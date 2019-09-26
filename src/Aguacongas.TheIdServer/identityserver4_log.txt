@@ -1,0 +1,472 @@
+2019-09-07 16:01:31.650 +02:00 [INF] Starting IdentityServer4 version 2.5.0.0
+2019-09-07 16:01:31.716 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-07 16:01:31.730 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-07 16:01:31.730 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-07 16:01:31.730 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-07 16:01:31.731 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-07 16:01:31.731 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-07 16:01:31.731 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-07 16:01:32.485 +02:00 [DBG] Login Url: /Account/Login
+2019-09-07 16:01:32.490 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-07 16:01:32.490 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-07 16:01:32.490 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-07 16:01:32.490 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-07 16:01:32.490 +02:00 [DBG] Error Url: /home/error
+2019-09-07 16:01:32.490 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-07 16:01:51.552 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-07 16:02:17.274 +02:00 [DBG] CORS request made for path: /Account/Login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-07 16:02:18.932 +02:00 [DBG] Augmenting SignInContext
+2019-09-07 16:02:18.936 +02:00 [DBG] Adding idp claim with value: local
+2019-09-07 16:02:18.936 +02:00 [DBG] Adding amr claim with value: pwd
+2019-09-07 16:02:18.936 +02:00 [DBG] Adding auth_time claim with value: 1567864938
+2019-09-07 16:02:18.956 +02:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2019-09-07 16:02:19.007 +02:00 [INF] {"Username":"alice","Provider":null,"ProviderUserId":null,"SubjectId":"7a32b954-799d-4241-bc7a-2c6074be4db2","DisplayName":"alice","Endpoint":"UI","ClientId":null,"Category":"Authentication","Name":"User Login Success","EventType":"Success","Id":1000,"Message":null,"ActivityId":"0HLPJJFHJ8LLV:00000002","TimeStamp":"2019-09-07T14:02:18.0000000Z","ProcessId":17768,"LocalIpAddress":"127.0.0.1:47455","RemoteIpAddress":"::1","$type":"UserLoginSuccessEvent"}
+2019-09-07 16:02:31.716 +02:00 [DBG] CORS request made for path: /Account/Logout from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-07 16:02:31.741 +02:00 [INF] AuthenticationScheme: Identity.Application signed out.
+2019-09-07 16:02:31.743 +02:00 [INF] AuthenticationScheme: Identity.External signed out.
+2019-09-07 16:02:31.744 +02:00 [INF] AuthenticationScheme: Identity.TwoFactorUserId signed out.
+2019-09-07 16:02:31.746 +02:00 [INF] {"SubjectId":"7a32b954-799d-4241-bc7a-2c6074be4db2","DisplayName":"Alice Smith","Category":"Authentication","Name":"User Logout Success","EventType":"Success","Id":1002,"Message":null,"ActivityId":"0HLPJJFHJ8LLS:00000004","TimeStamp":"2019-09-07T14:02:31.0000000Z","ProcessId":17768,"LocalIpAddress":"127.0.0.1:47455","RemoteIpAddress":"::1","$type":"UserLogoutSuccessEvent"}
+2019-09-07 17:42:10.262 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-07 17:42:10.319 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-07 17:42:10.325 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-07 17:42:10.325 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-07 17:42:10.325 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-07 17:42:10.326 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-07 17:42:10.326 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-07 17:42:10.327 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-07 17:42:11.381 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-07 17:42:11.509 +02:00 [DBG] Login Url: /Account/Login
+2019-09-07 17:42:11.509 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-07 17:42:11.510 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-07 17:42:11.510 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-07 17:42:11.510 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-07 17:42:11.510 +02:00 [DBG] Error Url: /home/error
+2019-09-07 17:42:11.510 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-07 17:42:18.534 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Endpoint IdentityServer4.Quickstart.UI.GrantsController.Index (Aguacongas.TheIdServer) contains authorization metadata, but a middleware was not found that supports authorization.
+Configure your application startup by adding app.UseAuthorization() inside the call to Configure(..) in the application startup code.
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.ThrowMissingAuthMiddlewareException(Endpoint endpoint)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.Invoke(HttpContext httpContext)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events)
+   at IdentityServer4.Hosting.MutualTlsTokenEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2019-09-07 17:44:06.382 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-07 17:44:06.458 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-07 17:44:06.464 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-07 17:44:06.464 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-07 17:44:06.464 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-07 17:44:06.464 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-07 17:44:06.465 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-07 17:44:06.465 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-07 17:44:06.952 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-07 17:44:07.040 +02:00 [DBG] Login Url: /Account/Login
+2019-09-07 17:44:07.040 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-07 17:44:07.040 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-07 17:44:07.041 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-07 17:44:07.041 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-07 17:44:07.041 +02:00 [DBG] Error Url: /home/error
+2019-09-07 17:44:07.042 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-07 17:44:10.052 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-07 17:44:10.204 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Microsoft.AspNetCore.Identity.IUserStore`1[Aguacongas.TheIdServer.Models.ApplicationUser]' while attempting to activate 'Microsoft.AspNetCore.Identity.UserManager`1[Aguacongas.TheIdServer.Models.ApplicationUser]'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(Type serviceType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateCallSite(Type serviceType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.<>c__DisplayClass7_0.<GetCallSite>b__0(Type type)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(Type serviceType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.CreateServiceAccessor(Type serviceType)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events)
+   at IdentityServer4.Hosting.MutualTlsTokenEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2019-09-07 17:45:48.899 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-07 17:45:48.946 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-07 17:45:48.950 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-07 17:45:48.950 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-07 17:45:48.950 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-07 17:45:48.950 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-07 17:45:48.951 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-07 17:45:48.951 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-07 17:45:49.307 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-07 17:45:49.381 +02:00 [DBG] Login Url: /Account/Login
+2019-09-07 17:45:49.381 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-07 17:45:49.381 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-07 17:45:49.381 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-07 17:45:49.381 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-07 17:45:49.381 +02:00 [DBG] Error Url: /home/error
+2019-09-07 17:45:49.381 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-07 17:45:52.379 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-07 17:46:03.308 +02:00 [DBG] CORS request made for path: /Account/Login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-07 17:46:06.214 +02:00 [DBG] Augmenting SignInContext
+2019-09-07 17:46:06.216 +02:00 [DBG] Adding idp claim with value: local
+2019-09-07 17:46:06.216 +02:00 [DBG] Adding auth_time claim with value: 1567871166
+2019-09-07 17:46:06.226 +02:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2019-09-07 17:46:06.252 +02:00 [INF] {"Username":"alice","Provider":null,"ProviderUserId":null,"SubjectId":"7a32b954-799d-4241-bc7a-2c6074be4db2","DisplayName":"alice","Endpoint":"UI","ClientId":null,"Category":"Authentication","Name":"User Login Success","EventType":"Success","Id":1000,"Message":null,"ActivityId":"80000005-0000-f900-b63f-84710c7967bb","TimeStamp":"2019-09-07T15:46:06.0000000Z","ProcessId":17760,"LocalIpAddress":"::1:5000","RemoteIpAddress":"::1","$type":"UserLoginSuccessEvent"}
+2019-09-07 17:46:18.309 +02:00 [DBG] CORS request made for path: /Account/Logout from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-07 17:46:18.348 +02:00 [INF] AuthenticationScheme: Identity.Application signed out.
+2019-09-07 17:46:18.350 +02:00 [INF] AuthenticationScheme: Identity.External signed out.
+2019-09-07 17:46:18.351 +02:00 [INF] AuthenticationScheme: Identity.TwoFactorUserId signed out.
+2019-09-07 17:46:18.352 +02:00 [INF] {"SubjectId":"7a32b954-799d-4241-bc7a-2c6074be4db2","DisplayName":"Alice Smith","Category":"Authentication","Name":"User Logout Success","EventType":"Success","Id":1002,"Message":null,"ActivityId":"80000008-0000-f900-b63f-84710c7967bb","TimeStamp":"2019-09-07T15:46:18.0000000Z","ProcessId":17760,"LocalIpAddress":"::1:5000","RemoteIpAddress":"::1","$type":"UserLogoutSuccessEvent"}
+2019-09-22 12:20:37.884 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-22 12:20:37.937 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-22 12:20:37.942 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-22 12:20:37.943 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-22 12:20:37.943 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-22 12:20:37.943 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-22 12:20:37.943 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-22 12:20:37.943 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-22 12:20:39.540 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-22 12:20:39.661 +02:00 [DBG] Login Url: /Account/Login
+2019-09-22 12:20:39.662 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-22 12:20:39.662 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-22 12:20:39.663 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-22 12:20:39.663 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-22 12:20:39.663 +02:00 [DBG] Error Url: /home/error
+2019-09-22 12:20:39.663 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-22 12:22:35.811 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-22 12:22:35.859 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-22 12:22:35.867 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-22 12:22:35.867 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-22 12:22:35.867 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-22 12:22:35.867 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-22 12:22:35.867 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-22 12:22:35.867 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-22 12:22:36.285 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-22 12:22:36.387 +02:00 [DBG] Login Url: /Account/Login
+2019-09-22 12:22:36.387 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-22 12:22:36.387 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-22 12:22:36.387 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-22 12:22:36.387 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-22 12:22:36.387 +02:00 [DBG] Error Url: /home/error
+2019-09-22 12:22:36.388 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-22 17:49:49.542 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-22 17:49:49.582 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-22 17:49:49.587 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-22 17:49:49.587 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-22 17:49:49.587 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-22 17:49:49.588 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-22 17:49:49.588 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-22 17:49:49.588 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-22 17:49:50.451 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-22 17:49:50.546 +02:00 [DBG] Login Url: /Account/Login
+2019-09-22 17:49:50.546 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-22 17:49:50.546 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-22 17:49:50.546 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-22 17:49:50.546 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-22 17:49:50.547 +02:00 [DBG] Error Url: /home/error
+2019-09-22 17:49:50.547 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-22 17:51:16.067 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-22 17:51:16.167 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-22 17:51:16.174 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-22 17:51:16.174 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-22 17:51:16.174 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-22 17:51:16.175 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-22 17:51:16.175 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-22 17:51:16.175 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-22 17:51:16.626 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-22 17:51:16.741 +02:00 [DBG] Login Url: /Account/Login
+2019-09-22 17:51:16.741 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-22 17:51:16.741 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-22 17:51:16.741 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-22 17:51:16.741 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-22 17:51:16.742 +02:00 [DBG] Error Url: /home/error
+2019-09-22 17:51:16.742 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-22 17:53:09.803 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-22 17:53:09.835 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-22 17:53:09.839 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-22 17:53:09.839 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-22 17:53:09.839 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-22 17:53:09.839 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-22 17:53:09.839 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-22 17:53:09.840 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-22 17:53:10.206 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-22 17:53:10.283 +02:00 [DBG] Login Url: /Account/Login
+2019-09-22 17:53:10.283 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-22 17:53:10.283 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-22 17:53:10.283 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-22 17:53:10.283 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-22 17:53:10.283 +02:00 [DBG] Error Url: /home/error
+2019-09-22 17:53:10.283 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 18:17:02.242 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-26 18:17:02.281 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-26 18:17:02.286 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 18:17:02.286 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 18:17:02.286 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 18:17:02.286 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 18:17:02.286 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 18:17:02.286 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 18:17:03.433 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 18:17:03.542 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 18:17:03.542 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 18:17:03.542 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 18:17:03.542 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 18:17:03.542 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 18:17:03.542 +02:00 [DBG] Error Url: /home/error
+2019-09-26 18:17:03.542 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 18:18:23.204 +02:00 [INF] Starting IdentityServer4 version 3.0.0.0
+2019-09-26 18:18:23.241 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-09-26 18:18:23.247 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 18:18:23.247 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 18:18:23.247 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 18:18:23.248 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 18:18:23.248 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 18:18:23.248 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 18:18:23.634 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 18:18:23.697 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 18:18:23.698 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 18:18:23.698 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 18:18:23.698 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 18:18:23.698 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 18:18:23.698 +02:00 [DBG] Error Url: /home/error
+2019-09-26 18:18:23.698 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 19:24:47.243 +02:00 [INF] Starting IdentityServer4 version 3.0.1.0
+2019-09-26 19:24:47.494 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 19:24:47.494 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 19:24:47.494 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 19:24:47.495 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 19:24:47.496 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 19:24:47.496 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 19:24:48.247 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 19:24:48.596 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 19:24:48.596 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 19:24:48.596 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 19:24:48.596 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 19:24:48.597 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 19:24:48.597 +02:00 [DBG] Error Url: /home/error
+2019-09-26 19:24:48.597 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 19:26:14.802 +02:00 [INF] Starting IdentityServer4 version 3.0.1.0
+2019-09-26 19:26:15.030 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 19:26:15.031 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 19:26:15.031 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 19:26:15.031 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 19:26:15.031 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 19:26:15.031 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 19:26:15.452 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 19:26:15.527 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 19:26:15.527 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 19:26:15.527 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 19:26:15.528 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 19:26:15.528 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 19:26:15.528 +02:00 [DBG] Error Url: /home/error
+2019-09-26 19:26:15.528 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 19:26:41.259 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-26 19:27:10.770 +02:00 [DBG] CORS request made for path: /Account/Login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-26 19:27:13.996 +02:00 [ERR] An error occurred using the connection to database 'TheIdServer' on server '(LocalDb)\MSSQLLocalDB'.
+2019-09-26 19:27:14.095 +02:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Aguacongas.TheIdServer.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot open database "TheIdServer" requested by the login. The login failed.
+Login failed for user 'ACN\LefebvreO'.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0df6ea5b-5767-491e-9762-4763e23da42c
+Error Number:4060,State:1,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot open database "TheIdServer" requested by the login. The login failed.
+Login failed for user 'ACN\LefebvreO'.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.AsyncQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0df6ea5b-5767-491e-9762-4763e23da42c
+Error Number:4060,State:1,Class:11
+2019-09-26 19:36:23.335 +02:00 [INF] Starting IdentityServer4 version 3.0.1.0
+2019-09-26 19:36:23.521 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 19:36:23.522 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 19:36:23.522 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 19:36:23.523 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 19:36:23.523 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 19:36:23.523 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 19:36:24.593 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 19:36:24.686 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 19:36:24.686 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 19:36:24.688 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 19:36:24.689 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 19:36:24.691 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 19:36:24.692 +02:00 [DBG] Error Url: /home/error
+2019-09-26 19:36:24.694 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 19:36:28.790 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-26 19:36:44.889 +02:00 [DBG] CORS request made for path: /Account/Login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-26 19:36:46.601 +02:00 [INF] {"Username":"alice","Endpoint":"UI","ClientId":null,"Category":"Authentication","Name":"User Login Failure","EventType":"Failure","Id":1001,"Message":"invalid credentials","ActivityId":"0HLQ2L06LSB4M:00000004","TimeStamp":"2019-09-26T17:36:46.0000000Z","ProcessId":11124,"LocalIpAddress":"::1:5000","RemoteIpAddress":"::1","$type":"UserLoginFailureEvent"}
+2019-09-26 19:45:23.909 +02:00 [INF] Starting IdentityServer4 version 3.0.1.0
+2019-09-26 19:45:24.111 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 19:45:24.112 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 19:45:24.112 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 19:45:24.113 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 19:45:24.113 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 19:45:24.113 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 19:45:25.007 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 19:45:25.150 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 19:45:25.150 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 19:45:25.154 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 19:45:25.155 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 19:45:25.156 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 19:45:25.157 +02:00 [DBG] Error Url: /home/error
+2019-09-26 19:45:25.158 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 19:45:36.033 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2019-09-26 19:45:52.992 +02:00 [DBG] CORS request made for path: /Account/Login from origin: null but was ignored because path was not for an allowed IdentityServer CORS endpoint
+2019-09-26 19:45:54.734 +02:00 [DBG] Augmenting SignInContext
+2019-09-26 19:45:54.736 +02:00 [DBG] Adding idp claim with value: local
+2019-09-26 19:45:54.737 +02:00 [DBG] Adding auth_time claim with value: 1569519954
+2019-09-26 19:45:54.762 +02:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2019-09-26 19:45:54.794 +02:00 [INF] {"Username":"alice","Provider":null,"ProviderUserId":null,"SubjectId":"3972386d-3425-4b50-9b98-65b6df21d615","DisplayName":"alice","Endpoint":"UI","ClientId":null,"Category":"Authentication","Name":"User Login Success","EventType":"Success","Id":1000,"Message":null,"ActivityId":"0HLQ2L57MUKGR:00000004","TimeStamp":"2019-09-26T17:45:54.0000000Z","ProcessId":18520,"LocalIpAddress":"::1:5000","RemoteIpAddress":"::1","$type":"UserLoginSuccessEvent"}
+2019-09-26 19:45:54.940 +02:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@__subjectId_0='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Key], [p].[ClientId], [p].[CreationTime], [p].[Data], [p].[Expiration], [p].[SubjectId], [p].[Type]
+FROM [PersistedGrants] AS [p]
+WHERE (([p].[SubjectId] = @__subjectId_0) AND ([p].[SubjectId] IS NOT NULL AND @__subjectId_0 IS NOT NULL)) OR ([p].[SubjectId] IS NULL AND @__subjectId_0 IS NULL)
+2019-09-26 19:45:54.983 +02:00 [ERR] An exception occurred while iterating over the results of a query for context type 'IdentityServer4.EntityFramework.DbContexts.PersistedGrantDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'PersistedGrants'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.QueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:96f950b5-90fb-4b62-96d4-63f04c52c7df
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'PersistedGrants'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.QueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:96f950b5-90fb-4b62-96d4-63f04c52c7df
+Error Number:208,State:1,Class:16
+2019-09-26 19:45:55.693 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'PersistedGrants'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.RelationalShapedQueryCompilingExpressionVisitor.QueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at IdentityServer4.EntityFramework.Stores.PersistedGrantStore.GetAllAsync(String subjectId)
+   at IdentityServer4.Services.DefaultPersistedGrantService.GetAllGrantsAsync(String subjectId)
+   at IdentityServer4.Services.DefaultIdentityServerInteractionService.GetAllUserConsentsAsync()
+   at IdentityServer4.Quickstart.UI.GrantsController.BuildViewModelAsync() in C:\Projects\Perso\TheIdServer\src\Aguacongas.TheIdServer\Quickstart\Grants\GrantsController.cs:line 64
+   at IdentityServer4.Quickstart.UI.GrantsController.Index() in C:\Projects\Perso\TheIdServer\src\Aguacongas.TheIdServer\Quickstart\Grants\GrantsController.cs:line 46
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Builder.Extensions.MapMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events)
+   at IdentityServer4.Hosting.MutualTlsTokenEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCompression.ResponseCompressionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+ClientConnectionId:96f950b5-90fb-4b62-96d4-63f04c52c7df
+Error Number:208,State:1,Class:16
+2019-09-26 21:53:58.191 +02:00 [INF] Starting IdentityServer4 version 3.0.1.0
+2019-09-26 21:53:58.437 +02:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-09-26 21:53:58.438 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-09-26 21:53:58.439 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-09-26 21:53:58.439 +02:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-09-26 21:53:58.439 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-09-26 21:53:58.440 +02:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-09-26 21:53:59.501 +02:00 [WRN] Failed to determine the https port for redirect.
+2019-09-26 21:53:59.640 +02:00 [DBG] Login Url: /Account/Login
+2019-09-26 21:53:59.647 +02:00 [DBG] Login Return Url Parameter: ReturnUrl
+2019-09-26 21:53:59.656 +02:00 [DBG] Logout Url: /Account/Logout
+2019-09-26 21:53:59.660 +02:00 [DBG] ConsentUrl Url: /consent
+2019-09-26 21:53:59.664 +02:00 [DBG] Consent Return Url Parameter: returnUrl
+2019-09-26 21:53:59.671 +02:00 [DBG] Error Url: /home/error
+2019-09-26 21:53:59.674 +02:00 [DBG] Error Id Parameter: errorId
+2019-09-26 21:54:31.833 +02:00 [DBG] 0 persisted grants found for 3972386d-3425-4b50-9b98-65b6df21d615
+2019-09-26 21:54:43.620 +02:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-09-26 21:54:43.626 +02:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-09-26 21:54:43.627 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-09-26 21:54:43.632 +02:00 [DBG] Start discovery request
+2019-09-26 21:54:44.027 +02:00 [DBG] Found [] as all scopes in database
