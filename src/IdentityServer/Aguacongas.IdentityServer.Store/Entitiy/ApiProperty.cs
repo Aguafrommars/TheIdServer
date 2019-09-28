@@ -4,9 +4,16 @@ using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
-    public class DeviceCodes<TKey> : IAuditable where TKey : IEquatable<TKey>
+    public class ApiProperty<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }
+
+        public TKey ApiId { get; set; }
+
+        public string Key { get; set; }
+
+        public string Value { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
         public string CreateBy { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
-    public class IdentityClaims<TKey> : IAuditable where TKey : IEquatable<TKey>
+    public class DeviceCode<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }
         public DateTime CreatedAt { get; set; }
