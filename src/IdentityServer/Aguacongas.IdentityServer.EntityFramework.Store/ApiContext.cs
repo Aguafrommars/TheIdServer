@@ -4,7 +4,41 @@ using System;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class ApiContext<TKey,
+
+    public class ApiDbContext : ApiDbContext<Api>
+    {
+        public ApiDbContext(DbContextOptions options) : base(options)
+        { }
+
+        protected ApiDbContext() { }
+    }
+
+    public class ApiDbContext<TApi>: ApiDbContext<TApi, string>
+        where TApi: Api
+    {
+        public ApiDbContext(DbContextOptions options) : base(options)
+        { }
+
+        protected ApiDbContext() { }
+    }
+
+    public class ApiDbContext<TApi, TKey> : ApiContext<TKey,
+        TApi,
+        ApiClaim<TKey>,
+        ApiScope<TKey>,
+        ApiScopeClaim<TKey>,
+        ApiSecret<TKey>,
+        ClaimType<TKey>>
+        where TKey : IEquatable<TKey>
+        where TApi : Api<TKey>
+    {
+        public ApiDbContext(DbContextOptions options) : base(options)
+        { }
+
+        protected ApiDbContext() { }
+    }
+
+    public abstract class ApiContext<TKey,
         TApi,
         TApiClaim,
         TApiScope,
@@ -14,36 +48,26 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         :ClaimTypeContext<TKey, TClaimType> 
         where TKey:IEquatable<TKey>
         where TApi: Api<TKey>
-        where TApiClaim : Api<TKey>
-        where TApiScope : Api<TKey>
-        where TApiScopeClaim : Api<TKey>
-        where TApiSecret : Api<TKey>
-        where TClaimType : Api<TKey>
+        where TApiClaim: ApiClaim<TKey>
+        where TApiScope: ApiScope<TKey>
+        where TApiScopeClaim: ApiScopeClaim<TKey>
+        where TApiSecret: ApiSecret<TKey>
+        where TClaimType: ClaimType<TKey>
     {
-        public DbSet<TApi> Apis { get; set; }
+        public ApiContext(DbContextOptions options) : base(options)
+        { }
 
-        public DbSet<TApiClaim> ApiClaims { get; set; }
+        protected ApiContext() { }
 
-        public DbSet<TApiScope> ApiScopes { get; set; }
+        public virtual DbSet<TApi> Apis { get; set; }
 
-        public DbSet<TApiScopeClaim> ApiScopeClaims { get; set; }
+        public virtual DbSet<TApiClaim> ApiClaims { get; set; }
 
-        public DbSet<TApiSecret> ApiSecrets { get; set; }
+        public virtual DbSet<TApiScope> ApiScopes { get; set; }
 
+        public virtual DbSet<TApiScopeClaim> ApiScopeClaims { get; set; }
 
+        public virtual DbSet<TApiSecret> ApiSecrets { get; set; }
 
-        public DbSet<DeviceCode<TKey>> DeviceCodes { get; set; }
-
-        public DbSet<Identity<TKey>> Identities { get; set; }
-
-        public DbSet<IdentityClaim<TKey>> IdentityClaims { get; set; }
-
-        public DbSet<IdentityProperty<TKey>> IdentityPropertys { get; set; }
-
-        public DbSet<ReferenceToken<TKey>> ReferenceTokens { get; set; }
-
-        public DbSet<RefreshToken<TKey>> RefreshTokens { get; set; }
-
-        public DbSet<UserConstent<TKey>> UserConstents { get; set; }
     }
 }

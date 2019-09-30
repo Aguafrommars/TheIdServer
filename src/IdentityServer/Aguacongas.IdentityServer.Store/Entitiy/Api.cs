@@ -4,6 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
+    public class Api: Api<string>
+    {
+
+    }
+
     public class Api<TKey>: IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }

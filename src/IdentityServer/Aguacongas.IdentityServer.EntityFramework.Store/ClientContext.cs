@@ -16,6 +16,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         TClientProperty,
         TClientScope,
         TClientSecret,
+        TReferenceToken,
+        TRefreshToken,
+        TUserConsent,
+        TDeviceCode,
         TClaimType> :ClaimTypeContext<TKey, TClaimType>
         where TKey: IEquatable<TKey>
         where TClient : Client<TKey>
@@ -27,6 +31,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         where TClientProperty : ClientProperty<TKey>
         where TClientScope : ClientScope<TKey>
         where TClientSecret : ClientSecret<TKey>
+        where TReferenceToken : ReferenceToken<TKey>
+        where TRefreshToken : RefreshToken<TKey>
+        where TUserConsent : UserConsent<TKey>
+        where TDeviceCode : DeviceCode<TKey>
         where TClaimType : ClaimType<TKey>
     {
         public DbSet<TClient> Clients { get; set; }
@@ -47,5 +55,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public DbSet<TClientSecret> ClientSecrets { get; set; }
 
+        public DbSet<TReferenceToken> ReferenceTokens { get; set; }
+
+        public DbSet<TRefreshToken> RefreshTokens { get; set; }
+
+        public DbSet<TUserConsent> UserConstents { get; set; }
+        
+        public DbSet<TDeviceCode> DeviceCodes { get; set; }
     }
 }
