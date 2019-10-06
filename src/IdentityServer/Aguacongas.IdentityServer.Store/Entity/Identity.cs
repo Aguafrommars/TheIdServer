@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     public class Identity : Identity<string>
     {

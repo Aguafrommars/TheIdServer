@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class RefreshToken<TKey> : IAuditable where TKey : IEquatable<TKey>
+    public class UserConsent<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }
         public DateTime CreatedAt { get; set; }

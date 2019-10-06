@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     public class Client: Client<string>
     {

@@ -1,4 +1,4 @@
-﻿using Aguacongas.IdentityServer.Store.Entitiy;
+﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 

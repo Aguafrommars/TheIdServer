@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     public class ApiProperty<TKey> : IAuditable where TKey : IEquatable<TKey>
     {

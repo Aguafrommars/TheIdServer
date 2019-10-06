@@ -1,4 +1,4 @@
-﻿using Aguacongas.IdentityServer.Store.Entitiy;
+﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -6,13 +6,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ClientContext: ClientContext<Client>
     {
+        public ClientContext(DbContextOptions options) : base(options)
+        {
 
+        }
     }
 
     public class ClientContext<TClient>: ClientContext<string, TClient>
         where TClient: Client<string>
     {
+        public ClientContext(DbContextOptions options) : base(options)
+        {
 
+        }
     }
 
     public class ClientContext<TKey,
@@ -33,7 +39,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         where TKey: IEquatable<TKey>
         where TClient: Client<TKey>
     {
+        public ClientContext(DbContextOptions options) : base(options)
+        {
 
+        }
     }
 
     public class ClientContext<TKey,
@@ -65,30 +74,42 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         where TUserConsent : UserConsent<TKey>
         where TDeviceCode : DeviceCode<TKey>
     {
-        public DbSet<TClient> Clients { get; set; }
+        public ClientContext(DbContextOptions options):base(options)
+        {
 
-        public DbSet<TClientClaim> ClientClaims { get; set; }
+        }
+        public virtual DbSet<TClient> Clients { get; set; }
 
-        public DbSet<TClientCorsOrigin> ClientCorsOrigins { get; set; }
+        public virtual DbSet<TClientClaim> ClientClaims { get; set; }
 
-        public DbSet<TClientGrantType> ClientGrantTypes { get; set; }
+        public virtual DbSet<TClientCorsOrigin> ClientCorsOrigins { get; set; }
 
-        public DbSet<TClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; }
+        public virtual DbSet<TClientGrantType> ClientGrantTypes { get; set; }
 
-        public DbSet<TClientProperty> ClientProperties { get; set; }
+        public virtual DbSet<TClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; }
 
-        public DbSet<TClientRedirectUri> ClientRedirectUris { get; set; }
+        public virtual DbSet<TClientProperty> ClientProperties { get; set; }
 
-        public DbSet<TClientScope> ClientScopes { get; set; }
+        public virtual DbSet<TClientRedirectUri> ClientRedirectUris { get; set; }
 
-        public DbSet<TClientSecret> ClientSecrets { get; set; }
+        public virtual DbSet<TClientScope> ClientScopes { get; set; }
 
-        public DbSet<TReferenceToken> ReferenceTokens { get; set; }
+        public virtual DbSet<TClientSecret> ClientSecrets { get; set; }
 
-        public DbSet<TRefreshToken> RefreshTokens { get; set; }
+        public virtual DbSet<TReferenceToken> ReferenceTokens { get; set; }
 
-        public DbSet<TUserConsent> UserConstents { get; set; }
+        public virtual DbSet<TRefreshToken> RefreshTokens { get; set; }
+
+        public virtual DbSet<TUserConsent> UserConstents { get; set; }
         
-        public DbSet<TDeviceCode> DeviceCodes { get; set; }
+        public virtual DbSet<TDeviceCode> DeviceCodes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
+            modelBuilder.Entity<Client>()
+                .HasIndex(m => m.ClientId)
+                .IsUnique(true);
+        }
     }
 }

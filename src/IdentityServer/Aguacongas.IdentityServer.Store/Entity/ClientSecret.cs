@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     public class ClientSecret<TKey> : IAuditable where TKey : IEquatable<TKey>
     {

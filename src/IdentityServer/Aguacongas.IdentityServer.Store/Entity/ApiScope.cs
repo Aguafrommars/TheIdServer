@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aguacongas.IdentityServer.Store.Entitiy
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     public class ApiScope<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
