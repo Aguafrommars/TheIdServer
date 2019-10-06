@@ -1,11 +1,41 @@
 ﻿using Aguacongas.IdentityServer.Store.Entitiy;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
+    public class ClientContext: ClientContext<Client>
+    {
+
+    }
+
+    public class ClientContext<TClient>: ClientContext<string, TClient>
+        where TClient: Client<string>
+    {
+
+    }
+
+    public class ClientContext<TKey,
+        TClient>: ClientContext<TKey, 
+        TClient,
+        ClientClaim<TKey>,
+        ClientCorsOrigin<TKey>,
+        ClientGrantType<TKey>,
+        ClientPostLogoutRedirectUri<TKey>,
+        ClientRedirectUri<TKey>,
+        ClientProperty<TKey>,
+        ClientScope<TKey>,
+        ClientSecret<TKey>,
+        ReferenceToken<TKey>,
+        RefreshToken<TKey>,
+        UserConsent<TKey>,
+        DeviceCode<TKey>>
+        where TKey: IEquatable<TKey>
+        where TClient: Client<TKey>
+    {
+
+    }
+
     public class ClientContext<TKey,
         TClient,
         TClientClaim,
@@ -19,8 +49,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         TReferenceToken,
         TRefreshToken,
         TUserConsent,
-        TDeviceCode,
-        TClaimType> :ClaimTypeContext<TKey, TClaimType>
+        TDeviceCode>: DbContext
         where TKey: IEquatable<TKey>
         where TClient : Client<TKey>
         where TClientClaim : ClientClaim<TKey>
@@ -35,7 +64,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         where TRefreshToken : RefreshToken<TKey>
         where TUserConsent : UserConsent<TKey>
         where TDeviceCode : DeviceCode<TKey>
-        where TClaimType : ClaimType<TKey>
     {
         public DbSet<TClient> Clients { get; set; }
 

@@ -27,8 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         ApiClaim<TKey>,
         ApiScope<TKey>,
         ApiScopeClaim<TKey>,
-        ApiSecret<TKey>,
-        ClaimType<TKey>>
+        ApiSecret<TKey>>
         where TKey : IEquatable<TKey>
         where TApi : Api<TKey>
     {
@@ -43,18 +42,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         TApiClaim,
         TApiScope,
         TApiScopeClaim,
-        TApiSecret,
-        TClaimType>
-        :ClaimTypeContext<TKey, TClaimType> 
+        TApiSecret>: DbContext
         where TKey:IEquatable<TKey>
         where TApi: Api<TKey>
         where TApiClaim: ApiClaim<TKey>
         where TApiScope: ApiScope<TKey>
         where TApiScopeClaim: ApiScopeClaim<TKey>
         where TApiSecret: ApiSecret<TKey>
-        where TClaimType: ClaimType<TKey>
     {
-        public ApiContext(DbContextOptions options) : base(options)
+        public ApiContext(DbContextOptions options): base(options)
         { }
 
         protected ApiContext() { }

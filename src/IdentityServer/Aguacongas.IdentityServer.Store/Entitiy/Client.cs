@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
+    public class Client: Client<string>
+    {
+
+    }
     public class Client<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }

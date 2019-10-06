@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
@@ -7,7 +8,9 @@ namespace Aguacongas.IdentityServer.Store.Entitiy
         public TKey Id { get; set; }
 
         public Identity<TKey> IdentityId { get; set; }
-        public ClaimType<TKey> Type { get; set; }
+        
+        [MaxLength(250)]
+        public string Type { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }

@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entitiy
 {
+    public class Identity : Identity<string>
+    {
+
+    }
+
     public class Identity<TKey> : IAuditable where TKey : IEquatable<TKey>
     {
         public TKey Id { get; set; }

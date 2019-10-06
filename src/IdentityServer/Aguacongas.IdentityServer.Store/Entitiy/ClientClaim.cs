@@ -10,7 +10,7 @@ namespace Aguacongas.IdentityServer.Store.Entitiy
         public TKey ClientId { get; set; }
 
         [MaxLength(250)]
-        public ClaimType<TKey> Type { get; set; }
+        public string Type { get; set; }
 
         public string Value { get; set; }
 
