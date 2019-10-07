@@ -21,7 +21,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .Include(c => c.AllowedCorsOrigins)
                 .Include(c => c.AllowedGrantTypes)
                 .Include(c => c.AllowedScopes)
-                .Include(c => c.Claims)
+                .Include(c => c.ClientClaims)
                 .Include(c => c.ClientSecrets)
                 .Include(c => c.IdentityProviderRestrictions)
                 .Include(c => c.PostLogoutRedirectUris)

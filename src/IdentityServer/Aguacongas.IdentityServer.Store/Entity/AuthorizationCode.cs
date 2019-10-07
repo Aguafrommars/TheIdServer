@@ -1,9 +1,10 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class IdentityProperty : IAuditable
+    public class AuthorizationCode : IAuditable
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -13,23 +14,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public string Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets the key.
-        /// </summary>
-        /// <value>
-        /// The key.
-        /// </value>
-        [MaxLength(250)]
-        public string Key { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        [MaxLength(2000)]
-        public string Value { get; set; }
+        public string Data { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.
@@ -69,6 +54,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The client.
         /// </value>
-        public virtual Identity Identity { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

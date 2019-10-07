@@ -4,238 +4,417 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class Client: Client<string>
+    public class Client : IAuditable
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public string Id { get; set; }
 
-    }
-    public class Client<TKey> : IAuditable where TKey : IEquatable<TKey>
-    {
-        public TKey Id { get; set; }
-
-        //
-        // Summary:
-        //     Unique ID of the client
-        public string ClientId { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether [allow offline access]. Defaults to false.
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow offline access].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [allow offline access]; otherwise, <c>false</c>.
+        /// </value>
         public bool AllowOfflineAccess { get; set; }
-        //
-        // Summary:
-        //     Lifetime of identity token in seconds (defaults to 300 seconds / 5 minutes)
+
+        /// <summary>
+        /// Gets or sets the identity token lifetime.
+        /// </summary>
+        /// <value>
+        /// The identity token lifetime.
+        /// </value>
         public int IdentityTokenLifetime { get; set; }
-        //
-        // Summary:
-        //     Lifetime of access token in seconds (defaults to 3600 seconds / 1 hour)
+
+        /// <summary>
+        /// Gets or sets the access token lifetime.
+        /// </summary>
+        /// <value>
+        /// The access token lifetime.
+        /// </value>
         public int AccessTokenLifetime { get; set; }
-        //
-        // Summary:
-        //     Lifetime of authorization code in seconds (defaults to 300 seconds / 5 minutes)
+
+        /// <summary>
+        /// Gets or sets the authorization code lifetime.
+        /// </summary>
+        /// <value>
+        /// The authorization code lifetime.
+        /// </value>
         public int AuthorizationCodeLifetime { get; set; }
-        //
-        // Summary:
-        //     Maximum lifetime of a refresh token in seconds. Defaults to 2592000 seconds /
-        //     30 days
+
+        /// <summary>
+        /// Gets or sets the absolute refresh token lifetime.
+        /// </summary>
+        /// <value>
+        /// The absolute refresh token lifetime.
+        /// </value>
         public int AbsoluteRefreshTokenLifetime { get; set; }
-        //
-        // Summary:
-        //     Sliding lifetime of a refresh token in seconds. Defaults to 1296000 seconds /
-        //     15 days
+
+        /// <summary>
+        /// Gets or sets the sliding refresh token lifetime.
+        /// </summary>
+        /// <value>
+        /// The sliding refresh token lifetime.
+        /// </value>
         public int SlidingRefreshTokenLifetime { get; set; }
-        //
-        // Summary:
-        //     Lifetime of a user consent in seconds. Defaults to null (no expiration)
+
+        /// <summary>
+        /// Gets or sets the consent lifetime.
+        /// </summary>
+        /// <value>
+        /// The consent lifetime.
+        /// </value>
         public int? ConsentLifetime { get; set; }
-        //
-        // Summary:
-        //     ReUse: the refresh token handle will stay the same when refreshing tokens OneTime:
-        //     the refresh token handle will be updated when refreshing tokens
+
+        /// <summary>
+        /// Gets or sets the refresh token usage.
+        /// </summary>
+        /// <value>
+        /// The refresh token usage.
+        /// </value>
         public int RefreshTokenUsage { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the access token (and its claims) should
-        //     be updated on a refresh token request. Defaults to false.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [update access token claims on refresh].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [update access token claims on refresh]; otherwise, <c>false</c>.
+        /// </value>
         public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
-        //
-        // Summary:
-        //     Absolute: the refresh token will expire on a fixed point in time (specified by
-        //     the AbsoluteRefreshTokenLifetime) Sliding: when refreshing the token, the lifetime
-        //     of the refresh token will be renewed (by the amount specified in SlidingRefreshTokenLifetime).
-        //     The lifetime will not exceed AbsoluteRefreshTokenLifetime.
+
+        /// <summary>
+        /// Gets or sets the refresh token expiration.
+        /// </summary>
+        /// <value>
+        /// The refresh token expiration.
+        /// </value>
         public int RefreshTokenExpiration { get; set; }
-        //
-        // Summary:
-        //     Specifies whether the access token is a reference token or a self contained JWT
-        //     token (defaults to Jwt).
+
+        /// <summary>
+        /// Gets or sets the type of the access token.
+        /// </summary>
+        /// <value>
+        /// The type of the access token.
+        /// </value>
         public int AccessTokenType { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the local login is allowed for this client.
-        //     Defaults to true.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [enable local login].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [enable local login]; otherwise, <c>false</c>.
+        /// </value>
         public bool EnableLocalLogin { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether JWT access tokens should include an identifier.
-        //     Defaults to false.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [include JWT identifier].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [include JWT identifier]; otherwise, <c>false</c>.
+        /// </value>        
         public bool IncludeJwtId { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether client claims should be always included
-        //     in the access tokens - or only for client credentials flow. Defaults to false
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [always send client claims].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [always send client claims]; otherwise, <c>false</c>.
+        /// </value>
         public bool AlwaysSendClientClaims { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a value to prefix it on client claim types. Defaults to client_.
+
+        /// <summary>
+        /// Gets or sets the client claims prefix.
+        /// </summary>
+        /// <value>
+        /// The client claims prefix.
+        /// </value>
         [MaxLength(250)]
         public string ClientClaimsPrefix { get; set; }
-        //
-        // Summary:
-        //     Gets or sets a salt value used in pair-wise subjectId generation for users of
-        //     this client.
+
+        /// <summary>
+        /// Gets or sets the pair wise subject salt.
+        /// </summary>
+        /// <value>
+        /// The pair wise subject salt.
+        /// </value>
         [MaxLength(200)]
         public string PairWiseSubjectSalt { get; set; }
-        //
-        // Summary:
-        //     The maximum duration (in seconds) since the last time the user authenticated.
+
+        /// <summary>
+        /// Gets or sets the user sso lifetime.
+        /// </summary>
+        /// <value>
+        /// The user sso lifetime.
+        /// </value>
         public int? UserSsoLifetime { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the type of the device flow user code.
+
+        /// <summary>
+        /// Gets or sets the type of the user code.
+        /// </summary>
+        /// <value>
+        /// The type of the user code.
+        /// </value>
         [MaxLength(100)]
         public string UserCodeType { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the device code lifetime.
+
+        /// <summary>
+        /// Gets or sets the device code lifetime.
+        /// </summary>
+        /// <value>
+        /// The device code lifetime.
+        /// </value>
         public int DeviceCodeLifetime { get; set; }
-        //
-        // Summary:
-        //     When requesting both an id token and access token, should the user claims always
-        //     be added to the id token instead of requring the client to use the userinfo endpoint.
-        //     Defaults to false.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether /[always include user claims in identifier token].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [always include user claims in identifier token]; otherwise, <c>false</c>.
+        /// </value>
         public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
-        //
-        // Summary:
-        //     Specifies is the user's session id should be sent to the BackChannelLogoutUri.
-        //     Defaults to true.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [back channel logout session required].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [back channel logout session required]; otherwise, <c>false</c>.
+        /// </value>
         public bool BackChannelLogoutSessionRequired { get; set; }
-        //
-        // Summary:
-        //     Specifies if client is enabled (defaults to true)
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Client{TKey}"/> is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool Enabled { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the protocol type.
+
+        /// <summary>
+        /// Gets or sets the type of the protocol.
+        /// </summary>
+        /// <value>
+        /// The type of the protocol.
+        /// </value>
+        [Required]
         [MaxLength(200)]
         public string ProtocolType { get; set; }
-        //
-        // Summary:
-        //     If set to false, no client secret is needed to request tokens at the token endpoint
-        //     (defaults to true)
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [require client secret].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [require client secret]; otherwise, <c>false</c>.
+        /// </value>
         public bool RequireClientSecret { get; set; }
-        //
-        // Summary:
-        //     Client display name (used for logging and consent screen)
+
+        /// <summary>
+        /// Gets or sets the name of the client.
+        /// </summary>
+        /// <value>
+        /// The name of the client.
+        /// </value>
         [MaxLength(200)]
         public string ClientName { get; set; }
-        //
-        // Summary:
-        //     Description of the client.
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
         [MaxLength(1000)]
         public string Description { get; set; }
-        //
-        // Summary:
-        //     URI to further information about client (used on consent screen)
+
+        /// <summary>
+        /// Gets or sets the client URI.
+        /// </summary>
+        /// <value>
+        /// The client URI.
+        /// </value>
         [MaxLength(2000)]
         public string ClientUri { get; set; }
-        //
-        // Summary:
-        //     URI to client logo (used on consent screen)
+
+        /// <summary>
+        /// Gets or sets the logo URI.
+        /// </summary>
+        /// <value>
+        /// The logo URI.
+        /// </value>
         [MaxLength(2000)]
         public string LogoUri { get; set; }
-        //
-        // Summary:
-        //     Specifies whether a consent screen is required (defaults to true)
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [require consent].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [require consent]; otherwise, <c>false</c>.
+        /// </value>
         public bool RequireConsent { get; set; }
-        //
-        // Summary:
-        //     Specifies whether a proof key is required for authorization code based token
-        //     requests (defaults to false).
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [require pkce].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [require pkce]; otherwise, <c>false</c>.
+        /// </value>
         public bool RequirePkce { get; set; }
-        //
-        // Summary:
-        //     Specifies whether a proof key can be sent using plain method (not recommended
-        //     and defaults to false.)
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow plain text pkce].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [allow plain text pkce]; otherwise, <c>false</c>.
+        /// </value>
         public bool AllowPlainTextPkce { get; set; }
-        //
-        // Summary:
-        //     Controls whether access tokens are transmitted via the browser for this client
-        //     (defaults to false). This can prevent accidental leakage of access tokens when
-        //     multiple response types are allowed.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow access tokens via browser].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [allow access tokens via browser]; otherwise, <c>false</c>.
+        /// </value>
         public bool AllowAccessTokensViaBrowser { get; set; }
-        //
-        // Summary:
-        //     Specifies logout URI at client for HTTP front-channel based logout.
+
+        /// <summary>
+        /// Gets or sets the front channel logout URI.
+        /// </summary>
+        /// <value>
+        /// The front channel logout URI.
+        /// </value>
         [MaxLength(2000)]
         public string FrontChannelLogoutUri { get; set; }
-        //
-        // Summary:
-        //     Specifies is the user's session id should be sent to the FrontChannelLogoutUri.
-        //     Defaults to true.
+
+        /// <summary>
+        /// Gets or sets a value indicating whether /[front channel logout session required].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [front channel logout session required]; otherwise, <c>false</c>.
+        /// </value>
         public bool FrontChannelLogoutSessionRequired { get; set; }
-        //
-        // Summary:
-        //     Specifies logout URI at client for HTTP back-channel based logout.
+
+        /// <summary>
+        /// Gets or sets the back channel logout URI.
+        /// </summary>
+        /// <value>
+        /// The back channel logout URI.
+        /// </value>
         [MaxLength(2000)]
         public string BackChannelLogoutUri { get; set; }
-        //
-        // Summary:
-        //     Specifies whether user can choose to store consent decisions (defaults to true)
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow remember consent].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [allow remember consent]; otherwise, <c>false</c>.
+        /// </value>
         public bool AllowRememberConsent { get; set; }
 
-        //
-        // Summary:
-        //     Specifies which external IdPs can be used with this client (if list is empty
-        //     all IdPs are allowed). Defaults to empty.
-        public virtual ICollection<ClientIdPRestriction<TKey>> IdentityProviderRestrictions { get; set; }
-        //
-        // Summary:
-        //     Allows settings claims for the client (will be included in the access token).
-        public virtual ICollection<ClientClaim<TKey>> Claims { get; set; }
-        //
-        // Summary:
-        //     Client secrets - only relevant for flows that require a secret
-        public virtual ICollection<ClientSecret<TKey>> ClientSecrets { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the allowed CORS origins for JavaScript clients.
-        public virtual ICollection<ClientCorsOrigin<TKey>> AllowedCorsOrigins { get; set; }
-        //
-        // Summary:
-        //     Specifies the allowed grant types (legal combinations of AuthorizationCode, Implicit,
-        //     Hybrid, ResourceOwner, ClientCredentials).
-        public virtual ICollection<ClientGrantType<TKey>> AllowedGrantTypes { get; set; }
-        //
-        // Summary:
-        //     Specifies allowed URIs to return tokens or authorization codes to
-        public virtual ICollection<ClientRedirectUri<TKey>> RedirectUris { get; set; }
-        //
-        // Summary:
-        //     Specifies allowed URIs to redirect to after logout
-        public virtual ICollection<ClientPostLogoutRedirectUri<TKey>> PostLogoutRedirectUris { get; set; }
-        //
-        // Summary:
-        //     Specifies the api scopes that the client is allowed to request. If empty, the
-        //     client can't access any scope
-        public virtual ICollection<ClientScope<TKey>> AllowedScopes { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the custom properties for the client.
-        public virtual ICollection<ClientProperty<TKey>> Properties { get; set; }
+        /// <summary>
+        /// Gets or sets the identity provider restrictions.
+        /// </summary>
+        /// <value>
+        /// The identity provider restrictions.
+        /// </value>
+        public virtual ICollection<ClientIdPRestriction> IdentityProviderRestrictions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the claims.
+        /// </summary>
+        /// <value>
+        /// The claims.
+        /// </value>
+        public virtual ICollection<ClientClaim> ClientClaims { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client secrets.
+        /// </summary>
+        /// <value>
+        /// The client secrets.
+        /// </value>
+        public virtual ICollection<ClientSecret> ClientSecrets { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed cors origins.
+        /// </summary>
+        /// <value>
+        /// The allowed cors origins.
+        /// </value>
+        public virtual ICollection<ClientCorsOrigin> AllowedCorsOrigins { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed grant types.
+        /// </summary>
+        /// <value>
+        /// The allowed grant types.
+        /// </value>
+        public virtual ICollection<ClientGrantType> AllowedGrantTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the redirect uris.
+        /// </summary>
+        /// <value>
+        /// The redirect uris.
+        /// </value>
+        public virtual ICollection<ClientRedirectUri> RedirectUris { get; set; }
+
+        /// <summary>
+        /// Gets or sets the post logout redirect uris.
+        /// </summary>
+        /// <value>
+        /// The post logout redirect uris.
+        /// </value>
+        public virtual ICollection<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed scopes.
+        /// </summary>
+        /// <value>
+        /// The allowed scopes.
+        /// </value>
+        public virtual ICollection<ClientScope> AllowedScopes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the properties.
+        /// </summary>
+        /// <value>
+        /// The properties.
+        /// </value>
+        public virtual ICollection<ClientProperty> Properties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created at.
+        /// </summary>
+        /// <value>
+        /// The created at.
+        /// </value>
         public DateTime CreatedAt { get; set; }
-        public DateTime ModifiedAt { get; set; }
-        public string CreateBy { get; set; }
-        public string ModifiedBy { get; set; }
 
+        /// <summary>
+        /// Gets or sets the modified at.
+        /// </summary>
+        /// <value>
+        /// The modified at.
+        /// </value>
+        public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the create by.
+        /// </summary>
+        /// <value>
+        /// The create by.
+        /// </value>
+        public string CreateBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modified by.
+        /// </summary>
+        /// <value>
+        /// The modified by.
+        /// </value>
+        public string ModifiedBy { get; set; }
     }
 }

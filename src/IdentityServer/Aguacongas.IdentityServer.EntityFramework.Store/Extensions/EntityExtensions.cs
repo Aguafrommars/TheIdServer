@@ -11,6 +11,11 @@ namespace Aguacongas.IdentityServer.Store
     {
 		public static Client ToClient(this Entity.Client client)
         {
+            if (client == null)
+            {
+                return null;
+            }
+
             return new Client
             {
                 AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
@@ -28,9 +33,9 @@ namespace Aguacongas.IdentityServer.Store
                 AuthorizationCodeLifetime = client.AuthorizationCodeLifetime,
                 BackChannelLogoutSessionRequired = client.BackChannelLogoutSessionRequired,
                 BackChannelLogoutUri = client.BackChannelLogoutUri,
-                Claims = client.Claims.Select(c => new Claim(c.Type, c.Value)).ToList(),
+                Claims = client.ClientClaims.Select(c => new Claim(c.Type, c.Value)).ToList(),
                 ClientClaimsPrefix = client.ClientClaimsPrefix,
-                ClientId = client.ClientId,
+                ClientId = client.Id,
                 ClientName = client.ClientName,
                 ClientSecrets = client.ClientSecrets.Select(s => new Secret(s.Value, s.Expiration)).ToList(),
                 ClientUri = client.ClientUri,

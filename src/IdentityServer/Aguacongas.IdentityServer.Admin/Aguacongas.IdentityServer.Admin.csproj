@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Olivier Lefebvre</Authors>
+    <Description>Expose OData controllers to manage IdentityServer4</Description>
+    <Copyright>@Olivier Lefebvre</Copyright>
+    <PackageProjectUrl>https://github.com/aguacongas/TheIdServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>IdentityServer4 Administration</PackageTags>
+    <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
+  </ItemGroup>
+
+</Project>
