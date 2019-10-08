@@ -44,22 +44,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the create by.
-        /// </summary>
-        /// <value>
-        /// The create by.
-        /// </value>
-        public string CreateBy { get; set; }
-
-        /// <summary>
-        /// Gets or sets the modified by.
-        /// </summary>
-        /// <value>
-        /// The modified by.
-        /// </value>
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
         /// Gets or sets the client.
         /// </summary>
         /// <value>
