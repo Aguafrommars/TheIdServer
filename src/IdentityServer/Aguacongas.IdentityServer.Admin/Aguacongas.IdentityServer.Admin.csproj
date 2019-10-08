@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+  </ItemGroup>
+
 </Project>
