@@ -1,10 +1,9 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class ClientContext : DbContext
+    public class ClientContext : AuditableDbContext
     {
         public ClientContext(DbContextOptions options):base(options)
         {

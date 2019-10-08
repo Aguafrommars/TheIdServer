@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -27,7 +28,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .Include(c => c.PostLogoutRedirectUris)
                 .Include(c => c.Properties)
                 .Include(c => c.RedirectUris)
-                .FirstOrDefaultAsync().ConfigureAwait(false);
+                .FirstOrDefaultAsync(c => c.Id == clientId).ConfigureAwait(false);
             return entity.ToClient();
         }
     }
