@@ -12,8 +12,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
 using System.Reflection;
+using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -21,32 +22,19 @@ namespace Aguacongas.TheIdServer
     {
         public static void EnsureSeedData(string connectionString)
         {
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             var services = new ServiceCollection();
             services.AddLogging()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(connectionString))
+                .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
+                .AddIdentityServer4EntityFrameworkStores(options => 
+                    options.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var builder = services.AddIdentityServer()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                // this adds the operational data from DB (codes, tokens, consents)
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-
-                    // this enables automatic token cleanup. this is optional.
-                    options.EnableTokenCleanup = true;
-                })
                 .AddAspNetIdentity<ApplicationUser>();
 
             using var serviceProvider = services.BuildServiceProvider();
@@ -57,10 +45,10 @@ namespace Aguacongas.TheIdServer
 
         private static void SeedConfiguration(IServiceScope scope)
         {
-            scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-
-            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ClientContext>();
+            context.Database.EnsureCreated();
             context.Database.Migrate();
+            
             if (!context.Clients.Any())
             {
                 foreach (var client in Config.GetClients())
@@ -70,20 +58,24 @@ namespace Aguacongas.TheIdServer
                 }
             }
 
-            if (!context.IdentityResources.Any())
+            var resouceContext = scope.ServiceProvider.GetRequiredService<ResourceContext>();
+            resouceContext.Database.EnsureCreated();
+            resouceContext.Database.Migrate();
+
+            if (!resouceContext.Identities.Any())
             {
                 foreach (var resource in Config.GetIdentityResources())
                 {
-                    context.IdentityResources.Add(resource.ToEntity());
+                    resouceContext.Identities.Add(resource.ToEntity());
                     Console.WriteLine($"Add identity resource {resource.DisplayName}");
                 }
             }
 
-            if (!context.ApiResources.Any())
+            if (!resouceContext.Apis.Any())
             {
                 foreach (var resource in Config.GetApis())
                 {
-                    context.ApiResources.Add(resource.ToEntity());
+                    resouceContext.Apis.Add(resource.ToEntity());
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
                 }
             }

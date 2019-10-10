@@ -5,7 +5,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ClientContext : AuditableDbContext
     {
-        public ClientContext(DbContextOptions options):base(options)
+        public ClientContext(DbContextOptions<ClientContext> options):base(options)
         {
         }
 

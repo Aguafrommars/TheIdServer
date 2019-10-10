@@ -5,12 +5,10 @@ using System;
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
 
-    public class ApiDbContext : DbContext
+    public class ResourceContext : AuditableDbContext
     { 
-        public ApiDbContext(DbContextOptions options): base(options)
+        public ResourceContext(DbContextOptions<ResourceContext> options): base(options)
         { }
-
-        protected ApiDbContext() { }
 
         public virtual DbSet<Api> Apis { get; set; }
 
@@ -21,5 +19,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public virtual DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
 
         public virtual DbSet<ApiSecret> ApiSecrets { get; set; }
+
+        public virtual DbSet<Identity> Identities { get; set; }
+
+        public virtual DbSet<IdentityClaim> IdentityClaims { get; set; }
+
+        public virtual DbSet<IdentityProperty> IdentityProperties { get; set; }
     }
 }

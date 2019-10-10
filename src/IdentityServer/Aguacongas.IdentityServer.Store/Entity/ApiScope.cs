@@ -15,16 +15,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        [Required]
-        [MaxLength(200)]
-        public string Name { get; set; }
-
-        /// <summary>
         /// Gets or sets the display name.
         /// </summary>
         /// <value>

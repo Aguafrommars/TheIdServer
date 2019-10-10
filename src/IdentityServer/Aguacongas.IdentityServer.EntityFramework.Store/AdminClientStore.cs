@@ -20,7 +20,16 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        public IQueryable<Client> Items => _context.Clients;
+
+        public Task<Client> GetAsync(string id)
+        {
+            return _context.Clients.FindAsync(id).AsTask();
+        }
+
+        public Task<PageResponse<Client>> GetAsync(PageRequest request)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<Client> CreateAsync(Client client, CancellationToken cancellationToken = default)
         {
