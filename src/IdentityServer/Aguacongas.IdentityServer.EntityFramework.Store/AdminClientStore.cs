@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -26,9 +27,20 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return _context.Clients.FindAsync(id).AsTask();
         }
 
-        public Task<PageResponse<Client>> GetAsync(PageRequest request)
+        public async Task<PageResponse<Client>> GetAsync(PageRequest request)
         {
-            throw new NotImplementedException();
+            request = request ?? throw new ArgumentNullException(nameof(request));
+            var query = _context.Clients.Skip(request.Skip.HasValue ? request.Skip.Value : 0);
+            if (request.Take.HasValue)
+            {
+                query = query.Take(request.Take.Value);
+            }
+
+            return new PageResponse<Client>
+            {
+                Count = await query.CountAsync().ConfigureAwait(false),
+                Items = await query.ToListAsync().ConfigureAwait(false)
+            };
         }
 
         public async Task<Client> CreateAsync(Client client, CancellationToken cancellationToken = default)

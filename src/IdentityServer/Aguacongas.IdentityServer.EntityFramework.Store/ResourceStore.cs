@@ -33,6 +33,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var entity = await _context.Apis
                 .Include(a => a.ApiClaims)
+                .Include(a => a.ApiScopeClaims)
                 .Include(a => a.Secrets)
                 .Include(a => a.Scopes)
                 .Include(a => a.Properties)
@@ -54,7 +55,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                         select api;
 
             return await query
+                .Include(a => a.Scopes)
                 .Include(a => a.ApiClaims)
+                .Include(a => a.ApiScopeClaims)
                 .Include(a => a.Secrets)
                 .Include(a => a.Properties)
                 .Select(a => a.ToApi())
@@ -86,8 +89,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             return new Resources
             {
-                ApiResources = await _context.Apis.Select(a => a.ToApi()).ToListAsync().ConfigureAwait(false),
-                IdentityResources = await _context.Identities.Select(i => i.ToIdentity()).ToListAsync().ConfigureAwait(false)
+                ApiResources = await _context.Apis
+                    .Include(a => a.ApiClaims)
+                    .Include(a => a.ApiScopeClaims)
+                    .Include(a => a.Secrets)
+                    .Include(a => a.Scopes)
+                    .Include(a => a.Properties)
+                    .Select(a => a.ToApi()).ToListAsync().ConfigureAwait(false),
+                IdentityResources = await _context.Identities
+                    .Include(i => i.IdentityClaims)
+                    .Include(i => i.Properties)
+                    .Select(i => i.ToIdentity()).ToListAsync().ConfigureAwait(false)
             };
         }
     }

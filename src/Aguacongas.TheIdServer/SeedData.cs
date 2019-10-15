@@ -81,6 +81,7 @@ namespace Aguacongas.TheIdServer
             }
 
             context.SaveChanges();
+            resouceContext.SaveChanges();
         }
 
         private static void SeedUsers(IServiceScope scope)

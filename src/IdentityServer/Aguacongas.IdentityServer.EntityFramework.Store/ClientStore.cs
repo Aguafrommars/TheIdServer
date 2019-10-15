@@ -19,13 +19,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<Client> FindClientByIdAsync(string clientId)
         {
             var entity = await _context.Clients
-                .Include(c => c.AllowedCorsOrigins)
                 .Include(c => c.AllowedGrantTypes)
                 .Include(c => c.AllowedScopes)
                 .Include(c => c.ClientClaims)
                 .Include(c => c.ClientSecrets)
                 .Include(c => c.IdentityProviderRestrictions)
-                .Include(c => c.PostLogoutRedirectUris)
                 .Include(c => c.Properties)
                 .Include(c => c.RedirectUris)
                 .FirstOrDefaultAsync(c => c.Id == clientId).ConfigureAwait(false);

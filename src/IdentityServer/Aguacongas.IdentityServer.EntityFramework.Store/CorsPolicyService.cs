@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Services;
+﻿using Aguacongas.IdentityServer.Store;
+using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -30,7 +31,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public Task<bool> IsOriginAllowedAsync(string origin)
         {
-            return _context.ClientCorsOrigins.AnyAsync(o => o.Origin.Equals(origin, StringComparison.OrdinalIgnoreCase));
+            var corsUri = new Uri(origin);
+            return _context.ClientRedirectUris
+                .AnyAsync(o => (o.Kind & (int)IdentityServer.Store.Entity.UriKind.Cors) == (int)IdentityServer.Store.Entity.UriKind.Cors &&
+                    corsUri.CorsMatch(o.Uri));
         }
+
     }
 }

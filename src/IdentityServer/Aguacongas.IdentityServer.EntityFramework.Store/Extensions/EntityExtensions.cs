@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.Models;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -20,7 +21,11 @@ namespace Aguacongas.IdentityServer.Store
                 AccessTokenLifetime = client.AccessTokenLifetime,
                 AccessTokenType = (AccessTokenType)client.AccessTokenType,
                 AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
-                AllowedCorsOrigins = client.AllowedCorsOrigins.Select(c => c.Origin).ToList(),
+                AllowedCorsOrigins = client.RedirectUris
+                    .Where(u => (u.Kind & (int)Entity.UriKind.Cors) == (int)Entity.UriKind.Cors)
+                    .Select(u => new Uri(u.Uri))
+                    .Select(u => $"{u.Scheme}://{u.Host}{u.UriPortString()}")
+                    .ToList(),
                 AllowedGrantTypes = client.AllowedGrantTypes.Select(g => g.GrantType).ToList(),
                 AllowedScopes = client.AllowedScopes.Select(s => s.Scope).ToList(),
                 AllowOfflineAccess = client.AllowOfflineAccess,
@@ -49,11 +54,15 @@ namespace Aguacongas.IdentityServer.Store
                 IncludeJwtId = client.IncludeJwtId,
                 LogoUri = client.LogoUri,
                 PairWiseSubjectSalt = client.PairWiseSubjectSalt,
-                PostLogoutRedirectUris = client.PostLogoutRedirectUris.Select(u => u.Uri).ToList(),
+                PostLogoutRedirectUris = client.RedirectUris
+                    .Where(u => (u.Kind & (int)Entity.UriKind.PostLogout) == (int)Entity.UriKind.PostLogout)
+                    .Select(u => u.Uri).ToList(),
                 Properties = client.Properties.ToDictionary(p => p.Key, p => p.Value),
                 ProtocolType = client.ProtocolType,
                 RefreshTokenExpiration = (TokenExpiration)client.RefreshTokenExpiration,
-                RedirectUris = client.RedirectUris.Select(u => u.Uri).ToList(),
+                RedirectUris = client.RedirectUris
+                    .Where(u => (u.Kind & (int)Entity.UriKind.Redirect) == (int)Entity.UriKind.Redirect)
+                    .Select(u => u.Uri).ToList(),
                 RefreshTokenUsage = (TokenUsage) client.RefreshTokenUsage,
                 RequireClientSecret = client.RequireClientSecret,
                 RequireConsent = client.RequireConsent,
@@ -88,10 +97,22 @@ namespace Aguacongas.IdentityServer.Store
                     Name = s.Id, 
                     Required = s.Required, 
                     ShowInDiscoveryDocument = s.ShowInDiscoveryDocument, 
-                    UserClaims = s.ApiScopeClaims.Select( c => c.Type).ToList() 
+                    UserClaims = api.ApiScopeClaims
+                        .Where(s => s.ApiScpope.Id == s.Id)
+                        .Select(c => c.Type).ToList() 
                 }).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()
             };
+        }
+
+        public static Consent ToConsent(this Entity.UserConsent entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<Consent>(entity.Data);
         }
 
         public static IdentityResource ToIdentity(this Entity.Identity identity)
@@ -122,18 +143,55 @@ namespace Aguacongas.IdentityServer.Store
                 return null;
             }
 
+            var uris = client.RedirectUris.Select(o => new Entity.ClientRedirectUri
+            {
+                Id = Guid.NewGuid().ToString(),
+                Uri = o,
+                Kind = (int)Entity.UriKind.Redirect
+            }).ToList();
+
+            foreach (var origin in client.AllowedCorsOrigins)
+            {
+                var cors = new Uri(origin);
+                var uri = uris.FirstOrDefault(u => cors.CorsMatch(u.Uri));
+                if (uri == null)
+                {
+                    uris.Add(new Entity.ClientRedirectUri
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Uri = origin,
+                        Kind = (int)Entity.UriKind.Cors
+                    });
+                    continue;
+                }
+
+                uri.Kind |= (int)Entity.UriKind.Cors;
+            }
+
+            foreach (var postLogout in client.PostLogoutRedirectUris)
+            {
+                var uri = uris.FirstOrDefault(u => u.Uri == postLogout);
+                if (uri == null)
+                {
+                    uris.Add(new Entity.ClientRedirectUri
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Uri = postLogout,
+                        Kind = (int)Entity.UriKind.PostLogout
+                    });
+                    continue;
+                }
+
+                uri.Kind |= (int)Entity.UriKind.Redirect;
+            }
+
             return new Entity.Client
             {
-                Id = client.ClientName,
+                Id = client.ClientId,                
                 AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
                 AccessTokenLifetime = client.AccessTokenLifetime,
                 AccessTokenType = (int)client.AccessTokenType,
                 AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
-                AllowedCorsOrigins = client.AllowedCorsOrigins.Select(o => new Entity.ClientCorsOrigin
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Origin = o
-                }).ToList(),
                 AllowedGrantTypes = client.AllowedGrantTypes.Select(t => new Entity.ClientGrantType
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -185,11 +243,6 @@ namespace Aguacongas.IdentityServer.Store
                 IncludeJwtId = client.IncludeJwtId,
                 LogoUri = client.LogoUri,
                 PairWiseSubjectSalt = client.PairWiseSubjectSalt,
-                PostLogoutRedirectUris = client.PostLogoutRedirectUris.Select(u => new Entity.ClientPostLogoutRedirectUri
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Uri = u
-                }).ToList(),
                 Properties = client.Properties.Select(p => new Entity.ClientProperty
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -197,11 +250,7 @@ namespace Aguacongas.IdentityServer.Store
                     Value = p.Value
                 }).ToList(),
                 ProtocolType = client.ProtocolType,
-                RedirectUris = client.RedirectUris.Select(u => new Entity.ClientRedirectUri
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Uri = u
-                }).ToList(),
+                RedirectUris = uris,
                 RefreshTokenExpiration = (int)client.RefreshTokenExpiration,
                 RefreshTokenUsage = (int)client.RefreshTokenUsage,
                 RequireClientSecret = client.RequireClientSecret,
@@ -240,7 +289,7 @@ namespace Aguacongas.IdentityServer.Store
                 }).ToList(),
                 Scopes = api.Scopes.Select(s => new Entity.ApiScope
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    Id = s.Name,
                     ApiScopeClaims = s.UserClaims.Select(c => new Entity.ApiScopeClaim
                     {
                         Id = Guid.NewGuid().ToString(),
@@ -291,6 +340,47 @@ namespace Aguacongas.IdentityServer.Store
                 Required = identity.Required,
                 ShowInDiscoveryDocument = identity.ShowInDiscoveryDocument
             };
+        }
+
+        public static Entity.UserConsent ToEntity(this Consent consent, Entity.Client client)
+        {
+            if (consent == null)
+            {
+                return null;
+            }
+
+            return new Entity.UserConsent
+            {
+                Id = Guid.NewGuid().ToString(),
+                Client = client,
+                Data = JsonConvert.SerializeObject(consent),
+                SubjectId = consent.SubjectId
+            };
+        }
+
+        public static bool CorsMatch(this Uri cors, string url)
+        {
+            cors = cors ?? throw new ArgumentNullException(nameof(cors));
+            url = url ?? throw new ArgumentNullException(nameof(url));
+            var uri = new Uri(url);
+            return uri.Scheme.ToUpperInvariant() == cors.Scheme.ToUpperInvariant() &&
+                uri.Host.ToUpperInvariant() == cors.Host.ToUpperInvariant() &&
+                uri.Port == cors.Port;
+        }
+
+        public static bool CorsMatch(this Uri cors, Uri uri)
+        {
+            cors = cors ?? throw new ArgumentNullException(nameof(cors));
+            uri = uri ?? throw new ArgumentNullException(nameof(uri));
+
+            return uri.Scheme.ToUpperInvariant() == cors.Scheme.ToUpperInvariant() &&
+                uri.Host.ToUpperInvariant() == cors.Host.ToUpperInvariant() &&
+                uri.Port == cors.Port;
+        }
+
+        private static string UriPortString(this Uri uri)
+        {
+            return uri.IsDefaultPort ? "" : $":{uri.Port}";
         }
     }
 }

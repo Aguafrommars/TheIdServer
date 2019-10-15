@@ -207,32 +207,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     b.ToTable("ClientClaims");
                 });
 
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientCorsOrigin", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("ClientCorsOrigins");
-                });
-
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientGrantType", b =>
                 {
                     b.Property<string>("Id")
@@ -285,32 +259,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     b.ToTable("ClientIdPRestriction");
                 });
 
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientPostLogoutRedirectUri", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Uri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("ClientPostLogoutRedirectUris");
-                });
-
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientProperty", b =>
                 {
                     b.Property<string>("Id")
@@ -351,6 +299,9 @@ namespace Aguacongas.TheIdServer.Migrations.Client
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -567,13 +518,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                         .HasForeignKey("ClientId");
                 });
 
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientCorsOrigin", b =>
-                {
-                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
-                        .WithMany("AllowedCorsOrigins")
-                        .HasForeignKey("ClientId");
-                });
-
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientGrantType", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -585,13 +529,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
                         .WithMany("IdentityProviderRestrictions")
-                        .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientPostLogoutRedirectUri", b =>
-                {
-                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
-                        .WithMany("PostLogoutRedirectUris")
                         .HasForeignKey("ClientId");
                 });
 

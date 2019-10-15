@@ -81,6 +81,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ApiClaim> ApiClaims { get; set; }
 
         /// <summary>
+        /// Gets or sets the API scope claims.
+        /// </summary>
+        /// <value>
+        /// The API scope claims.
+        /// </value>
+        public virtual ICollection<ApiScopeClaim> ApiScopeClaims { get; set; }
+
+        /// <summary>
         /// Gets or sets the properties.
         /// </summary>
         /// <value>

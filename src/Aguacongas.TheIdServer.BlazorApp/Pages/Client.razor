@@ -1,0 +1,30 @@
+﻿@page "/clients"
+@inherits ClientModel
+
+<h1>Clients</h1>
+
+@if (ClientList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in ClientList)
+            {
+                <tr>
+                    <td>@client.Id</td>
+                    <td>@client.ClientName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

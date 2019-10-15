@@ -24,6 +24,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Uri { get; set; }
 
         /// <summary>
+        /// Gets or sets the kind.
+        /// </summary>
+        /// <value>
+        /// The kind.
+        /// </value>
+        [Required]
+        public int Kind { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>

@@ -13,11 +13,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ClientClaim> ClientClaims { get; set; }
 
-        public virtual DbSet<ClientCorsOrigin> ClientCorsOrigins { get; set; }
-
         public virtual DbSet<ClientGrantType> ClientGrantTypes { get; set; }
-
-        public virtual DbSet<ClientPostLogoutRedirectUri> ClientPostLogoutRedirectUris { get; set; }
 
         public virtual DbSet<ClientProperty> ClientProperties { get; set; }
 

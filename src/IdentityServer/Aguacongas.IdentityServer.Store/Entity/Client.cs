@@ -338,14 +338,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ClientSecret> ClientSecrets { get; set; }
 
         /// <summary>
-        /// Gets or sets the allowed cors origins.
-        /// </summary>
-        /// <value>
-        /// The allowed cors origins.
-        /// </value>
-        public virtual ICollection<ClientCorsOrigin> AllowedCorsOrigins { get; set; }
-
-        /// <summary>
         /// Gets or sets the allowed grant types.
         /// </summary>
         /// <value>
@@ -360,14 +352,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The redirect uris.
         /// </value>
         public virtual ICollection<ClientRedirectUri> RedirectUris { get; set; }
-
-        /// <summary>
-        /// Gets or sets the post logout redirect uris.
-        /// </summary>
-        /// <value>
-        /// The post logout redirect uris.
-        /// </value>
-        public virtual ICollection<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; set; }
 
         /// <summary>
         /// Gets or sets the allowed scopes.
