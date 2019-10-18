@@ -54,10 +54,10 @@ namespace Aguacongas.TheIdServer
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    RedirectUris = { "http://localhost:5001/signin-oidc" },
+                    RedirectUris = { "http://localhost:5001/signin-oidc", "https://localhost:5446/signin-oidc" },
                     FrontChannelLogoutUri = "http://localhost:5001/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:5001/signout-callback-oidc" },
-
+                    PostLogoutRedirectUris = { "http://localhost:5001/signout-callback-oidc", "http://localhost:5446/signout-callback-oidc" },
+                    
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api1" }
                 },
@@ -75,13 +75,10 @@ namespace Aguacongas.TheIdServer
 
                     RedirectUris =
                     {
-                        "http://localhost:5002/index.html",
-                        "http://localhost:5002/callback.html",
-                        "http://localhost:5002/silent.html",
-                        "http://localhost:5002/popup.html",
+                        "http://localhost:5002"
                     },
 
-                    PostLogoutRedirectUris = { "http://localhost:5002/index.html" },
+                    PostLogoutRedirectUris = { "http://localhost:5002" },
                     AllowedCorsOrigins = { "http://localhost:5002" },
 
                     AllowedScopes = { "openid", "profile", "api1" }

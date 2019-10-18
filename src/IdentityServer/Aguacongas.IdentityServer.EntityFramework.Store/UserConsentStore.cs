@@ -3,9 +3,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -52,7 +49,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var newEntity = consent.ToEntity(client);
 
             var entity = await _context.UserConstents
-                .FirstOrDefaultAsync(c => c.SubjectId == consent.SubjectId & c.Client.Id == consent.ClientId)
+                .FirstOrDefaultAsync(c => c.SubjectId == consent.SubjectId && c.Client.Id == consent.ClientId)
                 .ConfigureAwait(false);
 
             if (entity == null)
@@ -66,6 +63,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
-        }    
+        }
     }
 }

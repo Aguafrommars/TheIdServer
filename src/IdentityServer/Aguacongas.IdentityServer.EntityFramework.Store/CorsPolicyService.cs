@@ -2,6 +2,7 @@
 using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -29,12 +30,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <returns></returns>
-        public Task<bool> IsOriginAllowedAsync(string origin)
+        public async Task<bool> IsOriginAllowedAsync(string origin)
         {
             var corsUri = new Uri(origin);
-            return _context.ClientRedirectUris
-                .AnyAsync(o => (o.Kind & (int)IdentityServer.Store.Entity.UriKind.Cors) == (int)IdentityServer.Store.Entity.UriKind.Cors &&
-                    corsUri.CorsMatch(o.Uri));
+            var corsValue = (int)IdentityServer.Store.Entity.UriKind.Cors;
+            var corsUris = await _context.ClientRedirectUris
+                .Where(o => (o.Kind & corsValue) == corsValue)
+                .ToListAsync()
+                .ConfigureAwait(false);
+            return corsUris.Any(o => corsUri.CorsMatch(o.Uri));
         }
 
     }

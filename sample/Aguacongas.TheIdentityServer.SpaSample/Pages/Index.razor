@@ -1,0 +1,60 @@
+﻿@page "/"
+@inject CustomAuthStateProvider _authStateProvider
+@inject HttpClient _httpClient
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<AuthorizeView>
+    <NotAuthorized>
+        <button @onclick="@LogUsername">Log username</button>
+    </NotAuthorized>
+    <Authorized>
+        <em>@_user.Identity.Name claims</em>
+        @foreach (var claim in _user.Claims)
+        {
+            <div>@claim.Type @claim.Value</div>
+        }
+        @if (_forecastList != null)
+        {
+            <p>
+                FORECAST
+                @foreach (var forecast in _forecastList)
+                {
+                    <div><em>@forecast.Date @forecast.Summary</em> @forecast.TemperatureC°</div>
+                }
+            </p>
+        }
+    </Authorized>
+</AuthorizeView>
+
+@code {
+
+    private ClaimsPrincipal _user;
+    private IEnumerable<WeatherForecast> _forecastList;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private async Task LogUsername()
+    {
+        await _authStateProvider.LoginAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await authenticationStateTask;
+
+        _user = state.User;
+        if (_user.Identity.IsAuthenticated)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                _user.Claims.First(c => c.Type == "access_token").Value);
+            _forecastList = await _httpClient.GetJsonAsync<IEnumerable<WeatherForecast>>("https://localhost:5448/weatherforecast");
+        }
+    }
+}

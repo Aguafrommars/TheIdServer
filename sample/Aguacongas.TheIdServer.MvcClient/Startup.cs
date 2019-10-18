@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +27,8 @@ namespace Aguacongas.TheIdServer.MvcClient
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(options =>
+            services.AddTransient<HttpClient>()
+                .AddAuthentication(options =>
                 {
                     options.DefaultScheme = "Cookies";
                     options.DefaultChallengeScheme = "oidc";
@@ -34,6 +36,7 @@ namespace Aguacongas.TheIdServer.MvcClient
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
+                    options.SignInScheme = "Cookies";
                     options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
 
@@ -43,6 +46,7 @@ namespace Aguacongas.TheIdServer.MvcClient
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("api1");
+                    options.GetClaimsFromUserInfoEndpoint = true;
                     options.SaveTokens = true;
                 });
            

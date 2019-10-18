@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Aguacongas.TheIdServer.MvcClient.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Aguacongas.TheIdServer.MvcClient.Models;
-using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.MvcClient.Controllers
 {
@@ -20,9 +20,17 @@ namespace Aguacongas.TheIdServer.MvcClient.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromServices] HttpClient httpClient)
         {
-            return View();
+            var result = await HttpContext.AuthenticateAsync();
+            var token = result.Properties.GetTokenValue("access_token");
+            var refresh = result.Properties.GetTokenValue("refresh_token");
+            var header = new AuthenticationHeaderValue("Bearer", token);
+            httpClient.DefaultRequestHeaders.Authorization = header;
+            using var response = await httpClient.GetAsync("https://localhost:5448/weatherforecast");
+            var content = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            return View(model: content);
         }
 
         public IActionResult Privacy()

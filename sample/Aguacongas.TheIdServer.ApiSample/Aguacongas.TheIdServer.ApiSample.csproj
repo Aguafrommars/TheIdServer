@@ -8,5 +8,9 @@
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.TheIdServer.Sample.Shared\Aguacongas.TheIdServer.Sample.Shared.csproj" />
+  </ItemGroup>
+
 
 </Project>

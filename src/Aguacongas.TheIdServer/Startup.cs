@@ -85,6 +85,7 @@ namespace Aguacongas.TheIdServer
              });
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())

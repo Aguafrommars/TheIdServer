@@ -27,7 +27,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore, RefreshTokenStore>()
                 .AddTransient<IReferenceTokenStore, ReferenceTokenStore>()
                 .AddTransient<IUserConsentStore, UserConsentStore>()
-                .AddTransient<IAdminStore<Client>, AdminClientStore>();
+                .AddTransient<IAdminStore<Client>, AdminClientStore>()
+                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>();
         }
     }
 }

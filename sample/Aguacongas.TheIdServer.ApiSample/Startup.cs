@@ -1,3 +1,4 @@
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,15 +20,16 @@ namespace Aguacongas.TheIdServer.ApiSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthorization()
+            services.AddCors()
+                .AddAuthorization()
                 .AddControllers();
 
-            services.AddAuthentication()
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "https://localhost:5443";
-                    options.RequireHttpsMetadata = true;
-                    options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
+                    options.RequireHttpsMetadata = false;
+                    options.SupportedTokens = SupportedTokens.Both;
                     options.ApiName = "api1";
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
@@ -45,7 +47,13 @@ namespace Aguacongas.TheIdServer.ApiSample
 
             app.UseAuthentication()
                 .UseHttpsRedirection()
-                .UseRouting();
+                .UseRouting()
+                .UseCors(configurePolicy =>
+                {
+                    configurePolicy.WithOrigins("http://localhost:5002")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
 
             app.UseAuthorization();
 
