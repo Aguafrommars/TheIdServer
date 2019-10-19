@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class ReferenceToken : IAuditable
+    public class ReferenceToken : IGrant
     {
         /// <summary>
         /// Gets or sets the identifier.

@@ -1,8 +1,6 @@
 ﻿using IdentityServer4.Models;
-using IdentityServer4.Stores.Serialization;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -10,17 +8,6 @@ namespace Aguacongas.IdentityServer.Store
 {
     public static class EntityExtensions
     {
-        private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = new CustomContractResolver(),
-            Converters = new List<JsonConverter> 
-            {
-                new ClaimConverter(),
-                new ClaimsPrincipalConverter(),
-            }
-        };
-
         public static Client ToClient(this Entity.Client client)
         {
             if (client == null)
@@ -118,16 +105,6 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Consent ToConsent(this Entity.UserConsent entity)
-        {
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return JsonConvert.DeserializeObject<Consent>(entity.Data, _settings);
-        }
-
         public static IdentityResource ToIdentity(this Entity.Identity identity)
         {
             if (identity == null)
@@ -147,16 +124,6 @@ namespace Aguacongas.IdentityServer.Store
                 ShowInDiscoveryDocument = identity.ShowInDiscoveryDocument,
                 UserClaims = identity.IdentityClaims.Select(c => c.Type).ToList()
             };
-        }
-
-        public static AuthorizationCode ToAuthorizationCode(this Entity.AuthorizationCode entity)
-        {
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return JsonConvert.DeserializeObject<AuthorizationCode>(entity.Data, _settings);
         }
 
         public static Entity.Client ToEntity(this Client client)
@@ -364,38 +331,7 @@ namespace Aguacongas.IdentityServer.Store
                 ShowInDiscoveryDocument = identity.ShowInDiscoveryDocument
             };
         }
-
-        public static Entity.UserConsent ToEntity(this Consent consent, Entity.Client client)
-        {
-            if (consent == null)
-            {
-                return null;
-            }
-
-            return new Entity.UserConsent
-            {
-                Id = Guid.NewGuid().ToString(),
-                Client = client,
-                Data = JsonConvert.SerializeObject(consent),
-                SubjectId = consent.SubjectId
-            };
-        }
-
-        public static Entity.AuthorizationCode ToEntity(this AuthorizationCode code, Entity.Client client)
-        {
-            if (code == null)
-            {
-                return null;
-            }
-
-            return new Entity.AuthorizationCode
-            {
-                Id = Guid.NewGuid().ToString(),
-                Client = client,
-                Data = JsonConvert.SerializeObject(code, _settings)
-            };
-        }
-
+                
         public static bool CorsMatch(this Uri cors, string url)
         {
             cors = cors ?? throw new ArgumentNullException(nameof(cors));

@@ -22,14 +22,13 @@ namespace Aguacongas.TheIdServer.MvcClient.Controllers
 
         public async Task<IActionResult> Index([FromServices] HttpClient httpClient)
         {
-            var result = await HttpContext.AuthenticateAsync();
-            var token = result.Properties.GetTokenValue("access_token");
-            var refresh = result.Properties.GetTokenValue("refresh_token");
+            var token = await HttpContext.GetTokenAsync("access_token");
             var header = new AuthenticationHeaderValue("Bearer", token);
             httpClient.DefaultRequestHeaders.Authorization = header;
             using var response = await httpClient.GetAsync("https://localhost:5448/weatherforecast");
             var content = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
+            
             return View(model: content);
         }
 

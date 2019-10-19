@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class UserConsent : IAuditable
+    public class UserConsent : IGrant
     {
         public string Id { get; set; }
 

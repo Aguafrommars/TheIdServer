@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
+using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     public class GetAllUserConsentStore : IGetAllUserConsentStore
     {
         private readonly ClientContext _context;
+        private readonly IPersistentGrantSerializer _serializer;
 
-        public GetAllUserConsentStore(ClientContext context)
+        public GetAllUserConsentStore(ClientContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<Consent>> GetAllUserConsent(string subjectId)
         {
             return await _context.UserConstents
                 .Where(c => c.SubjectId == subjectId)
-                .Select(c => c.ToConsent())
+                .Select(c => _serializer.Deserialize<Consent>(c.Data))
                 .ToListAsync()
                 .ConfigureAwait(false);
         }

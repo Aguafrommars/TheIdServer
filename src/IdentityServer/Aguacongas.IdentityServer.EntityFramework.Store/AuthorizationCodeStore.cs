@@ -1,25 +1,32 @@
-﻿using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Extensions;
+﻿using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using IdentityServer4.Stores.Serialization;
 using System;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class AuthorizationCodeStore : IAuthorizationCodeStore
     {
         private readonly ClientContext _context;
+        private readonly IPersistentGrantSerializer _serializer;
 
-        public AuthorizationCodeStore(ClientContext context)
+        public AuthorizationCodeStore(ClientContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
         {
             var entity = await _context.AuthorizationCodes.FindAsync(code);
-            return entity.ToAuthorizationCode();
+            if (entity != null)
+            {
+                return _serializer.Deserialize<AuthorizationCode>(entity.Data);
+            }
+            return null;
         }
 
         public async Task RemoveAuthorizationCodeAsync(string code)
@@ -42,7 +49,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 throw new InvalidOperationException($"Client {code.ClientId} not found");
             }
 
-            var newEntity = code.ToEntity(client);            
+            var newEntity = new Entity.AuthorizationCode
+            {
+                Id = Guid.NewGuid().ToString(),
+                Client = client,
+                Data = _serializer.Serialize(code)
+            };
             await _context.AuthorizationCodes.AddAsync(newEntity);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
