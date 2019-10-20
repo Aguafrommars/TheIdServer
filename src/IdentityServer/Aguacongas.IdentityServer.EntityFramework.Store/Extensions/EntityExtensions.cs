@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static ApiResource ToApi(this Entity.Api api)
+        public static ApiResource ToApi(this Entity.ProtectResource api)
         {
             if (api == null)
             {
@@ -105,7 +105,7 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static IdentityResource ToIdentity(this Entity.Identity identity)
+        public static IdentityResource ToIdentity(this Entity.IdentityResource identity)
         {
             if (identity == null)
             {
@@ -253,14 +253,14 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.Api ToEntity(this ApiResource api)
+        public static Entity.ProtectResource ToEntity(this ApiResource api)
         {
             if (api == null)
             {
                 return null;
             };
 
-            return new Entity.Api
+            return new Entity.ProtectResource
             {
                 Id = api.Name,
                 ApiClaims = api.UserClaims.Select(c => new Entity.ApiClaim
@@ -302,14 +302,14 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.Identity ToEntity(this IdentityResource identity)
+        public static Entity.IdentityResource ToEntity(this IdentityResource identity)
         {
             if (identity == null)
             {
                 return null;
             }
 
-            return new Entity.Identity
+            return new Entity.IdentityResource
             {
                 Id = identity.Name,
                 Description = identity.Description,

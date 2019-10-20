@@ -12,7 +12,7 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>id</th>
+                <th @onclick="async () => await SortById()">id</th>
                 <th>name</th>
             </tr>
         </thead>
@@ -21,7 +21,10 @@ else
             {
                 <tr>
                     <td>@client.Id</td>
-                    <td>@client.ClientName</td>
+                    <td>
+                        @client.ClientName
+                        <em>@client.Description</em>
+                    </td>
                 </tr>
             }
         </tbody>

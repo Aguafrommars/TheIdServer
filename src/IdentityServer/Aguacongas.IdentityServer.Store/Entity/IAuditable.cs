@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// <summary>
     /// Auditable interface
     /// </summary>
-    public interface IAuditable
+    public interface IAuditable : IEntityId
     {
         /// <summary>
         /// Gets or sets the created at.

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aguacongas.IdentityServer.Admin
 {
     [Route("client")]
-    public class ClientController : ApiControllerBase<Client>
+    public class ClientController : ApiController<Client>
     {
         public ClientController(IAdminStore<Client> store):base(store)
         {

@@ -9,10 +9,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     public abstract class GrantStore<TEntity, TDto> 
         where TEntity: class, IGrant, new()
     {
-        private readonly ClientContext _context;
+        private readonly IdentityServerDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public GrantStore(ClientContext context, IPersistentGrantSerializer serializer)
+        public GrantStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));

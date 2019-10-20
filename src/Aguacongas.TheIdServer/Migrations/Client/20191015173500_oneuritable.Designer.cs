@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aguacongas.TheIdServer.Migrations.Client
 {
-    [DbContext(typeof(ClientContext))]
+    [DbContext(typeof(IdentityServerDbContext))]
     [Migration("20191015173500_oneuritable")]
     partial class oneuritable
     {

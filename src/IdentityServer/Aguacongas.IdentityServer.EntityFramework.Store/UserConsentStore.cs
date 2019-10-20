@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class UserConsentStore : GrantStore<UserConsent, Consent>, IUserConsentStore
     {
-        public UserConsentStore(ClientContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public UserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
         {
         }
 

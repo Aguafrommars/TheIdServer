@@ -60,6 +60,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public DateTime? ModifiedAt { get; set; }
 
-        public virtual Api Api { get; set; }
+        public virtual ProtectResource Api { get; set; }
     }
 }

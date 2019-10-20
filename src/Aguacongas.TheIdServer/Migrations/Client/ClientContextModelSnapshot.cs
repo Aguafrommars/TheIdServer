@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aguacongas.TheIdServer.Migrations.Client
 {
-    [DbContext(typeof(ClientContext))]
+    [DbContext(typeof(IdentityServerDbContext))]
     partial class ClientContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

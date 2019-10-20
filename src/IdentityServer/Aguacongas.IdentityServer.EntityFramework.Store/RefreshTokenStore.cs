@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
-        public RefreshTokenStore(ClientContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public RefreshTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
         {
         }
 

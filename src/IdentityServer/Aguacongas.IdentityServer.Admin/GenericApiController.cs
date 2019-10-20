@@ -12,11 +12,13 @@ namespace Aguacongas.IdentityServer.Admin
     /// <typeparam name="T">Type of entity</typeparam>
     /// <seealso cref="Controller" />
     [Produces("application/json")]
-    public abstract class ApiControllerBase<T> : Controller where T: class
+    [Route("[controller]")]
+    [GenericApiControllerNameConvention]
+    public class GenericApiController<T> : Controller where T: class
     {
         private readonly IAdminStore<T> _store;
 
-        public ApiControllerBase(IAdminStore<T> store)
+        public GenericApiController(IAdminStore<T> store)
             => _store = store ?? throw new ArgumentNullException(nameof(store));
 
         /// <summary>

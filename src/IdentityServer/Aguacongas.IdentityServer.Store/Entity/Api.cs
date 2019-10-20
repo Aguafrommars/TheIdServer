@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class Api
+    public class ProtectResource : IAuditable
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -15,7 +15,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Api{TKey}"/> is enabled.
+        /// Gets or sets a value indicating whether this <see cref="ProtectResource"/> is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if enabled; otherwise, <c>false</c>.

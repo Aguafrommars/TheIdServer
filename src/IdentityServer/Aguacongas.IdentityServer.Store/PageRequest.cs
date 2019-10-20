@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets or sets the order expression
         /// </summary>
-        public string OrderExpression { get; set; }
+        public string OrderBy { get; set; }
 
         /// <summary>
         /// Gets or sets the filter.

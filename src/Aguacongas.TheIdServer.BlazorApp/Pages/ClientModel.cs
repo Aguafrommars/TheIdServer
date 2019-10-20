@@ -11,6 +11,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public class ClientModel: ComponentBase
     {
+        private bool _sortById = false;
+
         [Inject]
         public HttpClient HttpClient { get; set; }
 
@@ -20,7 +22,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
 
-            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>("/api/client").ConfigureAwait(false);
+            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>("/api/client?take=10")
+                .ConfigureAwait(false);
+            ClientList = page.Items;
+        }
+
+        protected async Task SortById()
+        {
+            var sortClose = "Id";
+            if (_sortById)
+            {
+                sortClose += " desc";
+            }
+            _sortById = !_sortById;
+            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>($"/api/client?orderby={sortClose}&take=10")
+                .ConfigureAwait(false);
             ClientList = page.Items;
         }
     }

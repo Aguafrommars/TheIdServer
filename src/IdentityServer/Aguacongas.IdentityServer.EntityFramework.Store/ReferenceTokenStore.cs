@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ReferenceTokenStore : GrantStore<ReferenceToken, Token>, IReferenceTokenStore
     {
-        public ReferenceTokenStore(ClientContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public ReferenceTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
         {
         }
 

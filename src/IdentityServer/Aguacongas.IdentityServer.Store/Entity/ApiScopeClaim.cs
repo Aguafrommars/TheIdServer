@@ -45,7 +45,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The API.
         /// </value>
-        public virtual Api Api { get; set; }
+        public virtual ProtectResource Api { get; set; }
 
         /// <summary>
         /// Gets or sets the API scpope.

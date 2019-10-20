@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Admin.Service;
+﻿using Aguacongas.IdentityServer.Admin;
+using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -9,7 +10,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>();
-            return builder.AddApplicationPart(assembly); 
-        }
+            return builder.AddApplicationPart(assembly)
+                .ConfigureApplicationPartManager(apm =>
+                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));        }
     }
 }

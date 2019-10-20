@@ -22,4 +22,8 @@
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 </Project>

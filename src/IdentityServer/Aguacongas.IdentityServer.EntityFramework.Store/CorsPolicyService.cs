@@ -13,14 +13,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly ClientContext _context;
+        private readonly IdentityServerDbContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(ClientContext context)
+        public CorsPolicyService(IdentityServerDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

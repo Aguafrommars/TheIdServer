@@ -11,10 +11,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class GetAllUserConsentStore : IGetAllUserConsentStore
     {
-        private readonly ClientContext _context;
+        private readonly IdentityServerDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public GetAllUserConsentStore(ClientContext context, IPersistentGrantSerializer serializer)
+        public GetAllUserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));

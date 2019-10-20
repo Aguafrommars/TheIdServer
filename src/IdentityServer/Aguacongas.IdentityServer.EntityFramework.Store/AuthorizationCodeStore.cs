@@ -10,10 +10,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class AuthorizationCodeStore : IAuthorizationCodeStore
     {
-        private readonly ClientContext _context;
+        private readonly IdentityServerDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public AuthorizationCodeStore(ClientContext context, IPersistentGrantSerializer serializer)
+        public AuthorizationCodeStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));

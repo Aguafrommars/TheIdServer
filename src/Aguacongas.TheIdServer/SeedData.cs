@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer
 
         private static void SeedConfiguration(IServiceScope scope)
         {
-            var context = scope.ServiceProvider.GetRequiredService<ClientContext>();
+            var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
             context.Database.EnsureCreated();
             context.Database.Migrate();
             
@@ -58,30 +58,25 @@ namespace Aguacongas.TheIdServer
                 }
             }
 
-            var resouceContext = scope.ServiceProvider.GetRequiredService<ResourceContext>();
-            resouceContext.Database.EnsureCreated();
-            resouceContext.Database.Migrate();
-
-            if (!resouceContext.Identities.Any())
+            if (!context.Identities.Any())
             {
                 foreach (var resource in Config.GetIdentityResources())
                 {
-                    resouceContext.Identities.Add(resource.ToEntity());
+                    context.Identities.Add(resource.ToEntity());
                     Console.WriteLine($"Add identity resource {resource.DisplayName}");
                 }
             }
 
-            if (!resouceContext.Apis.Any())
+            if (!context.Apis.Any())
             {
                 foreach (var resource in Config.GetApis())
                 {
-                    resouceContext.Apis.Add(resource.ToEntity());
+                    context.Apis.Add(resource.ToEntity());
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
                 }
             }
 
             context.SaveChanges();
-            resouceContext.SaveChanges();
         }
 
         private static void SeedUsers(IServiceScope scope)

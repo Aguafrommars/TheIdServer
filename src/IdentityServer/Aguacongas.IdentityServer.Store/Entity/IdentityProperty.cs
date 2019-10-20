@@ -53,6 +53,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The client.
         /// </value>
-        public virtual Identity Identity { get; set; }
+        public virtual IdentityResource Identity { get; set; }
     }
 }

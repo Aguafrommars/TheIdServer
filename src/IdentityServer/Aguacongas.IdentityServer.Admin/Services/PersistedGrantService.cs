@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.Admin.Service
+namespace Aguacongas.IdentityServer.Admin.Services
 {
     public class PersistedGrantService : IPersistedGrantService
     {
