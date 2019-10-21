@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public class ClientModel: ComponentBase
     {
-        private bool _sortById = false;
-
         [Inject]
         public HttpClient HttpClient { get; set; }
 
         protected IEnumerable<Entity.Client> ClientList { get; private set; }
+
+        protected string CurrentSortedProperty { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -27,15 +28,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             ClientList = page.Items;
         }
 
-        protected async Task SortById()
+        protected async Task Sort(SortEventArgs e)
         {
-            var sortClose = "Id";
-            if (_sortById)
-            {
-                sortClose += " desc";
-            }
-            _sortById = !_sortById;
-            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>($"/api/client?orderby={sortClose}&take=10")
+            CurrentSortedProperty = e.PropertyName;
+            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>($"/api/client?orderby={e.OrderBy}&take=10")
                 .ConfigureAwait(false);
             ClientList = page.Items;
         }

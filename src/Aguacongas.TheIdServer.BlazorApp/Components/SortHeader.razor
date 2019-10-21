@@ -1,0 +1,63 @@
+﻿<div @onclick="OnHeaderClick">@HeaderName<span class="oi oi-arrow-@_class float-right" /></div>
+
+@code {
+    private string _class = null;
+    private string _currentSortedProperty;
+
+    [Parameter]
+    public string PropertyName { get; set; }
+
+    [Parameter]
+    public string HeaderName { get; set; }
+
+    [Parameter]
+    public EventCallback<SortEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public string CurrentSortedProperty
+    {
+        get
+        {
+            return _currentSortedProperty;
+        }
+        set
+        {
+            Console.WriteLine($"current sort property {value}");
+            _currentSortedProperty = value;
+            if (_currentSortedProperty != PropertyName)
+            {
+                Console.WriteLine($"property name {PropertyName} reset class");
+                _class = null;
+            }
+        }
+    }
+
+    void OnHeaderClick()
+    {
+        string orderBy;
+        if (_class == null)
+        {
+            _class = "bottom";
+            orderBy = $"{PropertyName} desc";
+        }
+        else if (_class == "bottom")
+        {
+            _class = "top";
+            orderBy = PropertyName;
+        }
+        else
+        {
+            _class = null;
+            orderBy = null;
+        }
+
+        if (OnClick.HasDelegate)
+        {
+            OnClick.InvokeAsync(new SortEventArgs
+            {
+                PropertyName = PropertyName,
+                OrderBy = orderBy
+            });
+        }
+    }
+}

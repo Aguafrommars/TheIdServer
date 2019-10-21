@@ -25,12 +25,9 @@ app {
         border-bottom: 1px solid #d6d5d5;
     }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-}
-
     .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
+        background-color: #e6e6e6;
+        border-bottom: 1px solid #d6d5d5;
     }
 
     .sidebar .navbar-brand {
@@ -58,7 +55,7 @@ app {
     }
 
     .nav-item a {
-        color: #d7d7d7;
+        color: #373737;
         border-radius: 4px;
         height: 3rem;
         display: flex;
@@ -67,21 +64,17 @@ app {
     }
 
         .nav-item a.active {
-            background-color: rgba(255,255,255,0.25);
-            color: white;
+            background-color: rgba(0,0,0,0.25);
+            color: black;
         }
 
         .nav-item a:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
+            background-color: rgba(0,0,0,0.1);
+            color: black;
         }
 
 .content {
     padding-top: 1.1rem;
-}
-
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .valid.modified:not([type=checkbox]) {

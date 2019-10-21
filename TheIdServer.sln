@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Clie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdentityServer.SpaSample", "sample\Aguacongas.TheIdentityServer.SpaSample\Aguacongas.TheIdentityServer.SpaSample.csproj", "{F7FD7595-F9CE-49D0-8635-69C44EE65034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Sample.Shared", "sample\Aguacongas.TheIdServer.Sample.Shared\Aguacongas.TheIdServer.Sample.Shared.csproj", "{FE898782-780E-4B38-9786-C06008F3F96B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Sample.Shared", "sample\Aguacongas.TheIdServer.Sample.Shared\Aguacongas.TheIdServer.Sample.Shared.csproj", "{FE898782-780E-4B38-9786-C06008F3F96B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
