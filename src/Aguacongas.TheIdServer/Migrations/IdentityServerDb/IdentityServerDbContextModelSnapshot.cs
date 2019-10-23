@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Aguacongas.TheIdServer.Migrations.Client
+namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
 {
     [DbContext(typeof(IdentityServerDbContext))]
-    partial class ClientContextModelSnapshot : ModelSnapshot
+    partial class IdentityServerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,169 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiClaim", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.ToTable("ApiClaims");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.ToTable("ApiProperty");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.ToTable("ApiScopes");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeClaim", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiScpopeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiScpopeId");
+
+                    b.ToTable("ApiScopeClaims");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiSecret", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.ToTable("ApiSecrets");
+                });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.AuthorizationCode", b =>
                 {
@@ -417,6 +580,132 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     b.ToTable("DeviceCodes");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("IdentityClaims");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("IdentityProperties");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityResource", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Identities");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ProtectResource", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Apis");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ReferenceToken", b =>
                 {
                     b.Property<string>("Id")
@@ -504,6 +793,45 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     b.ToTable("UserConstents");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiClaim", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("ApiClaims")
+                        .HasForeignKey("ApiId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("Properties")
+                        .HasForeignKey("ApiId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("Scopes")
+                        .HasForeignKey("ApiId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeClaim", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("ApiScopeClaims")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ApiScope", "ApiScpope")
+                        .WithMany("ApiScopeClaims")
+                        .HasForeignKey("ApiScpopeId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiSecret", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("Secrets")
+                        .HasForeignKey("ApiId");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.AuthorizationCode", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -565,6 +893,20 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.IdentityResource", "Identity")
+                        .WithMany("IdentityClaims")
+                        .HasForeignKey("IdentityId");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.IdentityResource", "Identity")
+                        .WithMany("Properties")
+                        .HasForeignKey("IdentityId");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ReferenceToken", b =>

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "<Pending>")]
+    [SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "entry point")]
     public class Program
     {
         public static void Main(string[] args)
@@ -10,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
             CreateHostBuilder(args).Build().Run();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Default blazor Program class")]
         public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
             BlazorWebAssemblyHost.CreateDefaultBuilder()
                 .UseBlazorStartup<Startup>();

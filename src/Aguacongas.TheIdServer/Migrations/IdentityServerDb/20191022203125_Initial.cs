@@ -1,12 +1,30 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Aguacongas.TheIdServer.Migrations.Client
+namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
 {
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Apis",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    LastAccessed = table.Column<DateTime>(nullable: true),
+                    NonEditable = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Apis", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
@@ -57,6 +75,118 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 });
 
             migrationBuilder.CreateTable(
+                name: "Identities",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(nullable: false),
+                    Emphasize = table.Column<bool>(nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    NonEditable = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Identities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiClaims",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiClaims_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiProperty",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiProperty", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiProperty_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiScopes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(nullable: false),
+                    Emphasize = table.Column<bool>(nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiScopes_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiSecrets",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
+                    Expiration = table.Column<DateTime>(nullable: true),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiSecrets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiSecrets_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AuthorizationCodes",
                 columns: table => new
                 {
@@ -93,27 +223,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                     table.PrimaryKey("PK_ClientClaims", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ClientClaims_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientCorsOrigins",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Origin = table.Column<string>(maxLength: 150, nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientCorsOrigins", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClientCorsOrigins_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -163,27 +272,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientPostLogoutRedirectUris",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Uri = table.Column<string>(maxLength: 2000, nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientPostLogoutRedirectUris", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClientProperties",
                 columns: table => new
                 {
@@ -211,6 +299,7 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 {
                     Id = table.Column<string>(nullable: false),
                     Uri = table.Column<string>(maxLength: 2000, nullable: false),
+                    Kind = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true),
                     ClientId = table.Column<string>(nullable: true)
@@ -361,6 +450,107 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "IdentityClaims",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    IdentityId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityClaims_Identities_IdentityId",
+                        column: x => x.IdentityId,
+                        principalTable: "Identities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityProperties",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Key = table.Column<string>(maxLength: 250, nullable: true),
+                    Value = table.Column<string>(maxLength: 2000, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    IdentityId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityProperties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityProperties_Identities_IdentityId",
+                        column: x => x.IdentityId,
+                        principalTable: "Identities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiScopeClaims",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: true),
+                    ApiScpopeId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeClaims_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeClaims_ApiScopes_ApiScpopeId",
+                        column: x => x.ApiScpopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiClaims_ApiId",
+                table: "ApiClaims",
+                column: "ApiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiProperty_ApiId",
+                table: "ApiProperty",
+                column: "ApiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiScopeClaims_ApiId",
+                table: "ApiScopeClaims",
+                column: "ApiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiScopeClaims_ApiScpopeId",
+                table: "ApiScopeClaims",
+                column: "ApiScpopeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiScopes_ApiId",
+                table: "ApiScopes",
+                column: "ApiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiSecrets_ApiId",
+                table: "ApiSecrets",
+                column: "ApiId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AuthorizationCodes_ClientId",
                 table: "AuthorizationCodes",
@@ -372,11 +562,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientCorsOrigins_ClientId",
-                table: "ClientCorsOrigins",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ClientGrantTypes_ClientId",
                 table: "ClientGrantTypes",
                 column: "ClientId");
@@ -384,11 +569,6 @@ namespace Aguacongas.TheIdServer.Migrations.Client
             migrationBuilder.CreateIndex(
                 name: "IX_ClientIdPRestriction_ClientId",
                 table: "ClientIdPRestriction",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientPostLogoutRedirectUris_ClientId",
-                table: "ClientPostLogoutRedirectUris",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
@@ -417,6 +597,16 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IdentityClaims_IdentityId",
+                table: "IdentityClaims",
+                column: "IdentityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityProperties_IdentityId",
+                table: "IdentityProperties",
+                column: "IdentityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReferenceTokens_ClientId",
                 table: "ReferenceTokens",
                 column: "ClientId");
@@ -435,22 +625,28 @@ namespace Aguacongas.TheIdServer.Migrations.Client
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApiClaims");
+
+            migrationBuilder.DropTable(
+                name: "ApiProperty");
+
+            migrationBuilder.DropTable(
+                name: "ApiScopeClaims");
+
+            migrationBuilder.DropTable(
+                name: "ApiSecrets");
+
+            migrationBuilder.DropTable(
                 name: "AuthorizationCodes");
 
             migrationBuilder.DropTable(
                 name: "ClientClaims");
 
             migrationBuilder.DropTable(
-                name: "ClientCorsOrigins");
-
-            migrationBuilder.DropTable(
                 name: "ClientGrantTypes");
 
             migrationBuilder.DropTable(
                 name: "ClientIdPRestriction");
-
-            migrationBuilder.DropTable(
-                name: "ClientPostLogoutRedirectUris");
 
             migrationBuilder.DropTable(
                 name: "ClientProperties");
@@ -468,6 +664,12 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
+                name: "IdentityClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityProperties");
+
+            migrationBuilder.DropTable(
                 name: "ReferenceTokens");
 
             migrationBuilder.DropTable(
@@ -477,7 +679,16 @@ namespace Aguacongas.TheIdServer.Migrations.Client
                 name: "UserConstents");
 
             migrationBuilder.DropTable(
+                name: "ApiScopes");
+
+            migrationBuilder.DropTable(
+                name: "Identities");
+
+            migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Apis");
         }
     }
 }

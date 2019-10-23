@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.IdentityServer.Abstractions\Aguacongas.IdentityServer.Abstractions.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
   </ItemGroup>
 

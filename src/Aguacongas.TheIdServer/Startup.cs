@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -31,7 +32,7 @@ namespace Aguacongas.TheIdServer
         {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var connectionString = Configuration.GetConnectionString("DefaultConnection");            
-
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
                 .AddIdentityServer4EntityFrameworkStores(options =>
@@ -42,6 +43,12 @@ namespace Aguacongas.TheIdServer
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                {
+                    var settings = options.SerializerSettings;
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                })
                 .AddIdentityServerAdmin();
 
             services.Configure<IISOptions>(iis =>
@@ -77,6 +84,8 @@ namespace Aguacongas.TheIdServer
                     options.ClientId = "copy client ID from Google here";
                     options.ClientSecret = "copy client secret from Google here";
                 });
+
+            
 
             services.AddResponseCompression(opts =>
              {

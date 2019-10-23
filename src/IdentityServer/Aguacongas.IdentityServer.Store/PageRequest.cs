@@ -27,5 +27,21 @@
         /// The filter.
         /// </value>
         public string Filter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the select.
+        /// </summary>
+        /// <value>
+        /// The select.
+        /// </value>
+        public string Select { get; set; }
+
+        /// <summary>
+        /// Gets or sets the expand.
+        /// </summary>
+        /// <value>
+        /// The expand.
+        /// </value>
+        public string Expand { get; set; }
     }
 }

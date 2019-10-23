@@ -1,4 +1,4 @@
-﻿namespace Aguacongas.TheIdentityServer.SpaSample
+﻿namespace Aguacongas.Blazor.Oidc
 {
     public class SerializableClaim
     {

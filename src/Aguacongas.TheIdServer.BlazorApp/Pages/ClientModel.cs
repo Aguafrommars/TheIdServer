@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         public HttpClient HttpClient { get; set; }
 
+        [Inject]
+        public GridState GridState { get; set; }
+
         protected IEnumerable<Entity.Client> ClientList { get; private set; }
 
         protected string CurrentSortedProperty { get; set; }
@@ -26,14 +30,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>("/api/client?take=10")
                 .ConfigureAwait(false);
             ClientList = page.Items;
-        }
 
-        protected async Task Sort(SortEventArgs e)
-        {
-            CurrentSortedProperty = e.PropertyName;
-            var page = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>($"/api/client?orderby={e.OrderBy}&take=10")
-                .ConfigureAwait(false);
-            ClientList = page.Items;
+            GridState.OnHeaderClicked += async e =>
+            {
+                var p = await HttpClient.GetJsonAsync<PageResponse<Entity.Client>>($"/api/client?orderby={e.OrderBy}&take=10")
+                    .ConfigureAwait(false);
+                ClientList = p.Items;
+                StateHasChanged();
+            };
         }
     }
 }

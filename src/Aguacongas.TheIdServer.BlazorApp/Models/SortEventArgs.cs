@@ -8,7 +8,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
     public class SortEventArgs : EventArgs
     {
-        public string PropertyName { get; set; }
         public string OrderBy { get; set; }
     }
 }

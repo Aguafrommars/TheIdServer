@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
+﻿@inject IManageSettings  settingsManager
+
+<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
@@ -8,3 +10,9 @@
         </LayoutView>
     </NotFound>
 </Router>
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await settingsManager.InitializeAsync();
+    }
+}
