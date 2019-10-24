@@ -1,8 +1,11 @@
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
@@ -12,9 +15,21 @@ namespace Aguacongas.TheIdServer.BlazorApp
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddSingleton<IManageSettings, SettingsManager>()
-                .AddSingleton<GridState>()
-                .AddIdentityServer4HttpStores(p => p.GetRequiredService<HttpClient>());
+                .AddIdentityServer4HttpStores(p => p.GetRequiredService<HttpClient>())
+                .AddAuthorizationCore()
+                .AddOidc(async p => {
+                    var settings = await p.GetRequiredService<Task<Settings>>()
+                        .ConfigureAwait(false);
+                    settings.RedirectUri = p.GetRequiredService<NavigationManager>().BaseUri;
+                    return settings;
+                })
+                .AddSingleton(async p =>
+                {
+                    var httpClient = p.GetRequiredService<HttpClient>();
+                    return await httpClient.GetJsonAsync<Settings>("settings.json")
+                        .ConfigureAwait(false);
+                })
+                .AddSingleton<GridState>();                
         }
 
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Startup class")]

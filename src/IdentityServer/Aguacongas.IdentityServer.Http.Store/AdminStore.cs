@@ -3,7 +3,6 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
@@ -35,65 +34,77 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
-            using var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json");
-            using var response = await _httpClient.PostAsync(_baseUri, content, cancellationToken)
-                .ConfigureAwait(false);
-                
-            await EnsureSuccess(response).ConfigureAwait(false);
-            return await DeserializeResponse(response)
-                .ConfigureAwait(false);
+            using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
+            {
+                using (var response = await _httpClient.PostAsync(_baseUri, content, cancellationToken)
+                    .ConfigureAwait(false))
+                {
+                    await EnsureSuccess(response).ConfigureAwait(false);
+                    return await DeserializeResponse(response)
+                        .ConfigureAwait(false);
+                }
+            }
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            using var response = await _httpClient.DeleteAsync($"_baseUri/{id}", cancellationToken)
-                .ConfigureAwait(false);
+            using (var response = await _httpClient.DeleteAsync($"_baseUri/{id}", cancellationToken)
+                .ConfigureAwait(false))
+            {
 
-            await EnsureSuccess(response)
-                .ConfigureAwait(false);
+                await EnsureSuccess(response)
+                    .ConfigureAwait(false);
+            }
         }
 
         public async Task<T> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            using var response = await _httpClient.GetAsync($"_baseUri/{id}", cancellationToken)
-                .ConfigureAwait(false);
+            using (var response = await _httpClient.GetAsync($"_baseUri/{id}", cancellationToken)
+                .ConfigureAwait(false))
+            {
 
-            await EnsureSuccess(response)
-                .ConfigureAwait(false);
+                await EnsureSuccess(response)
+                    .ConfigureAwait(false);
 
-            return await DeserializeResponse(response)
-                .ConfigureAwait(false);
+                return await DeserializeResponse(response)
+                    .ConfigureAwait(false);
+            } 
         }
 
         public async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            request ??= new PageRequest();
+            request = request ?? new PageRequest();
 
             var dictionary = typeof(PageRequest)
                 .GetProperties()
                 .ToDictionary(p => p.Name, p => p.GetValue(request).ToString());
 
-            using var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString(_baseUri, dictionary), cancellationToken)
-                .ConfigureAwait(false);
+            using (var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString(_baseUri, dictionary), cancellationToken)
+                .ConfigureAwait(false))
+            {
 
-            await EnsureSuccess(response)
-                .ConfigureAwait(false);
+                await EnsureSuccess(response)
+                    .ConfigureAwait(false);
 
-            return await DeserializeResponse<PageResponse<T>>(response)
-                .ConfigureAwait(false);
+                return await DeserializeResponse<PageResponse<T>>(response)
+                    .ConfigureAwait(false);
+            }
         }
-
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
 
-            using var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json");
-            using var response = await _httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
-                .ConfigureAwait(false);
+            using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
+            {
+                using (var response = await _httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
+                    .ConfigureAwait(false))
+                {
 
-            await EnsureSuccess(response).ConfigureAwait(false);
-            return await DeserializeResponse(response)
-                .ConfigureAwait(false);
+                    await EnsureSuccess(response).ConfigureAwait(false);
+                    return await DeserializeResponse(response)
+                        .ConfigureAwait(false);
+                }
+            }
         }
 
         private string SerializeEntity(T entity)

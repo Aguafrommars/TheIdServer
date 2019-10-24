@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Aguacongas.Blazor.Oidc
+﻿namespace Aguacongas.Blazor.Oidc
 {
     public class AuthorizationOptions
     {
@@ -14,14 +10,16 @@ namespace Aguacongas.Blazor.Oidc
 
         public string RedirectUri { get; set; }
 
-        public string Scopes { get; set; }
+        public string Scope { get; set; }
 
-        public string VerifierStorageKey { get; set; } = "verfier";
+        public string StoragePrefix { get; set; } = "oidc.";
 
-        public string ClaimsStorageKey { get; set; } = "claims";
+        public string VerifierStorageKey => $"{StoragePrefix}verifier";
 
-        public string TokensStorageKey { get; set; } = "tokens";
+        public string ClaimsStorageKey => $"{StoragePrefix}claims";
 
-        public string ExpireAtStorageKey { get; set; } = "expireAt";
+        public string TokensStorageKey => $"{StoragePrefix}tokens";
+
+        public string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
     }
 }

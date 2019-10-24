@@ -17,43 +17,42 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.Blazor.Oidc
 {
-    public class CustomAuthStateProvider : AuthenticationStateProvider
+    public class OidcAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly HttpClient _httpClient;
         private readonly NavigationManager _navigationManager;
-        private readonly IJSRuntime _JsRuntime;
+        private readonly IJSRuntime _jsRuntime;
         private readonly UserStore _userStore;
-        private readonly AuthorizationOptions _options;
+        private readonly Task<AuthorizationOptions> _getOptionsTask;
         private DiscoveryDocumentResponse _discoveryDocumentResponse;
-        public CustomAuthStateProvider(HttpClient httpClient, 
+        public OidcAuthenticationStateProvider(HttpClient httpClient, 
             NavigationManager navigationManager, 
             IJSRuntime JsRuntime,
             UserStore userStore,
-            AuthorizationOptions options)
+            Task<AuthorizationOptions> getOptionsTask)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _navigationManager = navigationManager ?? throw new ArgumentNullException(nameof(httpClient));
-            _JsRuntime = JsRuntime ?? throw new ArgumentNullException(nameof(JsRuntime));
+            _jsRuntime = JsRuntime ?? throw new ArgumentNullException(nameof(JsRuntime));
             _userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _getOptionsTask = getOptionsTask ?? throw new ArgumentNullException(nameof(getOptionsTask));
         }
         public async Task LoginAsync()
         {
-            var discoveryResponse = await GetDicoveryDocumentAsync();
+            var options = await _getOptionsTask.ConfigureAwait(false);
+            var discoveryResponse = await GetDicoveryDocumentAsync(options);
 
             var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            Console.WriteLine($"Nonce: {nonce}");
 
             var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            await _JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "verfier", verifier);
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "verfier", verifier);
             var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
-            Console.WriteLine($"Challenge: {challenge}");
 
             var authorizationUri = QueryHelpers.AddQueryString(discoveryResponse.AuthorizeEndpoint, new Dictionary<string, string>
             {
-                ["client_id"] = _options.ClientId,
-                ["redirect_uri"] = _options.RedirectUri,
-                ["scope"] = _options.Scopes,
+                ["client_id"] = options.ClientId,
+                ["redirect_uri"] = options.RedirectUri,
+                ["scope"] = options.Scope,
                 ["response_type"] = "code",
                 ["nonce"] = nonce,
                 ["code_challenge"] = challenge,
@@ -70,19 +69,18 @@ namespace Aguacongas.Blazor.Oidc
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            var options = await _getOptionsTask.ConfigureAwait(false);
             var uri = new Uri(_navigationManager.Uri);
-            Console.WriteLine(uri.LocalPath);
+
             var queryParams = QueryHelpers.ParseQuery(uri.Query);
             if (_userStore.User == null)
             {
-                Console.WriteLine("Get user from session storage");
-                await GetUserFromSessionStorage();
+                await GetUserFromSessionStorage(options);
             }
             if (_userStore.User == null && queryParams.ContainsKey("code"))
             {
-                Console.WriteLine("Get user from code");
                 var code = queryParams["code"];
-                await GetTokensAsync(code);
+                await GetTokensAsync(code, options);
             }
             if (_userStore.User != null)
             {
@@ -92,33 +90,32 @@ namespace Aguacongas.Blazor.Oidc
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        private async Task GetUserFromSessionStorage()
+        private async Task GetUserFromSessionStorage(AuthorizationOptions options)
         {
-            var expireAtString = await GetItemAsync<string>(_options.ExpireAtStorageKey);
-            DateTime expireAt = DateTime.MinValue;
+            var expireAtString = await GetItemAsync<string>(options.ExpireAtStorageKey);
+            var expireAt = DateTime.MinValue;
             if (!string.IsNullOrEmpty(expireAtString))
             {
-                Console.WriteLine($"Tokens expire at {expireAtString}");
                 expireAt = DateTime.Parse(expireAtString);
             }
             if (DateTime.UtcNow < expireAt)
             {
-                var tokensString = await GetItemAsync<string>(_options.TokensStorageKey);
+                var tokensString = await GetItemAsync<string>(options.TokensStorageKey);
                 var tokens = JsonSerializer.Deserialize<Tokens>(tokensString);
-                var claimsString = await GetItemAsync<string>(_options.ClaimsStorageKey);
+                var claimsString = await GetItemAsync<string>(options.ClaimsStorageKey);
                 var claims = JsonSerializer.Deserialize<IEnumerable<SerializableClaim>>(claimsString); 
                 _userStore.User = CreateUser(claims.Select(c => new Claim(c.Type, c.Value)), tokens.access_token);
             }
         }
 
-        private async Task<DiscoveryDocumentResponse> GetDicoveryDocumentAsync()
+        private async Task<DiscoveryDocumentResponse> GetDicoveryDocumentAsync(AuthorizationOptions options)
         {
             if (_discoveryDocumentResponse != null)
             {
                 return _discoveryDocumentResponse;
             }
 
-            var discoveryResponse = await _httpClient.GetDiscoveryDocumentAsync(_options.Authority)
+            var discoveryResponse = await _httpClient.GetDiscoveryDocumentAsync(options.Authority)
                 .ConfigureAwait(false);
 
             if (discoveryResponse.Error != null)
@@ -130,17 +127,17 @@ namespace Aguacongas.Blazor.Oidc
             return _discoveryDocumentResponse;
         }
 
-        private async Task GetTokensAsync(StringValues code)
+        private async Task GetTokensAsync(StringValues code, AuthorizationOptions options)
         {
-            var discoveryResponse = await GetDicoveryDocumentAsync();
+            var discoveryResponse = await GetDicoveryDocumentAsync(options);
             
             using (var authorizationCodeRequest = new AuthorizationCodeTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
-                ClientId = _options.ClientId,
-                RedirectUri = _options.RedirectUri,
+                ClientId = options.ClientId,
+                RedirectUri = options.RedirectUri,
                 Code = code,
-                CodeVerifier = (await GetItemAsync<string>(_options.VerifierStorageKey))
+                CodeVerifier = (await GetItemAsync<string>(options.VerifierStorageKey))
                     .Replace("=", "")
                     .Replace('+', '-')
                     .Replace('/', '_')
@@ -152,8 +149,8 @@ namespace Aguacongas.Blazor.Oidc
                 {
                     throw new InvalidOperationException($"{authorizationCodeResponse.Error} {authorizationCodeResponse.ErrorDescription}");
                 }
-                await SetItemAsync(_options.TokensStorageKey, authorizationCodeResponse.Json.ToString());
-                await SetItemAsync(_options.ExpireAtStorageKey, 
+                await SetItemAsync(options.TokensStorageKey, authorizationCodeResponse.Json.ToString());
+                await SetItemAsync(options.ExpireAtStorageKey, 
                     DateTime.UtcNow.AddSeconds(authorizationCodeResponse.ExpiresIn));
 
                 using (var userInfoRequest = new UserInfoRequest
@@ -170,7 +167,7 @@ namespace Aguacongas.Blazor.Oidc
                         throw new InvalidOperationException($"{userInfoResponse.Error}");
                     }
 
-                    await SetItemAsync(_options.ClaimsStorageKey, 
+                    await SetItemAsync(options.ClaimsStorageKey, 
                         JsonSerializer.Serialize(userInfoResponse
                             .Claims
                             .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));                   
@@ -208,12 +205,12 @@ namespace Aguacongas.Blazor.Oidc
 
         private ValueTask<T> GetItemAsync<T>(string key)
         {
-            return _JsRuntime.InvokeAsync<T>("sessionStorage.setItem", key);
+            return _jsRuntime.InvokeAsync<T>("sessionStorage.getItem", key);
         }
 
         private ValueTask SetItemAsync<T>(string key, T value)
         {
-            return _JsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, value);
+            return _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, value);
         }
     }
 }

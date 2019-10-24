@@ -25,7 +25,8 @@ namespace Aguacongas.TheIdServer
         {
             return new ApiResource[]
             {
-                new ApiResource("api1", "My API #1")
+                new ApiResource("api1", "My API #1"),
+                new ApiResource("theidserveradmin", "TheIdServer admin API")
             };
         }
 
@@ -82,6 +83,28 @@ namespace Aguacongas.TheIdServer
                     AllowedCorsOrigins = { "http://localhost:5002" },
 
                     AllowedScopes = { "openid", "profile", "api1" }
+                },
+
+                // SPA client using code flow + pkce
+                new Client
+                {
+                    ClientId = "theidserveradmin",
+                    ClientName = "TheIdServer admin SPA Client",
+                    ClientUri = "http://identityserver.io",
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris =
+                    {
+                        "https://localhost:5443/admin/"
+                    },
+
+                    PostLogoutRedirectUris = { "https://localhost:5443/admin/" },
+                    AllowedCorsOrigins = { "https://localhost:5443" },
+
+                    AllowedScopes = { "openid", "profile", "theidserveradminapi" }
                 }
             };
         }

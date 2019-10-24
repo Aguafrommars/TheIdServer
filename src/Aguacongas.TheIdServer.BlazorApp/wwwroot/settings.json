@@ -1,3 +1,7 @@
 {
-  "ApiBaseUrl": "/api"
+  "ApiBaseUrl": "/api",
+  "Authority": "https://localhost:5443",
+  "ClientId": "theidserveradmin",
+  "ClientSecret": "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d",
+  "Scope": "openid profile theidserveradminapi"
 }
