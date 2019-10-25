@@ -14,6 +14,7 @@ namespace Aguacongas.IdentityServer.Admin
     [Produces("application/json")]
     [Route("[controller]")]
     [GenericApiControllerNameConvention]
+    [Authorize]
     public class GenericApiController<T> : Controller where T: class
     {
         private readonly IAdminStore<T> _store;

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190926174413_initial")]
-    partial class initial
+    [Migration("20191025173732_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

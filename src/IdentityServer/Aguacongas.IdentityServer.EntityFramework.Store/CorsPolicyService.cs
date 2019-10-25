@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var corsUri = new Uri(origin);
             var corsValue = (int)IdentityServer.Store.Entity.UriKind.Cors;
-            var corsUris = await _context.ClientRedirectUris
+            var corsUris = await _context.ClientUris
                 .Where(o => (o.Kind & corsValue) == corsValue)
                 .ToListAsync()
                 .ConfigureAwait(false);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
-    public class ClientRedirectUri : IAuditable
+    public class ClientUri : IAuditable
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -12,6 +12,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The identifier.
         /// </value>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
 
         /// <summary>
         /// Gets or sets the URI.

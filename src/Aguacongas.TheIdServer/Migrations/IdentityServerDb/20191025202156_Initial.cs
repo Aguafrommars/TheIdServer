@@ -99,10 +99,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApiId = table.Column<string>(nullable: false),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,7 +112,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ApiId,
                         principalTable: "Apis",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,11 +120,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApiId = table.Column<string>(nullable: false),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,7 +134,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ApiId,
                         principalTable: "Apis",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,14 +142,15 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApiId = table.Column<string>(nullable: false),
+                    Scope = table.Column<string>(nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,7 +160,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ApiId,
                         principalTable: "Apis",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,13 +168,13 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApiId = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -183,7 +184,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ApiId,
                         principalTable: "Apis",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,10 +192,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Data = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -204,7 +205,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,11 +213,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,7 +227,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,10 +235,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     GrantType = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -247,7 +248,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,10 +256,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Provider = table.Column<string>(maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -268,7 +269,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,11 +277,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -290,29 +291,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientRedirectUris",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Uri = table.Column<string>(maxLength: 2000, nullable: false),
-                    Kind = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientRedirectUris", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClientRedirectUris_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -320,10 +299,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Scope = table.Column<string>(maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -333,7 +312,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -341,13 +320,13 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -357,7 +336,29 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientUris",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
+                    Uri = table.Column<string>(maxLength: 2000, nullable: false),
+                    Kind = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientUris", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClientUris_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -365,13 +366,13 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     Code = table.Column<string>(maxLength: 200, nullable: true),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: false),
                     Data = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -381,7 +382,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -389,11 +390,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: false),
                     Data = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -403,7 +404,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -411,11 +412,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: false),
                     Data = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -425,7 +426,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -433,11 +434,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: false),
                     Data = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -447,7 +448,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -455,10 +456,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    IdentityId = table.Column<string>(nullable: false),
                     Type = table.Column<string>(maxLength: 250, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    IdentityId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -468,7 +469,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.IdentityId,
                         principalTable: "Identities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -476,11 +477,11 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    IdentityId = table.Column<string>(nullable: false),
                     Key = table.Column<string>(maxLength: 250, nullable: true),
                     Value = table.Column<string>(maxLength: 2000, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    IdentityId = table.Column<string>(nullable: true)
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -490,7 +491,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         column: x => x.IdentityId,
                         principalTable: "Identities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -498,53 +499,57 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    ApiScpopeId = table.Column<string>(nullable: false),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: true),
-                    ApiScpopeId = table.Column<string>(nullable: true)
+                    ProtectResourceId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiScopeClaims_Apis_ApiId",
-                        column: x => x.ApiId,
-                        principalTable: "Apis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_ApiScopeClaims_ApiScopes_ApiScpopeId",
                         column: x => x.ApiScpopeId,
                         principalTable: "ApiScopes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeClaims_Apis_ProtectResourceId",
+                        column: x => x.ProtectResourceId,
+                        principalTable: "Apis",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiClaims_ApiId",
+                name: "IX_ApiClaims_ApiId_Type",
                 table: "ApiClaims",
-                column: "ApiId");
+                columns: new[] { "ApiId", "Type" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiProperty_ApiId",
+                name: "IX_ApiProperty_ApiId_Key",
                 table: "ApiProperty",
-                column: "ApiId");
+                columns: new[] { "ApiId", "Key" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_ApiId",
+                name: "IX_ApiScopeClaims_ProtectResourceId",
                 table: "ApiScopeClaims",
-                column: "ApiId");
+                column: "ProtectResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_ApiScpopeId",
+                name: "IX_ApiScopeClaims_ApiScpopeId_Type",
                 table: "ApiScopeClaims",
-                column: "ApiScpopeId");
+                columns: new[] { "ApiScpopeId", "Type" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopes_ApiId",
+                name: "IX_ApiScopes_ApiId_Scope",
                 table: "ApiScopes",
-                column: "ApiId");
+                columns: new[] { "ApiId", "Scope" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApiSecrets_ApiId",
@@ -562,29 +567,28 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientGrantTypes_ClientId",
+                name: "IX_ClientGrantTypes_ClientId_GrantType",
                 table: "ClientGrantTypes",
-                column: "ClientId");
+                columns: new[] { "ClientId", "GrantType" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientIdPRestriction_ClientId",
+                name: "IX_ClientIdPRestriction_ClientId_Provider",
                 table: "ClientIdPRestriction",
-                column: "ClientId");
+                columns: new[] { "ClientId", "Provider" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientProperties_ClientId",
+                name: "IX_ClientProperties_ClientId_Key",
                 table: "ClientProperties",
-                column: "ClientId");
+                columns: new[] { "ClientId", "Key" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientRedirectUris_ClientId",
-                table: "ClientRedirectUris",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientScopes_ClientId",
+                name: "IX_ClientScopes_ClientId_Scope",
                 table: "ClientScopes",
-                column: "ClientId");
+                columns: new[] { "ClientId", "Scope" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientSecrets_ClientId",
@@ -592,19 +596,29 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientUris_ClientId_Uri",
+                table: "ClientUris",
+                columns: new[] { "ClientId", "Uri" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_ClientId",
                 table: "DeviceCodes",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityClaims_IdentityId",
+                name: "IX_IdentityClaims_IdentityId_Type",
                 table: "IdentityClaims",
-                column: "IdentityId");
+                columns: new[] { "IdentityId", "Type" },
+                unique: true,
+                filter: "[Type] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityProperties_IdentityId",
+                name: "IX_IdentityProperties_IdentityId_Key",
                 table: "IdentityProperties",
-                column: "IdentityId");
+                columns: new[] { "IdentityId", "Key" },
+                unique: true,
+                filter: "[Key] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReferenceTokens_ClientId",
@@ -652,13 +666,13 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 name: "ClientProperties");
 
             migrationBuilder.DropTable(
-                name: "ClientRedirectUris");
-
-            migrationBuilder.DropTable(
                 name: "ClientScopes");
 
             migrationBuilder.DropTable(
                 name: "ClientSecrets");
+
+            migrationBuilder.DropTable(
+                name: "ClientUris");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");

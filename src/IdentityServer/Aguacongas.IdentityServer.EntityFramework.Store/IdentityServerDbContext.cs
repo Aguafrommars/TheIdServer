@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ClientProperty> ClientProperties { get; set; }
 
-        public virtual DbSet<ClientRedirectUri> ClientRedirectUris { get; set; }
+        public virtual DbSet<ClientUri> ClientUris { get; set; }
 
         public virtual DbSet<ClientScope> ClientScopes { get; set; }
 
@@ -52,7 +53,59 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<IdentityProperty> IdentityProperties { get; set; }
 
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ClientUri>()
+                .HasIndex(e => new { e.ClientId, e.Uri })
+                .IsUnique(true);
+            modelBuilder.Entity<ClientScope>()
+                .HasIndex(e => new { e.ClientId, e.Scope })
+                .IsUnique(true);
+            modelBuilder.Entity<ClientProperty>()
+                .HasIndex(e => new { e.ClientId, e.Key })
+                .IsUnique(true);
+            modelBuilder.Entity<ClientGrantType>()
+                .HasIndex(e => new { e.ClientId, e.GrantType })
+                .IsUnique(true);
+            modelBuilder.Entity<ClientIdPRestriction>()
+                .HasIndex(e => new { e.ClientId, e.Provider })
+                .IsUnique(true);
+            modelBuilder.Entity<ApiClaim>()
+                .HasIndex(e => new { e.ApiId, e.Type })
+                .IsUnique(true);
+            modelBuilder.Entity<ApiScope>()
+                .HasIndex(e => new { e.ApiId, e.Scope })
+                .IsUnique(true);
+            modelBuilder.Entity<ApiProperty>()
+                .HasIndex(e => new { e.ApiId, e.Key })
+                .IsUnique(true);
+            modelBuilder.Entity<ApiScopeClaim>()
+                .HasIndex(e => new { e.ApiScpopeId, e.Type })
+                .IsUnique(true);
+            modelBuilder.Entity<IdentityProperty>()
+                .HasIndex(e => new { e.IdentityId, e.Key })
+                .IsUnique(true);
+            modelBuilder.Entity<IdentityClaim>()
+                .HasIndex(e => new { e.IdentityId, e.Type })
+                .IsUnique(true);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges()
+        {
+            SetAuditFields();
+            return base.SaveChanges();
+        }
+
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            SetAuditFields();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void SetAuditFields()
         {
             var entryList = ChangeTracker.Entries<IAuditable>();
             foreach (var entry in entryList)
@@ -67,7 +120,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                     entity.ModifiedAt = DateTime.UtcNow;
                 }
             }
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }

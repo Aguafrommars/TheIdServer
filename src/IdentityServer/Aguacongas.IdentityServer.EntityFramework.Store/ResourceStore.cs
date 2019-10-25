@@ -50,8 +50,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = from scope in _context.ApiScopes
                         join api in _context.Apis
-                        on scope.Api equals api
-                        where scopeNames.Contains(scope.Id)
+                        on scope.ApiId equals api.Id
+                        where scopeNames.Contains(scope.Scope)
                         select api;
 
             return await query

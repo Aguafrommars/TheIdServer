@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
@@ -11,6 +12,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The identifier.
         /// </value>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
 
         public string Data { get; set; }
 

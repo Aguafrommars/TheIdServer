@@ -12,14 +12,18 @@
 
         public string Scope { get; set; }
 
+        public string NameClaimType { get; set; } = "name";
+
+        public string RoleClaimType { get; set; } = "role";
+
         public string StoragePrefix { get; set; } = "oidc.";
 
-        public string VerifierStorageKey => $"{StoragePrefix}verifier";
+        internal string VerifierStorageKey => $"{StoragePrefix}verifier";
 
-        public string ClaimsStorageKey => $"{StoragePrefix}claims";
+        internal string ClaimsStorageKey => $"{StoragePrefix}claims";
 
-        public string TokensStorageKey => $"{StoragePrefix}tokens";
+        internal string TokensStorageKey => $"{StoragePrefix}tokens";
 
-        public string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
+        internal string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
     }
 }

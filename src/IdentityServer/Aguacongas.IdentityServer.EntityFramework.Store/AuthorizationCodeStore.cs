@@ -1,6 +1,7 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -33,8 +34,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await _context.AuthorizationCodes.FindAsync(code);
             if (entity != null)
             {
-                _context.AuthorizationCodes.Remove(entity);
-                await _context.SaveChangesAsync().ConfigureAwait(false);
+                try
+                {
+                    _context.AuthorizationCodes.Remove(entity);
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
+                }
+                catch (DbUpdateConcurrencyException)
+                { }
             }
         }
 
@@ -51,7 +57,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var newEntity = new Entity.AuthorizationCode
             {
                 Id = Guid.NewGuid().ToString(),
-                Client = client,
+                ClientId = client.Id,
                 Data = _serializer.Serialize(code)
             };
             await _context.AuthorizationCodes.AddAsync(newEntity);

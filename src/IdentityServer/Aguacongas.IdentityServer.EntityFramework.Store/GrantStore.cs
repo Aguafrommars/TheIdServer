@@ -2,6 +2,7 @@
 using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -23,7 +24,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await GetEntityByHandle(handle)
                 .ConfigureAwait(false);
 
-            return CreateDto(entity.Data);
+            return CreateDto(entity?.Data);
         }
 
         protected async Task<TDto> GetAsync(string subjectId, string clientId)
@@ -31,7 +32,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await GetEntityBySubjectAndClient(subjectId, clientId)
                 .ConfigureAwait(false);
 
-            return CreateDto(entity.Data);
+            return CreateDto(entity?.Data);
         }
 
         protected async Task UpdateAsync(string handle, TDto dto)
@@ -60,11 +61,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await GetEntityByHandle(handle)
                 .ConfigureAwait(false);
 
-            if (entity != null)
-            {
-                _context.Remove(entity);
-                await _context.SaveChangesAsync().ConfigureAwait(false);
-            }
+            _context.Remove(entity);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         protected async Task RemoveAsync(string subjectId, string clientId)
@@ -72,11 +70,24 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await GetEntityBySubjectAndClient(subjectId, clientId)
                 .ConfigureAwait(false);
 
-            if (entity != null)
+            await RemoveEntityAsync(entity)
+                .ConfigureAwait(false);
+        }
+
+        private async Task RemoveEntityAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                return;
+            }
+
+            try
             {
                 _context.Remove(entity);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
+            catch (DbUpdateConcurrencyException)
+            { }
         }
 
         protected async Task<string> StoreAsync(TDto dto)
@@ -131,23 +142,28 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
             return await _context.Set<TEntity>()
-                .FirstOrDefaultAsync(c => c.SubjectId == subjectId & c.Client.Id == clientId)
+                .FirstOrDefaultAsync(c => c.SubjectId == subjectId & c.ClientId == clientId)
                 .ConfigureAwait(false);
         }
 
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected virtual TEntity CreateEntity(TDto dto, Client client, string subjectId)
         {
             return new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
                 SubjectId = subjectId,
-                Client = client,
+                ClientId = client.Id,
                 Data = _serializer.Serialize(dto)
             };
         }
 
         protected virtual TDto CreateDto(string data)
-        {
+        {            
+            if (data == null)
+            {
+                return default;
+            }
             return _serializer.Deserialize<TDto>(data);
         }
     }

@@ -14,6 +14,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the identity identifier.
+        /// </summary>
+        /// <value>
+        /// The client.
+        /// </value>
+        [Required]
+        public string IdentityId { get; set; }
+
+        /// <summary>
         /// Gets or sets the key.
         /// </summary>
         /// <value>
@@ -48,7 +57,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the client.
+        /// Gets or sets the identity resource.
         /// </summary>
         /// <value>
         /// The client.

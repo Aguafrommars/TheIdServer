@@ -14,6 +14,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the API identifier.
+        /// </summary>
+        /// <value>
+        /// The API.
+        /// </value>
+        [Required]
+        public string ApiId { get; set; }
+
+        /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>
@@ -46,5 +55,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The API.
         /// </value>
         public virtual ProtectResource Api { get; set; }
+
     }
 }

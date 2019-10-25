@@ -26,7 +26,11 @@ namespace Aguacongas.TheIdServer
             return new ApiResource[]
             {
                 new ApiResource("api1", "My API #1"),
-                new ApiResource("theidserveradmin", "TheIdServer admin API")
+                new ApiResource("theidserveradminapi", "TheIdServer admin API", new string[] 
+                {
+                    "name",
+                    "role"
+                })
             };
         }
 
@@ -68,7 +72,7 @@ namespace Aguacongas.TheIdServer
                 {
                     ClientId = "spa",
                     ClientName = "SPA Client",
-                    ClientUri = "http://identityserver.io",
+                    ClientUri = "http://localhost:5002",
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
@@ -90,7 +94,7 @@ namespace Aguacongas.TheIdServer
                 {
                     ClientId = "theidserveradmin",
                     ClientName = "TheIdServer admin SPA Client",
-                    ClientUri = "http://identityserver.io",
+                    ClientUri = "https://localhost:5443/admin/",
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,

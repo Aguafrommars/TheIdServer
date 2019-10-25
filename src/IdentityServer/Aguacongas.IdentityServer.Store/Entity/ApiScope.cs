@@ -15,6 +15,24 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the API identifier.
+        /// </summary>
+        /// <value>
+        /// The API.
+        /// </value>
+        [Required]
+        public string ApiId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the scope.
+        /// </summary>
+        /// <value>
+        /// The API.
+        /// </value>
+        [Required]
+        public string Scope { get; set; }
+
+        /// <summary>
         /// Gets or sets the display name.
         /// </summary>
         /// <value>
@@ -73,14 +91,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the API.
-        /// </summary>
-        /// <value>
-        /// The API.
-        /// </value>
-        public virtual ProtectResource Api { get; set; }
-
-        /// <summary>
         /// Gets or sets the API scope claims.
         /// </summary>
         /// <value>
@@ -88,6 +98,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public virtual ICollection<ApiScopeClaim> ApiScopeClaims { get; set; }
 
+        /// <summary>
+        /// Gets or sets the API.
+        /// </summary>
+        /// <value>
+        /// The API.
+        /// </value>
+        public virtual ProtectResource Api { get; set; }
 
     }
 }

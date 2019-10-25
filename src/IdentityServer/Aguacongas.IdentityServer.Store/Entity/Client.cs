@@ -351,7 +351,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The redirect uris.
         /// </value>
-        public virtual ICollection<ClientRedirectUri> RedirectUris { get; set; }
+        public virtual ICollection<ClientUri> RedirectUris { get; set; }
 
         /// <summary>
         /// Gets or sets the allowed scopes.

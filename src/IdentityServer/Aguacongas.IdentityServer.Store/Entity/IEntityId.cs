@@ -11,6 +11,6 @@
         /// <value>
         /// The identifier.
         /// </value>
-        string Id { get;  }
+        string Id { get; set; }
     }
 }

@@ -14,6 +14,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
+
+        /// <summary>
         /// Gets or sets the subject identifier.
         /// </summary>
         /// <value>
@@ -54,5 +63,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The client.
         /// </value>
         public virtual Client Client { get; set; }
+
     }
 }

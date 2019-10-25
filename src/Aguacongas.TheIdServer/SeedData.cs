@@ -2,19 +2,18 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System;
-using System.Linq;
-using System.Security.Claims;
-using IdentityModel;
+using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityServer4.EntityFramework.DbContexts;
+using System;
+using System.Linq;
 using System.Reflection;
-using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.EntityFramework.Store;
+using System.Security.Claims;
 
 namespace Aguacongas.TheIdServer
 {

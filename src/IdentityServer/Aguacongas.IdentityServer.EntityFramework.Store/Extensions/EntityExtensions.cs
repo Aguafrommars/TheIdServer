@@ -94,11 +94,11 @@ namespace Aguacongas.IdentityServer.Store
                     Description = s.Description, 
                     DisplayName = s.DisplayName, 
                     Emphasize = s.Emphasize, 
-                    Name = s.Id, 
+                    Name = s.Scope, 
                     Required = s.Required, 
                     ShowInDiscoveryDocument = s.ShowInDiscoveryDocument, 
                     UserClaims = api.ApiScopeClaims
-                        .Where(s => s.ApiScpope.Id == s.Id)
+                        .Where(s => s.ApiScpopeId == s.Id)
                         .Select(c => c.Type).ToList() 
                 }).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()
@@ -133,7 +133,7 @@ namespace Aguacongas.IdentityServer.Store
                 return null;
             }
 
-            var uris = client.RedirectUris.Select(o => new Entity.ClientRedirectUri
+            var uris = client.RedirectUris.Select(o => new Entity.ClientUri
             {
                 Id = Guid.NewGuid().ToString(),
                 Uri = o,
@@ -146,7 +146,7 @@ namespace Aguacongas.IdentityServer.Store
                 var uri = uris.FirstOrDefault(u => cors.CorsMatch(u.Uri));
                 if (uri == null)
                 {
-                    uris.Add(new Entity.ClientRedirectUri
+                    uris.Add(new Entity.ClientUri
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = origin,
@@ -163,7 +163,7 @@ namespace Aguacongas.IdentityServer.Store
                 var uri = uris.FirstOrDefault(u => u.Uri == postLogout);
                 if (uri == null)
                 {
-                    uris.Add(new Entity.ClientRedirectUri
+                    uris.Add(new Entity.ClientUri
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = postLogout,
@@ -279,7 +279,8 @@ namespace Aguacongas.IdentityServer.Store
                 }).ToList(),
                 Scopes = api.Scopes.Select(s => new Entity.ApiScope
                 {
-                    Id = s.Name,
+                    Id = Guid.NewGuid().ToString(),
+                    Scope = s.Name,
                     ApiScopeClaims = s.UserClaims.Select(c => new Entity.ApiScopeClaim
                     {
                         Id = Guid.NewGuid().ToString(),

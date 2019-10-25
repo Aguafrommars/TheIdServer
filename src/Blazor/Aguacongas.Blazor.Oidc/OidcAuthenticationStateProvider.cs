@@ -45,7 +45,7 @@ namespace Aguacongas.Blazor.Oidc
             var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
 
             var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "verfier", verifier);
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", options.VerifierStorageKey, verifier);
             var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
 
             var authorizationUri = QueryHelpers.AddQueryString(discoveryResponse.AuthorizeEndpoint, new Dictionary<string, string>
@@ -104,7 +104,7 @@ namespace Aguacongas.Blazor.Oidc
                 var tokens = JsonSerializer.Deserialize<Tokens>(tokensString);
                 var claimsString = await GetItemAsync<string>(options.ClaimsStorageKey);
                 var claims = JsonSerializer.Deserialize<IEnumerable<SerializableClaim>>(claimsString); 
-                _userStore.User = CreateUser(claims.Select(c => new Claim(c.Type, c.Value)), tokens.access_token);
+                _userStore.User = CreateUser(options, claims.Select(c => new Claim(c.Type, c.Value)), tokens.AccessToken, tokens.TokenType);
             }
         }
 
@@ -171,19 +171,19 @@ namespace Aguacongas.Blazor.Oidc
                         JsonSerializer.Serialize(userInfoResponse
                             .Claims
                             .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));                   
-                    _userStore.User = CreateUser(userInfoResponse.Claims, authorizationCodeResponse.AccessToken);
+                    _userStore.User = CreateUser(options, userInfoResponse.Claims, authorizationCodeResponse.AccessToken, authorizationCodeResponse.TokenType);
                 }
             }
         }
 
-        private ClaimsPrincipal CreateUser(IEnumerable<Claim> claims, string accesToken)
+        private ClaimsPrincipal CreateUser(AuthorizationOptions options, IEnumerable<Claim> claims, string accesToken, string tokenType)
         {
             var claimList = claims.ToList();
             claimList.Add(new Claim("access_token", accesToken));
             return new ClaimsPrincipal(new ClaimsIdentity[] 
             {
                 new ClaimsIdentity(
-                    claimList, "Bearer", "name", "role")
+                    claimList, tokenType, options.NameClaimType, options.RoleClaimType)
             });
         }
 
