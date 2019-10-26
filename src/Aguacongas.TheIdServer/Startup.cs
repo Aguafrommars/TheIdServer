@@ -42,7 +42,10 @@ namespace Aguacongas.TheIdServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(options =>
+                {
+                    options.AddIdentityServerAdminFilters();
+                })
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;

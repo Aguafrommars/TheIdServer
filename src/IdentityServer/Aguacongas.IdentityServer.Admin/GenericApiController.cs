@@ -30,8 +30,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="200">Returns an entity</response>
         /// <response code="404">The entity is not found</response>
         [HttpGet("{id}")]
-        public async Task<T> GetAsync(string id) 
-            => await _store.GetAsync(id);
+        public Task<T> GetAsync(string id) 
+            => _store.GetAsync(id);
 
         /// <summary>
         /// Gets a page of <see cref="T"/>
@@ -40,7 +40,34 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns>A page of <see cref="T"/></returns>
         /// <response code="200">Returns a page of entites</response>
         [HttpGet]
-        public async Task<PageResponse<T>> GetAsync(PageRequest request) 
-            => await _store.GetAsync(request);
+        public Task<PageResponse<T>> GetAsync(PageRequest request) 
+            => _store.GetAsync(request);
+
+        /// <summary>
+        /// Creates the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        [HttpPost]
+        public Task<T> CreateAsync([FromBody] T entity)
+            => _store.CreateAsync(entity);
+
+        /// <summary>
+        /// Updates the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public Task<T> UpdateAsync(string id, [FromBody] T entity)
+            => _store.UpdateAsync(entity);
+
+        /// <summary>
+        /// Deletes the entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public Task DeleteAsync(string id)
+            => _store.DeleteAsync(id);
     }
 }

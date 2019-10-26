@@ -25,23 +25,28 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-
-            var page = await AdminStore.GetAsync(new PageRequest
+            var pageRequest = new PageRequest
             {
+                Select = "Id, ClientName, Description",
                 Take = 10
-            }).ConfigureAwait(false);
-            ClientList = page.Items;
-            
+            };
+            await GetClientList(pageRequest)
+                .ConfigureAwait(false);
+
             GridState.OnHeaderClicked += async e =>
             {
-                var p = await AdminStore.GetAsync(new PageRequest
-                {
-                    OrderBy = e.OrderBy,
-                    Take = 10
-                }).ConfigureAwait(false);;
-                ClientList = p.Items;
+                pageRequest.OrderBy = e.OrderBy;
+                await GetClientList(pageRequest)
+                    .ConfigureAwait(false);
                 StateHasChanged();
             };
+        }
+
+        private async Task GetClientList(PageRequest pageRequest)
+        {
+            var page = await AdminStore.GetAsync(pageRequest)
+                            .ConfigureAwait(false);
+            ClientList = page.Items;
         }
     }
 }
