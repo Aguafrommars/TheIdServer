@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client IDP restriction
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientIdPRestriction : IAuditable
     {
         /// <summary>

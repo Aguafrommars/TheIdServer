@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a refresh token
+    /// </summary>
+    /// <seealso cref="IGrant" />
     public class RefreshToken : IGrant
     {
         /// <summary>

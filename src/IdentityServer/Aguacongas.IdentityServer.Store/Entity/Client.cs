@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client appliction
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class Client : IAuditable
     {
         /// <summary>
@@ -186,7 +190,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool BackChannelLogoutSessionRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Client{TKey}"/> is enabled.
+        /// Gets or sets a value indicating whether this identity resouce is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if enabled; otherwise, <c>false</c>.

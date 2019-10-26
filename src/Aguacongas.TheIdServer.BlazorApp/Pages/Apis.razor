@@ -1,0 +1,36 @@
+﻿@page "/apis"
+@inherits EntityModel<Entity.ProtectResource>
+
+<h1>Apis</h1>
+
+@if (EntityList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                <th><SortableHeader PropertyName="DisplayName" HeaderName="name" /></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var api in EntityList)
+            {
+                <tr>
+                    <td>@api.Id</td>
+                    <td>
+                        @api.DisplayName
+                        <div><em>@api.Description</em></div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    protected override string SelectProperties => "Id, DisplayName, Description";
+}
+

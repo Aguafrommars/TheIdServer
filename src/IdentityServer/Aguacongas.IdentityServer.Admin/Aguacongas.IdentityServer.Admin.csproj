@@ -10,6 +10,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>IdentityServer4 Administration</PackageTags>
     <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
     <PackageReference Include="Community.OData.Linq.Json" Version="1.4.2" />
     <PackageReference Include="IdentityServer4" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.1.3" />
   </ItemGroup>
 
   <ItemGroup>

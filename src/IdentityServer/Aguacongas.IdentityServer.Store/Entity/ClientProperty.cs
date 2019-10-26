@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client property
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientProperty : IAuditable
     {
         /// <summary>

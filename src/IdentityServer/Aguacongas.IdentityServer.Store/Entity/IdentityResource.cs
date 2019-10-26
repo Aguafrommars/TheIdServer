@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Identity{TKey}"/> is enabled.
+        /// Gets or sets a value indicating whether this identity resouce is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if enabled; otherwise, <c>false</c>.
@@ -44,7 +44,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Identity{TKey}"/> is required.
+        /// Gets or sets a value indicating whether this identity resouce is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.
@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool Required { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Identity{TKey}"/> is emphasize.
+        /// Gets or sets a value indicating whether this identity resource is emphasize.
         /// </summary>
         /// <value>
         ///   <c>true</c> if emphasize; otherwise, <c>false</c>.

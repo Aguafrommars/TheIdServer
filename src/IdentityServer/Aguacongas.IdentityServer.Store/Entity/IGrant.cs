@@ -2,6 +2,10 @@
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Class implemting this intercace are grant
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public interface IGrant : IAuditable
     {
         /// <summary>
@@ -11,7 +15,19 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The client.
         /// </value>
         string ClientId { get; set; }
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>
+        /// The data.
+        /// </value>
         string Data { get; set; }
+        /// <summary>
+        /// Gets or sets the subject identifier.
+        /// </summary>
+        /// <value>
+        /// The subject identifier.
+        /// </value>
         string SubjectId { get; set; }
     }
 }

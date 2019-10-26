@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a claim needed by an API
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ApiClaim : IAuditable
     {
         /// <summary>

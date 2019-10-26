@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a reference token
+    /// </summary>
+    /// <seealso cref="IGrant" />
     public class ReferenceToken : IGrant
     {
         /// <summary>

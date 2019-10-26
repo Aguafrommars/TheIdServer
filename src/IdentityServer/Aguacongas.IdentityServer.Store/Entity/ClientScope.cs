@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client allowed scope
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientScope : IAuditable
     {
         /// <summary>

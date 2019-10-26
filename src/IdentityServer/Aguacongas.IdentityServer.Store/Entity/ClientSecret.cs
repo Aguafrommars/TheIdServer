@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client secret
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientSecret : IAuditable
     {
         /// <summary>
@@ -48,9 +52,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The expiration.
         /// </value>
         public DateTime? Expiration { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the type of the client secret.
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         [Required]
         [MaxLength(250)]
         public string Type { get; set; }

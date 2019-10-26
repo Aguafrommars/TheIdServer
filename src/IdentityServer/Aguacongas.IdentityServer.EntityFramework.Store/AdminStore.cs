@@ -24,23 +24,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<T> GetAsync(string id, CancellationToken cancellationToken = default)
+        public Task<T> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            return _context.Set<T>().FindAsync(id, cancellationToken).AsTask();
+            var query = _context.Set<T>() as IQueryable<T>;
+            query = Expand(request?.Expand, query);
+            return query.Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var query = _context.Set<T>() as IQueryable<T>;
-            if (!string.IsNullOrEmpty(request.Expand))
-            {
-                var pathList = request.Expand.Split(',');
-                foreach(var path in pathList)
-                {
-                    query = query.Include(path.Trim().Replace('/', '.'));
-                }
-            }
+            query = Expand(request.Expand, query);
 
             var odataQuery = query.OData();
 
@@ -68,6 +64,20 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 Count = count,
                 Items = items
             };
+        }
+
+        private static IQueryable<T> Expand(string expand, IQueryable<T> query)
+        {
+            if (expand != null)
+            {
+                var pathList = expand.Split(',');
+                foreach (var path in pathList)
+                {
+                    query = query.Include(path.Trim().Replace('/', '.'));
+                }
+            }
+
+            return query;
         }
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)

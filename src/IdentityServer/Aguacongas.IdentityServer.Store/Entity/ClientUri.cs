@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client uri
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientUri : IAuditable
     {
         /// <summary>
@@ -28,7 +32,8 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The URI.
         /// </value>
-        [Required] 
+        [Required]
+        [Url]
         [MaxLength(2000)]
         public string Uri { get; set; }
 

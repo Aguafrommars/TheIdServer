@@ -114,6 +114,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 if (entry.State == EntityState.Added)
                 {
                     entity.CreatedAt = DateTime.UtcNow;
+                    entity.ModifiedAt = null;
                 }
                 if (entry.State == EntityState.Modified)
                 {

@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a protected resources
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ProtectResource : IAuditable
     {
         /// <summary>
@@ -28,7 +32,8 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The display name.
         /// </value>
-        [MaxLength(200)] 
+        [MaxLength(200)]
+        [Required]
         public string DisplayName { get; set; }
 
         /// <summary>
@@ -39,14 +44,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [MaxLength(1000)] 
         public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last accessed.
-        /// </summary>
-        /// <value>
-        /// The last accessed.
-        /// </value>
-        public DateTime? LastAccessed { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [non editable].

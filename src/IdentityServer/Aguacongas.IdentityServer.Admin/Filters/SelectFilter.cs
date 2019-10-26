@@ -1,32 +1,27 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Community.OData.Linq;
 using Community.OData.Linq.Json;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
-    class SelectFilter : ResultFilterAttribute
+    class SelectFilter : IAsyncResultFilter
     {
-        public override void OnResultExecuting(ResultExecutingContext context)
-        {
-        }
-
-        public override async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
+        public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
             var controlerType = context.Controller.GetType();
             var result = context.Result as ObjectResult;
             var value = result?.Value;
             var query = context.HttpContext.Request.Query;
-            if (value != null &&
+            if (!context.Cancel &&
+                value != null &&
                 query.ContainsKey("select") &&
                 controlerType.FullName
                 .StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController",
@@ -47,6 +42,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                         Count = (int)pageResponseType.GetProperty("Count").GetValue(value)
                     };
                     result.Value = pageResponse;
+                    context.Cancel = true;
                 }
             }
 

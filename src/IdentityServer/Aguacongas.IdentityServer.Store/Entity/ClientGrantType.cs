@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a client grant type
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ClientGrantType : IAuditable
     {
         /// <summary>

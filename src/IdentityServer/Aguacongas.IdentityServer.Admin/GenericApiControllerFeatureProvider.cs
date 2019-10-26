@@ -7,9 +7,23 @@ using System.Reflection;
 
 namespace Aguacongas.IdentityServer.Admin
 {
+    /// <summary>
+    /// Generic API contoller feature
+    /// </summary>
+    /// <seealso cref="IApplicationFeatureProvider{ControllerFeature}" />
     public class GenericApiControllerFeatureProvider :
         IApplicationFeatureProvider<ControllerFeature>
     {
+        /// <summary>
+        /// Updates the <paramref name="feature" /> instance.
+        /// </summary>
+        /// <param name="parts">The list of <see cref="T:ApplicationPart" /> instances in the application.</param>
+        /// <param name="feature">The feature instance to populate.</param>
+        /// <remarks>
+        /// <see cref="T:ApplicationPart" /> instances in <paramref name="parts" /> appear in the same ordered sequence they
+        /// are stored in <see cref="P:ApplicationParts" />. This ordering may be used by the feature
+        /// provider to make precedence decisions.
+        /// </remarks>
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
             var assembly = typeof(IEntityId).GetTypeInfo().Assembly;

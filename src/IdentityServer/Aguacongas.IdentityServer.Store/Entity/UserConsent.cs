@@ -3,8 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a user consent
+    /// </summary>
+    /// <seealso cref="Aguacongas.IdentityServer.Store.Entity.IGrant" />
     public class UserConsent : IGrant
     {
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public string Id { get; set; }
 
         /// <summary>

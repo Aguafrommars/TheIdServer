@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define an identity resource property
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class IdentityProperty : IAuditable
     {
         /// <summary>
@@ -29,6 +33,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The key.
         /// </value>
         [MaxLength(250)]
+        [Required]
         public string Key { get; set; }
 
         /// <summary>

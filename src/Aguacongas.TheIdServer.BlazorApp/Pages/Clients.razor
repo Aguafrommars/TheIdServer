@@ -1,9 +1,9 @@
 ﻿@page "/clients"
-@inherits ClientModel
+@inherits EntityModel<Entity.Client>
 
 <h1>Clients</h1>
 
-@if (ClientList == null)
+@if (EntityList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -12,12 +12,12 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th><SortHeader PropertyName="Id" HeaderName="id" /></th>
-                <th><SortHeader PropertyName="ClientName" HeaderName="name" /></th>
+                <th><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                <th><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var client in ClientList)
+            @foreach (var client in EntityList)
             {
                 <tr>
                     <td>@client.Id</td>
@@ -29,5 +29,8 @@ else
             }
         </tbody>
     </table>
+}
+@code {
+    protected override string SelectProperties => "Id, ClientName, Description";
 }
 

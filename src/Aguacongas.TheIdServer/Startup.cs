@@ -5,6 +5,7 @@ using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -132,7 +133,9 @@ namespace Aguacongas.TheIdServer
                 })
                 .Map("/api", child =>
                 {
-                    child.UseRouting()
+                    child.UseOpenApi()
+                        .UseSwaggerUi3()
+                        .UseRouting()
                         .UseEndpoints(enpoints =>
                         {
                             enpoints.MapControllers();

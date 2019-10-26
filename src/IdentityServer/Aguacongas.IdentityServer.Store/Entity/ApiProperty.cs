@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define an API property
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ApiProperty : IAuditable
     {
         /// <summary>

@@ -1,33 +1,29 @@
-﻿using Aguacongas.IdentityServer.Admin.Http.Store;
-using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public class ClientModel: ComponentBase
+    public class EntityModel<T>: ComponentBase where T: class
     {
         [Inject]
-        public IAdminStore<Entity.Client> AdminStore { get; set; }
+        public IAdminStore<T> AdminStore { get; set; }
 
         [Inject]
         public GridState GridState { get; set; }
 
-        protected IEnumerable<Entity.Client> ClientList { get; private set; }
+        protected IEnumerable<T> EntityList { get; private set; }
 
-        protected string CurrentSortedProperty { get; set; }
+        protected virtual string SelectProperties { get; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
             var pageRequest = new PageRequest
             {
-                Select = "Id, ClientName, Description",
+                Select = SelectProperties,
                 Take = 10
             };
             await GetClientList(pageRequest)
@@ -46,7 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             var page = await AdminStore.GetAsync(pageRequest)
                             .ConfigureAwait(false);
-            ClientList = page.Items;
+            EntityList = page.Items;
         }
     }
 }

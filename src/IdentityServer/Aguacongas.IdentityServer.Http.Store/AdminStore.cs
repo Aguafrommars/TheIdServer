@@ -65,15 +65,14 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<T> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<T> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var response = await httpClient.GetAsync($"{_baseUri}/{id}", cancellationToken)
+            using (var response = await httpClient.GetAsync($"{_baseUri}/{id}?expand={request?.Expand}", cancellationToken)
                 .ConfigureAwait(false))
             {
-
                 await EnsureSuccess(response)
                     .ConfigureAwait(false);
 

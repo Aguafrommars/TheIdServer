@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a device code
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class DeviceCode : IAuditable
     {
         /// <summary>

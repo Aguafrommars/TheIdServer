@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define an API scope
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class ApiScope : IAuditable
     {
         /// <summary>
@@ -39,6 +43,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The display name.
         /// </value>
         [MaxLength(200)]
+        [Required]
         public string DisplayName { get; set; }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ApiScope{TKey}"/> is required.
+        /// Gets or sets a value indicating whether this api scope is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.
@@ -59,7 +64,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool Required { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ApiScope{TKey}"/> is emphasize.
+        /// Gets or sets a value indicating whether this api scope is emphasize.
         /// </summary>
         /// <value>
         ///   <c>true</c> if emphasize; otherwise, <c>false</c>.

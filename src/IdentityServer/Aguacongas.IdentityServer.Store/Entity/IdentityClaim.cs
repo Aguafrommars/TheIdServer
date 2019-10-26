@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define a claim returned by an identity resource
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class IdentityClaim : IAuditable
     {
         /// <summary>

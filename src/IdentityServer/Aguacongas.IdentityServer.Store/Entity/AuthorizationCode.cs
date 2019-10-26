@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
+    /// <summary>
+    /// Define an authorization code
+    /// </summary>
+    /// <seealso cref="IAuditable" />
     public class AuthorizationCode : IAuditable
     {
         /// <summary>
@@ -22,6 +26,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         [Required]
         public string ClientId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>
+        /// The data.
+        /// </value>
         public string Data { get; set; }
 
         /// <summary>
