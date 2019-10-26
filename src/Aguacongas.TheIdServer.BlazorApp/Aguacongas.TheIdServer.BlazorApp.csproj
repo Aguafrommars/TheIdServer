@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazor\Aguacongas.Blazor.Oidc\Aguacongas.Blazor.Oidc.csproj" />
+    <ProjectReference Include="..\Blazor\Aguacongas.Blazor.Oidc\Aguacongas.TheIdServer.Blazor.Oidc.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
   </ItemGroup>

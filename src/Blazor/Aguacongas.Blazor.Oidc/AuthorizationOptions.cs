@@ -1,4 +1,4 @@
-﻿namespace Aguacongas.Blazor.Oidc
+﻿namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class AuthorizationOptions
     {

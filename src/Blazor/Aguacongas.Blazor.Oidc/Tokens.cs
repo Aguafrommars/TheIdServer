@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Aguacongas.Blazor.Oidc
+namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class Tokens
     {

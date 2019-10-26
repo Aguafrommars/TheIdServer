@@ -1,4 +1,4 @@
-﻿using Aguacongas.Blazor.Oidc;
+﻿using Aguacongas.TheIdServer.Blazor.Oidc;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

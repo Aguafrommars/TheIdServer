@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor.Http;
 
-namespace Aguacongas.Blazor.Oidc
+namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class OidcDelegationHandler : DelegatingHandler
     {

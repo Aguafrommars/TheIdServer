@@ -1,4 +1,4 @@
-﻿using Aguacongas.Blazor.Oidc;
+﻿using Aguacongas.TheIdServer.Blazor.Oidc;
 using Microsoft.AspNetCore.Blazor.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;

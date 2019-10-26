@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aguacongas.Blazor.Oidc
+namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class OidcWebAssemblyHttpMessageHandler : WebAssemblyHttpMessageHandler
     {

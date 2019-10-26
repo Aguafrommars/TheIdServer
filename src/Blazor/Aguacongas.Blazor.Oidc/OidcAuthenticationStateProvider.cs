@@ -15,7 +15,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Aguacongas.Blazor.Oidc
+namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class OidcAuthenticationStateProvider : AuthenticationStateProvider
     {
