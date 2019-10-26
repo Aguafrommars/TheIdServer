@@ -11,5 +11,6 @@ namespace Aguacongas.Blazor.Oidc
         {
             return base.SendAsync(request, cancellationToken);
         }
+
     }
 }

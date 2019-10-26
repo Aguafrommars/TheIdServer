@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddIdentityServer4HttpStores(this IServiceCollection services, Func<IServiceProvider, HttpClient> getHttpClient)
+        public static IServiceCollection AddIdentityServer4HttpStores(this IServiceCollection services, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
         {
             var entityTypeList = GetEntityTypes();
 
@@ -39,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return entityTypeList;
         }
 
-        private static object CreateStore(Func<IServiceProvider, HttpClient> getHttpClient, IServiceProvider provider, Type entityType)
+        private static object CreateStore(Func<IServiceProvider, Task<HttpClient>> getHttpClient, IServiceProvider provider, Type entityType)
         {
             var adminStoreType = typeof(AdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();

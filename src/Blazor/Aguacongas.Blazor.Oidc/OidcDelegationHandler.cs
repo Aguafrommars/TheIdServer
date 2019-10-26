@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,15 +11,22 @@ namespace Aguacongas.Blazor.Oidc
 {
     public class OidcDelegationHandler : DelegatingHandler
     {
-        private readonly OidcWebAssemblyHttpMessageHandler _parent;
+        private readonly IUserStore _userStore;
+        private readonly OidcWebAssemblyHttpMessageHandler _innerHandler;
 
-        public OidcDelegationHandler(OidcWebAssemblyHttpMessageHandler parent)
+        public OidcDelegationHandler(IUserStore userStore, OidcWebAssemblyHttpMessageHandler innerHandler)
         {
-            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+            _userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
+            _innerHandler = innerHandler ?? throw new ArgumentNullException(nameof(innerHandler));
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return _parent.SendAsync(request, cancellationToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue(_userStore.AuthenticationScheme, _userStore.AccessToken);
+            request.Properties[WebAssemblyHttpMessageHandler.FetchArgs] = new
+            {
+                credentials = "include"
+            };
+            return _innerHandler.SendAsync(request, cancellationToken);
         }
     }
 }

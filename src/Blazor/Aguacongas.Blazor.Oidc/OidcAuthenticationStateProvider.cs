@@ -22,13 +22,13 @@ namespace Aguacongas.Blazor.Oidc
         private readonly HttpClient _httpClient;
         private readonly NavigationManager _navigationManager;
         private readonly IJSRuntime _jsRuntime;
-        private readonly UserStore _userStore;
+        private readonly IUserStore _userStore;
         private readonly Task<AuthorizationOptions> _getOptionsTask;
         private DiscoveryDocumentResponse _discoveryDocumentResponse;
         public OidcAuthenticationStateProvider(HttpClient httpClient, 
             NavigationManager navigationManager, 
             IJSRuntime JsRuntime,
-            UserStore userStore,
+            IUserStore userStore,
             Task<AuthorizationOptions> getOptionsTask)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -59,7 +59,7 @@ namespace Aguacongas.Blazor.Oidc
                 ["code_challenge_method"] = "S256"
             });
 
-            _navigationManager.NavigateTo(authorizationUri);
+            _navigationManager.NavigateTo(authorizationUri, true);
             
             using (var response = await _httpClient.GetAsync(authorizationUri))
             {
@@ -104,7 +104,11 @@ namespace Aguacongas.Blazor.Oidc
                 var tokens = JsonSerializer.Deserialize<Tokens>(tokensString);
                 var claimsString = await GetItemAsync<string>(options.ClaimsStorageKey);
                 var claims = JsonSerializer.Deserialize<IEnumerable<SerializableClaim>>(claimsString); 
-                _userStore.User = CreateUser(options, claims.Select(c => new Claim(c.Type, c.Value)), tokens.AccessToken, tokens.TokenType);
+
+                _userStore.User = CreateUser(options, 
+                    claims.Select(c => new Claim(c.Type, c.Value)), 
+                    tokens.AccessToken, 
+                    tokens.TokenType);
             }
         }
 
@@ -170,16 +174,24 @@ namespace Aguacongas.Blazor.Oidc
                     await SetItemAsync(options.ClaimsStorageKey, 
                         JsonSerializer.Serialize(userInfoResponse
                             .Claims
-                            .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));                   
-                    _userStore.User = CreateUser(options, userInfoResponse.Claims, authorizationCodeResponse.AccessToken, authorizationCodeResponse.TokenType);
+                            .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));
+                    
+                    _userStore.User = CreateUser(options, 
+                        userInfoResponse.Claims, 
+                        authorizationCodeResponse.AccessToken, 
+                        authorizationCodeResponse.TokenType);
                 }
             }
         }
 
-        private ClaimsPrincipal CreateUser(AuthorizationOptions options, IEnumerable<Claim> claims, string accesToken, string tokenType)
+        private ClaimsPrincipal CreateUser(AuthorizationOptions options, 
+            IEnumerable<Claim> claims, 
+            string accesToken, 
+            string tokenType)
         {
             var claimList = claims.ToList();
-            claimList.Add(new Claim("access_token", accesToken));
+            _userStore.AccessToken = accesToken;
+            _userStore.AuthenticationScheme = tokenType;
             return new ClaimsPrincipal(new ClaimsIdentity[] 
             {
                 new ClaimsIdentity(

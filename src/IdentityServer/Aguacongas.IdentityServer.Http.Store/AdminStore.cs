@@ -19,24 +19,29 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
         {
             IgnoreNullValues = true,
-            IgnoreReadOnlyProperties = true
+            IgnoreReadOnlyProperties = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,            
         };
-        private readonly HttpClient _httpClient;
+        private readonly Task<HttpClient> _httpClientFactory;
         private readonly ILogger<AdminStore<T>> _logger;
         private readonly string _baseUri;
 
-        public AdminStore(HttpClient httpClient, ILogger<AdminStore<T>> logger)
+        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Paths shoul be to lower")]
+        public AdminStore(Task<HttpClient> httpClientFactory, ILogger<AdminStore<T>> logger)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _baseUri = $"/{typeof(T).Name}";
+            _baseUri = $"/{typeof(T).Name}".ToLowerInvariant();
         }
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
+            var httpClient = await _httpClientFactory
+                .ConfigureAwait(false);
+
             using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
             {
-                using (var response = await _httpClient.PostAsync(_baseUri, content, cancellationToken)
+                using (var response = await httpClient.PostAsync(_baseUri, content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -48,7 +53,10 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            using (var response = await _httpClient.DeleteAsync($"_baseUri/{id}", cancellationToken)
+            var httpClient = await _httpClientFactory
+                .ConfigureAwait(false);
+
+            using (var response = await httpClient.DeleteAsync($"{_baseUri}/{id}", cancellationToken)
                 .ConfigureAwait(false))
             {
 
@@ -59,7 +67,10 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task<T> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            using (var response = await _httpClient.GetAsync($"_baseUri/{id}", cancellationToken)
+            var httpClient = await _httpClientFactory
+                .ConfigureAwait(false);
+
+            using (var response = await httpClient.GetAsync($"{_baseUri}/{id}", cancellationToken)
                 .ConfigureAwait(false))
             {
 
@@ -71,15 +82,20 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             } 
         }
 
+        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Request parameters should be to lower")]
         public async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? new PageRequest();
 
             var dictionary = typeof(PageRequest)
                 .GetProperties()
-                .ToDictionary(p => p.Name, p => p.GetValue(request).ToString());
+                .Where(p => p.GetValue(request) != null)
+                .ToDictionary(p => p.Name.ToLowerInvariant(), p => p.GetValue(request).ToString());
 
-            using (var response = await _httpClient.GetAsync(QueryHelpers.AddQueryString(_baseUri, dictionary), cancellationToken)
+            var httpClient = await _httpClientFactory
+                .ConfigureAwait(false);
+
+            using (var response = await httpClient.GetAsync(QueryHelpers.AddQueryString(_baseUri, dictionary), cancellationToken)
                 .ConfigureAwait(false))
             {
 
@@ -94,9 +110,12 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
 
+            var httpClient = await _httpClientFactory
+                .ConfigureAwait(false);
+
             using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
             {
-                using (var response = await _httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
+                using (var response = await httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
                     .ConfigureAwait(false))
                 {
 

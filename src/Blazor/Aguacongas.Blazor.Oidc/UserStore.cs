@@ -2,8 +2,10 @@
 
 namespace Aguacongas.Blazor.Oidc
 {
-    public class UserStore
+    public class UserStore : IUserStore
     {
-        public ClaimsPrincipal User { get; internal set; }
+        public ClaimsPrincipal User { get; set; }
+        public string AccessToken { get; set; }
+        public string AuthenticationScheme { get; set; }
     }
 }

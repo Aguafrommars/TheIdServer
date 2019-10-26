@@ -1,4 +1,5 @@
 ﻿using Aguacongas.Blazor.Oidc;
+using Microsoft.AspNetCore.Blazor.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Threading.Tasks;
@@ -7,17 +8,18 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtionsions
     {
-        public static IServiceCollection AddOidc(this IServiceCollection services, Func<IServiceProvider, Task<AuthorizationOptions>> getAuthorizationOptionsTask, string httpClientName = "oidc")
+        public static IHttpClientBuilder AddOidc(this IServiceCollection services, Func<IServiceProvider, Task<AuthorizationOptions>> getAuthorizationOptionsTask, string httpClientName = "oidc")
         {
-            services
-                .AddTransient<OidcWebAssemblyHttpMessageHandler>()
-                .AddHttpClient(httpClientName)
-                .AddHttpMessageHandler<OidcDelegationHandler>();
             return services
+                .AddTransient<OidcWebAssemblyHttpMessageHandler>()
+                .AddTransient<WebAssemblyHttpMessageHandler>()
+                .AddTransient<OidcDelegationHandler>()
                 .AddTransient(p => getAuthorizationOptionsTask(p))
                 .AddScoped<OidcAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<OidcAuthenticationStateProvider>())
-                .AddSingleton<UserStore>();
+                .AddSingleton<IUserStore, UserStore>()
+                .AddHttpClient(httpClientName)
+                .AddHttpMessageHandler<OidcDelegationHandler>();
         }
     }
 }
