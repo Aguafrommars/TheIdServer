@@ -1,0 +1,21 @@
+﻿<div class="input-group input-group-sm mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text oi oi-magnifying-glass" id="addon"></span>
+    </div>
+    <input class="form-control" type="text" placeholder="filter" aria-label="filter" aria-describedby="addon" value="@Term" @oninput="OnTermChanged" />
+</div>
+
+@code {
+    [Parameter]
+    public string Term { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TermChanged { get; set; }
+
+    private Task OnTermChanged(ChangeEventArgs e)
+    {
+        Term = e.Value.ToString();
+
+        return TermChanged.InvokeAsync(Term);
+    }
+}

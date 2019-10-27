@@ -1,0 +1,12 @@
+﻿@page "/protectresource/{id}"
+
+<div class="row sticky-top">
+    <div class="col">
+        <h3>@Id</h3>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}

@@ -1,9 +1,9 @@
-﻿@page "/apis"
-@inherits EntityModel<Entity.ProtectResource>
+﻿@page "/identities"
+@inherits EntityModel<Entity.IdentityResource>
 
 <div class="row sticky-top">
     <div class="col">
-        <h3>Apis</h3>
+        <h3>Identities</h3>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -12,6 +12,7 @@
 <div class="row">
     @if (EntityList == null)
     {
+        <div class="w-100"></div>
         <p class="col"><em>Loading...</em></p>
     }
     else
@@ -19,8 +20,8 @@
         <table class="table sticky-top">
             <thead>
                 <tr class="select">
-                    <th class="w-25" scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
-                    <th class="w-75" scope="col"><SortableHeader PropertyName="DisplayName" HeaderName="name" /></th>
+                    <th scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                    <th scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
                 </tr>
             </thead>
         </table>

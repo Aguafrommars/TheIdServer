@@ -42,7 +42,6 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                         Count = (int)pageResponseType.GetProperty("Count").GetValue(value)
                     };
                     result.Value = pageResponse;
-                    context.Cancel = true;
                 }
             }
 

@@ -1,8 +1,13 @@
 ﻿@page "/"
 @page "/home"
 
-<h1>Hello, world!</h1>
+<h1>Welcome </h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<AuthorizeView>
+    <Authorized>
+        @context.User.Identity.Name!
+    </Authorized>
+    <NotAuthorized>
+        You will be redirect to the login page.
+    </NotAuthorized>
+</AuthorizeView>

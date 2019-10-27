@@ -5,30 +5,58 @@
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="clients">
-                <span class="oi oi-plus" aria-hidden="true"></span> Clients
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="apis">
-                <span class="oi oi-plus" aria-hidden="true"></span> Apis
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+                <li class="nav-fill px-3"></li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="clients">
+                        <span class="oi oi-browser" aria-hidden="true"></span> Clients
+                    </NavLink>
+                </li>
+                <li class="nav-text px-4">resources</li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="apis">
+                        <span class="oi oi-key" aria-hidden="true"></span> Apis
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="identities">
+                        <span class="oi oi-puzzle-piece" aria-hidden="true"></span> Identities
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </Authorized>
+    <Authorizing>
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </Authorizing>
+    <NotAuthorized>
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     bool collapseNavMenu = true;

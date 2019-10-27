@@ -1,36 +1,47 @@
 ﻿@page "/clients"
 @inherits EntityModel<Entity.Client>
 
-<h1>Clients</h1>
-
-@if (EntityList == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th><SortableHeader PropertyName="Id" HeaderName="id" /></th>
-                <th><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var client in EntityList)
-            {
-                <tr>
-                    <td>@client.Id</td>
-                    <td>
-                        @client.ClientName
-                        <div><em>@client.Description</em></div>
-                    </td>
+<div class="row sticky-top">
+    <div class="col">
+        <h3>Clients</h3>
+    </div>
+    <div class="col">
+        <Filter TermChanged="OnFilterChanged" />
+    </div>
+</div>
+<div class="row">
+    @if (EntityList == null)
+    {
+        <div class="w-100"></div>
+        <p class="col"><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table sticky-top">
+            <thead>
+                <tr class="select">
+                    <th scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                    <th scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+        </table>
+        <table class="table table-hover">
+            <tbody>
+                @foreach (var entity in EntityList)
+                {
+                    <tr class="select" @onclick="() => OnRowClicked(entity.Id)">
+                        <td>@entity.Id</td>
+                        <td>
+                            @entity.ClientName
+                            <div><em>@entity.Description</em></div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 @code {
-    protected override string SelectProperties => "Id, ClientName, Description";
+    protected override string SelectProperties => "Id,ClientName,Description";
 }
 
