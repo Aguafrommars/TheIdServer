@@ -1,9 +1,9 @@
 ﻿@page "/apis"
-@inherits EntityModel<Entity.ProtectResource>
+@inherits EntitiesModel<Entity.ProtectResource>
 
 <div class="row sticky-top">
     <div class="col">
-        <h3>Apis</h3>
+        <PageListHeader Name="Apis" Url="protectresource"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />

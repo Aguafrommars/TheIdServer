@@ -1,12 +1,78 @@
-﻿@page "/protectresource/{id}"
+﻿@page "/protectresource"
+@page "/protectresource/{id}"
+@inherits EntityModel<Entity.ProtectResource>
 
-<div class="row sticky-top">
-    <div class="col">
-        <h3>@Id</h3>
-    </div>
-</div>
+@if (Model == null)
+{
+    <p class="col"><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row sticky-top">
+            <div class="col">
+                @if (IsNew)
+                {
+                    <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
+                }
+                else
+                {
+                    <h3>@Id</h3>
+                }
+            </div>
+        </div>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
+        <div class="form-group row">
+            <label class="col-2 col-form-label" for="enabled">
+                enabled
+            </label>
+            <div class="col-sm-10">
+                <InputCheckbox id="enabled" @bind-Value="@Model.Enabled" />
+            </div>
+            <label class="col-2 col-form-label" for="displayName">
+                display name
+            </label>
+            <div class="col-sm-10">
+                <InputText id="displayName" class="form-control" placeholder="display name" @bind-Value="@Model.DisplayName" />
+            </div>
+            <label class="col-2 col-form-label" for="description">
+                description
+            </label>
+            <div class="col-sm-10">
+                <InputTextArea id="description" class="form-control" placeholder="decription" @bind-Value="@Model.DisplayName" />
+            </div>
+        </div>
+        <h5 id="secrets">Secrets</h5>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-sm btn-primary">
+                    <span class="oi oi-plus"></span> Add
+                </button>
+            </div>
+        </div>
+        @foreach (var secret in Model.Secrets)
+        {
+            <div class="form-inline">
+                <label for="secret-value" class="sr-only">value</label>
+                <InputText name="secret-value" class="form-control" placeholder="value" @bind-Value="@secret.Value" />
+            </div>
+        }
+    </EditForm>
+}
 @code {
-    [Parameter]
-    public string Id { get; set; }
+    protected override string Expand => "Secrets,Scopes,ApiClaims,ApiScopeClaims,Properties";
+
+    protected override Entity.ProtectResource Create()
+    {
+        return new Entity.ProtectResource
+        {
+            Secrets = new List<Entity.ApiSecret>(),
+            Scopes = new List<Entity.ApiScope>(),
+            ApiClaims = new List<Entity.ApiClaim>(),
+            ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
+            Properties = new List<Entity.ApiProperty>()
+        };
+    }
 }

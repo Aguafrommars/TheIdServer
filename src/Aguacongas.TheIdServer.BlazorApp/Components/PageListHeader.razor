@@ -1,0 +1,15 @@
+﻿<div class="row">
+    <h3 class="col">@Name</h3>
+    <div class="col">
+        <a href="@Url" class="btn btn-sm btn-primary">
+            <span class="oi oi-plus"></span> Add
+        </a>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Url { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+}

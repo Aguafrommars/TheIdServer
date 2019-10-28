@@ -1,9 +1,9 @@
 ﻿@page "/identities"
-@inherits EntityModel<Entity.IdentityResource>
+@inherits EntitiesModel<Entity.IdentityResource>
 
 <div class="row sticky-top">
     <div class="col">
-        <h3>Identities</h3>
+        <PageListHeader Name="Identies" Url="identityresource"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -20,8 +20,8 @@
         <table class="table sticky-top">
             <thead>
                 <tr class="select">
-                    <th scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
-                    <th scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
+                    <th class="w-25" scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                    <th class="w-75" scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
                 </tr>
             </thead>
         </table>

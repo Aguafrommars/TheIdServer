@@ -1,9 +1,9 @@
 ﻿@page "/clients"
-@inherits EntityModel<Entity.Client>
+@inherits EntitiesModel<Entity.Client>
 
 <div class="row sticky-top">
     <div class="col">
-        <h3>Clients</h3>
+        <PageListHeader Name="Clients" Url="client"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -20,8 +20,8 @@
         <table class="table sticky-top">
             <thead>
                 <tr class="select">
-                    <th scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
-                    <th scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
+                    <th class="w-25" scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
+                    <th class="w-75" scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
                 </tr>
             </thead>
         </table>
@@ -30,8 +30,8 @@
                 @foreach (var entity in EntityList)
                 {
                     <tr class="select" @onclick="() => OnRowClicked(entity.Id)">
-                        <td>@entity.Id</td>
-                        <td>
+                        <td class="w-25">@entity.Id</td>
+                        <td class="w-75">
                             @entity.ClientName
                             <div><em>@entity.Description</em></div>
                         </td>
