@@ -47,8 +47,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
                     var httpClient = p.GetRequiredService<HttpClient>();
                     return await httpClient.GetJsonAsync<Settings>("settings.json")
                         .ConfigureAwait(false);
-                })
-                .AddSingleton<GridState>();                
+                });                
         }
 
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Startup class")]

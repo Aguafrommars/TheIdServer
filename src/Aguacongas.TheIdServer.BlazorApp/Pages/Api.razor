@@ -8,19 +8,21 @@
 }
 else
 {
-    <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
-        <div class="row sticky-top">
-            <div class="col">
-                @if (IsNew)
-                {
-                    <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
-                }
-                else
-                {
-                    <h3>@Id</h3>
-                }
-            </div>
+<EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+    <div class="row sticky-top">
+        <div class="col">
+            @if (IsNew)
+            {
+                <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
+            }
+            else
+            {
+                <h3>@Id</h3>
+            }
         </div>
+    </div>
+
+    <div class="entity-details">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -31,12 +33,16 @@ else
             <div class="col-sm-10">
                 <InputCheckbox id="enabled" @bind-Value="@Model.Enabled" />
             </div>
+        </div>
+        <div class="form-group row">
             <label class="col-2 col-form-label" for="displayName">
                 display name
             </label>
             <div class="col-sm-10">
                 <InputText id="displayName" class="form-control" placeholder="display name" @bind-Value="@Model.DisplayName" />
             </div>
+        </div>
+        <div class="form-group row">
             <label class="col-2 col-form-label" for="description">
                 description
             </label>
@@ -44,24 +50,70 @@ else
                 <InputTextArea id="description" class="form-control" placeholder="decription" @bind-Value="@Model.DisplayName" />
             </div>
         </div>
-        <h5 id="secrets">Secrets</h5>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-sm btn-primary">
-                    <span class="oi oi-plus"></span> Add
-                </button>
-            </div>
-        </div>
-        @foreach (var secret in Model.Secrets)
-        {
-            <div class="form-inline">
-                <label for="secret-value" class="sr-only">value</label>
-                <InputText name="secret-value" class="form-control" placeholder="value" @bind-Value="@secret.Value" />
-            </div>
-        }
-    </EditForm>
+        <EntitySubListHeader Text="Secrets" FilterChanged="OnSecretFilterChanged">
+        </EntitySubListHeader>
+        <EntitiesGrid Items="@Model.Secrets" TableClass="table table-hover" Context="secret">
+            <TableHeader>
+                <th scope="col">
+                    <SortableHeader Property="Type"
+                                    Text="type"
+                                    GridState="_secretGridState" />
+                </th>
+                <th scope="col">
+                    <SortableHeader Property="Value"
+                                    Text="expiration"
+                                    GridState="_secretGridState" />
+                </th>
+                <th scope="col">
+                    <SortableHeader Property="Description"
+                                    Text="description"
+                                    GridState="_secretGridState" />
+                </th>
+                <th scope="col">
+                    <SortableHeader Property="Expiration"
+                                    Text="expiration"
+                                    GridState="_secretGridState" />
+                </th>
+            </TableHeader>
+            <RowTemplate>
+                <td>@secret.Type</td>
+                <td>
+                    @if (secret.Id != null)
+                        {
+                        <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
+                        }
+                        else
+                        {
+                        <InputText @bind-Value="@secret.Value" />
+                        }
+                </td>
+                <td>
+                    @if (secret.Id != null)
+                        {
+                        @secret.Description
+                        }
+                        else
+                        {
+                        <InputText @bind-Value="@secret.Description" />
+                        }
+                </td>
+                <td>
+                    @if (secret.Id != null)
+                        {
+                        @secret.Expiration
+                        }
+                        else
+                        {
+                        <InputDate @bind-Value="@secret.Expiration" />
+                        }
+                </td>
+            </RowTemplate>
+        </EntitiesGrid>
+    </div>
+</EditForm>
 }
 @code {
+    private GridState _secretGridState = new GridState();
     protected override string Expand => "Secrets,Scopes,ApiClaims,ApiScopeClaims,Properties";
 
     protected override Entity.ProtectResource Create()
@@ -74,5 +126,12 @@ else
             ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
             Properties = new List<Entity.ApiProperty>()
         };
+    }
+
+    private void OnSecretFilterChanged(string term)
+    {
+        Model.Secrets = State.Secrets
+            .Where(s => s.Type.Contains(term) || s.Description.Contains(term))
+            .ToList();
     }
 }

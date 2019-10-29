@@ -1,28 +1,32 @@
-﻿@inject GridState _gridState
-
-<div @onclick="OnHeaderClick">@HeaderName<span class="oi oi-arrow-@_class float-right sort" /></div>
+﻿
+<div @onclick="OnHeaderClick">@Text<span class="oi oi-arrow-@_class float-right sort" /></div>
 
 @code {
     private string _class = null;
 
     [Parameter]
-    public string PropertyName { get; set; }
+    public string Property { get; set; }
 
     [Parameter]
-    public string HeaderName { get; set; }
+    public string Text { get; set; }
 
+    [Parameter]
+    public GridState GridState { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TermChanged { get; set; }
 
     void OnHeaderClick()
     {
-        _gridState.HeaderClicked(PropertyName);
+        GridState.HeaderClicked(Property);
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _gridState.OnHeaderClicked += e =>
+        GridState.OnHeaderClicked += e =>
         {
-            _class = _gridState.GetHeaderArrowClassSuffix(PropertyName);
+            _class = GridState.GetHeaderArrowClassSuffix(Property);
             StateHasChanged();
             return Task.CompletedTask;
         };

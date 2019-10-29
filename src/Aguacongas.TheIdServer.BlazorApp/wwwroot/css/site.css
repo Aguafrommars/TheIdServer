@@ -111,11 +111,15 @@ span.input-group-text.oi {
 }
 
 .content .sticky-top {
-    top: 0.8rem;
+    top: 0.7rem;
 }
 
 .sort {
     position: inherit;
+}
+
+.entity-details {
+    display: contents;
 }
 
 @media (max-width: 767.98px) {
@@ -139,6 +143,7 @@ span.input-group-text.oi {
     .main .top-row {
         position: sticky;
         top: 0;
+        z-index: 10;
     }
 
     .main > div {

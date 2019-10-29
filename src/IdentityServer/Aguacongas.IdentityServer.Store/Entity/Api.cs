@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a protected resources
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ProtectResource : IAuditable
+    public class ProtectResource : IAuditable, ICloneable<ProtectResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -108,5 +108,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ProtectResource Clone()
+        {
+            return MemberwiseClone() as ProtectResource;
+        }
     }
 }

@@ -1,0 +1,23 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="row">
+            <h5 class="col">@Text</h5>
+            <div class="col">
+                <button class="btn btn-sm btn-primary">
+                    <span class="oi oi-plus"></span> Add
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <Filter TermChanged="FilterChanged" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public EventCallback<string> FilterChanged { get; set; }
+}

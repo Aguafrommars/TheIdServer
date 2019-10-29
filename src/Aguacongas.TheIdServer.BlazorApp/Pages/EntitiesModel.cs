@@ -1,16 +1,16 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
+    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class, IEntityId
     {
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
@@ -19,12 +19,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         public IAdminStore<T> AdminStore { get; set; }
 
         [Inject]
-        public GridState GridState { get; set; }
-
-        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         protected IEnumerable<T> EntityList { get; private set; }
+
+        public GridState GridState => new GridState();
 
         protected string Filter { get; set; }
 
@@ -83,9 +82,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
 
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]
-        protected void OnRowClicked(string entityId)
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Never null")]
+        protected void OnRowClicked(T entity)
         {
-            NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entityId}");
+            NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entity.Id}");
         }
 
         private async Task GetClientList(PageRequest pageRequest)

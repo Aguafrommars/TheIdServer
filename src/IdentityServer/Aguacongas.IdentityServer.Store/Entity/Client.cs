@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client appliction
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class Client : IAuditable
+    public class Client : IAuditable, ICloneable<Client>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -389,5 +389,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public DateTime? ModifiedAt { get; set; }
 
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public Client Clone()
+        {
+            return MemberwiseClone() as Client;
+        }
     }
 }

@@ -17,28 +17,30 @@
     }
     else
     {
-        <table class="table sticky-top">
-            <thead>
-                <tr class="select">
-                    <th class="w-25" scope="col"><SortableHeader PropertyName="Id" HeaderName="id" /></th>
-                    <th class="w-75" scope="col"><SortableHeader PropertyName="ClientName" HeaderName="name" /></th>
-                </tr>
-            </thead>
-        </table>
-        <table class="table table-hover">
-            <tbody>
-                @foreach (var entity in EntityList)
-                {
-                    <tr class="select" @onclick="() => OnRowClicked(entity.Id)">
-                        <td class="w-25">@entity.Id</td>
-                        <td class="w-75">
-                            @entity.DisplayName
-                            <div><em>@entity.Description</em></div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <EntitiesGrid Items="EntityList" TableClass="table sticky-top">
+            <TableHeader>
+                <th class="w-25" scope="col">
+                    <SortableHeader Property="Id"
+                                    Text="id"
+                                    GridState="GridState" />
+                </th>
+                <th class="w-75" scope="col">
+                    <SortableHeader Property="DisplayName"
+                                    Text="name"
+                                    GridState="GridState" />
+                </th>
+            </TableHeader>
+        </EntitiesGrid>
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
+                      RowClicked="(Entity.IdentityResource item) => OnRowClicked(item)">
+            <RowTemplate>
+                <td class="w-25">@context.Id</td>
+                <td class="w-75">
+                    @context.DisplayName
+                    <div><em>@context.Description</em></div>
+                </td>
+            </RowTemplate>
+        </EntitiesGrid>
     }
 </div>
 @code {

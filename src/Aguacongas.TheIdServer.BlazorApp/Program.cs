@@ -6,13 +6,12 @@ namespace Aguacongas.TheIdServer.BlazorApp
     [SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "entry point")]
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder().Build().Run();
         }
 
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Default blazor Program class")]
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
+        public static IWebAssemblyHostBuilder CreateHostBuilder() =>
             BlazorWebAssemblyHost.CreateDefaultBuilder()
                 .UseBlazorStartup<Startup>();
     }

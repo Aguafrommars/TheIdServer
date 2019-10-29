@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// <summary>
     /// Identity resource
     /// </summary>
-    public class IdentityResource : IAuditable
+    public class IdentityResource : IAuditable, ICloneable<IdentityResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -106,5 +106,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public IdentityResource Clone()
+        {
+            return MemberwiseClone() as IdentityResource;
+        }
     }
 }

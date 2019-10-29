@@ -1,13 +1,11 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public abstract class EntityModel<T> : ComponentBase where T: class, new()
+    public abstract class EntityModel<T> : ComponentBase where T: class, ICloneable<T>, new()
     {
         [Inject]
         public IAdminStore<T> AdminStore { get; set; }
@@ -18,6 +16,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected bool IsNew { get; private set; }
 
         protected T Model { get; private set; }
+
+        protected T State { get; private set; }
 
         protected IReadOnlyDictionary<string, object> InputTextAttributes { get; set; }
             = new Dictionary<string, object>
@@ -35,10 +35,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 return;
             }
 
-            Model = await AdminStore.GetAsync(Id, new GetRequest
+            State = await AdminStore.GetAsync(Id, new GetRequest
             {
                 Expand = Expand
             }).ConfigureAwait(false);
+
+            Model = State.Clone();
         }
 
         protected async Task HandleValidSubmit()
