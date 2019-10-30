@@ -3,14 +3,11 @@
         <div class="row">
             <h5 class="col">@Text</h5>
             <div class="col">
-                <button class="btn btn-sm btn-primary">
+                <button type="button" class="btn btn-sm btn-primary" @onclick="() => AddClicked.InvokeAsync(null)">
                     <span class="oi oi-plus"></span> Add
                 </button>
             </div>
         </div>
-    </div>
-    <div class="col">
-        <Filter TermChanged="FilterChanged" />
     </div>
 </div>
 
@@ -20,4 +17,7 @@
 
     [Parameter]
     public EventCallback<string> FilterChanged { get; set; }
+
+    [Parameter]
+    public EventCallback AddClicked { get; set; }
 }

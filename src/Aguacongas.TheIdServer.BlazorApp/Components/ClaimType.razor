@@ -1,0 +1,27 @@
+﻿@if (Claim.Id == null)
+{
+    <div class="input-group input-group-sm mb-3">
+        <input type="text" class="form-control" placeholder="claim type" value="@Claim.Type"
+               @onchange="(ChangeEventArgs e) => ValueChanged.InvokeAsync(e.Value as string)" />
+    </div>
+}
+else
+{
+    <div class="input-group input-group-sm mb-3">
+        <input type="text" class="form-control" value="@Claim.Type" disabled />
+        <div class="input-group-prepend select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="oi oi-delete" />
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Entity.IClaimType Claim { get; set; }
+
+    [Parameter]
+    public EventCallback DeleteClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+}

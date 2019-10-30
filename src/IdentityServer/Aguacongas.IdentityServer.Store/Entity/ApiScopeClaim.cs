@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a claim needed by an API scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiScopeClaim : IAuditable
+    public class ApiScopeClaim : IAuditable, IClaimType
     {
         /// <summary>
         /// Gets or sets the identifier.

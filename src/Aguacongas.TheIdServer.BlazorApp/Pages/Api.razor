@@ -8,122 +8,282 @@
 }
 else
 {
-<EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
-    <div class="row sticky-top">
-        <div class="col">
-            @if (IsNew)
-            {
-                <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
-            }
-            else
-            {
-                <h3>@Id</h3>
-            }
+    <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+        <div class="row sticky-top">
+            <div class="col">
+                @if (IsNew)
+                {
+                    <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
+                }
+                else
+                {
+                    <h3>@Id</h3>
+                }
+            </div>
         </div>
-    </div>
 
-    <div class="entity-details">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="form-group row">
-            <label class="col-2 col-form-label" for="enabled">
-                enabled
-            </label>
-            <div class="col-sm-10">
-                <InputCheckbox id="enabled" @bind-Value="@Model.Enabled" />
+        <div class="entity-details">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group row">
+                <label class="col-2 col-form-label" for="enabled">
+                    enabled
+                </label>
+                <div class="col-sm-10">
+                    <div class="custom-control custom-switch">
+                        <InputCheckbox class="custom-control-input" @bind-Value="@Model.Enabled" />
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-2 col-form-label" for="displayName">
-                display name
-            </label>
-            <div class="col-sm-10">
-                <InputText id="displayName" class="form-control" placeholder="display name" @bind-Value="@Model.DisplayName" />
+            <div class="form-group row">
+                <label class="col-2 col-form-label" for="displayName">
+                    display name
+                </label>
+                <div class="col-sm-10">
+                    <InputText id="displayName" class="form-control" placeholder="display name" @bind-Value="@Model.DisplayName" />
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-2 col-form-label" for="description">
-                description
-            </label>
-            <div class="col-sm-10">
-                <InputTextArea id="description" class="form-control" placeholder="decription" @bind-Value="@Model.DisplayName" />
+            <div class="form-group row">
+                <label class="col-2 col-form-label" for="description">
+                    description
+                </label>
+                <div class="col-sm-10">
+                    <InputTextArea id="description" class="form-control" placeholder="decription" @bind-Value="@Model.DisplayName" />
+                </div>
             </div>
-        </div>
-        <EntitySubListHeader Text="Secrets" FilterChanged="OnSecretFilterChanged">
-        </EntitySubListHeader>
-        <EntitiesGrid Items="@Model.Secrets" TableClass="table table-hover" Context="secret">
-            <TableHeader>
-                <th scope="col">
-                    <SortableHeader Property="Type"
-                                    Text="type"
-                                    GridState="_secretGridState" />
-                </th>
-                <th scope="col">
-                    <SortableHeader Property="Value"
-                                    Text="expiration"
-                                    GridState="_secretGridState" />
-                </th>
-                <th scope="col">
-                    <SortableHeader Property="Description"
-                                    Text="description"
-                                    GridState="_secretGridState" />
-                </th>
-                <th scope="col">
-                    <SortableHeader Property="Expiration"
-                                    Text="expiration"
-                                    GridState="_secretGridState" />
-                </th>
-            </TableHeader>
-            <RowTemplate>
-                <td>@secret.Type</td>
-                <td>
-                    @if (secret.Id != null)
+            <div id="secrets">
+                <EntitySubGridTitle Text="Secrets"
+                                    FilterChanged="OnSecretFilterChanged"
+                                    AddClicked="OnAddScopeClicked" />
+                <EntitiesGrid Items="@Model.Secrets" TableClass="table table-hover" Context="secret">
+                    <TableHeader>
+                        <th scope="col">
+                            <SortableHeader Property="Type"
+                                            Text="type"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Value"
+                                            Text="expiration"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Description"
+                                            Text="description"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Expiration"
+                                            Text="expiration"
+                                            GridState="_secretGridState" />
+                        </th>
+                    </TableHeader>
+                    <RowTemplate>
+                        @if (secret.Id != null)
+                            {
+                            <td>@secret.Type</td>
+                            <td>
+                                <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
+                            </td>
+                            }
+                            else
+                            {
+                            <td>
+                                <InputText @bind-Value="@secret.Type" />
+                            </td>
+                            <td>
+                                <InputText @bind-Value="@secret.Value" />
+                            </td>
+                            }
+                        <td>
+                            <InputText @bind-Value="@secret.Description" />
+                        </td>
+                        <td>
+                            <InputDate @bind-Value="@secret.Expiration" />
+                        </td>
+                    </RowTemplate>
+                </EntitiesGrid>
+            </div>
+            <div id="claims">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="col">Claims</h5>
+                    </div>
+                    <div class="col">
+                        <Filter TermChanged="OnClaimFilterChanged" />
+                    </div>
+                </div>
+                <ul class="list-inline">
+                    @foreach (var claim in Model.ApiClaims)
+                    {
+                        <li class="list-inline-item">
+                            <ClaimType Claim="@claim"
+                                       DeleteClicked="() => OnClaimTypeDeleted(claim)"
+                                       ValueChanged="OnClaimTypeValueChanged" />
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div id="scopes">
+                <EntitySubGridTitle Text="Scopes"
+                                    FilterChanged="OnScopeFilterChanged"
+                                    AddClicked="OnAddScopeClicked" />
+                <EntitiesGrid Items="@Model.Scopes" TableClass="table table-hover" Context="scope">
+                    <TableHeader>
+                        <th scope="col">
+                            <SortableHeader Property="Scope"
+                                            Text="scope"
+                                            GridState="_scopeGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="DisplayName"
+                                            Text="name"
+                                            GridState="_scopeGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Description"
+                                            Text="description"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Required"
+                                            Text="required"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Emphasize"
+                                            Text="emphasize"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="ShowInDiscoveryDocument"
+                                            Text="show in discovery document"
+                                            GridState="_secretGridState" />
+                        </th>
+                        <th scope="col">
+                            claims
+                        </th>
+                    </TableHeader>
+                    <RowTemplate>
+                        @if (scope.Id != null)
                         {
-                        <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
+                            <td>
+                                @scope.Scope
+                            </td>
                         }
                         else
                         {
-                        <InputText @bind-Value="@secret.Value" />
+                            <td>
+                                <InputText @bind-Value="@scope.Scope" />
+                            </td>
                         }
-                </td>
-                <td>
-                    @if (secret.Id != null)
+                        <td>
+                            <InputText @bind-Value="@scope.DisplayName" />
+                        </td>
+                        <td>
+                            <InputText @bind-Value="@scope.Description" />
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" @bind-Value="@scope.Required" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" @bind-Value="@scope.Emphasize" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" @bind-Value="@scope.ShowInDiscoveryDocument" />
+                            </div>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                @foreach (var claim in scope.ApiScopeClaims)
+                                 {
+                                    <li>
+                                        <ClaimType Claim="@claim"
+                                                   DeleteClicked="() => OnScopeClaimDeleted(scope, claim)"
+                                                   ValueChanged="value => OnScopeClaimValueChanged(scope, value)" />
+                                    </li>
+                                 }
+                            </ul>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => OnDeleteScopeClicked(scope)"><span class="oi oi-delete"></span></button>
+                        </td>
+                    </RowTemplate>
+                </EntitiesGrid>
+            </div>
+            <div id="properties">
+                <EntitySubGridTitle Text="Properties"
+                                    FilterChanged="OnPropertiesFilterChanged"
+                                    AddClicked="OnAddPropertyClicked" />
+                <EntitiesGrid Items="@Model.Properties" TableClass="table table-hover" Context="property">
+                    <TableHeader>
+                        <th scope="col">
+                            <SortableHeader Property="Key"
+                                            Text="key"
+                                            GridState="_propertiesGridState" />
+                        </th>
+                        <th scope="col">
+                            <SortableHeader Property="Value"
+                                            Text="value"
+                                            GridState="_propertiesGridState" />
+                        </th>
+                        <th></th>
+                    </TableHeader>
+                    <RowTemplate>
+                        @if (property.Id != null)
                         {
-                        @secret.Description
+                            <td>
+                                @property.Key
+                            </td>
                         }
                         else
                         {
-                        <InputText @bind-Value="@secret.Description" />
+                            <td>
+                                <InputText @bind-Value="@property.Key" />
+                            </td>
                         }
-                </td>
-                <td>
-                    @if (secret.Id != null)
-                        {
-                        @secret.Expiration
-                        }
-                        else
-                        {
-                        <InputDate @bind-Value="@secret.Expiration" />
-                        }
-                </td>
-            </RowTemplate>
-        </EntitiesGrid>
-    </div>
-</EditForm>
+                        <td>
+                            <InputText @bind-Value="@property.Value" />
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => OnDeletePropertyClicked(property)"><span class="oi oi-delete"></span></button>
+                        </td>
+                    </RowTemplate>
+                </EntitiesGrid>
+            </div>
+        </div>
+    </EditForm>
 }
 @code {
     private GridState _secretGridState = new GridState();
-    protected override string Expand => "Secrets,Scopes,ApiClaims,ApiScopeClaims,Properties";
+    private GridState _scopeGridState = new GridState();
+    private GridState _propertiesGridState = new GridState();
+
+    protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Model.ApiClaims.Add(new Entity.ApiClaim());
+        foreach(var scope in Model.Scopes)
+        {
+            scope.ApiScopeClaims.Add(new Entity.ApiScopeClaim());
+        }
+    }
 
     protected override Entity.ProtectResource Create()
     {
+        var claims = new List<Entity.ApiClaim>();
+        claims.Add(new Entity.ApiClaim());
         return new Entity.ProtectResource
         {
             Secrets = new List<Entity.ApiSecret>(),
             Scopes = new List<Entity.ApiScope>(),
-            ApiClaims = new List<Entity.ApiClaim>(),
-            ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
+            ApiClaims = claims,
             Properties = new List<Entity.ApiProperty>()
         };
     }
@@ -133,5 +293,91 @@ else
         Model.Secrets = State.Secrets
             .Where(s => s.Type.Contains(term) || s.Description.Contains(term))
             .ToList();
+        StateHasChanged();
+    }
+
+    private void OnClaimFilterChanged(string term)
+    {
+        Model.ApiClaims = State.ApiClaims
+            .Where(c => c.Type.Contains(term))
+            .ToList();
+        StateHasChanged();
+    }
+
+    private void OnClaimTypeValueChanged(string type)
+    {
+        Model.ApiClaims.Add(new Entity.ApiClaim
+        {
+            Id = Guid.NewGuid().ToString()
+        });
+        StateHasChanged();
+    }
+
+    private void OnClaimTypeDeleted(Entity.ApiClaim claim)
+    {
+        Model.ApiClaims.Remove(claim);
+        StateHasChanged();
+    }
+
+    private void OnScopeFilterChanged(string term)
+    {
+        Model.Scopes = State.Scopes
+            .Where(s => s.Scope.Contains(term) ||
+                s.DisplayName.Contains(term) ||
+                s.Description.Contains(term))
+            .ToList();
+        StateHasChanged();
+    }
+
+    private void OnAddScopeClicked()
+    {
+        var claims = new List<Entity.ApiScopeClaim>();
+        claims.Add(new Entity.ApiScopeClaim());
+        Model.Scopes.Add(new Entity.ApiScope
+        {
+            ApiScopeClaims = claims
+        });
+        StateHasChanged();
+    }
+
+    private void OnDeleteScopeClicked(Entity.ApiScope scope)
+    {
+        Model.Scopes.Remove(scope);
+        StateHasChanged();
+    }
+
+    private void OnScopeClaimDeleted(Entity.ApiScope scope, Entity.ApiScopeClaim claim)
+    {
+        scope.ApiScopeClaims.Remove(claim);
+        StateHasChanged();
+    }
+
+    private void OnScopeClaimValueChanged(Entity.ApiScope scope, string value)
+    {
+        scope.ApiScopeClaims.Add(new Entity.ApiScopeClaim
+        {
+            Id= Guid.NewGuid().ToString()
+        });
+        StateHasChanged();
+    }
+
+    private void OnPropertiesFilterChanged(string term)
+    {
+        Model.Properties = State.Properties
+            .Where(p => p.Key.Contains(term) || p.Value.Contains(term))
+            .ToList();
+        StateHasChanged();
+    }
+
+    private void OnAddPropertyClicked()
+    {
+        Model.Properties.Add(new Entity.ApiProperty());
+        StateHasChanged();
+    }
+
+    private void OnDeletePropertyClicked(Entity.ApiProperty property)
+    {
+        Model.Properties.Remove(property);
+        StateHasChanged();
     }
 }

@@ -7,7 +7,8 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a claim returned by an identity resource
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class IdentityClaim : IAuditable
+    /// <seealso cref="IClaimType" />
+    public class IdentityClaim : IAuditable, IClaimType
     {
         /// <summary>
         /// Gets or sets the identifier.
