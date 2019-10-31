@@ -1,16 +1,19 @@
 ﻿@if (Claim.Id == null)
 {
     <div class="input-group input-group-sm mb-3">
-        <input type="text" class="form-control" placeholder="claim type" value="@Claim.Type"
-               @onchange="(ChangeEventArgs e) => ValueChanged.InvokeAsync(e.Value as string)" />
+        <input type="text" class="form-control new-claim" placeholder="claim type" value="@Claim.Type"
+               @onchange="OnInputChanged" />
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
+        </div>
     </div>
 }
 else
 {
     <div class="input-group input-group-sm mb-3">
-        <input type="text" class="form-control" value="@Claim.Type" disabled />
-        <div class="input-group-prepend select" @onclick="() => DeleteClicked.InvokeAsync(null)">
-            <span class="oi oi-delete" />
+        <div class="form-control" disabled>@Claim.Type</div>        
+        <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="input-group-text oi oi-trash" />
         </div>
     </div>
 }
@@ -23,5 +26,12 @@ else
     public EventCallback DeleteClicked { get; set; }
 
     [Parameter]
-    public EventCallback<string> ValueChanged { get; set; }
+    public EventCallback<Entity.IClaimType> ValueChanged { get; set; }
+
+    private Task OnInputChanged(ChangeEventArgs e)
+    {
+        Claim.Type = e.Value as string;
+        Claim.Id = Guid.NewGuid().ToString();
+        return ValueChanged.InvokeAsync(Claim);
+    }
 }

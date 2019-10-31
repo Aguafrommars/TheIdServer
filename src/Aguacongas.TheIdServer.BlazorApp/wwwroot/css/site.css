@@ -122,6 +122,10 @@ span.input-group-text.oi {
     display: contents;
 }
 
+.form-control.new-claim {
+    width: 50px;
+}
+
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;

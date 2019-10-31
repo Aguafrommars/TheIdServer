@@ -39,7 +39,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
+            using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
             {
                 using (var response = await httpClient.PostAsync(_baseUri, content, cancellationToken)
                     .ConfigureAwait(false))
@@ -112,7 +112,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var content = new StringContent(SerializeEntity(entity), Encoding.ASCII, "application/json"))
+            using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
             {
                 using (var response = await httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
                     .ConfigureAwait(false))

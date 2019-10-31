@@ -26,6 +26,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
         protected abstract string Expand { get; }
 
+        protected abstract bool NonEditable { get; }
+
         protected override async Task OnInitializedAsync()
         {
             if (Id == null)
@@ -43,17 +45,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model = State.Clone();
         }
 
-        protected async Task HandleValidSubmit()
+        protected virtual async Task HandleValidSubmit()
         {
+            if (NonEditable)
+            {
+                return;
+            }
+
             if (IsNew)
             {
                 await AdminStore.CreateAsync(Model)
                     .ConfigureAwait(false);
-                return;
             }
-
-            await AdminStore.UpdateAsync(Model)
-                .ConfigureAwait(false);
+            else
+            {
+                await AdminStore.UpdateAsync(Model)
+                    .ConfigureAwait(false);
+            }
+            Model = State.Clone();
+            StateHasChanged();
         }
 
         protected abstract T Create();

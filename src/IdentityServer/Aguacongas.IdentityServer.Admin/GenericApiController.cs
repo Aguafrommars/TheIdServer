@@ -69,7 +69,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Creates an entity")]
         [ProducesResponseType(201)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        public Task<T> CreateAsync([FromBody] T entity)
+        public Task<T> CreateAsync(T entity)
             => _store.CreateAsync(entity);
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(ProblemDetails), 409)]
-        public Task<T> UpdateAsync(string id, [FromBody] T entity)
+        public Task<T> UpdateAsync(string id, T entity)
             => _store.UpdateAsync(entity);
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The identifier.
         /// </value>
+        [Required]
         public string Id { get; set; }
 
         /// <summary>
