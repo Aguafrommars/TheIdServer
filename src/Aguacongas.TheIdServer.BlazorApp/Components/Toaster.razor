@@ -1,0 +1,30 @@
+﻿@inject Notifier _notifier
+
+
+<div aria-live="polite" aria-atomic="true" class="toaster">
+    <div class="toast-list">
+        @foreach (var notification in _notifications)
+        {
+            <Toast Notification="notification" Closed="OnToastClosed" />
+        }
+    </div>
+</div>
+
+@code {
+    private List<Notification> _notifications = new List<Notification>();
+
+    protected override void OnInitialized()
+    {
+        _notifier.Show = notification =>
+        {
+            _notifications.Add(notification);
+            StateHasChanged();
+        };
+    }
+
+    private void OnToastClosed(Notification notification)
+    {
+        _notifications.Remove(notification);
+        StateHasChanged();
+    }
+}

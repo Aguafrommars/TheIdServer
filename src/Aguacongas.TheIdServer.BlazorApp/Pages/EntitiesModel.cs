@@ -37,13 +37,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Select = SelectProperties,
                 Take = 10
             };
-            await GetClientList(_pageRequest)
+            await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
 
             GridState.OnHeaderClicked += async e =>
             {
                 _pageRequest.OrderBy = e.OrderBy;
-                await GetClientList(_pageRequest)
+                await GetEntityList(_pageRequest)
                     .ConfigureAwait(false);
                 StateHasChanged();
             };
@@ -88,7 +88,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entity.Id}");
         }
 
-        private async Task GetClientList(PageRequest pageRequest)
+        private async Task GetEntityList(PageRequest pageRequest)
         {
             var page = await AdminStore.GetAsync(pageRequest)
                             .ConfigureAwait(false);

@@ -8,12 +8,12 @@
 }
 else
 {
-    <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <div class="row sticky-top">
             <div class="col">
                 @if (IsNew)
                 {
-                    <InputText id="name" class="form-control" placeholder="api id" @bind-Value="@Model.Id" />
+                    <AuthorizeText Name="name" Placeholder="api id" @bind-Value="@Model.Id" />
                 }
                 else
                 {
@@ -23,10 +23,10 @@ else
             @if (!NonEditable)
             {
                 <div>
-                    <button type="submit" class="btn btn-primary">
+                    <AuthorizeButton Type="submit" CssSubClass="btn-primary">
                         <span class="oi oi-data-transfer-download"></span>
                         Save
-                    </button>
+                    </AuthorizeButton>
                 </div>
             }
             <div class="col">
@@ -43,12 +43,7 @@ else
                         <label class="col-2 col-form-label">
                         </label>
                         <div class="col-sm-10">
-                            <div class="form-check">
-                                <InputCheckbox id="enabled" class="form-check-input position-static" @bind-Value="@Model.Enabled" />
-                                <label class="form-check-label" for="enabled">
-                                    enabled
-                                </label>
-                            </div>
+                            <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -56,7 +51,7 @@ else
                             display name
                         </label>
                         <div class="col-sm-10">
-                            <InputText id="displayName" class="form-control" placeholder="display name" @bind-Value="@Model.DisplayName" />
+                            <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" />
                         </div>
                     </div>
                     <div class="form-group row">
@@ -64,7 +59,7 @@ else
                             description
                         </label>
                         <div class="col-sm-10">
-                            <InputTextArea id="description" class="form-control" placeholder="decription" @bind-Value="@Model.DisplayName" />
+                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.DisplayName" />
                         </div>
                     </div>
                 </div>
@@ -72,7 +67,7 @@ else
             <div id="secrets" class="card mb-3">
                 <div class="card-header">
                     <EntitySubGridTitle Text="Secrets"
-                                        AddClicked="OnAddScopeClicked" />
+                                        AddClicked="OnAddSecretClicked" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Secrets" TableClass="table table-hover" Context="secret">
@@ -97,6 +92,7 @@ else
                                                 Text="expiration"
                                                 GridState="_secretGridState" />
                             </th>
+                            <th></th>
                         </TableHeader>
                         <RowTemplate>
                             @if (secret.Id != null)
@@ -109,17 +105,22 @@ else
                                 else
                                 {
                                 <td>
-                                    <InputText @bind-Value="@secret.Type" />
+                                    <AuthorizeText Placeholder="type" @bind-Value="@secret.Type" />
                                 </td>
                                 <td>
-                                    <InputText @bind-Value="@secret.Value" />
+                                    <AuthorizeText Placeholder="value" @bind-Value="@secret.Value" />
                                 </td>
                                 }
                             <td>
-                                <InputText @bind-Value="@secret.Description" />
+                                <AuthorizeText Placeholder="description" @bind-Value="@secret.Description" />
                             </td>
                             <td>
-                                <InputDate @bind-Value="@secret.Expiration" />
+                                <AuthorizeDate @bind-Value="@secret.Expiration" />
+                            </td>
+                            <td>
+                                <AuthorizeButton CssSubClass="btn-sm btn-primary" Clicked="() => OnDeleteSecretClicked(secret)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>
                             </td>
                         </RowTemplate>
                     </EntitiesGrid>
@@ -142,7 +143,7 @@ else
                                     <li class="list-inline-item">
                                         <ClaimType Claim="@claim"
                                                    DeleteClicked="() => OnClaimTypeDeleted(claim)"
-                                                   ValueChanged="OnClaimTypeValueChanged" />
+                                                   ValueChanged="() => OnClaimTypeValueChanged(claim)" />
                                     </li>
                                 }
                             </ul>
@@ -159,12 +160,12 @@ else
                     <div class="row">
                         @foreach(var scope in Model.Scopes)
                         {
-                            <div class="col">
+                            <div class="col-12">
                                 <div class="card bg-light mb-3">
                                     <div class="card-header">
                                         @if(scope.Scope == null)
                                         {
-                                            <InputText class="form-control" @bind-Value="@scope.Id" />
+                                            <AuthorizeText Placeholder="scope" @bind-Value="@scope.Scope" />
                                         }
                                         else
                                         {
@@ -177,7 +178,7 @@ else
                                                 display name
                                             </label>
                                             <div class="col-sm-10">
-                                                <InputText name="displayName" class="form-control" @bind-Value="@scope.DisplayName" />
+                                                <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@scope.DisplayName" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -185,43 +186,28 @@ else
                                                 description
                                             </label>
                                             <div class="col-sm-10">
-                                                <InputTextArea name="description" class="form-control" @bind-Value="@scope.Description" />
+                                                <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@scope.Description" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-2 col-form-label">
                                             </label>
                                             <div class="col-sm-10">
-                                                <div class="form-check">
-                                                    <InputCheckbox name="required" class="form-check-input" @bind-Value="@scope.Required" />
-                                                    <label class="form-check-label" for="required">
-                                                        required
-                                                    </label>
-                                                </div>
+                                                <AuthorizeCheckbox Name="required" Label="required" @bind-Value="@scope.Required" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-2 col-form-label">
                                             </label>
                                             <div class="col-sm-10">
-                                                <div class="form-check">
-                                                    <InputCheckbox name="emphasize" class="form-check-input" @bind-Value="@scope.Emphasize" />
-                                                    <label class="form-check-label" for="emphasize">
-                                                        emphasize
-                                                    </label>
-                                                </div>
+                                                <AuthorizeCheckbox Name="emphasize" Label="emphasize" @bind-Value="@scope.Emphasize" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-2 col-form-label">
                                             </label>
                                             <div class="col-sm-10">
-                                                <div class="form-check">
-                                                    <InputCheckbox name="show-in-discovery-document" class="form-check-input" @bind-Value="@scope.ShowInDiscoveryDocument" />
-                                                    <label class="form-check-label" for="show-in-discovery-document">
-                                                        show in discovery document
-                                                    </label>
-                                                </div>
+                                                <AuthorizeCheckbox Name="show-in-discovery-document" Label="show in discovery document" @bind-Value="@scope.ShowInDiscoveryDocument" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -235,7 +221,7 @@ else
                                                         <li class="list-inline-item">
                                                             <ClaimType Claim="@claim"
                                                                        DeleteClicked="() => OnScopeClaimDeleted(scope, claim)"
-                                                                       ValueChanged="() => OnScopeClaimValueChanged(scope)" />
+                                                                       ValueChanged="() => OnScopeClaimValueChanged(scope, claim)" />
                                                         </li>
                                                     }
                                                 </ul>
@@ -245,9 +231,9 @@ else
                                     @if (Model.Scopes.Count() > 1)
                                     {
                                         <div class="card-footer">
-                                            <button type="button" class="btn btn-sm btn-primary" @onclick="() => OnDeleteScopeClicked(scope)">
+                                            <AuthorizeButton Type="button" CssSubClass="btn-sm btn-primary" Clicked="() => OnDeleteScopeClicked(scope)">
                                                 <span class="oi oi-trash"></span>Remove
-                                            </button>
+                                            </AuthorizeButton>
                                         </div>
                                     }
                                 </div>
@@ -286,14 +272,16 @@ else
                                 else
                                 {
                                 <td>
-                                    <InputText class="form-control" @bind-Value="@property.Key" />
+                                    <AuthorizeText Name="key" @bind-Value="@property.Key" />
                                 </td>
                                 }
                             <td>
-                                <InputText class="form-control" @bind-Value="@property.Value" />
+                                <AuthorizeText Name="value" @bind-Value="@property.Value" />
                             </td>
                             <td>
-                                <button class="btn btn-primary" @onclick="() => OnDeletePropertyClicked(property)"><span class="oi oi-trash"></span></button>
+                                <AuthorizeButton CssSubClass="btn-sm btn-primary" Clicked="() => OnDeletePropertyClicked(property)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>                                
                             </td>
                         </RowTemplate>
                     </EntitiesGrid>
@@ -303,30 +291,31 @@ else
     </EditForm>
 }
 @code {
+    private Dictionary<Type, List<object>> _changes = new Dictionary<Type, List<object>>();
+    private EditContext _editContext;
     private GridState _secretGridState = new GridState();
-    private GridState _scopeGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
 
     protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
 
     protected override bool NonEditable => Model.NonEditable;
 
+    public override int Compare(Type x, Type y)
+    {
+        if (x == typeof(Entity.ApiScopeClaim))
+        {
+            return 1;
+        }
+        if (y == typeof(Entity.ApiScopeClaim))
+        {
+            return -1;
+        }
+        return base.Compare(x, y);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        AddEmpyClaimsTypes();
-    }
-
-    protected override async Task HandleValidSubmit()
-    {
-        var claims = Model.ApiClaims;
-        claims.Remove(claims.Last());
-        foreach(var scope in Model.Scopes)
-        {
-            var scopeClaims = scope.ApiScopeClaims;
-            scopeClaims.Remove(scopeClaims.Last());
-        }
-        await base.HandleValidSubmit();
         AddEmpyClaimsTypes();
     }
 
@@ -343,6 +332,42 @@ else
         };
     }
 
+    protected override void SetNavigationProperty<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.IApiSubEntity subEntity)
+        {
+            subEntity.ApiId = Model.Id;
+        }
+        if (entity is Entity.ApiScopeClaim apiScopeClaim)
+        {
+            if (apiScopeClaim.ApiScpope == null)
+            {
+                throw new InvalidOperationException("ApiScopeClaim.ApiScope property cannot be null.");
+            }
+            if (apiScopeClaim.ApiScpope.Id == null)
+            {
+                throw new InvalidOperationException("ApiScopeClaim.ApiScope.Id property cannot be null.");
+            }
+            apiScopeClaim.ApiScpopeId = apiScopeClaim.ApiScpope.Id;
+            apiScopeClaim.ApiScpope = null;
+        }
+    }
+
+    protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.ProtectResource api)
+        {
+            api.ApiClaims = null;
+            api.Properties = null;
+            api.Scopes = null;
+            api.Secrets = null;
+        }
+        if (entity is Entity.ApiScope scope)
+        {
+            scope.ApiScopeClaims = null;
+        }
+    }
+
     private void AddEmpyClaimsTypes()
     {
         Model.ApiClaims.Add(new Entity.ApiClaim());
@@ -355,31 +380,47 @@ else
     private void OnFilterChanged(string term)
     {
         Model.ApiClaims = State.ApiClaims
-            .Where(c => c.Type.Contains(term))
-            .ToList();
+        .Where(c => c.Type.Contains(term))
+        .ToList();
         Model.Secrets = State.Secrets
-            .Where(s => s.Description.Contains(term) || s.Type.Contains(term))
-            .ToList();
+        .Where(s => s.Description.Contains(term) || s.Type.Contains(term))
+        .ToList();
         Model.Scopes = State.Scopes
-            .Where(s => s.Description.Contains(term) ||
-                s.DisplayName.Contains(term) ||
-                s.Scope.Contains(term))
-            .ToList();
+        .Where(s => s.Description.Contains(term) ||
+        s.DisplayName.Contains(term) ||
+        s.Scope.Contains(term))
+        .ToList();
         foreach (var scope in Model.Scopes)
         {
             var stateScope = State.Scopes.FirstOrDefault(s => s.Scope == scope.Scope);
             if (stateScope != null)
             {
                 scope.ApiScopeClaims = stateScope.ApiScopeClaims
-                    .Where(c => c.Type.Contains(term))
-                    .ToList();
+                .Where(c => c.Type.Contains(term))
+                .ToList();
             }
             StateHasChanged();
         }
     }
 
+    private void OnAddSecretClicked()
+    {
+        var secret = new Entity.ApiSecret();
+        Model.Secrets.Add(secret);
+        EntityCreated(secret);
+        StateHasChanged();
+    }
+
+    private void OnDeleteSecretClicked(Entity.ApiSecret secret)
+    {
+        Model.Secrets.Remove(secret);
+        EntityDeleted(secret);
+        StateHasChanged();
+    }
+
     private void OnClaimTypeValueChanged(Entity.IClaimType claim)
     {
+        EntityCreated(claim);
         Model.ApiClaims.Add(new Entity.ApiClaim());
         StateHasChanged();
     }
@@ -387,47 +428,58 @@ else
     private void OnClaimTypeDeleted(Entity.ApiClaim claim)
     {
         Model.ApiClaims.Remove(claim);
+        EntityDeleted(claim);
         StateHasChanged();
     }
 
     private void OnAddScopeClicked()
     {
-        var claims = new List<Entity.ApiScopeClaim>();
+        var claims = new List<Entity.ApiScopeClaim>
+            ();
         claims.Add(new Entity.ApiScopeClaim());
-        Model.Scopes.Add(new Entity.ApiScope
+        var scope = new Entity.ApiScope
         {
             ApiScopeClaims = claims
-        });
+        };
+        Model.Scopes.Add(scope);
+        EntityCreated(scope);
         StateHasChanged();
     }
 
     private void OnDeleteScopeClicked(Entity.ApiScope scope)
     {
         Model.Scopes.Remove(scope);
+        EntityDeleted(scope);
         StateHasChanged();
     }
 
     private void OnScopeClaimDeleted(Entity.ApiScope scope, Entity.ApiScopeClaim claim)
     {
         scope.ApiScopeClaims.Remove(claim);
+        EntityDeleted(claim);
         StateHasChanged();
     }
 
-    private void OnScopeClaimValueChanged(Entity.ApiScope scope)
+    private void OnScopeClaimValueChanged(Entity.ApiScope scope, Entity.ApiScopeClaim claim)
     {
+        claim.ApiScpope = scope;
+        EntityCreated(claim);
         scope.ApiScopeClaims.Add(new Entity.ApiScopeClaim());
         StateHasChanged();
     }
 
     private void OnAddPropertyClicked()
     {
-        Model.Properties.Add(new Entity.ApiProperty());
+        var property = new Entity.ApiProperty();
+        Model.Properties.Add(property);
+        EntityCreated(property);
         StateHasChanged();
     }
 
     private void OnDeletePropertyClicked(Entity.ApiProperty property)
     {
         Model.Properties.Remove(property);
+        EntityDeleted(property);
         StateHasChanged();
     }
-}
+        }

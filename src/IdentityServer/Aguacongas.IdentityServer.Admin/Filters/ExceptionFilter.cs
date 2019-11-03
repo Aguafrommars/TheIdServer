@@ -33,7 +33,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                     }
                     else
                     {
-                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState)
                         {
                             Detail = dbUpdateException.InnerException.Message ?? dbUpdateException.Message
                         });

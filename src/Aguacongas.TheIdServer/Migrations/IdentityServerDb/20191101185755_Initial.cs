@@ -13,9 +13,8 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 {
                     Id = table.Column<string>(nullable: false),
                     Enabled = table.Column<bool>(nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    LastAccessed = table.Column<DateTime>(nullable: true),
                     NonEditable = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true)
@@ -144,7 +143,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                     Id = table.Column<string>(nullable: false),
                     ApiId = table.Column<string>(nullable: false),
                     Scope = table.Column<string>(nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
@@ -478,7 +477,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 {
                     Id = table.Column<string>(nullable: false),
                     IdentityId = table.Column<string>(nullable: false),
-                    Key = table.Column<string>(maxLength: 250, nullable: true),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 2000, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true)
@@ -617,8 +616,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 name: "IX_IdentityProperties_IdentityId_Key",
                 table: "IdentityProperties",
                 columns: new[] { "IdentityId", "Key" },
-                unique: true,
-                filter: "[Key] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReferenceTokens_ClientId",

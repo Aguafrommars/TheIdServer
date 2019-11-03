@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an API property
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiProperty : IAuditable
+    public class ApiProperty : IAuditable, IApiSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

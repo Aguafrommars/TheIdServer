@@ -135,6 +135,12 @@ namespace Aguacongas.TheIdServer
                 {
                     child.UseOpenApi()
                         .UseSwaggerUi3()
+                        .UseCors(configure =>
+                        {
+                            configure.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                        })
                         .UseRouting()
                         .UseEndpoints(enpoints =>
                         {

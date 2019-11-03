@@ -126,6 +126,20 @@ span.input-group-text.oi {
     width: 50px;
 }
 
+.toaster {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 2000;
+}
+
+    .toaster .toast-list {
+        position: absolute;
+        min-width: 200px;
+        top: 0;
+        right: 0;
+    }
+
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;

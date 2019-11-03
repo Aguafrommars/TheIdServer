@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an API scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiScope : IAuditable
+    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -111,5 +111,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public virtual ProtectResource Api { get; set; }
 
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ApiScope Clone()
+        {
+            return MemberwiseClone() as ApiScope;
+        }
     }
 }

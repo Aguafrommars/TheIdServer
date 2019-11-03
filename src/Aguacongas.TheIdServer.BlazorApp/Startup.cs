@@ -17,23 +17,18 @@ namespace Aguacongas.TheIdServer.BlazorApp
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Startup class")]
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorizationCore(options =>
+            {
+                options.AddPolicy("Id4-Writer", policy =>
+                   policy.RequireAssertion(context =>
+                       context.User.Identity.Name == "Alice Smith"));
+            });
+
             services
-                .AddIdentityServer4HttpStores(async p => 
+                .AddIdentityServer4HttpStores(async p =>
                 {
-                    var httpClient = p.GetRequiredService<IHttpClientFactory>()
-                        .CreateClient("oidc");
-                    var settings = await p.GetRequiredService<Task<Settings>>()
+                    return await CreateApiHattpClient(p)
                         .ConfigureAwait(false);
-                    var apiUri = new Uri(settings.ApiBaseUrl);
-                    if (apiUri.IsAbsoluteUri)
-                    {
-                        var navigationManager = p.GetRequiredService<NavigationManager>();
-                        var baseUri = new Uri(navigationManager.BaseUri);
-                        var host = baseUri.IsDefaultPort ? baseUri.Host : $"{baseUri.Host}:{baseUri.Port}";
-                        apiUri = new Uri($"{baseUri.Scheme}://{host}{settings.ApiBaseUrl}");
-                    }
-                    httpClient.BaseAddress = apiUri;
-                    return httpClient;
                 })
                 .AddAuthorizationCore()
                 .AddOidc(async p => {
@@ -48,7 +43,27 @@ namespace Aguacongas.TheIdServer.BlazorApp
                     var httpClient = p.GetRequiredService<HttpClient>();
                     return await httpClient.GetJsonAsync<Settings>("settings.json")
                         .ConfigureAwait(false);
-                });                
+                })
+                .AddSingleton<Notifier>();
+        }
+
+        private static async Task<HttpClient> CreateApiHattpClient(IServiceProvider p)
+        {
+            var httpClient = p.GetRequiredService<IHttpClientFactory>()
+                                    .CreateClient("oidc");
+            var settingsTask = p.GetRequiredService<Task<Settings>>();
+            var settings = await settingsTask
+                .ConfigureAwait(false);
+            var apiUri = new Uri(settings.ApiBaseUrl);
+            if (!apiUri.IsAbsoluteUri)
+            {
+                var navigationManager = p.GetRequiredService<NavigationManager>();
+                var baseUri = new Uri(navigationManager.BaseUri);
+                var host = baseUri.IsDefaultPort ? baseUri.Host : $"{baseUri.Host}:{baseUri.Port}";
+                apiUri = new Uri($"{baseUri.Scheme}://{host}{settings.ApiBaseUrl}");
+            }
+            httpClient.BaseAddress = apiUri;
+            return httpClient;
         }
 
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Startup class")]

@@ -1,0 +1,19 @@
+﻿@inherits InputText
+<AuthorizeView Policy="Id4-Writer">
+    <Authorized>
+        <InputText name="@Name" class="form-control" placeholder="@Placeholder"
+                   ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+    </Authorized>
+    <NotAuthorized>
+        <div name="@Name" class="col-form-label">
+            @Value
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string Placeholder { get; set; }
+}

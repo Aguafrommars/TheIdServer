@@ -1,0 +1,20 @@
+﻿@inherits InputDate<DateTime?>
+<AuthorizeView Policy="Id4-Writer">
+    <Authorized>
+        <InputDate name="@Name" class="form-control" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+    </Authorized>
+    <NotAuthorized>
+        @if (Value.HasValue)
+        {
+            <div class="col-form-label">
+                @Value.Value.ToString()
+            </div>
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+}

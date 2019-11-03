@@ -83,6 +83,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            if (entity.Id == null)
+            {
+                entity.Id = Guid.NewGuid().ToString();
+            }
             await _context.AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
@@ -107,6 +111,16 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;
+        }
+
+        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

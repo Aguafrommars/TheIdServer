@@ -1,0 +1,22 @@
+﻿@inherits InputCheckbox
+<div class="form-check">
+    <AuthorizeView Policy="Id4-Writer">
+        <Authorized>
+            <InputCheckbox name="@Name" class="form-check-input" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+        </Authorized>
+        <NotAuthorized>
+            <InputCheckbox name="@Name" class="form-check-input" disabled ValueExpression="ValueExpression" Value="@Value" />
+        </NotAuthorized>
+    </AuthorizeView>
+    <label class="form-check-label" for="@Name">
+        @Label
+    </label>
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+}

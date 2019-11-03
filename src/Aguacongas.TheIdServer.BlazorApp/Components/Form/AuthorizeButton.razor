@@ -1,0 +1,30 @@
+﻿<AuthorizeView Policy="Id4-Writer">
+    <Authorized>
+        @if (Clicked.HasDelegate)
+        {
+            <button class="btn @CssSubClass" type="@Type" @onclick="Clicked">
+                @ChildContent
+            </button>
+        }
+        else
+        {
+            <button class="btn @CssSubClass" type="@Type">
+                @ChildContent
+            </button>
+        }
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string CssSubClass { get; set; }
+
+    [Parameter]
+    public string Type { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Clicked { get; set; }
+}

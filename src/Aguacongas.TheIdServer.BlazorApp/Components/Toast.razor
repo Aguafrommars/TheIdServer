@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime _jsRuntime
+
+<div id="@Notification.Id" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+     data-delay="2000" data-autohide="@AutoHide">
+    <div class="toast-header">
+        <svg class="bd-placeholder-img rounded mr-2"
+             width="20" height="20"
+             xmlns="http://www.w3.org/2000/svg"
+             preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+            <rect width="100%" height="100%" fill="@CarretColor"></rect>
+        </svg>
+        <strong class="mr-auto">@Notification.Header</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" @onclick="() => Closed.InvokeAsync(Notification)">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body @BodyClass">
+        @Notification.Message
+    </div>
+</div>
+
+@code {
+    private string BodyClass => Notification.IsError ? "text-danger" : "text-success";
+    private string CarretColor => Notification.IsError ? "#dc3545" : "#28a745";
+    private string AutoHide => Notification.IsError ? "false" : "true";
+
+    [Parameter]
+    public Notification Notification { get; set; }
+
+    [Parameter]
+    public EventCallback<Notification> Closed { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.showToast",
+            Notification.Id, DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public Task ToastClosed()
+    {
+        return Closed.InvokeAsync(Notification);
+    }
+}

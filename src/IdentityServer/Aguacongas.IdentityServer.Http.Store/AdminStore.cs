@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -125,6 +126,18 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
+        public async Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            return await CreateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            return await UpdateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         private string SerializeEntity(T entity)
         {
             return JsonSerializer.Serialize(entity, _jsonSerializerOptions);
@@ -134,7 +147,20 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError("Error response received {@Response}", await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                var content = await response.Content.ReadAsStringAsync()
+                    .ConfigureAwait(false);
+                _logger.LogError("Error response received {@Response}", content);
+
+                if (content != null &&
+                    (response.StatusCode == HttpStatusCode.BadRequest ||
+                     response.StatusCode == HttpStatusCode.Conflict))
+                {
+                    var details = JsonSerializer.Deserialize<ProblemDetails>(content);
+                    throw new ProblemException
+                    {
+                        Details = details
+                    };
+                }
                 response.EnsureSuccessStatusCode();
             }
         }

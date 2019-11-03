@@ -96,6 +96,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -648,6 +649,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Key")
+                        .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
@@ -661,8 +663,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityId", "Key")
-                        .IsUnique()
-                        .HasFilter("[Key] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("IdentityProperties");
                 });
@@ -719,14 +720,12 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastAccessed")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");

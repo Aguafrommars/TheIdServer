@@ -116,7 +116,18 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <returns></returns>
         public ProtectResource Clone()
         {
-            return MemberwiseClone() as ProtectResource;
+            var clone = MemberwiseClone() as ProtectResource;
+            if (clone.Scopes != null)
+            {
+                var scopes = clone.Scopes;
+                clone.Scopes = new List<ApiScope>(scopes.Count);
+                foreach(var scope in scopes)
+                {
+                    clone.Scopes.Add(scope.Clone());
+                }
+            }
+
+            return clone;
         }
     }
 }
