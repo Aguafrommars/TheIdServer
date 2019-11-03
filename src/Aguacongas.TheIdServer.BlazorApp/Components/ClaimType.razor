@@ -1,4 +1,4 @@
-﻿@if (Claim.Id == null)
+﻿@if (string.IsNullOrEmpty(Claim.Type))
 {
     <div class="input-group input-group-sm mb-3">
         <input type="text" class="form-control new-claim" placeholder="claim type" value="@Claim.Type"
@@ -31,7 +31,6 @@ else
     private Task OnInputChanged(ChangeEventArgs e)
     {
         Claim.Type = e.Value as string;
-        Claim.Id = Guid.NewGuid().ToString();
         return ValueChanged.InvokeAsync(Claim);
     }
 }

@@ -1,4 +1,5 @@
-﻿@page "/protectresource"
+﻿@using System.Text.Json
+@page "/protectresource"
 @page "/protectresource/{id}"
 @inherits EntityModel<Entity.ProtectResource>
 
@@ -27,6 +28,10 @@ else
                         <span class="oi oi-data-transfer-download"></span>
                         Save
                     </AuthorizeButton>
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
                 </div>
             }
             <div class="col">
@@ -79,7 +84,7 @@ else
                             </th>
                             <th scope="col">
                                 <SortableHeader Property="Value"
-                                                Text="expiration"
+                                                Text="value"
                                                 GridState="_secretGridState" />
                             </th>
                             <th scope="col">
@@ -96,21 +101,25 @@ else
                         </TableHeader>
                         <RowTemplate>
                             @if (secret.Id != null)
-                                {
-                                <td>@secret.Type</td>
+                            {
+                                <td>
+                                    <div class="col-form-label">
+                                        @secret.Type
+                                    </div>
+                                </td>
                                 <td>
                                     <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
                                 </td>
-                                }
-                                else
-                                {
+                            }
+                            else
+                            {
                                 <td>
-                                    <AuthorizeText Placeholder="type" @bind-Value="@secret.Type" />
+                                    <AuthorizeDropDownButton CssSubClass="btn-secondary" SelectedValue="@secret.Type" Values="@GetSecretTypes()" />
                                 </td>
                                 <td>
                                     <AuthorizeText Placeholder="value" @bind-Value="@secret.Value" />
                                 </td>
-                                }
+                            }
                             <td>
                                 <AuthorizeText Placeholder="description" @bind-Value="@secret.Description" />
                             </td>
@@ -118,7 +127,7 @@ else
                                 <AuthorizeDate @bind-Value="@secret.Expiration" />
                             </td>
                             <td>
-                                <AuthorizeButton CssSubClass="btn-sm btn-primary" Clicked="() => OnDeleteSecretClicked(secret)">
+                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteSecretClicked(secret)">
                                     <span class="oi oi-trash"></span>
                                 </AuthorizeButton>
                             </td>
@@ -163,7 +172,7 @@ else
                             <div class="col-12">
                                 <div class="card bg-light mb-3">
                                     <div class="card-header">
-                                        @if(scope.Scope == null)
+                                        @if(scope.Id == null)
                                         {
                                             <AuthorizeText Placeholder="scope" @bind-Value="@scope.Scope" />
                                         }
@@ -279,7 +288,7 @@ else
                                 <AuthorizeText Name="value" @bind-Value="@property.Value" />
                             </td>
                             <td>
-                                <AuthorizeButton CssSubClass="btn-sm btn-primary" Clicked="() => OnDeletePropertyClicked(property)">
+                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeletePropertyClicked(property)">
                                     <span class="oi oi-trash"></span>
                                 </AuthorizeButton>                                
                             </td>
@@ -292,13 +301,14 @@ else
 }
 @code {
     private Dictionary<Type, List<object>> _changes = new Dictionary<Type, List<object>>();
-    private EditContext _editContext;
     private GridState _secretGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
 
     protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
 
     protected override bool NonEditable => Model.NonEditable;
+
+    protected override string BackUrl => "apis";
 
     public override int Compare(Type x, Type y)
     {
@@ -322,12 +332,19 @@ else
     protected override Entity.ProtectResource Create()
     {
         var claims = new List<Entity.ApiClaim>();
-        claims.Add(new Entity.ApiClaim());
+        var scope = new Entity.ApiScope
+        {
+            ApiScopeClaims = new List<Entity.ApiScopeClaim>()
+        };
+        EntityCreated(scope);
         return new Entity.ProtectResource
         {
             Secrets = new List<Entity.ApiSecret>(),
-            Scopes = new List<Entity.ApiScope>(),
-            ApiClaims = claims,
+            Scopes = new List<Entity.ApiScope>()
+            {
+                scope
+            },
+            ApiClaims = new List<Entity.ApiClaim>(),
             Properties = new List<Entity.ApiProperty>()
         };
     }
@@ -366,6 +383,35 @@ else
         {
             scope.ApiScopeClaims = null;
         }
+        if (entity is Entity.ApiSecret secret && secret.Id == null)
+        {
+            secret.Value = secret.Value.Sha256();
+        }
+    }
+
+    protected override void SetModelEntityId(Type entityType, Entity.IEntityId result)
+    {
+        if (entityType == typeof(Entity.ApiScope))
+        {
+            var scope = result as Entity.ApiScope;
+            var modelScope = Model.Scopes.SingleOrDefault(s => s.Id == null && s.Scope == scope.Scope);
+            if (modelScope != null)
+            {
+                modelScope.Id = result.Id;
+            }
+        }
+    }
+
+    private string[] GetSecretTypes()
+    {
+        return new string[]
+        {
+            "SharedSecret",
+            "X509Thumbprint",
+            "X509Name",
+            "X509CertificateBase64",
+            "JWK"
+        };
     }
 
     private void AddEmpyClaimsTypes()
@@ -405,7 +451,10 @@ else
 
     private void OnAddSecretClicked()
     {
-        var secret = new Entity.ApiSecret();
+        var secret = new Entity.ApiSecret
+        {
+            Type = "SharedSecret"
+        };
         Model.Secrets.Add(secret);
         EntityCreated(secret);
         StateHasChanged();
@@ -418,7 +467,7 @@ else
         StateHasChanged();
     }
 
-    private void OnClaimTypeValueChanged(Entity.IClaimType claim)
+    private void OnClaimTypeValueChanged(Entity.ApiClaim claim)
     {
         EntityCreated(claim);
         Model.ApiClaims.Add(new Entity.ApiClaim());
@@ -434,8 +483,7 @@ else
 
     private void OnAddScopeClicked()
     {
-        var claims = new List<Entity.ApiScopeClaim>
-            ();
+        var claims = new List<Entity.ApiScopeClaim>();
         claims.Add(new Entity.ApiScopeClaim());
         var scope = new Entity.ApiScope
         {
@@ -482,4 +530,4 @@ else
         EntityDeleted(property);
         StateHasChanged();
     }
-        }
+}

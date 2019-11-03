@@ -39,10 +39,9 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
-
             using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(_baseUri, content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, _baseUri), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -57,7 +56,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var response = await httpClient.DeleteAsync($"{_baseUri}/{id}", cancellationToken)
+            using (var response = await httpClient.DeleteAsync(GetUri(httpClient, $"{_baseUri}/{id}"), cancellationToken)
                 .ConfigureAwait(false))
             {
 
@@ -71,7 +70,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var response = await httpClient.GetAsync($"{_baseUri}/{id}?expand={request?.Expand}", cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{_baseUri}/{id}?expand={request?.Expand}"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response)
@@ -95,7 +94,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await _httpClientFactory
                 .ConfigureAwait(false);
 
-            using (var response = await httpClient.GetAsync(QueryHelpers.AddQueryString(_baseUri, dictionary), cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, QueryHelpers.AddQueryString(_baseUri, dictionary)), cancellationToken)
                 .ConfigureAwait(false))
             {
 
@@ -115,7 +114,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
             using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PutAsync($"{_baseUri}/{entity.Id}", content, cancellationToken)
+                using (var response = await httpClient.PutAsync(GetUri(httpClient, $"{_baseUri}/{entity.Id}"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
 
@@ -176,6 +175,19 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             _logger.LogDebug("Response received {@Response}", content);
             return JsonSerializer.Deserialize<TResponse>(content, _jsonSerializerOptions);
+        }
+
+        private Uri GetUri(HttpClient httpClient, string uri)
+        {
+            var baseAddress = httpClient.BaseAddress.ToString();
+            if (baseAddress.EndsWith("/", StringComparison.Ordinal))
+            {
+                baseAddress = baseAddress.Substring(0, baseAddress.Length - 1);
+            }
+            
+            var result = new Uri($"{baseAddress}{uri}");
+            _logger.LogInformation($"Request {result}");
+            return result;
         }
     }
 }

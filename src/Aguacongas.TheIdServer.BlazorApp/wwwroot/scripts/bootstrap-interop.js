@@ -6,5 +6,9 @@
                 .then(_ => { });
         });
         $(query).toast('show');
+    },
+    dismissModal: id => {
+        const query = `#${id}`;
+        $(query).modal('hide');
     }
-}
+};

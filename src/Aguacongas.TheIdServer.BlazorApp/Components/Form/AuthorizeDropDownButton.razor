@@ -1,0 +1,49 @@
+﻿<AuthorizeView Policy="Id4-Writer">
+    <Authorized>
+        <div class="btn-group">
+            <button class="btn dropdown-toggle @CssSubClass" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @SelectedValue
+            </button>
+            <div class="dropdown-menu">
+                @foreach (var value in Values)
+                {
+                    <div class="dropdown-item @GetActiveClass(value) select" @onclick="() => SetSelectValue(value)">@value</div>
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div name="@Name" class="col-form-label">
+            @SelectedValue
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string CssSubClass { get; set; }
+
+    [Parameter]
+    public string[] Values { get; set; }
+
+    [Parameter]
+    public string SelectedValue { get; set; }
+
+    [Parameter]
+    public EventCallback<string> SelectedValueChanged { get; set; }
+
+    private string GetActiveClass(string value)
+    {
+        return value == SelectedValue ? "active" : null;
+    }
+
+    private void SetSelectValue(string value)
+    {
+        SelectedValue = value;
+        SelectedValueChanged.InvokeAsync(value);
+        StateHasChanged();
+    }
+}

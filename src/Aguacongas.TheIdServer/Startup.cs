@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -68,7 +69,9 @@ namespace Aguacongas.TheIdServer
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                 })
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddDefaultSecretParsers()
+                .AddDefaultSecretValidators();
 
             if (Environment.IsDevelopment())
             {
@@ -79,7 +82,28 @@ namespace Aguacongas.TheIdServer
                 throw new Exception("need to configure key material");
             }
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Id4-Writer", policy =>
+                   policy.RequireAssertion(context =>
+                       context.User.Identity.Name == "Alice Smith"));
+                options.AddPolicy("Id4-Reader", policy =>
+                  policy.RequireAssertion(context =>
+                      context.User.Identity.IsAuthenticated));
+            });
+                
             services.AddAuthentication()
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5443";
+                    options.RequireHttpsMetadata = false;
+                    options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
+                    options.ApiName = "theidserveradminapi";
+                    options.ApiSecret = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d";
+                    options.EnableCaching = true;
+                    options.CacheDuration = TimeSpan.FromMinutes(10);
+                    options.LegacyAudienceValidation = true;
+                })
                 .AddGoogle(options =>
                 {
                     // register your IdentityServer with Google at https://console.developers.google.com
@@ -117,20 +141,8 @@ namespace Aguacongas.TheIdServer
                 .UseStaticFiles()
                 .UseRouting()
                 .UseIdentityServer()
+                .UseAuthentication()
                 .UseAuthorization()
-                .Map("/admin", child =>
-                {
-                    child.UseRouting()
-                    .UseClientSideBlazorFiles<BlazorApp.Startup>()
-                    .UseEndpoints(endpoints =>
-                    {
-                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Startup>("index.html");
-                    });
-                })
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapDefaultControllerRoute();
-                })
                 .Map("/api", child =>
                 {
                     child.UseOpenApi()
@@ -146,6 +158,19 @@ namespace Aguacongas.TheIdServer
                         {
                             enpoints.MapControllers();
                         });
+                })
+                .Map("/admin", child =>
+                {
+                    child.UseRouting()
+                    .UseClientSideBlazorFiles<BlazorApp.Startup>()
+                    .UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Startup>("index.html");
+                    });
+                })
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapDefaultControllerRoute();
                 });
         }
     }

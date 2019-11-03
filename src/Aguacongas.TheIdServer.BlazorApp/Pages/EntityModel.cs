@@ -18,6 +18,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         public Notifier Notifier { get; set; }
 
         [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
         public IAdminStore<T> AdminStore { get; set; }
 
         [Inject]
@@ -37,6 +40,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected abstract string Expand { get; }
 
         protected abstract bool NonEditable { get; }
+
+        protected abstract string BackUrl { get; }
 
         private readonly Dictionary<Type, Dictionary<IEntityId, ModificationKind>> _changes =
             new Dictionary<Type, Dictionary<IEntityId, ModificationKind>>();
@@ -87,6 +92,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             State = Model.Clone();
             Model = State.Clone();
+            IsNew = false;
             StateHasChanged();
 
             try
@@ -134,6 +140,45 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
+        protected async Task DeleteEntity()
+        {
+            try
+            {
+                await AdminStore.DeleteAsync(Model.Id)
+                    .ConfigureAwait(false);
+            }
+            catch (ProblemException pe)
+            {
+                Notifier.Notify(new Models.Notification
+                {
+                    Header = "Error",
+                    IsError = true,
+                    Message = pe.Details.Detail
+                });
+                throw;
+            }
+#pragma warning disable CA1031 // Do not catch general exception types. We want to notify all error
+            catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
+            {
+                Notifier.Notify(new Models.Notification
+                {
+                    Header = "Error",
+                    IsError = true,
+                    Message = e.Message
+                });
+                throw;
+            }
+
+            Notifier.Notify(new Models.Notification
+            {
+                Header = Model.Id,
+                Message = "Deleted"
+            });
+
+            NavigationManager.NavigateTo(BackUrl);
+        }
+
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class, IEntityId
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
@@ -163,6 +208,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
+        protected virtual void SetModelEntityId(Type entityType, IEntityId result)
+        {
+        }
+
         private async Task HandleMoficationList(Type entityType, Dictionary<IEntityId, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
@@ -171,8 +220,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 SetNavigationProperty(entity);
                 SanetizeEntityToSaved(entity);
-                await CreateAsync(entityType, entity)
+                var result = await CreateAsync(entityType, entity)
                     .ConfigureAwait(false);
+                entity.Id = result.Id;
+                SetModelEntityId(entityType, result);
             }
             var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
             foreach (var entity in updateList)

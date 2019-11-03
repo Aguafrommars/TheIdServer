@@ -1,0 +1,58 @@
+﻿@inject IJSRuntime _jsRuntime
+<AuthorizeView Policy="Id4-Writer">
+    <Authorized>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-entity">
+            <span class="oi oi-trash"></span>
+            Delete
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="delete-entity" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="delete-modal-header">Remove</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <p class="col text-danger">
+                                Retype the '@EntityId' if you are sure to delete it.
+                            </p>                            
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <InputText class="form-control" @bind-Value="@_checkEntityId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @onclick="OnDeleteClicked">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private string _checkEntityId;
+
+    [Parameter]
+    public string EntityId { get; set; }
+
+    [Parameter]
+    public EventCallback<string> DeleteConfirmed { get; set; }
+
+    private async Task OnDeleteClicked() {
+        if (_checkEntityId == EntityId)
+        {
+            await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.dismissModal", "delete-entity");
+            await DeleteConfirmed.InvokeAsync(EntityId)
+                .ConfigureAwait(false);
+        }
+    }
+}

@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace Aguacongas.TheIdServer
 {
@@ -31,6 +33,16 @@ namespace Aguacongas.TheIdServer
                     "name",
                     "role"
                 })
+                {
+                    ApiSecrets = new List<Secret>
+                    {
+                        new Secret()
+                        {
+                            Type = SecretTypes.SharedSecret,
+                            Value = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d".Sha256(),
+                        }
+                    }
+                }
             };
         }
 
@@ -108,7 +120,15 @@ namespace Aguacongas.TheIdServer
                     PostLogoutRedirectUris = { "https://localhost:5443/admin/" },
                     AllowedCorsOrigins = { "https://localhost:5443" },
 
-                    AllowedScopes = { "openid", "profile", "theidserveradminapi" }
+                    AllowedScopes = { "openid", "profile", "theidserveradminapi" },
+                    ClientSecrets = new List<Secret>
+                    {
+                        new Secret()
+                        {
+                            Type = SecretTypes.SharedSecret,
+                            Value = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d".Sha256(),
+                        }
+                    }
                 }
             };
         }

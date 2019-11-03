@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Admin.Http.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;

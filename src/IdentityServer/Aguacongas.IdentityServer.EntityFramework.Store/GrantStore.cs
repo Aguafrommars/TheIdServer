@@ -112,8 +112,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             {
                 entity.Data = _serializer.Serialize(dto);
             }
-            
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            try
+            {
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+            }
+            catch (DbUpdateException e) when (e.InnerException == null)
+            { }
             return entity.Id;
         }
 
