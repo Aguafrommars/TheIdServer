@@ -37,8 +37,27 @@ else
             <div class="col">
                 <Filter TermChanged="OnFilterChanged" />
             </div>
+            <div class="w-100"></div>
+            <div class="col bg-white">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#secrets">secrets</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#claims">claims</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#scopes">scopes</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#scopes">properties</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#properties">properties</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-
         <div class="entity-details">
             <DataAnnotationsValidator />
             <ValidationSummary />

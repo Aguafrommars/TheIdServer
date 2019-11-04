@@ -139,26 +139,6 @@ namespace Aguacongas.TheIdServer
             app.UseHttpsRedirection()
                 .UseResponseCompression()
                 .UseStaticFiles()
-                .UseRouting()
-                .UseIdentityServer()
-                .UseAuthentication()
-                .UseAuthorization()
-                .Map("/api", child =>
-                {
-                    child.UseOpenApi()
-                        .UseSwaggerUi3()
-                        .UseCors(configure =>
-                        {
-                            configure.AllowAnyOrigin()
-                                .AllowAnyMethod()
-                                .AllowAnyHeader();
-                        })
-                        .UseRouting()
-                        .UseEndpoints(enpoints =>
-                        {
-                            enpoints.MapControllers();
-                        });
-                })
                 .Map("/admin", child =>
                 {
                     child.UseRouting()
@@ -168,6 +148,29 @@ namespace Aguacongas.TheIdServer
                         endpoints.MapFallbackToClientSideBlazor<BlazorApp.Startup>("index.html");
                     });
                 })
+                .Map("/api", child =>
+                {
+                    child.UseOpenApi()
+                        .UseSwaggerUi3()
+                        .UseCors(configure =>
+                        {
+                            configure.SetIsOriginAllowed(origin => true)
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowCredentials();
+                        })
+                        .UseRouting()
+                        .UseAuthentication()
+                        .UseAuthorization()
+                        .UseEndpoints(enpoints =>
+                        {
+                            enpoints.MapControllers();
+                        });
+                })
+                .UseIdentityServer()
+                .UseRouting()
+                .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultControllerRoute();

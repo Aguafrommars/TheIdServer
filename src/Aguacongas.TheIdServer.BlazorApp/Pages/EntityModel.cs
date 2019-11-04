@@ -92,6 +92,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             State = Model.Clone();
             Model = State.Clone();
+            Id = Model.Id;
             IsNew = false;
             StateHasChanged();
 
