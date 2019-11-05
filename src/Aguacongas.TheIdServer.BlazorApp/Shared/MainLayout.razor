@@ -1,16 +1,51 @@
-﻿@inherits LayoutComponentBase
-<div class="sidebar">
+﻿@using Aguacongas.TheIdServer.Blazor.Oidc
+@inject OidcAuthenticationStateProvider _provider;
+@inject Notifier _notifier;
+
+@inherits LayoutComponentBase
+
+<div class="sidebar bg-light">
     <NavMenu />
 </div>
 
-<div class="main">
+<div class="main bg-light">
     <div class="top-row px-4">
         <a href="#" class="ml-md-auto btn btn-secondary btn-sm dropdown-toggle">en</a>
     </div>
 
     <div class="content px-4">
-        @Body
+        <AuthorizeView>
+            <Authorized>
+                @ShowToast(context.User.Identity.Name)
+                @Body
+            </Authorized>
+            <NotAuthorized>
+                You are redirecting to the login page.
+                <span class="text-white">
+                    @_provider.LoginAsync()
+                </span>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </div>
+<div class="fixed-bottom bg-light">
+    <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/master/README.md" target="_blank">About</a>
+</div>
+@code {
+    private bool _notified;
+    private string ShowToast(string userName)
+    {
+        if (!_notified)
+        {
+            _notifier.Notify(new Notification
+            {
+                Header = userName,
+                Message = "Connected"
+            });
+            _notified = true;
+        }
+        return null;
+    }
+
+}
 <Toaster />
-    

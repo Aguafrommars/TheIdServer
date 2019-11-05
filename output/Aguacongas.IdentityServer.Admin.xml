@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Aguacongas.IdentityServer.Admin</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Extensions.DependencyInjection.MvcBuilderExtensions">
+            <summary>
+            <see cref="T:Microsoft.Extensions.DependencyInjection.IMvcBuilder"/> extensions
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.MvcBuilderExtensions.AddIdentityServerAdmin(Microsoft.Extensions.DependencyInjection.IMvcBuilder)">
+            <summary>
+            Adds the identity server admin.
+            </summary>
+            <param name="builder">The builder.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.MvcBuilderExtensions.AddIdentityServerAdminFilters(Microsoft.AspNetCore.Mvc.MvcOptions)">
+            <summary>
+            Adds the identity server admin filters.
+            </summary>
+            <param name="options">The options.</param>
+        </member>
+        <member name="T:Aguacongas.IdentityServer.Admin.GenericApiController`1">
+            <summary>
+            Api controller base.
+            </summary>
+            <typeparam name="T">Type of entity</typeparam>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.Controller" />
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.#ctor(Aguacongas.IdentityServer.Store.IAdminStore{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aguacongas.IdentityServer.Admin.GenericApiController`1"/> class.
+            </summary>
+            <param name="store">The store.</param>
+            <exception cref="T:System.ArgumentNullException">store</exception>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.GetAsync(System.String,Aguacongas.IdentityServer.Store.GetRequest)">
+            <summary>
+            Gets an entity.
+            </summary>
+            <param name="id">entity id.</param>
+            <param name="request">The request.</param>
+            <returns>
+            An entity.
+            </returns>
+            <response code="200">Returns an entity.</response>
+            <response code="400">Bad request.</response>
+            <response code="204">No content.</response>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.GetAsync(Aguacongas.IdentityServer.Store.PageRequest)">
+            <summary>
+            Gets a page of entites.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>Returns a page of entites for the request.</returns>
+            <response code="200">Returns a page of entites.</response>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.CreateAsync(`0)">
+            <summary>
+            Creates the entity.
+            </summary>
+            <param name="entity">The entity.</param>
+            <returns>The entity.</returns>
+            <response code="201">Returns the entity.</response>
+            <response code="400">Bad request.</response>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.UpdateAsync(System.String,`0)">
+            <summary>
+            Updates the entity.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="entity">The entity.</param>
+            <returns>The entity.</returns>
+            <response code="200">Returns the entity.</response>
+            <response code="400">Bad request.</response>
+            <response code="409">Conflict.</response>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiController`1.DeleteAsync(System.String)">
+            <summary>
+            Deletes the entity.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns></returns>
+            <response code="200">Ok.</response>
+            <response code="409">Conflict.</response>
+        </member>
+        <member name="T:Aguacongas.IdentityServer.Admin.GenericApiControllerFeatureProvider">
+            <summary>
+            Generic API contoller feature
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ApplicationParts.IApplicationFeatureProvider`1" />
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiControllerFeatureProvider.PopulateFeature(System.Collections.Generic.IEnumerable{Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPart},Microsoft.AspNetCore.Mvc.Controllers.ControllerFeature)">
+            <summary>
+            Updates the <paramref name="feature" /> instance.
+            </summary>
+            <param name="parts">The list of <see cref="T:ApplicationPart" /> instances in the application.</param>
+            <param name="feature">The feature instance to populate.</param>
+            <remarks>
+            <see cref="T:ApplicationPart" /> instances in <paramref name="parts" /> appear in the same ordered sequence they
+            are stored in <see cref="P:ApplicationParts" />. This ordering may be used by the feature
+            provider to make precedence decisions.
+            </remarks>
+        </member>
+        <member name="T:Aguacongas.IdentityServer.Admin.GenericApiControllerNameConvention">
+            <summary>
+            Generic API controller name convention
+            </summary>
+            <seealso cref="T:System.Attribute" />
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ApplicationModels.IControllerModelConvention" />
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.GenericApiControllerNameConvention.Apply(Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel)">
+            <summary>
+            Called to apply the convention to the <see cref="T:ControllerModel" />.
+            </summary>
+            <param name="controller">The <see cref="T:ControllerModel" />.</param>
+        </member>
+        <member name="T:Aguacongas.IdentityServer.Admin.Services.PersistedGrantService">
+            <summary>
+            <see cref="T:IdentityServer4.Services.IPersistedGrantService"/> implementation
+            </summary>
+            <seealso cref="T:IdentityServer4.Services.IPersistedGrantService" />
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.Services.PersistedGrantService.#ctor(Aguacongas.IdentityServer.Store.IGetAllUserConsentStore,IdentityServer4.Stores.IUserConsentStore)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Aguacongas.IdentityServer.Admin.Services.PersistedGrantService"/> class.
+            </summary>
+            <param name="getAllUserConsentStore">The get all user consent store.</param>
+            <param name="userConsentStore">The user consent store.</param>
+            <exception cref="T:System.ArgumentNullException">
+            getAllUserConsentStore
+            or
+            userConsentStore
+            </exception>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.Services.PersistedGrantService.GetAllGrantsAsync(System.String)">
+            <summary>
+            Gets all grants for a given subject ID.
+            </summary>
+            <param name="subjectId">The subject identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Aguacongas.IdentityServer.Admin.Services.PersistedGrantService.RemoveAllGrantsAsync(System.String,System.String)">
+            <summary>
+            Removes all grants for a given subject id and client id combination.
+            </summary>
+            <param name="subjectId">The subject identifier.</param>
+            <param name="clientId">The client identifier.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

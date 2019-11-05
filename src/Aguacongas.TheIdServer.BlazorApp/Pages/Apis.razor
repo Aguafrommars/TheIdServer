@@ -1,47 +1,45 @@
 ﻿@page "/apis"
 @inherits EntitiesModel<Entity.ProtectResource>
 
-<div class="row sticky-top">
+<div class="row sticky-top bg-light">
     <div class="col">
         <PageListHeader Name="Apis" Url="protectresource"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
+    <EntitiesGrid Items="EntityList" TableClass="table">
+        <TableHeader>
+            <th class="w-25" scope="col">
+                <SortableHeader Property="Id"
+                                Text="id"
+                                GridState="GridState" />
+            </th>
+            <th class="w-75" scope="col">
+                <SortableHeader Property="DisplayName"
+                                Text="name"
+                                GridState="GridState" />
+            </th>
+        </TableHeader>
+    </EntitiesGrid>
 </div>
-<div class="row">
-    @if (EntityList == null)
-    {
-        <p class="col"><em>Loading...</em></p>
-    }
-    else
-    {
-        <EntitiesGrid Items="EntityList" TableClass="table sticky-top">
-            <TableHeader>
-                <th class="w-25" scope="col">
-                    <SortableHeader Property="Id"
-                                    Text="id"
-                                    GridState="GridState" />
-                </th>
-                <th class="w-75" scope="col">
-                    <SortableHeader Property="DisplayName"
-                                    Text="name"
-                                    GridState="GridState" />
-                </th>
-            </TableHeader>
-        </EntitiesGrid>
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.ProtectResource item) => OnRowClicked(item)">
-            <RowTemplate>
-                <td class="w-25">@context.Id</td>
-                <td class="w-75">
-                    @context.DisplayName
-                    <div><em>@context.Description</em></div>
-                </td>
-            </RowTemplate>
-        </EntitiesGrid>
-    }
-</div>
+@if (EntityList == null)
+{
+    <p class="col"><em>Loading...</em></p>
+}
+else
+{
+    <EntitiesGrid Items="EntityList" TableClass="table table-hover"
+                  RowClicked="(Entity.ProtectResource item) => OnRowClicked(item)">
+        <RowTemplate>
+            <td class="w-25">@context.Id</td>
+            <td class="w-75">
+                @context.DisplayName
+                <div><em>@context.Description</em></div>
+            </td>
+        </RowTemplate>
+    </EntitiesGrid>
+}
 @code {
     protected override string SelectProperties => "Id,DisplayName,Description";
 }

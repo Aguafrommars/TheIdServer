@@ -5,6 +5,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, IEntityId, ICloneable<T>, new()
     {
+        const int HEADER_HEIGHT = 95;
+
         [Inject]
         public Notifier Notifier { get; set; }
 
@@ -25,6 +28,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         [Inject]
         public IServiceProvider Provider { get; set; }
+
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
 
         [Parameter]
         public string Id { get; set; }
@@ -41,7 +47,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract bool NonEditable { get; }
 
+#pragma warning disable CA1056 // Uri properties should not be strings. Nope, because it's used as parameter of NavigationManager.NavigateTo
         protected abstract string BackUrl { get; }
+#pragma warning restore CA1056 // Uri properties should not be strings
 
         private readonly Dictionary<Type, Dictionary<IEntityId, ModificationKind>> _changes =
             new Dictionary<Type, Dictionary<IEntityId, ModificationKind>>();
@@ -171,13 +179,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 throw;
             }
 
+            NavigationManager.NavigateTo(BackUrl);
+
             Notifier.Notify(new Models.Notification
             {
                 Header = Model.Id,
                 Message = "Deleted"
             });
-
-            NavigationManager.NavigateTo(BackUrl);
         }
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class, IEntityId
@@ -204,6 +212,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             modifications.Add(entity, ModificationKind.Delete);
         }
 
+        protected ValueTask ScrollTo(string id)
+        {
+            return JSRuntime.InvokeVoidAsync("browserInteropt.scrollTo", id, -HEADER_HEIGHT);
+        }
         protected abstract T Create();
         protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
 

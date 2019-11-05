@@ -1,4 +1,4 @@
-﻿<div class="input-group input-group-sm mb-3">
+﻿<div class="input-group input-group-sm @CssClass">
     <div class="input-group-prepend">
         <span class="input-group-text oi oi-magnifying-glass" id="addon"></span>
     </div>
@@ -6,6 +6,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public string CssClass { get; set; }
+
     [Parameter]
     public string Term { get; set; }
 

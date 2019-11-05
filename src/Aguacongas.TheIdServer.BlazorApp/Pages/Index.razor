@@ -1,29 +1,9 @@
 ﻿@page "/"
 @page "/home"
-@inject Notifier _notifier;
-<h1>Welcome </h1>
 
+<h1>Welcome </h1>
 <AuthorizeView>
     <Authorized>
-        @ShowToast(context.User.Identity.Name)
+        @context.User.Identity.Name
     </Authorized>
-    <NotAuthorized>
-        You are redirecting to the login page.
-    </NotAuthorized>
 </AuthorizeView>
-@code {
-    private bool _notified;
-    private string ShowToast(string userName)
-    {
-        if (!_notified)
-        {
-            _notifier.Notify(new Notification
-            {
-                Header = userName,
-                Message = "Connected"
-            });
-            _notified = true;
-        }
-        return userName;
-    }
-}

@@ -1,7 +1,4 @@
-﻿@using Aguacongas.TheIdServer.Blazor.Oidc
-@inject OidcAuthenticationStateProvider _provider;
-
-<Router AppAssembly="@typeof(Program).Assembly">
+﻿<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <NotAuthorized>
@@ -22,16 +19,3 @@
         </CascadingAuthenticationState>
     </NotFound>
 </Router>
-@code {    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        var state = await _provider.GetAuthenticationStateAsync();
-
-        var user = state.User;
-        if (!user.Identity.IsAuthenticated)
-        {
-            await _provider.LoginAsync();
-        }
-    }
-}

@@ -1,36 +1,35 @@
 ﻿@page "/identities"
 @inherits EntitiesModel<Entity.IdentityResource>
 
-<div class="row sticky-top">
+<div class="row sticky-top bg-light">
     <div class="col">
         <PageListHeader Name="Identies" Url="identityresource"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
+    <EntitiesGrid Items="EntityList" TableClass="table sticky-top">
+        <TableHeader>
+            <th class="w-25" scope="col">
+                <SortableHeader Property="Id"
+                                Text="id"
+                                GridState="GridState" />
+            </th>
+            <th class="w-75" scope="col">
+                <SortableHeader Property="DisplayName"
+                                Text="name"
+                                GridState="GridState" />
+            </th>
+        </TableHeader>
+    </EntitiesGrid>
 </div>
 <div class="row">
     @if (EntityList == null)
     {
-        <div class="w-100"></div>
         <p class="col"><em>Loading...</em></p>
     }
     else
     {
-        <EntitiesGrid Items="EntityList" TableClass="table sticky-top">
-            <TableHeader>
-                <th class="w-25" scope="col">
-                    <SortableHeader Property="Id"
-                                    Text="id"
-                                    GridState="GridState" />
-                </th>
-                <th class="w-75" scope="col">
-                    <SortableHeader Property="DisplayName"
-                                    Text="name"
-                                    GridState="GridState" />
-                </th>
-            </TableHeader>
-        </EntitiesGrid>
         <EntitiesGrid Items="EntityList" TableClass="table table-hover"
                       RowClicked="(Entity.IdentityResource item) => OnRowClicked(item)">
             <RowTemplate>

@@ -18,6 +18,12 @@
 
         public string StoragePrefix { get; set; } = "oidc.";
 
+        internal string BackUriStorageKey => $"{StoragePrefix}backUri";
+
+        internal string TokenEndpointStorageKey => $"{StoragePrefix}tokenEnpoint";
+
+        internal string UserInfoEndpointStorageKey => $"{StoragePrefix}userInfoEnpoint";
+
         internal string VerifierStorageKey => $"{StoragePrefix}verifier";
 
         internal string ClaimsStorageKey => $"{StoragePrefix}claims";

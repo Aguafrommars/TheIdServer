@@ -10,7 +10,7 @@
 else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
-        <div class="row sticky-top">
+        <div class="row bg-light sticky-top">
             <div class="col">
                 @if (IsNew)
                 {
@@ -35,25 +35,22 @@ else
                 </div>
             }
             <div class="col">
-                <Filter TermChanged="OnFilterChanged" />
+                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
             </div>
             <div class="w-100"></div>
-            <div class="col bg-white">
+            <div class="col">
                 <ul class="list-inline">
                     <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#secrets">secrets</a>
+                        <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#claims">claims</a>
+                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#scopes">scopes</a>
+                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#scopes">properties</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#properties">properties</a>
+                        <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
                     </li>
                 </ul>
             </div>
@@ -64,25 +61,25 @@ else
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-2 col-form-label">
+                        <label class="col col-form-label">
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-lg-10 col-sm-12">
                             <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-2 col-form-label" for="displayName">
+                        <label class="col col-form-label" for="displayName">
                             display name
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-lg-10 col-sm-12">
                             <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" />
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-2 col-form-label" for="description">
+                        <label class="col col-form-label" for="description">
                             description
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-lg-10 col-sm-12">
                             <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.DisplayName" />
                         </div>
                     </div>
@@ -202,47 +199,47 @@ else
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label" for="displayName">
+                                            <label class="col col-form-label" for="displayName">
                                                 display name
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10 col-sm-12">
                                                 <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@scope.DisplayName" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label" for="description">
+                                            <label class="col col-form-label" for="description">
                                                 description
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10 col-sm-12">
                                                 <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@scope.Description" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label">
+                                            <label class="col col-form-label">
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-12 col-md-10">
                                                 <AuthorizeCheckbox Name="required" Label="required" @bind-Value="@scope.Required" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label">
+                                            <label class="col col-form-label">
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10 col-sm-12">
                                                 <AuthorizeCheckbox Name="emphasize" Label="emphasize" @bind-Value="@scope.Emphasize" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label">
+                                            <label class="col col-form-label">
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10 col-sm-12">
                                                 <AuthorizeCheckbox Name="show-in-discovery-document" Label="show in discovery document" @bind-Value="@scope.ShowInDiscoveryDocument" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-2 col-form-label">
+                                            <label class="col col-form-label">
                                                 claims
                                             </label>
-                                            <div class="col-sm-10">
+                                            <div class="col-lg-10 col-sm-12">
                                                 <ul class="list-inline">
                                                     @foreach (var claim in scope.ApiScopeClaims)
                                                     {
