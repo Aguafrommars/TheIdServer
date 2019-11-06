@@ -14,16 +14,26 @@
     </div>
 
     <div class="content px-4">
-        <AuthorizeView>
+        <AuthorizeView Policy="Id4-Reader">
             <Authorized>
                 @ShowToast(context.User.Identity.Name)
                 @Body
             </Authorized>
             <NotAuthorized>
-                You are redirecting to the login page.
-                <span class="text-white">
-                    @_provider.LoginAsync()
-                </span>
+                @if (!context.User.Claims.Any(c => c.Type == "Oidc.NotConnected"))
+                {
+                    <div class="text-alerte">
+                        You're not authorize to use this application.
+                    </div>
+                }
+                else
+                {
+                    <div>You are redirecting to the login page.</div>
+                    <span class="text-white">
+                        @_provider.LoginAsync()
+                    </span>
+
+                }
             </NotAuthorized>
         </AuthorizeView>
     </div>

@@ -84,10 +84,11 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             }
             if (_userStore.User != null)
             {
+                _logger.LogInformation("User found with name {UserName}", _userStore.User.Identity.Name);
                 return new AuthenticationState(_userStore.User);
             }
-
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            _logger.LogInformation("No user, returning not authenticate identity");
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new  Claim[] { new Claim("Oidc.NotConnected", "") })));
         }
 
         private async Task GetUserFromSessionStorage(AuthorizationOptions options)

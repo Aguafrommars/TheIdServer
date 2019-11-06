@@ -1,5 +1,4 @@
-﻿using Aguacongas.IdentityServer.Admin.Http.Store;
-using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
@@ -26,8 +25,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         public GridState GridState => new GridState();
 
-        protected string Filter { get; set; }
-
         protected abstract string SelectProperties { get; }
 
         protected override async Task OnInitializedAsync()
@@ -50,22 +47,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
         }
 
-        protected async Task OnFilterChanged(string filter)
+        protected Task OnFilterChanged(string filter)
         {
-            Filter = filter;
-            var propertyArray = SelectProperties.Split(',');
-            var expressionArray = new string[propertyArray.Length];
-            for(int i = 0; i< propertyArray.Length; i++)
-            {
-                expressionArray[i] = $"contains({propertyArray[i]},'{filter}')";
-            }
-            _pageRequest.Filter = string.Join(" or ", expressionArray);
-
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
 
-            await Task.Delay(500, token)
+            return Task.Delay(500, token)
                 .ContinueWith(async task =>
                 {
                     if (task.IsCanceled)
@@ -73,13 +61,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                         return;
                     }
 
+                    var propertyArray = SelectProperties.Split(',');
+                    var expressionArray = new string[propertyArray.Length];
+                    for (int i = 0; i < propertyArray.Length; i++)
+                    {
+                        expressionArray[i] = $"contains({propertyArray[i]},'{filter}')";
+                    }
+                    _pageRequest.Filter = string.Join(" or ", expressionArray);
+
                     var page = await AdminStore.GetAsync(_pageRequest, token)
                                 .ConfigureAwait(false);
 
                     EntityList = page.Items;
                     StateHasChanged();
-                },TaskScheduler.Default)
-                .ConfigureAwait(false);
+                }, TaskScheduler.Default);
         }
 
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]

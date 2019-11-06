@@ -11,13 +11,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 
 namespace Aguacongas.TheIdServer
 {
+#pragma warning disable S1118 // Utility classes should not have public constructors
     public class SeedData
+#pragma warning restore S1118 // Utility classes should not have public constructors
     {
         public static void EnsureSeedData(string connectionString)
         {
@@ -33,7 +36,7 @@ namespace Aguacongas.TheIdServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            var builder = services.AddIdentityServer()
+            services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>();
 
             using var serviceProvider = services.BuildServiceProvider();
@@ -78,6 +81,7 @@ namespace Aguacongas.TheIdServer
             context.SaveChanges();
         }
 
+        [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown", Justification = "Seeding")]
         private static void SeedUsers(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();

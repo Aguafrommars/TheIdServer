@@ -20,6 +20,9 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 options.AddPolicy("Id4-Writer", policy =>
                    policy.RequireAssertion(context =>
                        context.User.Identity.Name == "Alice Smith"));
+                options.AddPolicy("Id4-Reader", policy =>
+                   policy.RequireAssertion(context =>
+                       context.User.Identity.Name == "Bod Smith" || context.User.Identity.Name == "Alice Smith"));
             });
 
             services

@@ -1,17 +1,32 @@
-﻿@if (string.IsNullOrEmpty(Claim.Type))
+﻿@using  Aguacongas.IdentityServer.Store
+@using  System.Threading
+@implements IDisposable
+@inject IAdminStore<Entity.IdentityClaim> _store
+@if (string.IsNullOrEmpty(Claim.Type))
 {
-    <div class="input-group input-group-sm mb-3">
-        <input type="text" class="form-control new-claim" placeholder="claim type" value="@Claim.Type"
-               @onchange="OnInputChanged" />
-        <div class="input-group-append">
-            <span class="input-group-text oi oi-plus" />
+    <div class="dropdown">
+        <div class="input-group input-group-sm mb-3" data-toggle="dropdown">
+            <input type="text" class="form-control new-claim" placeholder="claim type" value="@_value"
+                   @oninput="OnInputChanged" />
+            <div class="input-group-append">
+                <span class="input-group-text oi oi-plus" />
+            </div>
+        </div>
+        <div class="dropdown-menu m-0">
+            @if (_filteredClaimType != null)
+            {
+                foreach (var type in _filteredClaimType)
+                {
+                    <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetClaimType(type)"><small>@type</small></button>
+                }
+            }
         </div>
     </div>
 }
 else
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@Claim.Type</div>        
+        <div class="form-control" disabled>@Claim.Type</div>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
@@ -19,6 +34,15 @@ else
 }
 
 @code {
+    private readonly PageRequest _pageRequest = new PageRequest
+    {
+        Select = "Type",
+        Take = 5
+    };
+    private IEnumerable<string> _filteredClaimType;
+    private string _value;
+    private CancellationTokenSource _cancellationTokenSource;
+
     [Parameter]
     public Entity.IClaimType Claim { get; set; }
 
@@ -30,7 +54,67 @@ else
 
     private Task OnInputChanged(ChangeEventArgs e)
     {
-        Claim.Type = e.Value as string;
+        _value = e.Value as string;
+        if (_filteredClaimType != null && !_filteredClaimType.Any())
+        {
+            Claim.Type = _value;
+            _filteredClaimType = null;
+            _value = null;
+            return ValueChanged.InvokeAsync(Claim);
+        }
+        return Filter(_value);
+    }
+
+    private Task Filter(string value)
+    {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
+        var token = _cancellationTokenSource.Token;
+
+        return Task.Delay(500, token)
+                .ContinueWith(async task =>
+                {
+                    if (task.IsCanceled)
+                    {
+                        return;
+                    }
+                    _pageRequest.Filter = $"contains(Type,'{value}')";
+                    var response = await _store.GetAsync(_pageRequest)
+                        .ConfigureAwait(false);
+
+                    _filteredClaimType = response.Items.Select(c => c.Type);
+                    StateHasChanged();
+                }, TaskScheduler.Default);
+    }
+
+    private Task SetClaimType(string type)
+    {
+        Claim.Type = type;
+        _filteredClaimType = null;
         return ValueChanged.InvokeAsync(Claim);
     }
+
+    #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _cancellationTokenSource?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 }

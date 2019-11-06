@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
