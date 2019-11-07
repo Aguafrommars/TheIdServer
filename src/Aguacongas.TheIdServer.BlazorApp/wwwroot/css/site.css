@@ -132,10 +132,6 @@ span.input-group-text.oi {
         right: 0;
     }
 
-.hidden {
-    display: none;
-}
-
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;

@@ -10,6 +10,12 @@
     dismissModal: id => {
         const query = `#${id}`;
         $(query).modal('hide');
+    },
+    showDropDownMenu: id => {
+        $(`#${id}`).dropdown('show');
+    },
+    hideDropDownMenu: id => {
+        $(`#${id}`).dropdown('hide');
     }
 };
 window.browserInteropt = {
@@ -18,5 +24,16 @@ window.browserInteropt = {
         const y = element.getBoundingClientRect().top + window.pageYOffset;
         offset = offset || 0;
         window.scrollTo({ top: y + offset, behavior: 'smooth' });
+    },
+    preventEnterKeyPress: (id, dotnetHelper) => {
+        const element = document.getElementById(id);
+        element.onkeypress = e => {
+            var key = e.charCode || e.keyCode || 0;
+            if (key === 13) {
+                e.preventDefault();
+                dotnetHelper.invokeMethodAsync('EnterKeyPressed', id)
+                    .then(_ => { });
+            }
+        };
     }
 };

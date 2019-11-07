@@ -50,6 +50,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected Task OnFilterChanged(string filter)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
 

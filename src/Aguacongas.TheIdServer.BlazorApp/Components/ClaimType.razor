@@ -2,25 +2,24 @@
 @using  System.Threading
 @implements IDisposable
 @inject IAdminStore<Entity.IdentityClaim> _store
+@inject IJSRuntime _jsRuntime
 @if (string.IsNullOrEmpty(Claim.Type))
 {
-    <div class="dropdown">
-        <div class="input-group input-group-sm mb-3" data-toggle="dropdown">
-            <input type="text" class="form-control new-claim" placeholder="claim type" value="@_value"
-                   @oninput="OnInputChanged" />
-            <div class="input-group-append">
-                <span class="input-group-text oi oi-plus" />
-            </div>
+    <div id="@_id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="claim type" value="@_value"
+                @oninput="OnInputChanged"/>
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
         </div>
-        <div class="dropdown-menu m-0">
-            @if (_filteredClaimType != null)
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (_filteredClaimType != null)
+        {
+            foreach (var type in _filteredClaimType)
             {
-                foreach (var type in _filteredClaimType)
-                {
-                    <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetClaimType(type)"><small>@type</small></button>
-                }
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetClaimType(type)"><small>@type</small></button>
             }
-        </div>
+        }
     </div>
 }
 else
@@ -34,6 +33,7 @@ else
 }
 
 @code {
+    private readonly string _id = Guid.NewGuid().ToString();
     private readonly PageRequest _pageRequest = new PageRequest
     {
         Select = "Type",
@@ -52,26 +52,37 @@ else
     [Parameter]
     public EventCallback<Entity.IClaimType> ValueChanged { get; set; }
 
+    [JSInvokable]
+    public Task EnterKeyPressed()
+    {
+        Console.WriteLine("Enter key pressed");
+        return SetClaimType(_value);
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && string.IsNullOrEmpty(Claim.Type))
+        {
+            return _jsRuntime.InvokeVoidAsync("browserInteropt.preventEnterKeyPress", _id, DotNetObjectReference.Create(this))
+                .AsTask();
+        }
+        return Task.CompletedTask;
+    }
+
     private Task OnInputChanged(ChangeEventArgs e)
     {
         _value = e.Value as string;
-        if (_filteredClaimType != null && !_filteredClaimType.Any())
-        {
-            Claim.Type = _value;
-            _filteredClaimType = null;
-            _value = null;
-            return ValueChanged.InvokeAsync(Claim);
-        }
         return Filter(_value);
     }
 
     private Task Filter(string value)
     {
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         var token = _cancellationTokenSource.Token;
 
-        return Task.Delay(500, token)
+        return Task.Delay(250, token)
                 .ContinueWith(async task =>
                 {
                     if (task.IsCanceled)
@@ -83,38 +94,43 @@ else
                         .ConfigureAwait(false);
 
                     _filteredClaimType = response.Items.Select(c => c.Type);
+                    if (_filteredClaimType.Any())
+                    {
+                        await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", _id);
+                    }
                     StateHasChanged();
                 }, TaskScheduler.Default);
     }
 
-    private Task SetClaimType(string type)
+    private async Task SetClaimType(string type)
     {
         Claim.Type = type;
         _filteredClaimType = null;
-        return ValueChanged.InvokeAsync(Claim);
+        await ValueChanged.InvokeAsync(Claim);
     }
 
+
     #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+    private bool disposedValue = false; // To detect redundant calls
 
-        protected virtual void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
         {
-            if (!disposedValue)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _cancellationTokenSource?.Dispose();
-                }
-
-                disposedValue = true;
+                _cancellationTokenSource?.Dispose();
             }
-        }
 
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            disposedValue = true;
         }
-        #endregion
+    }
+
+    // This code added to correctly implement the disposable pattern.
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

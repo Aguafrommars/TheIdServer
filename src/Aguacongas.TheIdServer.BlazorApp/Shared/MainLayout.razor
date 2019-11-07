@@ -8,7 +8,7 @@
     <NavMenu />
 </div>
 
-<div class="main bg-light">
+<div class="main bg-light mb-2">
     <div class="top-row px-4">
         <a href="#" class="ml-md-auto btn btn-secondary btn-sm dropdown-toggle">en</a>
     </div>
@@ -19,16 +19,19 @@
                 @ShowToast(context.User.Identity.Name)
                 @Body
             </Authorized>
+            <Authorizing>
+                <p>Authentication in progress.</p>
+            </Authorizing>
             <NotAuthorized>
                 @if (!context.User.Claims.Any(c => c.Type == "Oidc.NotConnected"))
                 {
-                    <div class="text-alerte">
+                    <p class="text-alerte">
                         You're not authorize to use this application.
-                    </div>
+                    </p>
                 }
                 else
                 {
-                    <div>You are redirecting to the login page.</div>
+                    <p>You are redirecting to the login page. please wait</p>
                     <span class="text-white">
                         @_provider.LoginAsync()
                     </span>
