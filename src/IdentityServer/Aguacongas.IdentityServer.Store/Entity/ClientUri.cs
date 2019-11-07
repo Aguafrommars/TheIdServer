@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client uri
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ClientUri : IAuditable
+    public class ClientUri : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client IDP restriction
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ClientIdPRestriction : IAuditable
+    public class ClientIdPRestriction : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

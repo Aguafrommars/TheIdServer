@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client secret
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ClientSecret : IAuditable
+    public class ClientSecret : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

@@ -240,6 +240,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The client URI.
         /// </value>
         [MaxLength(2000)]
+        [Url]
         public string ClientUri { get; set; }
 
         /// <summary>
@@ -249,6 +250,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The logo URI.
         /// </value>
         [MaxLength(2000)]
+        [Url]
         public string LogoUri { get; set; }
 
         /// <summary>
@@ -290,6 +292,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The front channel logout URI.
         /// </value>
         [MaxLength(2000)]
+        [Url]
         public string FrontChannelLogoutUri { get; set; }
 
         /// <summary>
@@ -307,6 +310,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The back channel logout URI.
         /// </value>
         [MaxLength(2000)]
+        [Url]
         public string BackChannelLogoutUri { get; set; }
 
         /// <summary>
@@ -316,6 +320,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         ///   <c>true</c> if [allow remember consent]; otherwise, <c>false</c>.
         /// </value>
         public bool AllowRememberConsent { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [non editable].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [non editable]; otherwise, <c>false</c>.
+        /// </value>
+        public bool NonEditable { get; set; }
 
         /// <summary>
         /// Gets or sets the identity provider restrictions.

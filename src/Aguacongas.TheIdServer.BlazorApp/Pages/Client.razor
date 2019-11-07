@@ -1,13 +1,217 @@
 ﻿@page "/client"
 @page "/client/{id}"
+@inherits EntityModel<Entity.Client>
 
-<div class="row sticky-top">
-    <div class="col">
-        <h3>@Id</h3>
-    </div>
-</div>
-
+@if (Model == null)
+{
+    <p class="col"><em>Loading...</em></p>
+}
+else
+{
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <div class="row bg-light sticky-top">
+            <div class="col">
+                @if (IsNew)
+                {
+                    <AuthorizeText Name="name" Placeholder="api id" @bind-Value="@Model.Id" />
+                }
+                else
+                {
+                    <h3>@Id</h3>
+                }
+            </div>
+            @if (!NonEditable)
+            {
+                <div>
+                    <AuthorizeButton Type="submit" CssSubClass="btn-primary">
+                        <span class="oi oi-data-transfer-download"></span>
+                        Save
+                    </AuthorizeButton>
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
+                </div>
+            }
+            <div class="col">
+                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+            </div>
+            <div class="w-100"></div>
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
+                    </li>
+                </ul>
+            </div>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </div>
+        <div class="entity-details">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col col-form-label">
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="clientName">
+                            display name
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="description">
+                            description
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.Description" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="properties" class="card mb-3">
+                <div class="card-header">
+                    <EntitySubGridTitle Text="Properties"
+                                        AddClicked="OnAddPropertyClicked" />
+                </div>
+                <div class="card-body">
+                    <EntitiesGrid Items="@Model.Properties" TableClass="table table-hover" Context="property">
+                        <TableHeader>
+                            <th scope="col">
+                                <SortableHeader Property="Key"
+                                                Text="key"
+                                                GridState="_propertiesGridState" />
+                            </th>
+                            <th scope="col">
+                                <SortableHeader Property="Value"
+                                                Text="value"
+                                                GridState="_propertiesGridState" />
+                            </th>
+                            <th></th>
+                        </TableHeader>
+                        <RowTemplate>
+                            @if (property.Id != null)
+                                {
+                                <td>
+                                    @property.Key
+                                </td>
+                                }
+                                else
+                                {
+                                <td>
+                                    <AuthorizeText Name="key" @bind-Value="@property.Key" />
+                                </td>
+                                }
+                            <td>
+                                <AuthorizeText Name="value" @bind-Value="@property.Value" />
+                            </td>
+                            <td>
+                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeletePropertyClicked(property)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>
+                            </td>
+                        </RowTemplate>
+                    </EntitiesGrid>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
 @code {
-    [Parameter]
-    public string Id { get; set; }
+    private GridState _secretGridState = new GridState();
+    private GridState _propertiesGridState = new GridState();
+
+    protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
+
+    protected override bool NonEditable => false;
+
+    protected override string BackUrl => "clients";
+
+    protected override Entity.Client Create()
+    {
+        return new Entity.Client
+        {
+            AllowedGrantTypes = new List<Entity.ClientGrantType>(),
+            AllowedScopes = new List<Entity.ClientScope>(),
+            ClientClaims = new List<Entity.ClientClaim>(),
+            ClientSecrets = new List<Entity.ClientSecret>(),
+            IdentityProviderRestrictions = new List<Entity.ClientIdPRestriction>(),
+            RedirectUris = new List<Entity.ClientUri>()
+
+        };
+    }
+
+    protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.Client client)
+        {
+            client.IdentityProviderRestrictions = null;
+            client.ClientClaims = null;
+            client.ClientSecrets = null;
+            client.AllowedGrantTypes = null;
+            client.RedirectUris = null;
+            client.AllowedScopes = null;
+            client.Properties = null;
+        }
+    }
+
+    protected override void SetNavigationProperty<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.IClientSubEntity subEntity)
+        {
+            subEntity.ClientId = Model.Id;
+        }
+    }
+
+    private void OnFilterChanged(string term)
+    {
+        Model.AllowedScopes = State.AllowedScopes
+        .Where(s => s.Scope.Contains(term))
+        .ToList();
+        Model.AllowedGrantTypes = State.AllowedGrantTypes.
+            Where(g => g.GrantType.Contains(term))
+            .ToList();
+        Model.ClientClaims = State.ClientClaims
+        .Where(c => c.Type.Contains(term) || c.Value.Contains(term))
+        .ToList();
+        Model.ClientSecrets = State.ClientSecrets
+        .Where(s => s.Description.Contains(term) || s.Type.Contains(term))
+        .ToList();
+        Model.IdentityProviderRestrictions = State.IdentityProviderRestrictions
+            .Where(i => i.Provider.Contains(term))
+            .ToList();
+        Model.RedirectUris = State.RedirectUris
+            .Where(u => u.Uri.Contains(term))
+            .ToList();
+    }
+
+    private void OnAddPropertyClicked()
+    {
+        var property = new Entity.ClientProperty();
+        Model.Properties.Add(property);
+        EntityCreated(property);
+        StateHasChanged();
+    }
+
+    private void OnDeletePropertyClicked(Entity.ClientProperty property)
+    {
+        Model.Properties.Remove(property);
+        EntityDeleted(property);
+        StateHasChanged();
+    }
 }

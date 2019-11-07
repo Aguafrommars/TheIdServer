@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client grant type
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ClientGrantType : IAuditable
+    public class ClientGrantType : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

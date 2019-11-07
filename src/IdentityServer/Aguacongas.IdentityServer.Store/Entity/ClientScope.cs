@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client allowed scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ClientScope : IAuditable
+    public class ClientScope : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

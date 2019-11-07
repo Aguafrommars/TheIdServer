@@ -1,5 +1,4 @@
-﻿@using System.Text.Json
-@page "/protectresource"
+﻿@page "/protectresource"
 @page "/protectresource/{id}"
 @inherits EntityModel<Entity.ProtectResource>
 
@@ -54,10 +53,10 @@ else
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="entity-details">
             <DataAnnotationsValidator />
             <ValidationSummary />
+        </div>
+        <div class="entity-details">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="form-group row">
@@ -80,7 +79,7 @@ else
                             description
                         </label>
                         <div class="col-lg-10 col-sm-12">
-                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.DisplayName" />
+                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.Description" />
                         </div>
                     </div>
                 </div>
@@ -316,7 +315,6 @@ else
     </EditForm>
 }
 @code {
-    private Dictionary<Type, List<object>> _changes = new Dictionary<Type, List<object>>();
     private GridState _secretGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
 
