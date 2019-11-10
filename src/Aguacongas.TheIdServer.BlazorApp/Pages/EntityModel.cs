@@ -18,19 +18,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         const int HEADER_HEIGHT = 95;
 
         [Inject]
-        public Notifier Notifier { get; set; }
+        protected Notifier Notifier { get; set; }
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        protected NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        public IAdminStore<T> AdminStore { get; set; }
+        protected IAdminStore<T> AdminStore { get; set; }
 
         [Inject]
-        public IServiceProvider Provider { get; set; }
+        protected IServiceProvider Provider { get; set; }
 
         [Inject]
-        public IJSRuntime JSRuntime { get; set; }
+        protected IJSRuntime JSRuntime { get; set; }
 
         [Parameter]
         public string Id { get; set; }
@@ -65,6 +65,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 return 1;
             }
             return 0;
+        }
+
+        protected string[] GetSecretTypes()
+        {
+            return new string[]
+            {
+                "SharedSecret",
+                "X509Thumbprint",
+                "X509Name",
+                "X509CertificateBase64",
+                "JWK"
+            };
         }
 
         protected override async Task OnInitializedAsync()

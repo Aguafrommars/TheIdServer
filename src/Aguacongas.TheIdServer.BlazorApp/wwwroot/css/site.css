@@ -143,11 +143,8 @@ span.input-group-text.oi {
         flex-direction: row;
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+    .main {
+        border-left: 1px solid #d6d5d5;
     }
 
     .main > div {
@@ -157,6 +154,13 @@ span.input-group-text.oi {
 
     .navbar-toggler {
         display: none;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
     }
 
     .sidebar .collapse {

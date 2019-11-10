@@ -69,7 +69,17 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var options = await _getOptionsTask.ConfigureAwait(false);
+            AuthorizationOptions options;
+            try
+            {
+                options = await _getOptionsTask.ConfigureAwait(false);
+            }
+            catch(HttpRequestException e)
+            {
+                _logger.LogError(e, e.Message);
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
+            }
+
             var uri = new Uri(_navigationManager.Uri);
 
             var queryParams = QueryHelpers.ParseQuery(uri.Query);

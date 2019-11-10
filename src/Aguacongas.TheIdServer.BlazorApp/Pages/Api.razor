@@ -53,8 +53,10 @@ else
                     </li>
                 </ul>
             </div>
+            <div class="w-100"></div>
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            <ValidationSummary class="col" />
+
         </div>
         <div class="entity-details">
             <div class="card mb-3">
@@ -153,9 +155,7 @@ else
             <div id="claims" class="card mb-3">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col">
-                            <h5 class="col">Claims</h5>
-                        </div>
+                        <h5 class="col">Claims</h5>
                     </div>
                 </div>
                 <div class="card-body">
@@ -165,7 +165,7 @@ else
                                 @foreach (var claim in Model.ApiClaims)
                                 {
                                     <li class="list-inline-item">
-                                        <ClaimType Claim="@claim"
+                                        <ClaimType Entity="@claim"
                                                    DeleteClicked="() => OnClaimTypeDeleted(claim)"
                                                    ValueChanged="() => OnClaimTypeValueChanged(claim)" />
                                     </li>
@@ -243,7 +243,7 @@ else
                                                     @foreach (var claim in scope.ApiScopeClaims)
                                                     {
                                                         <li class="list-inline-item">
-                                                            <ClaimType Claim="@claim"
+                                                            <ClaimType Entity="@claim"
                                                                        DeleteClicked="() => OnScopeClaimDeleted(scope, claim)"
                                                                        ValueChanged="() => OnScopeClaimValueChanged(scope, claim)" />
                                                         </li>
@@ -414,18 +414,6 @@ else
                 modelScope.Id = result.Id;
             }
         }
-    }
-
-    private string[] GetSecretTypes()
-    {
-        return new string[]
-        {
-            "SharedSecret",
-            "X509Thumbprint",
-            "X509Name",
-            "X509CertificateBase64",
-            "JWK"
-        };
     }
 
     private void AddEmpyClaimsTypes()

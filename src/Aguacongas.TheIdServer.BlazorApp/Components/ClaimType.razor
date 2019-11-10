@@ -1,136 +1,57 @@
 ﻿@using  Aguacongas.IdentityServer.Store
 @using  System.Threading
-@implements IDisposable
+@inherits AutoCompleteModel<Entity.IClaimType>
 @inject IAdminStore<Entity.IdentityClaim> _store
-@inject IJSRuntime _jsRuntime
-@if (string.IsNullOrEmpty(Claim.Type))
-{
-    <div id="@_id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="claim type" value="@_value"
-                @oninput="OnInputChanged"/>
-        <div class="input-group-append">
-            <span class="input-group-text oi oi-plus" />
-        </div>
-    </div>
-    <div class="dropdown-menu m-0">
-        @if (_filteredClaimType != null)
-        {
-            foreach (var type in _filteredClaimType)
-            {
-                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetClaimType(type)"><small>@type</small></button>
-            }
-        }
-    </div>
-}
-else
+
+@if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@Claim.Type</div>
+        <div class="form-control" disabled>@Entity.Type</div>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
     </div>
 }
+else
+{
+    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
+               @oninput="OnInputChanged" />
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
+        </div>
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (FilteredValues != null)
+        {
+            foreach (var value in FilteredValues)
+            {
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(value)"><small>@value</small></button>
+            }
+        }
+    </div>
+}
 
 @code {
-    private readonly string _id = Guid.NewGuid().ToString();
     private readonly PageRequest _pageRequest = new PageRequest
     {
         Select = "Type",
         Take = 5
     };
-    private IEnumerable<string> _filteredClaimType;
-    private string _value;
-    private CancellationTokenSource _cancellationTokenSource;
 
-    [Parameter]
-    public Entity.IClaimType Claim { get; set; }
+    protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Type);
 
-    [Parameter]
-    public EventCallback DeleteClicked { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.IClaimType> ValueChanged { get; set; }
-
-    [JSInvokable]
-    public Task EnterKeyPressed()
+    protected override async Task<IEnumerable<string>> GetFilteredValues(string value)
     {
-        Console.WriteLine("Enter key pressed");
-        return SetClaimType(_value);
+        _pageRequest.Filter = $"contains(Type,'{value}')";
+        var response = await _store.GetAsync(_pageRequest)
+            .ConfigureAwait(false);
+
+        return response.Items.Select(c => c.Type);
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override void SetValue(string value)
     {
-        if (firstRender && string.IsNullOrEmpty(Claim.Type))
-        {
-            return _jsRuntime.InvokeVoidAsync("browserInteropt.preventEnterKeyPress", _id, DotNetObjectReference.Create(this))
-                .AsTask();
-        }
-        return Task.CompletedTask;
+        Entity.Type = value;
     }
-
-    private Task OnInputChanged(ChangeEventArgs e)
-    {
-        _value = e.Value as string;
-        return Filter(_value);
-    }
-
-    private Task Filter(string value)
-    {
-        _cancellationTokenSource?.Cancel();
-        _cancellationTokenSource?.Dispose();
-        _cancellationTokenSource = new CancellationTokenSource();
-        var token = _cancellationTokenSource.Token;
-
-        return Task.Delay(250, token)
-                .ContinueWith(async task =>
-                {
-                    if (task.IsCanceled)
-                    {
-                        return;
-                    }
-                    _pageRequest.Filter = $"contains(Type,'{value}')";
-                    var response = await _store.GetAsync(_pageRequest)
-                        .ConfigureAwait(false);
-
-                    _filteredClaimType = response.Items.Select(c => c.Type);
-                    if (_filteredClaimType.Any())
-                    {
-                        await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", _id);
-                    }
-                    StateHasChanged();
-                }, TaskScheduler.Default);
-    }
-
-    private async Task SetClaimType(string type)
-    {
-        Claim.Type = type;
-        _filteredClaimType = null;
-        await ValueChanged.InvokeAsync(Claim);
-    }
-
-
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                _cancellationTokenSource?.Dispose();
-            }
-
-            disposedValue = true;
-        }
-    }
-
-    // This code added to correctly implement the disposable pattern.
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
 }

@@ -1,0 +1,67 @@
+﻿@using  Aguacongas.IdentityServer.Store
+@using  System.Threading
+@inherits AutoCompleteModel<Entity.ClientGrantType>
+
+@if (IsReadOnly)
+{
+    <div class="input-group input-group-sm mb-3">
+        <div class="form-control" disabled>@GetGrantTypeName()</div>
+        <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="input-group-text oi oi-trash" />
+        </div>
+    </div>
+}
+else
+{
+    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
+               @oninput="OnInputChanged" @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })' />
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
+        </div>
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (FilteredValues != null)
+        {
+            foreach (var value in FilteredValues)
+            {
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(value)"><small>@value</small></button>
+            }
+        }
+    </div>
+}
+
+@code {
+    private Dictionary<string, string> _grantTypes = new Dictionary<string, string>
+    {
+        ["authorization_code"] = "Code",
+        ["client_credentials"] = "Client credentials",
+        ["hybrid"] = "Hybrid ",
+        ["implicit"] = "Implicit",
+        ["password"] = "Resource owner password",
+        ["urn:ietf:params:oauth:grant-type:device_code"] = "Device flow"
+    };
+
+
+    protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.GrantType);
+
+    protected override Task<IEnumerable<string>> GetFilteredValues(string value)
+    {
+        return Task.FromResult(_grantTypes.Where(kv => kv.Value.Contains(value)).Select(kv => kv.Value));
+    }
+
+    protected override void SetValue(string value)
+    {
+        var grantType = _grantTypes.FirstOrDefault(kv => kv.Value == value);
+        Entity.GrantType = _grantTypes != null ? grantType.Key : value;
+    }
+
+    private string GetGrantTypeName()
+    {
+        if (_grantTypes.ContainsKey(Entity.GrantType))
+        {
+            return _grantTypes[Entity.GrantType];
+        }
+        return Entity.GrantType;
+    }
+}

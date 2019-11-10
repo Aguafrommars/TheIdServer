@@ -53,8 +53,9 @@ else
                     </li>
                 </ul>
             </div>
+            <div class="w-100"></div>
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            <ValidationSummary class="col" />
         </div>
         <div class="entity-details">
             <div class="card mb-3">
@@ -79,7 +80,157 @@ else
                             description
                         </label>
                         <div class="col-lg-10 col-sm-12">
-                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.Description" />
+                            <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@Model.Description" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="logoUri">
+                            logo uri
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="clientUri">
+                            client uri
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="secrets" class="card mb-3">
+                <div class="card-header">
+                    <EntitySubGridTitle Text="Secrets"
+                                        AddClicked="OnAddSecretClicked" />
+                </div>
+                <div class="card-body">
+                    <EntitiesGrid Items="@Model.ClientSecrets" TableClass="table table-hover" Context="secret">
+                        <TableHeader>
+                            <th scope="col">
+                                <SortableHeader Property="Type"
+                                                Text="type"
+                                                GridState="_secretGridState" />
+                            </th>
+                            <th scope="col">
+                                <SortableHeader Property="Value"
+                                                Text="value"
+                                                GridState="_secretGridState" />
+                            </th>
+                            <th scope="col">
+                                <SortableHeader Property="Description"
+                                                Text="description"
+                                                GridState="_secretGridState" />
+                            </th>
+                            <th scope="col">
+                                <SortableHeader Property="Expiration"
+                                                Text="expiration"
+                                                GridState="_secretGridState" />
+                            </th>
+                            <th></th>
+                        </TableHeader>
+                        <RowTemplate>
+                            @if (secret.Id != null)
+                                {
+                                <td>
+                                    <div class="col-form-label">
+                                        @secret.Type
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
+                                </td>
+                                }
+                                else
+                                {
+                                <td>
+                                    <AuthorizeDropDownButton CssSubClass="btn-secondary" SelectedValue="@secret.Type" Values="@GetSecretTypes()" />
+                                </td>
+                                <td>
+                                    <AuthorizeText Placeholder="value" @bind-Value="@secret.Value" />
+                                </td>
+                                }
+                            <td>
+                                <AuthorizeText Placeholder="description" @bind-Value="@secret.Description" />
+                            </td>
+                            <td>
+                                <AuthorizeDate @bind-Value="@secret.Expiration" />
+                            </td>
+                            <td>
+                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteSecretClicked(secret)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>
+                            </td>
+                        </RowTemplate>
+                    </EntitiesGrid>
+                </div>
+            </div>
+            <div id="claims" class="card mb-3">
+                <div class="card-header">
+                    <EntitySubGridTitle Text="Claims"
+                                        AddClicked="OnAddClaimClicked" />
+                </div>
+                <div class="card-body">
+                    <EntitiesGrid Items="@Model.ClientClaims" TableClass="table table-hover" Context="claim">
+                        <TableHeader>
+                            <th scope="col">
+                                <SortableHeader Property="Type"
+                                                Text="type"
+                                                GridState="_claimsGridState" />
+                            </th>
+                            <th scope="col">
+                                <SortableHeader Property="Value"
+                                                Text="value"
+                                                GridState="_claimsGridState" />
+                            </th>
+                            <th></th>
+                        </TableHeader>
+                        <RowTemplate>
+                            @if (claim.Id != null)
+                                {
+                                <td>
+                                    @claim.Type
+                                </td>
+                                }
+                                else
+                                {
+                                <td>
+                                    <AuthorizeText Name="key" @bind-Value="@claim.Type" />
+                                </td>
+                                }
+                            <td>
+                                <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+                            </td>
+                            <td>
+                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>
+                            </td>
+                        </RowTemplate>
+                    </EntitiesGrid>
+                </div>
+            </div>
+            <div id="grantTypes" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Grant types</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-inline">
+                                @foreach (var grantType in Model.AllowedGrantTypes)
+                                {
+                                    <li class="list-inline-item">
+                                        <GrantType Entity="@grantType"
+                                                   DeleteClicked="() => OnGrantTypeDeleted(grantType)"
+                                                   ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
+                                    </li>
+                                }
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -117,6 +268,8 @@ else
                                     <AuthorizeText Name="key" @bind-Value="@property.Key" />
                                 </td>
                                 }
+                            /**/
+                            /**/
                             <td>
                                 <AuthorizeText Name="value" @bind-Value="@property.Value" />
                             </td>
@@ -134,6 +287,7 @@ else
 }
 @code {
     private GridState _secretGridState = new GridState();
+    private GridState _claimsGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
 
     protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
@@ -141,6 +295,12 @@ else
     protected override bool NonEditable => false;
 
     protected override string BackUrl => "clients";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        AddEmpyEntities();
+    }
 
     protected override Entity.Client Create()
     {
@@ -178,6 +338,12 @@ else
         }
     }
 
+    private void AddEmpyEntities()
+    {
+        Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
+        Model.AllowedScopes.Add(new Entity.ClientScope());
+    }
+
     private void OnFilterChanged(string term)
     {
         Model.AllowedScopes = State.AllowedScopes
@@ -198,6 +364,53 @@ else
         Model.RedirectUris = State.RedirectUris
             .Where(u => u.Uri.Contains(term))
             .ToList();
+    }
+
+    private void OnAddSecretClicked()
+    {
+        var secret = new Entity.ClientSecret
+        {
+            Type = "SharedSecret"
+        };
+        Model.ClientSecrets.Add(secret);
+        EntityCreated(secret);
+        StateHasChanged();
+    }
+
+    private void OnDeleteSecretClicked(Entity.ClientSecret secret)
+    {
+        Model.ClientSecrets.Remove(secret);
+        EntityDeleted(secret);
+        StateHasChanged();
+    }
+
+    private void OnAddClaimClicked()
+    {
+        var claim = new Entity.ClientClaim();
+        Model.ClientClaims.Add(claim);
+        EntityCreated(claim);
+        StateHasChanged();
+    }
+
+    private void OnDeleteClaimClicked(Entity.ClientClaim claim)
+    {
+        Model.ClientClaims.Remove(claim);
+        EntityDeleted(claim);
+        StateHasChanged();
+    }
+
+    private void OnGrantTypeValueChanged(Entity.ClientGrantType grantType)
+    {
+        EntityCreated(grantType);
+        Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
+        StateHasChanged();
+    }
+
+    private void OnGrantTypeDeleted(Entity.ClientGrantType grantType)
+    {
+        Model.AllowedGrantTypes.Remove(grantType);
+        EntityDeleted(grantType);
+        StateHasChanged();
     }
 
     private void OnAddPropertyClicked()

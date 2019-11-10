@@ -32,10 +32,10 @@
                 else
                 {
                     <p>You are redirecting to the login page. please wait</p>
+                    <div class="text-danger">@_loginError</div>
                     <span class="text-white">
-                        @_provider.LoginAsync()
+                        @LoginAsync()
                     </span>
-
                 }
             </NotAuthorized>
         </AuthorizeView>
@@ -44,7 +44,10 @@
 <div class="fixed-bottom bg-light">
     <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/master/README.md" target="_blank">About</a>
 </div>
+<Toaster />
+
 @code {
+    private string _loginError;
     private bool _notified;
     private string ShowToast(string userName)
     {
@@ -60,5 +63,16 @@
         return null;
     }
 
+    private async Task LoginAsync()
+    {
+        try
+        {
+            await _provider.LoginAsync();
+        }
+        catch(Exception e)
+        {
+            _loginError = e.Message;
+            StateHasChanged();
+        }
+    }
 }
-<Toaster />
