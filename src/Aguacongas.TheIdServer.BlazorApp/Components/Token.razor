@@ -1,0 +1,109 @@
+﻿@using System.Text.RegularExpressions
+<AuthorizeView Policy="Is4-Writer">
+    <Authorized>
+        <div class="btn-group">
+            <InputText class="form-control" @bind-Value="_token.ValueString" />
+            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(5))">5 minutes</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(10))">10 minutes</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(15))">15 minutes</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(30))">30 minutes</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(1))">1 hour</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(5))">5 hours</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(12))">12 hours</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(1))">1 day</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(7))">1 week</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(15))">2 week</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(30))">1 month</button>
+                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(365))">1 year</button>
+            </div>
+        </div>
+        <div class="text-secondary">
+            @_token.ValueString
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        @_token.ValueString
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private Models.Token _token;
+    private static Regex _regex = new Regex(Models.Token.RegulatExpression, RegexOptions.Compiled);
+
+    [Parameter]
+    public int Value { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ValueChanged { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        var timeSpan = TimeSpan.FromSeconds(Value);
+        _token = new Models.Token
+        {
+            ValueString = timeSpan.ToString("d hh:mm:ss")
+        };
+        _token.PropertyChanged += (s, e) =>
+        {
+            var match = _regex.Match(_token.ValueString);
+            if (!match.Success)
+            {
+                return;
+            }
+
+            var groups = match.Groups;
+            if (groups["DaysTime"].Success)
+            {
+                var segments = _token.ValueString.Split(' ');
+                var newTimeSpan = TimeSpan.Parse($"{segments[0]}.{segments[1]}");
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (groups["Time"].Success)
+            {
+                var newTimeSpan = TimeSpan.Parse(_token.ValueString);
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (groups["MinutesSecondes"].Success)
+            {
+                var newTimeSpan = TimeSpan.Parse($"00:{_token.ValueString}");
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (groups["Days"].Success || groups["Hours"].Success || groups["Minutes"].Success)
+            {
+                SetValueFromTokenIntString();
+                return;
+            }
+            else
+            {
+                if (!_token.ValueString.EndsWith("s"))
+                {
+                    _token.ValueString += "s";
+                }
+                SetValueFromTokenIntString();
+            }
+        };
+        return base.OnInitializedAsync();
+    }
+
+    private void SetValueFromTokenIntString()
+    {
+        var newTimeSpan = TimeSpan.FromDays(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
+        SetValue(newTimeSpan);
+    }
+
+    private void SetValue(TimeSpan time)
+    {
+        Value = (int)time.TotalSeconds;
+        ValueChanged.InvokeAsync(Value);
+        _token.ValueString = time.ToString("d hh:mm:ss");
+        StateHasChanged();
+    }
+}

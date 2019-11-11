@@ -14,7 +14,7 @@
     </div>
 
     <div class="content px-4">
-        <AuthorizeView Policy="Id4-Reader">
+        <AuthorizeView Policy="Is4-Reader">
             <Authorized>
                 @ShowToast(context.User.Identity.Name)
                 @Body
