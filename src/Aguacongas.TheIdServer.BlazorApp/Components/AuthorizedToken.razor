@@ -2,23 +2,15 @@
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <div class="btn-group">
-            <InputText class="form-control" @bind-Value="_token.ValueString" />
-            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <InputText name="@Name" class="form-control" @bind-Value="_token.ValueString" />
+            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu">
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(5))">5 minutes</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(10))">10 minutes</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(15))">15 minutes</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromMinutes(30))">30 minutes</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(1))">1 hour</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(5))">5 hours</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromHours(12))">12 hours</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(1))">1 day</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(7))">1 week</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(15))">2 week</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(30))">1 month</button>
-                <button class="dropdown-item" @onclick="() => SetValue(TimeSpan.FromDays(365))">1 year</button>
+                @foreach (var kv in QuickValues)
+                {
+                    <button type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@kv.Key</button>
+                }
             </div>
         </div>
         <div class="text-secondary">
@@ -26,14 +18,16 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        @_token.ValueString
+        @GetDisplayString()
     </NotAuthorized>
 </AuthorizeView>
 
 
 @code {
-    private Models.Token _token;
+    private const string DISPLAY_FORMAT = @"d\ hh\:mm\:ss";
     private static Regex _regex = new Regex(Models.Token.RegulatExpression, RegexOptions.Compiled);
+    private Token _token;
+    private bool _updatingValue;
 
     [Parameter]
     public int Value { get; set; }
@@ -41,15 +35,27 @@
     [Parameter]
     public EventCallback<int> ValueChanged { get; set; }
 
-    protected override Task OnInitializedAsync()
+    [Parameter]
+    public IDictionary<string, TimeSpan> QuickValues { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+
+    protected override void OnInitialized()
     {
         var timeSpan = TimeSpan.FromSeconds(Value);
-        _token = new Models.Token
+        _token = new Token
         {
-            ValueString = timeSpan.ToString("d hh:mm:ss")
+            ValueString = timeSpan.ToString(DISPLAY_FORMAT)
         };
         _token.PropertyChanged += (s, e) =>
         {
+            if (_updatingValue)
+            {
+                return;
+            }
+
             var match = _regex.Match(_token.ValueString);
             if (!match.Success)
             {
@@ -90,7 +96,7 @@
                 SetValueFromTokenIntString();
             }
         };
-        return base.OnInitializedAsync();
+        base.OnInitialized();
     }
 
     private void SetValueFromTokenIntString()
@@ -103,7 +109,14 @@
     {
         Value = (int)time.TotalSeconds;
         ValueChanged.InvokeAsync(Value);
-        _token.ValueString = time.ToString("d hh:mm:ss");
+        _updatingValue = true;
+        _token.ValueString = time.ToString(DISPLAY_FORMAT);
         StateHasChanged();
+        _updatingValue = false;
+    }
+
+    private string GetDisplayString()
+    {
+        return TimeSpan.FromSeconds(Value).ToString("");
     }
 }

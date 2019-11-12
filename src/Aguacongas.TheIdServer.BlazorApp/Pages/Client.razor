@@ -101,6 +101,46 @@ else
                     </div>
                 </div>
             </div>
+            <div id="grantTypes" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Grant types</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-inline">
+                                @foreach (var grantType in Model.AllowedGrantTypes)
+                                {
+                                    <li class="list-inline-item">
+                                        <GrantType Entity="@grantType"
+                                                   DeleteClicked="() => OnGrantTypeDeleted(grantType)"
+                                                   ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tokens" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Tokens</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="access-token">
+                            access token
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="secrets" class="card mb-3">
                 <div class="card-header">
                     <EntitySubGridTitle Text="Secrets"
@@ -212,29 +252,6 @@ else
                     </EntitiesGrid>
                 </div>
             </div>
-            <div id="grantTypes" class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <h5 class="col">Grant types</h5>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <ul class="list-inline">
-                                @foreach (var grantType in Model.AllowedGrantTypes)
-                                {
-                                    <li class="list-inline-item">
-                                        <GrantType Entity="@grantType"
-                                                   DeleteClicked="() => OnGrantTypeDeleted(grantType)"
-                                                   ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="properties" class="card mb-3">
                 <div class="card-header">
                     <EntitySubGridTitle Text="Properties"
@@ -268,8 +285,6 @@ else
                                     <AuthorizeText Name="key" @bind-Value="@property.Key" />
                                 </td>
                                 }
-                            /**/
-                            /**/
                             <td>
                                 <AuthorizeText Name="value" @bind-Value="@property.Value" />
                             </td>
@@ -289,6 +304,11 @@ else
     private GridState _secretGridState = new GridState();
     private GridState _claimsGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
+    private Dictionary<string, TimeSpan> _accessTokenQuickValues = new Dictionary<string, TimeSpan>
+    {
+        ["5 minutes"] = TimeSpan.FromMinutes(5),
+        ["10 minutes"] = TimeSpan.FromMinutes(10)
+    };
 
     protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
 
