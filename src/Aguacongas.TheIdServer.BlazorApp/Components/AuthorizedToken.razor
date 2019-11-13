@@ -1,4 +1,5 @@
 ﻿@using System.Text.RegularExpressions
+@typeparam T
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <div class="btn-group">
@@ -6,37 +7,34 @@
             <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-menu-right">
                 @foreach (var kv in QuickValues)
                 {
                     <button type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@kv.Key</button>
                 }
             </div>
         </div>
-        <div class="text-secondary">
-            @_token.ValueString
-        </div>
     </Authorized>
     <NotAuthorized>
-        @GetDisplayString()
+        @_token.ValueString
     </NotAuthorized>
 </AuthorizeView>
 
 
 @code {
-    private const string DISPLAY_FORMAT = @"d\ hh\:mm\:ss";
+    private const string DISPLAY_FORMAT = @"d\.hh\:mm\:ss";
     private static Regex _regex = new Regex(Models.Token.RegulatExpression, RegexOptions.Compiled);
     private Token _token;
     private bool _updatingValue;
 
     [Parameter]
-    public int Value { get; set; }
+    public T Value { get; set; }
 
     [Parameter]
-    public EventCallback<int> ValueChanged { get; set; }
+    public EventCallback<T> ValueChanged { get; set; }
 
     [Parameter]
-    public IDictionary<string, TimeSpan> QuickValues { get; set; }
+    public IDictionary<string, TimeSpan?> QuickValues { get; set; }
 
     [Parameter]
     public string Name { get; set; }
@@ -44,11 +42,19 @@
 
     protected override void OnInitialized()
     {
-        var timeSpan = TimeSpan.FromSeconds(Value);
-        _token = new Token
+        if (Value != null)
         {
-            ValueString = timeSpan.ToString(DISPLAY_FORMAT)
-        };
+            var timeSpan = TimeSpan.FromSeconds(Convert.ToInt32(Value));
+            _token = new Token
+            {
+                ValueString = timeSpan.ToString(DISPLAY_FORMAT)
+            };
+        }
+        else
+        {
+            _token = new Token();
+        }
+
         _token.PropertyChanged += (s, e) =>
         {
             if (_updatingValue)
@@ -63,14 +69,7 @@
             }
 
             var groups = match.Groups;
-            if (groups["DaysTime"].Success)
-            {
-                var segments = _token.ValueString.Split(' ');
-                var newTimeSpan = TimeSpan.Parse($"{segments[0]}.{segments[1]}");
-                SetValue(newTimeSpan);
-                return;
-            }
-            else if (groups["Time"].Success)
+            if (groups["DaysTime"].Success || groups["Time"].Success)
             {
                 var newTimeSpan = TimeSpan.Parse(_token.ValueString);
                 SetValue(newTimeSpan);
@@ -82,41 +81,60 @@
                 SetValue(newTimeSpan);
                 return;
             }
-            else if (groups["Days"].Success || groups["Hours"].Success || groups["Minutes"].Success)
+            else if (groups["Days"].Success)
             {
-                SetValueFromTokenIntString();
+                var newTimeSpan = TimeSpan.FromDays(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (groups["Hours"].Success)
+            {
+                var newTimeSpan = TimeSpan.FromHours(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (groups["Minutes"].Success)
+            {
+                var newTimeSpan = TimeSpan.FromMinutes(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
+                SetValue(newTimeSpan);
+                return;
+            }
+            else if (_token.ValueString.EndsWith("s"))
+            {
+                var newTimeSpan = TimeSpan.FromSeconds(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
+                SetValue(newTimeSpan);
                 return;
             }
             else
             {
-                if (!_token.ValueString.EndsWith("s"))
-                {
-                    _token.ValueString += "s";
-                }
-                SetValueFromTokenIntString();
+                var newTimeSpan = TimeSpan.FromSeconds(int.Parse(_token.ValueString));
+                SetValue(newTimeSpan);
             }
         };
         base.OnInitialized();
     }
 
-    private void SetValueFromTokenIntString()
-    {
-        var newTimeSpan = TimeSpan.FromDays(int.Parse(_token.ValueString.Substring(0, _token.ValueString.Length - 1)));
-        SetValue(newTimeSpan);
-    }
 
-    private void SetValue(TimeSpan time)
+    private void SetValue(TimeSpan? time)
     {
-        Value = (int)time.TotalSeconds;
-        ValueChanged.InvokeAsync(Value);
         _updatingValue = true;
-        _token.ValueString = time.ToString(DISPLAY_FORMAT);
+
+        if (!time.HasValue)
+        {
+            Value = default;
+            ValueChanged.InvokeAsync(Value);
+            _token.ValueString = null;
+        }
+        else
+        {
+            var timeValue = time.Value;
+            Value = (T)Convert.ChangeType(timeValue.TotalSeconds, typeof(T));
+            ValueChanged.InvokeAsync(Value);
+            _updatingValue = true;
+            _token.ValueString = timeValue.ToString(DISPLAY_FORMAT);
+        }
+
         StateHasChanged();
         _updatingValue = false;
-    }
-
-    private string GetDisplayString()
-    {
-        return TimeSpan.FromSeconds(Value).ToString("");
     }
 }

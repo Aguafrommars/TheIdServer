@@ -68,35 +68,11 @@ else
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col col-form-label" for="clientName">
-                            display name
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Name="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col col-form-label" for="description">
                             description
                         </label>
                         <div class="col-lg-10 col-sm-12">
                             <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@Model.Description" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col col-form-label" for="logoUri">
-                            logo uri
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Name="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col col-form-label" for="clientUri">
-                            client uri
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Name="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" />
                         </div>
                     </div>
                 </div>
@@ -124,6 +100,76 @@ else
                     </div>
                 </div>
             </div>
+            @if (Model.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
+                g.GrantType != "hybrid" ||
+                g.GrantType != "implicit" ||
+                g.GrantType != "urn:ietf:params:oauth:grant-type:device_code") ||
+            !Model.AllowedGrantTypes.All(g => _grantTypes.Any(k => g.GrantType == k)))
+            {
+                <div id="consent" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">Consent</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="require-consent" Label="require consent" @bind-Value="@Model.RequireConsent" />
+                            </div>
+                        </div>
+                        @if (Model.RequireConsent)
+                        {
+                            <div class="form-group row">
+                                <label class="col col-form-label" for="clientName">
+                                    display name
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Name="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col col-form-label" for="logoUri">
+                                    logo uri
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Name="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col col-form-label" for="clientUri">
+                                    client uri
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Name="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col col-form-label">
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeCheckbox Name="remember-consent" Label="remenber consent" @bind-Value="@Model.AllowRememberConsent" />
+                                </div>
+                            </div>
+                            @if (Model.AllowRememberConsent)
+                            {
+                                <div class="form-group row">
+                                    <label class="col col-form-label" for="consent-lifetime">
+                                        consent lifetime
+                                    </label>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <AuthorizedToken Name="consent-lifetime" QuickValues="_consentLifetimeQuickValues" @bind-Value="@Model.ConsentLifetime" />
+                                        <div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
             <div id="tokens" class="card mb-3">
                 <div class="card-header">
                     <div class="row">
@@ -132,13 +178,171 @@ else
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col col-form-label" for="access-token">
-                            access token
+                        <label class="col col-form-label pt-0" for="access-token-type">
+                            access token type
                         </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" />
+                        <div class="col-lg-8 col-sm-12">
+                            <AuthorizeView Policy="Is4-Writer">
+                                <Authorized Context="accessTokenType">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="access-token-type"
+                                               value="0"
+                                               checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Jwt)"
+                                               @onchange="@(() => Model.AccessTokenType = (int)Models.AccessTokenType.Jwt)" />
+                                        <label class="form-check-label" for="jwt">JWT</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="access-token-type"
+                                               value="1"
+                                               checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Reference)"
+                                               @onchange="@(() => Model.AccessTokenType = (int)Models.AccessTokenType.Reference)" />
+                                        <label class="form-check-label" for="reference">Reference</label>
+                                    </div>
+                                </Authorized>
+                                <NotAuthorized Context="accessTokenType">
+                                    @(((Models.AccessTokenType)Model.AccessTokenType).ToString())
+                                </NotAuthorized>
+                            </AuthorizeView>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="access-token">
+                            access token lifetime
+                        </label>
+                        <div class="col-lg-8 col-sm-12">
+                            <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" />
+                            <div>
+                                <AuthorizeCheckbox Name="include-jwt-id" Label="Include Jwt Id" @bind-Value="@Model.IncludeJwtId" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="id-token">
+                            id token lifetime
+                        </label>
+                        <div class="col-lg-8 col-sm-12">
+                            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" />
+                            <div>
+                                <AuthorizeCheckbox Name="include-claims" Label="always include user claims in Id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.AllowedGrantTypes.Any(g => g.GrantType == "hybrid") || !Model.AllowedGrantTypes.All(g => _grantTypes.Any(k => g.GrantType == k)))
+                    {
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-8 col-sm-12">
+                                <AuthorizeCheckbox Name="allow-offline-access" Label="allow offline access" @bind-Value="@Model.AllowOfflineAccess" />
+                            </div>
+                        </div>
+                        @if (Model.AllowOfflineAccess)
+                        {
+                            <div class="form-group row">
+                                <label class="col col-form-label pt-0" for="refesh-token-usage">
+                                    refresh token usage
+                                </label>
+                                <div class="col-lg-8 col-sm-12">
+                                    <AuthorizeView Policy="Is4-Writer">
+                                        <Authorized Context="refreshTokenUsage">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                                       value="0"
+                                                       checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
+                                                       @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
+                                                <label class="form-check-label" for="jwt">Re use</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                                       value="1"
+                                                       checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
+                                                       @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
+                                                <label class="form-check-label" for="reference">One time only</label>
+                                            </div>
+                                        </Authorized>
+                                        <NotAuthorized Context="refreshTokenUsage">
+                                            @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                                        </NotAuthorized>
+                                    </AuthorizeView>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col col-form-label pt-0" for="refesh-token-expiration">
+                                    refresh token expiration
+                                </label>
+                                <div class="col-lg-8 col-sm-12">
+                                    <AuthorizeView Policy="Is4-Writer">
+                                        <Authorized Context="refreshTokenExpiration">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                                       value="0"
+                                                       checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
+                                                       @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
+                                                <label class="form-check-label" for="jwt">Sliding</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                                       value="1"
+                                                       checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
+                                                       @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
+                                                <label class="form-check-label" for="reference">Absolute</label>
+                                            </div>
+                                        </Authorized>
+                                        <NotAuthorized Context="refreshTokenUsage">
+                                            @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                                        </NotAuthorized>
+                                    </AuthorizeView>
+                                </div>
+                            </div>
+                            @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
+                            {
+                                <div class="form-group row">
+                                    <label class="col col-form-label" for="refresh-token">
+                                        absolute refresh token lifetime
+                                    </label>
+                                    <div class="col-lg-8 col-sm-12">
+                                        <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" />
+                                        <div>
+                                            <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group row">
+                                    <label class="col col-form-label" for="refresh-token">
+                                        sliding refresh token lifetime
+                                    </label>
+                                    <div class="col-lg-8 col-sm-12">
+                                        <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" />
+                                        <div>
+                                            <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="sso-lifetime">
+                            sso lifetime
+                        </label>
+                        <div class="col-lg-8 col-sm-12">
+                            <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" />
+                        </div>
+                    </div>
+                    @if (Model.AllowedGrantTypes.Any(g => g.GrantType == "urn:ietf:params:oauth:grant-type:device_code"))
+                    {
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="device-flow-lifetime">
+                                device flow request lifetime
+                            </label>
+                            <div class="col-lg-8 col-sm-12">
+                                <AuthorizedToken Name="device-flow-lifetime" QuickValues="_deviceCodeLifetimeQuickValues" @bind-Value="@Model.DeviceCodeLifetime" />
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div id="secrets" class="card mb-3">
@@ -192,6 +396,9 @@ else
                                     <AuthorizeText Placeholder="value" @bind-Value="@secret.Value" />
                                 </td>
                                 }
+                            /**/
+                            /**/
+                            /**/
                             <td>
                                 <AuthorizeText Placeholder="description" @bind-Value="@secret.Description" />
                             </td>
@@ -240,6 +447,9 @@ else
                                     <AuthorizeText Name="key" @bind-Value="@claim.Type" />
                                 </td>
                                 }
+                            /**/
+                            /**/
+                            /**/
                             <td>
                                 <AuthorizeText Name="value" @bind-Value="@claim.Value" />
                             </td>
@@ -285,6 +495,9 @@ else
                                     <AuthorizeText Name="key" @bind-Value="@property.Key" />
                                 </td>
                                 }
+                            /**/
+                            /**/
+                            /**/
                             <td>
                                 <AuthorizeText Name="value" @bind-Value="@property.Value" />
                             </td>
@@ -304,10 +517,58 @@ else
     private GridState _secretGridState = new GridState();
     private GridState _claimsGridState = new GridState();
     private GridState _propertiesGridState = new GridState();
-    private Dictionary<string, TimeSpan> _accessTokenQuickValues = new Dictionary<string, TimeSpan>
+    private List<string> _grantTypes = new List<string>
     {
-        ["5 minutes"] = TimeSpan.FromMinutes(5),
-        ["10 minutes"] = TimeSpan.FromMinutes(10)
+        "authorization_code",
+        "client_credentials",
+        "hybrid",
+        "implicit",
+        "password",
+        "urn:ietf:params:oauth:grant-type:device_code"
+    };
+    private Dictionary<string, TimeSpan?> _accessTokenQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["15:00"] = TimeSpan.FromMinutes(15),
+        ["30:00"] = TimeSpan.FromMinutes(30),
+        ["1:00:00"] = TimeSpan.FromHours(1),
+        ["5:00:00"] = TimeSpan.FromHours(5)
+    };
+    private Dictionary<string, TimeSpan?> _idTokenQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["05:00"] = TimeSpan.FromMinutes(5),
+        ["10:00"] = TimeSpan.FromMinutes(10)
+    };
+    private Dictionary<string, TimeSpan?> _absoluteRefreshTokenQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["1.00:00:00"] = TimeSpan.FromDays(1),
+        ["15.00:00:00"] = TimeSpan.FromDays(15),
+        ["30.00:00:00"] = TimeSpan.FromDays(30)
+    };
+    private Dictionary<string, TimeSpan?> _slidingRefreshTokenQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["15:00"] = TimeSpan.FromMinutes(15),
+        ["30:00"] = TimeSpan.FromMinutes(30),
+        ["1:00:00"] = TimeSpan.FromHours(1),
+        ["5:00:00"] = TimeSpan.FromHours(5)
+    };
+    private Dictionary<string, TimeSpan?> _consentLifetimeQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["15.00:00:00"] = TimeSpan.FromDays(15),
+        ["30.00:00:00"] = TimeSpan.FromDays(30),
+        ["365.00:00:00"] = TimeSpan.FromDays(365),
+        ["Never expire"] = null
+    };
+    private Dictionary<string, TimeSpan?> _ssoLifetimeQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["1:00:00"] = TimeSpan.FromDays(15),
+        ["5:00:00"] = TimeSpan.FromDays(30),
+        ["1.00:00:00"] = TimeSpan.FromDays(365),
+        ["Session lifetime"] = null
+    };
+    private Dictionary<string, TimeSpan?> _deviceCodeLifetimeQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["05:00"] = TimeSpan.FromMinutes(5),
+        ["10:00"] = TimeSpan.FromMinutes(10)
     };
 
     protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
