@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Blazor.Http;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Blazor.Http;
 
 namespace Aguacongas.TheIdServer.Blazor.Oidc
 {
     public class OidcDelegationHandler : DelegatingHandler
     {
         private readonly IUserStore _userStore;
-        private readonly OidcWebAssemblyHttpMessageHandler _innerHandler;
+        private readonly HttpMessageHandler _innerHanler;
+        private readonly MethodInfo _method;
 
-        public OidcDelegationHandler(IUserStore userStore, OidcWebAssemblyHttpMessageHandler innerHandler)
+        public OidcDelegationHandler(IUserStore userStore, HttpMessageHandler innerHanler)
         {
             _userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
-            _innerHandler = innerHandler ?? throw new ArgumentNullException(nameof(innerHandler));
+            _innerHanler = innerHanler ?? throw new ArgumentNullException(nameof(innerHanler));
+            var type = innerHanler.GetType();
+            _method = type.GetMethod("SendAsync", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod) ?? throw new InvalidOperationException("Cannot get SendAsync method");
+            WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Include;
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue(_userStore.AuthenticationScheme, _userStore.AccessToken);
-            request.Properties[WebAssemblyHttpMessageHandler.FetchArgs] = new
-            {
-                credentials = "include"
-            };
-            return _innerHandler.SendAsync(request, cancellationToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue(_userStore.AuthenticationScheme, _userStore.AccessToken);            
+            return _method.Invoke(_innerHanler, new object[] { request, cancellationToken }) as Task<HttpResponseMessage>;
         }
     }
 }
