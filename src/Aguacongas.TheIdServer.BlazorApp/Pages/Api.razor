@@ -1,4 +1,6 @@
-﻿@page "/protectresource"
+﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
+
+@page "/protectresource"
 @page "/protectresource/{id}"
 @inherits EntityModel<Entity.ProtectResource>
 
@@ -56,7 +58,6 @@ else
             <div class="w-100"></div>
             <DataAnnotationsValidator />
             <ValidationSummary class="col" />
-
         </div>
         <div class="entity-details">
             <div class="card mb-3">
@@ -92,64 +93,7 @@ else
                                         AddClicked="OnAddSecretClicked" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@Model.Secrets" TableClass="table table-hover" Context="secret">
-                        <TableHeader>
-                            <th scope="col">
-                                <SortableHeader Property="Type"
-                                                Text="type"
-                                                GridState="_secretGridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Value"
-                                                Text="value"
-                                                GridState="_secretGridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Description"
-                                                Text="description"
-                                                GridState="_secretGridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Expiration"
-                                                Text="expiration"
-                                                GridState="_secretGridState" />
-                            </th>
-                            <th></th>
-                        </TableHeader>
-                        <RowTemplate>
-                            @if (secret.Id != null)
-                            {
-                                <td>
-                                    <div class="col-form-label">
-                                        @secret.Type
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="password" readonly class="form-control-plaintext" value="@secret.Value" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <AuthorizeDropDownButton CssSubClass="btn-secondary" SelectedValue="@secret.Type" Values="@GetSecretTypes()" />
-                                </td>
-                                <td>
-                                    <AuthorizeText Placeholder="value" @bind-Value="@secret.Value" />
-                                </td>
-                            }
-                            <td>
-                                <AuthorizeText Placeholder="description" @bind-Value="@secret.Description" />
-                            </td>
-                            <td>
-                                <AuthorizeDate @bind-Value="@secret.Expiration" />
-                            </td>
-                            <td>
-                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteSecretClicked(secret)">
-                                    <span class="oi oi-trash"></span>
-                                </AuthorizeButton>
-                            </td>
-                        </RowTemplate>
-                    </EntitiesGrid>
+                    <ApiSecrets Model="@Model" DeleteEntityClicked="OnDeleteSecretClicked" />
                 </div>
             </div>
             <div id="claims" class="card mb-3">
@@ -185,82 +129,10 @@ else
                         @foreach(var scope in Model.Scopes)
                         {
                             <div class="col-12">
-                                <div class="card bg-light mb-3">
-                                    <div class="card-header">
-                                        @if(scope.Id == null)
-                                        {
-                                            <AuthorizeText Placeholder="scope" @bind-Value="@scope.Scope" />
-                                        }
-                                        else
-                                        {
-                                            @scope.Scope
-                                        }
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <label class="col col-form-label" for="displayName">
-                                                display name
-                                            </label>
-                                            <div class="col-lg-10 col-sm-12">
-                                                <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@scope.DisplayName" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col col-form-label" for="description">
-                                                description
-                                            </label>
-                                            <div class="col-lg-10 col-sm-12">
-                                                <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@scope.Description" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col col-form-label">
-                                            </label>
-                                            <div class="col-12 col-md-10">
-                                                <AuthorizeCheckbox Name="required" Label="required" @bind-Value="@scope.Required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col col-form-label">
-                                            </label>
-                                            <div class="col-lg-10 col-sm-12">
-                                                <AuthorizeCheckbox Name="emphasize" Label="emphasize" @bind-Value="@scope.Emphasize" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col col-form-label">
-                                            </label>
-                                            <div class="col-lg-10 col-sm-12">
-                                                <AuthorizeCheckbox Name="show-in-discovery-document" Label="show in discovery document" @bind-Value="@scope.ShowInDiscoveryDocument" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col col-form-label">
-                                                claims
-                                            </label>
-                                            <div class="col-lg-10 col-sm-12">
-                                                <ul class="list-inline">
-                                                    @foreach (var claim in scope.ApiScopeClaims)
-                                                    {
-                                                        <li class="list-inline-item">
-                                                            <ClaimType Entity="@claim"
-                                                                       DeleteClicked="() => OnScopeClaimDeleted(scope, claim)"
-                                                                       ValueChanged="() => OnScopeClaimValueChanged(scope, claim)" />
-                                                        </li>
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if (Model.Scopes.Count() > 1)
-                                    {
-                                        <div class="card-footer">
-                                            <AuthorizeButton Type="button" CssSubClass="btn-sm btn-primary" Clicked="() => OnDeleteScopeClicked(scope)">
-                                                <span class="oi oi-trash"></span>Remove
-                                            </AuthorizeButton>
-                                        </div>
-                                    }
-                                </div>
+                                <ApiScope Model="@Model" Scope="@scope" 
+                                          DeleteScopeClaimClicked="claim => OnScopeClaimDeleted(scope, claim)"
+                                          ScopeClaimValueChanged="claim => OnScopeClaimValueChanged(scope, claim)"
+                                          DeleteScopeClicked="OnDeleteScopeClicked"/>
                             </div>
                         }
                     </div>
@@ -272,52 +144,13 @@ else
                                         AddClicked="OnAddPropertyClicked" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@Model.Properties" TableClass="table table-hover" Context="property">
-                        <TableHeader>
-                            <th scope="col">
-                                <SortableHeader Property="Key"
-                                                Text="key"
-                                                GridState="_propertiesGridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Value"
-                                                Text="value"
-                                                GridState="_propertiesGridState" />
-                            </th>
-                            <th></th>
-                        </TableHeader>
-                        <RowTemplate>
-                            @if (property.Id != null)
-                                {
-                                <td>
-                                    @property.Key
-                                </td>
-                                }
-                                else
-                                {
-                                <td>
-                                    <AuthorizeText Name="key" @bind-Value="@property.Key" />
-                                </td>
-                                }
-                            <td>
-                                <AuthorizeText Name="value" @bind-Value="@property.Value" />
-                            </td>
-                            <td>
-                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeletePropertyClicked(property)">
-                                    <span class="oi oi-trash"></span>
-                                </AuthorizeButton>                                
-                            </td>
-                        </RowTemplate>
-                    </EntitiesGrid>
+                    <ApiProperties Model="@Model" DeleteEntityClicked="OnDeletePropertyClicked" />
                 </div>
             </div>
         </div>
     </EditForm>
 }
 @code {
-    private GridState _secretGridState = new GridState();
-    private GridState _propertiesGridState = new GridState();
-
     protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
 
     protected override bool NonEditable => Model.NonEditable;

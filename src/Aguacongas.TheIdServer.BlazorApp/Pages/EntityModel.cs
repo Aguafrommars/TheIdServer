@@ -67,18 +67,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return 0;
         }
 
-        protected string[] GetSecretTypes()
-        {
-            return new string[]
-            {
-                "SharedSecret",
-                "X509Thumbprint",
-                "X509Name",
-                "X509CertificateBase64",
-                "JWK"
-            };
-        }
-
         protected override async Task OnInitializedAsync()
         {
             if (Id == null)

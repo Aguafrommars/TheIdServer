@@ -1,0 +1,39 @@
+﻿@inherits ClientEntitiesGridModel<Entity.ClientClaim>
+
+<EntitiesGrid Items="@Model.ClientClaims" TableClass="table table-hover" Context="claim">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="Type"
+                            Text="type"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Value"
+                            Text="value"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        @if (claim.Id != null)
+        {
+            <td>
+                @claim.Type
+            </td>
+        }
+        else
+        {
+            <td>
+                <AuthorizeText Name="type" @bind-Value="@claim.Type" />
+            </td>
+        }
+        <td>
+            <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+        </td>
+        <td>
+            <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(claim)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

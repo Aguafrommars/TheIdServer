@@ -1,0 +1,74 @@
+﻿@inherits ClientEntitiesGridModel<Entity.ClientUri>
+
+<EntitiesGrid Items="@GetClientUrls()" TableClass="table table-hover" Context="url">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="Uri"
+                            Text="uri"
+                            GridState="GridState" />
+        </th>
+        @if (Model.IsSpaClient())
+        {
+            <th scope="col">
+                <SortableHeader Property="Cors"
+                                Text="cors"
+                                GridState="GridState" />
+            </th>
+        }
+        <th scope="col">
+            <SortableHeader Property="Redirect"
+                            Text="redirect"
+                            GridState="GridState" />
+        </th>
+        @if (Model.CanHandlePostLogout())
+        {
+            <th scope="col">
+                <SortableHeader Property="PostLogout"
+                                Text="post logout"
+                                GridState="GridState" />
+            </th>
+        }
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        @if (url.Id != null)
+        {
+            <td>
+                @url.Uri
+            </td>
+        }
+        else
+        {
+            <td>
+                <AuthorizeText Name="uri" @bind-Value="@url.Uri" />
+            </td>
+        }
+        @if (Model.IsSpaClient())
+        {
+            <td>
+                <AuthorizeCheckbox Name="cors" @bind-Value="@url.Cors" />
+            </td>
+        }
+        <td>
+            <AuthorizeCheckbox Name="redirect" @bind-Value="@url.Redirect" />
+        </td>
+        @if (Model.CanHandlePostLogout())
+        {
+            <td>
+                <AuthorizeCheckbox Name="postlogout" @bind-Value="@url.PostLogout" />
+            </td>
+        }
+        <td>
+            <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url.ClientUri)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>
+
+@code {
+    private IEnumerable<ClientUrl> GetClientUrls()
+    {
+        return Model.RedirectUris.Select(u => new ClientUrl(u));
+    }
+}

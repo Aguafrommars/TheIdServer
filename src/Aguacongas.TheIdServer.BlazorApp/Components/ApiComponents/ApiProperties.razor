@@ -1,0 +1,39 @@
+﻿@inherits ApiEntitesGridModel<Entity.ApiProperty>
+
+<EntitiesGrid Items="@Model.Properties" TableClass="table table-hover" Context="property">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="Key"
+                            Text="key"
+                            GridState="_propertiesGridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Value"
+                            Text="value"
+                            GridState="_propertiesGridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        @if (property.Id != null)
+        {
+            <td>
+                @property.Key
+            </td>
+        }
+        else
+        {
+            <td>
+                <AuthorizeText Name="key" @bind-Value="@property.Key" />
+            </td>
+        }
+        <td>
+            <AuthorizeText Name="value" @bind-Value="@property.Value" />
+        </td>
+        <td>
+            <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(property)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

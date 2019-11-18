@@ -1,0 +1,109 @@
+﻿<div class="card bg-light mb-3">
+    <div class="card-header">
+        @if (Scope.Id == null)
+        {
+            <AuthorizeText Placeholder="scope" @bind-Value="@Scope.Scope" />
+        }
+        else
+        {
+            @Scope.Scope
+        }
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col col-form-label" for="displayName">
+                display name
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@Scope.DisplayName" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label" for="description">
+                description
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizeTextArea Name="description" Placeholder="description" @bind-Value="@Scope.Description" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label">
+            </label>
+            <div class="col-12 col-md-10">
+                <AuthorizeCheckbox Name="required" Label="required" @bind-Value="@Scope.Required" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label">
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizeCheckbox Name="emphasize" Label="emphasize" @bind-Value="@Scope.Emphasize" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label">
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizeCheckbox Name="show-in-discovery-document" Label="show in discovery document" @bind-Value="@Scope.ShowInDiscoveryDocument" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label">
+                claims
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <ul class="list-inline">
+                    @foreach (var claim in Scope.ApiScopeClaims)
+                    {
+                        <li class="list-inline-item">
+                            <ClaimType Entity="@claim"
+                                       DeleteClicked="() => OnScopeClaimDeleted(claim)"
+                                       ValueChanged="() => OnScopeClaimValueChanged(claim)" />
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    @if (Model.Scopes.Count() > 1)
+    {
+        <div class="card-footer">
+            <AuthorizeButton Type="button" CssSubClass="btn-sm btn-primary" Clicked="OnDeleteScopeClicked">
+                <span class="oi oi-trash"></span>Remove
+            </AuthorizeButton>
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public Entity.ProtectResource Model { get; set; }
+
+    [Parameter]
+    public Entity.ApiScope Scope { get; set; }
+
+    [Parameter]
+    public EventCallback<Entity.ApiScope> DeleteScopeClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<Entity.ApiScopeClaim> DeleteScopeClaimClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<Entity.ApiScopeClaim> ScopeClaimValueChanged { get; set; }
+
+    private void OnDeleteScopeClicked()
+    {
+        DeleteScopeClicked.InvokeAsync(Scope);
+    }
+
+    private void OnScopeClaimDeleted(Entity.ApiScopeClaim claim)
+    {
+        DeleteScopeClaimClicked.InvokeAsync(claim);
+    }
+
+    private void OnScopeClaimValueChanged(Entity.ApiScopeClaim claim)
+    {
+        ScopeClaimValueChanged.InvokeAsync(claim);
+    }
+}

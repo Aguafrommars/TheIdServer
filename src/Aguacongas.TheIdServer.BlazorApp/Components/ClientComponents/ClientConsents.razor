@@ -1,0 +1,66 @@
+﻿<div class="form-group row">
+    <label class="col col-form-label">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="require-consent" Label="require consent" @bind-Value="@Model.RequireConsent" />
+    </div>
+</div>
+@if (Model.RequireConsent)
+{
+    <div class="form-group row">
+        <label class="col col-form-label" for="clientName">
+            display name
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label" for="logoUri">
+            logo uri
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label" for="clientUri">
+            client uri
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label">
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeCheckbox Name="remember-consent" Label="remenber consent" @bind-Value="@Model.AllowRememberConsent" />
+        </div>
+    </div>
+    @if (Model.AllowRememberConsent)
+    {
+        <div class="form-group row">
+            <label class="col col-form-label" for="consent-lifetime">
+                consent lifetime
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizedToken Name="consent-lifetime" QuickValues="_consentLifetimeQuickValues" @bind-Value="@Model.ConsentLifetime" />
+                <div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@code {
+    private Dictionary<string, TimeSpan?> _consentLifetimeQuickValues = new Dictionary<string, TimeSpan?>
+    {
+        ["15.00:00:00"] = TimeSpan.FromDays(15),
+        ["30.00:00:00"] = TimeSpan.FromDays(30),
+        ["365.00:00:00"] = TimeSpan.FromDays(365),
+        ["Never expire"] = null
+    };
+
+    [Parameter]
+    public Entity.Client Model { get; set; }
+}
