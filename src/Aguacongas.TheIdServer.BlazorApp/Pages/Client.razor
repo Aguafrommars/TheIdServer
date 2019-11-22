@@ -42,13 +42,28 @@ else
             <div class="col">
                 <ul class="list-inline">
                     <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#grantTypes" @onclick='() => ScrollTo("grantTypes")' @onclick:preventDefault>grant types</a>
+                    </li>
+                    @if (Model.IsWebClient())
+                    {
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#consent" @onclick='() => ScrollTo("consent")' @onclick:preventDefault>consents</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>urls</a>
+                        </li>
+                    }
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#tokens" @onclick='() => ScrollTo("tokens")' @onclick:preventDefault>tokens</a>
+                    </li>
+                    <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
                     </li>
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
@@ -103,7 +118,7 @@ else
                 </div>
                 <div id="urls" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="URls"
+                        <EntitySubGridTitle Text="URLs"
                                             AddClicked="OnAddUrlClicked" />
                     </div>
                     <div class="card-body">
@@ -126,8 +141,8 @@ else
                                     <li class="list-inline-item">
                                         <ClientScope Entity="@scope"
                                                      Model="@Model"
-                                                   DeleteClicked="() => OnScopeDeleted(scope)"
-                                                   ValueChanged="() => OnScopeValueChanged(scope)" />
+                                                     DeleteClicked="() => OnScopeDeleted(scope)"
+                                                     ValueChanged="() => OnScopeValueChanged(scope)" />
                                     </li>
                                 }
                             </ul>
