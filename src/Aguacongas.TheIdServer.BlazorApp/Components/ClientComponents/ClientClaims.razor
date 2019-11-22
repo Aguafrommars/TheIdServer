@@ -37,3 +37,20 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
+@if (Model.ClientClaims.Any())
+{
+    <div class="form-group row">
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeCheckbox Label="always send claims" @bind-Value="@Model.AlwaysSendClientClaims" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label" for="clientUri">
+            claims prefix
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" />
+        </div>
+    </div>
+}
+

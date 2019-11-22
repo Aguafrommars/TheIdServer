@@ -15,6 +15,9 @@ namespace Aguacongas.IdentityServer.Store
                 return null;
             }
 
+            var redirectUris = client.RedirectUris
+                    .Where(u => (u.Kind & (int)Entity.UriKind.Redirect) == (int)Entity.UriKind.Redirect);
+
             return new Client
             {
                 AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
@@ -54,9 +57,9 @@ namespace Aguacongas.IdentityServer.Store
                 IncludeJwtId = client.IncludeJwtId,
                 LogoUri = client.LogoUri,
                 PairWiseSubjectSalt = client.PairWiseSubjectSalt,
-                PostLogoutRedirectUris = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKind.PostLogout) == (int)Entity.UriKind.PostLogout)
-                    .Select(u => u.Uri).ToList(),
+                PostLogoutRedirectUris = redirectUris
+                    .Select(u => u.Uri)
+                    .ToList(),
                 Properties = client.Properties.ToDictionary(p => p.Key, p => p.Value),
                 ProtocolType = client.ProtocolType,
                 RefreshTokenExpiration = (TokenExpiration)client.RefreshTokenExpiration,

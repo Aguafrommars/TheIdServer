@@ -103,20 +103,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <ul class="list-inline">
-                                @foreach (var claim in Model.ApiClaims)
-                                {
-                                    <li class="list-inline-item">
-                                        <ClaimType Entity="@claim"
-                                                   DeleteClicked="() => OnClaimTypeDeleted(claim)"
-                                                   ValueChanged="() => OnClaimTypeValueChanged(claim)" />
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                    <ApiClaimTypes Model="@Model" ClaimValueChanged="OnClaimTypeValueChanged" DeleteClaimClicked="OnClaimTypeDeleted" />
                 </div>
             </div>
             <div id="scopes" class="card mb-3">

@@ -3,7 +3,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store

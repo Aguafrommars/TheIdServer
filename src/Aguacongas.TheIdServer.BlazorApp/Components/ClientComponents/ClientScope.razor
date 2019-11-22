@@ -1,0 +1,122 @@
+﻿@using  Aguacongas.IdentityServer.Store
+@inherits AutoCompleteModel<Entity.ClientScope>
+@inject IAdminStore<Entity.IdentityResource> _identityStore
+@inject IAdminStore<Entity.ProtectResource> _apiStore
+@inject IAdminStore<Entity.ApiScope> _apiScopeStore
+
+@if (IsReadOnly)
+{
+    <div class="input-group input-group-sm mb-3">
+        <div class="form-control" disabled>@Entity.Scope</div>
+        <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="input-group-text oi oi-trash" />
+        </div>
+    </div>
+}
+else
+{
+    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="scope" value="@SelectedValue"
+               @oninput="OnInputChanged"
+               @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })'/>
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
+        </div>
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (_filterScopes != null)
+        {
+            foreach (var scope in _filterScopes)
+            {
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(scope.Value)">
+                    <small>@scope.Value</small> 
+                    @if (scope.IsIdentity)
+                    {
+                        <small class="text-muted">identity</small>
+                    }
+                    else
+                    {
+                        <small class="text-muted">api</small>
+                    }
+                    <div class="text-muted font-italic">
+                        <small>@scope.Description</small>
+                    </div>
+                </button>
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Entity.Client Model { get; set; }
+
+    private static ScopeComparer _comparer = new ScopeComparer();
+    private IEnumerable<Scope> _filterScopes;
+    private readonly PageRequest _idPageRequest = new PageRequest
+    {
+        Select = "Id,DisplayName",
+        Take = 5
+    };
+    private readonly PageRequest _scopeRequest = new PageRequest
+    {
+        Select = "Scope,DisplayName",
+        Take = 5
+    };
+
+    protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Scope);
+
+    protected override async Task<IEnumerable<string>> GetFilteredValues(string value)
+    {
+        _idPageRequest.Filter = $"contains(Id,'{value}') or contains(DisplayName,'{value}')";
+        _scopeRequest.Filter = $"contains(Scope,'{value}') or contains(DisplayName,'{value}')";
+        var identityResponse = _identityStore.GetAsync(_idPageRequest);
+        var apiResponse = _apiStore.GetAsync(_idPageRequest);
+        var apiScopeResponse = _apiScopeStore.GetAsync(_scopeRequest);
+
+        await Task.WhenAll(identityResponse, apiResponse, apiScopeResponse)
+            .ConfigureAwait(false);
+
+
+        _filterScopes = identityResponse.Result.Items.Select(i => new Scope
+        {
+            Value = i.Id,
+            Description = i.DisplayName,
+            IsIdentity = true
+        })
+            .Union(apiResponse.Result.Items.Select(a => new Scope
+            {
+                Value = a.Id,
+                Description = a.DisplayName
+            }))
+            .Union(apiScopeResponse.Result.Items.Select(s => new Scope
+            {
+                Value = s.Scope,
+                Description = s.DisplayName
+            }))
+            .Distinct(_comparer)
+            .Where(s => !Model.AllowedScopes.Any(cs => s.Value == cs.Scope))
+            .Take(5)
+            .OrderBy(r => r.Value);
+
+        return Array.Empty<string>();
+    }
+
+    protected override void SetValue(string value)
+    {
+        Entity.Scope = value;
+    }
+
+    private class ScopeComparer: IEqualityComparer<Scope>
+    {
+        public bool Equals(Scope x, Scope y)
+        {
+            return x.Value == y.Value && x.IsIdentity == y.IsIdentity;
+        }
+
+        public int GetHashCode(Scope obj)
+        {
+            return -1;
+        }
+    }
+}

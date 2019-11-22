@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.1" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
   </ItemGroup>
 

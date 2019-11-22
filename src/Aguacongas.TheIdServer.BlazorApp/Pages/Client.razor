@@ -86,20 +86,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <ul class="list-inline">
-                                @foreach (var grantType in Model.AllowedGrantTypes)
-                                {
-                                    <li class="list-inline-item">
-                                        <GrantType Entity="@grantType"
-                                                   DeleteClicked="() => OnGrantTypeDeleted(grantType)"
-                                                   ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                    <ClientGrantTypes Model="@Model" GrantTypeDeletedClicked="OnGrantTypeDeleted" GrantTypeValueChanged="OnGrantTypeValueChanged" />
                 </div>
             </div>
             @if (Model.IsWebClient())
@@ -124,6 +111,35 @@ else
                     </div>
                 </div>
             }
+            <div id="scopes" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Scopes</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-inline">
+                                @foreach (var scope in Model.AllowedScopes)
+                                {
+                                    <li class="list-inline-item">
+                                        <ClientScope Entity="@scope"
+                                                     Model="@Model"
+                                                   DeleteClicked="() => OnScopeDeleted(scope)"
+                                                   ValueChanged="() => OnScopeValueChanged(scope)" />
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <AuthorizeCheckbox Name="allow-offline-access" Label="allow offline access" @bind-Value="@Model.AllowOfflineAccess" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="tokens" class="card mb-3">
                 <div class="card-header">
                     <div class="row">
@@ -213,6 +229,24 @@ else
         }
     }
 
+    protected override Type GetEntityType(FieldIdentifier identifier)
+    {
+        if (identifier.Model is ClientUri)
+        {
+            return typeof(Entity.ClientUri);
+        }
+        return base.GetEntityType(identifier);
+    }
+
+    protected override Entity.IEntityId GetEntityModel(FieldIdentifier identifier)
+    {
+        if (identifier.Model is ClientUri clientUri)
+        {
+            return clientUri.Parent;
+        }
+        return base.GetEntityModel(identifier);
+    }
+
     private void AddEmpyEntities()
     {
         Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
@@ -300,6 +334,20 @@ else
     {
         Model.AllowedGrantTypes.Remove(grantType);
         EntityDeleted(grantType);
+        StateHasChanged();
+    }
+
+    private void OnScopeValueChanged(Entity.ClientScope scope)
+    {
+        EntityCreated(scope);
+        Model.AllowedScopes.Add(new Entity.ClientScope());
+        StateHasChanged();
+    }
+
+    private void OnScopeDeleted(Entity.ClientScope scope)
+    {
+        Model.AllowedScopes.Remove(scope);
+        EntityDeleted(scope);
         StateHasChanged();
     }
 

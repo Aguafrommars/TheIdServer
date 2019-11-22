@@ -25,43 +25,49 @@ else
         {
             foreach (var value in FilteredValues)
             {
-                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(value)"><small>@value</small></button>
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(value)">
+                    <small>@GetGrantTypeName(value)</small>
+                </button>
             }
         }
     </div>
 }
 
 @code {
-    private Dictionary<string, string> _grantTypes = new Dictionary<string, string>
-    {
-        ["authorization_code"] = "Code",
-        ["client_credentials"] = "Client credentials",
-        ["hybrid"] = "Hybrid ",
-        ["implicit"] = "Implicit",
-        ["password"] = "Resource owner password",
-        ["urn:ietf:params:oauth:grant-type:device_code"] = "Device flow"
-    };
-
+    [Parameter]
+    public Entity.Client Model { get; set; }
 
     protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.GrantType);
 
     protected override Task<IEnumerable<string>> GetFilteredValues(string value)
     {
-        return Task.FromResult(_grantTypes.Where(kv => kv.Value.Contains(value)).Select(kv => kv.Value));
+        value = value ?? string.Empty;
+        var grantTypes = GrantTypes.Instance;
+        var allowedGrantType = Model.AllowedGrantTypes;
+        var result = grantTypes.Where(kv => !allowedGrantType.Any(g => g.GrantType == kv.Key) &&
+            !(allowedGrantType.Any(g => g.GrantType == "implicit") && 
+                (kv.Key == "authorization_code" || kv.Key == "hybrid")) &&
+            !(allowedGrantType.Any(g => g.GrantType == "authorization_code") &&
+                (kv.Key == "hybrid" || kv.Key == "implicit")) &&
+            !(allowedGrantType.Any(g => g.GrantType == "hybrid") && 
+                (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
+            (kv.Value.Contains(value) || kv.Key.Contains(value)))
+        .Select(kv => kv.Key);
+        return Task.FromResult(result);
     }
 
     protected override void SetValue(string value)
     {
-        var grantType = _grantTypes.FirstOrDefault(kv => kv.Value == value);
-        Entity.GrantType = _grantTypes != null ? grantType.Key : value;
+        Entity.GrantType = value;
     }
 
     private string GetGrantTypeName()
     {
-        if (_grantTypes.ContainsKey(Entity.GrantType))
-        {
-            return _grantTypes[Entity.GrantType];
-        }
-        return Entity.GrantType;
+        return GetGrantTypeName(Entity.GrantType);
+    }
+
+    private string GetGrantTypeName(string key)
+    {
+        return GrantTypes.GetGrantTypeName(key);
     }
 }

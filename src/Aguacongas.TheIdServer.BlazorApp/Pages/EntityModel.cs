@@ -225,6 +225,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
         }
 
+        protected virtual Type GetEntityType(FieldIdentifier identifier)
+        {
+            return identifier.Model.GetType();
+        }
+
+        protected virtual IEntityId GetEntityModel(FieldIdentifier identifier)
+        {
+            return identifier.Model as IEntityId;
+        }
+
         private async Task HandleMoficationList(Type entityType, Dictionary<IEntityId, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
@@ -291,9 +301,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EditContext = new EditContext(model);
             EditContext.OnFieldChanged += (s, e) =>
             {
-                var identitfier = e.FieldIdentifier;
-                var entityType = identitfier.Model.GetType();
-                var entityModel = identitfier.Model as IEntityId;
+                var identifier = e.FieldIdentifier;
+                var entityType = GetEntityType(identifier);
+                var entityModel = GetEntityModel(identifier);
                 var modifications = GetModifications(entityType);
 
                 if (!modifications.ContainsKey(entityModel))

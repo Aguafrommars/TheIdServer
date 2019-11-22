@@ -52,16 +52,7 @@
                 claims
             </label>
             <div class="col-lg-10 col-sm-12">
-                <ul class="list-inline">
-                    @foreach (var claim in Scope.ApiScopeClaims)
-                    {
-                        <li class="list-inline-item">
-                            <ClaimType Entity="@claim"
-                                       DeleteClicked="() => OnScopeClaimDeleted(claim)"
-                                       ValueChanged="() => OnScopeClaimValueChanged(claim)" />
-                        </li>
-                    }
-                </ul>
+                <ApiScopeClaimTypes Scope="@Scope" ClaimValueChanged="OnScopeClaimValueChanged" DeleteClaimClicked="OnScopeClaimDeleted" />
             </div>
         </div>
     </div>

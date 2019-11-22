@@ -22,6 +22,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public EventCallback<T> ValueChanged { get; set; }
 
+        [Parameter]
+        public Func<string, bool> Validate { get; set; }
+
         protected abstract bool IsReadOnly { get; }
 
         protected string Id { get; } = Guid.NewGuid().ToString();
@@ -40,6 +43,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected Task SetSelectedValue(string value)
         {
+            if (Validate != null && !Validate.Invoke(value))
+            {
+                return Task.CompletedTask;
+            }
             SetValue(value);
             FilteredValues = null;
             return ValueChanged.InvokeAsync(Entity);

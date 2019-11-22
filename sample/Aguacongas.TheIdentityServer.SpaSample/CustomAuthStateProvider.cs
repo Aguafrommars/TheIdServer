@@ -58,11 +58,6 @@ namespace Aguacongas.TheIdentityServer.SpaSample
             });
 
             _navigationManager.NavigateTo(authorizationUri);
-            
-            using (var response = await _httpClient.GetAsync(authorizationUri))
-            {
-                var content = await response.Content.ReadAsStringAsync();
-            }
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()

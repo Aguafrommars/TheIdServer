@@ -9,20 +9,20 @@
         </th>
         @if (Model.IsSpaClient())
         {
-            <th scope="col">
+            <th scope="col" class="text-center">
                 <SortableHeader Property="Cors"
                                 Text="cors"
                                 GridState="GridState" />
             </th>
         }
-        <th scope="col">
+        <th scope="col" class="text-center">
             <SortableHeader Property="Redirect"
                             Text="redirect"
                             GridState="GridState" />
         </th>
         @if (Model.CanHandlePostLogout())
         {
-            <th scope="col">
+            <th scope="col" class="text-center">
                 <SortableHeader Property="PostLogout"
                                 Text="post logout"
                                 GridState="GridState" />
@@ -45,21 +45,21 @@
         }
         @if (Model.IsSpaClient())
         {
-            <td>
+            <td class="text-center">
                 <AuthorizeCheckbox Name="cors" @bind-Value="@url.Cors" />
             </td>
         }
-        <td>
+        <td class="text-center">
             <AuthorizeCheckbox Name="redirect" @bind-Value="@url.Redirect" />
         </td>
         @if (Model.CanHandlePostLogout())
         {
-            <td>
+            <td class="text-center">
                 <AuthorizeCheckbox Name="postlogout" @bind-Value="@url.PostLogout" />
             </td>
         }
         <td>
-            <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url.ClientUri)">
+            <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url.Parent)">
                 <span class="oi oi-trash"></span>
             </AuthorizeButton>
         </td>
@@ -67,8 +67,8 @@
 </EntitiesGrid>
 
 @code {
-    private IEnumerable<ClientUrl> GetClientUrls()
+    private IEnumerable<ClientUri> GetClientUrls()
     {
-        return Model.RedirectUris.Select(u => new ClientUrl(u));
+        return Model.RedirectUris.Select(u => new ClientUri(u));
     }
 }

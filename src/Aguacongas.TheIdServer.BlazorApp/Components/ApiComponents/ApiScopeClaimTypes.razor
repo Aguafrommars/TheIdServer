@@ -1,0 +1,38 @@
+﻿@inject Notifier _notifier
+
+<ul class="list-inline">
+    @foreach (var claim in Scope.ApiScopeClaims)
+    {
+        <li class="list-inline-item">
+            <ClaimType Entity="@claim"
+                       DeleteClicked="() => DeleteClaimClicked.InvokeAsync(claim)"
+                       ValueChanged="() => ClaimValueChanged.InvokeAsync(claim)" />
+        </li>
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public Entity.ApiScope Scope { get; set; }
+
+    [Parameter]
+    public EventCallback<Entity.ApiScopeClaim> DeleteClaimClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<Entity.ApiScopeClaim> ClaimValueChanged { get; set; }
+
+    private bool Validate(string claimType)
+    {
+        if (Scope.ApiScopeClaims.Any(c => c.Type == claimType))
+        {
+            _notifier.Notify(new Notification
+            {
+                Header = "Invalid claim type",
+                IsError = true,
+                Message = $"This scope already contains the claim type {claimType}"
+            });
+            return false;
+        }
+        return true;
+    }
+}

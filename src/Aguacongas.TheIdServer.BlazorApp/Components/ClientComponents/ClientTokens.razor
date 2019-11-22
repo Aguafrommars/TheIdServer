@@ -26,6 +26,23 @@
         </AuthorizeView>
     </div>
 </div>
+@if (Model.IsAuthorizationCodeClient())
+{
+    <div class="form-group row">
+        <label class="col col-form-label">
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeCheckbox Name="require-pkce" Label="require PKCE" @bind-Value="@Model.RequirePkce" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label">
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeCheckbox Name="allow-plain-text-pkce" Label="allow plain text PKCE" @bind-Value="@Model.AllowPlainTextPkce" />
+        </div>
+    </div>
+}
 <div class="form-group row">
     <label class="col col-form-label" for="access-token">
         access token lifetime
@@ -37,113 +54,113 @@
         </div>
     </div>
 </div>
-<div class="form-group row">
-    <label class="col col-form-label" for="id-token">
-        id token lifetime
-    </label>
-    <div class="col-lg-8 col-sm-12">
-        <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" />
-        <div>
-            <AuthorizeCheckbox Name="include-claims" Label="always include user claims in Id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
-        </div>
-    </div>
-</div>
-@if (Model.AllowedGrantTypes.Any(g => g.GrantType == "hybrid") ||
-   !Model.AllowedGrantTypes.All(g => GrantTypes.Instance.Any(k => g.GrantType == k)))
+@if (Model.HasUser())
 {
     <div class="form-group row">
-        <label class="col col-form-label">
+        <label class="col col-form-label" for="id-token">
+            id token lifetime
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizeCheckbox Name="allow-offline-access" Label="allow offline access" @bind-Value="@Model.AllowOfflineAccess" />
+            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" />
+            <div>
+                <AuthorizeCheckbox Name="include-claims" Label="always include user claims in Id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
+            </div>
         </div>
     </div>
-    @if (Model.AllowOfflineAccess)
+    <div class="form-group row">
+        <label class="col col-form-label" for="salt">
+            pairwise subject salt
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeText Name="salt" @bind-Value="@Model.PairWiseSubjectSalt" />
+        </div>
+    </div>
+}
+@if (Model.CanUseRefreshToken())
+{
+    <div class="form-group row">
+        <label class="col col-form-label pt-0" for="refesh-token-usage">
+            refresh token usage
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeView Policy="Is4-Writer">
+                <Authorized Context="refreshTokenUsage">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="refresh-token-usage"
+                               value="0"
+                               checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
+                               @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
+                        <label class="form-check-label" for="jwt">Re use</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="refresh-token-usage"
+                               value="1"
+                               checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
+                               @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
+                        <label class="form-check-label" for="reference">One time only</label>
+                    </div>
+                </Authorized>
+                <NotAuthorized Context="refreshTokenUsage">
+                    @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col col-form-label pt-0" for="refesh-token-expiration">
+            refresh token expiration
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeView Policy="Is4-Writer">
+                <Authorized Context="refreshTokenExpiration">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="refresh-token-expiration"
+                               value="0"
+                               checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
+                               @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
+                        <label class="form-check-label" for="jwt">Sliding</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="refresh-token-expiration"
+                               value="1"
+                               checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
+                               @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
+                        <label class="form-check-label" for="reference">Absolute</label>
+                    </div>
+                </Authorized>
+                <NotAuthorized Context="refreshTokenUsage">
+                    @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+    @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
     {
         <div class="form-group row">
-            <label class="col col-form-label pt-0" for="refesh-token-usage">
-                refresh token usage
+            <label class="col col-form-label" for="refresh-token">
+                absolute refresh token lifetime
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizeView Policy="Is4-Writer">
-                    <Authorized Context="refreshTokenUsage">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="refresh-token-usage"
-                                   value="0"
-                                   checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
-                                   @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
-                            <label class="form-check-label" for="jwt">Re use</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="refresh-token-usage"
-                                   value="1"
-                                   checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
-                                   @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
-                            <label class="form-check-label" for="reference">One time only</label>
-                        </div>
-                    </Authorized>
-                    <NotAuthorized Context="refreshTokenUsage">
-                        @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
-                    </NotAuthorized>
-                </AuthorizeView>
+                <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" />
+                <div>
+                    <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                </div>
             </div>
         </div>
+    }
+    else
+    {
         <div class="form-group row">
-            <label class="col col-form-label pt-0" for="refesh-token-expiration">
-                refresh token expiration
+            <label class="col col-form-label" for="refresh-token">
+                sliding refresh token lifetime
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizeView Policy="Is4-Writer">
-                    <Authorized Context="refreshTokenExpiration">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="refresh-token-usage"
-                                   value="0"
-                                   checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
-                                   @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
-                            <label class="form-check-label" for="jwt">Sliding</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="refresh-token-usage"
-                                   value="1"
-                                   checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
-                                   @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
-                            <label class="form-check-label" for="reference">Absolute</label>
-                        </div>
-                    </Authorized>
-                    <NotAuthorized Context="refreshTokenUsage">
-                        @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
-                    </NotAuthorized>
-                </AuthorizeView>
+                <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" />
+                <div>
+                    <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                </div>
             </div>
         </div>
-        @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
-        {
-            <div class="form-group row">
-                <label class="col col-form-label" for="refresh-token">
-                    absolute refresh token lifetime
-                </label>
-                <div class="col-lg-8 col-sm-12">
-                    <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" />
-                    <div>
-                        <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="form-group row">
-                <label class="col col-form-label" for="refresh-token">
-                    sliding refresh token lifetime
-                </label>
-                <div class="col-lg-8 col-sm-12">
-                    <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" />
-                    <div>
-                        <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
-                    </div>
-                </div>
-            </div>
-        }
     }
 }
 <div class="form-group row">
@@ -154,8 +171,7 @@
         <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" />
     </div>
 </div>
-@if (Model.AllowedGrantTypes.Any(g => g.GrantType == "urn:ietf:params:oauth:grant-type:device_code") ||
-     !Model.AllowedGrantTypes.All(g => GrantTypes.Instance.Any(k => g.GrantType == k)))
+@if (Model.IsDevice())
 {
     <div class="form-group row">
         <label class="col col-form-label" for="device-flow-lifetime">
@@ -174,7 +190,7 @@
         ["1:00:00"] = TimeSpan.FromHours(1),
         ["5:00:00"] = TimeSpan.FromHours(5)
     };
- 
+
     private Dictionary<string, TimeSpan?> _idTokenQuickValues = new Dictionary<string, TimeSpan?>
     {
         ["05:00"] = TimeSpan.FromMinutes(5),
