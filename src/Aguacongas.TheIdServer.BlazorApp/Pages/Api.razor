@@ -248,27 +248,28 @@ else
     private void OnFilterChanged(string term)
     {
         Model.ApiClaims = State.ApiClaims
-        .Where(c => c.Type.Contains(term))
-        .ToList();
+            .Where(c => c.Type != null && c.Type.Contains(term))
+            .ToList();
         Model.Secrets = State.Secrets
-        .Where(s => s.Description.Contains(term) || s.Type.Contains(term))
-        .ToList();
+            .Where(s => (s.Description != null && s.Description.Contains(term)) || (s.Type != null && s.Type.Contains(term)))
+            .ToList();
         Model.Scopes = State.Scopes
-        .Where(s => s.Description.Contains(term) ||
-        s.DisplayName.Contains(term) ||
-        s.Scope.Contains(term))
-        .ToList();
+            .Where(s => (s.Description != null && s.Description.Contains(term)) ||
+                (s.DisplayName != null && s.DisplayName.Contains(term)) ||
+                (s.Scope != null && s.Scope.Contains(term)))
+            .ToList();
         foreach (var scope in Model.Scopes)
         {
             var stateScope = State.Scopes.FirstOrDefault(s => s.Scope == scope.Scope);
             if (stateScope != null)
             {
                 scope.ApiScopeClaims = stateScope.ApiScopeClaims
-                .Where(c => c.Type.Contains(term))
-                .ToList();
+                    .Where(c => (c.Type != null && c.Type.Contains(term)))
+                    .ToList();
             }
-            StateHasChanged();
         }
+
+        AddEmpyClaimsTypes();
     }
 
     private void OnAddSecretClicked()

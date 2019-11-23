@@ -18,7 +18,7 @@
     "Aguacongas.TheIdServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "admin/",
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

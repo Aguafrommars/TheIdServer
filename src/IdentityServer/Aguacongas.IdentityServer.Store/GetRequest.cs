@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Aguacongas.IdentityServer.Store
+﻿namespace Aguacongas.IdentityServer.Store
 {
     /// <summary>
     /// Define a get request.

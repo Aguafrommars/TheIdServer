@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Community.OData.Linq" Version="1.4.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="3.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+  </ItemGroup>
+
+</Project>

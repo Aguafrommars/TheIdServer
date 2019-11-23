@@ -75,6 +75,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Model = Create();
                 CreateEditContext(Model);
                 EntityCreated(Model);
+                State = Model.Clone();
                 return;
             }
 
@@ -83,6 +84,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Expand = Expand
             }).ConfigureAwait(false);
             CreateEditContext(Model);
+            State = Model.Clone();
         }
 
         protected async Task HandleValidSubmit()

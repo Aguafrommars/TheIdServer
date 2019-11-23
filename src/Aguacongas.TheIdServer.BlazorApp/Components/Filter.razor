@@ -2,7 +2,8 @@
     <div class="input-group-prepend">
         <span class="input-group-text oi oi-magnifying-glass" id="addon"></span>
     </div>
-    <input class="form-control" type="text" placeholder="filter" aria-label="filter" aria-describedby="addon" value="@Term" @oninput="OnTermChanged" />
+    <input class="form-control" type="text" placeholder="filter" aria-label="filter" aria-describedby="addon" value="@Term"
+           @oninput="OnTermChanged" @onfocusout="() => FocusChanged.InvokeAsync(false)" @onfocus="() => FocusChanged.InvokeAsync(true)" />
 </div>
 
 @code {
@@ -14,6 +15,9 @@
 
     [Parameter]
     public EventCallback<string> TermChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> FocusChanged { get; set; }
 
     private Task OnTermChanged(ChangeEventArgs e)
     {

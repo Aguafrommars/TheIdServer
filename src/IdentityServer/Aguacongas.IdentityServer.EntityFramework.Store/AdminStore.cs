@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
-            var page = odataQuery.Skip(request.Skip.HasValue ? request.Skip.Value : 0);
+            var page = odataQuery.Skip(request.Skip ?? 0);
             if (request.Take.HasValue)
             {
                 page = page.Take(request.Take.Value);

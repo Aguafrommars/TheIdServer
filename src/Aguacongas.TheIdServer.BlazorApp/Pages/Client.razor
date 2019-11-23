@@ -36,7 +36,7 @@ else
                 </div>
             }
             <div class="col">
-                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" FocusChanged="FilterFocusChanged" />
             </div>
             <div class="w-100"></div>
             <div class="col">
@@ -104,7 +104,7 @@ else
                     <ClientGrantTypes Model="@Model" GrantTypeDeletedClicked="OnGrantTypeDeleted" GrantTypeValueChanged="OnGrantTypeValueChanged" />
                 </div>
             </div>
-            @if (Model.IsWebClient())
+            @if (IsWebClient())
             {
                 <div id="consent" class="card mb-3">
                     <div class="card-header">
@@ -196,6 +196,9 @@ else
     </EditForm>
 }
 @code {
+    private bool _filtered;
+    private bool _isWebClient;
+
     protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
 
     protected override bool NonEditable => false;
@@ -262,6 +265,24 @@ else
         return base.GetEntityModel(identifier);
     }
 
+    private void FilterFocusChanged(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            _isWebClient = Model.IsWebClient();
+        }
+        _filtered = hasFocus;
+    }
+
+    private bool IsWebClient()
+    {
+        if (_filtered)
+        {
+            return _isWebClient;
+        }
+        return Model.IsWebClient();
+    }
+
     private void AddEmpyEntities()
     {
         Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
@@ -271,23 +292,26 @@ else
     private void OnFilterChanged(string term)
     {
         Model.AllowedScopes = State.AllowedScopes
-        .Where(s => s.Scope.Contains(term))
-        .ToList();
-        Model.AllowedGrantTypes = State.AllowedGrantTypes.
-            Where(g => g.GrantType.Contains(term))
+            .Where(s => s.Scope != null && s.Scope.Contains(term))
+            .ToList();
+        Model.AllowedGrantTypes = State.AllowedGrantTypes
+            .Where(g => g.GrantType != null && g.GrantType.Contains(term))
             .ToList();
         Model.ClientClaims = State.ClientClaims
-        .Where(c => c.Type.Contains(term) || c.Value.Contains(term))
-        .ToList();
+            .Where(c => (c.Type != null && c.Type.Contains(term)) || (c.Value != null && c.Value.Contains(term)))
+            .ToList();
         Model.ClientSecrets = State.ClientSecrets
-        .Where(s => s.Description.Contains(term) || s.Type.Contains(term))
-        .ToList();
+            .Where(s => (s.Description != null && s.Description.Contains(term)) || (s.Type != null && s.Type.Contains(term)))
+            .ToList();
         Model.IdentityProviderRestrictions = State.IdentityProviderRestrictions
-            .Where(i => i.Provider.Contains(term))
+            .Where(i => i.Provider != null && i.Provider.Contains(term))
             .ToList();
         Model.RedirectUris = State.RedirectUris
-            .Where(u => u.Uri.Contains(term))
+            .Where(u => u.Uri != null && u.Uri.Contains(term))
             .ToList();
+
+        AddEmpyEntities();
+        StateHasChanged();
     }
 
     private void OnAddUrlClicked()
@@ -342,6 +366,7 @@ else
     {
         EntityCreated(grantType);
         Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
+        _isWebClient = Model.IsWebClient();
         StateHasChanged();
     }
 
@@ -349,6 +374,7 @@ else
     {
         Model.AllowedGrantTypes.Remove(grantType);
         EntityDeleted(grantType);
+        _isWebClient = Model.IsWebClient();
         StateHasChanged();
     }
 

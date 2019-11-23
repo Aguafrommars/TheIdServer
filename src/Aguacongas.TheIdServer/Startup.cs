@@ -36,7 +36,8 @@ namespace Aguacongas.TheIdServer
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
                 .AddIdentityServer4EntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
+                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
+                .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
