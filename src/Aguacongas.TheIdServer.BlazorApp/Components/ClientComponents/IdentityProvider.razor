@@ -1,11 +1,11 @@
 ﻿@using  Aguacongas.IdentityServer.Store
 @inherits AutoCompleteModel<Entity.ClientIdpRestriction>
-@inject IAdminStore<Entity.IdentityProvider> _store
+@inject IIdentityProviderStore _store
 
 @if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@Entity.Provider</div>
+        <div class="form-control" disabled>@_providerName</div>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
@@ -14,7 +14,7 @@
 else
 {
     <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
+        <input type="text" class="form-control new-claim" placeholder="provider" value="@SelectedValue"
                @oninput="OnInputChanged" @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })'/>
         <div class="input-group-append">
             <span class="input-group-text oi oi-plus" />
@@ -38,12 +38,19 @@ else
 
 @code {
     private IEnumerable<Entity.IdentityProvider> _filteredProviders;
+    private string _providerName;
     private readonly PageRequest _pageRequest = new PageRequest
     {
         Take = 5
     };
 
     protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Provider);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _providerName = await GetProviderName(Entity.Provider);
+        await base.OnInitializedAsync();
+    }
 
     protected override async Task<IEnumerable<string>> GetFilteredValues(string value)
     {
@@ -52,11 +59,21 @@ else
             .ConfigureAwait(false);
 
         _filteredProviders = response.Items;
+        StateHasChanged();
         return null;
     }
 
     protected override void SetValue(string value)
     {
         Entity.Provider = value;
+        _providerName = _filteredProviders?.FirstOrDefault(p => p.Id == value)?.DisplayName ?? value;
+    }
+
+    private async Task<string> GetProviderName(string id)
+    {
+        var provider = await _store.GetAsync(id)
+            .ConfigureAwait(false);
+
+        return provider.DisplayName;
     }
 }

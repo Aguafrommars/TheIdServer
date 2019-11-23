@@ -15,7 +15,7 @@ else
             <div class="col">
                 @if (IsNew)
                 {
-                    <AuthorizeText Name="name" Placeholder="api id" @bind-Value="@Model.Id" />
+                    <AuthorizeText Name="name" Placeholder="client id" @bind-Value="@Model.Id" />
                 }
                 else
                 {
@@ -52,6 +52,9 @@ else
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>urls</a>
                         </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>idp restrictions</a>
+                        </li>
                     }
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
@@ -85,6 +88,14 @@ else
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col col-form-label" for="name">
+                            name
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="name" Placeholder="description" @bind-Value="@Model.ClientName" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col col-form-label" for="description">
                             description
                         </label>
@@ -101,7 +112,9 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ClientGrantTypes Model="@Model" GrantTypeDeletedClicked="OnGrantTypeDeleted" GrantTypeValueChanged="OnGrantTypeValueChanged" />
+                    <ClientGrantTypes Model="@Model" 
+                                      GrantTypeDeletedClicked="OnGrantTypeDeleted" 
+                                      GrantTypeValueChanged="OnGrantTypeValueChanged" />
                 </div>
             </div>
             @if (IsWebClient())
@@ -123,6 +136,18 @@ else
                     </div>
                     <div class="card-body">
                         <ClientUris Model="@Model" DeleteEntityClicked="OnDeleteUrlClicked" />
+                    </div>
+                </div>
+                <div id="providers" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">External provider restrictions</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ClientIdpRestrictions Model="@Model"
+                                               ProviderDeletedClicked="OnProviderDeleted" 
+                                               ProviderValueChanged="OnProviderValueChanged"/>
                     </div>
                 </div>
             }
@@ -215,13 +240,13 @@ else
     {
         return new Entity.Client
         {
+            ProtocolType = "oidc",
             AllowedGrantTypes = new List<Entity.ClientGrantType>(),
             AllowedScopes = new List<Entity.ClientScope>(),
             ClientClaims = new List<Entity.ClientClaim>(),
             ClientSecrets = new List<Entity.ClientSecret>(),
             IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
             RedirectUris = new List<Entity.ClientUri>()
-
         };
     }
 
@@ -287,6 +312,7 @@ else
     {
         Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
         Model.AllowedScopes.Add(new Entity.ClientScope());
+        Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
     }
 
     private void OnFilterChanged(string term)
@@ -375,6 +401,20 @@ else
         Model.AllowedGrantTypes.Remove(grantType);
         EntityDeleted(grantType);
         _isWebClient = Model.IsWebClient();
+        StateHasChanged();
+    }
+
+    private void OnProviderValueChanged(Entity.ClientIdpRestriction provider)
+    {
+        EntityCreated(provider);
+        Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
+        StateHasChanged();
+    }
+
+    private void OnProviderDeleted(Entity.ClientIdpRestriction provider)
+    {
+        Model.IdentityProviderRestrictions.Remove(provider);
+        EntityDeleted(provider);
         StateHasChanged();
     }
 

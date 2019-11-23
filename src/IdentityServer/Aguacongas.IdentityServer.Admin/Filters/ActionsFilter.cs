@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 return;
             }
 
-            if (actionDescriptor.ActionName == "Get")
+            if (actionDescriptor.ActionName == "Get" && objectResult.Value == null)
             {
                 context.Result = new NotFoundObjectResult(new ProblemDetails 
                 {

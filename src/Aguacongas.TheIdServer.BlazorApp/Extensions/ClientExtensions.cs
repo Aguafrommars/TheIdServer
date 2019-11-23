@@ -8,11 +8,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Extensions
     {
         public static bool IsWebClient(this Client client)
         {
-            return client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
+            return client.ProtocolType == "oidc" &&
+                (client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
                     g.GrantType == "hybrid" ||
                     g.GrantType == "implicit" ||
                     g.GrantType == "urn:ietf:params:oauth:grant-type:device_code") ||
-                client.HasCustomGrantType();
+                client.HasCustomGrantType());
         }
 
         public static bool IsSpaClient(this Client client)
