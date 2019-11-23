@@ -89,7 +89,9 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(ProblemDetails), 409)]
         [Authorize(Policy = "Id4-Writer")]
+#pragma warning disable IDE0060 // Remove unused parameter. The id is used in ActionsFilter, id and entity.Id MUST match. 
         public Task<T> UpdateAsync(string id, [FromBody] T entity)
+#pragma warning restore IDE0060 // Remove unused parameter
             => _store.UpdateAsync(entity);
 
         /// <summary>

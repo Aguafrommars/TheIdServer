@@ -9,6 +9,13 @@ namespace Aguacongas.IdentityServer.Store
     public interface IIdentityProviderStore
     {
         /// <summary>
+        /// Gets the asynchronous.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<IdentityProvider> GetAsync(string id);
+        
+        /// <summary>
         /// Gets a page of identity provider corresponding to the request.
         /// </summary>
         /// <param name="request">The request.</param>

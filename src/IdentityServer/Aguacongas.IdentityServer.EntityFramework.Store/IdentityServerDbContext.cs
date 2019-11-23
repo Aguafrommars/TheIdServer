@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             modelBuilder.Entity<ClientGrantType>()
                 .HasIndex(e => new { e.ClientId, e.GrantType })
                 .IsUnique(true);
-            modelBuilder.Entity<ClientIdPRestriction>()
+            modelBuilder.Entity<ClientIdpRestriction>()
                 .HasIndex(e => new { e.ClientId, e.Provider })
                 .IsUnique(true);
             modelBuilder.Entity<ApiClaim>()

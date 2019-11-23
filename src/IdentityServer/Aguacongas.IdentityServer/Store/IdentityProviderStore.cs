@@ -36,7 +36,7 @@ namespace Aguacongas.IdentityServer.Store
 
             var odataQuery = schenes
                 .Where(s => IsAssignableToRemoteAuthenticationHandler(s.HandlerType))
-                .Select(s => new IdentityProvider { DisplayName = s.DisplayName, Id = s.Name })
+                .Select(s => s.ToIdentityProvider())
                 .AsQueryable()
                 .OData();
 
@@ -62,6 +62,14 @@ namespace Aguacongas.IdentityServer.Store
                 Count = count,
                 Items = page
             };
+        }
+
+        public async Task<IdentityProvider> GetAsync(string id)
+        {
+            var schenes = await _provider.GetAllSchemesAsync()
+                .ConfigureAwait(false);
+            return schenes.FirstOrDefault(s => s.Name == id && IsAssignableToRemoteAuthenticationHandler(s.HandlerType))
+                .ToIdentityProvider();            
         }
 
         private static bool IsAssignableToRemoteAuthenticationHandler(Type givenType)

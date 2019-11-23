@@ -11,18 +11,33 @@ namespace Aguacongas.IdentityServer.Admin.Filters
         public void OnActionExecuted(ActionExecutedContext context)
         {
             var controlerType = context.Controller.GetType();
-            var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
-            if (context.Exception == null &&
-                !context.Canceled &&
-                actionDescriptor.ActionName == "Create" &&                
-                controlerType.FullName
-                .StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController",
+
+            if (!(context.Result is ObjectResult objectResult) || 
+                context.Exception != null ||
+                context.Canceled ||
+                !controlerType.FullName
+                    .StartsWith("Aguacongas.IdentityServer.Admin",
                     StringComparison.Ordinal))
             {
-                var objectResult = context.Result as ObjectResult;
+                return;
+            }
+
+            var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
+            if (actionDescriptor.ActionName == "Create")
+            {
                 var value = objectResult.Value as IEntityId;
                 var request = context.HttpContext.Request;
                 context.Result = new CreatedResult($"{request.Scheme}://{request.Host}{request.PathBase}{request.Path}/{value.Id}", objectResult.Value);
+                return;
+            }
+
+            if (actionDescriptor.ActionName == "Get")
+            {
+                context.Result = new NotFoundObjectResult(new ProblemDetails 
+                {
+                    Title = "Entity not found",
+                    Status = 404
+                });
             }
         }
 

@@ -1,0 +1,62 @@
+﻿@using  Aguacongas.IdentityServer.Store
+@inherits AutoCompleteModel<Entity.ClientIdpRestriction>
+@inject IAdminStore<Entity.IdentityProvider> _store
+
+@if (IsReadOnly)
+{
+    <div class="input-group input-group-sm mb-3">
+        <div class="form-control" disabled>@Entity.Provider</div>
+        <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="input-group-text oi oi-trash" />
+        </div>
+    </div>
+}
+else
+{
+    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
+               @oninput="OnInputChanged" @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })'/>
+        <div class="input-group-append">
+            <span class="input-group-text oi oi-plus" />
+        </div>
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (_filteredProviders != null)
+        {
+            foreach (var provider in _filteredProviders)
+            {
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(provider.Id)">
+                    <small>@provider.DisplayName</small>
+                    <div class="text-muted font-italic">
+                        <small>@provider.Id</small>
+                    </div>
+                </button>
+            }
+        }
+    </div>
+}
+
+@code {
+    private IEnumerable<Entity.IdentityProvider> _filteredProviders;
+    private readonly PageRequest _pageRequest = new PageRequest
+    {
+        Take = 5
+    };
+
+    protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Provider);
+
+    protected override async Task<IEnumerable<string>> GetFilteredValues(string value)
+    {
+        _pageRequest.Filter = $"contains(Id,'{value}') or contains(DisplayName,'{value}')";
+        var response = await _store.GetAsync(_pageRequest)
+            .ConfigureAwait(false);
+
+        _filteredProviders = response.Items;
+        return null;
+    }
+
+    protected override void SetValue(string value)
+    {
+        Entity.Provider = value;
+    }
+}

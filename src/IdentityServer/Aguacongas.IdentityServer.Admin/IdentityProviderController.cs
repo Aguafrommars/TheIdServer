@@ -29,6 +29,26 @@ namespace Aguacongas.IdentityServer.Admin
         }
 
         /// <summary>
+        /// Gets an entity.
+        /// </summary>
+        /// <param name="id">entity id.</param>
+        /// <returns>
+        /// An entity.
+        /// </returns>
+        /// <response code="200">Returns an entity.</response>
+        /// <response code="400">Bad request.</response>
+        /// <response code="204">No content.</response>
+        [HttpGet("{id}")]
+        [Description("Gets an entity")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(ProblemDetails), 404)]
+        [Authorize(Policy = "Id4-Reader")]
+        public Task<IdentityProvider> GetAsync(string id)
+            => _store.GetAsync(id);
+
+
+
+        /// <summary>
         /// Search entities using OData style query string (wihtout $).
         /// </summary>
         /// <param name="request">The request.</param>

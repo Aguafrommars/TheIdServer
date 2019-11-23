@@ -335,7 +335,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The identity provider restrictions.
         /// </value>
-        public virtual ICollection<ClientIdPRestriction> IdentityProviderRestrictions { get; set; }
+        public virtual ICollection<ClientIdpRestriction> IdentityProviderRestrictions { get; set; }
 
         /// <summary>
         /// Gets or sets the claims.

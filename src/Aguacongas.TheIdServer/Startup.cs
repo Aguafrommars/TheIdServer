@@ -78,7 +78,9 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
+#pragma warning disable S112 // General exceptions should never be thrown
                 throw new Exception("need to configure key material");
+#pragma warning restore S112 // General exceptions should never be thrown
             }
 
             services.AddAuthorization(options =>

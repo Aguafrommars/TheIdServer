@@ -1,5 +1,4 @@
 ﻿using IdentityServer4.Models;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -227,7 +226,7 @@ namespace Aguacongas.IdentityServer.Store
                 EnableLocalLogin = client.EnableLocalLogin,
                 FrontChannelLogoutSessionRequired = client.FrontChannelLogoutSessionRequired,
                 FrontChannelLogoutUri = client.FrontChannelLogoutUri,
-                IdentityProviderRestrictions = client.IdentityProviderRestrictions.Select(r => new Entity.ClientIdPRestriction
+                IdentityProviderRestrictions = client.IdentityProviderRestrictions.Select(r => new Entity.ClientIdpRestriction
                 {
                     Id = Guid.NewGuid().ToString(),
                     Provider = r
@@ -261,7 +260,7 @@ namespace Aguacongas.IdentityServer.Store
             if (api == null)
             {
                 return null;
-            };
+            }
 
             return new Entity.ProtectResource
             {
