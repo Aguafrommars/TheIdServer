@@ -1,16 +1,16 @@
 ﻿namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
-    /// Api sub entity interface
+    /// Idenetity resource sub entity interface
     /// </summary>
-    public interface IApiSubEntity
+    public interface IIdentitySubEntity
     {
         /// <summary>
-        /// Gets or sets the API identifier.
+        /// Gets or sets the identity resource identifier.
         /// </summary>
         /// <value>
         /// The API identifier.
         /// </value>
-        string ApiId { get; set; }
+        string IdentityId { get; set; }
     }
 }

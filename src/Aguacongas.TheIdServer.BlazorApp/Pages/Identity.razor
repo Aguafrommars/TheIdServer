@@ -1,13 +1,201 @@
-﻿@page "/identityresource"
+﻿@using Aguacongas.TheIdServer.BlazorApp.Components.IdentityComponents
+
+@page "/identityresource"
 @page "/identityresource/{id}"
 
-<div class="row sticky-top">
-    <div class="col">
-        <h3>@Id</h3>
-    </div>
-</div>
+@inherits EntityModel<Entity.IdentityResource>
 
+@if (Model == null)
+{
+    <p class="col"><em>Loading...</em></p>
+}
+else
+{
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <div class="row bg-light sticky-top">
+            <div class="col">
+                @if (IsNew)
+                {
+                    <AuthorizeText Name="name" Placeholder="identity id" @bind-Value="@Model.Id" />
+                }
+                else
+                {
+                    <h3>@Id</h3>
+                }
+            </div>
+            @if (!NonEditable)
+            {
+                <div>
+                    <AuthorizeButton Type="submit" CssSubClass="btn-primary">
+                        <span class="oi oi-data-transfer-download"></span>
+                        Save
+                    </AuthorizeButton>
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
+                </div>
+            }
+            <div class="col">
+                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+            </div>
+            <div class="w-100"></div>
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-100"></div>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="col" />
+        </div>
+        <div class="entity-details">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col col-form-label">
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="displayName">
+                            display name
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="description">
+                            description
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeTextArea Name="description" Placeholder="decription" @bind-Value="@Model.Description" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="claims" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Claims</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <IdentityClaimTypes Model="@Model" ClaimValueChanged="OnClaimTypeValueChanged" DeleteClaimClicked="OnClaimTypeDeleted" />
+                </div>
+            </div>
+            <div id="properties" class="card mb-3">
+                <div class="card-header">
+                    <EntitySubGridTitle Text="Properties"
+                                        AddClicked="OnAddPropertyClicked" />
+                </div>
+                <div class="card-body">
+                    <IdentityProperties Model="@Model" DeleteEntityClicked="OnDeletePropertyClicked" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
 @code {
-    [Parameter]
-    public string Id { get; set; }
+    protected override string Expand => "IdentityClaims,Properties";
+
+    protected override bool NonEditable => Model.NonEditable;
+
+    protected override string BackUrl => "identities";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        AddEmpyClaimsTypes();
+    }
+
+    protected override Entity.IdentityResource Create()
+    {
+        return new Entity.IdentityResource
+        {
+            IdentityClaims = new List<Entity.IdentityClaim>(),
+            Properties = new List<Entity.IdentityProperty>()
+        };
+    }
+
+    protected override void SetNavigationProperty<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.IIdentitySubEntity subEntity)
+        {
+            subEntity.IdentityId = Model.Id;
+        }
+    }
+
+    protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
+    {
+        if (entity is Entity.IdentityResource identity)
+        {
+            identity.IdentityClaims = null;
+            identity.Properties = null;
+        }
+    }
+
+    protected override void SetModelEntityId(Type entityType, Entity.IEntityId result)
+    {
+    }
+
+    private void AddEmpyClaimsTypes()
+    {
+        Model.IdentityClaims.Add(new Entity.IdentityClaim());
+    }
+
+    private void OnFilterChanged(string term)
+    {
+        Model.IdentityClaims = State.IdentityClaims
+            .Where(c => c.Type != null && c.Type.Contains(term))
+            .ToList();
+        Model.Properties = State.Properties
+            .Where(p => (p.Key != null && p.Key.Contains(term)) || (p.Value != null && p.Value.Contains(term)))
+            .ToList();
+
+        AddEmpyClaimsTypes();
+    }
+
+    private void OnClaimTypeValueChanged(Entity.IdentityClaim claim)
+    {
+        EntityCreated(claim);
+        Model.IdentityClaims.Add(new Entity.IdentityClaim());
+        StateHasChanged();
+    }
+
+    private void OnClaimTypeDeleted(Entity.IdentityClaim claim)
+    {
+        Model.IdentityClaims.Remove(claim);
+        EntityDeleted(claim);
+        StateHasChanged();
+    }
+
+    private void OnAddPropertyClicked()
+    {
+        var property = new Entity.IdentityProperty();
+        Model.Properties.Add(property);
+        EntityCreated(property);
+        StateHasChanged();
+    }
+
+    private void OnDeletePropertyClicked(Entity.IdentityProperty property)
+    {
+        Model.Properties.Remove(property);
+        EntityDeleted(property);
+        StateHasChanged();
+    }
 }

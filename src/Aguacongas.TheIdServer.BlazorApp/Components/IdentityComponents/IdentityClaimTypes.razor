@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col">
         <ul class="list-inline">
-            @foreach (var claim in Model.ApiClaims)
+            @foreach (var claim in Model.IdentityClaims)
             {
                 <li class="list-inline-item">
                     <ClaimType Entity="@claim"
@@ -18,23 +18,23 @@
 
 @code {
     [Parameter]
-    public Entity.ProtectResource Model { get; set; }
+    public Entity.IdentityResource Model { get; set; }
 
     [Parameter]
-    public EventCallback<Entity.ApiClaim> DeleteClaimClicked { get; set; }
+    public EventCallback<Entity.IdentityClaim> DeleteClaimClicked { get; set; }
 
     [Parameter]
-    public EventCallback<Entity.ApiClaim> ClaimValueChanged { get; set; }
+    public EventCallback<Entity.IdentityClaim> ClaimValueChanged { get; set; }
 
     private bool Validate(string claimType)
     {
-        if (Model.ApiClaims.Any(c => c.Type == claimType))
+        if (Model.IdentityClaims.Any(c => c.Type == claimType))
         {
             _notifier.Notify(new Notification
             {
                 Header = "Invalid claim type",
                 IsError = true,
-                Message = $"This API already contains the claim type {claimType}"
+                Message = $"This identity already contains the claim type {claimType}"
             });
             return false;
         }

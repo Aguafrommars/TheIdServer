@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// </summary>
     /// <seealso cref="IAuditable" />
     /// <seealso cref="IClaimType" />
-    public class IdentityClaim : IAuditable, IClaimType
+    public class IdentityClaim : IAuditable, IClaimType, IIdentitySubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an identity resource property
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class IdentityProperty : IAuditable
+    public class IdentityProperty : IAuditable, IIdentitySubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.
