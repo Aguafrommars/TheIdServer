@@ -1,9 +1,11 @@
 ﻿
 using Aguacongas.IdentityServer.Admin;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -26,6 +28,17 @@ namespace Microsoft.AspNetCore.Builder
             string authicationScheme = null)
         {
             var entityTypeList = GenericApiControllerFeatureProvider.GetEntityTypeList();
+
+            Func<HttpContext, Task<AuthenticateResult>> authenticate;
+            if (authicationScheme != null)
+            {
+                authenticate = context => context.AuthenticateAsync(authicationScheme);
+            }
+            else
+            {
+                authenticate = context => context.AuthenticateAsync();
+            }
+
             return builder.Map(basePath, child =>
                 {
                     configure(child);
@@ -35,15 +48,7 @@ namespace Microsoft.AspNetCore.Builder
                             if (!context.Request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) && 
                                 !context.User.Identity.IsAuthenticated)
                             {
-                                AuthenticateResult result;
-                                if (authicationScheme != null)
-                                {
-                                    result = await context.AuthenticateAsync(authicationScheme);
-                                }
-                                else
-                                {
-                                    result = await context.AuthenticateAsync();
-                                }
+                                var result = await authenticate(context);
                                 if (result.Succeeded)
                                 {
                                     context.User = result.Principal;
