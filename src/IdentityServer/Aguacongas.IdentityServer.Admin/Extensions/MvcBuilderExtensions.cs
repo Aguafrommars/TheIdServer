@@ -45,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     };
-                }); ;
+                });
             return builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
                     apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));

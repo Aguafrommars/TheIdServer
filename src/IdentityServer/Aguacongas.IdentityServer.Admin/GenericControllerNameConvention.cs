@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// <seealso cref="System.Attribute" />
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ApplicationModels.IControllerModelConvention" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public class GenericApiControllerNameConvention : Attribute, IControllerModelConvention
+    public sealed class GenericApiControllerNameConventionAttribute : Attribute, IControllerModelConvention
     {
         /// <summary>
         /// Called to apply the convention to the <see cref="T:ControllerModel" />.

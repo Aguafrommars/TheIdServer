@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -100,7 +101,6 @@ namespace Aguacongas.TheIdServer
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
                     options.ApiName = "theidserveradminapi";
-                    options.ApiSecret = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d";
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
                     options.LegacyAudienceValidation = true;
@@ -123,7 +123,7 @@ namespace Aguacongas.TheIdServer
              });
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
+        [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())
@@ -149,7 +149,7 @@ namespace Aguacongas.TheIdServer
                         endpoints.MapFallbackToClientSideBlazor<BlazorApp.Startup>("index.html");
                     });
                 })
-                .Map("/api", child =>
+                .UseIdentityServerAdminApi("/api", child =>
                 {
                     child.UseOpenApi()
                         .UseSwaggerUi3()
@@ -159,13 +159,6 @@ namespace Aguacongas.TheIdServer
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                                 .AllowCredentials();
-                        })
-                        .UseRouting()
-                        .UseAuthentication()
-                        .UseAuthorization()
-                        .UseEndpoints(enpoints =>
-                        {
-                            enpoints.MapControllers();
                         });
                 })
                 .UseIdentityServer()
@@ -175,7 +168,7 @@ namespace Aguacongas.TheIdServer
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultControllerRoute();
-                });
+                }); 
         }
     }
 }

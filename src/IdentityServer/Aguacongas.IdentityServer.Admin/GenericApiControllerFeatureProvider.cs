@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,10 +27,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// </remarks>
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
-            var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
-            var entyTypeList = assembly.GetTypes().Where(t => t.IsClass &&
-                !t.IsAbstract && 
-                t.GetInterface("IEntityId") != null);
+            var entyTypeList = GetEntityTypeList();
             // This is designed to run after the default ControllerTypeProvider, 
             // so the list of 'real' controllers has already been populated.
             foreach (var entityType in entyTypeList)
@@ -43,6 +41,19 @@ namespace Aguacongas.IdentityServer.Admin
                     feature.Controllers.Add(controllerType);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the entity type list.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetEntityTypeList()
+        {
+            var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
+            var entyTypeList = assembly.GetTypes().Where(t => t.IsClass &&
+                !t.IsAbstract &&
+                t.GetInterface("IEntityId") != null);
+            return entyTypeList;
         }
     }
 
