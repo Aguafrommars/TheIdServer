@@ -40,7 +40,8 @@ namespace Aguacongas.TheIdServer
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentityProviderStore();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                    options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -114,13 +115,18 @@ namespace Aguacongas.TheIdServer
                     options.ClientSecret = "copy client secret from Google here";
                 });
 
-            
+
 
             services.AddResponseCompression(opts =>
-             {
-                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                     new[] { "application/octet-stream" });
-             });
+                 {
+                     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                         new[] { "application/octet-stream" });
+                 })
+                .AddRazorPages(options =>
+                {
+                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
+                });
+
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -168,6 +174,7 @@ namespace Aguacongas.TheIdServer
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultControllerRoute();
+                    endpoints.MapRazorPages();
                 }); 
         }
     }

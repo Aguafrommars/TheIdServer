@@ -17,7 +17,6 @@
                         <h3 class="panel-title">Local Login</h3>
                     </div>
                     <div class="panel-body">
-
                         <form asp-route="Login">
                             <input type="hidden" asp-for="ReturnUrl" />
 
@@ -50,6 +49,7 @@
                                 </div>
                             </fieldset>
                         </form>
+                        <a asp-area="Identity" asp-page="/Account/Register">Register</a>
                     </div>
                 </div>
             </div>

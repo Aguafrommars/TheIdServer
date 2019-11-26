@@ -13,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
             var exception = context.Exception;
             if (context.ActionDescriptor is ControllerActionDescriptor actionDescriptor &&
                 actionDescriptor.ControllerTypeInfo
-                    .FullName.StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController"))
+                    .FullName.StartsWith("Aguacongas.IdentityServer.Admin"))
             {
                 if (exception is InvalidOperationException)
                 {
