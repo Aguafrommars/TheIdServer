@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4EntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TUser>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+            where TUser: IdentityUser
         {
             var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
@@ -42,7 +44,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore, RefreshTokenStore>()
                 .AddTransient<IReferenceTokenStore, ReferenceTokenStore>()
                 .AddTransient<IUserConsentStore, UserConsentStore>()
-                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>();
+                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
+                .AddTransient<IAdminStore<TUser>, IdentityUserStore<TUser>>();
         }
     }
 }

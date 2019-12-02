@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public Task<T> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var query = _context.Set<T>() as IQueryable<T>;
-            query = Expand(request?.Expand, query);
+            query = query.Expand(request?.Expand);
             return query.Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
         }
@@ -36,7 +36,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var query = _context.Set<T>() as IQueryable<T>;
-            query = Expand(request.Expand, query);
+            query = query.Expand(request.Expand);
 
             var odataQuery = query.OData();
 
@@ -66,18 +66,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             };
         }
 
-        private static IQueryable<T> Expand(string expand, IQueryable<T> query)
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            if (expand != null)
+            var entity = await _context.Set<T>().FindAsync(id).ConfigureAwait(false);
+            if (entity != null)
             {
-                var pathList = expand.Split(',');
-                foreach (var path in pathList)
-                {
-                    query = query.Include(path.Trim().Replace('/', '.'));
-                }
+                _context.Remove(entity);
+                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
             }
-
-            return query;
         }
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
@@ -93,15 +90,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return entity;
         }
 
-        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Set<T>().FindAsync(id).ConfigureAwait(false);
-            if (entity != null)
-            {
-                _context.Remove(entity);
-                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
-            }
+            throw new NotImplementedException();
         }
 
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
@@ -111,11 +102,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;
-        }
-
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)

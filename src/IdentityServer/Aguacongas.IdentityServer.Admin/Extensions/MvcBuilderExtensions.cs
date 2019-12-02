@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns></returns>
-        public static IMvcBuilder AddIdentityServerAdmin(this IMvcBuilder builder)
+        public static IMvcBuilder AddIdentityServerAdmin<TUser>(this IMvcBuilder builder)
         {
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()

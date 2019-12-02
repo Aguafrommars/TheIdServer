@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
     {
         private readonly HttpClient _httpClient;
         private readonly NavigationManager _navigationManager;
-        private readonly IJSRuntime _JsRuntime;
+        private readonly IJSRuntime _jsRuntime;
         private readonly UserStore _userStore;
 
         public CustomAuthStateProvider(HttpClient httpClient, 
@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _navigationManager = navigationManager ?? throw new ArgumentNullException(nameof(httpClient));
-            _JsRuntime = JsRuntime ?? throw new ArgumentNullException(nameof(JsRuntime));
+            _jsRuntime = JsRuntime ?? throw new ArgumentNullException(nameof(JsRuntime));
             _userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
         }
         public async Task LoginAsync()
@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
             Console.WriteLine($"Nonce: {nonce}");
 
             var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            await _JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "verfier", verifier);
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "verfier", verifier);
             var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
             Console.WriteLine($"Challenge: {challenge}");
 
@@ -86,7 +86,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
 
         private async Task GetUserFromSessionStorage()
         {
-            var expireAtString = await _JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "expireAt");
+            var expireAtString = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "expireAt");
             DateTime expireAt = DateTime.MinValue;
             if (!string.IsNullOrEmpty(expireAtString))
             {
@@ -95,9 +95,9 @@ namespace Aguacongas.TheIdentityServer.SpaSample
             }
             if (DateTime.UtcNow < expireAt)
             {
-                var tokensString = await _JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "tokens");
+                var tokensString = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "tokens");
                 var tokens = JsonConvert.DeserializeObject<Tokens>(tokensString);
-                var claimsString = await _JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "claims");
+                var claimsString = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "claims");
                 var claims = JsonConvert.DeserializeObject<IEnumerable<SerializableClaim>>(claimsString); 
                 _userStore.User = CreateUser(claims.Select(c => new Claim(c.Type, c.Value)), tokens.access_token);
             }
@@ -126,7 +126,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
                 ClientId = "spa",
                 RedirectUri = "http://localhost:5002",
                 Code = code,
-                CodeVerifier = (await _JsRuntime.InvokeAsync<string>("sessionStorage.getItem", "verfier"))
+                CodeVerifier = (await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "verfier"))
                     .Replace("=", "")
                     .Replace('+', '-')
                     .Replace('/', '_')
@@ -138,8 +138,8 @@ namespace Aguacongas.TheIdentityServer.SpaSample
                 {
                     throw new InvalidOperationException($"{authorizationCodeResponse.Error} {authorizationCodeResponse.ErrorDescription}");
                 }
-                await _JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "tokens", authorizationCodeResponse.Json.ToString());
-                await _JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "expireAt", DateTime.UtcNow.AddSeconds(authorizationCodeResponse.ExpiresIn));
+                await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "tokens", authorizationCodeResponse.Json.ToString());
+                await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "expireAt", DateTime.UtcNow.AddSeconds(authorizationCodeResponse.ExpiresIn));
 
                 using (var userInfoRequest = new UserInfoRequest
                 {
@@ -155,7 +155,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
                         throw new InvalidOperationException($"{userInfoResponse.Error}");
                     }
 
-                    await _JsRuntime.InvokeVoidAsync("sessionStorage.setItem",
+                    await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem",
                         "claims", 
                         System.Text.Json.JsonSerializer.Serialize(userInfoResponse
                             .Claims

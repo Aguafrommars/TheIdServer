@@ -17,7 +17,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="controller">The <see cref="T:ControllerModel" />.</param>
         public void Apply(ControllerModel controller)
         {
-            if (controller.ControllerType.GetGenericTypeDefinition() !=
+            if (!controller.ControllerType.IsGenericType || controller.ControllerType.GetGenericTypeDefinition() !=
                 typeof(GenericApiController<>))
             {
                 return;

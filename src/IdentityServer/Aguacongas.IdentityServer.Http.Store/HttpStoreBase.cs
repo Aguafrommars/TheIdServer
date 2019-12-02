@@ -24,8 +24,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         protected Task<HttpClient> HttpClientFactory { get; }
         protected string BaseUri { get; }
 
-
-
         public HttpStoreBase(Task<HttpClient> httpClientFactory, ILogger<HttpStoreBase<T>> logger)
         {
             HttpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
