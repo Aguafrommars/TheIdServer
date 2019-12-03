@@ -15,14 +15,13 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns></returns>
         public static IEndpointRouteBuilder MapAdminApiControllers(this IEndpointRouteBuilder endpoints)
         {
-            var entyTypeList = GenericApiControllerFeatureProvider.GetEntityTypeList();
+            var entyTypeList = Utils.GetEntityTypeList();
             foreach(var entityType in entyTypeList)
             {
                 endpoints.MapControllerRoute(entityType.Name, $"{entityType.Name}");
             }
             endpoints.MapControllerRoute("IdentityProvider", "IdentityProvider");
             return endpoints;
-        }
-
+        }        
     }
 }

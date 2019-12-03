@@ -27,7 +27,7 @@ namespace Microsoft.AspNetCore.Builder
             Action<IApplicationBuilder> configure,
             string authicationScheme = null)
         {
-            var entityTypeList = GenericApiControllerFeatureProvider.GetEntityTypeList();
+            var entityTypeList = Utils.GetEntityTypeList();
 
             Func<HttpContext, Task<AuthenticateResult>> authenticate;
             if (authicationScheme != null)

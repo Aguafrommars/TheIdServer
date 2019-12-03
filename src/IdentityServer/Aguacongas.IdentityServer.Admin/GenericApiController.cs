@@ -56,6 +56,7 @@ namespace Aguacongas.IdentityServer.Admin
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $)")]
         [Authorize(Policy = "Id4-Reader")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         public Task<PageResponse<T>> GetAsync(PageRequest request) 
             => _store.GetAsync(request);
 

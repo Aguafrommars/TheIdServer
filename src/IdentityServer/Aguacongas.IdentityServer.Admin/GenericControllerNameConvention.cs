@@ -17,14 +17,21 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="controller">The <see cref="T:ControllerModel" />.</param>
         public void Apply(ControllerModel controller)
         {
-            if (!controller.ControllerType.IsGenericType || controller.ControllerType.GetGenericTypeDefinition() !=
-                typeof(GenericApiController<>))
+            if (!controller.ControllerType.IsGenericType)
+            {             
+                return;
+            }
+            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(IdentityUserController<>))
             {
+                controller.ControllerName = "IdentityUser";
                 return;
             }
 
-            var entityType = controller.ControllerType.GenericTypeArguments[0];
-            controller.ControllerName = entityType.Name;
+            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericApiController<>))
+            {
+                var entityType = controller.ControllerType.GenericTypeArguments[0];
+                controller.ControllerName = entityType.Name;
+            }
         }
     }
 }

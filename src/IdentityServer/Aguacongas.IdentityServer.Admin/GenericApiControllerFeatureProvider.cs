@@ -1,7 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
+﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +10,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// Generic API contoller feature
     /// </summary>
     /// <seealso cref="IApplicationFeatureProvider{ControllerFeature}" />
-    public class GenericApiControllerFeatureProvider :
+    public class GenericApiControllerFeatureProvider<TUser> :
         IApplicationFeatureProvider<ControllerFeature>
     {
         /// <summary>
@@ -27,7 +25,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// </remarks>
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
-            var entyTypeList = GetEntityTypeList();
+            var entyTypeList = Utils.GetEntityTypeList();
             // This is designed to run after the default ControllerTypeProvider, 
             // so the list of 'real' controllers has already been populated.
             foreach (var entityType in entyTypeList)
@@ -37,23 +35,16 @@ namespace Aguacongas.IdentityServer.Admin
                 {
                     // There's no controller for this entity, so add the generic version.
                     var controllerType = typeof(GenericApiController<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+                        .MakeGenericType(entityType.GetTypeInfo())
+                        .GetTypeInfo();
                     feature.Controllers.Add(controllerType);
                 }
             }
-        }
 
-        /// <summary>
-        /// Gets the entity type list.
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<Type> GetEntityTypeList()
-        {
-            var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
-            var entyTypeList = assembly.GetTypes().Where(t => t.IsClass &&
-                !t.IsAbstract &&
-                t.GetInterface("IEntityId") != null);
-            return entyTypeList;
+            var identityControllerType = typeof(IdentityUserController<>)
+                    .MakeGenericType(typeof(TUser).GetTypeInfo())
+                    .GetTypeInfo();
+            feature.Controllers.Add(identityControllerType);
         }
     }
 

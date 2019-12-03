@@ -1,20 +1,19 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Microsoft.AspNetCore.Identity;
 
 namespace Aguacongas.IdentityServer.Admin
 {
-
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="GenericApiController{IdentityUser}" />
-    public class IdentityUserController : GenericApiController<IdentityUser>
+    /// <typeparam name="TUser">The type of the user.</typeparam>
+    /// <seealso cref="GenericApiController{TUser}" />
+    public class IdentityUserController<TUser> : GenericApiController<TUser> where TUser: class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IdentityUserController"/> class.
+        /// Initializes a new instance of the <see cref="IdentityUserController{TUser}"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        public IdentityUserController(IAdminStore<IdentityUser> store): base(store)
+        public IdentityUserController(IAdminStore<TUser> store): base(store)
         {
 
         }

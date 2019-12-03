@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,13 +9,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="4.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview3.19555.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview3.19555.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.0-preview3.19555.2" />
+    <PackageReference Include="IdentityModel" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview4.19579.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.0-preview3.19553.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 

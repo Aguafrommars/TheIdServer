@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             return builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
-                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));
+                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider<TUser>()));
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Aguacongas.IdentityServer.Store
     /// Class implementing this interface is an admin store
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IAdminStore<T> : IAdminStore where T:class
+    public interface IAdminStore<T> : IAdminStore where T : class
     {
         /// <summary>
         /// Creates an entity.

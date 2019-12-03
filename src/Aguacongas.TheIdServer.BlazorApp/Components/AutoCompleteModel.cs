@@ -25,6 +25,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public Func<string, bool> Validate { get; set; }
 
+        [JSInvokable]
+        public Task EnterKeyPressed()
+        {
+            return SetSelectedValue(SelectedValue);
+        }
+
         protected abstract bool IsReadOnly { get; }
 
         protected string Id { get; } = Guid.NewGuid().ToString();
@@ -34,12 +40,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected IEnumerable<string> FilteredValues { get; private set; }
 
         private CancellationTokenSource _cancellationTokenSource;
-
-        [JSInvokable]
-        public Task EnterKeyPressed()
-        {
-            return SetSelectedValue(SelectedValue);
-        }
 
         protected Task SetSelectedValue(string value)
         {
