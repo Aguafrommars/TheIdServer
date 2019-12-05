@@ -18,27 +18,3 @@
         @Notification.Message
     </div>
 </div>
-
-@code {
-    private string BodyClass => Notification.IsError ? "text-danger" : "text-success";
-    private string CarretColor => Notification.IsError ? "#dc3545" : "#28a745";
-    private string AutoHide => Notification.IsError ? "false" : "true";
-
-    [Parameter]
-    public Notification Notification { get; set; }
-
-    [Parameter]
-    public EventCallback<Notification> Closed { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.showToast",
-            Notification.Id, DotNetObjectReference.Create(this));
-    }
-
-    [JSInvokable]
-    public Task ToastClosed()
-    {
-        return Closed.InvokeAsync(Notification);
-    }
-}

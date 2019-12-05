@@ -5,24 +5,3 @@
     <input class="form-control" type="text" placeholder="filter" aria-label="filter" aria-describedby="addon" value="@Term"
            @oninput="OnTermChanged" @onfocusout="() => FocusChanged.InvokeAsync(false)" @onfocus="() => FocusChanged.InvokeAsync(true)" />
 </div>
-
-@code {
-    [Parameter]
-    public string CssClass { get; set; }
-
-    [Parameter]
-    public string Term { get; set; }
-
-    [Parameter]
-    public EventCallback<string> TermChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> FocusChanged { get; set; }
-
-    private Task OnTermChanged(ChangeEventArgs e)
-    {
-        Term = e.Value.ToString();
-
-        return TermChanged.InvokeAsync(Term);
-    }
-}

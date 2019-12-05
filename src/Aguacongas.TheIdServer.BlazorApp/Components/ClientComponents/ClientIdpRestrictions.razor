@@ -13,14 +13,3 @@
         <AuthorizeCheckbox Label="enable local login" @bind-Value="@Model.EnableLocalLogin" />
     </div>
 </div>
-
-@code {
-    [Parameter]
-    public Entity.Client Model { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.ClientIdpRestriction> ProviderDeletedClicked { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.ClientIdpRestriction> ProviderValueChanged { get; set; }
-}

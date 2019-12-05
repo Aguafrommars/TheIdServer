@@ -1,34 +1,4 @@
-﻿
-<div @onclick="OnHeaderClick">@Text<span class="oi oi-arrow-@_class float-right sort" /></div>
-
-@code {
-    private string _class = null;
-
-    [Parameter]
-    public string Property { get; set; }
-
-    [Parameter]
-    public string Text { get; set; }
-
-    [Parameter]
-    public GridState GridState { get; set; }
-
-    [Parameter]
-    public EventCallback<string> TermChanged { get; set; }
-
-    void OnHeaderClick()
-    {
-        GridState.HeaderClicked(Property);
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        GridState.OnHeaderClicked += e =>
-        {
-            _class = GridState.GetHeaderArrowClassSuffix(Property);
-            StateHasChanged();
-            return Task.CompletedTask;
-        };
-    }
-}
+﻿<div @onclick="OnHeaderClick">
+    @Text
+    <span class="oi oi-arrow-@_class float-right sort" />
+</div>

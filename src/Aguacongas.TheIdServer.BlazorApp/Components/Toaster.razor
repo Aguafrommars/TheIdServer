@@ -9,22 +9,3 @@
         }
     </div>
 </div>
-
-@code {
-    private List<Notification> _notifications = new List<Notification>();
-
-    protected override void OnInitialized()
-    {
-        _notifier.Show = notification =>
-        {
-            _notifications.Add(notification);
-            StateHasChanged();
-        };
-    }
-
-    private void OnToastClosed(Notification notification)
-    {
-        _notifications.Remove(notification);
-        StateHasChanged();
-    }
-}

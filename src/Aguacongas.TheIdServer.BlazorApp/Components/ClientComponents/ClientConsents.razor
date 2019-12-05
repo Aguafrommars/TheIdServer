@@ -52,15 +52,3 @@
         </div>
     }
 }
-@code {
-    private Dictionary<string, TimeSpan?> _consentLifetimeQuickValues = new Dictionary<string, TimeSpan?>
-    {
-        ["15.00:00:00"] = TimeSpan.FromDays(15),
-        ["30.00:00:00"] = TimeSpan.FromDays(30),
-        ["365.00:00:00"] = TimeSpan.FromDays(365),
-        ["Never expire"] = null
-    };
-
-    [Parameter]
-    public Entity.Client Model { get; set; }
-}

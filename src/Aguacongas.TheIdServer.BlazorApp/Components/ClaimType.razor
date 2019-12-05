@@ -1,6 +1,4 @@
-﻿@using  Aguacongas.IdentityServer.Store
-@inherits AutoCompleteModel<Entity.IClaimType>
-@inject IAdminStore<Entity.IdentityClaim> _store
+﻿@inherits AutoCompleteModel<Entity.IClaimType>
 
 @if (IsReadOnly)
 {
@@ -29,28 +27,4 @@ else
             }
         }
     </div>
-}
-
-@code {
-    private readonly PageRequest _pageRequest = new PageRequest
-    {
-        Select = "Type",
-        Take = 5
-    };
-
-    protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Type);
-
-    protected override async Task<IEnumerable<string>> GetFilteredValues(string value)
-    {
-        _pageRequest.Filter = $"contains(Type,'{value}')";
-        var response = await _store.GetAsync(_pageRequest)
-            .ConfigureAwait(false);
-
-        return response.Items.Select(c => c.Type);
-    }
-
-    protected override void SetValue(string value)
-    {
-        Entity.Type = value;
-    }
 }
