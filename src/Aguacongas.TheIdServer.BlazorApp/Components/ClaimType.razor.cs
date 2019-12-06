@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
-    public partial class ClaimType : AutoCompleteModel<IClaimType>
+    public partial class ClaimType
     {
         [Inject]
         IAdminStore<IdentityClaim> Store { get; set; }

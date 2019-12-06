@@ -1,4 +1,6 @@
-﻿<div class="row">
+﻿@inject Notifier _notifier
+
+<div class="row">
     <div class="col">
         <ul class="list-inline">
             @foreach (var grantType in Model.AllowedGrantTypes)

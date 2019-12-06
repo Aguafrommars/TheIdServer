@@ -1,12 +1,10 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -14,14 +12,13 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Http.Store
 {
-    [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "No globalization")]
-    public class AdminStore<T> : HttpStoreBase<T>, IAdminStore<T> where T : class, IEntityId
+    public class AdminStore<T> : HttpStoreBase<T>  where T : class
     {
-
-        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Paths shoul be to lower")]
+        private readonly PropertyInfo _idProperty;
         public AdminStore(Task<HttpClient> httpClientFactory, ILogger<AdminStore<T>> logger)
             : base(httpClientFactory, logger)
         {
+            _idProperty = typeof(T).GetProperty("Id") ?? throw new ArgumentException($"The type parameter {typeof(T)} cannot be used because it doesn't contain an Id property.");
         }
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
@@ -38,12 +35,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                         .ConfigureAwait(false);
                 }
             }
-        }
-
-        public async Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            return await CreateAsync(entity as T, cancellationToken)
-                .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -69,7 +60,8 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
             using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PutAsync(GetUri(httpClient, $"{BaseUri}/{entity.Id}"), content, cancellationToken)
+                var id = _idProperty.GetValue(entity);
+                using (var response = await httpClient.PutAsync(GetUri(httpClient, $"{BaseUri}/{id}"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
 
@@ -80,16 +72,29 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            return await UpdateAsync(entity as T, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
         private string SerializeEntity(T entity)
         {
             return JsonSerializer.Serialize(entity, JsonSerializerOptions);
         }
+    }
 
+    public class EntityAdminStore<T> : AdminStore<T>, IAdminStore<T> where T : class, IEntityId
+    {
+        public EntityAdminStore(Task<HttpClient> httpClientFactory, ILogger<AdminStore<T>> logger)
+            : base(httpClientFactory, logger)
+        {
+        }
+
+        public async Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            return await base.CreateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        {
+            return await base.UpdateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

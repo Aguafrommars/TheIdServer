@@ -12,6 +12,11 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
+            <NavLink class="nav-link" href="users">
+                <span class="oi oi-person" aria-hidden="true"></span> Users
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
             <NavLink class="nav-link" href="clients">
                 <span class="oi oi-browser" aria-hidden="true"></span> Clients
             </NavLink>
@@ -33,13 +38,3 @@
 <div class="fixed-bottom">
     <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/master/README.md" target="_blank">About</a>
 </div>
-@code {
-    bool collapseNavMenu = true;
-
-    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}

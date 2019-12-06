@@ -14,17 +14,3 @@
         }
     </Authorized>
 </AuthorizeView>
-
-@code {
-    [Parameter]
-    public string CssSubClass { get; set; }
-
-    [Parameter]
-    public string Type { get; set; }
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> Clicked { get; set; }
-}

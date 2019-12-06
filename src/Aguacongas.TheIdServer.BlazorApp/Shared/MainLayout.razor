@@ -45,34 +45,3 @@
     <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/master/README.md" target="_blank">About</a>
 </div>
 <Toaster />
-
-@code {
-    private string _loginError;
-    private bool _notified;
-    private string ShowToast(string userName)
-    {
-        if (!_notified)
-        {
-            _notifier.Notify(new Notification
-            {
-                Header = userName,
-                Message = "Connected"
-            });
-            _notified = true;
-        }
-        return null;
-    }
-
-    private async Task LoginAsync()
-    {
-        try
-        {
-            await _provider.LoginAsync();
-        }
-        catch(Exception e)
-        {
-            _loginError = e.Message;
-            StateHasChanged();
-        }
-    }
-}

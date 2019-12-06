@@ -135,7 +135,7 @@ namespace IdentityServer4.Quickstart.UI
                     else
                     {
                         // user might have clicked on a malicious link - should be logged
-                        throw new Exception("invalid return URL");
+                        throw new InvalidReturnUrlException();
                     }
                 }
 
@@ -158,7 +158,7 @@ namespace IdentityServer4.Quickstart.UI
             // build a model so the logout page knows what to display
             var vm = await BuildLogoutViewModelAsync(logoutId);
 
-            if (vm.ShowLogoutPrompt == false)
+            if (!vm.ShowLogoutPrompt)
             {
                 // if the request for logout was properly authenticated from IdentityServer, then
                 // we don't need to show the prompt and can just log the user out directly.

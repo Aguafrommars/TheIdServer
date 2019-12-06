@@ -1,22 +1,23 @@
-﻿@page "/identities"
-@inherits EntitiesModel<Entity.IdentityResource>
+﻿@using Microsoft.AspNetCore.Identity
+@page "/users"
+@inherits EntitiesModel<IdentityUser>
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="Identies" Url="identityresource"></PageListHeader>
+        <PageListHeader Name="Users" Url="user"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
     <EntitiesGrid Items="EntityList" TableClass="table mb-0">
         <TableHeader>
-            <th class="w-25" scope="col">
+            <th class="w-50" scope="col">
                 <SortableHeader Property="Id"
                                 Text="id"
                                 GridState="GridState" />
             </th>
-            <th class="w-75" scope="col">
-                <SortableHeader Property="DisplayName"
+            <th class="w-50" scope="col">
+                <SortableHeader Property="UserName"
                                 Text="name"
                                 GridState="GridState" />
             </th>
@@ -31,12 +32,11 @@
     else
     {
         <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.IdentityResource item) => OnRowClicked(item)">
+                      RowClicked="(IdentityUser item) => OnRowClicked(item)">
             <RowTemplate>
-                <td class="w-25">@context.Id</td>
-                <td class="w-75">
-                    @context.DisplayName
-                    <div><em>@context.Description</em></div>
+                <td class="w-50">@context.Id</td>
+                <td class="w-50">
+                    @context.UserName
                 </td>
             </RowTemplate>
         </EntitiesGrid>

@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             }
 
-            return services.AddTransient<IIdentityProviderStore>(p => 
-                new IdentityProviderStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityProviderStore>>()));
+            return services.AddTransient<IAdminStore<IdentityUser>>(p => 
+                    new IdentityUserStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityUserStore>>()))
+                .AddTransient<IIdentityProviderStore>(p => 
+                    new IdentityProviderStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityProviderStore>>()));
         }
 
         private static IEnumerable<Type> GetEntityTypes()
@@ -43,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static object CreateStore(Func<IServiceProvider, Task<HttpClient>> getHttpClient, IServiceProvider provider, Type entityType)
         {
-            var adminStoreType = typeof(AdminStore<>)
+            var adminStoreType = typeof(EntityAdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
 
             var loggerType = typeof(ILogger<>).MakeGenericType(adminStoreType);

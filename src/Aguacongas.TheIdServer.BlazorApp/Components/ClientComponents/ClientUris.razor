@@ -65,10 +65,3 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
-
-@code {
-    private IEnumerable<ClientUri> GetClientUrls()
-    {
-        return Model.RedirectUris.Select(u => new ClientUri(u));
-    }
-}

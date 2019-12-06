@@ -15,7 +15,6 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="store">The store.</param>
         public IdentityUserController(IAdminStore<TUser> store): base(store)
         {
-
         }
     }
 }

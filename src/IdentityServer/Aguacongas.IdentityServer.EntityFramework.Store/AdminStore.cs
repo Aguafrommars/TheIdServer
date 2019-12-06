@@ -68,13 +68,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Set<T>().FindAsync(id).ConfigureAwait(false);
-            if (entity != null)
+            var entity = await _context.Set<T>().FindAsync(id, cancellationToken).ConfigureAwait(false);
+            if (entity == null)
             {
-                _context.Remove(entity);
-                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
+                throw new DbUpdateException($"Entity type {typeof(T).Name} at id {id} is not found");
             }
+            _context.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
         }
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
@@ -98,6 +99,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            var storedEntity = await _context.Set<T>().FindAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            if (storedEntity == null)
+            {
+                throw new DbUpdateException($"Entity type {typeof(T).Name} at id {entity.Id} is not found");
+            }
+            if (entity is IAuditable auditable)
+            {
+                var storedAuditable = storedEntity as IAuditable;
+                auditable.CreatedAt = storedAuditable.CreatedAt;
+                auditable.ModifiedAt = storedAuditable.ModifiedAt;
+            }
             _context.Update(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);

@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class, IEntityId
+    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
     {
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
 
         [Inject]
-        public IAdminStore<T> AdminStore { get; set; }
+        protected IAdminStore<T> AdminStore { get; set; }
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        protected NavigationManager NavigationManager { get; set; }
 
         protected IEnumerable<T> EntityList { get; private set; }
 
@@ -80,9 +80,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Never null")]
-        protected void OnRowClicked(T entity)
+        protected virtual void OnRowClicked(T entity)
         {
-            NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entity.Id}");
+            if (!(entity is IEntityId entityWithId))
+            {
+                throw new InvalidOperationException($"The identity type {typeof(T).Name} is not a 'IEntityId', override this method to navigate to the identity page.");
+            }
+            NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entityWithId.Id}");
         }
 
         private async Task GetEntityList(PageRequest pageRequest)

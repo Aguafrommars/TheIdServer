@@ -15,29 +15,3 @@
         </ul>
     </div>
 </div>
-
-@code {
-    [Parameter]
-    public Entity.IdentityResource Model { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.IdentityClaim> DeleteClaimClicked { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.IdentityClaim> ClaimValueChanged { get; set; }
-
-    private bool Validate(string claimType)
-    {
-        if (Model.IdentityClaims.Any(c => c.Type == claimType))
-        {
-            _notifier.Notify(new Notification
-            {
-                Header = "Invalid claim type",
-                IsError = true,
-                Message = $"This identity already contains the claim type {claimType}"
-            });
-            return false;
-        }
-        return true;
-    }
-}

@@ -35,17 +35,3 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
-@code {
-    protected GridState GridState { get; } = new GridState();
-
-    [Parameter]
-    public Entity.IdentityResource Model { get; set; }
-
-    [Parameter]
-    public EventCallback<Entity.IdentityProperty> DeleteEntityClicked { get; set; }
-
-    protected void OnDeleteEntityClicked(Entity.IdentityProperty entity)
-    {
-        DeleteEntityClicked.InvokeAsync(entity);
-    }
-}

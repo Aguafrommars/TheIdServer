@@ -9,9 +9,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class ClientGrantTypes
     {
-        [Inject]
-        private Notifier Notifier { get; set; }
-
         [Parameter]
         public Entity.Client Model { get; set; }
 
@@ -32,7 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             // spaces are not allowed in grant types
             if (inputValue.Contains(' '))
             {
-                Notifier.Notify(new Notification
+                _notifier.Notify(new Notification
                 {
                     Header = "Invalid grant type",
                     IsError = true,
@@ -49,7 +46,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
             if (grantTypes.Any(g => g.GrantType == inputValue))
             {
-                Notifier.Notify(new Notification
+                _notifier.Notify(new Notification
                 {
                     Header = "Invalid grant type",
                     IsError = true,
@@ -62,7 +59,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             if (grantTypes.Any(g => g.GrantType == "implicit") &&
                 (inputValue == "authorization_code" || inputValue == "hybrid"))
             {
-                Notifier.Notify(new Notification
+                _notifier.Notify(new Notification
                 {
                     Header = "Invalid grant type",
                     IsError = true,
@@ -74,7 +71,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             if (grantTypes.Any(g => g.GrantType == "authorization_code") &&
                 (inputValue == "implicit" || inputValue == "hybrid"))
             {
-                Notifier.Notify(new Notification
+                _notifier.Notify(new Notification
                 {
                     Header = "Invalid grant type",
                     IsError = true,
@@ -87,7 +84,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             if (grantTypes.Any(g => g.GrantType == "hybrid") &&
                 (inputValue == "implicit" || inputValue == "authorization_code"))
             {
-                Notifier.Notify(new Notification
+                _notifier.Notify(new Notification
                 {
                     Header = "Invalid grant type",
                     IsError = true,
