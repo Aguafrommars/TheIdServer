@@ -6,9 +6,9 @@
     public class PageRequest : GetRequest
     {
         /// <summary>
-        /// Gets or sets the number of items to take
+        /// Gets or sets the number of items to take. Default value is 10.
         /// </summary>
-        public int? Take { get; set; }
+        public int Take { get; set; } = 10;
 
         /// <summary>
         /// Gets or sets the number of items to skip

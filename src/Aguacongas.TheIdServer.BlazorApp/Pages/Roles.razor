@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@page "/roles"
+@inherits EntitiesModel<IdentityRole>
+
+<div class="row sticky-top bg-light">
+    <div class="col">
+        <PageListHeader Name="Roles" Url="role"></PageListHeader>
+    </div>
+    <div class="col">
+        <Filter TermChanged="OnFilterChanged" />
+    </div>
+    <EntitiesGrid Items="EntityList" TableClass="table mb-0">
+        <TableHeader>
+            <th class="w-50" scope="col">
+                <SortableHeader Property="Id"
+                                Text="id"
+                                GridState="GridState" />
+            </th>
+            <th class="w-50" scope="col">
+                <SortableHeader Property="Name"
+                                Text="name"
+                                GridState="GridState" />
+            </th>
+        </TableHeader>
+    </EntitiesGrid>
+</div>
+<div class="row">
+    @if (EntityList == null)
+    {
+        <p class="col"><em>Loading...</em></p>
+    }
+    else
+    {
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
+                      RowClicked="(IdentityRole item) => OnRowClicked(item)">
+            <RowTemplate>
+                <td class="w-50">@context.Id</td>
+                <td class="w-50">
+                    @context.Name
+                </td>
+            </RowTemplate>
+        </EntitiesGrid>
+    }
+</div>
+

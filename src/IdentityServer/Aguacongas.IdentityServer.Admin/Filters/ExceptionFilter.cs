@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
@@ -21,6 +22,13 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                     {
                         Detail = exception.Message
                     });
+                }
+                if (exception is IdentityException identityException)
+                {
+                    context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                    (
+                        identityException.Errors.ToDictionary(e => e.Code, e => new string[] { e.Description })
+                    ));
                 }
                 if (exception is DbUpdateException dbUpdateException)
                 {

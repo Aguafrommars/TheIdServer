@@ -51,11 +51,7 @@ namespace Aguacongas.IdentityServer.Store
 
             var count = odataQuery.Count();
 
-            var page = odataQuery.Skip(request.Skip ?? 0);
-            if (request.Take.HasValue)
-            {
-                page = page.Take(request.Take.Value);
-            }
+            var page = odataQuery.Skip(request.Skip ?? 0).Take(request.Take);
 
             return new PageResponse<IdentityProvider>
             {

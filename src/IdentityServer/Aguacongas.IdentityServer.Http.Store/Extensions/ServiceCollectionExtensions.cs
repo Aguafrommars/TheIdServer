@@ -29,8 +29,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             }
 
-            return services.AddTransient<IAdminStore<IdentityUser>>(p => 
+            return services.AddTransient<IIdentityUserStore<IdentityUser>>(p => 
                     new IdentityUserStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityUserStore>>()))
+                .AddTransient<IAdminStore<IdentityUser>>(p => p.GetRequiredService<IIdentityUserStore<IdentityUser>>())
+                .AddTransient<IIdentityRoleStore<IdentityRole>>(p =>
+                    new IdentityRoleStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityRoleStore>>()))
+                .AddTransient<IAdminStore<IdentityRole>>(p => p.GetRequiredService<IIdentityRoleStore<IdentityRole>>())
                 .AddTransient<IIdentityProviderStore>(p => 
                     new IdentityProviderStore(getHttpClient.Invoke(p), p.GetRequiredService<ILogger<IdentityProviderStore>>()));
         }

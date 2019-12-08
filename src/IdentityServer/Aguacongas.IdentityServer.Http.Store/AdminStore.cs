@@ -2,7 +2,6 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -72,7 +71,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        private string SerializeEntity(T entity)
+        protected string SerializeEntity<TEntity>(TEntity entity)
         {
             return JsonSerializer.Serialize(entity, JsonSerializerOptions);
         }

@@ -26,6 +26,11 @@ namespace Aguacongas.IdentityServer.Admin
                 controller.ControllerName = "IdentityUser";
                 return;
             }
+            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(IdentityRoleController<>))
+            {
+                controller.ControllerName = "IdentityRole";
+                return;
+            }
 
             if (controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericApiController<>))
             {

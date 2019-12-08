@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected IEnumerable<T> EntityList { get; private set; }
 
-        public GridState GridState => new GridState();
+        public GridState GridState { get; } = new GridState();
 
         protected abstract string SelectProperties { get; }
 

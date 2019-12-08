@@ -36,26 +36,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var query = _context.Set<T>() as IQueryable<T>;
-            query = query.Expand(request.Expand);
-
-            var odataQuery = query.OData();
-
-            if (!string.IsNullOrEmpty(request.Filter))
-            {
-                odataQuery = odataQuery.Filter(request.Filter);
-            }
-            if (!string.IsNullOrEmpty(request.OrderBy))
-            {
-                odataQuery = odataQuery.OrderBy(request.OrderBy);
-            }
+            var odataQuery = query.GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
-            var page = odataQuery.Skip(request.Skip ?? 0);
-            if (request.Take.HasValue)
-            {
-                page = page.Take(request.Take.Value);
-            }
+            var page = odataQuery.GetPage(request);
 
             var items = (await page.ToListAsync(cancellationToken).ConfigureAwait(false)) as IEnumerable<T>;
 

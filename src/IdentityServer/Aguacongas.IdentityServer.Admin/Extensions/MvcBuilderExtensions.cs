@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -18,7 +19,28 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns></returns>
+        public static IMvcBuilder AddIdentityServerAdmin(this IMvcBuilder builder)
+        {
+            return AddIdentityServerAdmin<IdentityUser, IdentityRole>(builder);
+        }
+
+        /// <summary>
+        /// Adds the identity server admin.
+        /// </summary>
+        /// <typeparam name="TUser">The type of the user.</typeparam>
+        /// <param name="builder">The builder.</param>
+        /// <returns></returns>
         public static IMvcBuilder AddIdentityServerAdmin<TUser>(this IMvcBuilder builder)
+        {
+            return AddIdentityServerAdmin<TUser, IdentityRole>(builder);
+        }
+
+        /// <summary>
+        /// Adds the identity server admin.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns></returns>
+        public static IMvcBuilder AddIdentityServerAdmin<TUser, TRole>(this IMvcBuilder builder)
         {
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()
@@ -48,7 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             return builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
-                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider<TUser>()));
+                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider<TUser, TRole>()));
         }
 
         /// <summary>
