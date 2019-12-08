@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Http.Store
 {
-    public class AdminStore<T> : HttpStoreBase<T>  where T : class
+    public class AdminStore<T> : HttpStoreBase<T>, IAdminStore<T> where T : class
     {
         private readonly PropertyInfo _idProperty;
         public AdminStore(Task<HttpClient> httpClientFactory, ILogger<AdminStore<T>> logger)
@@ -34,6 +33,12 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                         .ConfigureAwait(false);
                 }
             }
+        }
+
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        {
+            return await CreateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -71,29 +76,15 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        {
+            return await UpdateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         protected string SerializeEntity<TEntity>(TEntity entity)
         {
             return JsonSerializer.Serialize(entity, JsonSerializerOptions);
-        }
-    }
-
-    public class EntityAdminStore<T> : AdminStore<T>, IAdminStore<T> where T : class, IEntityId
-    {
-        public EntityAdminStore(Task<HttpClient> httpClientFactory, ILogger<AdminStore<T>> logger)
-            : base(httpClientFactory, logger)
-        {
-        }
-
-        public async Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            return await base.CreateAsync(entity as T, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            return await base.UpdateAsync(entity as T, cancellationToken)
-                .ConfigureAwait(false);
         }
     }
 }

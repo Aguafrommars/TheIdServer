@@ -2,7 +2,6 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -22,7 +21,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(claim), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/claim/add"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{roleId}/claim/add"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -32,16 +31,11 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<PageResponse<EntityClaim>> GetClaimsAsync(string roleId, PageRequest request, CancellationToken cancellationToken = default)
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/claim"), cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{roleId}/claim"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
@@ -56,17 +50,12 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(claim), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/claim/remove"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{roleId}/claim/remove"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
                 }
             }
-        }
-
-        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
     }
 }

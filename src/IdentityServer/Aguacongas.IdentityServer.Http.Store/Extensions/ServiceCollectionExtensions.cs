@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static object CreateStore(Func<IServiceProvider, Task<HttpClient>> getHttpClient, IServiceProvider provider, Type entityType)
         {
-            var adminStoreType = typeof(EntityAdminStore<>)
+            var adminStoreType = typeof(AdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
 
             var loggerType = typeof(ILogger<>).MakeGenericType(adminStoreType);

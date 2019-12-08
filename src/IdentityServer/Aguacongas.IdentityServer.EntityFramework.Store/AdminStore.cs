@@ -53,7 +53,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Set<T>().FindAsync(id, cancellationToken).ConfigureAwait(false);
+            var entity = await _context.Set<T>().FindAsync(new[] { id }, cancellationToken).ConfigureAwait(false);
             if (entity == null)
             {
                 throw new DbUpdateException($"Entity type {typeof(T).Name} at id {id} is not found");
@@ -76,15 +76,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return entity;
         }
 
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await CreateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var storedEntity = await _context.Set<T>().FindAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            var storedEntity = await _context.Set<T>().FindAsync(new[] { entity.Id }, cancellationToken)
+                .ConfigureAwait(false);
             if (storedEntity == null)
             {
                 throw new DbUpdateException($"Entity type {typeof(T).Name} at id {entity.Id} is not found");
@@ -101,9 +103,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return entity;
         }
 
-        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity as T, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

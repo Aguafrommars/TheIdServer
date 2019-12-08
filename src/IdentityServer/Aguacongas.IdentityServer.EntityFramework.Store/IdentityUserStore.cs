@@ -61,9 +61,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return ChechResult(result, entity);
         }
 
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await CreateAsync(entity as TUser, cancellationToken);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -168,9 +168,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return ChechResult(result, entity);
         }
 
-        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity as TUser, cancellationToken);
         }
 
         private async Task<TUser> GetUserAsync(string userId)

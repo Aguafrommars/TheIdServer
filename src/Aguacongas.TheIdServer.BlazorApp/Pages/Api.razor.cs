@@ -92,7 +92,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        protected override void SetModelEntityId(Type entityType, IEntityId result)
+        protected override void SetModelEntityId(Type entityType, object result)
         {
             if (entityType == typeof(ApiScope))
             {
@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 var modelScope = Model.Scopes.SingleOrDefault(s => s.Id == null && s.Scope == scope.Scope);
                 if (modelScope != null)
                 {
-                    modelScope.Id = result.Id;
+                    modelScope.Id = scope.Id;
                 }
             }
         }

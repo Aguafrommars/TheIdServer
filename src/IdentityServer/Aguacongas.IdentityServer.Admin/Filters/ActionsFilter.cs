@@ -25,9 +25,15 @@ namespace Aguacongas.IdentityServer.Admin.Filters
             var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
             if (actionDescriptor.ActionName == "Create")
             {
-                var value = objectResult.Value as IEntityId;
+                string id = null;
+                var value = objectResult.Value;
+                if (value != null)
+                {
+                    var idProperty = value.GetType().GetProperty("Id");
+                    id = idProperty?.GetValue(value)?.ToString();
+                }
                 var request = context.HttpContext.Request;
-                context.Result = new CreatedResult($"{request.Scheme}://{request.Host}{request.PathBase}{request.Path}/{value.Id}", objectResult.Value);
+                context.Result = new CreatedResult($"{request.Scheme}://{request.Host}{request.PathBase}{request.Path}/{id}", value);
                 return;
             }
 

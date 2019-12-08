@@ -2,7 +2,6 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -46,11 +45,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                         .ConfigureAwait(false);
                 }
             }
-        }
-
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<PageResponse<EntityClaim>> GetClaimsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
@@ -129,11 +123,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
             }
-        }
-
-        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The type.
         /// </value>
         [Key]
+        [Required]
         public string Type { get; set; }
 
         /// <summary>

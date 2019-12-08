@@ -31,7 +31,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<EntityClaim> AddClaimAsync(string roleId, EntityClaim claim, CancellationToken cancellationToken = default)
         {
-            var role = await GetRoleAsync(roleId);
+            claim = claim ?? throw new ArgumentNullException(nameof(claim));
+            var role = await GetRoleAsync(roleId);            
             var result = await _roleManager.AddClaimAsync(role, new Claim(claim.Type, claim.Value))
                 .ConfigureAwait(false);
             return ChechResult(result, claim);
@@ -51,9 +52,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             };
         }
 
-        public Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await CreateAsync(entity as TRole, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -95,7 +97,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var claims = await _roleManager.GetClaimsAsync(role)
                 .ConfigureAwait(false);
 
-            var odataQuery = claims.AsQueryable().GetODataQuery(request);
+            var odataQuery = claims
+                .Select(c => new EntityClaim { Type = c.Type, Value = c.Value })
+                .AsQueryable().GetODataQuery(request);
 
             var count = odataQuery.Count();
 
@@ -104,12 +108,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return new PageResponse<EntityClaim>
             {
                 Count = count,
-                Items = page.Select(c => new EntityClaim { Type = c.Type, Value = c.Value})
+                Items = page
             };
         }
 
         public async Task RemoveClaimAsync(string roleId, EntityClaim claim, CancellationToken cancellationToken = default)
         {
+            claim = claim ?? throw new ArgumentNullException(nameof(claim));
             var role = await GetRoleAsync(roleId);
             var result = await _roleManager.RemoveClaimAsync(role, new Claim(claim.Type, claim.Value));
             ChechResult(result, claim);
@@ -122,9 +127,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return ChechResult(result, entity);
         }
 
-        public Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity as TRole, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private async Task<TRole> GetRoleAsync(string roleId)

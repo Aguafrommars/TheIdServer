@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, IEntityId, ICloneable<T>, new()
+    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, new()
     {
         const int HEADER_HEIGHT = 95;
 
@@ -51,8 +51,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected abstract string BackUrl { get; }
 #pragma warning restore CA1056 // Uri properties should not be strings
 
-        private readonly Dictionary<Type, Dictionary<IEntityId, ModificationKind>> _changes =
-            new Dictionary<Type, Dictionary<IEntityId, ModificationKind>>();
+        private readonly Dictionary<Type, Dictionary<object, ModificationKind>> _changes =
+            new Dictionary<Type, Dictionary<object, ModificationKind>>();
 
         public virtual int Compare(Type x, Type y)
         {
@@ -75,34 +75,37 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Model = Create();
                 CreateEditContext(Model);
                 EntityCreated(Model);
-                State = Model.Clone();
+                State = CloneModel(Model);
                 return;
             }
 
-            Model = await AdminStore.GetAsync(Id, new GetRequest
-            {
-                Expand = Expand
-            }).ConfigureAwait(false);
+            Model = await GetModelAsync()
+                .ConfigureAwait(false);
             CreateEditContext(Model);
-            State = Model.Clone();
+            State = CloneModel(Model);
         }
 
         protected async Task HandleValidSubmit()
         {
+            if (!EditContext.Validate())
+            {
+                return;
+            }
+
             if (!_changes.Any())
             {
                 Notifier.Notify(new Models.Notification
                 {
-                    Header = Model.Id,
+                    Header = GetModelId(Model),
                     IsError = false,
                     Message = "No changes"
                 });
                 return;
             }
 
-            State = Model.Clone();
-            Model = State.Clone();
-            Id = Model.Id;
+            State = CloneModel(Model);
+            Model = CloneModel(State);
+            Id = GetModelId(Model);
             IsNew = false;
             StateHasChanged();
 
@@ -146,16 +149,46 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             Notifier.Notify(new Models.Notification
             {
-                Header = Model.Id,
+                Header = GetModelId(Model),
                 Message = "Saved"
             });
+        }
+
+        protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
+        {
+            entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            var entityType = typeof(TEntity);
+            var modifications = GetModifications(entityType);
+            Console.WriteLine($"Add created change for entity {entityType.Name} {GetModelId(entity)}");
+            modifications.Add(entity, ModificationKind.Add);
+        }
+
+        protected void EntityDeleted<TEntity>(TEntity entity) where TEntity : class
+        {
+            entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            var entityType = typeof(TEntity);
+            var modifications = GetModifications(entityType);
+            var id = GetModelId(entity);
+            if (id == null)
+            {
+                Console.WriteLine($"Remove change for entity {entityType.Name}");
+                modifications.Remove(entity);
+                return;
+            }
+            Console.WriteLine($"Add delete change for entity {entityType.Name} {id}");
+            modifications.Add(entity, ModificationKind.Delete);
+        }
+
+        protected ValueTask ScrollTo(string id)
+        {
+            return JSRuntime.InvokeVoidAsync("browserInteropt.scrollTo", id, -HEADER_HEIGHT);
         }
 
         protected async Task DeleteEntity()
         {
             try
             {
-                await AdminStore.DeleteAsync(Model.Id)
+                await AdminStore.DeleteAsync(GetModelId(Model))
                     .ConfigureAwait(false);
             }
             catch (ProblemException pe)
@@ -185,46 +218,48 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             Notifier.Notify(new Models.Notification
             {
-                Header = Model.Id,
+                Header = GetModelId(Model),
                 Message = "Deleted"
             });
         }
 
-        protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class, IEntityId
+        protected virtual Task<T> GetModelAsync()
         {
-            entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var entityType = typeof(TEntity);
-            var modifications = GetModifications(entityType);
-            Console.WriteLine($"Add created change for entity {entityType.Name} {entity.Id}");
-            modifications.Add(entity, ModificationKind.Add);
+            return AdminStore.GetAsync(Id, new GetRequest
+            {
+                Expand = Expand
+            });
         }
 
-        protected void EntityDeleted<TEntity>(TEntity entity) where TEntity : class, IEntityId
+        protected virtual T CloneModel(T entity)
         {
-            entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var entityType = typeof(TEntity);
-            var modifications = GetModifications(entityType);
-            if (entity.Id == null)
+            if (entity is ICloneable<T> cloneable)
             {
-                Console.WriteLine($"Remove change for entity {entityType.Name}");
-                modifications.Remove(entity);
+                return cloneable.Clone();
+            }
+            throw new NotSupportedException();
+        }
+        protected virtual string GetModelId<TEntity>(TEntity model)
+        {
+            if (model is IEntityId entity)
+            {
+                return entity.Id;
+            }
+            throw new NotSupportedException();
+        }
+       
+        protected virtual void SetModelEntityId(Type entityType, object result)
+        {
+        }
+
+        protected virtual void SetCreatedEntityId(object entity, object result)
+        {
+            if (entity is IEntityId entityId)
+            {
+                entityId.Id = ((IEntityId)result).Id;
                 return;
             }
-            Console.WriteLine($"Add delete change for entity {entityType.Name} {entity.Id}");
-            modifications.Add(entity, ModificationKind.Delete);
-        }
-
-        protected ValueTask ScrollTo(string id)
-        {
-            return JSRuntime.InvokeVoidAsync("browserInteropt.scrollTo", id, -HEADER_HEIGHT);
-        }
-        protected abstract T Create();
-        protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
-
-        protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
-
-        protected virtual void SetModelEntityId(Type entityType, IEntityId result)
-        {
+            throw new NotSupportedException();
         }
 
         protected virtual Type GetEntityType(FieldIdentifier identifier)
@@ -237,7 +272,45 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return identifier.Model as IEntityId;
         }
 
-        private async Task HandleMoficationList(Type entityType, Dictionary<IEntityId, ModificationKind> modificationList)
+        protected virtual Task<object> UpdateAsync(Type entityType, object entity)
+        {
+            return StoreAsync(entityType, entity, (store, e) =>
+            {
+                return store.UpdateAsync(e);
+            });
+        }
+
+        protected virtual Task<object> DeleteAsync(Type entityType, object entity)
+        {
+            return StoreAsync(entityType, entity, async (store, e) =>
+            {
+                await store.DeleteAsync(GetModelId(e))
+                .ConfigureAwait(false);
+                return e;
+            });
+        }
+
+        protected virtual Task<object> CreateAsync(Type entityType, object entity)
+        {
+            return StoreAsync(entityType, entity, (store, e) =>
+            {
+                return store.CreateAsync(e);
+            });
+        }
+
+        protected abstract T Create();
+        protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
+
+        protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
+
+        private static IEnumerable<object> GetModifiedEntities(Dictionary<object, ModificationKind> modificationList, ModificationKind kind)
+        {
+            return modificationList
+                            .Where(m => m.Value == kind)
+                            .Select(m => m.Key);
+        }
+
+        private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
@@ -247,7 +320,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 SanetizeEntityToSaved(entity);
                 var result = await CreateAsync(entityType, entity)
                     .ConfigureAwait(false);
-                entity.Id = result.Id;
+                SetCreatedEntityId(entity, result);
                 SetModelEntityId(entityType, result);
             }
             var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
@@ -263,39 +336,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 await DeleteAsync(entityType, entity)
                     .ConfigureAwait(false);
             }
-        }
-
-        private static IEnumerable<IEntityId> GetModifiedEntities(Dictionary<IEntityId, ModificationKind> modificationList, ModificationKind kind)
-        {
-            return modificationList
-                            .Where(m => m.Value == kind)
-                            .Select(m => m.Key);
-        }
-
-        private Task<IEntityId> UpdateAsync(Type entityType, IEntityId entity)
-        {
-            return StoreAsync(entityType, entity, (store, e) =>
-           {
-               return store.UpdateAsync(e);
-           });
-        }
-
-        private Task<IEntityId> DeleteAsync(Type entityType, IEntityId entity)
-        {
-            return StoreAsync(entityType, entity, async (store, e) =>
-            {
-                await store.DeleteAsync(e.Id)
-                .ConfigureAwait(false);
-                return e;
-            });
-        }
-
-        private Task<IEntityId> CreateAsync(Type entityType, IEntityId entity)
-        {
-            return StoreAsync(entityType, entity, (store, e) =>
-            {
-                return store.CreateAsync(e);
-            });
         }
 
         private void CreateEditContext(T model)
@@ -316,18 +356,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
         }
 
-        private Dictionary<IEntityId, ModificationKind> GetModifications(Type entityType)
+        private Dictionary<object, ModificationKind> GetModifications(Type entityType)
         {
-            if (!_changes.TryGetValue(entityType, out Dictionary<IEntityId, ModificationKind> modifications))
+            if (!_changes.TryGetValue(entityType, out Dictionary<object, ModificationKind> modifications))
             {
-                modifications = new Dictionary<IEntityId, ModificationKind>();
+                modifications = new Dictionary<object, ModificationKind>();
                 _changes.Add(entityType, modifications);
             }
 
             return modifications;
         }
 
-        private async Task<IEntityId> StoreAsync(Type entityType, IEntityId entity, Func<IAdminStore, IEntityId, Task<IEntityId>> action)
+        private async Task<object> StoreAsync(Type entityType, object entity, Func<IAdminStore, object, Task<object>> action)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
 

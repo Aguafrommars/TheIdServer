@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(201)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Writer")]
-        public Task<EntityClaim> AddClaimAsync(string id, EntityClaim claim)
+        public Task<EntityClaim> AddClaimAsync(string id, [FromBody] EntityClaim claim)
             => _store.AddClaimAsync(id, claim);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Writer")]
-        public Task RemoveClaimAsync(string id, EntityClaim claim)
+        public Task RemoveClaimAsync(string id, [FromBody] EntityClaim claim)
             => _store.RemoveClaimAsync(id, claim);
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(201)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Writer")]
-        public Task<string> AddRoleAsync(string id, string role)
+        public Task<string> AddRoleAsync(string id, [FromBody] string role)
             => _store.AddRoleAsync(id, role);
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Writer")]
-        public Task RemoveLoginAsync(string id, Login login)
+        public Task RemoveLoginAsync(string id, [FromBody] Login login)
             => _store.RemoveLoginAsync(id, login);
 
         /// <summary>

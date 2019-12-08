@@ -1,5 +1,4 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -15,7 +14,7 @@ namespace Aguacongas.IdentityServer.Store
         /// <param name="entity">The entity.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<IEntityId> CreateAsync(IEntityId entity, CancellationToken cancellationToken = default);
+        Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates an entity.
@@ -23,7 +22,7 @@ namespace Aguacongas.IdentityServer.Store
         /// <param name="entity">The entity.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<IEntityId> UpdateAsync(IEntityId entity, CancellationToken cancellationToken = default);
+        Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an entity.
