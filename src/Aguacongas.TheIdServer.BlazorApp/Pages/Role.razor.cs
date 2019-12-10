@@ -11,11 +11,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Role
     {
-        private GridState _gridState = new GridState();
+        private readonly GridState _gridState = new GridState();
         private List<EntityClaim> _claims;
         private List<EntityClaim> _claimsState;
 
-        private IIdentityRoleStore<IdentityRole> _store => AdminStore as IIdentityRoleStore<IdentityRole>;
+        private IIdentityRoleStore<IdentityRole> IdentityRoleStore => AdminStore as IIdentityRoleStore<IdentityRole>;
 
         protected override string Expand => null;
 
@@ -55,7 +55,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             var role = await base.GetModelAsync();
 
-            var claimsResponse = await _store.GetClaimsAsync(role.Id, null);
+            var claimsResponse = await IdentityRoleStore.GetClaimsAsync(role.Id, null);
 
             _claims = claimsResponse.Items.ToList();
             _claimsState = new List<EntityClaim>(_claims);
@@ -80,7 +80,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entityType == typeof(EntityClaim))
             {
-                return await _store.AddClaimAsync(Model.Id, entity as EntityClaim);
+                return await IdentityRoleStore.AddClaimAsync(Model.Id, entity as EntityClaim);
             }
             return base.CreateAsync(entityType, entity);
         }
@@ -89,8 +89,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entityType == typeof(EntityClaim))
             {
-                await _store.RemoveClaimAsync(Model.Id, entity as EntityClaim);
-                return await _store.AddClaimAsync(Model.Id, entity as EntityClaim);
+                await IdentityRoleStore.RemoveClaimAsync(Model.Id, entity as EntityClaim);
+                return await IdentityRoleStore.AddClaimAsync(Model.Id, entity as EntityClaim);
             }
 
             return await base.UpdateAsync(entityType, entity);
@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entityType == typeof(EntityClaim))
             {
-                await _store.RemoveClaimAsync(Model.Id, entity as EntityClaim);
+                await IdentityRoleStore.RemoveClaimAsync(Model.Id, entity as EntityClaim);
                 return entity;
             }
             return await base.DeleteAsync(entityType, entity);

@@ -21,7 +21,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(claim), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/claim/add"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{userId}/claim/add"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(role), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/role"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{userId}/role"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/claim"), cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{userId}/claim"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/login"), cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{userId}/login"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/login"), cancellationToken)
+            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{userId}/login"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
@@ -92,7 +92,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(claim), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/claim/remove"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{userId}/claim/remove"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -106,7 +106,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(login), Encoding.UTF8, "application/json"))
             {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/login/remove"), content, cancellationToken)
+                using (var response = await httpClient.PostAsync(GetUri(httpClient, $"{BaseUri}/{userId}/login/remove"), content, cancellationToken)
                     .ConfigureAwait(false))
                 {
                     await EnsureSuccess(response).ConfigureAwait(false);
@@ -118,7 +118,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var response = await httpClient.DeleteAsync(GetUri(httpClient, $"{BaseUri}/role/{role}"), cancellationToken)
+            using (var response = await httpClient.DeleteAsync(GetUri(httpClient, $"{BaseUri}/{userId}/role/{role}"), cancellationToken)
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
