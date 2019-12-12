@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an authorization code
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class AuthorizationCode : IAuditable
+    public class AuthorizationCode : IAuditable, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

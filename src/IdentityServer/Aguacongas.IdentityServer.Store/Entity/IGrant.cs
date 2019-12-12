@@ -28,6 +28,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The subject identifier.
         /// </value>
-        string SubjectId { get; set; }
+        string UserId { get; set; }
     }
 }

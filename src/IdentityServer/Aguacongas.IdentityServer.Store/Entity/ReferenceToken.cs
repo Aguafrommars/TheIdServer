@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a reference token
     /// </summary>
     /// <seealso cref="IGrant" />
-    public class ReferenceToken : IGrant
+    public class ReferenceToken : IGrant, IUserSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         [MaxLength(200)]
-        public string SubjectId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the data.

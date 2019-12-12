@@ -23,7 +23,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<IEnumerable<Consent>> GetAllUserConsent(string subjectId)
         {
             return await _context.UserConstents
-                .Where(c => c.SubjectId == subjectId)
+                .Where(c => c.UserId == subjectId)
                 .Select(c => _serializer.Deserialize<Consent>(c.Data))
                 .ToListAsync()
                 .ConfigureAwait(false);

@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<PageResponse<Login>> GetLoginsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<PageResponse<UserLogin>> GetLoginsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
                 .ConfigureAwait(false))
             {
                 await EnsureSuccess(response).ConfigureAwait(false);
-                return await DeserializeResponse<PageResponse<Login>>(response)
+                return await DeserializeResponse<PageResponse<UserLogin>>(response)
                     .ConfigureAwait(false);
             }
         }
@@ -100,7 +100,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task RemoveLoginAsync(string userId, Login login, CancellationToken cancellationToken = default)
+        public async Task RemoveLoginAsync(string userId, UserLogin login, CancellationToken cancellationToken = default)
         {
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);

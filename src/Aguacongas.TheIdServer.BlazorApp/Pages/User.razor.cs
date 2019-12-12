@@ -15,8 +15,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private readonly GridState _gridState = new GridState();
         private List<EntityClaim> _claims;
         private List<EntityClaim> _claimsState;
-        private List<Login> _logins;
-        private List<Login> _loginsState;
+        private List<UserLogin> _logins;
+        private List<UserLogin> _loginsState;
         private List<string> _roles;
         private List<string> _rolesState;
 
@@ -79,7 +79,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var loginsRespone = await IdentityUserStore.GetLoginsAsync(user.Id, null);
 
             _logins = loginsRespone.Items.ToList();
-            _loginsState = new List<Login>(_logins);
+            _loginsState = new List<UserLogin>(_logins);
 
             var rolesResponse = await IdentityUserStore.GetRolesAsync(user.Id, null);
 
@@ -95,7 +95,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 return claim.Type == null && claim.Value == null ? null : $"{claim.Type}/{claim.Value}";
             }
-            if (model is Login login)
+            if (model is UserLogin login)
             {
                 return $"{login.LoginProvider}/{login.ProviderKey}";
             }
@@ -141,9 +141,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 await IdentityUserStore.RemoveClaimAsync(Model.Id, entity as EntityClaim);
                 return entity;
             }
-            if (entityType == typeof(Login))
+            if (entityType == typeof(UserLogin))
             {
-                await IdentityUserStore.RemoveLoginAsync(Model.Id, entity as Login);
+                await IdentityUserStore.RemoveLoginAsync(Model.Id, entity as UserLogin);
                 return entity;
             }
             if (entityType == typeof(string))

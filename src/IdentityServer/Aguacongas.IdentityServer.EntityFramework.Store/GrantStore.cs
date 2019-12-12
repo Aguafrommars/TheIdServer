@@ -147,7 +147,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
             return await _context.Set<TEntity>()
-                .FirstOrDefaultAsync(c => c.SubjectId == subjectId & c.ClientId == clientId)
+                .FirstOrDefaultAsync(c => c.UserId == subjectId & c.ClientId == clientId)
                 .ConfigureAwait(false);
         }
 
@@ -157,7 +157,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                SubjectId = subjectId,
+                UserId = subjectId,
                 ClientId = client.Id,
                 Data = _serializer.Serialize(dto)
             };

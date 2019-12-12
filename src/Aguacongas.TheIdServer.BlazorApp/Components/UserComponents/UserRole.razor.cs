@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components
+namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 {
-    public partial class ClaimType
+    public partial class UserRole
     {
         private readonly PageRequest _pageRequest = new PageRequest
         {
-            Select = "Type",
+            Select = "Name",
             Take = 5
         };
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Type);
+        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Name);
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
-            _pageRequest.Filter = $"contains(Type,'{term}')";
+            _pageRequest.Filter = $"contains(Name,'{term}')";
             var response = await _store.GetAsync(_pageRequest)
                 .ConfigureAwait(false);
 
-            return response.Items.Select(c => c.Type);
+            return response.Items.Select(r => r.Name);
         }
 
         protected override void SetValue(string inputValue)
         {
-            Entity.Type = inputValue;
+            Entity.Name = inputValue;
         }
     }
 }

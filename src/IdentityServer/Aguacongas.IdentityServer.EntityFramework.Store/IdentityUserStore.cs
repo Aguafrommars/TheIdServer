@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,29 +12,19 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityUserStore<TUser> : IIdentityUserStore<TUser> where TUser : IdentityUser
+    public class IdentityUserStore<TUser> : IAdminStore<User>,
+        IAdminStore<UserClaim>,
+        IAdminStore<UserLogin>,
+        IAdminStore<UserRole>
+        where TUser : IdentityUser
     {
         private readonly UserManager<TUser> _userManager;
 
-        public IdentityUserStore(UserManager<TUser> userManager)
+        public IdentityUserStore(UserManager<TUser> userManager, 
+            IdentityDbContext<TUser> identityContext,
+            IdentityServerDbContext context)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            if (!userManager.SupportsQueryableUsers)
-            {
-                throw new ArgumentException($"{nameof(userManager)} must support queryable users");
-            }
-            if (!userManager.SupportsUserClaim)
-            {
-                throw new ArgumentException($"{nameof(userManager)} must support user claim");
-            }
-            if (!userManager.SupportsUserLogin)
-            {
-                throw new ArgumentException($"{nameof(userManager)} must support user login");
-            }
-            if (!userManager.SupportsUserRole)
-            {
-                throw new ArgumentException($"{nameof(userManager)} must support user role");
-            }
         }
 
         public async Task<EntityClaim> AddClaimAsync(string userId, EntityClaim claim, CancellationToken cancellationToken = default)
@@ -112,13 +103,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 }));
         }
 
-        public async Task<PageResponse<Login>> GetLoginsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<PageResponse<UserLogin>> GetLoginsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(userId);
             var logins = await _userManager.GetLoginsAsync(user)
                 .ConfigureAwait(false);
             
-            return GetPage(request, logins.Select(l => new Login
+            return GetPage(request, logins.Select(l => new UserLogin
             {
                 LoginProvider = l.LoginProvider,
                 ProviderDisplayName = l.ProviderDisplayName,
@@ -147,7 +138,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             ChechResult(result, claim);
         }
 
-        public async Task RemoveLoginAsync(string userId, Login login, CancellationToken cancellationToken = default)
+        public async Task RemoveLoginAsync(string userId, UserLogin login, CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(userId);
             var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);

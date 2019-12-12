@@ -6,8 +6,9 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// <summary>
     /// Define a user consent
     /// </summary>
-    /// <seealso cref="Aguacongas.IdentityServer.Store.Entity.IGrant" />
-    public class UserConsent : IGrant
+    /// <seealso cref="IGrant" />
+    /// <seealso cref="IUserSubEntity" />
+    public class UserConsent : IGrant, IUserSubEntity, IClientSubEntity
     {
         /// <summary>
         /// Gets the identifier.
@@ -34,7 +35,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         [MaxLength(200)]
-        public string SubjectId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the data.

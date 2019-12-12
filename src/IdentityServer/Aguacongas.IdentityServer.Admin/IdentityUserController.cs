@@ -119,7 +119,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Writer")]
-        public Task RemoveLoginAsync(string id, [FromBody] Login login)
+        public Task RemoveLoginAsync(string id, [FromBody] UserLogin login)
             => _store.RemoveLoginAsync(id, login);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [Authorize(Policy = "Id4-Reader")]
-        public Task<PageResponse<Login>> GetLoginsAsync(string id, PageRequest request)
+        public Task<PageResponse<UserLogin>> GetLoginsAsync(string id, PageRequest request)
             => _store.GetLoginsAsync(id, request);
     }
 }
