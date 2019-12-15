@@ -1,5 +1,5 @@
-﻿@inherits AutoCompleteModel<IdentityRole>
-@inject IAdminStore<IdentityRole> _store
+﻿@inherits AutoCompleteModel<Entity.Role>
+@inject IAdminStore<Entity.Role> _store
 
 @if (IsReadOnly)
 {
@@ -13,8 +13,9 @@
 else
 {
     <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
-               @oninput="OnInputChanged" />
+        <input type="text" class="form-control new-claim" placeholder="role" value="@SelectedValue"
+               @oninput="OnInputChanged"
+               @onfocus="() => OnInputChanged(new ChangeEventArgs())"/>
         <div class="input-group-append">
             <span class="input-group-text oi oi-plus" />
         </div>

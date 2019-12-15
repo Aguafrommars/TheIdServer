@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Community.OData.Linq;
+using Microsoft.OData.Edm;
 using System.Linq;
 
 namespace Microsoft.EntityFrameworkCore
@@ -20,11 +21,11 @@ namespace Microsoft.EntityFrameworkCore
             return query;
         }
 
-        public static ODataQuery<T> GetODataQuery<T>(this IQueryable<T> query, PageRequest request) where T: class
+        public static ODataQuery<T> GetODataQuery<T>(this IQueryable<T> query, PageRequest request, IEdmModel edmModel = null) where T: class
         {
             var odataQuery = query
                 .Expand(request?.Expand)
-                .OData();
+                .OData(edmModel: edmModel);
 
             if (!string.IsNullOrEmpty(request?.Filter))
             {

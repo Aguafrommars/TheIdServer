@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @page "/roles"
-@inherits EntitiesModel<IdentityRole>
+@inherits EntitiesModel<Entity.Role>
 
 <div class="row sticky-top bg-light">
     <div class="col">
@@ -32,7 +32,7 @@
     else
     {
         <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(IdentityRole item) => OnRowClicked(item)">
+                      RowClicked="(Entity.Role item) => OnRowClicked(item)">
             <RowTemplate>
                 <td class="w-50">@context.Id</td>
                 <td class="w-50">

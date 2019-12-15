@@ -3,75 +3,79 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityUserStore<TUser> : IAdminStore<User>,
-        IAdminStore<UserClaim>,
-        IAdminStore<UserLogin>,
-        IAdminStore<UserRole>
-        where TUser : IdentityUser
+    public class IdentityUserStore<TUser> : IAdminStore<User>
+        where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
+        private readonly IdentityDbContext<TUser> _context;
+        private readonly ILogger<IdentityUserStore<TUser>> _logger;
 
         public IdentityUserStore(UserManager<TUser> userManager, 
-            IdentityDbContext<TUser> identityContext,
-            IdentityServerDbContext context)
+            IdentityDbContext<TUser> context,
+            ILogger<IdentityUserStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<EntityClaim> AddClaimAsync(string userId, EntityClaim claim, CancellationToken cancellationToken = default)
+        public async Task<User> CreateAsync(User entity, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(userId);
-            var result = await _userManager.AddClaimAsync(user, new Claim(claim.Type, claim.Value))
-                .ConfigureAwait(false);
-            return ChechResult(result, claim);
-        }
-
-        public async Task<string> AddRoleAsync(string userId, string role, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var result = await _userManager.AddToRoleAsync(user, role);
-            return ChechResult(result, role);
-        }
-
-        public async Task<TUser> CreateAsync(TUser entity, CancellationToken cancellationToken = default)
-        {
-            var result = string.IsNullOrEmpty(entity.PasswordHash)
-                ? await _userManager.CreateAsync(entity)
+            var user = entity.ToUser<TUser>();
+            var result = string.IsNullOrEmpty(entity.Password)
+                ? await _userManager.CreateAsync(user)
                     .ConfigureAwait(false)
-                : await _userManager.CreateAsync(entity, entity.PasswordHash)
+                : await _userManager.CreateAsync(user, entity.Password)
                     .ConfigureAwait(false);
-            return ChechResult(result, entity);
+            if (result.Succeeded)
+            {
+                entity.Id = user.Id;
+                _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
+                return entity;
+            }
+            throw new IdentityException
+            {
+                Errors = result.Errors
+            };
         }
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as TUser, cancellationToken);
+            return await CreateAsync(entity as User, cancellationToken);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(id);
-            await _userManager.DeleteAsync(user)
+            var result = await _userManager.DeleteAsync(user)
                 .ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Entity {EntityId} deleted", user.Id, user);
+                return;
+            }
+            throw new IdentityException
+            {
+                Errors = result.Errors
+            };
         }
 
-        public Task<TUser> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+        public async Task<User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            return _userManager.Users
-                .Expand(request?.Expand)
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FindAsync(new object[] { id }, cancellationToken)
+                .ConfigureAwait(false);
+            return user.ToUserEntity();
         }
 
-        public async Task<PageResponse<TUser>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<PageResponse<User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var odataQuery = _userManager.Users.GetODataQuery(request);
@@ -80,88 +84,42 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var page = odataQuery.GetPage(request);
 
-            var items = (await page.ToListAsync(cancellationToken).ConfigureAwait(false)) as IEnumerable<TUser>;
+            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            return new PageResponse<TUser>
+            return new PageResponse<User>
             {
                 Count = count,
-                Items = items
+                Items = items.Select(u => u.ToUserEntity())
             };
         }
 
-        public async Task<PageResponse<EntityClaim>> GetClaimsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<User> UpdateAsync(User entity, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(userId);
-            var claims = await _userManager.GetClaimsAsync(user)
+            var user = await GetUserAsync(entity.Id)
                 .ConfigureAwait(false);
-
-            return GetPage(request, claims
-                .Select(c => new EntityClaim
-                {
-                    Type = c.Type,
-                    Value = c.Value
-                }));
-        }
-
-        public async Task<PageResponse<UserLogin>> GetLoginsAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var logins = await _userManager.GetLoginsAsync(user)
+            user.Email = entity.Email;
+            user.EmailConfirmed = entity.EmailConfirmed;
+            user.TwoFactorEnabled = entity.TwoFactorEnabled;
+            user.LockoutEnabled = entity.LockoutEnabled;
+            user.LockoutEnd = entity.LockoutEnd;
+            user.PhoneNumber = entity.PhoneNumber;
+            user.PhoneNumberConfirmed = entity.PhoneNumberConfirmed;
+            var result = await _userManager.UpdateAsync(user)
                 .ConfigureAwait(false);
-            
-            return GetPage(request, logins.Select(l => new UserLogin
+            if (result.Succeeded)
             {
-                LoginProvider = l.LoginProvider,
-                ProviderDisplayName = l.ProviderDisplayName,
-                ProviderKey = l.ProviderKey
-            }));
-        }
-
-        public async Task<PageResponse<string>> GetRolesAsync(string userId, PageRequest request, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var roles = await _userManager.GetRolesAsync(user)
-                .ConfigureAwait(false);
-            return new PageResponse<string>
+                _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
+                return entity;
+            }
+            throw new IdentityException
             {
-                Count = roles.Count,
-                Items = roles.Where(r => r.Contains(request.Filter))
-                    .Skip(request.Skip ?? 0)
-                    .Take(request.Take)
+                Errors = result.Errors
             };
-        }
-
-        public async Task RemoveClaimAsync(string userId, EntityClaim claim, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var result = await _userManager.RemoveClaimAsync(user, new Claim(claim.Type, claim.Value));
-            ChechResult(result, claim);
-        }
-
-        public async Task RemoveLoginAsync(string userId, UserLogin login, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
-            ChechResult(result, login);
-        }
-
-        public async Task RemoveRoleAsync(string userId, string role, CancellationToken cancellationToken = default)
-        {
-            var user = await GetUserAsync(userId);
-            var result = await _userManager.RemoveFromRoleAsync(user, role);
-            ChechResult(result, role);
-        }
-
-        public async Task<TUser> UpdateAsync(TUser entity, CancellationToken cancellationToken = default)
-        {
-            var result = await _userManager.UpdateAsync(entity)
-                .ConfigureAwait(false);
-            return ChechResult(result, entity);
         }
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as TUser, cancellationToken);
+            return await UpdateAsync(entity as User, cancellationToken);
         }
 
         private async Task<TUser> GetUserAsync(string userId)
@@ -174,32 +132,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
 
             return user;
-        }
-
-        private TValue ChechResult<TValue>(IdentityResult result, TValue value)
-        {
-            if (result.Succeeded)
-            {
-                return value;
-            }
-            throw new IdentityException
-            {
-                Errors = result.Errors
-            };
-        }
-        private static PageResponse<T> GetPage<T>(PageRequest request, IEnumerable<T> roles) where T : class
-        {
-            var odataQuery = roles.AsQueryable().GetODataQuery(request);
-
-            var count = odataQuery.Count();
-
-            var page = odataQuery.GetPage(request);
-
-            return new PageResponse<T>
-            {
-                Count = count,
-                Items = page
-            };
         }
     }
 }

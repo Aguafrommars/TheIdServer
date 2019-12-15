@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer
             
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
-                .AddIdentityServer4EntityFrameworkStores<ApplicationUser>(options =>
+                .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentityProviderStore();
 
@@ -55,7 +55,7 @@ namespace Aguacongas.TheIdServer
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerAdmin<ApplicationUser>();
+                .AddIdentityServerAdmin();
 
             services.Configure<IISOptions>(iis =>
             {

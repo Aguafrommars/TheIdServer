@@ -1,6 +1,7 @@
 ﻿@page "/role"
 @page "/role/{id}"
-@inherits EntityModel<IdentityRole>
+@inherits EntityModel<Entity.Role>
+@inject IAdminStore<Entity.RoleClaim> _roleClaimStore
 
 @if (Model == null)
 {

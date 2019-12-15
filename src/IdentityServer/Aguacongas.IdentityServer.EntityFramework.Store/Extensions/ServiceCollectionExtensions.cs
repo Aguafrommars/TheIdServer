@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -20,9 +21,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4EntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+            where TContext : IdentityDbContext<IdentityUser>
         {
-            return AddIdentityServer4EntityFrameworkStores<IdentityUser, IdentityRole>(services, optionsAction);
+            return AddIdentityServer4EntityFrameworkStores<IdentityUser, IdentityRole, TContext>(services, optionsAction);
         }
 
         /// <summary>
@@ -32,10 +34,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TUser>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
-            where TUser : IdentityUser
+        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TUser, TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+            where TUser : IdentityUser, new()
+            where TContext : IdentityDbContext<TUser>
         {
-            return AddIdentityServer4EntityFrameworkStores<TUser, IdentityRole>(services, optionsAction);
+            return AddIdentityServer4EntityFrameworkStores<TUser, IdentityRole, TContext>(services, optionsAction);
         }
         /// <summary>
         /// Adds the identity server4 entity framework stores.
@@ -43,14 +46,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TUser, TRole>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
-            where TUser: IdentityUser
-            where TRole: IdentityRole
+        public static IServiceCollection AddIdentityServer4EntityFrameworkStores<TUser, TRole, TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+            where TUser: IdentityUser, new()
+            where TRole: IdentityRole, new()
+            where TContext: IdentityDbContext<TUser>
         {
             var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
                 !t.IsAbstract &&
-                t.GetInterface("IEntityId") != null);
+                !t.IsGenericType &&
+                t.GetInterface("IEntityId") != null &&
+                t.GetInterface("IRoleSubEntity") == null &&
+                t.GetInterface("IUserSubEntity") == null);
 
             foreach (var entityType in entityTypeList)
             {
@@ -62,6 +69,8 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return services.AddDbContext<IdentityServerDbContext>(optionsAction)
+                .AddScoped<IdentityDbContext<TUser>>(p => p.GetRequiredService<TContext>())
+                .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole, string>)
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<ICorsPolicyService, CorsPolicyService>()
                 .AddTransient<IResourceStore, ResourceStore>()
@@ -69,9 +78,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore, RefreshTokenStore>()
                 .AddTransient<IReferenceTokenStore, ReferenceTokenStore>()
                 .AddTransient<IUserConsentStore, UserConsentStore>()
-                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
-                .AddTransient<IIdentityUserStore<TUser>, IdentityUserStore<TUser>>()
-                .AddTransient<IIdentityRoleStore<TRole>, IdentityRoleStore<TRole>>();
+                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()               
+                .AddTransient<IAdminStore<User>, IdentityUserStore<TUser>>()
+                .AddTransient<IAdminStore<UserLogin>, IdentityUserLoginStore<TUser>>()
+                .AddTransient<IAdminStore<UserClaim>, IdentityUserClaimStore<TUser>>()
+                .AddTransient<IAdminStore<UserRole>, IdentityUserRoleStore<TUser>>()
+                .AddTransient<IAdminStore<UserToken>, IdentityUserTokenStore<TUser>>()
+                .AddTransient<IAdminStore<Role>, IdentityRoleStore<TUser, TRole>>()
+                .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>();
         }
     }
 }

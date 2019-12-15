@@ -1,26 +1,22 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class User
     {
         private readonly GridState _gridState = new GridState();
-        private List<EntityClaim> _claims;
-        private List<EntityClaim> _claimsState;
-        private List<UserLogin> _logins;
-        private List<UserLogin> _loginsState;
-        private List<string> _roles;
-        private List<string> _rolesState;
-
-        private IIdentityUserStore<IdentityUser> IdentityUserStore => AdminStore as IIdentityUserStore<IdentityUser>;
+        private List<Entity.UserClaim> _claims;
+        private List<Entity.UserClaim> _claimsState;
+        private List<Entity.UserLogin> _logins;
+        private List<Entity.UserLogin> _loginsState;
+        private List<Entity.Role> _roles;
+        private List<Entity.Role> _rolesState;
 
         protected override string Expand => null;
 
@@ -28,11 +24,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override string BackUrl => "roles";
 
-        protected override IdentityUser Create()
+        protected override async Task OnInitializedAsync()
         {
-            _claims = new List<EntityClaim>();
-            _claimsState = new List<EntityClaim>();
-            return new IdentityUser();
+            await base.OnInitializedAsync();
+            AddEmptyRole();
+        }
+
+        protected override Entity.User Create()
+        {
+            _claims = new List<Entity.UserClaim>();
+            _claimsState = new List<Entity.UserClaim>();
+            return new Entity.User();
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
@@ -45,113 +47,89 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // no navigation property
         }
 
-        protected override IdentityUser CloneModel(IdentityUser entity)
-        {
-            return new IdentityUser
-            {
-                Id = entity.Id,
-                AccessFailedCount = entity.AccessFailedCount,
-                ConcurrencyStamp = entity.ConcurrencyStamp,
-                Email = entity.Email,
-                EmailConfirmed = entity.EmailConfirmed,
-                LockoutEnabled = entity.LockoutEnabled,
-                LockoutEnd = entity.LockoutEnd,
-                NormalizedEmail = entity.NormalizedEmail,
-                NormalizedUserName = entity.NormalizedUserName,
-                PasswordHash = entity.PasswordHash,
-                PhoneNumber = entity.PhoneNumber,
-                PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
-                SecurityStamp = entity.SecurityStamp,
-                TwoFactorEnabled = entity.TwoFactorEnabled,
-                UserName = entity.UserName
-            };
-        }
-
-        protected override async Task<IdentityUser> GetModelAsync()
+        protected override async Task<Entity.User> GetModelAsync()
         {
             var user = await base.GetModelAsync();
 
-            var claimsResponse = await IdentityUserStore.GetClaimsAsync(user.Id, null);
+            var pageRequest = new PageRequest
+            {
+                Filter = $"UserId eq '{user.Id}'"
+            };
+
+            var userClaimStore = GetStore<Entity.UserClaim>();
+            var claimsResponse = await userClaimStore.GetAsync(pageRequest);
 
             _claims = claimsResponse.Items.ToList();
-            _claimsState = new List<EntityClaim>(_claims);
+            _claimsState = new List<Entity.UserClaim>(_claims);
 
-            var loginsRespone = await IdentityUserStore.GetLoginsAsync(user.Id, null);
+            var userLoginStore = GetStore<Entity.UserLogin>();
+            var loginsRespone = await userLoginStore.GetAsync(pageRequest);
 
             _logins = loginsRespone.Items.ToList();
-            _loginsState = new List<UserLogin>(_logins);
+            _loginsState = new List<Entity.UserLogin>(_logins);
 
-            var rolesResponse = await IdentityUserStore.GetRolesAsync(user.Id, null);
+            var userRoleStore = GetStore<Entity.UserRole>();
+            var userRolesResponse = await userRoleStore.GetAsync(pageRequest);
 
-            _roles = rolesResponse.Items.ToList();
-            _rolesState = new List<string>(_roles);
+            var userRoles = userRolesResponse.Items;
+            if (userRoles.Any())
+            {
+                var userStore = GetStore<Entity.Role>();
+                var rolesResponse = await userStore.GetAsync(new PageRequest
+                {
+                    Filter = string.Join(" or ", userRolesResponse.Items.Select(r => $"Id eq '{r.RoleId}'"))
+                });
+                _roles = rolesResponse.Items.ToList();
+            }
+            else
+            {
+                _roles = new List<Entity.Role>();
+            }
+            _rolesState = new List<Entity.Role>(_roles);
 
             return user;
         }
 
-        protected override string GetModelId<TEntity>(TEntity model)
+        protected async override Task<object> CreateAsync(Type entityType, object entity)
         {
-            if (model is EntityClaim claim)
+            if (entity is Entity.Role role)
             {
-                return claim.Type == null && claim.Value == null ? null : $"{claim.Type}/{claim.Value}";
-            }
-            if (model is UserLogin login)
-            {
-                return $"{login.LoginProvider}/{login.ProviderKey}";
-            }
-            if (model is string role)
-            {
+                var roleStore = GetStore<Entity.Role>();
+                var roleResponse = await roleStore.GetAsync(new PageRequest
+                {
+                    Select = "Id",
+                    Take = 1,
+                    Filter = $"Name eq '{role.Name}'"
+                });
+
+                var roles = roleResponse.Items;
+                if (roles.Any())
+                {
+                    await base.CreateAsync(typeof(Entity.UserRole), new Entity.UserRole
+                    {
+                        RoleId = roles.First().Id,
+                        UserId = Model.Id
+                    });                   
+                }
                 return role;
             }
-            if (model is IdentityUser user)
-            {
-                return user.Id;
-            }
-            return base.GetModelId(model);
+            return await base.CreateAsync(entityType, entity);
         }
 
-        protected override async Task<object> CreateAsync(Type entityType, object entity)
+        protected override Task<object> DeleteAsync(Type entityType, object entity)
         {
-            if (entityType == typeof(EntityClaim))
+            if (entity is Entity.Role role)
             {
-                return await IdentityUserStore.AddClaimAsync(Model.Id, entity as EntityClaim);
+                return base.DeleteAsync(typeof(Entity.UserRole), new Entity.UserRole
+                {
+                    Id = $"{Model.Id}@{role.Id}"
+                });
             }
-            if (entityType == typeof(string))
-            {
-                return await IdentityUserStore.AddRoleAsync(Model.Id, entity as string);
-            }
-            return base.CreateAsync(entityType, entity);
+            return base.DeleteAsync(entityType, entity);
         }
-
-        protected override async Task<object> UpdateAsync(Type entityType, object entity)
+        private void AddEmptyRole()
         {
-            if (entityType == typeof(EntityClaim))
-            {
-                await IdentityUserStore.RemoveClaimAsync(Model.Id, entity as EntityClaim);
-                return await IdentityUserStore.AddClaimAsync(Model.Id, entity as EntityClaim);
-            }
-
-            return await base.UpdateAsync(entityType, entity);
-        }
-
-        protected override async Task<object> DeleteAsync(Type entityType, object entity)
-        {
-            if (entityType == typeof(EntityClaim))
-            {
-                await IdentityUserStore.RemoveClaimAsync(Model.Id, entity as EntityClaim);
-                return entity;
-            }
-            if (entityType == typeof(UserLogin))
-            {
-                await IdentityUserStore.RemoveLoginAsync(Model.Id, entity as UserLogin);
-                return entity;
-            }
-            if (entityType == typeof(string))
-            {
-                await IdentityUserStore.RemoveRoleAsync(Model.Id, entity as string);
-                return entity;
-            }
-            return await base.DeleteAsync(entityType, entity);
+            _roles.Add(new Entity.Role());
         }
 
         private void OnFilterChanged(string term)
@@ -162,20 +140,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             _logins = _loginsState.Where(l => l.ProviderDisplayName.Contains(term))
                 .ToList();
 
-            _roles = _rolesState.Where(r => r.Contains(term))
+            _roles = _rolesState.Where(r => r.Name.Contains(term))
                 .ToList();
+
+            AddEmptyRole();
         }
 
         private void OnAddClaimClicked()
         {
-            var claim = new EntityClaim();
+            var claim = new Entity.UserClaim();
             _claims.Add(claim);
             _claimsState.Add(claim);
             EntityCreated(claim);
             StateHasChanged();
         }
 
-        private void OnDeleteClaimClicked(EntityClaim claim)
+        private void OnDeleteClaimClicked(Entity.UserClaim claim)
         {
             _claimsState.Remove(claim);
             _claims.Remove(claim);
@@ -183,5 +163,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
+        private void OnDeleteRoleClicked(Entity.Role role)
+        {
+            _rolesState.Remove(role);
+            _roles.Remove(role);
+            EntityDeleted(role);
+            StateHasChanged();
+        }
+
+        private void OnRoleValueChanged(Entity.Role role)
+        {
+            EntityCreated(role);
+            AddEmptyRole();
+            StateHasChanged();
+        }
     }
 }

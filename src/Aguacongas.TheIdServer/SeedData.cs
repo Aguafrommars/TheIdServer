@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace Aguacongas.TheIdServer
 {
 #pragma warning disable S1118 // Utility classes should not have public constructors
-    public class SeedData
+    public static class SeedData
 #pragma warning restore S1118 // Utility classes should not have public constructors
     {
         public static void EnsureSeedData(string connectionString)
@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer
             var services = new ServiceCollection();
             services.AddLogging()
                 .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
-                .AddIdentityServer4EntityFrameworkStores<ApplicationUser>(options => 
+                .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options => 
                     options.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentity<ApplicationUser, IdentityRole>()

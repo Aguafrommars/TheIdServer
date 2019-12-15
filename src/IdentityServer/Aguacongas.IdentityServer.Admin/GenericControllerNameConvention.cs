@@ -20,17 +20,7 @@ namespace Aguacongas.IdentityServer.Admin
             if (!controller.ControllerType.IsGenericType)
             {             
                 return;
-            }
-            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(IdentityUserController<>))
-            {
-                controller.ControllerName = "IdentityUser";
-                return;
-            }
-            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(IdentityRoleController<>))
-            {
-                controller.ControllerName = "IdentityRole";
-                return;
-            }
+            }            
 
             if (controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericApiController<>))
             {

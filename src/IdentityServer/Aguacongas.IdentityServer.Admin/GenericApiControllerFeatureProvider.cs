@@ -10,7 +10,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// Generic API contoller feature
     /// </summary>
     /// <seealso cref="IApplicationFeatureProvider{ControllerFeature}" />
-    public class GenericApiControllerFeatureProvider<TUser, TRole> :
+    public class GenericApiControllerFeatureProvider :
         IApplicationFeatureProvider<ControllerFeature>
     {
         /// <summary>
@@ -40,16 +40,6 @@ namespace Aguacongas.IdentityServer.Admin
                     feature.Controllers.Add(controllerType);
                 }
             }
-
-            var identityUserControllerType = typeof(IdentityUserController<>)
-                    .MakeGenericType(typeof(TUser).GetTypeInfo())
-                    .GetTypeInfo();
-            feature.Controllers.Add(identityUserControllerType);
-
-            var identityRoleControllerType = typeof(IdentityRoleController<>)
-                    .MakeGenericType(typeof(TRole).GetTypeInfo())
-                    .GetTypeInfo();
-            feature.Controllers.Add(identityRoleControllerType);
         }
     }
 

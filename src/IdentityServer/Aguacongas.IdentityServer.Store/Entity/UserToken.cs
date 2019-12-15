@@ -3,12 +3,9 @@
 namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
-    /// User role
+    /// User token
     /// </summary>
-    /// <seealso cref="IEntityId" />
-    /// <seealso cref="IUserSubEntity" />
-    /// <seealso cref="IRoleSubEntity" />
-    public class UserRole : IEntityId, IUserSubEntity, IRoleSubEntity
+    public class UserToken : IEntityId, IUserSubEntity
     {
         /// <summary>
         /// Gets the identifier.
@@ -26,14 +23,30 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         public string UserId { get; set; }
-
         /// <summary>
-        /// Gets or sets the role id.
+        /// Gets or sets the login provider.
         /// </summary>
         /// <value>
-        /// The role identifier.
+        /// The login provider.
         /// </value>
         [Required]
-        public string RoleId { get; set; }
+        public string LoginProvider { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        [Required]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        public string Value { get; set; }
     }
 }

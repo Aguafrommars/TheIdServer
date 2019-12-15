@@ -1,6 +1,8 @@
-﻿@page "/user"
+﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
+
+@page "/user"
 @page "/user/{id}"
-@inherits EntityModel<IdentityUser>
+@inherits EntityModel<Entity.User>
 
 @if (Model == null)
 {
@@ -39,6 +41,69 @@ else
             <ValidationSummary class="col" />
         </div>
         <div class="entity-details">
+            <div class="card mb-3">
+                <div class="card-body">
+                    @if (IsNew)
+                    {
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="description">
+                                password
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeText Name="password" Placeholder="password" @bind-Value="@Model.Password" />
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="email">
+                            email
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="email" @bind-Value="@Model.Email" />
+                            <div>
+                                <AuthorizeCheckbox Name="email-confirmed" Label="email confirmed" @bind-Value="@Model.EmailConfirmed" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="phone-number">
+                            phone number
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Name="phone-number" @bind-Value="@Model.PhoneNumber" />
+                            <div>
+                                <AuthorizeCheckbox Name="phone-number-confirmed" Label="phone number confirmed" @bind-Value="@Model.PhoneNumberConfirmed" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="lokoutend">
+                            lockout end
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeDate Name="lokoutend" @bind-Value="@Model.LockoutEnd" />
+                            <div>
+                                <AuthorizeCheckbox Name="lockout-enabled" Label="lockout enabled" @bind-Value="@Model.LockoutEnabled" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label">
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeCheckbox Name="two-factor-enabled" Label="two factor enabled" @bind-Value="@Model.TwoFactorEnabled" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="access-failed-count">
+                            access failed count
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <input id="access-failed-count" type="text" readonly class="form-control-plaintext" value="@Model.AccessFailedCount" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
                     <EntitySubGridTitle Text="Claims"
@@ -73,6 +138,16 @@ else
                             </td>
                         </RowTemplate>
                     </EntitiesGrid>
+                </div>
+            </div>
+            <div id="roles" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Roles</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <UserRoles Model="@_roles" DeleteRoleClicked="OnDeleteRoleClicked" RoleValueChanged="OnRoleValueChanged" />
                 </div>
             </div>
         </div>

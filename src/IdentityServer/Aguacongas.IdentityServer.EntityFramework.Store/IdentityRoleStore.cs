@@ -1,49 +1,43 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityRoleStore<TRole> : IIdentityRoleStore<TRole> where TRole : IdentityRole
+    public class IdentityRoleStore<TUser, TRole> : IAdminStore<Role>
+        where TRole : IdentityRole, new()
+        where TUser : IdentityUser
     {
         private readonly RoleManager<TRole> _roleManager;
-
-        public IdentityRoleStore(RoleManager<TRole> roleManager)
+        private readonly IdentityDbContext<TUser, TRole, string> _context;
+        private readonly ILogger<IdentityRoleStore<TUser, TRole>> _logger;
+        public IdentityRoleStore(RoleManager<TRole> roleManager, 
+            IdentityDbContext<TUser, TRole, string> context,
+            ILogger<IdentityRoleStore<TUser, TRole>> logger)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            if (!roleManager.SupportsQueryableRoles)
-            {
-                throw new ArgumentException($"{nameof(roleManager)} must support queryable users");
-            }
-            if (!roleManager.SupportsRoleClaims)
-            {
-                throw new ArgumentException($"{nameof(roleManager)} must support role claims");
-            }
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<EntityClaim> AddClaimAsync(string roleId, EntityClaim claim, CancellationToken cancellationToken = default)
+        public async Task<Role> CreateAsync(Role entity, CancellationToken cancellationToken = default)
         {
-            claim = claim ?? throw new ArgumentNullException(nameof(claim));
-            var role = await GetRoleAsync(roleId);            
-            var result = await _roleManager.AddClaimAsync(role, new Claim(claim.Type, claim.Value))
-                .ConfigureAwait(false);
-            return ChechResult(result, claim);
-        }
-
-        public async Task<TRole> CreateAsync(TRole entity, CancellationToken cancellationToken = default)
-        {
-            var result = await _roleManager.CreateAsync(entity)
+            var role = entity.ToRole<TRole>();
+            role.Id = Guid.NewGuid().ToString();
+            var result = await _roleManager.CreateAsync(role)
                 .ConfigureAwait(false);
             if (result.Succeeded)
             {
+                entity.Id = role.Id;
+                _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
                 return entity;
             }
             throw new IdentityException
@@ -54,83 +48,65 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as TRole, cancellationToken)
+            return await CreateAsync(entity as Role, cancellationToken)
                 .ConfigureAwait(false);
         }
+
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var role = await GetRoleAsync(id);
             await _roleManager.DeleteAsync(role)
                 .ConfigureAwait(false);
+            _logger.LogInformation("Entity {EntityId} deleted", role.Id, role);
         }
 
-        public Task<TRole> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+        public async Task<Role> UpdateAsync(Role entity, CancellationToken cancellationToken = default)
         {
-            return _roleManager.Roles
-                .Expand(request?.Expand)
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var role = await GetRoleAsync(entity.Id);
+            role.Name = entity.Name;
+            var result = await _roleManager.UpdateAsync(role)
+                .ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
+                return entity;
+            }
+            throw new IdentityException
+            {
+                Errors = result.Errors
+            };
         }
 
-        public async Task<PageResponse<TRole>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        {
+            return await UpdateAsync(entity as Role, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<Role> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+        {
+            var role = await _context.Roles.FindAsync(new object[] { id }, cancellationToken)
+                .ConfigureAwait(false);
+            return role.ToEntity();
+        }
+
+        public async Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var query = _roleManager.Roles;
-            var odataQuery = query.GetODataQuery(request);
+            var odataQuery = _context.Roles.GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             var page = odataQuery.GetPage(request);
 
-            var items = (await page.ToListAsync(cancellationToken).ConfigureAwait(false)) as IEnumerable<TRole>;
+            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            return new PageResponse<TRole>
+            return new PageResponse<Role>
             {
                 Count = count,
-                Items = items
+                Items = items.Select(r => r.ToEntity())
             };
-        }
-
-        public async Task<PageResponse<EntityClaim>> GetClaimsAsync(string roleId, PageRequest request, CancellationToken cancellationToken = default)
-        {
-            var role = await GetRoleAsync(roleId);
-            var claims = await _roleManager.GetClaimsAsync(role)
-                .ConfigureAwait(false);
-
-            var odataQuery = claims
-                .Select(c => new EntityClaim { Type = c.Type, Value = c.Value })
-                .AsQueryable().GetODataQuery(request);
-
-            var count = odataQuery.Count();
-
-            var page = odataQuery.GetPage(request);
-
-            return new PageResponse<EntityClaim>
-            {
-                Count = count,
-                Items = page
-            };
-        }
-
-        public async Task RemoveClaimAsync(string roleId, EntityClaim claim, CancellationToken cancellationToken = default)
-        {
-            claim = claim ?? throw new ArgumentNullException(nameof(claim));
-            var role = await GetRoleAsync(roleId);
-            var result = await _roleManager.RemoveClaimAsync(role, new Claim(claim.Type, claim.Value));
-            ChechResult(result, claim);
-        }
-
-        public async Task<TRole> UpdateAsync(TRole entity, CancellationToken cancellationToken = default)
-        {
-            var result = await _roleManager.UpdateAsync(entity)
-                .ConfigureAwait(false);
-            return ChechResult(result, entity);
-        }
-
-        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
-        {
-            return await UpdateAsync(entity as TRole, cancellationToken)
-                .ConfigureAwait(false);
         }
 
         private async Task<TRole> GetRoleAsync(string roleId)
@@ -143,17 +119,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
 
             return role;
-        }
-        private TValue ChechResult<TValue>(IdentityResult result, TValue value)
-        {
-            if (result.Succeeded)
-            {
-                return value;
-            }
-            throw new IdentityException
-            {
-                Errors = result.Errors
-            };
         }
     }
 }

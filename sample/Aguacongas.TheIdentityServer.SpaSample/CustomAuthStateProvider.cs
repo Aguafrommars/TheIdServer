@@ -119,8 +119,8 @@ namespace Aguacongas.TheIdentityServer.SpaSample
         private async Task GetTokensAsync(StringValues code)
         {
             var discoveryResponse = await GetDicoveryDocumentAsync();
-            
-            using (var authorizationCodeRequest = new AuthorizationCodeTokenRequest
+
+            using var authorizationCodeRequest = new AuthorizationCodeTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 ClientId = "spa",
@@ -130,39 +130,35 @@ namespace Aguacongas.TheIdentityServer.SpaSample
                     .Replace("=", "")
                     .Replace('+', '-')
                     .Replace('/', '_')
-            })
+            };
+            var authorizationCodeResponse = await _httpClient.RequestAuthorizationCodeTokenAsync(authorizationCodeRequest)
+  .ConfigureAwait(false);
+            if (authorizationCodeResponse.IsError)
             {
-                var authorizationCodeResponse = await _httpClient.RequestAuthorizationCodeTokenAsync(authorizationCodeRequest)
-                    .ConfigureAwait(false);
-                if (authorizationCodeResponse.IsError)
-                {
-                    throw new InvalidOperationException($"{authorizationCodeResponse.Error} {authorizationCodeResponse.ErrorDescription}");
-                }
-                await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "tokens", authorizationCodeResponse.Json.ToString());
-                await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "expireAt", DateTime.UtcNow.AddSeconds(authorizationCodeResponse.ExpiresIn));
-
-                using (var userInfoRequest = new UserInfoRequest
-                {
-                    Address = discoveryResponse.UserInfoEndpoint,
-                    Token = authorizationCodeResponse.AccessToken
-                })
-                {
-                    var userInfoResponse = await _httpClient.GetUserInfoAsync(userInfoRequest)
-                        .ConfigureAwait(false);
-
-                    if (userInfoResponse.IsError)
-                    {
-                        throw new InvalidOperationException($"{userInfoResponse.Error}");
-                    }
-
-                    await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem",
-                        "claims", 
-                        System.Text.Json.JsonSerializer.Serialize(userInfoResponse
-                            .Claims
-                            .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));                   
-                    _userStore.User = CreateUser(userInfoResponse.Claims, authorizationCodeResponse.AccessToken);
-                }
+                throw new InvalidOperationException($"{authorizationCodeResponse.Error} {authorizationCodeResponse.ErrorDescription}");
             }
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "tokens", authorizationCodeResponse.Json.ToString());
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "expireAt", DateTime.UtcNow.AddSeconds(authorizationCodeResponse.ExpiresIn));
+
+            using UserInfoRequest userInfoRequest = new UserInfoRequest
+            {
+                Address = discoveryResponse.UserInfoEndpoint,
+                Token = authorizationCodeResponse.AccessToken
+            };
+            var userInfoResponse = await _httpClient.GetUserInfoAsync(userInfoRequest)
+  .ConfigureAwait(false);
+
+            if (userInfoResponse.IsError)
+            {
+                throw new InvalidOperationException($"{userInfoResponse.Error}");
+            }
+
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem",
+                "claims",
+                System.Text.Json.JsonSerializer.Serialize(userInfoResponse
+                    .Claims
+                    .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));
+            _userStore.User = CreateUser(userInfoResponse.Claims, authorizationCodeResponse.AccessToken);
         }
 
         private ClaimsPrincipal CreateUser(IEnumerable<Claim> claims, string accesToken)
@@ -178,10 +174,8 @@ namespace Aguacongas.TheIdentityServer.SpaSample
 
         private string GetChallenge(byte[] verifier)
         {
-            using(var sha256 = SHA256.Create())
-            {
-                return ToUrlBase64String(sha256.ComputeHash(verifier));                
-            }
+            using var sha256 = SHA256.Create();
+            return ToUrlBase64String(sha256.ComputeHash(verifier));
         }
 
         private string ToUrlBase64String(byte[] value)

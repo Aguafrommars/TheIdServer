@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
@@ -8,7 +6,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Role entity
     /// </summary>
     /// <seealso cref="IEntityId" />
-    public class Role : IEntityId
+    public class Role : IEntityId, ICloneable<Role>
     {
         /// <summary>
         /// Gets the identifier.
@@ -27,11 +25,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the claims.
+        /// Clones this instance.
         /// </summary>
-        /// <value>
-        /// The claims.
-        /// </value>
-        public virtual ICollection<RoleClaim> Claims { get; set; }
+        /// <returns></returns>
+        public Role Clone()
+        {
+            return MemberwiseClone() as Role;
+        }
     }
 }

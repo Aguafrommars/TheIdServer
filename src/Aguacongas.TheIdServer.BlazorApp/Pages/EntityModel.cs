@@ -298,6 +298,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
+        protected virtual IAdminStore GetStore(Type entityType)
+        {
+            return Provider.GetRequiredService(typeof(IAdminStore<>).MakeGenericType(entityType)) as IAdminStore;
+        }
+
+        protected virtual IAdminStore<TEntity> GetStore<TEntity>() where TEntity: class
+        {
+            return GetStore(typeof(TEntity)) as IAdminStore<TEntity>;
+        }
+
         protected abstract T Create();
         protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
 
@@ -376,7 +386,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 throw new InvalidOperationException("The entity is non editable");
             }
 
-            var store = Provider.GetRequiredService(typeof(IAdminStore<>).MakeGenericType(entityType)) as IAdminStore;
+            var store = GetStore(entityType);
             entity = await action.Invoke(store, entity)
                 .ConfigureAwait(false);
 
