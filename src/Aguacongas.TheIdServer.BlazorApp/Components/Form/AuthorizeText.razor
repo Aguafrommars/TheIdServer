@@ -1,11 +1,11 @@
 ﻿@inherits InputText
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <InputText name="@Name" class="form-control" placeholder="@Placeholder"
+        <InputText id="@Id" class="form-control" placeholder="@Placeholder"
                    ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
     </Authorized>
     <NotAuthorized>
-        <div name="@Name" class="col-form-label">
+        <div id="@Id" class="col-form-label">
             @Value
         </div>
     </NotAuthorized>

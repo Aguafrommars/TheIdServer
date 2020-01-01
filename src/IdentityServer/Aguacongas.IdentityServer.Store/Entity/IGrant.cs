@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aguacongas.IdentityServer.Store.Entity
+﻿namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
     /// Class implemting this intercace are grant

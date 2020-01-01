@@ -1,12 +1,12 @@
 ﻿@inherits InputDate<DateTime?>
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <InputDate name="@Name" class="form-control" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+        <InputDate id="@Id" class="form-control" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
     </Authorized>
     <NotAuthorized>
         @if (Value.HasValue)
         {
-            <div class="col-form-label">
+            <div id="@Id" class="col-form-label">
                 @Value.Value.ToString()
             </div>
         }

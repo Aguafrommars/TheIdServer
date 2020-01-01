@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Aguacongas.TheIdServer.Models;
 
 namespace Aguacongas.TheIdServer.Data
 {

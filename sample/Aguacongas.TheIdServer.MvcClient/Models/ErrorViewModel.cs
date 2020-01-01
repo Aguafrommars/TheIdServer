@@ -1,5 +1,3 @@
-using System;
-
 namespace Aguacongas.TheIdServer.MvcClient.Models
 {
     public class ErrorViewModel

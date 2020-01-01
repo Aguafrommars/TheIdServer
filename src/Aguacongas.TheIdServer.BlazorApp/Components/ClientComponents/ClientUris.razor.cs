@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+using System.Collections.Generic;
 using System.Linq;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents

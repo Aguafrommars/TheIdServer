@@ -1,6 +1,6 @@
 ﻿<AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <div class="btn-group">
+        <div id="@Id" class="btn-group">
             <button class="btn dropdown-toggle @CssSubClass" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @SelectedValue
             </button>
@@ -13,7 +13,7 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        <div name="@Name" class="col-form-label">
+        <div id="@Id" class="col-form-label">
             @SelectedValue
         </div>
     </NotAuthorized>

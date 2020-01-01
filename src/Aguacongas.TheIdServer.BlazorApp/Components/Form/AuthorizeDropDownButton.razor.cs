@@ -6,7 +6,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
     public partial class AuthorizeDropDownButton
     {
         [Parameter]
-        public string Name { get; set; }
+        public string Id { get; set; }
 
         [Parameter]
         public string CssSubClass { get; set; }
