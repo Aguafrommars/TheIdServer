@@ -1,5 +1,5 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
-using Aguacongas.TheIdServer.BlazorApp.Extensions;
+﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;

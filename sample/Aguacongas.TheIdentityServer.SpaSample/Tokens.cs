@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Aguacongas.TheIdentityServer.SpaSample
+﻿namespace Aguacongas.TheIdentityServer.SpaSample
 {
     public class Tokens
     {

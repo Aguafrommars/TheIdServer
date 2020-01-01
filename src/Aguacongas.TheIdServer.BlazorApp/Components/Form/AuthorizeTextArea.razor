@@ -1,10 +1,10 @@
 ﻿@inherits InputTextArea
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <InputTextArea class="form-control" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+        <InputTextArea id="@Id" class="form-control" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
     </Authorized>
     <NotAuthorized>
-        <div class="col-form-label">
+        <div id="@Id" class="col-form-label">
             @Value
         </div>
     </NotAuthorized>

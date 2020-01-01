@@ -5,7 +5,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
     public partial class AuthorizeText
     {
         [Parameter]
-        public string Name { get; set; }
+        public string Id { get; set; }
         [Parameter]
         public string Placeholder { get; set; }
     }
