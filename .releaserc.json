@@ -1,0 +1,36 @@
+{
+  "tagFormat": "${version}",
+  "noCi": true,
+  "verifyConditions": [ "@semantic-release/changelog", "@semantic-release/git" ],
+  "analyzeCommits": {
+    "preset": "angular",
+    "parserOpts": {
+      "noteKeywords": [ "BREAKING CHANGE", "BREAKING CHANGES", "BREAKING" ]
+    }
+  },
+  "verifyRelease": {
+    "path": "@semantic-release/exec",
+    "verifyReleaseCmd": "echo ${nextRelease.version} > nextversion.txt"
+  },
+  "prepare": [
+    "@semantic-release/changelog",
+    {
+      "path": "@semantic-release/git",
+      "assets": [ "CHANGELOG.md" ],
+      "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+    }
+  ],
+  "generateNotes": {
+    "path": "@semantic-release/release-notes-generator",
+    "preset": "angular",
+    "parserOpts": {
+      "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+    },
+    "writerOpts": {
+      "commitsSort": ["subject", "scope"]
+    }
+  },
+  "publish": [],
+  "fail": [],
+  "success": []
+}

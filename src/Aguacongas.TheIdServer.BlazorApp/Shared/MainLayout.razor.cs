@@ -28,7 +28,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
         {
             try
             {
-                await _provider.LoginAsync();
+                await _provider.LoginAsync()
+                    .ConfigureAwait(false);
             }
             catch (Exception e)
             {

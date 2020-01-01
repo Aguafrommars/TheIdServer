@@ -5,7 +5,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class Toaster
     {
-        private List<Notification> _notifications = new List<Notification>();
+        private readonly List<Notification> _notifications = new List<Notification>();
 
         protected override void OnInitialized()
         {

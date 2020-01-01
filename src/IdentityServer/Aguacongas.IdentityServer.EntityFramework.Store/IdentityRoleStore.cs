@@ -55,7 +55,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var role = await GetRoleAsync(id);
+            var role = await GetRoleAsync(id)
+                .ConfigureAwait(false);
             await _roleManager.DeleteAsync(role)
                 .ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} deleted", role.Id, role);
@@ -63,7 +64,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<Role> UpdateAsync(Role entity, CancellationToken cancellationToken = default)
         {
-            var role = await GetRoleAsync(entity.Id);
+            var role = await GetRoleAsync(entity.Id)
+                .ConfigureAwait(false);
             role.Name = entity.Name;
             var result = await _roleManager.UpdateAsync(role)
                 .ConfigureAwait(false);

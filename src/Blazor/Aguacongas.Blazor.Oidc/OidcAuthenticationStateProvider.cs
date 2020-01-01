@@ -27,8 +27,8 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         private readonly Task<AuthorizationOptions> _getOptionsTask;
         private readonly ILogger<OidcAuthenticationStateProvider> _logger;
 
-        public OidcAuthenticationStateProvider(HttpClient httpClient, 
-            NavigationManager navigationManager, 
+        public OidcAuthenticationStateProvider(HttpClient httpClient,
+            NavigationManager navigationManager,
             IJSRuntime JsRuntime,
             IUserStore userStore,
             Task<AuthorizationOptions> getOptionsTask,
@@ -44,7 +44,8 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         public async Task LoginAsync()
         {
             var options = await _getOptionsTask.ConfigureAwait(false);
-            var discoveryResponse = await GetDicoveryDocumentAsync(options);
+            var discoveryResponse = await GetDicoveryDocumentAsync(options)
+                .ConfigureAwait(false);
 
             var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
 
@@ -74,7 +75,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             {
                 options = await _getOptionsTask.ConfigureAwait(false);
             }
-            catch(HttpRequestException e)
+            catch (HttpRequestException e)
             {
                 _logger.LogError(e, e.Message);
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
@@ -85,12 +86,14 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             var queryParams = QueryHelpers.ParseQuery(uri.Query);
             if (_userStore.User == null)
             {
-                await GetUserFromSessionStorage(options);
+                await GetUserFromSessionStorage(options)
+                    .ConfigureAwait(false);
             }
             if (_userStore.User == null && queryParams.ContainsKey("code"))
             {
                 var code = queryParams["code"];
-                await GetTokensAsync(code, options);
+                await GetTokensAsync(code, options)
+                    .ConfigureAwait(false);
             }
             if (_userStore.User != null)
             {
@@ -98,7 +101,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                 return new AuthenticationState(_userStore.User);
             }
             _logger.LogInformation("No user, returning not authenticate identity");
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new  Claim[] { new Claim("Oidc.NotConnected", "") })));
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
         }
 
         private async Task GetUserFromSessionStorage(AuthorizationOptions options)
@@ -114,11 +117,11 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                 var tokensString = await GetItemAsync<string>(options.TokensStorageKey);
                 var tokens = JsonSerializer.Deserialize<Tokens>(tokensString);
                 var claimsString = await GetItemAsync<string>(options.ClaimsStorageKey);
-                var claims = JsonSerializer.Deserialize<IEnumerable<SerializableClaim>>(claimsString); 
+                var claims = JsonSerializer.Deserialize<IEnumerable<SerializableClaim>>(claimsString);
 
-                _userStore.User = CreateUser(options, 
-                    claims.Select(c => new Claim(c.Type, c.Value)), 
-                    tokens.AccessToken, 
+                _userStore.User = CreateUser(options,
+                    claims.Select(c => new Claim(c.Type, c.Value)),
+                    tokens.AccessToken,
                     tokens.TokenType);
             }
         }
@@ -141,7 +144,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private async Task GetTokensAsync(StringValues code, AuthorizationOptions options)
         {
-            using (var authorizationCodeRequest = new AuthorizationCodeTokenRequest
+            using var authorizationCodeRequest = new AuthorizationCodeTokenRequest
             {
                 Address = await GetItemAsync<string>(options.TokenEndpointStorageKey),
                 ClientId = options.ClientId,
@@ -151,19 +154,11 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                     .Replace("=", "")
                     .Replace('+', '-')
                     .Replace('/', '_')
-            })
+            };
+            try
             {
-                TokenResponse tokenResponse;
-                try
-                {
-                    tokenResponse = await _httpClient.RequestAuthorizationCodeTokenAsync(authorizationCodeRequest)
-                        .ConfigureAwait(false);
-                }
-                catch(HttpRequestException e)
-                {
-                    _logger.LogError("{Error}", e.Message);
-                    return;
-                }
+                var tokenResponse = await _httpClient.RequestAuthorizationCodeTokenAsync(authorizationCodeRequest)
+                    .ConfigureAwait(false);
 
                 if (tokenResponse.IsError)
                 {
@@ -172,59 +167,54 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                 }
 
                 await SetItemAsync(options.TokensStorageKey, tokenResponse.Json.ToString());
-                await SetItemAsync(options.ExpireAtStorageKey, 
+                await SetItemAsync(options.ExpireAtStorageKey,
                     DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn));
 
-                using (var userInfoRequest = new UserInfoRequest
+                using var userInfoRequest = new UserInfoRequest
                 {
                     Address = await GetItemAsync<string>(options.UserInfoEndpointStorageKey),
                     Token = tokenResponse.AccessToken
-                })
+                };
+                var userInfoResponse = await _httpClient.GetUserInfoAsync(userInfoRequest)
+                    .ConfigureAwait(false);
+
+
+                if (userInfoResponse.IsError)
                 {
-                    UserInfoResponse userInfoResponse;
-                    try
-                    {
-                        userInfoResponse = await _httpClient.GetUserInfoAsync(userInfoRequest)
-                            .ConfigureAwait(false);
-                    }
-                    catch(HttpRequestException e)
-                    {
-                        _logger.LogError("{Error}", e.Message);
-                        return;
-                    }
-                    
-
-                    if (userInfoResponse.IsError)
-                    {
-                        _logger.LogError("{Error}", userInfoResponse.Error);
-                        return;
-                    }
-
-                    await SetItemAsync(options.ClaimsStorageKey, 
-                        JsonSerializer.Serialize(userInfoResponse
-                            .Claims
-                            .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));
-                    
-                    _userStore.User = CreateUser(options, 
-                        userInfoResponse.Claims,
-                        tokenResponse.AccessToken,
-                        tokenResponse.TokenType);
-
-                    var redirectTo = await GetItemAsync<string>(options.BackUriStorageKey);
-                    _navigationManager.NavigateTo(redirectTo);
+                    _logger.LogError("{Error}", userInfoResponse.Error);
+                    return;
                 }
+
+                await SetItemAsync(options.ClaimsStorageKey,
+                    JsonSerializer.Serialize(userInfoResponse
+                        .Claims
+                        .Select(c => new SerializableClaim { Type = c.Type, Value = c.Value })));
+
+                _userStore.User = CreateUser(options,
+                    userInfoResponse.Claims,
+                    tokenResponse.AccessToken,
+                    tokenResponse.TokenType);
+
             }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError("{Error}", e.Message);
+                return;
+            }
+
+            var redirectTo = await GetItemAsync<string>(options.BackUriStorageKey);
+            _navigationManager.NavigateTo(redirectTo);
         }
 
-        private ClaimsPrincipal CreateUser(AuthorizationOptions options, 
-            IEnumerable<Claim> claims, 
-            string accesToken, 
+        private ClaimsPrincipal CreateUser(AuthorizationOptions options,
+            IEnumerable<Claim> claims,
+            string accesToken,
             string tokenType)
         {
             var claimList = claims.ToList();
             _userStore.AccessToken = accesToken;
             _userStore.AuthenticationScheme = tokenType;
-            return new ClaimsPrincipal(new ClaimsIdentity[] 
+            return new ClaimsPrincipal(new ClaimsIdentity[]
             {
                 new ClaimsIdentity(
                     claimList, tokenType, options.NameClaimType, options.RoleClaimType)
@@ -233,10 +223,8 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private string GetChallenge(byte[] verifier)
         {
-            using(var sha256 = SHA256.Create())
-            {
-                return ToUrlBase64String(sha256.ComputeHash(verifier));                
-            }
+            using var sha256 = SHA256.Create();
+            return ToUrlBase64String(sha256.ComputeHash(verifier));
         }
 
         private string ToUrlBase64String(byte[] value)

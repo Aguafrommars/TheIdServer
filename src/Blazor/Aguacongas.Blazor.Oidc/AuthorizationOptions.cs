@@ -16,18 +16,18 @@
 
         public string StoragePrefix { get; set; } = "oidc.";
 
-        internal string BackUriStorageKey => $"{StoragePrefix}backUri";
+        public string BackUriStorageKey => $"{StoragePrefix}backUri";
 
-        internal string TokenEndpointStorageKey => $"{StoragePrefix}tokenEnpoint";
+        public string TokenEndpointStorageKey => $"{StoragePrefix}tokenEnpoint";
 
-        internal string UserInfoEndpointStorageKey => $"{StoragePrefix}userInfoEnpoint";
+        public string UserInfoEndpointStorageKey => $"{StoragePrefix}userInfoEnpoint";
 
-        internal string VerifierStorageKey => $"{StoragePrefix}verifier";
+        public string VerifierStorageKey => $"{StoragePrefix}verifier";
 
-        internal string ClaimsStorageKey => $"{StoragePrefix}claims";
+        public string ClaimsStorageKey => $"{StoragePrefix}claims";
 
-        internal string TokensStorageKey => $"{StoragePrefix}tokens";
+        public string TokensStorageKey => $"{StoragePrefix}tokens";
 
-        internal string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
+        public string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
     }
 }
