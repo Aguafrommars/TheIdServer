@@ -8,7 +8,6 @@ branches:
   - /preview\/*/ 
   - /release\/*/
 image: 
-- Ubuntu
 - Visual Studio 2019
 environment:
   GH_TOKEN: 
