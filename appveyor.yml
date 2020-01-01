@@ -9,11 +9,12 @@ branches:
   - /release\/*/
 image: 
 - Ubuntu
-- Visual Studio 2019 Preview
+- Visual Studio 2019
 environment:
   GH_TOKEN: 
     secure: 0NJdORJRFjpB0dwUYv7bVNsbkldkoBhnvWik/CTOwAF/k9kP+/uTWMFnDcpEpt8E
   donetsdk: 3.1.100
+  blazorversion: 3.1.0-preview4.19579.2
 init:
   - cmd: git config --global core.autocrlf true
 install:
@@ -26,6 +27,7 @@ install:
   - sh: export PATH=/home/appveyor/projects/dymamicauthproviders/dotnetsdk:$PATH
   - sh: sudo apt -y install nuget
   - ps: if ($isWindows) { .\dotnet-install.ps1 -Version $env:donetsdk }
+  - ps: dotnet new -i Microsoft.AspNetCore.Blazor.Templates::$env:blazorversion
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
