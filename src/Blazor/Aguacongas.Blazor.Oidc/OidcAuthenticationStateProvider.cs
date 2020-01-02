@@ -78,7 +78,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, e.Message);
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(" Oidc.NotConnected", "") })));
             }
 
             var uri = new Uri(_navigationManager.Uri);
@@ -133,6 +133,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
             if (discoveryResponse.Error != null)
             {
+                _logger.LogError(discoveryResponse.Error);
                 throw new InvalidOperationException(discoveryResponse.Error);
             }
 

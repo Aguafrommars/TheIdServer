@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Moq;
 using RichardSzalay.MockHttp;
@@ -18,6 +19,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
@@ -71,6 +73,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         public static void CreateTestHost(string userName,
             string url,
             TestServer sut,
+            ITestOutputHelper testOutputHelper,
             out TestHost host,
             out RenderedComponent<blazorApp.App> component,
             out MockHttpMessageHandler mockHttp)
@@ -109,7 +112,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] { new Claim("name", userName) });
 
-                services.AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                services
+                    .AddLogging(configure =>
+                    {
+                        configure.AddProvider(new TestLoggerProvider(testOutputHelper));
+                    })
+                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton<NavigationManager>(p => new TestNavigationManager(uri: url))
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);

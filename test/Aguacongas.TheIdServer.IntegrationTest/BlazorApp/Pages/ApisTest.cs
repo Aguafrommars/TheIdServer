@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
@@ -16,9 +18,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     {
         private readonly ApiFixture _fixture;
 
-        public ApisTest(ApiFixture fixture)
+        public ApisTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
         {
             _fixture = fixture;
+            _fixture.TestOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -88,7 +91,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             out RenderedComponent<App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            TestUtils.CreateTestHost(userName, $"http://exemple.com/apis", _fixture.Sut,
+            TestUtils.CreateTestHost(userName, 
+                $"http://exemple.com/apis", 
+                _fixture.Sut,
+                _fixture.TestOutputHelper,
                 out host,
                 out component,
                 out mockHttp);

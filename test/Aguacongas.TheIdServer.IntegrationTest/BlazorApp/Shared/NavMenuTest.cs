@@ -4,12 +4,23 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
     public class NavMenuTest
     {
+        [SuppressMessage("Critical Code Smell", "S4487:Unread \"private\" fields should be removed", Justification = "To enable console log")]
+        [SuppressMessage("Code Quality", "IDE0052:Remove unread private members", Justification = "To enable console log")]
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public NavMenuTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
         [Fact]
         public void ToggleNavMenu_should_update_nav_menu_class()
         {

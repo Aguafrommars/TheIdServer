@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
 {
@@ -17,9 +18,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
     {
         private readonly ApiFixture _fixture;
 
-        public ApiTest(ApiFixture fixture)
+        public ApiTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
         {
             _fixture = fixture;
+            _fixture.TestOutputHelper = testOutputHelper;
         }
 
 
@@ -142,7 +144,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             out RenderedComponent<App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            TestUtils.CreateTestHost(userName, $"http://exemple.com/protectresource/{id}", _fixture.Sut,
+            TestUtils.CreateTestHost(userName, 
+                $"http://exemple.com/protectresource/{id}", 
+                _fixture.Sut,
+                _fixture.TestOutputHelper,
                 out host,
                 out component,
                 out mockHttp);

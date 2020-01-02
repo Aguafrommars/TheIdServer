@@ -3,18 +3,27 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using Xunit;
+using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
     public class MainLayoutTest
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public MainLayoutTest(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
         [Fact]
         public void WhenNoUser_should_authomaticaly_signin()
         {
@@ -23,8 +32,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             var host = new TestHost();
             host.ConfigureServices(services =>
             {
-                new blazorApp.Startup().ConfigureServices(services);
-                services.AddSingleton<NavigationManager, TestNavigationManager>()
+                new blazorApp.Startup().ConfigureServices(services);                
+                services
+                    .AddLogging(configure =>
+                    {
+                        configure.AddProvider(new TestLoggerProvider(_testOutputHelper));
+                    })
+                    .AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
             });
@@ -84,7 +98,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             host.ConfigureServices(services =>
             {
                 new blazorApp.Startup().ConfigureServices(services);
-                services.AddSingleton<NavigationManager, TestNavigationManager>()
+                services.AddLogging(configure =>
+                    {
+                        configure.AddProvider(new TestLoggerProvider(_testOutputHelper));
+                    })
+                    .AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
             });
@@ -139,7 +157,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             host.ConfigureServices(services =>
             {
                 new blazorApp.Startup().ConfigureServices(services);
-                services.AddSingleton<NavigationManager, TestNavigationManager>()
+                services.AddLogging(configure =>
+                    {
+                        configure.AddProvider(new TestLoggerProvider(_testOutputHelper));
+                    })
+                    .AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
             });
