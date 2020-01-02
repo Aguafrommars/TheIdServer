@@ -7,6 +7,7 @@ using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -34,7 +35,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender();
+            host.WaitForNextRender(() => Thread.Sleep(500));
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
