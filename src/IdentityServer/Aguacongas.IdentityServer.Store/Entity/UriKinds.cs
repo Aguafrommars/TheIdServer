@@ -6,7 +6,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define uri kind
     /// </summary>
     [Flags]
-    public enum UriKind
+    public enum UriKinds
     {
         /// <summary>
         /// Redirect uri

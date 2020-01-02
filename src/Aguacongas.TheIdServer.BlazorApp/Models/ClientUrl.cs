@@ -14,48 +14,48 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 
         public bool Cors
         {
-            get { return ((Entity.UriKind)Parent.Kind & Entity.UriKind.Cors) == Entity.UriKind.Cors; }
+            get { return ((Entity.UriKinds)Parent.Kind & Entity.UriKinds.Cors) == Entity.UriKinds.Cors; }
             set 
             {
                 if (value)
                 {
-                    Parent.Kind |= (int)Entity.UriKind.Cors;
+                    Parent.Kind |= (int)Entity.UriKinds.Cors;
                 }
                 else
                 {
-                    Parent.Kind &= (int)~Entity.UriKind.Cors;
+                    Parent.Kind &= (int)~Entity.UriKinds.Cors;
                 }
             }
         }
 
         public bool Redirect
         {
-            get { return ((Entity.UriKind)Parent.Kind & Entity.UriKind.Redirect) == Entity.UriKind.Redirect; }
+            get { return ((Entity.UriKinds)Parent.Kind & Entity.UriKinds.Redirect) == Entity.UriKinds.Redirect; }
             set
             {
                 if (value)
                 {
-                    Parent.Kind |= (int)Entity.UriKind.Redirect;
+                    Parent.Kind |= (int)Entity.UriKinds.Redirect;
                 }
                 else
                 {
-                    Parent.Kind &= (int)~Entity.UriKind.Redirect;
+                    Parent.Kind &= (int)~Entity.UriKinds.Redirect;
                 }
             }
         }
 
         public bool PostLogout
         {
-            get { return ((Entity.UriKind)Parent.Kind & Entity.UriKind.PostLogout) == Entity.UriKind.PostLogout; }
+            get { return ((Entity.UriKinds)Parent.Kind & Entity.UriKinds.PostLogout) == Entity.UriKinds.PostLogout; }
             set
             {
                 if (value)
                 {
-                    Parent.Kind |= (int)Entity.UriKind.PostLogout;
+                    Parent.Kind |= (int)Entity.UriKinds.PostLogout;
                 }
                 else
                 {
-                    Parent.Kind &= (int)~Entity.UriKind.PostLogout;
+                    Parent.Kind &= (int)~Entity.UriKinds.PostLogout;
                 }
             }
         }

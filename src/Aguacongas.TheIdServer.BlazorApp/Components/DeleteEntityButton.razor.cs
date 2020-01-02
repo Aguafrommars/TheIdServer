@@ -8,6 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     public partial class DeleteEntityButton
     {
         [SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This field is binded to a component.")]
+        [SuppressMessage("Major", "CS0649:Fiel is never asign to", Justification = "This field is binded to a component.")]
         private string _checkEntityId;
 
         [Parameter]

@@ -16,7 +16,7 @@ namespace Aguacongas.IdentityServer.Store
             }
 
             var redirectUris = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKind.Redirect) == (int)Entity.UriKind.Redirect);
+                    .Where(u => (u.Kind & (int)Entity.UriKinds.Redirect) == (int)Entity.UriKinds.Redirect);
 
             return new Client
             {
@@ -25,7 +25,7 @@ namespace Aguacongas.IdentityServer.Store
                 AccessTokenType = (AccessTokenType)client.AccessTokenType,
                 AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
                 AllowedCorsOrigins = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKind.Cors) == (int)Entity.UriKind.Cors)
+                    .Where(u => (u.Kind & (int)Entity.UriKinds.Cors) == (int)Entity.UriKinds.Cors)
                     .Select(u => new Uri(u.Uri))
                     .Select(u => $"{u.Scheme}://{u.Host}{u.UriPortString()}")
                     .ToList(),
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.Store
                 ProtocolType = client.ProtocolType,
                 RefreshTokenExpiration = (TokenExpiration)client.RefreshTokenExpiration,
                 RedirectUris = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKind.Redirect) == (int)Entity.UriKind.Redirect)
+                    .Where(u => (u.Kind & (int)Entity.UriKinds.Redirect) == (int)Entity.UriKinds.Redirect)
                     .Select(u => u.Uri).ToList(),
                 RefreshTokenUsage = (TokenUsage) client.RefreshTokenUsage,
                 RequireClientSecret = client.RequireClientSecret,
@@ -140,7 +140,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = Guid.NewGuid().ToString(),
                 Uri = o,
-                Kind = (int)Entity.UriKind.Redirect
+                Kind = (int)Entity.UriKinds.Redirect
             }).ToList();
 
             foreach (var origin in client.AllowedCorsOrigins)
@@ -153,12 +153,12 @@ namespace Aguacongas.IdentityServer.Store
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = origin,
-                        Kind = (int)Entity.UriKind.Cors
+                        Kind = (int)Entity.UriKinds.Cors
                     });
                     continue;
                 }
 
-                uri.Kind |= (int)Entity.UriKind.Cors;
+                uri.Kind |= (int)Entity.UriKinds.Cors;
             }
 
             foreach (var postLogout in client.PostLogoutRedirectUris)
@@ -170,12 +170,12 @@ namespace Aguacongas.IdentityServer.Store
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = postLogout,
-                        Kind = (int)Entity.UriKind.PostLogout
+                        Kind = (int)Entity.UriKinds.PostLogout
                     });
                     continue;
                 }
 
-                uri.Kind |= (int)Entity.UriKind.Redirect;
+                uri.Kind |= (int)Entity.UriKinds.Redirect;
             }
 
             return new Entity.Client
