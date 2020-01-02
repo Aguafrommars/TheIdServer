@@ -58,10 +58,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            host.WaitForNextRender(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
-            {
-                Value = GenerateId()
-            }));
+            host.WaitForNextRender(() => {
+                filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+                {
+                    Value = GenerateId()
+                });
+                // cancel previous search
+                filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+                {
+                    Value = GenerateId()
+                });
+            });
 
             markup = component.GetMarkup();
 
@@ -69,6 +76,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             markup = component.GetMarkup();
 
+            host.WaitForNextRender(() => Thread.Sleep(500));
+
+            markup = component.GetMarkup();
             Assert.DoesNotContain("filtered", markup);
         }
 

@@ -29,7 +29,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<UserClaim> CreateAsync(UserClaim entity, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(entity.UserId);
+            var user = await GetUserAsync(entity.UserId)
+                .ConfigureAwait(false);
             var claim = entity.ToUserClaim().ToClaim();
             var result = await _userManager.AddClaimAsync(user, claim)
                 .ConfigureAwait(false);
@@ -55,8 +56,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
-            var user = await GetUserAsync(claim.UserId);
-            var result = await _userManager.RemoveClaimAsync(user, claim.ToClaim());
+            var user = await GetUserAsync(claim.UserId)
+                .ConfigureAwait(false);
+            var result = await _userManager.RemoveClaimAsync(user, claim.ToClaim())
+                .ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 throw new IdentityException
@@ -70,7 +73,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<UserClaim> UpdateAsync(UserClaim entity, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
-            var user = await GetUserAsync(entity.UserId);
+            var user = await GetUserAsync(entity.UserId)
+                .ConfigureAwait(false);
             var result = await _userManager.RemoveClaimAsync(user, claim.ToClaim())
                 .ConfigureAwait(false);
             ChechResult(result);

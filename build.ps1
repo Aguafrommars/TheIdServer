@@ -1,17 +1,9 @@
 $result = 0
 
 if ($isLinux) {
-	Get-ChildItem -rec `
-	| Where-Object { $_.Name -like "*.IntegrationTest.csproj" `
-		   -Or $_.Name -like "*.Test.csproj" `
-		 } `
-	| ForEach-Object { 
-		Set-Location $_.DirectoryName
-		dotnet test
-	
-		if ($LASTEXITCODE -ne 0) {
-			$result = $LASTEXITCODE
-		}
+	dotnet test
+	if ($LASTEXITCODE -ne 0) {
+		$result = $LASTEXITCODE
 	}
 } else {
 	$prNumber = $env:APPVEYOR_PULL_REQUEST_NUMBER
@@ -24,6 +16,10 @@ if ($isLinux) {
 
 	dotnet test -c Release --settings coverletArgs.runsettings
 
+	if ($LASTEXITCODE -ne 0) {
+		$result = $LASTEXITCODE
+	}
+	
 	$merge = ""
 	Get-ChildItem -rec `
 	| Where-Object { $_.Name -like "coverage.cobertura.xml" } `
