@@ -1,12 +1,26 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Aguacongas.TheIdServer.Blazor.Oidc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+using Moq;
+using RichardSzalay.MockHttp;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Xunit;
+using Xunit.Abstractions;
+using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -54,6 +68,75 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var testServer = new TestServer(webHostBuilder);
 
             return testServer;
+        }
+
+        public static void CreateTestHost(string userName,
+            string url,
+            TestServer sut,
+            ITestOutputHelper testOutputHelper,
+            out TestHost host,
+            out RenderedComponent<blazorApp.App> component,
+            out MockHttpMessageHandler mockHttp)
+        {
+            var options = new AuthorizationOptions();
+            var jsRuntimeMock = new Mock<IJSRuntime>();
+            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ExpireAtStorageKey }))
+                .ReturnsAsync(DateTime.UtcNow.AddHours(1).ToString());
+            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.TokensStorageKey }))
+                .ReturnsAsync(JsonSerializer.Serialize(new Tokens
+                {
+                    AccessToken = "test",
+                    TokenType = "Bearer"
+                }));
+            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
+                .ReturnsAsync(JsonSerializer.Serialize(new List<SerializableClaim>
+                {
+                    new SerializableClaim
+                    {
+                        Type = "name",
+                        Value = userName
+                    }
+                }));
+
+            var navigationInterceptionMock = new Mock<INavigationInterception>();
+
+            host = new TestHost();
+            var httpMock = host.AddMockHttp();
+            mockHttp = httpMock;
+            var settingsRequest = httpMock.Capture("/settings.json");
+            host.ConfigureServices(services =>
+            {
+                new blazorApp.Startup().ConfigureServices(services);
+                var httpClient = sut.CreateClient();
+                httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("name", userName) });
+
+                services
+                    .AddLogging(configure =>
+                    {
+                        configure.AddProvider(new TestLoggerProvider(testOutputHelper));
+                    })
+                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                    .AddSingleton<NavigationManager>(p => new TestNavigationManager(uri: url))
+                    .AddSingleton(p => jsRuntimeMock.Object)
+                    .AddSingleton(p => navigationInterceptionMock.Object);
+            });
+
+            component = host.AddComponent<blazorApp.App>();
+
+            var markup = component.GetMarkup();
+            Assert.Contains("Authentication in progress", markup);
+
+            host.WaitForNextRender(() =>
+            {
+                settingsRequest.SetResult(new AuthorizationOptions
+                {
+                    Authority = "https://exemple.com",
+                    ClientId = "test",
+                    Scope = "openid profile apitest"
+                });
+            });
         }
     }
 

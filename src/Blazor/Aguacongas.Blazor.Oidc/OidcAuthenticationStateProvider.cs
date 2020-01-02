@@ -80,6 +80,11 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                 _logger.LogError(e, e.Message);
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
             }
+            catch (TaskCanceledException tce)
+            {
+                _logger.LogError(tce, tce.Message);
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
+            }
 
             var uri = new Uri(_navigationManager.Uri);
 
@@ -133,6 +138,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
             if (discoveryResponse.Error != null)
             {
+                _logger.LogError(discoveryResponse.Error);
                 throw new InvalidOperationException(discoveryResponse.Error);
             }
 
@@ -211,13 +217,12 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             string accesToken,
             string tokenType)
         {
-            var claimList = claims.ToList();
             _userStore.AccessToken = accesToken;
             _userStore.AuthenticationScheme = tokenType;
             return new ClaimsPrincipal(new ClaimsIdentity[]
             {
                 new ClaimsIdentity(
-                    claimList, tokenType, options.NameClaimType, options.RoleClaimType)
+                    claims, tokenType, options.NameClaimType, options.RoleClaimType)
             });
         }
 

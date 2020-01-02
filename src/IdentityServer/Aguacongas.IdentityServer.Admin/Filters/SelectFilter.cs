@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,11 +46,12 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 }
             }
 
-            await next();
+            await next().ConfigureAwait(false);
         }
 
         class SelectResult<T>: SelectResult
         {
+            [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "Won't fix")]
             private readonly static CamelCasePropertyNamesContractResolver _resolver = new CamelCasePropertyNamesContractResolver();
             public override JToken Select(object items, string select, string expand)
             {

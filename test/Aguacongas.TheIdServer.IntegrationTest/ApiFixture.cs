@@ -5,30 +5,40 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
     public class ApiFixture : IDisposable
     {
         private readonly SqliteConnection _connection;
-
+        private readonly TestLoggerProvider _testLoggerProvider = new TestLoggerProvider();
         /// <summary>
         /// Gets the system under test
         /// </summary>
         public TestServer Sut { get; }
 
+        public ITestOutputHelper TestOutputHelper 
+        { 
+            get { return _testLoggerProvider.TestOutputHelper; } 
+            set { _testLoggerProvider.TestOutputHelper = value; }
+        }
+
         public ApiFixture()
         {
             _connection = new SqliteConnection("DataSource=:memory:");
             _connection.Open();
+
             Sut = TestUtils.CreateTestServer(
                 // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
                 services =>
                 {
-                    services.AddDbContext<ApplicationDbContext>(options =>
+                    services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
+                    .AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlite(_connection))
                     .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
                         options.UseSqlite(_connection))
