@@ -81,7 +81,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var options = new AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ExpireAtStorageKey }))
-                .ReturnsAsync(DateTime.Now.ToString());
+                .ReturnsAsync(DateTime.UtcNow.AddHours(1).ToString());
             jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.TokensStorageKey }))
                 .ReturnsAsync(JsonSerializer.Serialize(new Tokens
                 {
