@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="authicationScheme">(Optional) authentication scheme to use</param>
         /// <returns></returns>
         public static IApplicationBuilder UseIdentityServerAdminApi(this IApplicationBuilder builder,
-            string basePath, 
+            string basePath,
             Action<IApplicationBuilder> configure,
             string authicationScheme = null)
         {
@@ -40,53 +40,63 @@ namespace Microsoft.AspNetCore.Builder
             }
 
             return builder.Map(basePath, child =>
+            {
+                configure(child);
+                AuthenticateUserMiddleware(child, authenticate);
+            })
+            .Use(async (context, next) =>
+            {
+                // avoid accessing the api outside the path.
+                var path = context.Request.Path;
+                if (path.HasValue)
                 {
-                    configure(child);
-                    child.UseRouting()
-                        .Use(async (context, next) =>
-                        {
-                            if (!context.Request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) && 
-                                !context.User.Identity.IsAuthenticated)
-                            {
-                                var result = await authenticate(context);
-                                if (result.Succeeded)
-                                {
-                                    context.User = result.Principal;
-                                }
-                                else
-                                {
-                                    var response = context.Response;
-                                    response.StatusCode = (int)HttpStatusCode.Forbidden;
-                                    await response.CompleteAsync();
-                                    return;
-                                }
-                            }
-                            await next();
-                        })
-                        .UseAuthorization()
-                        .UseEndpoints(enpoints =>
-                        {
-                            enpoints.MapAdminApiControllers();
-                        });
-                })
+                    var segments = path.Value.Split('/');
+                    if (path.Equals(basePath, StringComparison.OrdinalIgnoreCase) ||
+                        (!path.StartsWithSegments(basePath) &&
+                            segments.Any(s => entityTypeList.Any(t => t.Name.Equals(s, StringComparison.OrdinalIgnoreCase)))))
+                    {
+                        var response = context.Response;
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        await response.CompleteAsync()
+                            .ConfigureAwait(false);
+                        return;
+                    }
+                }
+                await next()
+                    .ConfigureAwait(false);
+            });
+        }
+
+        private static void AuthenticateUserMiddleware(IApplicationBuilder child, Func<HttpContext, Task<AuthenticateResult>> authenticate)
+        {
+            child.UseRouting()
                 .Use(async (context, next) =>
                 {
-                    // avoid accessing the api outside the path.
-                    var path = context.Request.Path;
-                    if (path.HasValue)
+                    if (!context.Request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) &&
+                        !context.User.Identity.IsAuthenticated)
                     {
-                        var segments = path.Value.Split('/');
-                        if (path.Equals(basePath, StringComparison.OrdinalIgnoreCase) || 
-                            (!path.StartsWithSegments(basePath) && 
-                                segments.Any(s => entityTypeList.Any(t => t.Name.Equals(s, StringComparison.OrdinalIgnoreCase)))))
+                        var result = await authenticate(context)
+                            .ConfigureAwait(false);
+                        if (result.Succeeded)
+                        {
+                            context.User = result.Principal;
+                        }
+                        else
                         {
                             var response = context.Response;
-                            response.StatusCode = (int)HttpStatusCode.NotFound;
-                            await response.CompleteAsync();
+                            response.StatusCode = (int)HttpStatusCode.Forbidden;
+                            await response.CompleteAsync()
+                                .ConfigureAwait(false);
                             return;
                         }
                     }
-                    await next();
+                    await next()
+                        .ConfigureAwait(false);
+                })
+                .UseAuthorization()
+                .UseEndpoints(enpoints =>
+                {
+                    enpoints.MapAdminApiControllers();
                 });
         }
     }
