@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
+namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
     public class NavMenuTest
     {

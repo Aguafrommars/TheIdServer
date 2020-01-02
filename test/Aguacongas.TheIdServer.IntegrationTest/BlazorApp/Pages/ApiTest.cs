@@ -1,5 +1,7 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
+﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Blazor.Oidc;
+using Aguacongas.TheIdServer.IntegrationTest;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
@@ -10,14 +12,24 @@ using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
 {
+    [Collection("api collection")]
     public class ApiTest
     {
+        private readonly ApiFixture _fixture;
+
+        public ApiTest(ApiFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
+
         [Fact]
         public void WhenNonAdmin_should_disable_inputs()
         {
@@ -51,50 +63,60 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
         }
 
         [Fact]
-        public void OnFilterChanged_should_filter_properties_scopes_scopeClaims_and_secret()
+        public async Task OnFilterChanged_should_filter_properties_scopes_scopeClaims_and_secret()
         {
-            CreateTestHost("Alice Smith",
-                "test",
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            var apiRequest = mockHttp.Capture("http://exemple.com/api/protectresource/test");
-
-            host.WaitForNextRender(() => 
+            var apiId = GenerateId();
+            await _fixture.DbActionAsync<IdentityServerDbContext>(context =>
             {
-                apiRequest.SetResult(new ProtectResource
+                context.Apis.Add(new ProtectResource
                 {
+                    Id = apiId,
+                    DisplayName = apiId,
                     ApiClaims = new List<ApiClaim>
                     {
-                        new ApiClaim { Type = "filtered" }
-                    },                    
-                    Id = "test",
+                        new ApiClaim { Id = GenerateId(), Type = "filtered" }
+                    },
                     Properties = new List<ApiProperty>
                     {
-                        new ApiProperty { Key = "filtered", Value = "filtered" }
+                        new ApiProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
                     },
                     Scopes = new List<ApiScope>
                     {
                        new ApiScope
                        {
-                           Scope = "test",
+                           Id = GenerateId(),
+                           Scope = apiId,
+                           DisplayName = "test",
                            ApiScopeClaims = new List<ApiScopeClaim>
                            {
-                               new ApiScopeClaim { Type = "filtered" }
+                               new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
                            }
                        },
                        new ApiScope
                        {
+                           Id = GenerateId(),
                            Scope = "filtered",
+                           DisplayName = "filtered",
                            ApiScopeClaims = new List<ApiScopeClaim>()
                        }
                     },
                     Secrets = new List<ApiSecret>
                     {
-                        new ApiSecret { Value = "filtered" }
+                        new ApiSecret { Id = GenerateId(), Type="SHA256", Value = "filtered" }
                     }
                 });
+
+                return context.SaveChangesAsync();
+            });
+
+            CreateTestHost("Alice Smith",
+                apiId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            host.WaitForNextRender(() => 
+            {
             });
 
             var markup = component.GetMarkup();
@@ -113,7 +135,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
 
             host.WaitForNextRender(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
-                Value = "test"
+                Value = apiId
             }));
 
             markup = component.GetMarkup();
@@ -121,7 +143,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             Assert.DoesNotContain("filtered", markup);
         }
 
-        private static void CreateTestHost(string userName, 
+        private void CreateTestHost(string userName, 
             string id,
             out TestHost host,
             out RenderedComponent<App> component,
@@ -156,8 +178,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             host.ConfigureServices(services =>
             {
                 new Startup().ConfigureServices(services);
-                var httpClient = httpMock.ToHttpClient();
-                httpClient.BaseAddress = new Uri("http://exemple.com/api");
+                var sut = _fixture.Sut;
+                var httpClient = sut.CreateClient();
+                httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("name", userName) });
+
                 services.AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton<NavigationManager>(p => new TestNavigationManager(uri: $"http://exemple.com/protectresource/{id}"))
                     .AddSingleton(p => jsRuntimeMock.Object)
@@ -179,5 +205,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
                 });
             });
         }
+
+        private static string GenerateId() => Guid.NewGuid().ToString();
     }
 }

@@ -9,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using Xunit;
+using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
+namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
     public class MainLayoutTest
     {
@@ -22,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var host = new TestHost();
             host.ConfigureServices(services =>
             {
-                new Startup().ConfigureServices(services);
+                new blazorApp.Startup().ConfigureServices(services);
                 services.AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
@@ -32,7 +33,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var settingsRequest = httpMock.Capture("/settings.json");
             var discoveryRequest = httpMock.Capture("https://exemple.com/.well-known/openid-configuration");
             
-            var component = host.AddComponent<App>();
+            var component = host.AddComponent<blazorApp.App>();
 
             var markup = component.GetMarkup();
             Assert.Contains("Authentication in progress", markup);
@@ -82,7 +83,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var host = new TestHost();
             host.ConfigureServices(services =>
             {
-                new Startup().ConfigureServices(services);
+                new blazorApp.Startup().ConfigureServices(services);
                 services.AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
@@ -91,7 +92,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var httpMock = host.AddMockHttp();
             var settingsRequest = httpMock.Capture("/settings.json");
 
-            var component = host.AddComponent<App>();
+            var component = host.AddComponent<blazorApp.App>();
 
             var markup = component.GetMarkup();
             Assert.Contains("Authentication in progress", markup);
@@ -137,7 +138,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var host = new TestHost();
             host.ConfigureServices(services =>
             {
-                new Startup().ConfigureServices(services);
+                new blazorApp.Startup().ConfigureServices(services);
                 services.AddSingleton<NavigationManager, TestNavigationManager>()
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
@@ -146,7 +147,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Shared
             var httpMock = host.AddMockHttp();
             var settingsRequest = httpMock.Capture("/settings.json");
 
-            var component = host.AddComponent<App>();
+            var component = host.AddComponent<blazorApp.App>();
 
             var markup = component.GetMarkup();
             Assert.Contains("Authentication in progress", markup);
