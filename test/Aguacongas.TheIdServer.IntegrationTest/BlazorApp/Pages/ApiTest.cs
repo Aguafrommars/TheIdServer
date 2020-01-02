@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
         [Fact]
         public void WhenNonAdmin_should_disable_inputs()
         {
-            CreateTestHost("Bob Smith",
+            CreateTestHost("Bod Smith",
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
