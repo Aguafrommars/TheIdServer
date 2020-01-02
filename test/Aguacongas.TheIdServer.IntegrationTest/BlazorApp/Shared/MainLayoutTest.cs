@@ -162,7 +162,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 });
             });
 
-            host.WaitForNextRender(() => { });
+            host.WaitForNextRender();
 
             markup = component.GetMarkup();
             Assert.Contains("Bod Smith", markup);

@@ -1,19 +1,12 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.IntegrationTest;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
-using Moq;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,7 +32,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() => { });
+            host.WaitForNextRender();
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -55,7 +48,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() => { });
+            host.WaitForNextRender();
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -123,7 +116,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
 
             Assert.Contains("Loading...", markup);
 
-            host.WaitForNextRender(() => { });
+            host.WaitForNextRender();
 
             markup = component.GetMarkup();
 
@@ -149,61 +142,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             out RenderedComponent<App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            var options = new AuthorizationOptions();
-            var jsRuntimeMock = new Mock<IJSRuntime>();
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ExpireAtStorageKey }))
-                .ReturnsAsync(DateTime.Now.ToString());
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.TokensStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(new Tokens
-                {
-                    AccessToken = "test",
-                    TokenType = "Bearer"
-                }));
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(new List<SerializableClaim>
-                {
-                    new SerializableClaim
-                    {
-                        Type = "name",
-                        Value = userName
-                    }
-                }));
-
-            var navigationInterceptionMock = new Mock<INavigationInterception>();
-
-            host = new TestHost();
-            var httpMock = host.AddMockHttp();
-            mockHttp = httpMock;
-            var settingsRequest = httpMock.Capture("/settings.json");
-            host.ConfigureServices(services =>
-            {
-                new Startup().ConfigureServices(services);
-                var sut = _fixture.Sut;
-                var httpClient = sut.CreateClient();
-                httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
-                sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("name", userName) });
-
-                services.AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
-                    .AddSingleton<NavigationManager>(p => new TestNavigationManager(uri: $"http://exemple.com/protectresource/{id}"))
-                    .AddSingleton(p => jsRuntimeMock.Object)
-                    .AddSingleton(p => navigationInterceptionMock.Object);
-            });
-
-            component = host.AddComponent<App>();
-
-            var markup = component.GetMarkup();
-            Assert.Contains("Authentication in progress", markup);
-
-            host.WaitForNextRender(() =>
-            {
-                settingsRequest.SetResult(new AuthorizationOptions
-                {
-                    Authority = "https://exemple.com",
-                    ClientId = "test",
-                    Scope = "openid profile apitest"
-                });
-            });
+            TestUtils.CreateTestHost(userName, $"http://exemple.com/protectresource/{id}", _fixture.Sut,
+                out host,
+                out component,
+                out mockHttp);
         }
 
         private static string GenerateId() => Guid.NewGuid().ToString();

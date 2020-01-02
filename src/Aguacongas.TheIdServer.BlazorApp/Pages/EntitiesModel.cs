@@ -53,7 +53,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
-
+                       
             return Task.Delay(500, token)
                 .ContinueWith(async task =>
                 {
@@ -74,7 +74,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                                 .ConfigureAwait(false);
 
                     EntityList = page.Items;
-                    StateHasChanged();
+
+                    await InvokeAsync(() => StateHasChanged())
+                        .ConfigureAwait(false);                    
                 }, TaskScheduler.Default);
         }
 
