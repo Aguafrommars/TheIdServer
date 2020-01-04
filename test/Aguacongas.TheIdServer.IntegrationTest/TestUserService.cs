@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 identityMock.SetupGet(m => m.Name).Returns(name);
             }
 
-            User = new ClaimsPrincipal(new ClaimsIdentity(identityMock.Object, claims));
+            User = new ClaimsPrincipal(new ClaimsIdentity(identityMock.Object, claims, "Bearer", "name", "role"));
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.JSInterop;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Xunit;
 using Xunit.Abstractions;
@@ -74,7 +75,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         [Fact]
         public void WhenNoAuthorized_should_display_message()
         {
-            var component = CreateComponent("test");
+            var component = CreateComponent("test", new List<SerializableClaim>());
 
             var markup = component.GetMarkup();
             Assert.Contains("You're not authorize to use this application.", markup);
@@ -83,13 +84,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         [Fact]
         public void WhenAuthorized_should_display_welcome_message()
         {
-            var component = CreateComponent("Bod Smith");
+            var expected = "Bob Smith";
+            var component = CreateComponent(expected, new List<SerializableClaim>
+            {
+                new SerializableClaim
+                {
+                    Type = "role",
+                    Value = Microsoft.AspNetCore.Authorization.AuthorizationOptionsExtensions.READER
+                }
+            });
 
             var markup = component.GetMarkup();
-            Assert.Contains("Bod Smith", markup);
+            Assert.Contains(expected, markup);
         }
 
-        private RenderedComponent<App> CreateComponent(string userName)
+        private RenderedComponent<App> CreateComponent(string userName, List<SerializableClaim> claims)
         {
             var options = new AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
@@ -101,15 +110,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                     AccessToken = "test",
                     TokenType = "Bearer"
                 }));
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(new List<SerializableClaim>
+            if (!claims.Any(c => c.Type == "name"))
+            {
+                claims.Add(new SerializableClaim
                 {
-                    new SerializableClaim
-                    {
-                        Type = "name",
-                        Value = userName
-                    }
-                }));
+                    Type = "name",
+                    Value = userName
+                });
+            }
+            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
+                .ReturnsAsync(JsonSerializer.Serialize(claims));
 
             var navigationInterceptionMock = new Mock<INavigationInterception>();
             var host = new TestHost();

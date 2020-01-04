@@ -1,10 +1,13 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -38,6 +41,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
             CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -86,11 +90,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
         private void CreateTestHost(string userName,
+            string role,
             out TestHost host,
             out RenderedComponent<App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            TestUtils.CreateTestHost(userName, 
+            TestUtils.CreateTestHost(userName,
+                new List<SerializableClaim>
+                {
+                    new SerializableClaim
+                    {
+                        Type = "role",
+                        Value = AuthorizationOptionsExtensions.READER
+                    },
+                    new SerializableClaim
+                    {
+                        Type = "role",
+                        Value = role
+                    }
+                },
                 $"http://exemple.com/apis", 
                 _fixture.Sut,
                 _fixture.TestOutputHelper,

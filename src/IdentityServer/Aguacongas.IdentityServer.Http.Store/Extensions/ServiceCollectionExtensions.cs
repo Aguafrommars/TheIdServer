@@ -27,8 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
                     return CreateStore(getHttpClient, provider, entityType);
                 });
             }
-
-            return services;
+            
+            return services.AddTransient<IIdentityProviderStore>(
+                p => new IdentityProviderStore(getHttpClient.Invoke(p),
+                    p.GetRequiredService<ILogger<IdentityProviderStore>>()));
         }
 
         private static IEnumerable<Type> GetEntityTypes()

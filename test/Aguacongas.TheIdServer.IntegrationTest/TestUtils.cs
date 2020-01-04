@@ -15,6 +15,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -71,6 +72,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         }
 
         public static void CreateTestHost(string userName,
+            List<SerializableClaim> claims,
             string url,
             TestServer sut,
             ITestOutputHelper testOutputHelper,
@@ -88,15 +90,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     AccessToken = "test",
                     TokenType = "Bearer"
                 }));
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(new List<SerializableClaim>
+            
+            if (!claims.Any(c => c.Type == "name"))
+            {
+                claims.Add(new SerializableClaim
                 {
-                    new SerializableClaim
-                    {
-                        Type = "name",
-                        Value = userName
-                    }
-                }));
+                    Type = "name",
+                    Value = userName
+                });
+            }
+            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
+                .ReturnsAsync(JsonSerializer.Serialize(claims));
 
             var navigationInterceptionMock = new Mock<INavigationInterception>();
 
@@ -110,7 +114,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 var httpClient = sut.CreateClient();
                 httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
                 sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("name", userName) });
+                    .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
                 services
                     .AddLogging(configure =>

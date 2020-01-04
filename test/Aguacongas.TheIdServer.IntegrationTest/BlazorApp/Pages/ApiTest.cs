@@ -1,6 +1,8 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.IntegrationTest;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
@@ -27,9 +29,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
 
 
         [Fact]
-        public void WhenNonAdmin_should_disable_inputs()
+        public void WhenNonWriter_should_disable_inputs()
         {
-            CreateTestHost("Bod Smith",
+            CreateTestHost("Bob Smith",
+                AuthorizationOptionsExtensions.READER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -43,9 +46,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
         }
 
         [Fact]
-        public void WhenAdmin_should_enable_inputs()
+        public void WhenWriter_should_enable_inputs()
         {
             CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -106,14 +110,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             });
 
             CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
                 apiId,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() => 
-            {
-            });
+            host.WaitForNextRender();
 
             var markup = component.GetMarkup();
 
@@ -139,13 +142,27 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Pages
             Assert.DoesNotContain("filtered", markup);
         }
 
-        private void CreateTestHost(string userName, 
+        private void CreateTestHost(string userName,
+            string role,
             string id,
             out TestHost host,
             out RenderedComponent<App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            TestUtils.CreateTestHost(userName, 
+            TestUtils.CreateTestHost(userName,
+                new List<SerializableClaim>
+                {
+                    new SerializableClaim
+                    {
+                        Type = "role",
+                        Value = AuthorizationOptionsExtensions.READER
+                    },
+                    new SerializableClaim
+                    {
+                        Type = "role",
+                        Value = role
+                    }
+                },
                 $"http://exemple.com/protectresource/{id}", 
                 _fixture.Sut,
                 _fixture.TestOutputHelper,
