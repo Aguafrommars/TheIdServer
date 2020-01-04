@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -86,16 +87,10 @@ namespace Aguacongas.TheIdServer
             }
 
             services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Id4-Writer", policy =>
-                   policy.RequireAssertion(context =>
-                       context.User.Identity.Name == "Alice Smith"));
-                options.AddPolicy("Id4-Reader", policy =>
-                  policy.RequireAssertion(context =>
-                      context.User.Identity.IsAuthenticated));
-            });
-                
-            services.AddAuthentication()
+                {
+                    options.AddIdentityServerPolicies();
+                })
+                .AddAuthentication()
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
                     options.Authority = "https://localhost:5443";

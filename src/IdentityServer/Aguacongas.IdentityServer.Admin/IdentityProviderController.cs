@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Gets an entity")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ProblemDetails), 404)]
-        [Authorize(Policy = "Id4-Reader")]
+        [Authorize(Policy = "Is4-Reader")]
         public Task<IdentityProvider> GetAsync(string id)
             => _store.GetAsync(id);
 
@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $).")]
-        [Authorize(Policy = "Id4-Reader")]
+        [Authorize(Policy = "Is4-Reader")]
         public Task<PageResponse<IdentityProvider>> GetAsync(PageRequest request)
             => _store.GetAsync(request);
     }
