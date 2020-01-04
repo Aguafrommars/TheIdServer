@@ -1,0 +1,33 @@
+﻿<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="consent">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="ClientId"
+                            Text="client id"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            scopes
+        </th>
+        <th>
+            <SortableHeader Property="CreateAt"
+                            Text="create at"
+                            GridState="GridState" />
+        </th>
+    </TableHeader>
+    <RowTemplate>
+        <td>
+            @consent.ClientId
+        </td>
+        <td>
+            <ul class="list-inline">
+                @foreach(var scope in GetScopes(consent))
+                {
+                    <li class="list-inline-item">@scope</li>
+                }
+            </ul>
+        </td>
+        <td>
+            @consent.CreatedAt.ToShortDateString() @consent.CreatedAt.ToShortTimeString()
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

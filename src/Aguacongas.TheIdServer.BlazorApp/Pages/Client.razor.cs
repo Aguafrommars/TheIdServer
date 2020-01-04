@@ -125,6 +125,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.RedirectUris = State.RedirectUris
                 .Where(u => u.Uri != null && u.Uri.Contains(term))
                 .ToList();
+            Model.Properties = State.Properties
+                .Where(p => p.Key.Contains(term) || p.Value.Contains(term))
+                .ToList();
 
             AddEmpyEntities();
             StateHasChanged();

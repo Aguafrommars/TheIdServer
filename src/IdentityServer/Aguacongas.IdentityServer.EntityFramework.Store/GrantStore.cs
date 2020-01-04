@@ -1,19 +1,21 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public abstract class GrantStore<TEntity, TDto> 
+    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity>
         where TEntity: class, IGrant, new()
     {
         private readonly IdentityServerDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public GrantStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
+        protected GrantStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
+            : base(context, logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
@@ -147,7 +149,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
             return await _context.Set<TEntity>()
-                .FirstOrDefaultAsync(c => c.UserId == subjectId & c.ClientId == clientId)
+                .FirstOrDefaultAsync(c => c.UserId == subjectId && c.ClientId == clientId)
                 .ConfigureAwait(false);
         }
 

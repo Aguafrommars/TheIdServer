@@ -1,0 +1,31 @@
+﻿<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="token">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="LoginProvider"
+                            Text="provider"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Name"
+                            Text="name"
+                            GridState="GridState" />
+            scopes
+        </th>
+        <th>
+            <SortableHeader Property="Value"
+                            Text="create at"
+                            GridState="GridState" />
+        </th>
+    </TableHeader>
+    <RowTemplate>
+        <td>
+            @token.LoginProvider
+        </td>
+        <td>
+            @token.Name
+        </td>
+        <td>
+            @token.Value
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

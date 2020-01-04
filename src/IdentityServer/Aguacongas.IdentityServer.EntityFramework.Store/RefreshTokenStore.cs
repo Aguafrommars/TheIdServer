@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
@@ -8,7 +9,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
-        public RefreshTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public RefreshTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
+            : base(context, serializer, logger)
         {
         }
 

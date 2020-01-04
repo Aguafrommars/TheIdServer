@@ -16,6 +16,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     public class ApiFixture : IDisposable
     {
         private readonly SqliteConnection _connection;
+        private readonly SqliteConnection _connectionApp;
         private readonly TestLoggerProvider _testLoggerProvider = new TestLoggerProvider();
         /// <summary>
         /// Gets the system under test
@@ -32,6 +33,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         {
             _connection = new SqliteConnection("DataSource=:memory:");
             _connection.Open();
+            _connectionApp = new SqliteConnection("DataSource=:memory:");
+            _connectionApp.Open();
 
             Sut = TestUtils.CreateTestServer(
                 // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
@@ -39,15 +42,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 {
                     services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
                     .AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite(_connection))
+                        options.UseSqlite(_connectionApp))
                     .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
                         options.UseSqlite(_connection))
                     .AddIdentityProviderStore();
                 });
 
             using var scope = Sut.Host.Services.CreateScope();
-            using var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
-            context.Database.EnsureCreated();
+            using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            identityContext.Database.EnsureCreated();
+            using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            appContext.Database.EnsureCreated();
         }
 
         /// <summary>
@@ -55,12 +60,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         /// </summary>
         /// <param name="action">The action to perform</param>
         /// <returns></returns>
-        public async Task DbActionAsync<T>(Func<T, Task> action) where T: DbContext
+        public Task DbActionAsync<T>(Func<T, Task> action) where T: DbContext
         {
             var services = Sut.Host.Services;
             using var scope = services.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<T>();
-            await action(context);
+            return action(context);
         }
 
         #region IDisposable Support
@@ -73,6 +78,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 if (disposing)
                 {
                     _connection.Dispose();
+                    _connectionApp.Dispose();
                     Sut?.Dispose();
                 }
 

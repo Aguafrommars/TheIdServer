@@ -17,6 +17,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private List<Entity.UserLogin> _loginsState;
         private List<Entity.Role> _roles;
         private List<Entity.Role> _rolesState;
+        private List<Entity.UserConsent> _consents;
+        private List<Entity.UserConsent> _consentsState;
+        private List<Entity.UserToken> _tokens;
+        private List<Entity.UserToken> _tokensState;
 
         protected override string Expand => null;
 
@@ -34,6 +38,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             _claims = new List<Entity.UserClaim>();
             _claimsState = new List<Entity.UserClaim>();
+            _logins = new List<Entity.UserLogin>();
+            _loginsState = new List<Entity.UserLogin>();
+            _roles = new List<Entity.Role>();
+            _rolesState = new List<Entity.Role>();
+            _consents = new List<Entity.UserConsent>();
+            _consentsState = new List<Entity.UserConsent>();
+            _tokens = new List<Entity.UserToken>();
+            _tokensState = new List<Entity.UserToken>();
             return new Entity.User();
         }
 
@@ -87,6 +99,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             _rolesState = new List<Entity.Role>(_roles);
 
+            var userConsentStore = GetStore<Entity.UserConsent>();
+            var userConsentsResponse = await userConsentStore.GetAsync(pageRequest);
+
+            _consents = userConsentsResponse.Items.ToList();
+            _consentsState = new List<Entity.UserConsent>(_consents);
+
+            var userTokenStore = GetStore<Entity.UserToken>();
+            var userTokensResponse = await userTokenStore.GetAsync(pageRequest);
+
+            _tokens = userTokensResponse.Items.ToList();
+            _tokensState = new List<Entity.UserToken>(_tokens);
             return user;
         }
 
@@ -141,6 +164,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
 
             _roles = _rolesState.Where(r => r.Name.Contains(term))
+                .ToList();
+
+            _consents = _consentsState.Where(c => c.ClientId.Contains(term))
+                .ToList();
+
+            _tokens = _tokensState.Where(t => t.LoginProvider.Contains(term) || t.Name.Contains(term) || t.Value.Contains(term))
                 .ToList();
 
             AddEmptyRole();
