@@ -2,12 +2,16 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -77,11 +81,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            host.WaitForNextRender();
+            WaitForSavedToast(host, component);
 
-            var toasts = component.FindAll(".toast-body.text-success");
-
-            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
                 var token = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == userId);
@@ -121,11 +122,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            host.WaitForNextRender();
+            WaitForSavedToast(host, component);
 
-            var toasts = component.FindAll(".toast-body.text-success");
-
-            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
                 var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
@@ -165,11 +163,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            host.WaitForNextRender();
+            WaitForSavedToast(host, component);
 
-            var toasts = component.FindAll(".toast-body.text-success");
-
-            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
                 var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
@@ -177,10 +172,149 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task DeleteUserRoleClicked_should_remove_user_from_role()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(role);
+            });
+
+            var deleteButton = component.Find("#roles .input-group-append");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#roles");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender(async () => await Task.Delay(500));
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(role);
+            });
+        }
+
+        [Fact]
+        public async Task AddUserRole_should_add_user_to_role()
+        {
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var roleId = GenerateId();
+            await DbActionAsync<ApplicationDbContext>(context =>
+            {
+                context.Roles.Add(new IdentityRole
+                {
+                    Id = roleId,
+                    Name = roleId,
+                    NormalizedName = roleId.ToUpper()
+                });
+
+                return context.SaveChangesAsync();
+            });
+
+            var input = component.Find("#roles .new-claim");
+
+            Assert.NotNull(input);
+
+            host.WaitForNextRender(async () =>
+            {
+                await input.TriggerEventAsync("oninput", new ChangeEventArgs
+                {
+                    Value = roleId
+                });
+            });
+
+            var markup = component.GetMarkup();
+
+            while (!markup.Contains("dropdown-item"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            var button = component.Find(".dropdown-item");
+
+            Assert.NotNull(button);
+
+            host.WaitForNextRender(() => button.Click());
+
+            markup = component.GetMarkup();
+
+            Assert.Contains(roleId, markup);
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var rolessDiv = component.Find("#roles");
+
+            Assert.NotNull(rolessDiv);
+
+            Assert.Contains(roleId, rolessDiv.InnerText);
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.RoleId == roleId);
+                Assert.NotNull(role);
+            });
+        }
+
+        private static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
+        {
+            var toasts = component.FindAll(".toast-body.text-success");
+            while (!toasts.Any(t => t.InnerText.Contains("Saved")))
+            {
+                host.WaitForNextRender();
+                toasts = component.FindAll(".toast-body.text-success");
+            }
+        }
+
         private async Task<Tuple<string, TestHost, RenderedComponent<App>>> SetupPage()
         {
             var userId = GenerateId();
             await CreateTestEntity(userId);
+
+            var roleManager = Fixture.Sut.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = await roleManager.FindByNameAsync("filtered");
+            if (role == null)
+            {
+                var roleResult = await roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = "filtered"
+                });
+                Assert.True(roleResult.Succeeded);
+            }
+            var manager = Fixture.Sut.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = await manager.FindByIdAsync(userId);
+            var result = await manager.AddToRoleAsync(user, "filtered");
+            Assert.True(result.Succeeded);
 
             CreateTestHost("Alice Smith",
                 AuthorizationOptionsExtensions.WRITER,
@@ -210,33 +344,23 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 context.Users.Add(new Models.ApplicationUser
                 {
                     Id = userId,
-                    UserName = "test"
+                    UserName = userId,
+                    NormalizedUserName = userId.ToUpper()
                 });
-                var roleId = GenerateId();
-                context.Roles.Add(new Microsoft.AspNetCore.Identity.IdentityRole
-                {
-                    Id = roleId,
-                    Name = "filtered"
-                });
-                context.UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<string>
-                {
-                    RoleId = roleId,
-                    UserId = userId
-                });
-                context.UserClaims.Add(new Microsoft.AspNetCore.Identity.IdentityUserClaim<string>
+                context.UserClaims.Add(new IdentityUserClaim<string>
                 {
                     ClaimType = "filtered",
                     ClaimValue = "filtered",
                     UserId = userId
                 });
-                context.UserTokens.Add(new Microsoft.AspNetCore.Identity.IdentityUserToken<string>
+                context.UserTokens.Add(new IdentityUserToken<string>
                 {
                     UserId = userId,
                     LoginProvider = "filtered",
                     Name = "filtered",
                     Value = "filtered"
                 });
-                context.UserLogins.Add(new Microsoft.AspNetCore.Identity.IdentityUserLogin<string>
+                context.UserLogins.Add(new IdentityUserLogin<string>
                 {
                     UserId = userId,
                     LoginProvider = "filtered",
