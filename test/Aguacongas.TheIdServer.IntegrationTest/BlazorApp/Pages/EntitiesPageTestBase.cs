@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
