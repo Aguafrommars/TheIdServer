@@ -15,14 +15,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     public abstract class EntityPageTestBase
     {
-        private readonly ApiFixture _fixture;
-
         public abstract string Entity { get; }
+
+        public ApiFixture Fixture { get; }
 
         protected EntityPageTestBase(ApiFixture fixture, ITestOutputHelper testOutputHelper)
         {
-            _fixture = fixture;
-            _fixture.TestOutputHelper = testOutputHelper;
+            Fixture = fixture;
+            Fixture.TestOutputHelper = testOutputHelper;
         }
 
 
@@ -82,8 +82,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     }
                 },
                 $"http://exemple.com/{Entity}/{id}",
-                _fixture.Sut,
-                _fixture.TestOutputHelper,
+                Fixture.Sut,
+                Fixture.TestOutputHelper,
                 out host,
                 out component,
                 out mockHttp);
@@ -91,9 +91,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
         {
-            return _fixture.DbActionAsync(action);
+            return Fixture.DbActionAsync(action);
         }
 
-        protected string GenerateId() => Guid.NewGuid().ToString();
+        protected static string GenerateId() => Guid.NewGuid().ToString();
     }
 }
