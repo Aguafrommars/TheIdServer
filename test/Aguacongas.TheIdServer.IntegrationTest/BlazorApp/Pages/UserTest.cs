@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -286,14 +285,94 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        private static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
+        [Fact]
+        public async Task UpdateProperty_should_update_user()
         {
-            var toasts = component.FindAll(".toast-body.text-success");
-            while (!toasts.Any(t => t.InnerText.Contains("Saved")))
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var input = component.Find("#email");
+
+            Assert.NotNull(input);
+
+            var expected = "test@exemple.com";
+            host.WaitForNextRender(() => input.Change(expected));
+
+            var markup = component.GetMarkup();
+
+            Assert.Contains(expected, markup);
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
             {
-                host.WaitForNextRender();
-                toasts = component.FindAll(".toast-body.text-success");
-            }
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Id == tuple.Item1);
+                Assert.Equal(expected, user.Email);
+            });
+        }
+
+        [Fact]
+        public async Task Delete_should_remove_user()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var input = component.Find("#delete-entity input");
+
+            host.WaitForNextRender(() => input.Change(userId));
+
+            var confirm = component.Find("#delete-entity button.btn-danger");
+
+            host.WaitForNextRender(() => confirm.Click());
+
+            WaitForDeletedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                Assert.Null(user);
+            });
+        }
+
+        [Fact]
+        public async Task Should_create_new_user()
+        {
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                null,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            host.WaitForNextRender();
+
+            var markup = component.GetMarkup();
+
+            var input = component.Find("#name");
+
+            var userId = GenerateId();
+            host.WaitForNextRender(() => input.Change(userId));
+
+            var form = component.Find("form");
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == userId);
+                Assert.NotNull(user);
+            });
         }
 
         private async Task<Tuple<string, TestHost, RenderedComponent<App>>> SetupPage()

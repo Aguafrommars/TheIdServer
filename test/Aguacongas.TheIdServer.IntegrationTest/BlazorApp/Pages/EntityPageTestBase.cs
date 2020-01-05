@@ -95,5 +95,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
+
+        protected static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
+        {
+            WaitForToast("Saved", host, component);
+        }
+
+        protected static void WaitForDeletedToast(TestHost host, RenderedComponent<App> component)
+        {
+            WaitForToast("Deleted", host, component);
+        }
+
+        protected static void WaitForToast(string text, TestHost host, RenderedComponent<App> component)
+        {
+            var toasts = component.FindAll(".toast-body.text-success");
+            while (!toasts.Any(t => t.InnerText.Contains(text)))
+            {
+                host.WaitForNextRender();
+                toasts = component.FindAll(".toast-body.text-success");
+            }
+        }
     }
 }

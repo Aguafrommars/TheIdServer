@@ -358,7 +358,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 var entityModel = GetEntityModel(identifier);
                 var modifications = GetModifications(entityType);
 
-                if (!modifications.ContainsKey(entityModel))
+                if (entityModel != null && !modifications.ContainsKey(entityModel))
                 {
                     Console.WriteLine($"Add update modification for entity {entityType} {entityModel.Id}");
                     modifications.Add(entityModel, ModificationKind.Update);
