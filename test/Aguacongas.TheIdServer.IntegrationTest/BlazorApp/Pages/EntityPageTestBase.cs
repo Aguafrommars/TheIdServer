@@ -36,8 +36,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender();
-
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
             Assert.All(inputs, input => input.Attributes.Any(a => a.Name == "disabled"));
@@ -52,8 +50,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
-
-            host.WaitForNextRender();
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));

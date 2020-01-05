@@ -355,8 +355,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender();
 
-            var markup = component.GetMarkup();
-
             var input = component.Find("#name");
 
             var userId = GenerateId();
