@@ -76,12 +76,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                         {
                             return;
                         }
-                        FilteredValues = await GetFilteredValues(SelectedValue);
+                        FilteredValues = await GetFilteredValues(SelectedValue)
+                            .ConfigureAwait(false);
                         if (FilteredValues.Any())
                         {
                             await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", Id);
                         }
-                        StateHasChanged();
+                       await InvokeAsync(StateHasChanged);
                     }, TaskScheduler.Default);
         }
 

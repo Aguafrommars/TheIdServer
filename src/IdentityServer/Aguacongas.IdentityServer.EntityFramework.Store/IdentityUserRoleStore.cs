@@ -33,9 +33,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<UserRole> CreateAsync(UserRole entity, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(entity.UserId);
-            var role = await GetRoleAsync(entity.RoleId, cancellationToken);
-            var result = await _userManager.AddToRoleAsync(user, role.Name);                
+            var user = await GetUserAsync(entity.UserId)
+                .ConfigureAwait(false);
+            var role = await GetRoleAsync(entity.RoleId, cancellationToken)
+                .ConfigureAwait(false);
+            var result = await _userManager.AddToRoleAsync(user, role.Name)
+                .ConfigureAwait(false);                
             if (result.Succeeded)
             {
                 entity.Id = $"{user.Id}@{entity.RoleId}";
@@ -58,8 +61,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var info = id.Split('@');
             var role = await GetRoleAsync(info[1], cancellationToken).ConfigureAwait(false);
-            var user = await GetUserAsync(info[0]);
-            var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+            var user = await GetUserAsync(info[0])
+                .ConfigureAwait(false);
+            var result = await _userManager.RemoveFromRoleAsync(user, role.Name)
+                .ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 throw new IdentityException

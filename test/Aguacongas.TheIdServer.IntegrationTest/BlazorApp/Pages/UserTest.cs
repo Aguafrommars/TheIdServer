@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -177,6 +178,121 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task DeleteUserRoleClicked_should_remove_user_from_role()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(role);
+            });
+
+            var deleteButton = component.Find("#roles .input-group-append");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#roles");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(role);
+            });
+        }
+
+        [Fact]
+        public async Task AddUserRole_should_add_user_to_role()
+        {
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var roleId = GenerateId();
+            await DbActionAsync<ApplicationDbContext>(context =>
+            {
+                context.Roles.Add(new Microsoft.AspNetCore.Identity.IdentityRole
+                {
+                    Id = roleId,
+                    Name = roleId,
+                    NormalizedName = roleId.ToUpper()
+                });
+
+                return context.SaveChangesAsync();
+            });
+
+            var input = component.Find("#roles .new-claim");
+
+            Assert.NotNull(input);
+
+            host.WaitForNextRender(async () => 
+                await input.TriggerEventAsync("oninput", new ChangeEventArgs
+                {
+                    Value = roleId
+                })
+             );
+
+            host.WaitForNextRender(async () => await Task.Delay(500));
+
+            var markup = component.GetMarkup();
+
+            Assert.Contains(roleId, markup);
+
+            var button = component.Find(".dropdown-item");
+
+            Assert.NotNull(button);
+
+            host.WaitForNextRender(() => button.Click());
+
+            markup = component.GetMarkup();
+
+            Assert.Contains(roleId, markup);
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#roles");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.Contains(roleId, tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var role = await context.UserRoles.FirstOrDefaultAsync(t => t.RoleId == roleId);
+                Assert.NotNull(role);
+            });
+        }
+
         private async Task<Tuple<string, TestHost, RenderedComponent<App>>> SetupPage()
         {
             var userId = GenerateId();
@@ -212,15 +328,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     Id = userId,
                     UserName = "test"
                 });
-                var roleId = GenerateId();
-                context.Roles.Add(new Microsoft.AspNetCore.Identity.IdentityRole
+                var role = context.Roles.FirstOrDefault(r => r.Name == "filtered");
+                if (role == null)
                 {
-                    Id = roleId,
-                    Name = "filtered"
-                });
+                    role = new Microsoft.AspNetCore.Identity.IdentityRole
+                    {
+                        Id = GenerateId(),
+                        Name = "filtered",
+                        NormalizedName = "filtered".ToUpper()
+                    };
+                    context.Roles.Add(role);
+                }
                 context.UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<string>
                 {
-                    RoleId = roleId,
+                    RoleId = role.Id,
                     UserId = userId
                 });
                 context.UserClaims.Add(new Microsoft.AspNetCore.Identity.IdentityUserClaim<string>
