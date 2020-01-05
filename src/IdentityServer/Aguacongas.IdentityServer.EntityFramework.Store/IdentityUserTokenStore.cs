@@ -44,7 +44,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var token = await GetTokenAsync(id, cancellationToken).ConfigureAwait(false);
             _context.UserTokens.Remove(token);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync()
+                .ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} deleted", id, token);
         }
 

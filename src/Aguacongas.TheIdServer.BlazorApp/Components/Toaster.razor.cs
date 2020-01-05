@@ -12,7 +12,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             _notifier.Show = notification =>
             {
                 _notifications.Add(notification);
-                StateHasChanged();
+                InvokeAsync(StateHasChanged);
             };
         }
 

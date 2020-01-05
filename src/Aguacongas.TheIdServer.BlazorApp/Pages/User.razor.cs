@@ -206,5 +206,29 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmptyRole();
             StateHasChanged();
         }
+
+        private void OnDeleteUserTokenClicked(Entity.UserToken token)
+        {
+            _tokensState.Remove(token);
+            _tokens.Remove(token);
+            EntityDeleted(token);
+            StateHasChanged();
+        }
+
+        private void OnDeleteUserLoginClicked(Entity.UserLogin login)
+        {
+            _loginsState.Remove(login);
+            _logins.Remove(login);
+            EntityDeleted(login);
+            StateHasChanged();
+        }
+
+        private void OnDeleteUserConsentClicked(Entity.UserConsent consent)
+        {
+            _consentsState.Remove(consent);
+            _consents.Remove(consent);
+            EntityDeleted(consent);
+            StateHasChanged();
+        }
     }
 }

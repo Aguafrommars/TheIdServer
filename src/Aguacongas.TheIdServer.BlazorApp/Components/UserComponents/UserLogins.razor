@@ -1,15 +1,15 @@
-﻿@inherits  UserEntitesGridModel<Entity.UserToken>
+﻿@inherits  UserEntitesGridModel<Entity.UserLogin>
 
-<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="token">
+<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="login">
     <TableHeader>
         <th scope="col">
-            <SortableHeader Property="LoginProvider"
+            <SortableHeader Property="ProviderDisplayName"
                             Text="provider"
                             GridState="GridState" />
         </th>
         <th scope="col">
-            <SortableHeader Property="Name"
-                            Text="name"
+            <SortableHeader Property="ProviderKey"
+                            Text="key"
                             GridState="GridState" />
         </th>
         <th>
@@ -21,16 +21,13 @@
     </TableHeader>
     <RowTemplate>
         <td>
-            @token.LoginProvider
+            @login.ProviderDisplayName
         </td>
         <td>
-            @token.Name
+            @login.ProviderKey
         </td>
         <td>
-            @token.Value
-        </td>
-        <td>
-            <AuthorizeButton CssSubClass="btn-primary" Type="button" Clicked="() => OnDeleteEntityClicked(token)">
+            <AuthorizeButton CssSubClass="btn-primary" Type="button" Clicked="() => OnDeleteEntityClicked(login)">
                 <span class="oi oi-trash"></span>
             </AuthorizeButton>
         </td>

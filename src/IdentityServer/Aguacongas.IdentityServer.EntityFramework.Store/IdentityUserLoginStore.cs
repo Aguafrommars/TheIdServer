@@ -32,36 +32,23 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<UserLogin> CreateAsync(UserLogin entity, CancellationToken cancellationToken = default)
+        public Task<UserLogin> CreateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(entity.UserId);
-            var login = entity.ToUserLoginInfo();
-            var result = await _userManager.AddLoginAsync(user, login)
-                .ConfigureAwait(false);
-            if (result.Succeeded)
-            {
-                entity.Id = $"{entity.UserId}@{entity.LoginProvider}@{entity.ProviderKey}";
-                _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
-                return entity;
-            }
-            throw new IdentityException
-            {
-                Errors = result.Errors
-            };
+            throw new NotImplementedException();
         }
 
-        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        public Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as UserLogin, cancellationToken)
-                .ConfigureAwait(false);
+            throw new NotImplementedException();
         }
-
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var login = await GetLoginAsync(id, cancellationToken).ConfigureAwait(false);
-            var user = await GetUserAsync(login.UserId);
-            var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+            var user = await GetUserAsync(login.UserId)
+                .ConfigureAwait(false);
+            var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey)
+                .ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 throw new IdentityException
@@ -72,24 +59,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger.LogInformation("Entity {EntityId} deleted", id, login);
         }
 
-        public async Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
+        public Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
-            var login = await GetLoginAsync(entity.Id, cancellationToken).ConfigureAwait(false);
-            var user = await GetUserAsync(entity.Id);
-            var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey)
-                .ConfigureAwait(false);
-            ChechResult(result);
-            result = await _userManager.AddLoginAsync(user, entity.ToUserLoginInfo())
-                .ConfigureAwait(false);
-            ChechResult(result);
-            _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
-            return entity;
+            throw new NotImplementedException();
         }
 
-        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as UserLogin, cancellationToken)
-                .ConfigureAwait(false);
+            throw new NotImplementedException();
         }
 
         public async Task<UserLogin> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
@@ -145,17 +122,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
 
             return login;
-        }
-
-        private void ChechResult(IdentityResult result)
-        {
-            if (!result.Succeeded)
-            {
-                throw new IdentityException
-                {
-                    Errors = result.Errors
-                };
-            }
         }
 
         private static IEdmModel GetEdmModel()

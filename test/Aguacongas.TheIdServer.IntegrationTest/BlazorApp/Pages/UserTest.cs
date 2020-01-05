@@ -5,7 +5,9 @@ using Aguacongas.TheIdServer.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -23,6 +25,159 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         [Fact]
         public async Task OnFilterChanged_should_filter_roles_consents_claims_and_tokens()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var filterInput = component.Find("input[placeholder=\"filter\"]");
+
+            Assert.NotNull(filterInput);
+
+            host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            {
+                Value = userId
+            }));
+
+            var markup = component.GetMarkup();
+
+            Assert.DoesNotContain("filtered", markup);
+        }
+
+        [Fact]
+        public async Task DeleteUserTokenClicked_should_remove_user_token()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var token = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(token);
+            });
+
+            var deleteButton = component.Find("#external-logins-tokens button[type=button]");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#external-logins-tokens");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var token = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(token);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteUserLoginClicked_should_remove_user_login()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(login);
+            });
+
+            var deleteButton = component.Find("#external-logins button[type=button]");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#external-logins");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(login);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteUserConsentClicked_should_remove_user_consent()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(consent);
+            });
+
+            var deleteButton = component.Find("#consents button[type=button]");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#consents");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(consent);
+            });
+        }
+
+        private async Task<Tuple<string, TestHost, RenderedComponent<App>>> SetupPage()
         {
             var userId = GenerateId();
             await CreateTestEntity(userId);
@@ -44,24 +199,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 markup = component.GetMarkup();
             }
 
-            markup = component.GetMarkup();
-
             Assert.Contains("filtered", markup);
 
-            var filterInput = component.Find("input[placeholder=\"filter\"]");
-
-            Assert.NotNull(filterInput);
-
-            host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
-            {
-                Value = userId
-            }));
-
-            markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            return new Tuple<string, TestHost, RenderedComponent<App>>(userId, host, component);
         }
-
         private async Task CreateTestEntity(string userId)
         {
             await DbActionAsync<ApplicationDbContext>(context =>
@@ -94,6 +235,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     LoginProvider = "filtered",
                     Name = "filtered",
                     Value = "filtered"
+                });
+                context.UserLogins.Add(new Microsoft.AspNetCore.Identity.IdentityUserLogin<string>
+                {
+                    UserId = userId,
+                    LoginProvider = "filtered",
+                    ProviderDisplayName = "filtered",
+                    ProviderKey = GenerateId()
                 });
                 return context.SaveChangesAsync();
             });

@@ -1,6 +1,4 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -8,11 +6,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 {
     public partial class UserConsents
     {
-        private GridState GridState { get; } = new GridState();
-
-        [Parameter]
-        public IEnumerable<Entity.UserConsent> Model { get; set; }
-
         public static IEnumerable<string> GetScopes(Entity.UserConsent consent)
         {
             var scopes = JsonSerializer.Deserialize<Data>(consent.Data)?.Scopes;
