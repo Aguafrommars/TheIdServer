@@ -15,7 +15,7 @@ else
             <div class="col">
                 @if (IsNew)
                 {
-                    <AuthorizeText Name="name" Placeholder="role name" @bind-Value="@Model.UserName" />
+                    <AuthorizeText Id="name" Placeholder="role name" @bind-Value="@Model.UserName" />
                 }
                 else
                 {
@@ -50,7 +50,7 @@ else
                                 password
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Name="password" Placeholder="password" @bind-Value="@Model.Password" />
+                                <AuthorizeText Id="password" Placeholder="password" @bind-Value="@Model.Password" />
                             </div>
                         </div>
                     }
@@ -59,7 +59,7 @@ else
                             email
                         </label>
                         <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Name="email" @bind-Value="@Model.Email" />
+                            <AuthorizeText Id="email" @bind-Value="@Model.Email" />
                             <div>
                                 <AuthorizeCheckbox Name="email-confirmed" Label="email confirmed" @bind-Value="@Model.EmailConfirmed" />
                             </div>
@@ -70,7 +70,7 @@ else
                             phone number
                         </label>
                         <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Name="phone-number" @bind-Value="@Model.PhoneNumber" />
+                            <AuthorizeText Id="phone-number" @bind-Value="@Model.PhoneNumber" />
                             <div>
                                 <AuthorizeCheckbox Name="phone-number-confirmed" Label="phone number confirmed" @bind-Value="@Model.PhoneNumberConfirmed" />
                             </div>
@@ -81,7 +81,7 @@ else
                             lockout end
                         </label>
                         <div class="col-lg-10 col-sm-12">
-                            <AuthorizeDate Name="lokoutend" @bind-Value="@Model.LockoutEnd" />
+                            <AuthorizeDate Id="lokoutend" @bind-Value="@Model.LockoutEnd" />
                             <div>
                                 <AuthorizeCheckbox Name="lockout-enabled" Label="lockout enabled" @bind-Value="@Model.LockoutEnabled" />
                             </div>
@@ -126,10 +126,10 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText Name="type" @bind-Value="@claim.Type" />
+                                <AuthorizeText @bind-Value="@claim.Type" />
                             </td>
                             <td>
-                                <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+                                <AuthorizeText @bind-Value="@claim.Value" />
                             </td>
                             <td>
                                 <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">

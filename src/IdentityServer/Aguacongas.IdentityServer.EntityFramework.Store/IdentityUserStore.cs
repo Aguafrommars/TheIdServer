@@ -30,6 +30,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<User> CreateAsync(User entity, CancellationToken cancellationToken = default)
         {
             var user = entity.ToUser<TUser>();
+            user.Id = Guid.NewGuid().ToString();
             var result = string.IsNullOrEmpty(entity.Password)
                 ? await _userManager.CreateAsync(user)
                     .ConfigureAwait(false)
@@ -49,12 +50,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as User, cancellationToken);
+            return await CreateAsync(entity as User, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var user = await GetUserAsync(id);
+            var user = await GetUserAsync(id)
+                .ConfigureAwait(false);
             var result = await _userManager.DeleteAsync(user)
                 .ConfigureAwait(false);
             if (result.Succeeded)
@@ -119,7 +122,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as User, cancellationToken);
+            return await UpdateAsync(entity as User, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private async Task<TUser> GetUserAsync(string userId)

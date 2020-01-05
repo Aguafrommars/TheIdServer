@@ -36,8 +36,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender();
-
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
             Assert.All(inputs, input => input.Attributes.Any(a => a.Name == "disabled"));
@@ -52,8 +50,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
-
-            host.WaitForNextRender();
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -95,5 +91,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
+
+        protected static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
+        {
+            WaitForToast("Saved", host, component);
+        }
+
+        protected static void WaitForDeletedToast(TestHost host, RenderedComponent<App> component)
+        {
+            WaitForToast("Deleted", host, component);
+        }
+
+        protected static void WaitForToast(string text, TestHost host, RenderedComponent<App> component)
+        {
+            var toasts = component.FindAll(".toast-body.text-success");
+            while (!toasts.Any(t => t.InnerText.Contains(text)))
+            {
+                host.WaitForNextRender();
+                toasts = component.FindAll(".toast-body.text-success");
+            }
+        }
     }
 }
