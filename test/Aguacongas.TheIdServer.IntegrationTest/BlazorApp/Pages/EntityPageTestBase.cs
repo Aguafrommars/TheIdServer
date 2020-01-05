@@ -94,6 +94,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             return _fixture.DbActionAsync(action);
         }
 
-        protected static string GenerateId() => Guid.NewGuid().ToString();
+        protected string GenerateId() => Guid.NewGuid().ToString();
     }
 }

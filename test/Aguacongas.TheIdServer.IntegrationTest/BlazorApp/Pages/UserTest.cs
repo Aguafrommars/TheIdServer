@@ -59,7 +59,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(token);
             });
 
-
             var deleteButton = component.Find("#external-logins-tokens button[type=button]");
 
             Assert.NotNull(deleteButton);
@@ -71,7 +70,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(form);
 
             host.WaitForNextRender(() => form.Submit());
-
 
             var tokensDiv = component.Find("#external-logins-tokens");
 
@@ -88,6 +86,94 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             {
                 var token = await context.UserTokens.FirstOrDefaultAsync(t => t.UserId == userId);
                 Assert.Null(token);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteUserLoginClicked_should_remove_user_login()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(login);
+            });
+
+            var deleteButton = component.Find("#external-logins button[type=button]");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#external-logins");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(login);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteUserConsentClicked_should_remove_user_consent()
+        {
+            var tuple = await SetupPage();
+            var userId = tuple.Item1;
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.NotNull(consent);
+            });
+
+            var deleteButton = component.Find("#consents button[type=button]");
+
+            Assert.NotNull(deleteButton);
+
+            host.WaitForNextRender(() => deleteButton.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            var tokensDiv = component.Find("#consents");
+
+            Assert.NotNull(tokensDiv);
+
+            Assert.DoesNotContain("filtered", tokensDiv.InnerText);
+
+            host.WaitForNextRender();
+
+            var toasts = component.FindAll(".toast-body.text-success");
+
+            Assert.Contains(toasts, t => t.InnerText.Contains("Saved"));
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(consent);
             });
         }
 
@@ -117,7 +203,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             return new Tuple<string, TestHost, RenderedComponent<App>>(userId, host, component);
         }
-
         private async Task CreateTestEntity(string userId)
         {
             await DbActionAsync<ApplicationDbContext>(context =>
@@ -156,7 +241,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     UserId = userId,
                     LoginProvider = "filtered",
                     ProviderDisplayName = "filtered",
-                    ProviderKey = "filtered"
+                    ProviderKey = GenerateId()
                 });
                 return context.SaveChangesAsync();
             });

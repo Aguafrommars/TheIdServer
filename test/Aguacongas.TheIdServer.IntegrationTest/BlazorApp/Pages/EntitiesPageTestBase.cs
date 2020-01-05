@@ -64,6 +64,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 {
                     Value = GenerateId()
                 });
+
+                await Task.Delay(500);
             });
 
 
