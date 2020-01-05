@@ -150,6 +150,26 @@ else
                     <UserRoles Model="@_roles" DeleteRoleClicked="OnDeleteRoleClicked" RoleValueChanged="OnRoleValueChanged" />
                 </div>
             </div>
+            <div id="consents" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Consents</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <UserConsents Model="_consents" />
+                </div>
+            </div>
+            <div id="external-logins" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">External login tokens</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <UserConsents Model="_consents" />
+                </div>
+            </div>
         </div>
     </EditForm>
 }

@@ -49,7 +49,7 @@ namespace Microsoft.AspNetCore.Components.Testing
             }
             else
             {
-                task.Wait(millisecondsTimeout: 1000);
+                task.Wait(millisecondsTimeout: 5000);
             }
             
 

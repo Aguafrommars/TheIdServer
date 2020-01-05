@@ -2,13 +2,15 @@
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ReferenceTokenStore : GrantStore<ReferenceToken, Token>, IReferenceTokenStore
     {
-        public ReferenceTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public ReferenceTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<ReferenceTokenStore> logger)
+            : base(context, serializer, logger)
         {
         }
 

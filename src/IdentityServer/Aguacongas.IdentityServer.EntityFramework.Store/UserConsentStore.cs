@@ -2,13 +2,15 @@
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class UserConsentStore : GrantStore<UserConsent, Consent>, IUserConsentStore
     {
-        public UserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer) : base(context, serializer)
+        public UserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<UserConsentStore> logger)
+            : base(context, serializer, logger)
         {
         }
 
