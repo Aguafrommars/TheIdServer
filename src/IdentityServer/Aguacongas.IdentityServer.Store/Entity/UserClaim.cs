@@ -42,6 +42,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The value.
         /// </value>
+        [MaxLength(250)]
         public string Value { get; set; }
     }
 }

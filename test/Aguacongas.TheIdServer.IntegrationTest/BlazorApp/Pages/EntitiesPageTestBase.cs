@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase
+    public abstract class EntitiesPageTestBase<TEntity>
     {
         private readonly ApiFixture _fixture;
 
@@ -78,6 +79,48 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             Assert.DoesNotContain("filtered", markup);
+        }
+
+        [Fact]
+        public async Task OnRowClicked_should_navigate_to_entity_page()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            host.WaitForNextRender(() =>
+            {
+            });
+
+            var markup = component.GetMarkup();
+
+            if (markup.Contains("Loading..."))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            Assert.Contains("filtered", markup);
+
+            var tr = component.Find(".table-hover tr");
+
+            Assert.NotNull(tr);
+
+            var navigationManager = host.ServiceProvider.GetRequiredService<TestNavigationManager>();
+            bool called = false;
+            navigationManager.OnNavigateToCore = (uri, forceload) =>
+            {
+                called = true;
+                Assert.Contains(typeof(TEntity).Name.ToLower(), uri);
+            };
+
+            host.WaitForNextRender(() => tr.Click());
+
+            Assert.True(called);
         }
 
         protected abstract Task PopulateList();

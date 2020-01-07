@@ -11,6 +11,8 @@ namespace Microsoft.AspNetCore.Components.Testing
         private readonly ServiceCollection _serviceCollection = new ServiceCollection();
         private readonly Lazy<TestRenderer> _renderer;
 
+        public IServiceProvider ServiceProvider => Renderer.ServiceProvider;
+
         public TestHost()
         {
             _renderer = new Lazy<TestRenderer>(() =>

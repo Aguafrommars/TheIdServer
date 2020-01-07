@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection("api collection")]
-    public class CientsTest : EntitiesPageTestBase
+    public class CientsTest : EntitiesPageTestBase<Client>
     {
         public override string Entities => "clients";
         public CientsTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             {
                 context.Clients.Add(new Client
                 {
-                    Id = "filtered",
+                    Id = GenerateId(),
                     ProtocolType = "oidc",
                     ClientName = "filtered"
                 });

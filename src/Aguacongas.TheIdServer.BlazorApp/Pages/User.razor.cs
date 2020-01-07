@@ -177,7 +177,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnAddClaimClicked()
         {
-            var claim = new Entity.UserClaim();
+            var claim = new Entity.UserClaim
+            {
+                UserId = Model.Id
+            };
             _claims.Add(claim);
             _claimsState.Add(claim);
             EntityCreated(claim);

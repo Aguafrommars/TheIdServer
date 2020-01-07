@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -286,7 +287,86 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public async Task UpdateProperty_should_update_user()
+        public async Task AddUserClaim_should_add_claim_to_user()
+        {
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var addButton = component.Find("#claims button");
+
+            Assert.NotNull(addButton);
+
+            host.WaitForNextRender(() => addButton.Click());
+
+            var rows = component.FindAll("#claims tr");
+
+            Assert.NotNull(rows);
+
+            var lastRow = rows.Last();
+            var inputList = lastRow.Descendants("input");
+
+            Assert.NotEmpty(inputList);
+
+            var expected = GenerateId();
+            host.WaitForNextRender(() => inputList.First().Change(expected));
+
+            rows = component.FindAll("#claims tr");
+            lastRow = rows.Last();
+            inputList = lastRow.Descendants("input");
+
+            host.WaitForNextRender(() => inputList.Last().Change(expected));
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var userId = tuple.Item1;
+                var claim = await context.UserClaims.FirstOrDefaultAsync(t => t.UserId == userId &&
+                    t.ClaimType == expected &&
+                    t.ClaimValue == expected);
+                Assert.NotNull(claim);
+            });
+        }
+
+        [Fact]
+        public async Task SaveClicked_create_new_user()
+        {
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                null,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            host.WaitForNextRender();
+
+            var input = component.Find("#name");
+
+            var userId = GenerateId();
+            host.WaitForNextRender(() => input.Change(userId));
+
+            var form = component.Find("form");
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == userId);
+                Assert.NotNull(user);
+            });
+        }
+
+        [Fact]
+        public async Task SaveClicked_should_update_user()
         {
             var tuple = await SetupPage();
             var host = tuple.Item2;
@@ -319,7 +399,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public async Task Delete_should_remove_user()
+        public async Task DeleteClicked_should_remove_user()
         {
             var tuple = await SetupPage();
             var userId = tuple.Item1;
@@ -343,35 +423,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        [Fact]
-        public async Task Should_create_new_user()
-        {
-            CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
-                null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            host.WaitForNextRender();
-
-            var input = component.Find("#name");
-
-            var userId = GenerateId();
-            host.WaitForNextRender(() => input.Change(userId));
-
-            var form = component.Find("form");
-
-            host.WaitForNextRender(() => form.Submit());
-
-            WaitForSavedToast(host, component);
-
-            await DbActionAsync<ApplicationDbContext>(async context =>
-            {
-                var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == userId);
-                Assert.NotNull(user);
-            });
-        }
 
         private async Task<Tuple<string, TestHost, RenderedComponent<App>>> SetupPage()
         {

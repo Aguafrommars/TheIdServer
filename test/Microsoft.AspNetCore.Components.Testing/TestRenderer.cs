@@ -17,6 +17,7 @@ namespace Microsoft.AspNetCore.Components.Testing
         public TestRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
             : base(serviceProvider, loggerFactory)
         {
+            ServiceProvider = serviceProvider;
         }
 
         public new ArrayRange<RenderTreeFrame> GetCurrentRenderTreeFrames(int componentId)
@@ -36,6 +37,8 @@ namespace Microsoft.AspNetCore.Components.Testing
         public override Dispatcher Dispatcher { get; } = Dispatcher.CreateDefault();
 
         public Task NextRender => _nextRenderTcs.Task;
+
+        public IServiceProvider ServiceProvider { get; }
 
         protected override void HandleException(Exception exception)
         {

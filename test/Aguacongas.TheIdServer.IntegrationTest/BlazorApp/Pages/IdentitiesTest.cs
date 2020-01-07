@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection("api collection")]
-    public class IdentitiesTest : EntitiesPageTestBase
+    public class IdentitiesTest : EntitiesPageTestBase<IdentityResource>
     {
         public override string Entities => "identities";
         public IdentitiesTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             {
                 context.Identities.Add(new IdentityResource
                 {
-                    Id = "filtered",
+                    Id = GenerateId(),
                     DisplayName = "filtered"
                 });
 
