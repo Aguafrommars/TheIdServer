@@ -336,6 +336,72 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
+        public async Task UpdateUserClaim_should_update_claim()
+        {
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var rows = component.FindAll("#claims tr");
+
+            Assert.NotNull(rows);
+
+            var lastRow = rows.Last();
+            var inputList = lastRow.Descendants("input");
+
+            Assert.NotEmpty(inputList);
+
+            var expected = GenerateId();
+
+            host.WaitForNextRender(() => inputList.Last().Change(expected));
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var userId = tuple.Item1;
+                var claim = await context.UserClaims.FirstOrDefaultAsync(t => t.UserId == userId &&
+                    t.ClaimValue == expected);
+                Assert.NotNull(claim);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteUserClaim_should_remove_claim_from_user()
+        {
+            var tuple = await SetupPage();
+            var host = tuple.Item2;
+            var component = tuple.Item3;
+
+            var button = component.Find("#claims tr button");
+
+            Assert.NotNull(button);
+
+            host.WaitForNextRender(() => button.Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ApplicationDbContext>(async context =>
+            {
+                var userId = tuple.Item1;
+                var claim = await context.UserClaims.FirstOrDefaultAsync(t => t.UserId == userId);
+                Assert.Null(claim);
+            });
+        }
+
+        [Fact]
         public async Task SaveClicked_create_new_user()
         {
             CreateTestHost("Alice Smith",
