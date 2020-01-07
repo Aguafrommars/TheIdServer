@@ -1,4 +1,5 @@
-﻿using Aguacongas.TheIdServer.Data;
+﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Xunit;
@@ -7,7 +8,7 @@ using Xunit.Abstractions;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection("api collection")]
-    public class RolesTest : EntitiesPageTestBase
+    public class RolesTest : EntitiesPageTestBase<Role>
     {
         public override string Entities => "roles";
 

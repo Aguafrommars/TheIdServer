@@ -466,7 +466,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             return new IdentityUserClaim<string>
             {
-                Id = int.Parse(claim.Id),
+                Id = claim.Id != null ? int.Parse(claim.Id) : 0,
                 UserId = claim.UserId,
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value
