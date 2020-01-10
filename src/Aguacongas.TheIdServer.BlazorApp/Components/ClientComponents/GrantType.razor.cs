@@ -1,4 +1,4 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
