@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
                 .Where(m => m.GrantType != null)
                 .SetValidator(new ClientGrantTypeValidator(client));
             RuleFor(m => m.AllowedGrantTypes).Must(g => g.Any(g => !string.IsNullOrEmpty(g.GrantType)))
-                .WithMessage("The client should contains at least one grant type.");
+                .WithMessage("The client should contain at least one grant type.");
         }
     }
 }

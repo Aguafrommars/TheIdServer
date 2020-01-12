@@ -21,8 +21,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
         }
 
-
-
         [Fact]
         public async Task OnFilterChanged_should_filter_properties_scopes_scopeClaims_and_secret()
         {
@@ -91,7 +89,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
                 Assert.Equal(expected, api.DisplayName);
             });
-
         }
 
         private async Task<string> CreateApi()
