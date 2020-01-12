@@ -1,5 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
+﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using System.Linq;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Extensions

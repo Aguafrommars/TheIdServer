@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Internal;
+using FluentValidation.Results;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -28,11 +30,11 @@ namespace Microsoft.AspNetCore.Components.Forms
 
         private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
         {
-            var validator = GetValidatorForModel(editContext.Model);
+            var validator = GetValidatorForModel(editContext.Model, editContext.Model);
             var validationResults = validator.Validate(editContext.Model);
 
             messages.Clear();
-            foreach (var validationResult in validationResults.Errors)
+            foreach (var validationResult in validationResults.Errors.Distinct(CompareError.Instance))
             {
                 messages.Add(editContext.Field(validationResult.PropertyName), validationResult.ErrorMessage);
             }
@@ -43,14 +45,15 @@ namespace Microsoft.AspNetCore.Components.Forms
         private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier)
         {
             var properties = new[] { fieldIdentifier.FieldName };
-            var context = new ValidationContext(fieldIdentifier.Model, new PropertyChain(),
+            var model = fieldIdentifier.Model;
+            var context = new ValidationContext(model, new PropertyChain(),
                 new MemberNameValidatorSelector(properties));
 
-            var validator = GetValidatorForModel(fieldIdentifier.Model);
+            var validator = GetValidatorForModel(editContext.Model, model);
             var validationResults = validator.Validate(context);
 
             messages.Clear(fieldIdentifier);
-            foreach(var result in validationResults.Errors.Select(error => error.ErrorMessage))
+            foreach(var result in validationResults.Errors.Distinct(CompareError.Instance).Select(error => error.ErrorMessage))
             {
                 messages.Add(fieldIdentifier, result);
             }
@@ -58,14 +61,28 @@ namespace Microsoft.AspNetCore.Components.Forms
             editContext.NotifyValidationStateChanged();
         }
 
-        private static IValidator GetValidatorForModel(object model)
+        private static IValidator GetValidatorForModel(object entity, object model)
         {
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
             var modelValidatorType = Assembly.GetExecutingAssembly()
                 .GetTypes().FirstOrDefault(t => t.IsSubclassOf(abstractValidatorType));
-            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType);
+            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity);
 
             return modelValidatorInstance;
+        }
+
+        class CompareError : IEqualityComparer<ValidationFailure>
+        {
+            public static readonly CompareError Instance = new CompareError();
+            public bool Equals(ValidationFailure x, ValidationFailure y)
+            {
+                return x.ErrorMessage == y.ErrorMessage;
+            }
+
+            public int GetHashCode(ValidationFailure obj)
+            {
+                return -1;
+            }
         }
     }
 }

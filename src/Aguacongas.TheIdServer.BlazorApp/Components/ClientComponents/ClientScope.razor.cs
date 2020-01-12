@@ -29,6 +29,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Scope);
 
+        protected override string PropertyName => "Scope";
+
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
             _idPageRequest.Filter = $"contains(Id,'{term}') or contains(DisplayName,'{term}')";

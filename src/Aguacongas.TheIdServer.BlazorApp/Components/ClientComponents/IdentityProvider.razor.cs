@@ -17,6 +17,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Provider);
 
+        protected override string PropertyName => "Provider";
+
         protected override async Task OnInitializedAsync()
         {
             _providerName = await GetProviderName(Entity.Provider);

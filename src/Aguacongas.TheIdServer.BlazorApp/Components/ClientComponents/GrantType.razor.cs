@@ -1,4 +1,4 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class GrantType : AutoCompleteModel<Entity.ClientGrantType>
     {
+        private bool _isReadOnly;
         [Parameter]
         public Entity.Client Model { get; set; }
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.GrantType);
+        protected override bool IsReadOnly => _isReadOnly;
+
+        protected override string PropertyName => "GrantType";
 
         protected override Task<IEnumerable<string>> GetFilteredValues(string term)
         {
@@ -31,6 +34,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             return Task.FromResult(result);
         }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _isReadOnly = Entity.GrantType != null;
+        }
         protected override void SetValue(string inputValue)
         {
             Entity.GrantType = inputValue;

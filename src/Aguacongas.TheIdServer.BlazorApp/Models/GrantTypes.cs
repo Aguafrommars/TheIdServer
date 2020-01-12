@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Aguacongas.IdentityServer.Store
+namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
     /// <summary>
     /// 

@@ -80,6 +80,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return base.GetEntityModel(identifier);
         }
 
+        protected override void OnEntityUpdated(Type entityType, Entity.IEntityId entityModel)
+        {
+            if (entityType == typeof(Entity.ClientGrantType))
+            {
+                return;
+            }
+            base.OnEntityUpdated(entityType, entityModel);
+        }
+
         private void FilterFocusChanged(bool hasFocus)
         {
             if (hasFocus)

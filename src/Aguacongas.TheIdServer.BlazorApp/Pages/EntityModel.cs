@@ -87,11 +87,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected async Task HandleValidSubmit()
         {
-            if (!EditContext.Validate())
-            {
-                return;
-            }
-
             if (!_changes.Any())
             {
                 Notifier.Notify(new Models.Notification
@@ -113,7 +108,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 var keys = _changes.Keys
                     .OrderBy(k => k, this);
-                
+
                 foreach (var key in keys)
                 {
                     await HandleMoficationList(key, _changes[key])
@@ -159,8 +154,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var entityType = typeof(TEntity);
             var modifications = GetModifications(entityType);
+            if (!modifications.TryAdd(entity, ModificationKind.Add))
+            {
+                var modification = modifications[entity];
+                Console.WriteLine($"Replace change for entity {entityType.Name} {GetModelId(entity)} {modification} with {ModificationKind.Add}");
+                modifications[entity] = ModificationKind.Add;
+                return;
+            }
             Console.WriteLine($"Add created change for entity {entityType.Name} {GetModelId(entity)}");
-            modifications.Add(entity, ModificationKind.Add);
         }
 
         protected void EntityDeleted<TEntity>(TEntity entity) where TEntity : class
@@ -247,7 +248,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             throw new NotSupportedException();
         }
-       
+
         protected virtual void SetModelEntityId(Type entityType, object result)
         {
         }
@@ -303,9 +304,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return Provider.GetRequiredService(typeof(IAdminStore<>).MakeGenericType(entityType)) as IAdminStore;
         }
 
-        protected virtual IAdminStore<TEntity> GetStore<TEntity>() where TEntity: class
+        protected virtual IAdminStore<TEntity> GetStore<TEntity>() where TEntity : class
         {
             return GetStore(typeof(TEntity)) as IAdminStore<TEntity>;
+        }
+
+        protected virtual void OnEntityUpdated(Type entityType, IEntityId entityModel)
+        {
+            var modifications = GetModifications(entityType);
+
+            if (entityModel != null && !modifications.ContainsKey(entityModel))
+            {
+                Console.WriteLine($"Add update modification for entity {entityType} {entityModel.Id}");
+                modifications.Add(entityModel, ModificationKind.Update);
+            }
         }
 
         protected abstract T Create();
@@ -356,13 +368,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 var identifier = e.FieldIdentifier;
                 var entityType = GetEntityType(identifier);
                 var entityModel = GetEntityModel(identifier);
-                var modifications = GetModifications(entityType);
-
-                if (entityModel != null && !modifications.ContainsKey(entityModel))
-                {
-                    Console.WriteLine($"Add update modification for entity {entityType} {entityModel.Id}");
-                    modifications.Add(entityModel, ModificationKind.Update);
-                }
+                OnEntityUpdated(entityType, entityModel);
             };
         }
 
