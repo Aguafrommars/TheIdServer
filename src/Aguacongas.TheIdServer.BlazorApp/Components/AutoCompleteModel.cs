@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public EventCallback<T> ValueChanged { get; set; }
 
-        [Parameter]
-        public Func<string, bool> Validate { get; set; }
+        [CascadingParameter]
+        EditContext EditContext { get; set; }
 
         [JSInvokable]
         public Task EnterKeyPressed()
@@ -33,23 +34,34 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected abstract bool IsReadOnly { get; }
 
+        protected abstract string PropertyName { get; }
+
         protected string Id { get; } = Guid.NewGuid().ToString();
 
         protected string SelectedValue { get; set; }
 
         protected IEnumerable<string> FilteredValues { get; private set; }
 
+        protected string FieldClass
+            => EditContext.FieldCssClass(_fieldIdentifier);
+
+
         private CancellationTokenSource _cancellationTokenSource;
 
+
+        private FieldIdentifier _fieldIdentifier;
         protected Task SetSelectedValue(string value)
         {
-            if (Validate != null && !Validate.Invoke(value))
-            {
-                return Task.CompletedTask;
-            }
             SetValue(value);
+            EditContext.NotifyFieldChanged(_fieldIdentifier);
             FilteredValues = null;
             return ValueChanged.InvokeAsync(Entity);
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _fieldIdentifier = new FieldIdentifier(Entity, PropertyName);
         }
 
         protected override Task OnAfterRenderAsync(bool firstRender)
@@ -89,6 +101,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected Task OnInputChanged(ChangeEventArgs e)
         {
             SelectedValue = e.Value as string;
+            SetValue(SelectedValue);
+            EditContext.NotifyFieldChanged(_fieldIdentifier);
             return Filter();
         }
 

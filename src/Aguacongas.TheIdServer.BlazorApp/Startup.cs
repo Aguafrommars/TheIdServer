@@ -1,3 +1,4 @@
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
@@ -38,7 +40,9 @@ namespace Aguacongas.TheIdServer.BlazorApp
                     return await httpClient.GetJsonAsync<Settings>("settings.json")
                         .ConfigureAwait(false);
                 })
-                .AddSingleton<Notifier>();
+                .AddSingleton<Notifier>()
+                .AddTransient<IAdminStore<User>, UserAdminStore>()
+                .AddTransient<IAdminStore<Role>, RoleAdminStore>();
         }
 
         [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Startup class")]

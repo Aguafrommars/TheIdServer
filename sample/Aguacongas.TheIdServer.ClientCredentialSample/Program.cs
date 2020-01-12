@@ -3,7 +3,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Aguacongas.TheIdServer.ClientCredential
+namespace Aguacongas.TheIdServer.ClientCredentialSample
 {
     class Program
     {

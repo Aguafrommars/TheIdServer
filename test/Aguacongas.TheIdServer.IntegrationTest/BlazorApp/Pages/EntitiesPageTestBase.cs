@@ -37,13 +37,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() =>
-            {
-            });
-
             var markup = component.GetMarkup();
+            while (markup.Contains("Authentication in progress"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
 
-            if (markup.Contains("Loading..."))
+            while (markup.Contains("Loading..."))
             {
                 host.WaitForNextRender();
                 markup = component.GetMarkup();

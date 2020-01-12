@@ -8,13 +8,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 {
     public partial class UserRole
     {
+        private bool _isReadOnly;
         private readonly PageRequest _pageRequest = new PageRequest
         {
             Select = "Name",
             Take = 5
         };
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Id);
+        protected override bool IsReadOnly => _isReadOnly;
+
+        protected override string PropertyName => "Name";
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _isReadOnly = Entity.Name != null;
+        }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {

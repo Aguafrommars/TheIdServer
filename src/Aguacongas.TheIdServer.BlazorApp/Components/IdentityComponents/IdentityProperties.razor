@@ -22,11 +22,11 @@
         else
         {
             <td>
-                <AuthorizeText Name="key" @bind-Value="@property.Key" />
+                <AuthorizeText Id="key" @bind-Value="@property.Key" />
             </td>
         }
         <td>
-            <AuthorizeText Name="value" @bind-Value="@property.Value" />
+            <AuthorizeText Id="value" @bind-Value="@property.Value" />
         </td>
         <td>
             <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(property)">

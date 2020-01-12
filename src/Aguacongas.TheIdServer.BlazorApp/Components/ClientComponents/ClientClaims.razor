@@ -24,11 +24,11 @@
         else
         {
             <td>
-                <AuthorizeText Name="type" @bind-Value="@claim.Type" />
+                <AuthorizeText Id="type" @bind-Value="@claim.Type" />
             </td>
         }
         <td>
-            <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+            <AuthorizeText Id="value" @bind-Value="@claim.Value" />
         </td>
         <td>
             <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(claim)">
@@ -49,7 +49,7 @@
             claims prefix
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Name="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" />
+            <AuthorizeText Id="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" />
         </div>
     </div>
 }

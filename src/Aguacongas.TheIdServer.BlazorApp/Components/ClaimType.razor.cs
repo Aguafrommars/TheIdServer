@@ -7,13 +7,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class ClaimType
     {
+        private bool _isReadOnly;
+
         private readonly PageRequest _pageRequest = new PageRequest
         {
             Select = "Type",
             Take = 5
         };
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Type);
+        protected override bool IsReadOnly => _isReadOnly;
+
+        protected override string PropertyName => "Type";
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _isReadOnly = Entity.Type != null;
+        }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {

@@ -64,7 +64,7 @@ namespace Aguacongas.TheIdServer.MvcClient
                         }
 
                         var expiresAt = tokens.FirstOrDefault(t => t.Name == "expires_at");
-                        if (refreshToken == null)
+                        if (expiresAt == null)
                         {
                             logger.LogWarning("expires_at not found.");
                             return;

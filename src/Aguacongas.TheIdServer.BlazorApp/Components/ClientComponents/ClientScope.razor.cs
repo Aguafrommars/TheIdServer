@@ -11,6 +11,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class ClientScope
     {
+        private bool _isReadOnly;
+
         [Parameter]
         public Entity.Client Model { get; set; }
 
@@ -27,7 +29,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             Take = 5
         };
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Scope);
+        protected override bool IsReadOnly => _isReadOnly;
+
+        protected override string PropertyName => "Scope";
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _isReadOnly = Entity.Scope != null;
+        }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {

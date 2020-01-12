@@ -1,6 +1,6 @@
 ﻿@page "/role"
 @page "/role/{id}"
-@inherits EntityModel<Entity.Role>
+@inherits EntityModel<Models.Role>
 @inject IAdminStore<Entity.RoleClaim> _roleClaimStore
 
 @if (Model == null)
@@ -14,7 +14,7 @@ else
             <div class="col">
                 @if (IsNew)
                 {
-                    <AuthorizeText Name="name" Placeholder="role name" @bind-Value="@Model.Name" />
+                    <AuthorizeText Id="name" Placeholder="role name" @bind-Value="@Model.Name" />
                 }
                 else
                 {
@@ -36,7 +36,7 @@ else
                 <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
             </div>
             <div class="w-100"></div>
-            <DataAnnotationsValidator />
+            <FluentValidationValidator />
             <ValidationSummary class="col" />
         </div>
         <div class="entity-details">
@@ -46,7 +46,7 @@ else
                                         AddClicked="OnAddClaimClicked" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@_claims" TableClass="table table-hover" Context="claim">
+                    <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"
@@ -62,10 +62,10 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText Name="type" @bind-Value="@claim.Type" />
+                                <AuthorizeText Id="type" @bind-Value="@claim.Type" />
                             </td>
                             <td>
-                                <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+                                <AuthorizeText Id="value" @bind-Value="@claim.Value" />
                             </td>
                             <td>
                                 <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
