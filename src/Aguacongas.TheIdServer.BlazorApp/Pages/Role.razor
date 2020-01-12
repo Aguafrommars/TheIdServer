@@ -14,7 +14,7 @@ else
             <div class="col">
                 @if (IsNew)
                 {
-                    <AuthorizeText Name="name" Placeholder="role name" @bind-Value="@Model.Name" />
+                    <AuthorizeText Id="name" Placeholder="role name" @bind-Value="@Model.Name" />
                 }
                 else
                 {
@@ -62,10 +62,10 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText Name="type" @bind-Value="@claim.Type" />
+                                <AuthorizeText Id="type" @bind-Value="@claim.Type" />
                             </td>
                             <td>
-                                <AuthorizeText Name="value" @bind-Value="@claim.Value" />
+                                <AuthorizeText Id="value" @bind-Value="@claim.Value" />
                             </td>
                             <td>
                                 <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">

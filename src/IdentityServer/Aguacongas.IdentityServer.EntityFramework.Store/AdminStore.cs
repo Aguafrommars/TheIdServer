@@ -96,6 +96,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 auditable.CreatedAt = storedAuditable.CreatedAt;
                 auditable.ModifiedAt = storedAuditable.ModifiedAt;
             }
+            _context.Entry(storedEntity).State = EntityState.Detached;
             _context.Update(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);

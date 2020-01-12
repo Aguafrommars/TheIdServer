@@ -1,5 +1,6 @@
 version: 1.0.{build}
 skip_tags: true
+stack: node 10
 skip_commits:
   message: /^chore(release)/
 branches:

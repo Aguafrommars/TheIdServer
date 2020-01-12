@@ -31,10 +31,6 @@ namespace Microsoft.AspNetCore.Components.Forms
         private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
         {
             var validator = GetValidatorForModel(editContext.Model, editContext.Model);
-            if (validator == null)
-            {
-                return;
-            }
 
             var validationResults = validator.Validate(editContext.Model);
 
