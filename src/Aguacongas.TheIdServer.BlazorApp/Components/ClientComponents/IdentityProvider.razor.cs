@@ -8,6 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class IdentityProvider
     {
+        private bool _isReadOnly;
         private IEnumerable<Entity.IdentityProvider> _filteredProviders;
         private string _providerName;
         private readonly PageRequest _pageRequest = new PageRequest
@@ -15,9 +16,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             Take = 5
         };
 
-        protected override bool IsReadOnly => !string.IsNullOrEmpty(Entity.Provider);
+        protected override bool IsReadOnly => _isReadOnly;
 
         protected override string PropertyName => "Provider";
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            _isReadOnly = Entity.Provider != null;
+        }
 
         protected override async Task OnInitializedAsync()
         {

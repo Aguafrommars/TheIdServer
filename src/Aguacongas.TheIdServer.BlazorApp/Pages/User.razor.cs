@@ -11,16 +11,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     public partial class User
     {
         private readonly GridState _gridState = new GridState();
-        private List<Entity.UserClaim> _claims;
-        private List<Entity.UserClaim> _claimsState;
-        private List<Entity.UserLogin> _logins;
-        private List<Entity.UserLogin> _loginsState;
-        private List<Entity.Role> _roles;
-        private List<Entity.Role> _rolesState;
-        private List<Entity.UserConsent> _consents;
-        private List<Entity.UserConsent> _consentsState;
-        private List<Entity.UserToken> _tokens;
-        private List<Entity.UserToken> _tokensState;
 
         protected override string Expand => null;
 
@@ -34,19 +24,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmptyRole();
         }
 
-        protected override Entity.User Create()
+        protected override Models.User Create()
         {
-            _claims = new List<Entity.UserClaim>();
-            _claimsState = new List<Entity.UserClaim>();
-            _logins = new List<Entity.UserLogin>();
-            _loginsState = new List<Entity.UserLogin>();
-            _roles = new List<Entity.Role>();
-            _rolesState = new List<Entity.Role>();
-            _consents = new List<Entity.UserConsent>();
-            _consentsState = new List<Entity.UserConsent>();
-            _tokens = new List<Entity.UserToken>();
-            _tokensState = new List<Entity.UserToken>();
-            return new Entity.User();
+            return new Models.User
+            {
+                Claims = new List<Entity.UserClaim>(),
+                Consents = new List<Entity.UserConsent>(),
+                Logins = new List<Entity.UserLogin>(),
+                Roles = new List<Entity.Role>(),
+                Tokens = new List<Entity.UserToken>()
+            };
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
@@ -59,26 +46,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // no navigation property
         }
 
-        protected override async Task<Entity.User> GetModelAsync()
+        protected override async Task<Models.User> GetModelAsync()
         {
-            var user = await base.GetModelAsync();
+            var model = await base.GetModelAsync();
 
             var pageRequest = new PageRequest
             {
-                Filter = $"UserId eq '{user.Id}'"
+                Filter = $"UserId eq '{model.Id}'"
             };
 
             var userClaimStore = GetStore<Entity.UserClaim>();
             var claimsResponse = await userClaimStore.GetAsync(pageRequest);
 
-            _claims = claimsResponse.Items.ToList();
-            _claimsState = new List<Entity.UserClaim>(_claims);
+            model.Claims = claimsResponse.Items.ToList();
 
             var userLoginStore = GetStore<Entity.UserLogin>();
             var loginsRespone = await userLoginStore.GetAsync(pageRequest);
 
-            _logins = loginsRespone.Items.ToList();
-            _loginsState = new List<Entity.UserLogin>(_logins);
+            model.Logins = loginsRespone.Items.ToList();
 
             var userRoleStore = GetStore<Entity.UserRole>();
             var userRolesResponse = await userRoleStore.GetAsync(pageRequest);
@@ -91,26 +76,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 {
                     Filter = string.Join(" or ", userRolesResponse.Items.Select(r => $"Id eq '{r.RoleId}'"))
                 });
-                _roles = rolesResponse.Items.ToList();
+                model.Roles = rolesResponse.Items.ToList();
             }
             else
             {
-                _roles = new List<Entity.Role>();
+                model.Roles = new List<Entity.Role>();
             }
-            _rolesState = new List<Entity.Role>(_roles);
 
             var userConsentStore = GetStore<Entity.UserConsent>();
             var userConsentsResponse = await userConsentStore.GetAsync(pageRequest);
 
-            _consents = userConsentsResponse.Items.ToList();
-            _consentsState = new List<Entity.UserConsent>(_consents);
+            model.Consents = userConsentsResponse.Items.ToList();
 
             var userTokenStore = GetStore<Entity.UserToken>();
             var userTokensResponse = await userTokenStore.GetAsync(pageRequest);
 
-            _tokens = userTokensResponse.Items.ToList();
-            _tokensState = new List<Entity.UserToken>(_tokens);
-            return user;
+            model.Tokens = userTokensResponse.Items.ToList();
+
+            return model;
         }
 
         protected async override Task<object> CreateAsync(Type entityType, object entity)
@@ -152,24 +135,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
         private void AddEmptyRole()
         {
-            _roles.Add(new Entity.Role());
+            Model.Roles.Add(new Entity.Role());
         }
 
         private void OnFilterChanged(string term)
         {
-            _claims = _claimsState.Where(c => c.Type.Contains(term) || c.Value.Contains(term))
+            Model.Claims = State.Claims.Where(c => c.Type.Contains(term) || c.Value.Contains(term))
                 .ToList();
 
-            _logins = _loginsState.Where(l => l.ProviderDisplayName.Contains(term))
+            Model.Logins = State.Logins.Where(l => l.ProviderDisplayName.Contains(term))
                 .ToList();
 
-            _roles = _rolesState.Where(r => r.Name.Contains(term))
+            Model.Roles = State.Roles.Where(r => r.Name != null && r.Name.Contains(term))
                 .ToList();
 
-            _consents = _consentsState.Where(c => c.ClientId.Contains(term))
+            Model.Consents = State.Consents.Where(c => c.ClientId.Contains(term))
                 .ToList();
 
-            _tokens = _tokensState.Where(t => t.LoginProvider.Contains(term) || t.Name.Contains(term) || t.Value.Contains(term))
+            Model.Tokens = State.Tokens.Where(t => t.LoginProvider.Contains(term) || t.Name.Contains(term) || t.Value.Contains(term))
                 .ToList();
 
             AddEmptyRole();
@@ -181,24 +164,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 UserId = Model.Id
             };
-            _claims.Add(claim);
-            _claimsState.Add(claim);
+            State.Claims.Add(claim);
             EntityCreated(claim);
             StateHasChanged();
         }
 
         private void OnDeleteClaimClicked(Entity.UserClaim claim)
         {
-            _claimsState.Remove(claim);
-            _claims.Remove(claim);
+            Model.Claims.Remove(claim);
             EntityDeleted(claim);
             StateHasChanged();
         }
 
         private void OnDeleteRoleClicked(Entity.Role role)
         {
-            _rolesState.Remove(role);
-            _roles.Remove(role);
+            Model.Roles.Remove(role);
             EntityDeleted(role);
             StateHasChanged();
         }
@@ -212,24 +192,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnDeleteUserTokenClicked(Entity.UserToken token)
         {
-            _tokensState.Remove(token);
-            _tokens.Remove(token);
+            Model.Tokens.Remove(token);
             EntityDeleted(token);
             StateHasChanged();
         }
 
         private void OnDeleteUserLoginClicked(Entity.UserLogin login)
         {
-            _loginsState.Remove(login);
-            _logins.Remove(login);
+            Model.Logins.Remove(login);
             EntityDeleted(login);
             StateHasChanged();
         }
 
         private void OnDeleteUserConsentClicked(Entity.UserConsent consent)
         {
-            _consentsState.Remove(consent);
-            _consents.Remove(consent);
+            Model.Consents.Remove(consent);
             EntityDeleted(consent);
             StateHasChanged();
         }

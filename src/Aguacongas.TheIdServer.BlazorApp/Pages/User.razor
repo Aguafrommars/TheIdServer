@@ -2,7 +2,7 @@
 
 @page "/user"
 @page "/user/{id}"
-@inherits EntityModel<Entity.User>
+@inherits EntityModel<Models.User>
 
 @if (Model == null)
 {
@@ -110,7 +110,7 @@ else
                                         AddClicked="OnAddClaimClicked" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@_claims" TableClass="table table-hover" Context="claim">
+                    <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"
@@ -147,7 +147,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserRoles Model="@_roles" DeleteRoleClicked="OnDeleteRoleClicked" RoleValueChanged="OnRoleValueChanged" />
+                    <UserRoles Model="@Model.Roles" DeleteRoleClicked="OnDeleteRoleClicked" RoleValueChanged="OnRoleValueChanged" />
                 </div>
             </div>
             <div id="consents" class="card mb-3">
@@ -157,7 +157,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserConsents Model="_consents" DeleteEntityClicked="OnDeleteUserConsentClicked" />
+                    <UserConsents Model="@Model.Consents" DeleteEntityClicked="OnDeleteUserConsentClicked" />
                 </div>
             </div>
             <div id="external-logins" class="card mb-3">
@@ -167,7 +167,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserLogins Model="_logins" DeleteEntityClicked="OnDeleteUserLoginClicked" />
+                    <UserLogins Model="@Model.Logins" DeleteEntityClicked="OnDeleteUserLoginClicked" />
                 </div>
             </div>
             <div id="external-logins-tokens" class="card mb-3">
@@ -177,7 +177,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserTokens Model="_tokens" DeleteEntityClicked="OnDeleteUserTokenClicked" />
+                    <UserTokens Model="@Model.Tokens" DeleteEntityClicked="OnDeleteUserTokenClicked" />
                 </div>
             </div>
         </div>

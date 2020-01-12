@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             propertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
             var property = typeof(T).GetTypeInfo().GetDeclaredProperty(propertyName);
             return _items.All(item =>
-              item.Equals(editedItem) || property.GetValue(item).ToString() != newValue);
+              item.Equals(editedItem) || property.GetValue(item) as string != newValue);
         }
     }
 

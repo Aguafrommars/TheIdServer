@@ -31,6 +31,11 @@ namespace Microsoft.AspNetCore.Components.Forms
         private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
         {
             var validator = GetValidatorForModel(editContext.Model, editContext.Model);
+            if (validator == null)
+            {
+                return;
+            }
+
             var validationResults = validator.Validate(editContext.Model);
 
             messages.Clear();
@@ -50,6 +55,11 @@ namespace Microsoft.AspNetCore.Components.Forms
                 new MemberNameValidatorSelector(properties));
 
             var validator = GetValidatorForModel(editContext.Model, model);
+            if (validator == null)
+            {
+                return;
+            }
+
             var validationResults = validator.Validate(context);
 
             messages.Clear(fieldIdentifier);
@@ -66,8 +76,12 @@ namespace Microsoft.AspNetCore.Components.Forms
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
             var modelValidatorType = Assembly.GetExecutingAssembly()
                 .GetTypes().FirstOrDefault(t => t.IsSubclassOf(abstractValidatorType));
-            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity);
+            if (modelValidatorType == null)
+            {
+                return null;
+            }
 
+            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity);
             return modelValidatorInstance;
         }
 

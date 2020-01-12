@@ -10,6 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
     public partial class GrantType : AutoCompleteModel<Entity.ClientGrantType>
     {
         private bool _isReadOnly;
+
         [Parameter]
         public Entity.Client Model { get; set; }
 

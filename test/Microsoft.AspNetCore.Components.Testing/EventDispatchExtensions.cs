@@ -33,14 +33,14 @@ namespace Microsoft.AspNetCore.Components.Testing
             _ = ChangeAsync(element, newValue);
         }
 
-        public static Task ChangeAsync(this HtmlNode element, string newValue)
-        {
-            return element.TriggerEventAsync("onchange", new ChangeEventArgs { Value = newValue });
-        }
-
         public static void Change(this HtmlNode element, bool newValue)
         {
             _ = ChangeAsync(element, newValue);
+        }
+
+        public static Task ChangeAsync(this HtmlNode element, string newValue)
+        {
+            return element.TriggerEventAsync("onchange", new ChangeEventArgs { Value = newValue });
         }
 
         public static Task ChangeAsync(this HtmlNode element, bool newValue)

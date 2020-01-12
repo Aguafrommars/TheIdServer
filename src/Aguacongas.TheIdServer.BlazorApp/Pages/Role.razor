@@ -1,6 +1,6 @@
 ﻿@page "/role"
 @page "/role/{id}"
-@inherits EntityModel<Entity.Role>
+@inherits EntityModel<Models.Role>
 @inject IAdminStore<Entity.RoleClaim> _roleClaimStore
 
 @if (Model == null)
@@ -46,7 +46,7 @@ else
                                         AddClicked="OnAddClaimClicked" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@_claims" TableClass="table table-hover" Context="claim">
+                    <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"

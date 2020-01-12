@@ -40,7 +40,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.ClientName).Must(n => !client.RequireConsent || 
                 (client.RequireConsent && !string.IsNullOrEmpty(n))).WithMessage("The name is required.");
             RuleFor(m => m.Description).MaximumLength(200).WithMessage("The description canoot exceed 1000 char.");
-            RuleForEach(m => m.AllowedGrantTypes).SetValidator(new ClientGrantTypeValidator(client));
+            RuleForEach(m => m.AllowedGrantTypes)
+                .Where(m => m.GrantType != null)
+                .SetValidator(new ClientGrantTypeValidator(client));
             RuleFor(m => m.AllowedGrantTypes).Must(g => g.Any(g => !string.IsNullOrEmpty(g.GrantType)))
                 .WithMessage("The client should contains at least one grant type.");
         }
