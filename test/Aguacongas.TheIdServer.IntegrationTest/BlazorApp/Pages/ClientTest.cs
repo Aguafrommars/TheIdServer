@@ -149,7 +149,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The client should contains at least one grant type.", message.InnerText);
+            Assert.Contains("The client should contain at least one grant type.", message.InnerText);
         }
 
         private static void WaitForEntityLoaded(TestHost host, RenderedComponent<App> component)

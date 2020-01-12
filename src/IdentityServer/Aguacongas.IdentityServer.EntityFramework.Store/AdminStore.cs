@@ -25,7 +25,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public Task<T> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var query = _context.Set<T>() as IQueryable<T>;
+            var query = _context.Set<T>().AsNoTracking();
             query = query.Expand(request?.Expand);
             return query.Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var query = _context.Set<T>() as IQueryable<T>;
+            var query = _context.Set<T>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -84,7 +84,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var storedEntity = await _context.Set<T>().FindAsync(new[] { entity.Id }, cancellationToken)
+            var storedEntity = await _context.Set<T>()
+                .AsNoTracking()
+                .Where(e => e.Id == entity.Id)
+                .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
             if (storedEntity == null)
             {
@@ -96,7 +99,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 auditable.CreatedAt = storedAuditable.CreatedAt;
                 auditable.ModifiedAt = storedAuditable.ModifiedAt;
             }
-            _context.Entry(storedEntity).State = EntityState.Detached;
             _context.Update(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);

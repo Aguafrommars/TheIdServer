@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.Secrets).SetValidator(new ApiSecretValidator(api));
             RuleForEach(m => m.Scopes).SetValidator(new ApiScopeValidator(api));
             RuleFor(m => m.Scopes).Must(s => s.Any(scope => !string.IsNullOrEmpty(scope.Scope)))
-                .WithMessage("The api should contains at least one scope.");
+                .WithMessage("The api should contain at least one scope.");
             RuleForEach(m => m.Properties).SetValidator(new ApiPropertyValidator(api));
             RuleForEach(m => m.ApiClaims)
                 .Where(m => m.Type != null)
