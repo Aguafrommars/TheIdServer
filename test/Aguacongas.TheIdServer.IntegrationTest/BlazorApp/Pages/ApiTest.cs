@@ -82,7 +82,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -140,7 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -163,7 +163,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await WaitForLoaded(host, component);
 
+
+
             var input = component.Find("#delete-entity input");
+
+            Assert.NotNull(input);
 
             host.WaitForNextRender(() => input.Change(apiId));
 
@@ -171,7 +175,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => confirm.Click());
 
-            WaitForDeletedToast(host, component);
+            await WaitForDeletedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -226,21 +230,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 return context.SaveChangesAsync();
             });
             return apiId;
-        }
-
-        private static async Task<string> WaitForLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            host.WaitForNextRender();
-
-            var markup = component.GetMarkup();
-
-            while (markup.Contains("Loading..."))
-            {
-                await Task.Delay(200);
-                markup = component.GetMarkup();
-            }
-
-            return markup;
         }
     }
 }

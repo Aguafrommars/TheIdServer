@@ -81,7 +81,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -122,7 +122,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.DoesNotContain("filtered", tokensDiv.InnerText);
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -206,7 +206,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(async () => await Task.Delay(500));
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -277,7 +277,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.Contains(roleId, rolessDiv.InnerText);
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -323,7 +323,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -361,7 +361,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -391,7 +391,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -422,7 +422,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -455,7 +455,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -480,7 +480,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => confirm.Click());
 
-            WaitForDeletedToast(host, component);
+            await WaitForDeletedToast(host, component);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {

@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            WaitForSavedToast(host, component);
+            await WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {

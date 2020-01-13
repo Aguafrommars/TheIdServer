@@ -48,7 +48,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var markup = component.GetMarkup();
             while (!markup.Contains("table-hover"))
             {
-                await Task.Delay(200);
+                await Task.Delay(200)
+                    .ConfigureAwait(false);
                 markup = component.GetMarkup();
             }
 
@@ -68,8 +69,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 {
                     Value = GenerateId()
                 });
-
-                await Task.Delay(500);
             });
 
 
