@@ -17,11 +17,6 @@ if ($isLinux) {
     Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
 	dotnet test -c Release --settings coverletArgs.runsettings
 
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "re run tests"
-        Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
-	    dotnet test -c Release --settings coverletArgs.runsettings
-	}
 	if ($LASTEXITCODE -ne 0) {
 		$result = $LASTEXITCODE
 	}
