@@ -2,7 +2,7 @@
     <div class="card-header">
         @if (Scope.Id == null)
         {
-            <AuthorizeText Placeholder="scope" @bind-Value="@Scope.Scope" />
+            <AuthorizeText Id="scope" Placeholder="scope" @bind-Value="@Scope.Scope" />
         }
         else
         {

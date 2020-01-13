@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -38,16 +37,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
+            var filterInput = component.Find("input[placeholder=\"filter\"]");
+
+            while (filterInput == null)
+            {
+                host.WaitForNextRender();
+                filterInput = component.Find("input[placeholder=\"filter\"]");
+            }
+
             var markup = component.GetMarkup();
             while (!markup.Contains("table-hover"))
             {
-                host.WaitForNextRender(() => Thread.Sleep(200));
+                await Task.Delay(200);
                 markup = component.GetMarkup();
             }
 
             Assert.Contains("filtered", markup);
 
-            var filterInput = component.Find("input[placeholder=\"filter\"]");
+            filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 

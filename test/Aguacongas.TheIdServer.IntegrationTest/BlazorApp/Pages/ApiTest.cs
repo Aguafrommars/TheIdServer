@@ -91,6 +91,95 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task SaveClicked_should_create_api()
+        {
+            var apiId = GenerateId();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                null,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = component.Find("#name");
+
+            Assert.NotNull(input);
+
+            host.WaitForNextRender(() => input.Change(apiId));
+
+            input = component.Find("#displayName");
+
+            Assert.NotNull(input);
+
+            var expected = GenerateId();
+            host.WaitForNextRender(() => input.Change(expected));
+
+            var markup = component.GetMarkup();
+
+            Assert.Contains(expected, markup);
+
+            input = component.Find("#scopes #scope");
+
+            Assert.NotNull(input);
+
+            host.WaitForNextRender(() => input.Change(expected));
+
+            input = component.Find("#scopes #displayName");
+
+            Assert.NotNull(input);
+
+            host.WaitForNextRender(() => input.Change(expected));
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
+                Assert.Equal(expected, api.DisplayName);
+            });
+        }
+
+        [Fact]
+        public async Task DeleteClicked_should_delete_api()
+        {
+            string apiId = await CreateApi();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                apiId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = component.Find("#delete-entity input");
+
+            host.WaitForNextRender(() => input.Change(apiId));
+
+            var confirm = component.Find("#delete-entity button.btn-danger");
+
+            host.WaitForNextRender(() => confirm.Click());
+
+            WaitForDeletedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
+                Assert.Null(api);
+            });
+        }
+
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();
