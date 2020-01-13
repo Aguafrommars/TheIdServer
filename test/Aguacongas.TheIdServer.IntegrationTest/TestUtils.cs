@@ -40,7 +40,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 .ConfigureAppConfiguration(builder =>
                 {
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\appsettings.Test.json"), true);
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     if (configurationOverrides != null)
                     {
                         builder.AddInMemoryCollection(configurationOverrides);
