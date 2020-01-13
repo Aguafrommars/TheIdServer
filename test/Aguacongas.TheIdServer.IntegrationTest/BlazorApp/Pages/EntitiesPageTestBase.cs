@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -38,15 +39,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out MockHttpMessageHandler mockHttp);
 
             var markup = component.GetMarkup();
-            while (markup.Contains("Authentication in progress"))
+            while (!markup.Contains("table-hover"))
             {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            while (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
+                host.WaitForNextRender(() => Thread.Sleep(200));
                 markup = component.GetMarkup();
             }
 
