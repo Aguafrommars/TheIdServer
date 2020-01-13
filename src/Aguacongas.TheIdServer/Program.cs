@@ -20,7 +20,10 @@ namespace Aguacongas.TheIdServer
         public static void Main(string[] args)
         {
             var seed = args.Any(x => x == "/seed");
-            if (seed) args = args.Except(new[] { "/seed" }).ToArray();
+            if (seed)
+            {
+                args = args.Except(new[] { "/seed" }).ToArray();
+            }
 
             var host = CreateWebHostBuilder(args).Build();
 

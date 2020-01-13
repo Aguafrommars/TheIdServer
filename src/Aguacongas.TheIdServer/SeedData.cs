@@ -7,6 +7,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer
 {
@@ -81,11 +83,28 @@ namespace Aguacongas.TheIdServer
             context.SaveChanges();
         }
 
-        [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown", Justification = "Seeding")]
         private static void SeedUsers(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
+
+            var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var roles = new string[]
+            {
+                AuthorizationOptionsExtensions.WRITER,
+                AuthorizationOptionsExtensions.READER
+            };
+            foreach(var role in roles)
+            {
+                if (roleMgr.FindByNameAsync(role).GetAwaiter().GetResult() == null)
+                {
+                    ExcuteAndCheckResult(() => roleMgr.CreateAsync(new IdentityRole
+                    {
+                        Name = role
+                    })).GetAwaiter().GetResult();
+                }
+            }
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
@@ -95,13 +114,10 @@ namespace Aguacongas.TheIdServer
                 {
                     UserName = "alice"
                 };
-                var result = userMgr.CreateAsync(alice, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+                ExcuteAndCheckResult(() => userMgr.CreateAsync(alice, "Pass123$"))
+                    .GetAwaiter().GetResult();
 
-                result = userMgr.AddClaimsAsync(alice, new Claim[]{
+                ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(alice, new Claim[]{
                         new Claim(JwtClaimTypes.Name, "Alice Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Alice"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
@@ -109,11 +125,11 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
                         new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
-                    }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+                    })).GetAwaiter().GetResult();
+
+                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(alice, roles))
+                    .GetAwaiter().GetResult();
+
                 Console.WriteLine("alice created");
             }
             else
@@ -121,20 +137,17 @@ namespace Aguacongas.TheIdServer
                 Console.WriteLine("alice already exists");
             }
 
-            var bob = userMgr.FindByNameAsync("bob").Result;
+            var bob = userMgr.FindByNameAsync("bob").GetAwaiter().GetResult();
             if (bob == null)
             {
                 bob = new ApplicationUser
                 {
                     UserName = "bob"
                 };
-                var result = userMgr.CreateAsync(bob, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+                ExcuteAndCheckResult(() => userMgr.CreateAsync(bob, "Pass123$"))
+                    .GetAwaiter().GetResult();
 
-                result = userMgr.AddClaimsAsync(bob, new Claim[]{
+                ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(bob, new Claim[]{
                         new Claim(JwtClaimTypes.Name, "Bob Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Bob"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
@@ -143,17 +156,26 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                         new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
                         new Claim("location", "somewhere")
-                    }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+                    })).GetAwaiter().GetResult();
+                ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, AuthorizationOptionsExtensions.READER))
+                    .GetAwaiter().GetResult();
                 Console.WriteLine("bob created");
             }
             else
             {
                 Console.WriteLine("bob already exists");
             }
+        }
+
+        [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown", Justification = "Seeding")]
+        private static async Task ExcuteAndCheckResult(Func<Task<IdentityResult>> action)
+        {
+            var result = await action.Invoke();
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
         }
     }
 }
