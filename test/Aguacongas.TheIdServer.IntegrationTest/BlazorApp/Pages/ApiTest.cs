@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            string markup = WaitForLoaded(host, component);
+            string markup = await WaitForLoaded(host, component);
 
             Assert.Contains("filtered", markup);
 
@@ -63,7 +63,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForLoaded(host, component);
+            await WaitForLoaded(host, component);
 
             var input = component.Find("#displayName");
 
@@ -103,7 +103,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForLoaded(host, component);
+            await WaitForLoaded(host, component);
 
             var input = component.Find("#name");
 
@@ -161,7 +161,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForLoaded(host, component);
+            await WaitForLoaded(host, component);
 
             var input = component.Find("#delete-entity input");
 
@@ -228,7 +228,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             return apiId;
         }
 
-        private static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
+        private static async Task<string> WaitForLoaded(TestHost host, RenderedComponent<App> component)
         {
             host.WaitForNextRender();
 
@@ -236,7 +236,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             while (markup.Contains("Loading..."))
             {
-                host.WaitForNextRender();
+                await Task.Delay(200);
                 markup = component.GetMarkup();
             }
 
