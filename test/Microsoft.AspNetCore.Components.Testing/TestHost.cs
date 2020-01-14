@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Microsoft.AspNetCore.Components.Testing
 {
-    public class TestHost
+    public class TestHost : IDisposable
     {
         private readonly ServiceCollection _serviceCollection = new ServiceCollection();
         private readonly Lazy<TestRenderer> _renderer;
@@ -69,5 +69,28 @@ namespace Microsoft.AspNetCore.Components.Testing
         }
 
         private TestRenderer Renderer => _renderer.Value;
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing && _renderer.IsValueCreated)
+                {
+#pragma warning disable BL0006 // Do not use RenderTree types
+                    _renderer.Value.Dispose();
+#pragma warning restore BL0006 // Do not use RenderTree types
+                }
+                disposedValue = true;
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,7 +19,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     public class ApiTest : EntityPageTestBase
     {
         public override string Entity => "protectresource";
-        public ApiTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public ApiTest(ApiFixture fixture, ITestOutputHelper testOutputHelper) : base(fixture, testOutputHelper)
         {
         }
 
@@ -35,7 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             string markup = WaitForLoaded(host, component);
 
-            while(!markup.Contains("filtered"))
+            while (!markup.Contains("filtered"))
             {
                 host.WaitForNextRender();
                 markup = component.GetMarkup();
@@ -111,7 +113,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#name");
 
-            while(input == null)
+            while (input == null)
             {
                 host.WaitForNextRender();
                 input = component.Find("#name");
@@ -173,7 +175,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#delete-entity input");
 
-            while(input == null)
+            while (input == null)
             {
                 host.WaitForNextRender();
                 input = component.Find("#delete-entity input");
@@ -192,6 +194,69 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
                 Assert.Null(api);
             });
+        }
+
+        [Fact]
+        public void DisposeTest()
+        {
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                null,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            host.Dispose();
+
+            Assert.Throws<ArgumentException>(() => component.GetMarkup());
+        }
+
+        [Fact]
+        public void ClickAllButtons_should_not_throw()
+        {
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         null,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var buttons = component.FindAll(".entity-details button");
+            while (buttons.Count == 0)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll(".entity-details button");
+            }
+
+            host.WaitForNextRender(() =>
+            {
+                foreach (var button in buttons)
+                {
+                    button.Click();
+                }
+            });
+
+            buttons = component.FindAll(".entity-details button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            var expected = buttons.Count;
+
+            host.WaitForNextRender(() =>
+            {
+                foreach (var button in buttons)
+                {
+                    button.Click();
+                }
+            });
+
+            buttons = component.FindAll(".entity-details button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList(); ;
+
+            Assert.Equal(expected, buttons.Count);
+
         }
 
         private async Task<string> CreateApi()
