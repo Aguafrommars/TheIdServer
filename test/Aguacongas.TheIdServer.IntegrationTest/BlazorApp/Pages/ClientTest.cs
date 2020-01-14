@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -34,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var markup = component.GetMarkup();
 
@@ -66,11 +67,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var input = component.Find("#grantTypes input");
 
-            Assert.NotNull(input);
+            while(input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#grantTypes input");
+            }
 
             host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
 
@@ -133,11 +138,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var button = component.Find("#grantTypes div.select");
 
-            Assert.NotNull(button);
+            while(button == null)
+            {
+                host.WaitForNextRender();
+                button = component.Find("#grantTypes div.select");
+            }
+
             host.WaitForNextRender(() => button.Click());
 
             var form = component.Find("form");
@@ -150,19 +160,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(message);
             Assert.Contains("The client should contain at least one grant type.", message.InnerText);
-        }
-
-        private static void WaitForEntityLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            host.WaitForNextRender();
-
-            var markup = component.GetMarkup();
-
-            while (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
         }
 
         private async Task<string> CreateClient()

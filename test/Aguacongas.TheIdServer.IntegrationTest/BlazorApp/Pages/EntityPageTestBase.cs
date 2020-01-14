@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
         [Fact]
-        public async Task WhenNonWriter_should_disable_inputs()
+        public void WhenNonWriter_should_disable_inputs()
         {
             CreateTestHost("Bob Smith",
                 AuthorizationOptionsExtensions.READER,
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            await WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -94,36 +94,33 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
 
-        protected static Task WaitForSavedToast(TestHost host, RenderedComponent<App> component)
+        protected static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
         {
-            return WaitForToast("Saved", host, component);
+            WaitForToast("Saved", host, component);
         }
 
-        protected static Task WaitForDeletedToast(TestHost host, RenderedComponent<App> component)
+        protected static void WaitForDeletedToast(TestHost host, RenderedComponent<App> component)
         {
-            return WaitForToast("Deleted", host, component);
+            WaitForToast("Deleted", host, component);
         }
 
-        protected static async Task WaitForToast(string text, TestHost host, RenderedComponent<App> component)
+        protected static void WaitForToast(string text, TestHost host, RenderedComponent<App> component)
         {
             var toasts = component.FindAll(".toast-body.text-success");
             while (!toasts.Any(t => t.InnerText.Contains(text)))
             {
-                await Task.Delay(200).ConfigureAwait(false);
+                host.WaitForNextRender();
                 toasts = component.FindAll(".toast-body.text-success");
             }
         }
 
-        protected static async Task<string> WaitForLoaded(TestHost host, RenderedComponent<App> component)
+        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
         {
-            host.WaitForNextRender();
-
             var markup = component.GetMarkup();
 
-            while (markup.Contains("Loading..."))
+            while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
             {
-                await Task.Delay(200)
-                    .ConfigureAwait(false);
+                host.WaitForNextRender();
                 markup = component.GetMarkup();
             }
 

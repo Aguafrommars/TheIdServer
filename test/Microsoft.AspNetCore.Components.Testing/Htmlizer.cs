@@ -39,7 +39,8 @@ namespace Microsoft.AspNetCore.Components.Testing
                 nextPosition = RenderCore(context, frames, position);
                 if (position == nextPosition)
                 {
-                    throw new InvalidOperationException("We didn't consume any input.");
+                    break;
+                    //throw new InvalidOperationException("We didn't consume any input.");
                 }
                 position = nextPosition;
             }
@@ -73,7 +74,8 @@ namespace Microsoft.AspNetCore.Components.Testing
                 case RenderTreeFrameType.ComponentReferenceCapture:
                     return ++position;
                 default:
-                    throw new InvalidOperationException($"Invalid element frame type '{frame.FrameType}'.");
+                    return ++position;
+                    //throw new InvalidOperationException($"Invalid element frame type '{frame.FrameType}'.");
             }
         }
 

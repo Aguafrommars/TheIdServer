@@ -37,25 +37,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            var filterInput = component.Find("input[placeholder=\"filter\"]");
-
-            while (filterInput == null)
-            {
-                host.WaitForNextRender();
-                filterInput = component.Find("input[placeholder=\"filter\"]");
-            }
+            WaitForLoaded(host, component);
 
             var markup = component.GetMarkup();
             while (!markup.Contains("table-hover"))
             {
-                await Task.Delay(200)
-                    .ConfigureAwait(false);
+                host.WaitForNextRender();
                 markup = component.GetMarkup();
             }
 
             Assert.Contains("filtered", markup);
 
-            filterInput = component.Find("input[placeholder=\"filter\"]");
+            var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
@@ -63,12 +56,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
                 {
                     Value = GenerateId()
-                });
+                }).ConfigureAwait(false);
                 // cancel previous search
                 await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
                 {
                     Value = GenerateId()
-                });
+                }).ConfigureAwait(false);
+
+                await Task.Delay(500).ConfigureAwait(false);
             });
 
 
@@ -94,17 +89,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() =>
-            {
-            });
-
-            var markup = component.GetMarkup();
-
-            if (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
+            var markup = WaitForLoaded(host, component);
 
             Assert.Contains("filtered", markup);
 
@@ -162,5 +147,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
 
+        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
+        {
+            var markup = component.GetMarkup();
+
+            while (!markup.Contains("filtered"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            return markup;
+        }
     }
 }

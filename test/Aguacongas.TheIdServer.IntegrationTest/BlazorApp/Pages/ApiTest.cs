@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            string markup = await WaitForLoaded(host, component);
+            string markup = WaitForLoaded(host, component);
 
             Assert.Contains("filtered", markup);
 
@@ -63,7 +63,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            await WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var input = component.Find("#displayName");
 
@@ -82,7 +82,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            await WaitForSavedToast(host, component);
+            WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -103,11 +103,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            await WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var input = component.Find("#name");
 
-            Assert.NotNull(input);
+            while(input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#name");
+            }
 
             host.WaitForNextRender(() => input.Change(apiId));
 
@@ -140,7 +144,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            await WaitForSavedToast(host, component);
+            WaitForSavedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
@@ -161,13 +165,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            await WaitForLoaded(host, component);
-
-
+            WaitForLoaded(host, component);
 
             var input = component.Find("#delete-entity input");
 
-            Assert.NotNull(input);
+            while(input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#delete-entity input");
+            }
 
             host.WaitForNextRender(() => input.Change(apiId));
 
@@ -175,7 +181,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => confirm.Click());
 
-            await WaitForDeletedToast(host, component);
+            WaitForDeletedToast(host, component);
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
