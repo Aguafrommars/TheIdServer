@@ -107,16 +107,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(message);
             Assert.Contains("&#x27;Code&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;.", message.InnerText);
 
-            input = component.Find("#grantTypes input");
-            Assert.NotNull(input);
-
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "implicit" }));
-
-            message = component.Find(".validation-message");
-
-            Assert.NotNull(message);
-            Assert.Contains("&#x27;Implicit&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;.", message.InnerText);
-
             var form = component.Find("form");
 
             Assert.NotNull(form);
@@ -125,9 +115,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var messages = component.FindAll(".validation-message");
 
-            Assert.Equal(2, messages.Count);
             Assert.Contains(messages, m => m.InnerText.Contains("&#x27;Hybrid&#x27; cannot be added to a client with grant type &#x27;Implicit&#x27;."));
-            Assert.Contains(messages, m => m.InnerText.Contains("&#x27;Implicit&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;."));
         }
 
         [Fact]

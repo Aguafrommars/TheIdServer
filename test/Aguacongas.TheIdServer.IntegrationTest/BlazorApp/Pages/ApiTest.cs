@@ -208,9 +208,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            host.Dispose();
-
-            Assert.Throws<ArgumentException>(() => component.GetMarkup());
+            Assert.ThrowsAny<Exception>(() => 
+            {
+                host.Dispose();
+                component.GetMarkup();
+            });
         }
 
         [Fact]
@@ -253,7 +255,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
             buttons = component.FindAll(".entity-details button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList(); ;
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.Equal(expected, buttons.Count);
 
