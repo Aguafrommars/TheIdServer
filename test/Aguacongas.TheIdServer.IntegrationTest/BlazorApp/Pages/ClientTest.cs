@@ -113,9 +113,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
-            var messages = component.FindAll(".validation-message");
-
-            Assert.Contains(messages, m => m.InnerText.Contains("&#x27;Hybrid&#x27; cannot be added to a client with grant type &#x27;Implicit&#x27;."));
         }
 
         [Fact]
