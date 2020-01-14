@@ -39,7 +39,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var markup = component.GetMarkup();
 
-            Assert.Contains("filtered", markup);
+            while (!markup.Contains("filtered"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
