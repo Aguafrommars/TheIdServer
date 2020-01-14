@@ -40,7 +40,6 @@ namespace Microsoft.AspNetCore.Components.Testing
                 if (position == nextPosition)
                 {
                     break;
-                    //throw new InvalidOperationException("We didn't consume any input.");
                 }
                 position = nextPosition;
             }
@@ -70,12 +69,8 @@ namespace Microsoft.AspNetCore.Components.Testing
                     return RenderChildComponent(context, frames, position);
                 case RenderTreeFrameType.Region:
                     return RenderFrames(context, frames, position + 1, frame.RegionSubtreeLength - 1);
-                case RenderTreeFrameType.ElementReferenceCapture:
-                case RenderTreeFrameType.ComponentReferenceCapture:
-                    return ++position;
                 default:
                     return ++position;
-                    //throw new InvalidOperationException($"Invalid element frame type '{frame.FrameType}'.");
             }
         }
 
