@@ -116,20 +116,5 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
             return identityId;
         }
-
-        private static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            host.WaitForNextRender();
-
-            var markup = component.GetMarkup();
-
-            while (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            return markup;
-        }
     }
 }

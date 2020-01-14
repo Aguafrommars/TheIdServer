@@ -36,6 +36,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
+            WaitForLoaded(host, component);
+
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
             Assert.All(inputs, input => input.Attributes.Any(a => a.Name == "disabled"));
@@ -110,6 +112,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 host.WaitForNextRender();
                 toasts = component.FindAll(".toast-body.text-success");
             }
+        }
+
+        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
+        {
+            var markup = component.GetMarkup();
+
+            while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            return markup;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using FluentValidation;
-using System.Linq;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
@@ -14,8 +13,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.Description).MaximumLength(1000).WithMessage("The description cannot exceed 200 chars.");
             RuleForEach(m => m.Secrets).SetValidator(new ApiSecretValidator(api));
             RuleForEach(m => m.Scopes).SetValidator(new ApiScopeValidator(api));
-            RuleFor(m => m.Scopes).Must(s => s.Any(scope => !string.IsNullOrEmpty(scope.Scope)))
-                .WithMessage("The api should contain at least one scope.");
             RuleForEach(m => m.Properties).SetValidator(new ApiPropertyValidator(api));
             RuleForEach(m => m.ApiClaims)
                 .Where(m => m.Type != null)

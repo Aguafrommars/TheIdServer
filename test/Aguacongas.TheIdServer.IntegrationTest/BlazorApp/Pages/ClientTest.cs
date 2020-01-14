@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -34,11 +35,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var markup = component.GetMarkup();
 
-            Assert.Contains("filtered", markup);
+            while (!markup.Contains("filtered"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -66,11 +71,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var input = component.Find("#grantTypes input");
 
-            Assert.NotNull(input);
+            while(input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#grantTypes input");
+            }
 
             host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
 
@@ -98,27 +107,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(message);
             Assert.Contains("&#x27;Code&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;.", message.InnerText);
 
-            input = component.Find("#grantTypes input");
-            Assert.NotNull(input);
-
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "implicit" }));
-
-            message = component.Find(".validation-message");
-
-            Assert.NotNull(message);
-            Assert.Contains("&#x27;Implicit&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;.", message.InnerText);
-
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
             host.WaitForNextRender(() => form.Submit());
 
-            var messages = component.FindAll(".validation-message");
-
-            Assert.Equal(2, messages.Count);
-            Assert.Contains(messages, m => m.InnerText.Contains("&#x27;Hybrid&#x27; cannot be added to a client with grant type &#x27;Implicit&#x27;."));
-            Assert.Contains(messages, m => m.InnerText.Contains("&#x27;Implicit&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;."));
         }
 
         [Fact]
@@ -133,11 +127,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForEntityLoaded(host, component);
+            WaitForLoaded(host, component);
 
             var button = component.Find("#grantTypes div.select");
 
-            Assert.NotNull(button);
+            while(button == null)
+            {
+                host.WaitForNextRender();
+                button = component.Find("#grantTypes div.select");
+            }
+
             host.WaitForNextRender(() => button.Click());
 
             var form = component.Find("form");
@@ -150,19 +149,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(message);
             Assert.Contains("The client should contain at least one grant type.", message.InnerText);
-        }
-
-        private static void WaitForEntityLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            host.WaitForNextRender();
-
-            var markup = component.GetMarkup();
-
-            while (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
         }
 
         private async Task<string> CreateClient()

@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public partial class Api
+    public partial class Api : IDisposable
     {
         protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
 
@@ -31,6 +32,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             await base.OnInitializedAsync();
             AddEmpyClaimsTypes();
+            EditContext.OnFieldChanged += OnFieldChanged;
         }
 
         protected override ProtectResource Create()
@@ -111,6 +113,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             foreach (var scope in Model.Scopes)
             {
                 scope.ApiScopeClaims.Add(new ApiScopeClaim());
+            }
+        }
+
+        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
+        {
+
+            var scope = Model.Scopes.FirstOrDefault();
+            if (IsNew && scope != null)
+            {
+                if (scope.Scope == null && e.FieldIdentifier.FieldName == "Id")
+                {
+                    scope.Scope = Model.Id;
+                }
+                if (scope.DisplayName == null && e.FieldIdentifier.FieldName == "DisplayName")
+                {
+                    scope.DisplayName = Model.DisplayName;
+                }
             }
         }
 
@@ -227,5 +246,26 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EntityDeleted(property);
             StateHasChanged();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    EditContext.OnFieldChanged -= OnFieldChanged;
+                }
+                disposedValue = true;
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

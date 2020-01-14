@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -38,10 +37,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
+            WaitForLoaded(host, component);
+
             var markup = component.GetMarkup();
             while (!markup.Contains("table-hover"))
             {
-                host.WaitForNextRender(() => Thread.Sleep(200));
+                host.WaitForNextRender();
                 markup = component.GetMarkup();
             }
 
@@ -55,14 +56,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
                 {
                     Value = GenerateId()
-                });
+                }).ConfigureAwait(false);
                 // cancel previous search
                 await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
                 {
                     Value = GenerateId()
-                });
+                }).ConfigureAwait(false);
 
-                await Task.Delay(500);
+                await Task.Delay(500).ConfigureAwait(false);
             });
 
 
@@ -88,17 +89,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender(() =>
-            {
-            });
-
-            var markup = component.GetMarkup();
-
-            if (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
+            var markup = WaitForLoaded(host, component);
 
             Assert.Contains("filtered", markup);
 
@@ -156,5 +147,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
 
+        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
+        {
+            var markup = component.GetMarkup();
+
+            while (!markup.Contains("filtered"))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            return markup;
+        }
     }
 }
