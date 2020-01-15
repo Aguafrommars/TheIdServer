@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -20,7 +21,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public ClientTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
         {
         }
-
 
 
         [Fact]
@@ -149,6 +149,53 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(message);
             Assert.Contains("The client should contain at least one grant type.", message.InnerText);
+        }
+
+        [Fact]
+        public async Task ClickAllButtons_should_not_throw()
+        {
+            var clientId = await CreateClient();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         clientId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var buttons = component.FindAll(".entity-details button");
+            while (buttons.Count == 0)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll(".entity-details button");
+            }
+
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            host.WaitForNextRender(() =>
+            {
+                foreach (var button in buttons)
+                {
+                    button.Click();
+                }
+            });
+
+            buttons = component.FindAll(".entity-details button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            var expected = buttons.Count;
+
+            host.WaitForNextRender(() =>
+            {
+                foreach (var button in buttons)
+                {
+                    button.Click();
+                }
+            });
+
+            buttons = component.FindAll(".entity-details button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.Equal(expected, buttons.Count);
         }
 
         private async Task<string> CreateClient()

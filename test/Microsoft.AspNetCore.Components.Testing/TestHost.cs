@@ -51,7 +51,7 @@ namespace Microsoft.AspNetCore.Components.Testing
             }
             else
             {
-                task.Wait(millisecondsTimeout: 5000);
+                task.Wait(5000);
             }
             
 

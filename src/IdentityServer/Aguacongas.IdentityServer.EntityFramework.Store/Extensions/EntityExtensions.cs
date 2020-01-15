@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer.Store
                 SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = client.UserCodeType,
-                UserSsoLifetime = client.UserSsoLifetime
+                UserSsoLifetime = client.UserSsoLifetime,
             };
         }
 

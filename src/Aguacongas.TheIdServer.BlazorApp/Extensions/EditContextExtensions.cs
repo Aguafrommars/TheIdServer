@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Validators;
+using FluentValidation;
 using FluentValidation.Internal;
 using FluentValidation.Results;
 using System;
@@ -69,6 +71,10 @@ namespace Microsoft.AspNetCore.Components.Forms
 
         private static IValidator GetValidatorForModel(object entity, object model)
         {
+            if (model is ApiScopeClaim claim)
+            {
+                return new ApiScopeClaimValidator(claim.ApiScpope);
+            }
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
             var modelValidatorType = Assembly.GetExecutingAssembly()
                 .GetTypes().FirstOrDefault(t => t.IsSubclassOf(abstractValidatorType));

@@ -216,49 +216,230 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public void ClickAllButtons_should_not_throw()
+        public async Task ClickSecretsButtons_should_not_throw()
         {
+            var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
                          AuthorizationOptionsExtensions.WRITER,
-                         null,
+                         apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
                          out MockHttpMessageHandler mockHttp);
 
             WaitForLoaded(host, component);
 
-            var buttons = component.FindAll(".entity-details button");
+            var buttons = component.FindAll("#secrets button");            
             while (buttons.Count == 0)
             {
                 host.WaitForNextRender();
-                buttons = component.FindAll(".entity-details button");
+                buttons = component.FindAll("#secrets button");
             }
 
-            host.WaitForNextRender(() =>
-            {
-                foreach (var button in buttons)
-                {
-                    button.Click();
-                }
-            });
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
-            buttons = component.FindAll(".entity-details button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
             var expected = buttons.Count;
+            host.WaitForNextRender(() => buttons.First().Click());
 
-            host.WaitForNextRender(() =>
-            {
-                foreach (var button in buttons)
-                {
-                    button.Click();
-                }
-            });
+            buttons = component.FindAll("#secrets button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
-            buttons = component.FindAll(".entity-details button")
+            Assert.NotEqual(expected, buttons.Count);
+
+            host.WaitForNextRender(() => buttons.Last().Click());
+
+            buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.Equal(expected, buttons.Count);
+        }
 
+        [Fact]
+        public async Task ClickScopesButtons_should_not_throw()
+        {
+            var apiId = await CreateApi();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var buttons = component.FindAll("#scopes button");
+            while (buttons.Count == 0)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll("#scopes button");
+            }
+
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            var expected = buttons.Count;
+            host.WaitForNextRender(() => buttons.First().Click());
+
+            buttons = component.FindAll("#scopes button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.NotEqual(expected, buttons.Count);
+
+            host.WaitForNextRender(() => buttons.Last().Click());
+
+            buttons = component.FindAll("#scopes button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.Equal(expected, buttons.Count);
+        }
+
+        [Fact]
+        public async Task ClickPropertiesButtons_should_not_throw()
+        {
+            var apiId = await CreateApi();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var buttons = component.FindAll("#properties button");
+            while (buttons.Count == 0)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll("#properties button");
+            }
+
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            var expected = buttons.Count;
+            host.WaitForNextRender(() => buttons.First().Click());
+
+            buttons = component.FindAll("#properties button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.NotEqual(expected, buttons.Count);
+
+            host.WaitForNextRender(() => buttons.Last().Click());
+
+            buttons = component.FindAll("#properties button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.Equal(expected, buttons.Count);
+        }
+
+        [Fact]
+        public async Task ClickAddRemoveClaims_should_not_throw()
+        {
+            var apiId = await CreateApi();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = component.Find("#claims input");
+            while (input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#claims input");
+            }
+
+            host.WaitForNextRender(() => input.TriggerEventAsync("onpinput", new ChangeEventArgs { Value = "name" }));
+
+            var button = component.Find("#claims button.dropdown-item");
+            Assert.NotNull(button);
+
+            host.WaitForNextRender(() => button.Click());
+
+            var divs = component.FindAll("#claim div.select");
+
+            Assert.NotEmpty(divs);
+
+            host.WaitForNextRender(() => divs.Last().Click());
+        }
+
+        [Fact]
+        public async Task DeleteScopeClaimsClick_should_delete_scope_claim()
+        {
+            var apiId = await CreateApi();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var div = component.Find("#scopes div.select");
+            while (div == null)
+            {
+                host.WaitForNextRender();
+                div = component.Find("#scopes div.select");
+            }
+
+            host.WaitForNextRender(() => div.Click());
+
+            var form = component.Find("form");
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
+                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
+            });
+        }
+
+        [Fact]
+        public async Task AddScopeClaims_should_validate_claim()
+        {
+            var apiId = await CreateApi();
+            CreateTestHost("Alice Smith",
+                         AuthorizationOptionsExtensions.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = component.Find("#scopes input.new-claim");
+            while (input == null)
+            {
+                host.WaitForNextRender();
+                input = component.Find("#scopes input.new-claim");
+            }
+
+            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
+
+            var button = component.Find("#scopes button.dropdown-item");
+            while (button == null)
+            {
+                host.WaitForNextRender();
+                button = component.Find("#scopes button.dropdown-item");
+            }
+
+            host.WaitForNextRender(() => button.Click());
+
+            var form = component.Find("form");
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
+                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
+            });
         }
 
         private async Task<string> CreateApi()
@@ -303,7 +484,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                         new ApiSecret { Id = GenerateId(), Type="SHA256", Value = "filtered" }
                     }
                 });
-
+                if (!context.IdentityClaims.Any(c => c.Type == "name"))
+                {
+                    context.Identities.Add(new IdentityResource
+                    {
+                        Id = GenerateId(),
+                        DisplayName = GenerateId(),
+                        IdentityClaims = new List<IdentityClaim>
+                    {
+                        new IdentityClaim
+                        {
+                            Id = GenerateId(),
+                            Type = "name"
+                        }
+                    }
+                    });
+                }
                 return context.SaveChangesAsync();
             });
             return apiId;
