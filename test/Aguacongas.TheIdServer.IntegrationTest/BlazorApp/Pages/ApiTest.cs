@@ -402,6 +402,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task AddScopeClaims_should_validate_claim()
         {
             var apiId = await CreateApi();
+            ApiScope scope = null;
+            int expected = 0;
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
+                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+            });
+
             CreateTestHost("Alice Smith",
                          AuthorizationOptionsExtensions.WRITER,
                          apiId,
@@ -437,8 +445,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
-                var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
+                Assert.True(expected < await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id));
             });
         }
 

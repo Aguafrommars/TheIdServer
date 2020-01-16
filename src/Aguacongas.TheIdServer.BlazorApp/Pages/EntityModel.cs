@@ -102,40 +102,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model = CloneModel(State);
             Id = GetModelId(Model);
             IsNew = false;
-            StateHasChanged();
+
+            var keys = _changes.Keys
+                .OrderBy(k => k, this);
+
+            var tasks = new List<Task>();
+            foreach (var key in keys)
+            {
+                tasks.Add(HandleMoficationList(key, _changes[key]));
+            }
 
             try
             {
-                var keys = _changes.Keys
-                    .OrderBy(k => k, this);
-
-                foreach (var key in keys)
-                {
-                    await HandleMoficationList(key, _changes[key])
-                        .ConfigureAwait(false);
-                }
-            }
-            catch (ProblemException pe)
-            {
-                Notifier.Notify(new Models.Notification
-                {
-                    Header = "Error",
-                    IsError = true,
-                    Message = pe.Details.Detail
-                });
-                throw;
-            }
-#pragma warning disable CA1031 // Do not catch general exception types. We want to notify all error
-            catch (Exception e)
-#pragma warning restore CA1031 // Do not catch general exception types
-            {
-                Notifier.Notify(new Models.Notification
-                {
-                    Header = "Error",
-                    IsError = true,
-                    Message = e.Message
-                });
-                throw;
+                await Task.WhenAll(tasks)
+                    .ConfigureAwait(false);
             }
             finally
             {
@@ -147,6 +127,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Header = GetModelId(Model),
                 Message = "Saved"
             });
+
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
@@ -332,32 +314,68 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                             .Select(m => m.Key);
         }
 
-        private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
+        private Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
+            var tasks = new List<Task>();
             foreach (var entity in addList)
             {
                 SetNavigationProperty(entity);
                 SanetizeEntityToSaved(entity);
-                var result = await CreateAsync(entityType, entity)
-                    .ConfigureAwait(false);
-                SetCreatedEntityId(entity, result);
-                SetModelEntityId(entityType, result);
+                tasks.Add(CreateAsync(entityType, entity)
+                    .ContinueWith(t =>
+                    {
+                        if (t.Exception != null)
+                        {
+                            HandleModificationError(t.Exception);
+                        }
+                        SetCreatedEntityId(entity, t.Result);
+                        SetModelEntityId(entityType, t.Result);
+                    }));
             }
             var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
             foreach (var entity in updateList)
             {
                 SanetizeEntityToSaved(entity);
-                await UpdateAsync(entityType, entity)
-                    .ConfigureAwait(false);
+                tasks.Add(UpdateAsync(entityType, entity)
+                    .ContinueWith(t => HandleModificationError(t.Exception), TaskContinuationOptions.OnlyOnFaulted));
             }
             var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
             foreach (var entity in deleteList)
             {
-                await DeleteAsync(entityType, entity)
-                    .ConfigureAwait(false);
+                tasks.Add(DeleteAsync(entityType, entity)
+                    .ContinueWith(t => HandleModificationError(t.Exception), TaskContinuationOptions.OnlyOnFaulted));
             }
+
+            return Task.WhenAll(tasks);
+        }
+
+        private void HandleModificationError(AggregateException exception)
+        {
+            foreach(var e in exception.InnerExceptions)
+            {
+                if (e is ProblemException pe)
+                {
+                    Notifier.Notify(new Models.Notification
+                    {
+                        Header = "Error",
+                        IsError = true,
+                        Message = pe.Details.Detail
+                    });
+
+                    continue;
+                }
+
+                Notifier.Notify(new Models.Notification
+                {
+                    Header = "Error",
+                    IsError = true,
+                    Message = e.Message
+                });
+            }
+
+            throw exception;
         }
 
         private void CreateEditContext(T model)
