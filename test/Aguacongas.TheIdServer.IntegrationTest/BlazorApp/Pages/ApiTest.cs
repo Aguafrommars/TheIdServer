@@ -37,11 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             string markup = WaitForLoaded(host, component);
 
-            while (!markup.Contains("filtered"))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
+            WaitForContains(host, component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -111,13 +107,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#name");
-
-            while (input == null)
-            {
-                host.WaitForNextRender();
-                input = component.Find("#name");
-            }
+            var input = WaitForNode(host, component, "#name");
 
             host.WaitForNextRender(() => input.Change(apiId));
 
@@ -173,13 +163,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#delete-entity input");
-
-            while (input == null)
-            {
-                host.WaitForNextRender();
-                input = component.Find("#delete-entity input");
-            }
+            var input = WaitForNode(host, component, "#delete-entity input");
 
             host.WaitForNextRender(() => input.Change(apiId));
 
@@ -228,12 +212,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var buttons = component.FindAll("#secrets button");            
-            while (buttons.Count == 0)
-            {
-                host.WaitForNextRender();
-                buttons = component.FindAll("#secrets button");
-            }
+            var buttons = WaitForAllNodes(host, component, "#secrets button");            
 
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
@@ -266,12 +245,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var buttons = component.FindAll("#scopes button");
-            while (buttons.Count == 0)
-            {
-                host.WaitForNextRender();
-                buttons = component.FindAll("#scopes button");
-            }
+            var buttons = WaitForAllNodes(host, component, "#scopes button");
 
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
@@ -304,12 +278,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var buttons = component.FindAll("#properties button");
-            while (buttons.Count == 0)
-            {
-                host.WaitForNextRender();
-                buttons = component.FindAll("#properties button");
-            }
+            var buttons = WaitForAllNodes(host, component, "#properties button");
 
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
@@ -342,21 +311,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#claims input");
-            while (input == null)
-            {
-                host.WaitForNextRender();
-                input = component.Find("#claims input");
-            }
+            var input = WaitForNode(host, component, "#claims input.new-claim");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("onpinput", new ChangeEventArgs { Value = "name" }));
+            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
 
             var button = component.Find("#claims button.dropdown-item");
+            while (button == null)
+            {
+                host.WaitForNextRender();
+                button = component.Find("#claims button.dropdown-item");
+            }
+
             Assert.NotNull(button);
 
             host.WaitForNextRender(() => button.Click());
 
-            var divs = component.FindAll("#claim div.select");
+            var divs = component.FindAll("#claims div.select");
 
             Assert.NotEmpty(divs);
 
@@ -376,12 +346,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var div = component.Find("#scopes div.select");
-            while (div == null)
-            {
-                host.WaitForNextRender();
-                div = component.Find("#scopes div.select");
-            }
+            var div = WaitForNode(host, component, "#scopes div.select");
 
             host.WaitForNextRender(() => div.Click());
 
@@ -419,12 +384,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#scopes input.new-claim");
-            while (input == null)
-            {
-                host.WaitForNextRender();
-                input = component.Find("#scopes input.new-claim");
-            }
+            var input = WaitForNode(host, component, "#scopes input.new-claim");
 
             host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
 
@@ -445,7 +405,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
-                Assert.True(expected < await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id));
+                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+                Assert.True(expected <= count);
             });
         }
 

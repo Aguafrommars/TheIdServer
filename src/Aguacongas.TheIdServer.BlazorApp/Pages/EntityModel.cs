@@ -106,16 +106,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var keys = _changes.Keys
                 .OrderBy(k => k, this);
 
-            var tasks = new List<Task>();
-            foreach (var key in keys)
-            {
-                tasks.Add(HandleMoficationList(key, _changes[key]));
-            }
-
             try
             {
-                await Task.WhenAll(tasks)
-                    .ConfigureAwait(false);
+                foreach (var key in keys)
+                {
+                    await HandleMoficationList(key, _changes[key])
+                        .ConfigureAwait(false);
+                }
             }
             finally
             {
@@ -268,7 +265,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return StoreAsync(entityType, entity, async (store, e) =>
             {
                 await store.DeleteAsync(GetModelId(e))
-                .ConfigureAwait(false);
+                    .ConfigureAwait(false);
                 return e;
             });
         }
@@ -339,13 +336,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 SanetizeEntityToSaved(entity);
                 tasks.Add(UpdateAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception), TaskContinuationOptions.OnlyOnFaulted));
+                    .ContinueWith(t => HandleModificationError(t.Exception)));
             }
             var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
             foreach (var entity in deleteList)
             {
                 tasks.Add(DeleteAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception), TaskContinuationOptions.OnlyOnFaulted));
+                    .ContinueWith(t => HandleModificationError(t.Exception)));
             }
 
             return Task.WhenAll(tasks);
@@ -353,6 +350,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void HandleModificationError(AggregateException exception)
         {
+            if(exception == null)
+            {
+                return;
+            }
+
             foreach(var e in exception.InnerExceptions)
             {
                 if (e is ProblemException pe)

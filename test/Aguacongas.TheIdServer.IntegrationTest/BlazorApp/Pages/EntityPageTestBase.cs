@@ -1,5 +1,6 @@
 ﻿using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -119,6 +120,43 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var markup = component.GetMarkup();
 
             while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
+
+            return markup;
+        }
+
+        protected static HtmlNode WaitForNode(TestHost host, RenderedComponent<App> component, string selector)
+        {
+            var node = component.Find(selector);
+            while (node == null)
+            {
+                host.WaitForNextRender();
+                node = component.Find(selector);
+            }
+
+            return node;
+        }
+
+        protected static ICollection<HtmlNode> WaitForAllNodes(TestHost host, RenderedComponent<App> component, string selector)
+        {
+            var nodes = component.FindAll(selector);
+            while (nodes.Count == 0)
+            {
+                host.WaitForNextRender();
+                nodes = component.FindAll(selector);
+            }
+
+            return nodes;
+        }
+
+
+        protected static string WaitForContains(TestHost host, RenderedComponent<App> component, string term)
+        {
+            var markup = component.GetMarkup();
+            while (!markup.Contains(term))
             {
                 host.WaitForNextRender();
                 markup = component.GetMarkup();
