@@ -112,7 +112,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.ApiClaims.Add(new ApiClaim());
             foreach (var scope in Model.Scopes)
             {
-                scope.ApiScopeClaims.Add(new ApiScopeClaim());
+                scope.ApiScopeClaims.Add(new ApiScopeClaim { ApiScpope = scope });
             }
         }
 
@@ -197,14 +197,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnAddScopeClicked()
         {
+            var claim = new ApiScopeClaim();
             var claims = new List<ApiScopeClaim>()
             {
-                new ApiScopeClaim()
+                claim
             };
             var scope = new ApiScope
             {
                 ApiScopeClaims = claims
             };
+            claim.ApiScpope = scope;
             Model.Scopes.Add(scope);
             EntityCreated(scope);
             StateHasChanged();
@@ -228,7 +230,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             claim.ApiScpope = scope;
             EntityCreated(claim);
-            scope.ApiScopeClaims.Add(new ApiScopeClaim());
+            scope.ApiScopeClaims.Add(new ApiScopeClaim { ApiScpope = scope });
             StateHasChanged();
         }
 

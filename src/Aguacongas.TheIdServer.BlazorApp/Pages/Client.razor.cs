@@ -36,7 +36,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 ClientClaims = new List<Entity.ClientClaim>(),
                 ClientSecrets = new List<Entity.ClientSecret>(),
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
-                RedirectUris = new List<Entity.ClientUri>()
+                RedirectUris = new List<Entity.ClientUri>(),
+                Properties = new List<Entity.ClientProperty>()
             };
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -20,7 +21,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public ClientTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
         {
         }
-
 
 
         [Fact]
@@ -150,6 +150,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(message);
             Assert.Contains("The client should contain at least one grant type.", message.InnerText);
         }
+
 
         private async Task<string> CreateClient()
         {
