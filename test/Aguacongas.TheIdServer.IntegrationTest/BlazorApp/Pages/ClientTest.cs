@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Components.Testing;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -37,13 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var markup = component.GetMarkup();
-
-            while (!markup.Contains("filtered"))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
+            var markup = WaitForContains(host, component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -73,7 +66,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#grantTypes input");
+            var input = WaitForNode(host, component, "#grantTypes input");
 
             while(input == null)
             {
@@ -129,13 +122,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var button = component.Find("#grantTypes div.select");
-
-            while(button == null)
-            {
-                host.WaitForNextRender();
-                button = component.Find("#grantTypes div.select");
-            }
+            var button = WaitForNode(host, component, "#grantTypes div.select");
 
             host.WaitForNextRender(() => button.Click());
 
@@ -151,8 +138,163 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.Contains("The client should contain at least one grant type.", message.InnerText);
         }
 
+        [Fact]
+        public async Task Hybrid_client_should_have_consent()
+        {
+            string clientId = await CreateClient();
 
-        private async Task<string> CreateClient()
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            WaitForNode(host, component, "#consent");
+
+            // hybrid client should have id token input field
+            Assert.NotNull(component.Find("#id-token"));
+            // hybrid client should not have device flow lifetime input field
+            Assert.Null(component.Find("#device-flow-lifetime"));
+            // hybrid client should not have require pkce check box
+            Assert.Null(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Code_client_should_have_consent()
+        {
+            var clientId = await CreateClient("authorization_code");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            WaitForNode(host, component, "#consent");
+
+            // authorization code client should have id token input field
+            Assert.NotNull(component.Find("#id-token"));
+            // authorization code client should not have device flow lifetime input field
+            Assert.Null(component.Find("#device-flow-lifetime"));
+            // authorization code client should have require pkce check box
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Implicit_client_should_have_consent()
+        {
+            var clientId = await CreateClient("implicit");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            WaitForNode(host, component, "#consent");
+
+            // implicit client should have id token input field
+            Assert.NotNull(component.Find("#id-token"));
+            // implicit client should not have device flow lifetime input field
+            Assert.Null(component.Find("#device-flow-lifetime"));
+            // implicit client should have require pkce check box
+            Assert.Null(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Device_client_should_have_consent()
+        {
+            var clientId = await CreateClient("urn:ietf:params:oauth:grant-type:device_code");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            WaitForNode(host, component, "#consent");
+
+            // device client not should have id token input field
+            Assert.Null(component.Find("#id-token"));
+            // device client should have device flow lifetime input field
+            Assert.NotNull(component.Find("#device-flow-lifetime"));
+            // device client should have require pkce check box
+            Assert.Null(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Credentials_client_should_not_have_consent()
+        {
+            var clientId = await CreateClient("client_credentials");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            // client credentials client should not have consent section
+            Assert.Throws<TimeoutException>(() => WaitForNode(host, component, "#consent"));
+        }
+
+        [Fact]
+        public async Task Password_client_should_not_have_consent()
+        {
+            var clientId = await CreateClient("password");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            // resource owner password client should not have consent section
+            Assert.Throws<TimeoutException>(() => WaitForNode(host, component, "#consent"));
+        }
+
+        [Fact]
+        public async Task Custom_client_should_not_have_consent()
+        {
+            var clientId = await CreateClient("custom");
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            WaitForNode(host, component, "#consent");
+
+            // custom client should have id token input field
+            Assert.NotNull(component.Find("#id-token"));
+            // custom client should have device flow lifetime input field
+            Assert.NotNull(component.Find("#device-flow-lifetime"));
+            // custom client should have require pkce check box
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
+        }
+
+        private async Task<string> CreateClient(string grantType = "hybrid")
         {
             var clientId = GenerateId();
             await DbActionAsync<IdentityServerDbContext>(context =>
@@ -164,7 +306,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     ProtocolType = "oidc",
                     AllowedGrantTypes = new List<ClientGrantType>
                     {
-                        new ClientGrantType{ Id = GenerateId(), GrantType = "hybrid" }
+                        new ClientGrantType{ Id = GenerateId(), GrantType = grantType }
                     },
                     AllowedScopes = new List<ClientScope>
                     {
