@@ -22,8 +22,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-        {            
-            _testOutputHelper.WriteLine(formatter(state, exception));
+        {
+            try
+            {
+                _testOutputHelper.WriteLine(formatter(state, exception));
+            }
+            catch
+            {
+                // silent
+            }
         }
     }
 }

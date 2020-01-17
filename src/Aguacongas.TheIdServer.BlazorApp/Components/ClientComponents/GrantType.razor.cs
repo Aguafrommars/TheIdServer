@@ -10,6 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
     public partial class GrantType : AutoCompleteModel<Entity.ClientGrantType>
     {
         private bool _isReadOnly;
+        private List<Entity.ClientGrantType> _allowedGrantTypes;
 
         [Parameter]
         public Entity.Client Model { get; set; }
@@ -18,17 +19,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override string PropertyName => "GrantType";
 
+        protected override Task OnParametersSetAsync()
+        {
+            _allowedGrantTypes = Model.AllowedGrantTypes
+                .Where(g => !string.IsNullOrEmpty(g.GrantType))
+                .ToList();
+            return base.OnParametersSetAsync();
+        }
+
         protected override Task<IEnumerable<string>> GetFilteredValues(string term)
         {
             term ??= string.Empty;
             var grantTypes = GrantTypes.Instance;
-            var allowedGrantType = Model.AllowedGrantTypes;
-            var result = grantTypes.Where(kv => !allowedGrantType.Any(g => g.GrantType == kv.Key) &&
-                !(allowedGrantType.Any(g => g.GrantType == "implicit") &&
+            var result = grantTypes.Where(kv => !_allowedGrantTypes.Any(g => g.GrantType == kv.Key) &&
+                !(_allowedGrantTypes.Any(g => g.GrantType == "implicit") &&
                     (kv.Key == "authorization_code" || kv.Key == "hybrid")) &&
-                !(allowedGrantType.Any(g => g.GrantType == "authorization_code") &&
+                !(_allowedGrantTypes.Any(g => g.GrantType == "authorization_code") &&
                     (kv.Key == "hybrid" || kv.Key == "implicit")) &&
-                !(allowedGrantType.Any(g => g.GrantType == "hybrid") &&
+                !(_allowedGrantTypes.Any(g => g.GrantType == "hybrid") &&
                     (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
                 (kv.Value.Contains(term) || kv.Key.Contains(term)))
             .Select(kv => kv.Key);
