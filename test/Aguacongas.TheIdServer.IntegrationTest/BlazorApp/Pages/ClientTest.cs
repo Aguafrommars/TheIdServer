@@ -4,9 +4,11 @@ using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -67,12 +69,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             WaitForLoaded(host, component);
 
             var input = WaitForNode(host, component, "#grantTypes input");
-
-            while(input == null)
-            {
-                host.WaitForNextRender();
-                input = component.Find("#grantTypes input");
-            }
 
             host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
 
@@ -292,6 +288,88 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // custom client should have require pkce check box
             Assert.NotNull(component.Find("input[name=require-pkce]"));
+        }
+
+
+        [Fact]
+        public async Task DeleteButtonClick_should_delete_client()
+        {
+            string clientId = await CreateClient();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#delete-entity input");
+
+            host.WaitForNextRender(() => input.Change(clientId));
+
+            var confirm = component.Find("#delete-entity button.btn-danger");
+
+            host.WaitForNextRender(() => confirm.Click());
+
+            WaitForDeletedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var client = await context.Clients.FirstOrDefaultAsync(a => a.Id == clientId);
+                Assert.Null(client);
+            });
+
+        }
+
+        [Fact]
+        public async Task SaveClick_should_create_client()
+        {
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                null,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#grantTypes input");
+
+            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
+
+            WaitForNode(host, component, "#grantTypes button.dropdown-item");
+
+            var dropdownButton = component.Find("#grantTypes button.dropdown-item");
+
+            host.WaitForNextRender(() => dropdownButton.Click());
+
+            var idInput = component.Find("#id");
+            Assert.NotNull(idInput);
+
+            var clientId = GenerateId();
+            host.WaitForNextRender(() => idInput.Change(clientId));
+
+            var nameInput = component.Find("#name");
+            
+            Assert.NotNull(nameInput);
+            host.WaitForNextRender(() => nameInput.Change(clientId));
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var client = await context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
+                Assert.NotNull(client);
+                var grantType = await context.ClientGrantTypes.FirstOrDefaultAsync(g => g.ClientId == clientId);
+                Assert.NotNull(grantType);
+            });
         }
 
         private async Task<string> CreateClient(string grantType = "hybrid")
