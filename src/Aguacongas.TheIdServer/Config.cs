@@ -113,7 +113,8 @@ namespace Aguacongas.TheIdServer
 
                     RedirectUris =
                     {
-                        "https://localhost:5443/admin/"
+                        "https://localhost:5443/admin/",
+                        "http://exemple.com/"
                     },
 
                     PostLogoutRedirectUris = { "https://localhost:5443/admin/" },

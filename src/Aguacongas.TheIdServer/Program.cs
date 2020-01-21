@@ -49,6 +49,7 @@ namespace Aguacongas.TheIdServer
                             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                             .MinimumLevel.Override("System", LogEventLevel.Information)
                             .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                            .WriteTo.Seq("http://localhost:5341/")
                             .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
                             .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate);
                     });

@@ -34,7 +34,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
             catch (Exception e)
             {
                 _loginError = e.Message;
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
         }
     }
