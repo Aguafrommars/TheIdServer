@@ -47,7 +47,7 @@ namespace Aguacongas.TheIdServer
             SeedConfiguration(scope);
         }
 
-        private static void SeedConfiguration(IServiceScope scope)
+        public static void SeedConfiguration(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
             context.Database.EnsureCreated();
@@ -83,7 +83,7 @@ namespace Aguacongas.TheIdServer
             context.SaveChanges();
         }
 
-        private static void SeedUsers(IServiceScope scope)
+        public static void SeedUsers(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();

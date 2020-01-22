@@ -1,20 +1,22 @@
-﻿using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.TheIdServer.Blazor.Oidc;
+﻿using Aguacongas.TheIdServer.Blazor.Oidc;
+using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Models;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Moq;
 using RichardSzalay.MockHttp;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -23,28 +25,38 @@ using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 {
-    [Collection("api collection")]
     public class AppTest
     {
-        private readonly ApiFixture _fixture;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public AppTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        public AppTest(ITestOutputHelper testOutputHelper)
         {
-            _fixture = fixture;
-            _fixture.TestOutputHelper = testOutputHelper;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
         public async Task FullLoginTest()
         {
-            var server = TestUtils.CreateTestServer();
-            using var scope = server.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
-            context.Database.EnsureDeleted();
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+            var connectionApp = new SqliteConnection("DataSource=:memory:");
+            connectionApp.Open();
+            var testLoggerProvider = new TestLoggerProvider(_testOutputHelper);
+            var server = TestUtils.CreateTestServer(
+                // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
+                services =>
+                {
+                    services.AddLogging(configure => configure.AddProvider(testLoggerProvider))
+                    .AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlite(connectionApp))
+                    .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
+                        options.UseSqlite(connection))
+                    .AddIdentityProviderStore();
+                });
 
-            var config = server.Services.GetRequiredService<IConfiguration>();
-            var connectionString = config.GetConnectionString("DefaultConnection");
-            SeedData.EnsureSeedData(connectionString);
+            using var scope = server.Host.Services.CreateScope();
+            SeedData.SeedUsers(scope);
+            SeedData.SeedConfiguration(scope);
 
             var host = new TestHost();
             var options = new AuthorizationOptions();
@@ -61,7 +73,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 services
                     .AddLogging(configure =>
                     {
-                        configure.AddProvider(new TestLoggerProvider(_fixture.TestOutputHelper));
+                        configure.AddProvider(testLoggerProvider);
                     })
                     .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton(p => navigationManager)
@@ -111,7 +123,37 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var loginPageResponse = await httpClient.GetAsync(redirectResponse.Headers.Location);
             var loginPageContent = await loginPageResponse.Content.ReadAsStringAsync();
 
-            Assert.Contains("<form", loginPageContent);
+            var document = new HtmlDocument();
+            document.LoadHtml(loginPageContent);
+            var form = document.DocumentNode.SelectSingleNode("//body//form");
+            Assert.NotNull(form);
+            var inputs = form.ParentNode.SelectNodes("input");
+            Assert.NotEmpty(inputs);
+
+            var redirectUrl = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "ReturnUrl"))?
+                .Attributes?
+                .FirstOrDefault(a => a.Name == "value")?
+                .Value;
+
+            Assert.NotNull(redirectUri);
+            var validationToken = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "__RequestVerificationToken"))?
+                .Attributes?
+                .FirstOrDefault(a => a.Name == "value")?
+                .Value;
+
+            Assert.NotNull(validationToken);
+
+            var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["Username"] = "Alice",
+                ["Password"] = "Password123",
+                ["ReturnUrl"] = redirectUrl,
+                ["__RequestVerificationToken"] = validationToken,
+                ["RememberLogin"] = "false"
+            });
+
+            var postLoginResponse = await httpClient.PostAsync(redirectResponse.Headers.Location, postContent);
+            var postLoginContent = await postLoginResponse.Content.ReadAsStringAsync();
         }
 
         private static void WaitForHttpResponse(ManualResetEvent waitHandle)
