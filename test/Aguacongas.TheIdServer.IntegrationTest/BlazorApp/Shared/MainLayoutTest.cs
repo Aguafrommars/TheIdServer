@@ -49,7 +49,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             var settingsRequest = httpMock.Capture("/settings.json");
             var discoveryRequest = httpMock.Capture("https://exemple.com/.well-known/openid-configuration");
             
-            var component = host.AddComponent<blazorApp.App>();
+            var component = host.AddComponent<App>();
 
             var markup = component.GetMarkup();
             Assert.Contains("Authentication in progress", markup);
