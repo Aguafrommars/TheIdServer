@@ -43,6 +43,7 @@ namespace Aguacongas.TheIdServer
 
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
+
             SeedUsers(scope);
             SeedConfiguration(scope);
         }
@@ -79,7 +80,6 @@ namespace Aguacongas.TheIdServer
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
                 }
             }
-
             context.SaveChanges();
         }
 
@@ -165,6 +165,7 @@ namespace Aguacongas.TheIdServer
             {
                 Console.WriteLine("bob already exists");
             }
+            context.SaveChanges();
         }
 
         [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown", Justification = "Seeding")]

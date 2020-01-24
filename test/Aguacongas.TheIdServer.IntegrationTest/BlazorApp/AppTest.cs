@@ -1,5 +1,4 @@
-﻿using Aguacongas.TheIdServer.Blazor.Oidc;
-using Aguacongas.TheIdServer.Data;
+﻿using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +54,107 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var server = CreateTestServer(connection, connectionApp);
 
             using var scope = server.Host.Services.CreateScope();
+            HttpClient httpClient;
+            string redirectUri;
+            NavigateToLoginPage(testLoggerProvider, server, scope, out httpClient, out redirectUri);
+
+            using var authorizeResponse = await httpClient.GetAsync(redirectUri);
+            Assert.Equal(HttpStatusCode.Redirect, authorizeResponse.StatusCode);
+
+            using var loginPageResponse = await httpClient.GetAsync(authorizeResponse.Headers.Location);
+            var loginPageContent = await loginPageResponse.Content.ReadAsStringAsync();
+
+            Assert.NotNull(redirectUri);
+            string redirectUrl, validationToken;
+            ParseForm(loginPageContent, out redirectUrl, out validationToken);
+
+            using var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["Username"] = "alice",
+                ["Password"] = "Pass123$",
+                ["ReturnUrl"] = redirectUrl.Replace("&amp;", "&"),
+                ["__RequestVerificationToken"] = validationToken,
+                ["RememberLogin"] = "false",
+                ["button"] = "login"
+            });
+            var cookie = loginPageResponse.Headers.First(h => h.Key == "Set-Cookie").Value.First().Split(';').First();
+            postContent.Headers.Add("Cookie", cookie);
+
+            using var postLoginResponse = await httpClient.PostAsync(authorizeResponse.Headers.Location, postContent);            
+            Assert.Equal(HttpStatusCode.Redirect, postLoginResponse.StatusCode);
+
+            var cookies = postLoginResponse.Headers.First(h => h.Key == "Set-Cookie").Value
+                .Select(v => v.Split(';').First())
+                .ToList();
+
+            cookies.Add(cookie);
+
+            using var message = new HttpRequestMessage(HttpMethod.Get, postLoginResponse.Headers.Location);
+            message.Headers.Add("Cookie", string.Join("; ", cookies));
+
+            using var redirectLoginResponse = await httpClient.SendAsync(message);
+            Assert.Equal(HttpStatusCode.Redirect, postLoginResponse.StatusCode);
+
+            using var message2 = new HttpRequestMessage(HttpMethod.Get, redirectLoginResponse.Headers.Location);
+            message2.Headers.Add("Cookie", string.Join("; ", cookies));
+
+            using var consentResponse = await httpClient.SendAsync(message2);
+            Assert.Equal(HttpStatusCode.OK, consentResponse.StatusCode);
+
+            var consentContent = await consentResponse.Content.ReadAsStringAsync();
+
+            ParseForm(consentContent, out redirectUrl, out validationToken);
+            using var postConsentContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("ReturnUrl", redirectUrl.Replace("&amp;", "&")),
+                new KeyValuePair<string, string>("__RequestVerificationToken", validationToken),
+                new KeyValuePair<string, string>("ScopesConsented", "openid"),
+                new KeyValuePair<string, string>("ScopesConsented", "profile"),
+                new KeyValuePair<string, string>("ScopesConsented", "theidserveradminapi"),
+                new KeyValuePair<string, string>("button", "yes"),
+            });
+            postConsentContent.Headers.Add("Cookie", string.Join("; ", cookies));
+
+            using var postConsentResponse = await httpClient.PostAsync(redirectLoginResponse.Headers.Location, postConsentContent);
+            Assert.Equal(HttpStatusCode.OK, postConsentResponse.StatusCode);
+
+            var consentRedirectContent = await postConsentResponse.Content.ReadAsStringAsync();
+
+            var document = new HtmlDocument();
+            document.LoadHtml(consentRedirectContent);
+            var meta = document.DocumentNode.SelectSingleNode("//body//meta");
+
+            redirectUrl = meta.Attributes.First(a => a.Name == "data-url").Value.Replace("&amp;", "&");
+            cookie = postConsentResponse.Headers.First(h => h.Key == "Set-Cookie").Value.First().Split(';').First();
+            cookies.Add(cookie);
+            using var message3 = new HttpRequestMessage(HttpMethod.Get, redirectUrl);
+            message3.Headers.Add("Cookier", string.Join("; ", cookies));
+            using var consentRedirectResponse = await httpClient.SendAsync(message3);
+        }
+
+        private static void ParseForm(string html, out string redirectUrl, out string validationToken)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+            var form = document.DocumentNode.SelectSingleNode("//body//form");
+            Assert.NotNull(form);
+            var inputs = form.ParentNode.SelectNodes("input");
+            Assert.NotEmpty(inputs);
+
+            redirectUrl = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "ReturnUrl"))?
+                .Attributes?
+                .FirstOrDefault(a => a.Name == "value")?
+                .Value;
+            Assert.NotNull(redirectUrl);
+            validationToken = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "__RequestVerificationToken"))?
+                .Attributes?
+                .FirstOrDefault(a => a.Name == "value")?
+                .Value;
+            Assert.NotNull(validationToken);
+        }
+
+        private static void NavigateToLoginPage(TestLoggerProvider testLoggerProvider, TestServer server, IServiceScope scope, out HttpClient httpClient, out string redirectUri)
+        {
             SeedData.SeedUsers(scope);
             SeedData.SeedConfiguration(scope);
 
@@ -65,7 +164,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var navigationInterceptionMock = new Mock<INavigationInterception>();
             var navigationManager = new TestNavigationManager(uri: "http://exemple.com");
 
-            var httpClient = server.CreateClient();
+            var client = server.CreateClient();
+            httpClient = client;
             options.Authority = httpClient.BaseAddress.ToString();
 
             host.ConfigureServices(services =>
@@ -76,7 +176,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     {
                         configure.AddProvider(testLoggerProvider);
                     })
-                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                    .AddIdentityServer4HttpStores(p => Task.FromResult(client))
                     .AddSingleton(p => navigationManager)
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => jsRuntimeMock.Object)
@@ -89,10 +189,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             jsRuntimeMock.Setup(m => m.InvokeAsync<object>("sessionStorage.setItem", It.IsAny<object[]>()))
                 .ReturnsAsync(null);
 
-            string redirectUri = null;
+            string navigatedUri = null;
             navigationManager.OnNavigateToCore = (uri, f) =>
             {
-                redirectUri = uri;
+                navigatedUri = uri;
                 waitHandle.Set();
             };
 
@@ -107,7 +207,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 settingsRequest.SetResult(new
                 {
                     ApiBaseUrl = $"{options.Authority}api",
-                    options.Authority,
+                    Authority = options.Authority.TrimEnd('/'),
                     ClientId = "theidserveradmin",
                     Scope = "openid profile theidserveradminapi"
                 });
@@ -117,52 +217,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             WaitForHttpResponse(waitHandle);
 
-            using var authorizeResponse = await httpClient.GetAsync(redirectUri);
-            Assert.Equal(HttpStatusCode.Redirect, authorizeResponse.StatusCode);
-
-
-            using var loginPageResponse = await httpClient.GetAsync(authorizeResponse.Headers.Location);
-            var loginPageContent = await loginPageResponse.Content.ReadAsStringAsync();
-
-            var document = new HtmlDocument();
-            document.LoadHtml(loginPageContent);
-            var form = document.DocumentNode.SelectSingleNode("//body//form");
-            Assert.NotNull(form);
-            var inputs = form.ParentNode.SelectNodes("input");
-            Assert.NotEmpty(inputs);
-
-            var redirectUrl = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "ReturnUrl"))?
-                .Attributes?
-                .FirstOrDefault(a => a.Name == "value")?
-                .Value;
-
-            Assert.NotNull(redirectUri);
-            var validationToken = inputs.FirstOrDefault(n => n.Attributes.Any(a => a.Value == "__RequestVerificationToken"))?
-                .Attributes?
-                .FirstOrDefault(a => a.Name == "value")?
-                .Value;
-
-            Assert.NotNull(validationToken);
-
-            using var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                ["Username"] = "alice",
-                ["Password"] = "Pass123$",
-                ["ReturnUrl"] = redirectUrl,
-                ["__RequestVerificationToken"] = validationToken,
-                ["RememberLogin"] = "false",
-                ["button"] = "login"
-            });
-            var cookie = loginPageResponse.Headers.First(h => h.Key == "Set-Cookie").Value.First().Split(';').First();
-            postContent.Headers.Add("Cookie", cookie);
-
-            using var postLoginResponse = await httpClient.PostAsync(authorizeResponse.Headers.Location, postContent);
-            var postLoginContent = await postLoginResponse.Content.ReadAsStringAsync();
-
-            Assert.Equal(HttpStatusCode.Redirect, postLoginResponse.StatusCode);
-
-            using var redirectLoginResponse = await httpClient.GetAsync(postLoginResponse.Headers.Location);
-            var redirectLoginContent = await redirectLoginResponse.Content.ReadAsStringAsync();
+            redirectUri = navigatedUri;
         }
 
         private static void WaitForHttpResponse(ManualResetEvent waitHandle)
@@ -196,7 +251,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                         options.UseSqlite(connection));
 
                     services.AddIdentity<ApplicationUser, IdentityRole>(
-                            options => options.SignIn.RequireConfirmedAccount = true)
+                            options => options.SignIn.RequireConfirmedAccount = false)
                         .AddEntityFrameworkStores<ApplicationDbContext>()
                         .AddDefaultTokenProviders();
 

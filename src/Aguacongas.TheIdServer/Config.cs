@@ -117,9 +117,16 @@ namespace Aguacongas.TheIdServer
                         "http://exemple.com/"
                     },
 
-                    PostLogoutRedirectUris = { "https://localhost:5443/admin/" },
-                    AllowedCorsOrigins = { "https://localhost:5443" },
-
+                    PostLogoutRedirectUris = 
+                    { 
+                        "https://localhost:5443/admin/",
+                        "http://exemple.com/"
+                    },
+                    AllowedCorsOrigins = 
+                    {
+                        "https://localhost:5443",
+                        "http://exemple.com/"
+                    },
                     AllowedScopes = { "openid", "profile", "theidserveradminapi" },
                     ClientSecrets = new List<Secret>
                     {
