@@ -161,7 +161,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
         private static void OpenLogggedPage(TestLoggerProvider testLoggerProvider, HttpClient httpClient, ConcurrentDictionary<object, object> sessionStore, string location)
         {
-            var host = new TestHost();
+            using var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
@@ -237,7 +237,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             SeedData.SeedUsers(scope);
             SeedData.SeedConfiguration(scope);
 
-            var host = new TestHost();
+            using var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
