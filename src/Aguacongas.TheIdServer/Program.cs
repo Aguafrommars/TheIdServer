@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 using System.Linq;
 
 namespace Aguacongas.TheIdServer
@@ -42,17 +40,8 @@ namespace Aguacongas.TheIdServer
         {
             return WebHost.CreateDefaultBuilder(args)
                     .UseStartup<Startup>()
-                    .UseSerilog((context, configuration) =>
-                    {
-                        configuration
-                            .MinimumLevel.Debug()
-                            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                            .MinimumLevel.Override("System", LogEventLevel.Information)
-                            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                            .WriteTo.Seq("http://localhost:5341/")
-                            .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate);
-                    });
+                    .UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration));
         }
     }
 }

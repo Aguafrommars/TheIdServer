@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -137,7 +138,8 @@ namespace Aguacongas.TheIdServer
                     .UseHsts();
             }
 
-            app.UseHttpsRedirection()
+            app.UseSerilogRequestLogging()
+                .UseHttpsRedirection()
                 .UseResponseCompression()
                 .UseStaticFiles()
                 .Map("/admin", child =>

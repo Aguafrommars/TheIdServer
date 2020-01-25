@@ -88,12 +88,13 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
             var uri = new Uri(_navigationManager.Uri);
 
-            var queryParams = QueryHelpers.ParseQuery(uri.Query);
             if (_userStore.User == null)
             {
                 await GetUserFromSessionStorage(options)
                     .ConfigureAwait(false);
             }
+
+            var queryParams = QueryHelpers.ParseQuery(uri.Query);
             if (_userStore.User == null && queryParams.ContainsKey("code"))
             {
                 var code = queryParams["code"];
@@ -150,16 +151,19 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private async Task GetTokensAsync(StringValues code, AuthorizationOptions options)
         {
+            var authorizeEnpoint = await GetItemAsync<string>(options.TokenEndpointStorageKey);
+            var codeVerifier = await GetItemAsync<string>(options.VerifierStorageKey);
+            codeVerifier = codeVerifier.Replace("=", "")
+                    .Replace('+', '-')
+                    .Replace('/', '_');
+
             using var authorizationCodeRequest = new AuthorizationCodeTokenRequest
             {
-                Address = await GetItemAsync<string>(options.TokenEndpointStorageKey),
+                Address = authorizeEnpoint,
                 ClientId = options.ClientId,
                 RedirectUri = options.RedirectUri,
                 Code = code,
-                CodeVerifier = (await GetItemAsync<string>(options.VerifierStorageKey))
-                    .Replace("=", "")
-                    .Replace('+', '-')
-                    .Replace('/', '_')
+                CodeVerifier = codeVerifier
             };
             try
             {
