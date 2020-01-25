@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 using Serilog;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -51,12 +52,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var connectionApp = new SqliteConnection("DataSource=:memory:");
             connectionApp.Open();
             var testLoggerProvider = new TestLoggerProvider(_testOutputHelper);
-            var server = CreateTestServer(connection, connectionApp);
+            using var server = CreateTestServer(connection, connectionApp);
 
             using var scope = server.Host.Services.CreateScope();
             HttpClient httpClient;
             string redirectUri;
-            NavigateToLoginPage(testLoggerProvider, server, scope, out httpClient, out redirectUri);
+            var sessionStore = new ConcurrentDictionary<object, object>();
+            NavigateToLoginPage(testLoggerProvider, server, scope, sessionStore, out httpClient, out redirectUri);
 
             using var authorizeResponse = await httpClient.GetAsync(redirectUri);
             Assert.Equal(HttpStatusCode.Redirect, authorizeResponse.StatusCode);
@@ -74,7 +76,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 ["Password"] = "Pass123$",
                 ["ReturnUrl"] = redirectUrl.Replace("&amp;", "&"),
                 ["__RequestVerificationToken"] = validationToken,
-                ["RememberLogin"] = "false",
+                ["RememberLogin"] = "true",
                 ["button"] = "login"
             });
             var cookie = loginPageResponse.Headers.First(h => h.Key == "Set-Cookie").Value.First().Split(';').First();
@@ -111,6 +113,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 new KeyValuePair<string, string>("ScopesConsented", "openid"),
                 new KeyValuePair<string, string>("ScopesConsented", "profile"),
                 new KeyValuePair<string, string>("ScopesConsented", "theidserveradminapi"),
+                new KeyValuePair<string, string>("RememberConsent", "true"),
                 new KeyValuePair<string, string>("button", "yes"),
             });
             postConsentContent.Headers.Add("Cookie", string.Join("; ", cookies));
@@ -127,9 +130,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             redirectUrl = meta.Attributes.First(a => a.Name == "data-url").Value.Replace("&amp;", "&");
             cookie = postConsentResponse.Headers.First(h => h.Key == "Set-Cookie").Value.First().Split(';').First();
             cookies.Add(cookie);
-            using var message3 = new HttpRequestMessage(HttpMethod.Get, redirectUrl);
-            message3.Headers.Add("Cookier", string.Join("; ", cookies));
+
+            using var message3 = new HttpRequestMessage(HttpMethod.Get, $"{redirectUrl}&{Guid.NewGuid()}");
+            message3.Headers.Add("Cookie", string.Join("; ", cookies));
             using var consentRedirectResponse = await httpClient.SendAsync(message3);
+
+            OpenLogggedPage(testLoggerProvider, httpClient, sessionStore, consentRedirectResponse.Headers.Location.ToString());
         }
 
         private static void ParseForm(string html, out string redirectUrl, out string validationToken)
@@ -153,7 +159,80 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             Assert.NotNull(validationToken);
         }
 
-        private static void NavigateToLoginPage(TestLoggerProvider testLoggerProvider, TestServer server, IServiceScope scope, out HttpClient httpClient, out string redirectUri)
+        private static void OpenLogggedPage(TestLoggerProvider testLoggerProvider, HttpClient httpClient, ConcurrentDictionary<object, object> sessionStore, string location)
+        {
+            var host = new TestHost();
+            var options = new Blazor.Oidc.AuthorizationOptions();
+            var jsRuntimeMock = new Mock<IJSRuntime>();
+            var navigationInterceptionMock = new Mock<INavigationInterception>();
+            var navigationManager = new TestNavigationManager(uri: location);
+
+            options.Authority = httpClient.BaseAddress.ToString();
+
+            host.ConfigureServices(services =>
+            {
+                new blazorApp.Startup().ConfigureServices(services);
+                services
+                    .AddLogging(configure =>
+                    {
+                        configure.AddProvider(testLoggerProvider);
+                    })
+                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                    .AddSingleton(p => navigationManager)
+                    .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
+                    .AddSingleton(p => jsRuntimeMock.Object)
+                    .AddSingleton(p => navigationInterceptionMock.Object);
+            });
+
+            var httpMock = host.AddMockHttp();
+            httpMock.Fallback.Respond(httpClient);
+
+            foreach(var key in sessionStore.Keys)
+            {
+                jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", It.Is<object[]>(p => p[0].ToString() == key.ToString())))
+                    .ReturnsAsync<string, object[], IJSRuntime, string>((_, array) =>
+                        {
+                            if (sessionStore.TryGetValue(array[0], out object value))
+                            {
+                                return (string)value;
+                            }
+                            throw new InvalidOperationException($"sessionStore doesn't contain key {key}");
+                        });
+
+            }
+
+            string navigatedUri = null;
+            var waitHandle = new ManualResetEvent(false);
+            navigationManager.OnNavigateToCore = (uri, f) =>
+            {
+                navigatedUri = uri;
+                waitHandle.Set();
+            };
+
+            var settingsRequest = httpMock.Capture("/settings.json");
+            var component = host.AddComponent<blazorApp.App>();
+
+            var markup = component.GetMarkup();
+            Assert.Contains("Authentication in progress", markup);
+
+            host.WaitForNextRender(() =>
+            {
+                settingsRequest.SetResult(new
+                {
+                    ApiBaseUrl = $"{options.Authority}api",
+                    Authority = options.Authority.TrimEnd('/'),
+                    ClientId = "theidserveradmin",
+                    Scope = "openid profile theidserveradminapi"
+                });
+            });
+
+
+            WaitForOnNavigateToCore(waitHandle);
+
+            Assert.Equal("http://exemple.com", navigatedUri);
+        }
+
+        private static void NavigateToLoginPage(TestLoggerProvider testLoggerProvider, TestServer server, IServiceScope scope, ConcurrentDictionary<object, object> sessionStore, out HttpClient httpClient, out string redirectUri)
         {
             SeedData.SeedUsers(scope);
             SeedData.SeedConfiguration(scope);
@@ -184,12 +263,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             });
 
             var httpMock = host.AddMockHttp();
-            var waitHandle = new ManualResetEvent(false);
             httpMock.Fallback.Respond(httpClient);
             jsRuntimeMock.Setup(m => m.InvokeAsync<object>("sessionStorage.setItem", It.IsAny<object[]>()))
+                .Callback<string, object[]>((_, array) => sessionStore.TryAdd(array[0],  array[1]))
                 .ReturnsAsync(null);
 
             string navigatedUri = null;
+            var waitHandle = new ManualResetEvent(false);
             navigationManager.OnNavigateToCore = (uri, f) =>
             {
                 navigatedUri = uri;
@@ -215,12 +295,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.WaitForContains(component, "You are redirecting to the login page. please wait");
 
-            WaitForHttpResponse(waitHandle);
+            WaitForOnNavigateToCore(waitHandle);
 
             redirectUri = navigatedUri;
         }
 
-        private static void WaitForHttpResponse(ManualResetEvent waitHandle)
+        private static void WaitForOnNavigateToCore(ManualResetEvent waitHandle)
         {
             if (Debugger.IsAttached)
             {
@@ -254,6 +334,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                             options => options.SignIn.RequireConfirmedAccount = false)
                         .AddEntityFrameworkStores<ApplicationDbContext>()
                         .AddDefaultTokenProviders();
+
+                    services.AddRazorPages(options =>
+                    {
+                        options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
+                    });
 
                     services.AddControllersWithViews(options =>
                     {
@@ -312,7 +397,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     app.UseDeveloperExceptionPage()
                         .UseDatabaseErrorPage();
 
-                    app.UseStaticFiles()
+                    app.UseSerilogRequestLogging()
+                        .UseStaticFiles()
                         .UseIdentityServer()
                         .UseRouting()
                         .UseAuthentication()
