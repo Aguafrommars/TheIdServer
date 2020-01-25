@@ -136,6 +136,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             using var consentRedirectResponse = await httpClient.SendAsync(message3);
 
             OpenLogggedPage(testLoggerProvider, httpClient, sessionStore, consentRedirectResponse.Headers.Location.ToString());
+
         }
 
         private static void ParseForm(string html, out string redirectUrl, out string validationToken)
@@ -161,7 +162,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
         private static void OpenLogggedPage(TestLoggerProvider testLoggerProvider, HttpClient httpClient, ConcurrentDictionary<object, object> sessionStore, string location)
         {
-            using var host = new TestHost();
+            var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
@@ -201,14 +202,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             }
 
-            string navigatedUri = null;
-            var waitHandle = new ManualResetEvent(false);
-            navigationManager.OnNavigateToCore = (uri, f) =>
-            {
-                navigatedUri = uri;
-                waitHandle.Set();
-            };
-
             var settingsRequest = httpMock.Capture("/settings.json");
             var component = host.AddComponent<blazorApp.App>();
 
@@ -226,10 +219,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 });
             });
 
+            markup = component.GetMarkup();
 
-            WaitForOnNavigateToCore(waitHandle);
-
-            Assert.Equal("http://exemple.com", navigatedUri);
+            while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
+            {
+                host.WaitForNextRender();
+                markup = component.GetMarkup();
+            }
         }
 
         private static void NavigateToLoginPage(TestLoggerProvider testLoggerProvider, TestServer server, IServiceScope scope, ConcurrentDictionary<object, object> sessionStore, out HttpClient httpClient, out string redirectUri)
@@ -237,7 +233,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             SeedData.SeedUsers(scope);
             SeedData.SeedConfiguration(scope);
 
-            using var host = new TestHost();
+            var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
@@ -263,13 +259,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             });
 
             var httpMock = host.AddMockHttp();
+            var waitHandle = new ManualResetEvent(false);
             httpMock.Fallback.Respond(httpClient);
             jsRuntimeMock.Setup(m => m.InvokeAsync<object>("sessionStorage.setItem", It.IsAny<object[]>()))
-                .Callback<string, object[]>((_, array) => sessionStore.TryAdd(array[0],  array[1]))
+                .Callback<string, object[]>((_, array) => sessionStore.AddOrUpdate(array[0],  array[1], (k,v) => array[1]))
                 .ReturnsAsync(null);
 
             string navigatedUri = null;
-            var waitHandle = new ManualResetEvent(false);
             navigationManager.OnNavigateToCore = (uri, f) =>
             {
                 navigatedUri = uri;
@@ -295,12 +291,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.WaitForContains(component, "You are redirecting to the login page. please wait");
 
-            WaitForOnNavigateToCore(waitHandle);
+            WaitForHttpResponse(waitHandle);
 
             redirectUri = navigatedUri;
         }
 
-        private static void WaitForOnNavigateToCore(ManualResetEvent waitHandle)
+        private static void WaitForHttpResponse(ManualResetEvent waitHandle)
         {
             if (Debugger.IsAttached)
             {
