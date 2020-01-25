@@ -12,10 +12,12 @@ namespace Aguacongas.TheIdServer
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
+            var profile = new IdentityResources.Profile();
+            profile.UserClaims.Add("role");
             return new IdentityResource[]
             {
+                profile,
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
                 new IdentityResources.Address(),
                 new IdentityResources.Email(),
                 new IdentityResources.Phone(),
