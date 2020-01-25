@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
-                    options => options.SignIn.RequireConfirmedAccount = true)
+                    options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -121,7 +121,6 @@ namespace Aguacongas.TheIdServer
                 {
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
                 });
-
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
