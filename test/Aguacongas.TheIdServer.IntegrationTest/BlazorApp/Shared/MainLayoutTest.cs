@@ -17,7 +17,7 @@ using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
-    public class MainLayoutTest
+    public class MainLayoutTest : IDisposable
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         {
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
-            var host = new TestHost();
+            using var host = new TestHost();
             host.ConfigureServices(services =>
             {
                 new blazorApp.Startup().ConfigureServices(services);                
@@ -123,6 +123,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 
             var navigationInterceptionMock = new Mock<INavigationInterception>();
             var host = new TestHost();
+            _host = host;
             host.ConfigureServices(services =>
             {
                 new blazorApp.Startup().ConfigureServices(services);
@@ -154,5 +155,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 
             return component;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+        private TestHost _host;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _host?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

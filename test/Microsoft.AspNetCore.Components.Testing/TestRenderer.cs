@@ -44,6 +44,11 @@ namespace Microsoft.AspNetCore.Components.Testing
         {
             _unhandledException = exception;
         }
+        public void DispatchAndAssertNoSynchronousErrors(Action callback)
+        {
+            Dispatcher.InvokeAsync(callback).Wait();
+            AssertNoSynchronousErrors();
+        }
 
         protected override Task UpdateDisplayAsync(in RenderBatch renderBatch)
         {
@@ -52,12 +57,6 @@ namespace Microsoft.AspNetCore.Components.Testing
             _nextRenderTcs = new TaskCompletionSource<object>();
             prevTcs.SetResult(null);
             return Task.CompletedTask;
-        }
-
-        public void DispatchAndAssertNoSynchronousErrors(Action callback)
-        {
-            Dispatcher.InvokeAsync(callback).Wait();
-            AssertNoSynchronousErrors();
         }
 
         private void AssertNoSynchronousErrors()

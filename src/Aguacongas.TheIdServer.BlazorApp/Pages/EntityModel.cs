@@ -403,7 +403,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return modifications;
         }
 
-        private async Task<object> StoreAsync(Type entityType, object entity, Func<IAdminStore, object, Task<object>> action)
+        private Task<object> StoreAsync(Type entityType, object entity, Func<IAdminStore, object, Task<object>> action)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
 
@@ -413,10 +413,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
 
             var store = GetStore(entityType);
-            entity = await action.Invoke(store, entity)
-                .ConfigureAwait(false);
-
-            return entity;
+            return action.Invoke(store, entity);
         }
 
         private enum ModificationKind

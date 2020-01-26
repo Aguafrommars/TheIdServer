@@ -38,7 +38,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
         {
-            // nothing to do
+            if (entity is Entity.UserClaim claim)
+            {
+                claim.UserId = Model.Id;
+            }
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
@@ -160,10 +163,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnAddClaimClicked()
         {
-            var claim = new Entity.UserClaim
-            {
-                UserId = Model.Id
-            };
+            var claim = new Entity.UserClaim();
             State.Claims.Add(claim);
             EntityCreated(claim);
             StateHasChanged();

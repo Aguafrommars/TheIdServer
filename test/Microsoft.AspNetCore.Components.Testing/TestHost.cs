@@ -80,7 +80,14 @@ namespace Microsoft.AspNetCore.Components.Testing
                 if (disposing && _renderer.IsValueCreated)
                 {
 #pragma warning disable BL0006 // Do not use RenderTree types
-                    _renderer.Value.Dispose();
+                    try
+                    {
+                        _renderer.Value.Dispose();
+                    }
+                    catch(InvalidOperationException)
+                    {
+                        _renderer.Value.Dispose();
+                    }
 #pragma warning restore BL0006 // Do not use RenderTree types
                 }
                 disposedValue = true;

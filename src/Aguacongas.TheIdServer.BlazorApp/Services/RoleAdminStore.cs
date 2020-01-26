@@ -18,14 +18,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
 
         public async Task<Role> CreateAsync(Role entity, CancellationToken cancellationToken = default)
         {
-            return Role.FromEntity(await _store.CreateAsync(entity,cancellationToken)
+            return Role.FromEntity(await _store.CreateAsync(entity, cancellationToken)
                 .ConfigureAwait(false));
         }
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return (await _store.CreateAsync(entity, cancellationToken)
-                .ConfigureAwait(false)) as Role;
+            return await CreateAsync(entity as Role, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -44,16 +44,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Role> UpdateAsync(Role entity, CancellationToken cancellationToken = default)
+        public Task<Role> UpdateAsync(Role entity, CancellationToken cancellationToken = default)
         {
-            return Role.FromEntity(await _store.UpdateAsync(entity, cancellationToken)
-                .ConfigureAwait(false));
+            throw new NotImplementedException();
         }
 
-        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return Role.FromEntity((await _store.UpdateAsync(entity, cancellationToken)
-                .ConfigureAwait(false)) as Role);
+            throw new NotImplementedException();
         }
     }
 }

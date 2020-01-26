@@ -22,13 +22,23 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                     {
                         Detail = exception.Message
                     });
+                    return;
                 }
                 if (exception is IdentityException identityException)
                 {
+                    if (identityException.Errors != null)
+                    {
+                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                        (
+                            identityException.Errors.ToDictionary(e => e.Code, e => new string[] { e.Description })
+                        ));
+                        return;
+                    }
                     context.Result = new BadRequestObjectResult(new ValidationProblemDetails
-                    (
-                        identityException.Errors.ToDictionary(e => e.Code, e => new string[] { e.Description })
-                    ));
+                    {
+                        Detail = exception.Message
+                    });
+                    return;
                 }
                 if (exception is DbUpdateException dbUpdateException)
                 {
@@ -38,14 +48,12 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                         {
                             Detail = dbUpdateException.Message
                         });
+                        return;
                     }
-                    else
+                    context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState)
                     {
-                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState)
-                        {
-                            Detail = dbUpdateException.InnerException.Message ?? dbUpdateException.Message
-                        });
-                    }
+                        Detail = dbUpdateException.InnerException.Message ?? dbUpdateException.Message
+                    });
                 }
             }
         }

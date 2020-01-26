@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase<TEntity>
+    public abstract class EntitiesPageTestBase<TEntity> : IDisposable
     {
         private readonly ApiFixture _fixture;
 
@@ -184,6 +184,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out host,
                 out component,
                 out mockHttp);
+            _host = host;
         }
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
@@ -205,5 +206,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             return markup;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+        private TestHost _host;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _host?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

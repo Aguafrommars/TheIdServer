@@ -65,8 +65,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var loginPageContent = await loginPageResponse.Content.ReadAsStringAsync();
 
             Assert.NotNull(redirectUri);
-            string redirectUrl, validationToken;
-            ParseForm(loginPageContent, out redirectUrl, out validationToken);
+            ParseForm(loginPageContent, out string redirectUrl, out string validationToken);
 
             using var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -134,7 +133,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             using var consentRedirectResponse = await httpClient.SendAsync(message3);
 
             OpenLogggedPage(testLoggerProvider, httpClient, sessionStore, consentRedirectResponse.Headers.Location.ToString());
-
         }
 
         private static void ParseForm(string html, out string redirectUrl, out string validationToken)
@@ -160,7 +158,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
         private static void OpenLogggedPage(TestLoggerProvider testLoggerProvider, HttpClient httpClient, ConcurrentDictionary<object, object> sessionStore, string location)
         {
-            var host = new TestHost();
+            using var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
@@ -200,6 +198,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             }
 
+            string navigatedUri = null;
+            var waitHandle = new ManualResetEvent(false);
+            navigationManager.OnNavigateToCore = (uri, f) =>
+            {
+                navigatedUri = uri;
+                waitHandle.Set();
+            };
+
             var settingsRequest = httpMock.Capture("/settings.json");
             var component = host.AddComponent<blazorApp.App>();
 
@@ -217,13 +223,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 });
             });
 
-            markup = component.GetMarkup();
 
-            while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
+            WaitForHttpResponse(waitHandle);
+
+            Assert.Equal("http://exemple.com", navigatedUri);
         }
 
         private static void NavigateToLoginPage(TestLoggerProvider testLoggerProvider, TestServer server, IServiceScope scope, ConcurrentDictionary<object, object> sessionStore, out HttpClient httpClient, out string redirectUri)
@@ -231,7 +234,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             SeedData.SeedUsers(scope);
             SeedData.SeedConfiguration(scope);
 
-            var host = new TestHost();
+            using var host = new TestHost();
             var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
@@ -257,13 +260,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             });
 
             var httpMock = host.AddMockHttp();
-            var waitHandle = new ManualResetEvent(false);
             httpMock.Fallback.Respond(httpClient);
             jsRuntimeMock.Setup(m => m.InvokeAsync<object>("sessionStorage.setItem", It.IsAny<object[]>()))
                 .Callback<string, object[]>((_, array) => sessionStore.AddOrUpdate(array[0],  array[1], (k,v) => array[1]))
                 .ReturnsAsync(null);
 
             string navigatedUri = null;
+            var waitHandle = new ManualResetEvent(false);
             navigationManager.OnNavigateToCore = (uri, f) =>
             {
                 navigatedUri = uri;

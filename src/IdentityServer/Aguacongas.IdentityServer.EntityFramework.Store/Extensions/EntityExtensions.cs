@@ -453,9 +453,10 @@ namespace Aguacongas.IdentityServer.Store
 
         public static IdentityRoleClaim<string> ToRoleClaim(this Entity.RoleClaim claim)
         {
+            int.TryParse(claim.Id, out int id);
             return new IdentityRoleClaim<string>
             {
-                Id = int.Parse(claim.Id),
+                Id = id,
                 RoleId = claim.RoleId,
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value

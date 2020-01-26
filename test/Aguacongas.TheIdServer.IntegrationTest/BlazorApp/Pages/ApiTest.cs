@@ -192,9 +192,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            Assert.ThrowsAny<Exception>(() => 
+            host.Dispose();
+
+            Assert.Throws<ArgumentException>(() => 
             {
-                host.Dispose();
                 component.GetMarkup();
             });
         }

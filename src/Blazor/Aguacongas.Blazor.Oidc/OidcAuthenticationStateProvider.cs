@@ -41,6 +41,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             _getOptionsTask = getOptionsTask ?? throw new ArgumentNullException(nameof(getOptionsTask));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public async Task LoginAsync()
         {
             var options = await _getOptionsTask.ConfigureAwait(false);
