@@ -7,6 +7,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
 {
     public partial class MainLayout
     {
+        private readonly object _syncObject = new object();
+        private bool _pendingLoging = false;
         private string _loginError;
         private bool _notified;
         private string ShowToast(string userName)
@@ -26,6 +28,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We want to catch all exception here.")]
         private async Task LoginAsync()
         {
+            if (_pendingLoging)
+            {
+                return;
+            }
+            lock (_syncObject)
+            {
+                if (_pendingLoging)
+                {
+                    return;
+                }
+                _pendingLoging = true;
+            }
+
             try
             {
                 await _provider.LoginAsync()

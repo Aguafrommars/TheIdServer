@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         {
             var navigationInterceptionMock = new Mock<INavigationInterception>();
 
-            var host = new TestHost();
+            using var host = new TestHost();
             host.ConfigureServices(services =>
             {
                 services.AddSingleton<NavigationManager, TestNavigationManager>()

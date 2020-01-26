@@ -24,5 +24,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Services
             Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest()));
             Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest(), CancellationToken.None));
         }
+
+        [Fact]
+        public void UpdateAsync_should_not_be_implememted()
+        {
+            var storeMock = new Mock<IAdminStore<Role>>();
+            var sut = new RoleAdminStore(storeMock.Object);
+            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role()));
+            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role(), CancellationToken.None));
+            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object()));
+            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object(), CancellationToken.None));
+        }
     }
 }

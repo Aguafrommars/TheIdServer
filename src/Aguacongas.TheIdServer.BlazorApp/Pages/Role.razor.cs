@@ -33,7 +33,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
         {
-            // no navigation property
+            if (entity is RoleClaim claim)
+            {
+                claim.RoleId = Model.Id;
+            }
         }
 
         protected override async Task<Models.Role> GetModelAsync()

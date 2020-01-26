@@ -143,7 +143,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out MockHttpMessageHandler _);
 
             WaitForLoaded(host, component);
 
@@ -167,7 +167,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out MockHttpMessageHandler _);
 
             WaitForLoaded(host, component);
 
@@ -191,7 +191,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out MockHttpMessageHandler _);
 
             WaitForLoaded(host, component);
 
@@ -215,7 +215,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out MockHttpMessageHandler _);
 
             WaitForLoaded(host, component);
 
@@ -275,7 +275,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out MockHttpMessageHandler _);
 
             WaitForLoaded(host, component);
 
