@@ -11,24 +11,14 @@ Write-Host "dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d
 dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=$env:sonarqube -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
 dotnet build -c Release
-dotnet test -c Release --no-build --settings coverletArgs.runsettings
-
-if ($LASTEXITCODE -ne 0) {
-	Get-ChildItem -rec `
-	| Where-Object { $_.Name -like "coverage.cobertura.xml" } `
-	| ForEach-Object { 
-		Remove-Item $_.FullName
-	}
-	dotnet test -c Release --no-build --settings coverletArgs.runsettings
-	$result = $LASTEXITCODE
-}
+dotnet test -c Release --settings coverletArgs.runsettings
 	
 $merge = ""
 Get-ChildItem -rec `
 | Where-Object { $_.Name -like "coverage.cobertura.xml" } `
 | ForEach-Object { 
 	$path = $_.FullName
-	$merge = "$merge;$path"
+	$merge = "$path;$merge"
 }
 Write-Host $merge
 ReportGenerator\tools\netcoreapp3.0\ReportGenerator.exe "-reports:$merge" "-targetdir:coverage" "-reporttypes:SonarQube"

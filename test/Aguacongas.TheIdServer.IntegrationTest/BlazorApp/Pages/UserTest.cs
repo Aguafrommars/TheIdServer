@@ -35,9 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            var filterInput = component.Find("input[placeholder=\"filter\"]");
-
-            Assert.NotNull(filterInput);
+            var filterInput = WaitForNode(host, component, "input[placeholder=\"filter\"]");
 
             host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
@@ -63,9 +61,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(token);
             });
 
-            var deleteButton = component.Find("#external-logins-tokens button[type=button]");
-
-            Assert.NotNull(deleteButton);
+            var deleteButton = WaitForNode(host, component, "#external-logins-tokens button[type=button]");
 
             host.WaitForNextRender(() => deleteButton.Click());
 
@@ -104,9 +100,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(login);
             });
 
-            var deleteButton = component.Find("#external-logins button[type=button]");
-
-            Assert.NotNull(deleteButton);
+            var deleteButton = WaitForNode(host, component, "#external-logins button[type=button]");
 
             host.WaitForNextRender(() => deleteButton.Click());
 
@@ -145,9 +139,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(consent);
             });
 
-            var deleteButton = component.Find("#consents button[type=button]");
-
-            Assert.NotNull(deleteButton);
+            var deleteButton = WaitForNode(host, component, "#consents button[type=button]");
 
             host.WaitForNextRender(() => deleteButton.Click());
 
@@ -186,9 +178,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(role);
             });
 
-            var deleteButton = component.Find("#roles .input-group-append");
-
-            Assert.NotNull(deleteButton);
+            var deleteButton = WaitForNode(host, component, "#roles .input-group-append");
 
             host.WaitForNextRender(() => deleteButton.Click());
 
@@ -235,9 +225,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 return context.SaveChangesAsync();
             });
 
-            var input = component.Find("#roles .new-claim");
-
-            Assert.NotNull(input);
+            var input = WaitForNode(host, component, "#roles .new-claim");
 
             host.WaitForNextRender(async () =>
             {
@@ -247,21 +235,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
             });
 
-            var markup = component.GetMarkup();
-
-            while (!markup.Contains("dropdown-item"))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            var button = component.Find(".dropdown-item");
+            var button = WaitForNode(host, component, ".dropdown-item");
 
             Assert.NotNull(button);
 
             host.WaitForNextRender(() => button.Click());
 
-            markup = component.GetMarkup();
+            var markup = component.GetMarkup();
 
             Assert.Contains(roleId, markup);
 
@@ -293,7 +273,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            var addButton = component.Find("#claims button");
+            var addButton = WaitForNode(host, component, "#claims button");
 
             Assert.NotNull(addButton);
 
@@ -342,9 +322,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            var rows = component.FindAll("#claims tr");
-
-            Assert.NotNull(rows);
+            var rows = WaitForAllNodes(host, component, "#claims tr");
 
             var lastRow = rows.Last();
             var inputList = lastRow.Descendants("input");
@@ -379,7 +357,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            var button = component.Find("#claims tr button");
+            var button = WaitForNode(host, component, "#claims tr button");
 
             Assert.NotNull(button);
 
@@ -413,7 +391,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender();
 
-            var input = component.Find("#name");
+            var input = WaitForNode(host, component, "#name");
 
             var userId = GenerateId();
             host.WaitForNextRender(() => input.Change(userId));
@@ -438,9 +416,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            var input = component.Find("#email");
-
-            Assert.NotNull(input);
+            var input = WaitForNode(host, component, "#email");
 
             var expected = "test@exemple.com";
             host.WaitForNextRender(() => input.Change(expected));
