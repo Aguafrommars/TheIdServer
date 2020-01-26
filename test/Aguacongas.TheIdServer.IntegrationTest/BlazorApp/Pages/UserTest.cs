@@ -517,17 +517,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender();
-
-            var markup = component.GetMarkup();
-
-            if (markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            Assert.Contains("filtered", markup);
+            host.WaitForContains(component, "filtered");
 
             return new Tuple<string, TestHost, RenderedComponent<App>>(userId, host, component);
         }
