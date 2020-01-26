@@ -82,6 +82,7 @@ namespace Microsoft.AspNetCore.Components.Testing
 #pragma warning disable BL0006 // Do not use RenderTree types
                     try
                     {
+                        _renderer.Value.Dispose();
                     }
                     catch(InvalidOperationException)
                     {
