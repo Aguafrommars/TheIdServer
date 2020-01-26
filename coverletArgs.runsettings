@@ -6,6 +6,7 @@
         <Configuration>
           <Format>cobertura</Format>          
           <ExcludeByFile>**/*.razor</ExcludeByFile>
+          <Exclude>[FluentValidation]*</Exclude>
         </Configuration>
       </DataCollector>
     </DataCollectors>
