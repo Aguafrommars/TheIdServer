@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             string markup = WaitForLoaded(host, component);
 
-            Assert.Contains("filtered", markup);
+            WaitForContains(host, component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 

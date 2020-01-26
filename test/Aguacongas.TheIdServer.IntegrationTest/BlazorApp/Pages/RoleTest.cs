@@ -36,9 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var markup = component.GetMarkup();
-
-            Assert.Contains("filtered", markup);
+            WaitForContains(host, component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -49,7 +47,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = roleId
             }));
 
-            markup = component.GetMarkup();
+            var markup = component.GetMarkup();
 
             Assert.DoesNotContain("filtered", markup);
         }
@@ -66,8 +64,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#name");
-            Assert.NotNull(input);
+            var input = WaitForNode(host, component, "#name");
 
             var roleName = GenerateId();
 
@@ -133,9 +130,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var addButton = component.Find("#claims button");
-
-            Assert.NotNull(addButton);
+            var addButton = WaitForNode(host, component, "#claims button");
 
             host.WaitForNextRender(() => addButton.Click());
 
@@ -188,9 +183,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var rows = component.FindAll("#claims tr");
-
-            Assert.NotNull(rows);
+            var rows = WaitForAllNodes(host, component, "#claims tr");
 
             var lastRow = rows.Last();
             var inputList = lastRow.Descendants("input");
@@ -231,9 +224,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var button = component.Find("#claims tr button");
-
-            Assert.NotNull(button);
+            var button = WaitForNode(host, component, "#claims tr button");
 
             host.WaitForNextRender(() => button.Click());
 

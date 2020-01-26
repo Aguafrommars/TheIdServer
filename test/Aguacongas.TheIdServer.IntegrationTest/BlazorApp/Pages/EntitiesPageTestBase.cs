@@ -37,16 +37,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForLoaded(host, component);
+            var markup = WaitForLoaded(host, component);
 
-            var markup = component.GetMarkup();
-            while (!markup.Contains("table-hover"))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            Assert.Contains("filtered", markup);
+            host.WaitForContains(component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 

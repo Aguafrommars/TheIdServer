@@ -18,8 +18,13 @@ appveyor AddMessage "SemVer = $nextversion"
 
 if (![string]::IsNullOrEmpty($env:GitVersion_PreReleaseLabel))
 {
-    $nextversion = "$nextversion-$env:GitVersion_PreReleaseLabel$env:GitVersion_CommitsSinceVersionSourcePadded"
+    $preReleaseLabel = $env:GitVersion_PreReleaseLabel.Trim()
+    if (![string]::IsNullOrEmpty($preReleaseLabel))
+    {
+        $nextversion = "$nextversion-$preReleaseLabel$env:GitVersion_CommitsSinceVersionSourcePadded"
+    }
 }
+$nextversion = $nextversion.Trim()
 appveyor SetVariable -Name Version -Value $nextversion
 appveyor UpdateBuild -Version $nextversion
 appveyor AddMessage "Version = $nextversion"

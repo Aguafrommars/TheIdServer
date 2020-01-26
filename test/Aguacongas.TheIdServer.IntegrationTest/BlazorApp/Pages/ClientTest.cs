@@ -35,9 +35,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            WaitForLoaded(host, component);
+            var markup = WaitForLoaded(host, component);
 
-            var markup = WaitForContains(host, component, "filtered");
+            host.WaitForContains(component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
