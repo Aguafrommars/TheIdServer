@@ -18,15 +18,6 @@ if ($isLinux) {
 	dotnet test -c Release --settings coverletArgs.runsettings
 
 	if ($LASTEXITCODE -ne 0) {
-		Get-ChildItem -rec `
-		| Where-Object { $_.Name -like "coverage.cobertura.xml" } `
-		| ForEach-Object { 
-			Remove-Item $_.FullName
-		}
-			dotnet test -c Release --settings coverletArgs.runsettings
-	}
-
-	if ($LASTEXITCODE -ne 0) {
 		$result = $LASTEXITCODE
 	}
 	
