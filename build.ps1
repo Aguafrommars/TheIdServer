@@ -1,5 +1,17 @@
 $result = 0
 
+Get-ChildItem -rec `
+| Where-Object { $_.Name -eq "TestResults" } `
+| ForEach-Object {
+	Remove-Item  $_.FullName -Recurse
+}
+
+Get-ChildItem -rec `
+| Where-Object { $_.Name -eq "SonarQube.xml" } `
+| ForEach-Object {
+	Remove-Item  $_.FullName
+}
+
 $prNumber = $env:APPVEYOR_PULL_REQUEST_NUMBER
 if ($prNumber) {
 	$prArgs = "-d:sonar.pullrequest.key=$prNumber"
@@ -10,12 +22,13 @@ elseif ($env:APPVEYOR_REPO_BRANCH) {
 Write-Host "dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=****** -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version"
 dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=$env:sonarqube -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
+
 dotnet build -c Release
-dotnet test -c Release --settings coverletArgs.runsettings
+dotnet test -c Release --no-build --settings coverletArgs.runsettings
 	
 $merge = ""
 Get-ChildItem -rec `
-| Where-Object { $_.Name -like "coverage.cobertura.xml" } `
+| Where-Object { $_.Name -eq "coverage.cobertura.xml" } `
 | ForEach-Object { 
 	$path = $_.FullName
 	$merge = "$path;$merge"
