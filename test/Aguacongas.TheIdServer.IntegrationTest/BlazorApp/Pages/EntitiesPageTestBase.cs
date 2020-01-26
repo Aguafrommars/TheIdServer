@@ -110,6 +110,52 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.True(called);
         }
 
+        [Fact]
+        public async Task OnHeaderClicked_should_sort_grid()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            var markup = WaitForLoaded(host, component);
+
+            Assert.Contains("filtered", markup);
+
+            var th = component.Find(".table.mb-0 th div");
+
+            Assert.NotNull(th);
+
+            host.WaitForNextRender(() => th.Click());
+
+            var arrow = component.Find(".oi-arrow-bottom");
+
+            Assert.NotNull(arrow);
+
+            th = component.Find(".table.mb-0 th div");
+
+            Assert.NotNull(th);
+
+            host.WaitForNextRender(() => th.Click());
+
+            arrow = component.Find(".oi-arrow-top");
+
+            Assert.NotNull(arrow);
+
+            th = component.Find(".table.mb-0 th div");
+
+            Assert.NotNull(th);
+
+            host.WaitForNextRender(() => th.Click());
+
+            arrow = component.Find(".oi-arrow-");
+
+            Assert.NotNull(th);
+        }
+
         protected abstract Task PopulateList();
 
         protected void CreateTestHost(string userName,

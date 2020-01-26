@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -40,15 +39,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
                 .ConfigureAwait(false));
         }
 
-        public async Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+        public Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _store.GetAsync(request, cancellationToken)
-                .ConfigureAwait(false);
-            return new PageResponse<Role>
-            {
-                Count = response.Count,
-                Items = response.Items.Select(Role.FromEntity)
-            };
+            throw new NotImplementedException();
         }
 
         public async Task<Role> UpdateAsync(Role entity, CancellationToken cancellationToken = default)
