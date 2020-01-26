@@ -25,7 +25,19 @@ Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
 
 dotnet build -c Release
 dotnet test -c Release --no-build --settings coverletArgs.runsettings
-	
+
+if ($LASTEXITCODE -ne 0) {
+	Get-ChildItem -rec `
+	| Where-Object { $_.Name -eq "TestResults" } `
+	| ForEach-Object {
+		Remove-Item  $_.FullName -Recurse
+	}
+	dotnet test -c Release --no-build --settings coverletArgs.runsettings
+}
+
+if ($LASTEXITCODE -ne 0) {
+	$result = $LASTEXITCODE
+}
 $merge = ""
 Get-ChildItem -rec `
 | Where-Object { $_.Name -eq "coverage.cobertura.xml" } `
