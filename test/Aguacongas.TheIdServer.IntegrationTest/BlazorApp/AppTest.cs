@@ -55,10 +55,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             using var server = CreateTestServer(connection, connectionApp);
 
             using var scope = server.Host.Services.CreateScope();
-            HttpClient httpClient;
-            string redirectUri;
             var sessionStore = new ConcurrentDictionary<object, object>();
-            NavigateToLoginPage(testLoggerProvider, server, scope, sessionStore, out httpClient, out redirectUri);
+            NavigateToLoginPage(testLoggerProvider, server, scope, sessionStore, out HttpClient httpClient, out string redirectUri);
 
             using var authorizeResponse = await httpClient.GetAsync(redirectUri);
             Assert.Equal(HttpStatusCode.Redirect, authorizeResponse.StatusCode);
