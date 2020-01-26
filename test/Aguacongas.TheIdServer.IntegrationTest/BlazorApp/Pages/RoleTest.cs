@@ -36,9 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var markup = component.GetMarkup();
-
-            Assert.Contains("filtered", markup);
+            WaitForContains(host, component, "filtered");
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -49,7 +47,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = roleId
             }));
 
-            markup = component.GetMarkup();
+            var markup = component.GetMarkup();
 
             Assert.DoesNotContain("filtered", markup);
         }
