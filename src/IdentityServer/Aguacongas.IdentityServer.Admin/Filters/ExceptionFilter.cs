@@ -7,8 +7,16 @@ using System.Linq;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
-    class ExceptionFilter : IExceptionFilter
+    /// <summary>
+    /// Exception filter
+    /// </summary>
+    /// <seealso cref="IExceptionFilter" />
+    public class ExceptionFilter : IExceptionFilter
     {
+        /// <summary>
+        /// Called after an action has thrown an <see cref="T:System.Exception" />.
+        /// </summary>
+        /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ExceptionContext" />.</param>
         public void OnException(ExceptionContext context)
         {
             var exception = context.Exception;
