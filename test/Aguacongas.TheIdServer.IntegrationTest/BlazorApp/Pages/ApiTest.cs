@@ -67,9 +67,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#displayName");
-
-            Assert.NotNull(input);
+            var input = host.WaitForNode(component, "#displayName");
 
             var expected = GenerateId();
             host.WaitForNextRender(() => input.Change(expected));
