@@ -115,24 +115,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(input);
 
-            var expected = GenerateId();
-            host.WaitForNextRender(() => input.Change(expected));
-
-            var markup = component.GetMarkup();
-
-            Assert.Contains(expected, markup);
+            host.WaitForNextRender(() => input.Change(apiId));
 
             input = component.Find("#scopes #scope");
 
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.Change(expected));
+            host.WaitForNextRender(() => input.Change(apiId));
 
             input = component.Find("#scopes #displayName");
 
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.Change(expected));
+            host.WaitForNextRender(() => input.Change(apiId));
 
             var form = component.Find("form");
 
@@ -145,7 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<IdentityServerDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
-                Assert.Equal(expected, api.DisplayName);
+                Assert.Equal(apiId, api.DisplayName);
             });
         }
 

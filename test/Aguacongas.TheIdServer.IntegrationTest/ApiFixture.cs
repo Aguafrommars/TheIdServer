@@ -2,7 +2,6 @@
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,8 +14,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 {
     public class ApiFixture : IDisposable
     {
-        private readonly SqliteConnection _connection;
-        private readonly SqliteConnection _connectionApp;
         private readonly TestLoggerProvider _testLoggerProvider = new TestLoggerProvider();
         /// <summary>
         /// Gets the system under test
@@ -31,20 +28,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
         public ApiFixture()
         {
-            _connection = new SqliteConnection("DataSource=:memory:");
-            _connection.Open();
-            _connectionApp = new SqliteConnection("DataSource=:memory:");
-            _connectionApp.Open();
-
+            var dbName = Guid.NewGuid().ToString();
             Sut = TestUtils.CreateTestServer(
                 // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
                 services =>
                 {
                     services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
                     .AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite(_connectionApp))
+                        options.UseInMemoryDatabase(dbName))
                     .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
-                        options.UseSqlite(_connection))
+                        options.UseInMemoryDatabase(dbName))
                     .AddIdentityProviderStore();
                 });
 
@@ -77,22 +70,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 if (disposing)
                 {
-                    try
-                    {
-                        _connection.Dispose();
-                    }
-                    catch
-                    {
-                        // silent
-                    }
-                    try
-                    {
-                        _connectionApp.Dispose();
-                    }
-                    catch
-                    {
-                        // silent
-                    }
                     Sut?.Dispose();
                 }
 
