@@ -54,7 +54,7 @@ namespace Microsoft.AspNetCore.Components.Testing
             var eventHandlerIdString = element.GetAttributeValue(attributeName, string.Empty);
             if (string.IsNullOrEmpty(eventHandlerIdString))
             {
-                throw new ArgumentException($"The element does not have an event handler for the event '{attributeName}'.");
+               throw new ArgumentException($"The element does not have an event handler for the event '{attributeName}'.");
             }
             var eventHandlerId = ulong.Parse(eventHandlerIdString);
 

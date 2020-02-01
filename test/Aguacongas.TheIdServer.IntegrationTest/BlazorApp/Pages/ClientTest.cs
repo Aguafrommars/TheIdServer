@@ -104,6 +104,44 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         }
 
+        [Theory]
+        [InlineData("0.01:00:00")]
+        [InlineData("01:00:00")]
+        [InlineData("01:00")]
+        [InlineData("15")]
+        [InlineData("15d")]
+        [InlineData("15h")]
+        [InlineData("15m")]
+        public async Task AddToken_should_validate_token_regex(string value)
+        {
+            string clientId = await CreateClient();
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#access-token");
+
+            host.WaitForNextRender(() => input.Change("test test"));
+
+            var message = component.Find(".validation-message");
+
+            Assert.NotNull(message);
+            Assert.StartsWith("The token expression doesn&#x27;t match a valid format.", message.InnerText);
+
+            input = component.Find("#access-token");
+            host.WaitForNextRender(() => input.Change(value));
+
+            message = component.Find(".validation-message");
+
+            Assert.Null(message);
+        }
+
         [Fact]
         public async Task ScopeInputChange_should_filter_scopes_list()
         {
@@ -171,6 +209,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.NotNull(scope);
             });
         }
+
+
 
         [Fact]
         public async Task RemoveGrantType_should_validate_grant_type_rule()

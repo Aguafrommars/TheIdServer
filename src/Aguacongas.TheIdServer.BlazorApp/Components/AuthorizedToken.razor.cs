@@ -109,7 +109,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                 var timeValue = time.Value;
                 Value = (T)Convert.ChangeType(timeValue.TotalSeconds, typeof(T));
                 ValueChanged.InvokeAsync(Value);
-                _updatingValue = true;
                 _token.ValueString = timeValue.ToString(DISPLAY_FORMAT);
             }
 
