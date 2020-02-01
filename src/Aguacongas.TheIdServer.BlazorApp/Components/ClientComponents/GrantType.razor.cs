@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         {
             term ??= string.Empty;
             var grantTypes = GrantTypes.Instance;
-            var result = grantTypes.Where(kv => !_allowedGrantTypes.Any(g => g.GrantType == kv.Key) &&
+            var result = grantTypes.Where(kv => !_allowedGrantTypes.Any(g => g.Id == null && g.GrantType == kv.Key) &&
                 !(_allowedGrantTypes.Any(g => g.GrantType == "implicit") &&
                     (kv.Key == "authorization_code" || kv.Key == "hybrid")) &&
                 !(_allowedGrantTypes.Any(g => g.GrantType == "authorization_code") &&
