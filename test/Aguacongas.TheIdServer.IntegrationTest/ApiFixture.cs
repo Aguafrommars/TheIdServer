@@ -77,8 +77,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 if (disposing)
                 {
-                    _connection.Dispose();
-                    _connectionApp.Dispose();
+                    try
+                    {
+                        _connection.Dispose();
+                    }
+                    catch
+                    {
+                        // silent
+                    }
+                    try
+                    {
+                        _connectionApp.Dispose();
+                    }
+                    catch
+                    {
+                        // silent
+                    }
                     Sut?.Dispose();
                 }
 

@@ -63,7 +63,7 @@ namespace Microsoft.AspNetCore.Components.Testing
         {
             if (_unhandledException != null)
             {
-                ExceptionDispatchInfo.Capture(_unhandledException).Throw();
+                //ExceptionDispatchInfo.Capture(_unhandledException).Throw();
             }
         }
     }
