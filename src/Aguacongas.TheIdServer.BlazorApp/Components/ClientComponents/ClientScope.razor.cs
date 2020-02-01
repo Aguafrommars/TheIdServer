@@ -50,7 +50,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             await Task.WhenAll(identityResponse, apiResponse, apiScopeResponse)
                 .ConfigureAwait(false);
 
-
             _filterScopes = identityResponse.Result.Items.Select(i => new Scope
             {
                 Value = i.Id,
@@ -68,7 +67,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
                     Description = s.DisplayName
                 }))
                 .Distinct(_comparer)
-                .Where(s => !Model.AllowedScopes.Any(cs => s.Value == cs.Scope))
+                .Where(s => !Model.AllowedScopes.Any(cs => cs.Id != null && s.Value == cs.Scope))
                 .Take(5)
                 .OrderBy(r => r.Value);
 

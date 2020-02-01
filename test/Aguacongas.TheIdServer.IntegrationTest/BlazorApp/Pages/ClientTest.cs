@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -101,6 +102,74 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => form.Submit());
 
+        }
+
+        [Fact]
+        public async Task ScopeInputChange_should_filter_scopes_list()
+        {
+            string clientId = await CreateClient();
+
+            var firstId = GenerateId();
+            var secondId = GenerateId();
+            await DbActionAsync<IdentityServerDbContext>(async c =>
+            {
+                await c.Apis.AddAsync(new ProtectResource
+                {
+                    Id = firstId,
+                    DisplayName = firstId,
+                    Scopes = new List<ApiScope>
+                    {
+                        new ApiScope
+                        {
+                            Id = firstId,
+                            Scope = firstId,
+                            DisplayName = firstId
+                        }
+                    }
+                });
+
+                await c.Identities.AddAsync(new IdentityResource
+                {
+                    Id = secondId,
+                    DisplayName = secondId,                    
+                });
+
+                await c.SaveChangesAsync();
+            });
+
+            CreateTestHost("Alice Smith",
+                AuthorizationOptionsExtensions.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var expected = 1;
+            var input = WaitForNode(host, component, "#scopes input");
+
+            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }));
+
+            var nodes = host.WaitForAllNodes(component, "#scopes .dropdown-item");
+
+            Assert.Equal(expected, nodes.Count);
+
+            host.WaitForNextRender(() => nodes.First().Click());
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            host.WaitForNextRender(() => form.Submit());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<IdentityServerDbContext>(async context =>
+            {
+                var scope = await context.ClientScopes.FirstOrDefaultAsync(s => s.ClientId == clientId && s.Scope == firstId);
+                Assert.NotNull(scope);
+            });
         }
 
         [Fact]
