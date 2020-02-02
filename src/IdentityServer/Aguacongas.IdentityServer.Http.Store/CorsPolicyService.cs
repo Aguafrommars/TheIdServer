@@ -1,28 +1,28 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Http.Store
 {
     /// <summary>
     /// <see cref="ICorsPolicyService"/> implementation
     /// </summary>
-    /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
+    /// <seealso cref="ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly IAdminStore<Entity.ClientUri> _store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="store">The store.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(IdentityServerDbContext context)
+        public CorsPolicyService(IAdminStore<Entity.ClientUri> store)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
         /// <summary>
@@ -34,13 +34,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var url = origin.ToUpperInvariant();
             var corsUri = new Uri(origin);
-            var corsValue = (int)IdentityServer.Store.Entity.UriKinds.Cors;
-            var corsUris = await _context.ClientUris
-                .AsNoTracking()
-                .Where(o => o.Uri.ToUpperInvariant().StartsWith(url) && (o.Kind & corsValue) == corsValue)
-                .ToListAsync()
-                .ConfigureAwait(false);
-            return corsUris.Any(o => corsUri.CorsMatch(o.Uri));
+            var corsValue = (int)Entity.UriKinds.Cors;
+            var response = await _store.GetAsync(new PageRequest
+            {
+                Filter = $"startswith(toupper(Uri), '{url}')"
+            }).ConfigureAwait(false);
+            return response.Items.Any(o => (o.Kind & corsValue) == corsValue && corsUri.CorsMatch(o.Uri));
         }
 
     }

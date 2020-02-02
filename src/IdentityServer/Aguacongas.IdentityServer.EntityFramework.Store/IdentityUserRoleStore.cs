@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<UserRole> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var info = id.Split('@');
-            var role = await _context.UserRoles.FirstOrDefaultAsync(r => r.UserId == info[0] && r.RoleId == info[1], cancellationToken)
+            var role = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(r => r.UserId == info[0] && r.RoleId == info[1], cancellationToken)
                             .ConfigureAwait(false);
             if (role == null)
             {
@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<UserRole>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.UserRoles.GetODataQuery(request, _edmModel);
+            var odataQuery = _context.UserRoles.AsNoTracking().GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 

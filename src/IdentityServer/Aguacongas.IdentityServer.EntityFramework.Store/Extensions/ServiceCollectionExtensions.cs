@@ -74,17 +74,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<ICorsPolicyService, CorsPolicyService>()
                 .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<IAuthorizationCodeStore, AuthorizationCodeStore>()
-                .AddTransient<RefreshTokenStore>()
-                .AddTransient<ReferenceTokenStore>()
-                .AddTransient<UserConsentStore>()
-                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IAdminStore<RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IAdminStore<ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IAdminStore<UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
                 .AddTransient<IAdminStore<User>, IdentityUserStore<TUser>>()
                 .AddTransient<IAdminStore<UserLogin>, IdentityUserLoginStore<TUser>>()
                 .AddTransient<IAdminStore<UserClaim>, IdentityUserClaimStore<TUser>>()
@@ -92,6 +81,27 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<UserToken>, IdentityUserTokenStore<TUser>>()
                 .AddTransient<IAdminStore<Role>, IdentityRoleStore<TUser, TRole>>()
                 .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>();
+        }
+
+        public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        {
+            return services.AddDbContext<OperationalDbContext>(optionsAction)
+                .AddTransient<AuthorizationCodeStore>()
+                .AddTransient<RefreshTokenStore>()
+                .AddTransient<ReferenceTokenStore>()
+                .AddTransient<UserConsentStore>()
+                .AddTransient<DeviceFlowStore>()
+                .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
+                .AddTransient<IAdminStore<AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
+                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
+                .AddTransient<IAdminStore<RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
+                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
+                .AddTransient<IAdminStore<ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
+                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
+                .AddTransient<IAdminStore<UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
+                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
+                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
+                .AddTransient<IAdminStore<DeviceCode>> (p => p.GetRequiredService<DeviceFlowStore>());
         }
     }
 }

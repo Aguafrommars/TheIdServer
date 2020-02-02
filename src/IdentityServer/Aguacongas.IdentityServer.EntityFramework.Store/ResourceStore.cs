@@ -36,6 +36,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .Include(a => a.Secrets)
                 .Include(a => a.Scopes)
                 .Include(a => a.Properties)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == name).ConfigureAwait(false);
             return entity.ToApi();
         }
@@ -59,6 +60,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .Include(a => a.ApiScopeClaims)
                 .Include(a => a.Secrets)
                 .Include(a => a.Properties)
+                .AsNoTracking()
                 .Select(a => a.ToApi())
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -74,6 +76,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return await _context.Identities
                 .Include(i => i.IdentityClaims)
                 .Include(i => i.Properties)
+                .AsNoTracking()
                 .Where(i => scopeNames.Contains(i.Id))
                 .Select(i => i.ToIdentity())
                 .ToListAsync()
@@ -94,10 +97,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                     .Include(a => a.Secrets)
                     .Include(a => a.Scopes)
                     .Include(a => a.Properties)
+                    .AsNoTracking()
                     .Select(a => a.ToApi()).ToListAsync().ConfigureAwait(false),
                 IdentityResources = await _context.Identities
                     .Include(i => i.IdentityClaims)
                     .Include(i => i.Properties)
+                    .AsNoTracking()
                     .Select(i => i.ToIdentity()).ToListAsync().ConfigureAwait(false)
             };
         }

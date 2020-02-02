@@ -95,7 +95,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.Roles.GetODataQuery(request);
+            var odataQuery = _context.Roles.AsNoTracking().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 

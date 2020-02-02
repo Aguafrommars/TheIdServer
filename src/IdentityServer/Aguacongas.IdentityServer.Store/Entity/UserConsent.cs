@@ -46,6 +46,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Data { get; set; }
 
         /// <summary>
+        /// Gets or sets the expiration.
+        /// </summary>
+        /// <value>
+        /// The expiration.
+        /// </value>
+        public DateTime? Expiration { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>
@@ -60,13 +68,5 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
-
-        /// <summary>
-        /// Gets or sets the client.
-        /// </summary>
-        /// <value>
-        /// The client.
-        /// </value>
-        public virtual Client Client { get; set; }
     }
 }

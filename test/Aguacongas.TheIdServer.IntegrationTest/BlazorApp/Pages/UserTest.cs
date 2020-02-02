@@ -133,7 +133,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<OperationalDbContext>(async context =>
             {
                 var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
                 Assert.NotNull(consent);
@@ -157,7 +157,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<OperationalDbContext>(async context =>
             {
                 var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
                 Assert.Null(consent);
@@ -529,15 +529,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 return context.SaveChangesAsync();
             });
+            var clientId = GenerateId();
             await DbActionAsync<IdentityServerDbContext>(context =>
             {
-                var clientId = GenerateId();
                 context.Clients.Add(new Client
                 {
                     Id = clientId,
                     ClientName = "filtered",
                     ProtocolType = "oidc"
                 });
+                return context.SaveChangesAsync();
+            });
+            await DbActionAsync<OperationalDbContext>(context =>
+            {
                 context.UserConstents.Add(new UserConsent
                 {
                     Id = GenerateId(),

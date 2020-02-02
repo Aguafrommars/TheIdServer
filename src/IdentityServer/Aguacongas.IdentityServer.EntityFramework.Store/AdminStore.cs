@@ -14,10 +14,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "No localization")]
     public class AdminStore<T> : IAdminStore<T> where T: class, IEntityId, new()
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly DbContext _context;
         private readonly ILogger<AdminStore<T>> _logger;
 
-        public AdminStore(IdentityServerDbContext context, ILogger<AdminStore<T>> logger)
+        public AdminStore(DbContext context, ILogger<AdminStore<T>> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

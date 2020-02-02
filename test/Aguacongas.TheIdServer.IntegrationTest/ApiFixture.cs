@@ -30,7 +30,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         {
             var dbName = Guid.NewGuid().ToString();
             Sut = TestUtils.CreateTestServer(
-                // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
                 services =>
                 {
                     services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
@@ -38,12 +37,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         options.UseInMemoryDatabase(dbName))
                     .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
                         options.UseInMemoryDatabase(dbName))
+                    .AddOperationalEntityFrameworkStores(options =>
+                        options.UseInMemoryDatabase(dbName))
                     .AddIdentityProviderStore();
                 });
 
             using var scope = Sut.Host.Services.CreateScope();
             using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
             identityContext.Database.EnsureCreated();
+            using var operationalContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+            operationalContext.Database.EnsureCreated();
             using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             appContext.Database.EnsureCreated();
         }

@@ -2,18 +2,22 @@
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class AuthorizationCodeStore : IAuthorizationCodeStore
+    public class AuthorizationCodeStore : AdminStore<Entity.AuthorizationCode>, IAuthorizationCodeStore
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly OperationalDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public AuthorizationCodeStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
+        public AuthorizationCodeStore(OperationalDbContext context, 
+            IPersistentGrantSerializer serializer,
+            ILogger<AuthorizationCodeStore> logger)
+            : base(context, logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
@@ -48,17 +52,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             code = code ?? throw new ArgumentNullException(nameof(code));
 
-            var client = await _context.Clients.FindAsync(code.ClientId);
-            if (client == null)
-            {
-                throw new InvalidOperationException($"Client {code.ClientId} not found");
-            }
-
             var newEntity = new Entity.AuthorizationCode
             {
                 Id = Guid.NewGuid().ToString(),
-                ClientId = client.Id,
-                Data = _serializer.Serialize(code)
+                ClientId = code.ClientId,
+                Data = _serializer.Serialize(code),
+                Expiration = code.CreationTime.AddSeconds(code.Lifetime)
             };
             await _context.AuthorizationCodes.AddAsync(newEntity);
             await _context.SaveChangesAsync().ConfigureAwait(false);

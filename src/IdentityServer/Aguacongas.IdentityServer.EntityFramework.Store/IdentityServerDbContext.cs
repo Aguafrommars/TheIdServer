@@ -27,16 +27,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ClientSecret> ClientSecrets { get; set; }
 
-        public virtual DbSet<AuthorizationCode> AuthorizationCodes { get; set; }
-
-        public virtual DbSet<ReferenceToken> ReferenceTokens { get; set; }
-
-        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
-        public virtual DbSet<UserConsent> UserConstents { get; set; }
-        
-        public virtual DbSet<DeviceCode> DeviceCodes { get; set; }
-
         public virtual DbSet<ProtectResource> Apis { get; set; }
 
         public virtual DbSet<ApiClaim> ApiClaims { get; set; }
