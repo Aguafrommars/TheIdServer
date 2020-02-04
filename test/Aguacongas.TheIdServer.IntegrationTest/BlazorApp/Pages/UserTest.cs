@@ -471,7 +471,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = GenerateId();
             await CreateTestEntity(userId);
 
-            var roleManager = Fixture.Sut.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = Fixture.PrivateServer.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
             var role = await roleManager.FindByNameAsync("filtered");
             if (role == null)
             {
@@ -481,7 +481,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 Assert.True(roleResult.Succeeded);
             }
-            var manager = Fixture.Sut.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+            var manager = Fixture.PrivateServer.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
             var user = await manager.FindByIdAsync(userId);
             var result = await manager.AddToRoleAsync(user, "filtered");
             Assert.True(result.Succeeded);

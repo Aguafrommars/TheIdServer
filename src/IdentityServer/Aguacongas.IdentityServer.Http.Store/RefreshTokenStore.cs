@@ -5,7 +5,7 @@ using IdentityServer4.Stores.Serialization;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Http.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {

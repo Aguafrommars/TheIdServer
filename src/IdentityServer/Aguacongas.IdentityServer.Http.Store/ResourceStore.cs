@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Http.Store
 {
 
     /// <summary>

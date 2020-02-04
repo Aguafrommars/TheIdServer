@@ -5,7 +5,7 @@ using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Http.Store
 {
     public class UserConsentStore : GrantStore<UserConsent, Consent>, IUserConsentStore
     {

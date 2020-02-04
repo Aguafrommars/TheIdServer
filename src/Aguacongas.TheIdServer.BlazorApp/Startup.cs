@@ -22,7 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 {
                     options.AddIdentityServerPolicies();
                 })
-                .AddIdentityServer4HttpStores(async p =>
+                .AddIdentityServer4AdminHttpStores(async p =>
                 {
                     return await CreateApiHttpClient(p)
                         .ConfigureAwait(false);

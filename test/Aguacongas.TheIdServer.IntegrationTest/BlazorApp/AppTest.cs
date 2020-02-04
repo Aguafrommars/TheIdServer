@@ -174,7 +174,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     {
                         configure.AddProvider(testLoggerProvider);
                     })
-                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                    .AddIdentityServer4AdminHttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton(p => navigationManager)
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => jsRuntimeMock.Object)
@@ -252,7 +252,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     {
                         configure.AddProvider(testLoggerProvider);
                     })
-                    .AddIdentityServer4HttpStores(p => Task.FromResult(client))
+                    .AddIdentityServer4AdminHttpStores(p => Task.FromResult(client))
                     .AddSingleton(p => navigationManager)
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => jsRuntimeMock.Object)
@@ -324,7 +324,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 {
                     services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlite(connectionApp))
-                    .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
+                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
                         options.UseSqlite(connection));
 
                     services.AddIdentity<ApplicationUser, IdentityRole>(

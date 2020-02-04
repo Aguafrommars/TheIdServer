@@ -121,7 +121,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     {
                         configure.AddProvider(new TestLoggerProvider(testOutputHelper));
                     })
-                    .AddIdentityServer4HttpStores(p => Task.FromResult(httpClient))
+                    .AddIdentityServer4AdminHttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => jsRuntimeMock.Object)

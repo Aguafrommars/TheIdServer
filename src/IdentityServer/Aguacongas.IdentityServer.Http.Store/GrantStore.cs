@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Http.Store
 {
     public abstract class GrantStore<TEntity, TDto>
         where TEntity: class, IGrant, new()

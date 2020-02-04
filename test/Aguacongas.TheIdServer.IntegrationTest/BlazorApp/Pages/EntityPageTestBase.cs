@@ -81,7 +81,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     }
                 },
                 $"http://exemple.com/{Entity}/{id}",
-                Fixture.Sut,
+                Fixture.PrivateServer,
                 Fixture.TestOutputHelper,
                 out host,
                 out component,
