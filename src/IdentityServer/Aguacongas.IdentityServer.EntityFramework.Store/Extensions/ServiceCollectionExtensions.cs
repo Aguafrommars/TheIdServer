@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TContext>(this IServiceCollection services)
             where TContext : IdentityDbContext<IdentityUser>
         {
-            return AddIdentityServer4AdminEntityFrameworkStores<IdentityUser, IdentityRole, TContext>(services, optionsAction);
+            return AddIdentityServer4AdminEntityFrameworkStores<IdentityUser, IdentityRole, TContext>(services);
         }
 
         /// <summary>
@@ -34,11 +35,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TContext>(this IServiceCollection services)
             where TUser : IdentityUser, new()
             where TContext : IdentityDbContext<TUser>
         {
-            return AddIdentityServer4AdminEntityFrameworkStores<TUser, IdentityRole, TContext>(services, optionsAction);
+            return AddIdentityServer4AdminEntityFrameworkStores<TUser, IdentityRole, TContext>(services);
         }
         /// <summary>
         /// Adds the identity server4 admin entity framework stores.
@@ -46,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TRole, TContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TRole, TContext>(this IServiceCollection services)
             where TUser: IdentityUser, new()
             where TRole: IdentityRole, new()
             where TContext: IdentityDbContext<TUser>
@@ -56,21 +57,32 @@ namespace Microsoft.Extensions.DependencyInjection
                 !t.IsAbstract &&
                 !t.IsGenericType &&
                 t.GetInterface("IEntityId") != null &&
+                t.GetInterface("IGrant") == null &&
+                t.Name != nameof(AuthorizationCode) &&
+                t.Name != nameof(DeviceCode) &&
                 t.GetInterface("IRoleSubEntity") == null &&
                 t.GetInterface("IUserSubEntity") == null);
 
             foreach (var entityType in entityTypeList)
             {
-                var adminStoreType = typeof(AdminStore<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+                var adminStoreType = typeof(AdminStore<,>)
+                        .MakeGenericType(entityType.GetTypeInfo(), typeof(IdentityServerDbContext).GetTypeInfo()).GetTypeInfo();
                 var iAdminStoreType = typeof(IAdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
                 services.AddTransient(iAdminStoreType, adminStoreType);
             }
 
-            return services.AddDbContext<IdentityServerDbContext>(optionsAction)
-                .AddScoped<IdentityDbContext<TUser>>(p => p.GetRequiredService<TContext>())
+            return services.AddScoped<IdentityDbContext<TUser>>(p => p.GetRequiredService<TContext>())
                 .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole, string>)
+                .AddTransient<ILookupNormalizer, UpperInvariantLookupNormalizer>()
+                .AddTransient<IPasswordHasher<TUser>, PasswordHasher<TUser>>()
+                .AddTransient<IdentityErrorDescriber>()
+                .AddTransient<RoleManager<TRole>>()
+                .AddTransient<UserManager<TUser>>()
+                .AddTransient<IRoleStore<TRole>>(p => 
+                    new RoleStore<TRole>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
+                .AddTransient<IUserStore<TUser>>(p =>
+                    new UserStore<TUser>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
                 .AddTransient<IAdminStore<User>, IdentityUserStore<TUser>>()
                 .AddTransient<IAdminStore<UserLogin>, IdentityUserLoginStore<TUser>>()
                 .AddTransient<IAdminStore<UserClaim>, IdentityUserClaimStore<TUser>>()
@@ -96,6 +108,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ReferenceTokenStore>()
                 .AddTransient<UserConsentStore>()
                 .AddTransient<DeviceFlowStore>()
+                .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
                 .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
                 .AddTransient<IAdminStore<AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())

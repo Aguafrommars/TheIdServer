@@ -10,7 +10,7 @@ using Models = IdentityServer4.Models;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class DeviceFlowStore : AdminStore<DeviceCode>, IDeviceFlowStore
+    public class DeviceFlowStore : AdminStore<DeviceCode, OperationalDbContext>, IDeviceFlowStore
     {
         private readonly OperationalDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;

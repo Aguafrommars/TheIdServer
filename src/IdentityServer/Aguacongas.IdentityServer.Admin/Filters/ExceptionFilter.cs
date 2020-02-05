@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -13,6 +14,18 @@ namespace Aguacongas.IdentityServer.Admin.Filters
     /// <seealso cref="IExceptionFilter" />
     public class ExceptionFilter : IExceptionFilter
     {
+        private readonly ILogger<ExceptionFilter> _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionFilter"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <exception cref="System.ArgumentNullException">logger</exception>
+        public ExceptionFilter(ILogger<ExceptionFilter> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         /// <summary>
         /// Called after an action has thrown an <see cref="T:System.Exception" />.
         /// </summary>
@@ -24,6 +37,8 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 actionDescriptor.ControllerTypeInfo
                     .FullName.StartsWith("Aguacongas.IdentityServer.Admin"))
             {
+                _logger.LogError(exception, exception.Message);
+
                 if (exception is InvalidOperationException)
                 {
                     context.Result = new BadRequestObjectResult(new ValidationProblemDetails

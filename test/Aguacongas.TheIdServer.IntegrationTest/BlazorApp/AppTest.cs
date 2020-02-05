@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,12 +46,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
         [Fact]
         public async Task FullLoginTest()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            var connectionApp = new SqliteConnection("DataSource=:memory:");
-            connectionApp.Open();
             var testLoggerProvider = new TestLoggerProvider(_testOutputHelper);
-            using var server = CreateTestServer(connection, connectionApp);
+            using var server = CreateTestServer();
 
             using var scope = server.Host.Services.CreateScope();
             var sessionStore = new ConcurrentDictionary<object, object>();
@@ -309,8 +304,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             }
         }
 
-        private static TestServer CreateTestServer(SqliteConnection connection, SqliteConnection connectionApp)
+        private static TestServer CreateTestServer()
         {
+            var dbName = Guid.NewGuid().ToString();
             var webHostBuilder = new WebHostBuilder()
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
@@ -323,9 +319,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 .ConfigureServices((context, services) =>
                 {
                     services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite(connectionApp))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
-                        options.UseSqlite(connection));
+                        options.UseInMemoryDatabase(dbName))
+                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                    .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName))
+                    .AddOperationalEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName));
 
                     services.AddIdentity<ApplicationUser, IdentityRole>(
                             options => options.SignIn.RequireConfirmedAccount = false)

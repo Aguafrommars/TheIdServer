@@ -1,9 +1,8 @@
 ﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,47 +10,46 @@ namespace Aguacongas.IdentityServer.Http.Store
 {
     public class OAuthTokenManager : IDisposable
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly HttpClient _httpClient;
         private readonly IOptions<AuthorizationOptions> _options;
-        private readonly Mutex _mutex = new Mutex();
+        private readonly object _syncObject = new object();
+        private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
         private DiscoveryDocumentResponse _discoveryResponse;
         private DateTime _expiration;
-        private string _accessToken;
+        private AuthenticationHeaderValue _accessToken;
 
-        public OAuthTokenManager(IHttpContextAccessor httpContextAccessor,
-            HttpClient httpClient,
+        public OAuthTokenManager(HttpClient httpClient,
             IOptions<AuthorizationOptions> options)
         {
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task<string> GetTokenAsync()
+        public async Task<AuthenticationHeaderValue> GetTokenAsync()
         {
-            var userToken = _httpContextAccessor.HttpContext?
-                .Request?
-                .Headers?
-                .FirstOrDefault(h => h.Key == "Authorization").Value.FirstOrDefault();
-            if (userToken != null)
-            {
-                return userToken;
-            }
-
             if (_expiration > DateTime.Now)
             {
                 return _accessToken;
             }
 
+            lock(_syncObject)
+            {
+                _resetEvent.WaitOne();
+                if (_expiration > DateTime.Now)
+                {
+                    return _accessToken;
+                }
+
+                _resetEvent.Reset();
+            }
+
             try
             {
-                _mutex.WaitOne();
-                await SetAccessTokenAsync().ConfigureAwait(false);
+                await SetAccessTokenAsync().ConfigureAwait(true);
             }
             finally
             {
-                _mutex.ReleaseMutex();
+                _resetEvent.Set();
             }
 
             return _accessToken;                    
@@ -84,7 +82,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             }
 
             _expiration = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn - options.RefreshBefore);
-            _accessToken = tokenResponse.AccessToken;
+            _accessToken = new AuthenticationHeaderValue(tokenResponse.TokenType, tokenResponse.AccessToken);
         }
 
 
@@ -116,7 +114,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 if (disposing)
                 {
-                    _mutex.Dispose();
+                    _resetEvent.Dispose();
                 }
 
                 disposedValue = true;

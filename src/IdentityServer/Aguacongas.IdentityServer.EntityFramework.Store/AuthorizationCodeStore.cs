@@ -9,7 +9,7 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class AuthorizationCodeStore : AdminStore<Entity.AuthorizationCode>, IAuthorizationCodeStore
+    public class AuthorizationCodeStore : AdminStore<Entity.AuthorizationCode,  OperationalDbContext>, IAuthorizationCodeStore
     {
         private readonly OperationalDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;

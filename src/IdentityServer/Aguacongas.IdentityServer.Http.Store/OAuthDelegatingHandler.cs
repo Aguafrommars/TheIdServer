@@ -15,10 +15,15 @@ namespace Aguacongas.IdentityServer.Http.Store
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
+        public OAuthDelegatingHandler(OAuthTokenManager manager) : base()
+        {
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+        }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var accessToken = await _manager.GetTokenAsync();
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.Authorization = accessToken;
             return await base.SendAsync(request, cancellationToken);
         }
     }

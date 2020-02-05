@@ -1,4 +1,5 @@
-﻿using Aguacongas.TheIdServer.Blazor.Oidc;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
@@ -90,7 +91,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 new SerializableClaim
                 {
                     Type = "role",
-                    Value = Microsoft.AspNetCore.Authorization.AuthorizationOptionsExtensions.READER
+                    Value = SharedConstants.READER
                 }
             });
 

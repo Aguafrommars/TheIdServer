@@ -16,13 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             var options = new AuthorizationOptions();
             configureOptions(options);
-            services.AddHttpClient(options.HttpClientName).AddHttpMessageHandler<OAuthDelegatingHandler>();
+            services.AddTransient<OAuthDelegatingHandler>()
+                .AddTransient<HttpClient>()
+                .AddHttpClient(options.HttpClientName)
+                .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
-            return services.AddConfigurationHttpStores(p =>
-            {
-                var factory = p.GetRequiredService<IHttpClientFactory>();
-                return Task.FromResult(factory.CreateClient(options.HttpClientName));
-            }, configureOptions);
+            return services.AddConfigurationHttpStores(p => CreateApiHttpClient(p, options), configureOptions);
         }
 
         /// <summary>
@@ -37,7 +36,6 @@ namespace Microsoft.Extensions.DependencyInjection
             getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
-                .AddHttpContextAccessor()
                 .AddIdentityServer4AdminHttpStores(getHttpClient)
                 .AddSingleton<OAuthTokenManager>()
                 .AddTransient<IClientStore, ClientStore>()
@@ -65,5 +63,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
         }
 
+
+        private static Task<HttpClient> CreateApiHttpClient(IServiceProvider p, AuthorizationOptions options)
+        {
+            var factory = p.GetRequiredService<IHttpClientFactory>();
+            var client = factory.CreateClient(options.HttpClientName);
+            client.BaseAddress = new Uri(options.ApiUrl);
+            return Task.FromResult(client);
+        }
     }
 }

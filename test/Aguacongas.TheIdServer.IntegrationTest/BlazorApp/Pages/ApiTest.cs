@@ -1,7 +1,7 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string apiId = await CreateApi();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 apiId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -59,7 +59,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string apiId = await CreateApi();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 apiId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -97,7 +97,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var apiId = GenerateId();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -148,7 +148,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string apiId = await CreateApi();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 apiId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -177,7 +177,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void DisposeTest()
         {
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -198,7 +198,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -231,7 +231,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -264,7 +264,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -297,7 +297,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -332,7 +332,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = await CreateApi();
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -370,7 +370,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
             CreateTestHost("Alice Smith",
-                         AuthorizationOptionsExtensions.WRITER,
+                         SharedConstants.WRITER,
                          apiId,
                          out TestHost host,
                          out RenderedComponent<App> component,

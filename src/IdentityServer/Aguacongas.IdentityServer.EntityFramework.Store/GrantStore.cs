@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity>
+    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity, OperationalDbContext>
         where TEntity: class, IGrant, new()
     {
         private readonly OperationalDbContext _context;

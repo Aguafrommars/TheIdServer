@@ -1,6 +1,6 @@
-﻿using Aguacongas.TheIdServer.Blazor.Oidc;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -77,7 +77,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -109,7 +109,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     new SerializableClaim
                     {
                         Type = "role",
-                        Value = AuthorizationOptionsExtensions.READER
+                        Value = SharedConstants.READER
                     },
                     new SerializableClaim
                     {
@@ -172,7 +172,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     }
                 },
                 $"http://exemple.com/{Entities}",
-                _fixture.PrivateServer,
+                _fixture.Sut,
                 _fixture.TestOutputHelper,
                 out host,
                 out component,

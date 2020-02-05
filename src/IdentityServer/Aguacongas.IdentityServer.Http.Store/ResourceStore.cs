@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
-                    Filter = $"Scopes.Scope eq '{name}'",
+                    Filter = $"Scopes/any(s:s/Scope eq '{name}')",
                     Expand = "ApiClaims,ApiScopeClaims,Secrets,Scopes,Properties"
                 }));
             }
@@ -69,11 +69,12 @@ namespace Aguacongas.IdentityServer.Http.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var taskList = new List<Task<IdentityResource>>(scopeNames.Count());
+            var taskList = new List<Task<PageResponse<IdentityResource>>>(scopeNames.Count());
             foreach (var name in scopeNames)
             {
-                taskList.Add(_identityStore.GetAsync(name, new GetRequest
+                taskList.Add(_identityStore.GetAsync(new PageRequest
                 {
+                    Filter = $"Id eq '{name}'",
                     Expand = "IdentityClaims,Properties"
                 }));
             }
@@ -81,7 +82,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 .ConfigureAwait(false);
 
             return taskList
-                .Select(t => t.Result.ToIdentity());
+                .SelectMany(t => t.Result.Items.Select(e => e.ToIdentity()));
         }
 
         /// <summary>

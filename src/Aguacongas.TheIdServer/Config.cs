@@ -2,8 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
-using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Security.Claims;
 using static IdentityServer4.IdentityServerConstants;
@@ -153,7 +153,9 @@ namespace Aguacongas.TheIdServer
                     AllowedScopes = { "theidserveradminapi" },
                     Claims = new List<Claim>
                     {
-                        new Claim("role", AuthorizationOptionsExtensions.READER)
+                        new Claim("role", SharedConstants.READER),
+                        new Claim("role", SharedConstants.WRITER),
+                        new Claim("name", "public-server")
                     }
                 },
 

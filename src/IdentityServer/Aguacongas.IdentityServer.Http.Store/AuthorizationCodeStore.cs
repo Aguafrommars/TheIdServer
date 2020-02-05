@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"Code eq '{code}'",
+                Filter = $"Id eq '{code}'",
                 Select = "Data"
             });
             if (response.Count == 1)
@@ -43,7 +43,7 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"Code eq '{code}'",
+                Filter = $"Id eq '{code}'",
                 Select = "Id"
             });
             foreach(var item in response.Items)

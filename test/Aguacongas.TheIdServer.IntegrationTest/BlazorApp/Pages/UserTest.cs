@@ -1,9 +1,9 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Identity;
@@ -383,7 +383,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClicked_create_new_user()
         {
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -471,7 +471,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = GenerateId();
             await CreateTestEntity(userId);
 
-            var roleManager = Fixture.PrivateServer.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = Fixture.Sut.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
             var role = await roleManager.FindByNameAsync("filtered");
             if (role == null)
             {
@@ -481,13 +481,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 Assert.True(roleResult.Succeeded);
             }
-            var manager = Fixture.PrivateServer.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+            var manager = Fixture.Sut.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
             var user = await manager.FindByIdAsync(userId);
             var result = await manager.AddToRoleAsync(user, "filtered");
             Assert.True(result.Succeeded);
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 userId,
                 out TestHost host,
                 out RenderedComponent<App> component,
