@@ -75,7 +75,7 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(request)
                 .ConfigureAwait(false);
-            Console.WriteLine($"Access token: {tokenResponse.AccessToken}\n");
+
             if (tokenResponse.Error != null)
             {
                 throw new InvalidOperationException($"{tokenResponse.Error} {tokenResponse.ErrorDescription}");
@@ -95,7 +95,6 @@ namespace Aguacongas.IdentityServer.Http.Store
             var discoveryResponse = await _httpClient.GetDiscoveryDocumentAsync(_options.Value.Authority)
                             .ConfigureAwait(false);
 
-            Console.WriteLine($"Token enpoint: {discoveryResponse.TokenEndpoint}\n");
             if (discoveryResponse.Error != null)
             {
                 throw new InvalidOperationException(discoveryResponse.Error);
