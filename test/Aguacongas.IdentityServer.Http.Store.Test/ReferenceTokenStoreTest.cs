@@ -99,6 +99,28 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq '' And ClientId eq 'test'"), default));
             storeMock.Verify(m => m.CreateAsync(It.IsAny<ReferenceToken>(), default));
+
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+                .ReturnsAsync(new PageResponse<ReferenceToken>
+                {
+                    Count = 1,
+                    Items = new List<ReferenceToken>
+                    {
+                        new ReferenceToken()
+                    }
+                })
+                .Verifiable();
+            storeMock.Setup(m => m.UpdateAsync(It.IsAny<ReferenceToken>(), default))
+                .ReturnsAsync(new ReferenceToken())
+                .Verifiable();
+
+            await sut.StoreReferenceTokenAsync(new IdentityServer4.Models.Token()
+            {
+                ClientId = "test"
+            });
+
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq '' And ClientId eq 'test'"), default));
+            storeMock.Verify(m => m.UpdateAsync(It.IsAny<ReferenceToken>(), default));
         }
 
         private static void CreateSut(out Mock<IAdminStore<ReferenceToken>> storeMock,

@@ -104,6 +104,32 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             storeMock.Verify(m => m.CreateAsync(It.IsAny<RefreshToken>(), default));
         }
 
+        [Fact]
+        public async Task UpdateRefreshTokenAsync_should_call_store_UpdateAsync()
+        {
+            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+                out RefreshTokenStore sut);
+
+            storeMock.Setup(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default))
+                .ReturnsAsync(new RefreshToken())
+                .Verifiable();
+
+            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
+                .ReturnsAsync(new RefreshToken())
+                .Verifiable();
+
+            await sut.UpdateRefreshTokenAsync("test", new IdentityServer4.Models.RefreshToken
+            {
+                AccessToken = new IdentityServer4.Models.Token
+                {
+                    ClientId = "test"
+                }
+            });
+
+            storeMock.Verify(m => m.GetAsync("test", null, default));
+            storeMock.Verify(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default));
+        }
+
         private static void CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
             out RefreshTokenStore sut)
         {

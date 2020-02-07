@@ -112,6 +112,36 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             storeMock.Verify(m => m.CreateAsync(It.IsAny<DeviceCode>(), default));
         }
 
+        [Fact]
+        public async Task UpdateByUserCodeAsync_should_call_store_CreateAsync()
+        {
+            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+                out DeviceFlowStore sut);
+
+            storeMock.Setup(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default))
+                .ReturnsAsync(new DeviceCode())
+                .Verifiable();
+
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+                .ReturnsAsync(new PageResponse<DeviceCode>
+                {
+                    Count = 1,
+                    Items = new List<DeviceCode>
+                    {
+                        new DeviceCode
+                        {
+                            Id = "id"
+                        }
+                    }
+                })
+                .Verifiable();
+
+            await sut.UpdateByUserCodeAsync("test", new IdentityServer4.Models.DeviceCode());
+
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
+            storeMock.Verify(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default));
+        }
+
         private static void CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
             out DeviceFlowStore sut)
         {
