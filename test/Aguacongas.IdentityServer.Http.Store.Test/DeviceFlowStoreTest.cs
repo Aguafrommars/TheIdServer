@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores.Serialization;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -140,6 +141,15 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
             storeMock.Verify(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default));
+
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+                .ReturnsAsync(new PageResponse<DeviceCode>
+                {
+                    Count = 0,
+                })
+                .Verifiable();
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateByUserCodeAsync("test", new IdentityServer4.Models.DeviceCode()));
         }
 
         private static void CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,

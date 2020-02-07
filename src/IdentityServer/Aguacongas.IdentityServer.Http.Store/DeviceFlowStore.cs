@@ -111,6 +111,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 entity.Expiration = data.CreationTime.AddSeconds(data.Lifetime);
                 entity.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value;
                 await _store.UpdateAsync(entity).ConfigureAwait(false);
+                return;
             }
 
             throw new InvalidOperationException($"Device code for {userCode} not found");         
