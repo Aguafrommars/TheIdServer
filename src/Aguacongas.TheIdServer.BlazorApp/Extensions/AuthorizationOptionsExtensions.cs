@@ -1,17 +1,17 @@
-﻿namespace Microsoft.AspNetCore.Authorization
+﻿using Aguacongas.IdentityServer.Store;
+
+namespace Microsoft.AspNetCore.Authorization
 {
     public static class AuthorizationOptionsExtensions
     {
-        public const string WRITER = "Is4-Writer";
-        public const string READER = "Is4-Reader";
         public static void AddIdentityServerPolicies(this AuthorizationOptions options)
         {
-            options.AddPolicy(WRITER, policy =>
+            options.AddPolicy(SharedConstants.WRITER, policy =>
                    policy.RequireAssertion(context =>
-                       context.User.IsInRole(WRITER)));
-            options.AddPolicy(READER, policy =>
+                       context.User.IsInRole(SharedConstants.WRITER)));
+            options.AddPolicy(SharedConstants.READER, policy =>
                policy.RequireAssertion(context =>
-                   context.User.IsInRole(READER)));
+                   context.User.IsInRole(SharedConstants.READER)));
         }
     }
 }

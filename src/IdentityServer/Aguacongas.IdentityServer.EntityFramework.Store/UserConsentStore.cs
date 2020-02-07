@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class UserConsentStore : GrantStore<UserConsent, Consent>, IUserConsentStore
     {
-        public UserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<UserConsentStore> logger)
+        public UserConsentStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<UserConsentStore> logger)
             : base(context, serializer, logger)
         {
         }
@@ -21,7 +21,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             => RemoveAsync(subjectId, clientId);
 
         public Task StoreUserConsentAsync(Consent consent)
-            => StoreAsync(consent);
+            => StoreAsync(consent, consent.Expiration);
 
         protected override string GetClientId(Consent dto) 
             => dto?.ClientId;

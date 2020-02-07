@@ -58,9 +58,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddIdentityServerAdminFilters(this MvcOptions options)
         {
             var filters = options.Filters;
-            filters.Add(new SelectFilter());
-            filters.Add(new ExceptionFilter());
-            filters.Add(new ActionsFilter());
+            filters.Add<SelectFilter>();
+            filters.Add<ExceptionFilter>();
+            filters.Add<ActionsFilter>();
         }
     }
 }

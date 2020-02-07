@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string identityId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 identityId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -59,7 +60,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string identityId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 identityId,
                 out TestHost host,
                 out RenderedComponent<App> component,

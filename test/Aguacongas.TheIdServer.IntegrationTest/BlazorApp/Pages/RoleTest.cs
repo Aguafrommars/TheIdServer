@@ -1,6 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +28,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -56,7 +56,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClick_should_create_role()
         {
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -91,7 +91,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -122,7 +122,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -175,7 +175,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -216,7 +216,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,

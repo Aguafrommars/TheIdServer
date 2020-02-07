@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity>
+    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity, OperationalDbContext>
         where TEntity: class, IGrant, new()
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly OperationalDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        protected GrantStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
+        protected GrantStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
             : base(context, logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return CreateDto(entity?.Data);
         }
 
-        protected async Task UpdateAsync(string handle, TDto dto)
+        protected async Task UpdateAsync(string handle, TDto dto, DateTime? expiration)
         {
             var entity = await GetEntityByHandle(handle)
                 .ConfigureAwait(false);
@@ -48,11 +48,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
 
             var subjectId = GetSubjectId(dto);
-            var clientId = GetClientId(dto);
-            var client = await GetClientAsync(clientId)
-                .ConfigureAwait(false);
+            var clientId = GetClientId(dto); 
 
-            var newEntity = CreateEntity(dto, client, subjectId);
+            var newEntity = CreateEntity(dto, clientId, subjectId, expiration);
             entity.Data = newEntity.Data;
 
             await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -92,13 +90,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             { }
         }
 
-        protected async Task<string> StoreAsync(TDto dto)
+        protected async Task<string> StoreAsync(TDto dto, DateTime? expiration)
         {
             dto = dto ?? throw new ArgumentNullException(nameof(dto));
 
             var clientId = GetClientId(dto);
-            var client = await GetClientAsync(clientId)
-                .ConfigureAwait(false);
 
             var subjectId = GetSubjectId(dto);
 
@@ -107,7 +103,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             if (entity == null)
             {
-                entity = CreateEntity(dto, client, subjectId);
+                entity = CreateEntity(dto, clientId, subjectId, expiration);
                 await _context.AddAsync(entity);
             }
             else
@@ -124,17 +120,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return entity.Id;
         }
 
-        protected virtual async Task<Client> GetClientAsync(string clientId)
-        {
-            var client = await _context.Clients.FindAsync(clientId);
-            if (client == null)
-            {
-                throw new InvalidOperationException($"Client {clientId} not found");
-            }
-
-            return client;
-        }
-
         protected abstract string GetClientId(TDto dto);
 
         protected abstract string GetSubjectId(TDto dto);
@@ -148,20 +133,21 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
-            return await _context.Set<TEntity>()
+            return await _context.Set<TEntity>().AsNoTracking()
                 .FirstOrDefaultAsync(c => c.UserId == subjectId && c.ClientId == clientId)
                 .ConfigureAwait(false);
         }
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
-        protected virtual TEntity CreateEntity(TDto dto, Client client, string subjectId)
+        protected virtual TEntity CreateEntity(TDto dto, string clientId, string subjectId, DateTime? expiration)
         {
             return new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
                 UserId = subjectId,
-                ClientId = client.Id,
-                Data = _serializer.Serialize(dto)
+                ClientId = clientId,
+                Data = _serializer.Serialize(dto),
+                Expiration = expiration
             };
         }
 

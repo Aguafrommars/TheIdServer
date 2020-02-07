@@ -11,10 +11,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class GetAllUserConsentStore : IGetAllUserConsentStore
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly OperationalDbContext _context;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public GetAllUserConsentStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer)
+        public GetAllUserConsentStore(OperationalDbContext context, IPersistentGrantSerializer serializer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
@@ -23,6 +23,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<IEnumerable<Consent>> GetAllUserConsent(string subjectId)
         {
             return await _context.UserConstents
+                .AsNoTracking()
                 .Where(c => c.UserId == subjectId)
                 .Select(c => _serializer.Deserialize<Consent>(c.Data))
                 .ToListAsync()

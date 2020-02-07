@@ -72,7 +72,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<UserToken>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var query = _context.UserTokens;
+            var query = _context.UserTokens.AsNoTracking();
             var odataQuery = query.GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);

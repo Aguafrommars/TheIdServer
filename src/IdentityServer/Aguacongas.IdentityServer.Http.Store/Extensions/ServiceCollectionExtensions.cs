@@ -1,55 +1,75 @@
-﻿using Aguacongas.IdentityServer.Admin.Http.Store;
+﻿using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
-using Microsoft.Extensions.Logging;
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddIdentityServer4HttpStores(this IServiceCollection services, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
+        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+            Action<AuthorizationOptions> configureOptions)
         {
-            var entityTypeList = GetEntityTypes();
+            configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
+            var options = new AuthorizationOptions();
+            configureOptions(options);
+            services.AddTransient<OAuthDelegatingHandler>()
+                .AddTransient<HttpClient>()
+                .AddHttpClient(options.HttpClientName)
+                .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
-            foreach (var entityType in entityTypeList)
-            {
-                var iAdminStoreType = typeof(IAdminStore<>)
-                    .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-
-                services.AddTransient(iAdminStoreType, provider =>
-                {
-                    return CreateStore(getHttpClient, provider, entityType);
-                });
-            }
-            
-            return services.AddTransient<IIdentityProviderStore>(
-                p => new IdentityProviderStore(getHttpClient.Invoke(p),
-                    p.GetRequiredService<ILogger<IdentityProviderStore>>()));
+            return services.AddConfigurationHttpStores(p => CreateApiHttpClient(p, options), configureOptions);
         }
 
-        private static IEnumerable<Type> GetEntityTypes()
+        /// <summary>
+        /// Adds the identity server4 HTTP stores.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+        Func<IServiceProvider, Task<HttpClient>> getHttpClient,
+        Action<AuthorizationOptions> configureOptions)
         {
-            var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
-            var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
-                !t.IsAbstract &&
-                t.GetInterface("IEntityId") != null);
-            return entityTypeList;
+            getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
+            configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
+            return services.Configure(configureOptions)
+                .AddIdentityServer4AdminHttpStores(getHttpClient)
+                .AddSingleton<OAuthTokenManager>()
+                .AddTransient<IClientStore, ClientStore>()
+                .AddTransient<IResourceStore, ResourceStore>()
+                .AddTransient<ICorsPolicyService, CorsPolicyService>();
         }
 
-        private static object CreateStore(Func<IServiceProvider, Task<HttpClient>> getHttpClient, IServiceProvider provider, Type entityType)
+        /// <summary>
+        /// Adds the operational HTTP stores.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddOperationalHttpStores(this IServiceCollection services)
         {
-            var adminStoreType = typeof(AdminStore<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+            return services.AddTransient<AuthorizationCodeStore>()
+                .AddTransient<RefreshTokenStore>()
+                .AddTransient<ReferenceTokenStore>()
+                .AddTransient<UserConsentStore>()
+                .AddTransient<DeviceFlowStore>()
+                .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
+                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
+                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
+                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
+                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
+                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
+        }
 
-            var loggerType = typeof(ILogger<>).MakeGenericType(adminStoreType);
-            return adminStoreType.GetConstructors()[0]
-                .Invoke(new object[] { getHttpClient.Invoke(provider), provider.GetRequiredService(loggerType) });
+
+        private static Task<HttpClient> CreateApiHttpClient(IServiceProvider p, AuthorizationOptions options)
+        {
+            var factory = p.GetRequiredService<IHttpClientFactory>();
+            var client = factory.CreateClient(options.HttpClientName);
+            client.BaseAddress = new Uri(options.ApiUrl);
+            return Task.FromResult(client);
         }
     }
 }

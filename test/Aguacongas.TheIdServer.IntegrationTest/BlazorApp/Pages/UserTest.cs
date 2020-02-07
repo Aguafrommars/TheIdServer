@@ -1,9 +1,9 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Identity;
@@ -133,7 +133,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var host = tuple.Item2;
             var component = tuple.Item3;
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<OperationalDbContext>(async context =>
             {
                 var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
                 Assert.NotNull(consent);
@@ -157,7 +157,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<OperationalDbContext>(async context =>
             {
                 var consent = await context.UserConstents.FirstOrDefaultAsync(t => t.UserId == userId);
                 Assert.Null(consent);
@@ -383,7 +383,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClicked_create_new_user()
         {
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -487,7 +487,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.True(result.Succeeded);
 
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 userId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -529,15 +529,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 return context.SaveChangesAsync();
             });
+            var clientId = GenerateId();
             await DbActionAsync<IdentityServerDbContext>(context =>
             {
-                var clientId = GenerateId();
                 context.Clients.Add(new Client
                 {
                     Id = clientId,
                     ClientName = "filtered",
                     ProtocolType = "oidc"
                 });
+                return context.SaveChangesAsync();
+            });
+            await DbActionAsync<OperationalDbContext>(context =>
+            {
                 context.UserConstents.Add(new UserConsent
                 {
                     Id = GenerateId(),

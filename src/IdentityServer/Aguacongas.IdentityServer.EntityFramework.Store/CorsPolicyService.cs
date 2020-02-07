@@ -32,10 +32,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public async Task<bool> IsOriginAllowedAsync(string origin)
         {
+            var url = origin.ToUpperInvariant();
             var corsUri = new Uri(origin);
             var corsValue = (int)IdentityServer.Store.Entity.UriKinds.Cors;
             var corsUris = await _context.ClientUris
-                .Where(o => (o.Kind & corsValue) == corsValue)
+                .AsNoTracking()
+                .Where(o => o.Uri.ToUpperInvariant().StartsWith(url) && (o.Kind & corsValue) == corsValue)
                 .ToListAsync()
                 .ConfigureAwait(false);
             return corsUris.Any(o => corsUri.CorsMatch(o.Uri));

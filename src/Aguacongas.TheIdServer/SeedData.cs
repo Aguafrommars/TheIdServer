@@ -7,7 +7,6 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +30,10 @@ namespace Aguacongas.TheIdServer
             var services = new ServiceCollection();
             services.AddLogging()
                 .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
-                .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options => 
+                .AddConfigurationEntityFrameworkStores(options =>
+                    options.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly)))
+                .AddOperationalEntityFrameworkStores(options => 
                     options.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentity<ApplicationUser, IdentityRole>()
@@ -44,6 +46,15 @@ namespace Aguacongas.TheIdServer
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
 
+            var configContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            configContext.Database.Migrate();
+
+            var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+            opContext.Database.Migrate();
+
+            var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            appcontext.Database.Migrate();
+
             SeedUsers(scope);
             SeedConfiguration(scope);
         }
@@ -51,8 +62,6 @@ namespace Aguacongas.TheIdServer
         public static void SeedConfiguration(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
-            context.Database.EnsureCreated();
-            context.Database.Migrate();
             
             if (!context.Clients.Any())
             {
@@ -86,14 +95,13 @@ namespace Aguacongas.TheIdServer
         public static void SeedUsers(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
-            context.Database.Migrate();
 
             var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             var roles = new string[]
             {
-                AuthorizationOptionsExtensions.WRITER,
-                AuthorizationOptionsExtensions.READER
+                SharedConstants.WRITER,
+                SharedConstants.READER
             };
             foreach(var role in roles)
             {
@@ -157,7 +165,7 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
                         new Claim("location", "somewhere")
                     })).GetAwaiter().GetResult();
-                ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, AuthorizationOptionsExtensions.READER))
+                ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, SharedConstants.READER))
                     .GetAwaiter().GetResult();
                 Console.WriteLine("bob created");
             }

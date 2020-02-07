@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,8 @@ namespace Aguacongas.IdentityServer.Admin.Test.Filters
         public void OnException_should_set_context_bad_request_result_according_to_exception_type(Exception e)
         {
             var errorContext = CreateExceptionContext(e);
-            var sut = new ExceptionFilter();
+            var loggerMock = new Mock<ILogger<ExceptionFilter>>();
+            var sut = new ExceptionFilter(loggerMock.Object);
             sut.OnException(errorContext);
 
             Assert.IsType<BadRequestObjectResult>(errorContext.Result);
@@ -48,7 +50,8 @@ namespace Aguacongas.IdentityServer.Admin.Test.Filters
         public void OnException_should_set_context_conflict_request_result_according_to_exception_type()
         {
             var errorContext = CreateExceptionContext(new DbUpdateException());
-            var sut = new ExceptionFilter();
+            var loggerMock = new Mock<ILogger<ExceptionFilter>>();
+            var sut = new ExceptionFilter(loggerMock.Object);
             sut.OnException(errorContext);
 
             Assert.IsType<ConflictObjectResult>(errorContext.Result);
@@ -59,7 +62,8 @@ namespace Aguacongas.IdentityServer.Admin.Test.Filters
         {
             var errorContext = CreateExceptionContext(new DbUpdateException());
             ((ControllerActionDescriptor)errorContext.ActionDescriptor).ControllerTypeInfo = typeof(object).GetTypeInfo();
-            var sut = new ExceptionFilter();
+            var loggerMock = new Mock<ILogger<ExceptionFilter>>();
+            var sut = new ExceptionFilter(loggerMock.Object);
             sut.OnException(errorContext);
 
             Assert.Null(errorContext.Result);

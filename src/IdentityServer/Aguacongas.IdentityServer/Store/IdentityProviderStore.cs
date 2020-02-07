@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.Store
         /// Initializes a new instance of the <see cref="IdentityProviderStore"/> class.
         /// </summary>
         /// <param name="provider">The provider.</param>
-        /// <exception cref="System.ArgumentNullException">provider</exception>
+        /// <exception cref="ArgumentNullException">provider</exception>
         public IdentityProviderStore(IAuthenticationSchemeProvider provider)
         {
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));

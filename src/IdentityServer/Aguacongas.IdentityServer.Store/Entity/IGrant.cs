@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Store.Entity
+﻿using System;
+
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
     /// Class implemting this intercace are grant
@@ -27,5 +29,13 @@
         /// The subject identifier.
         /// </value>
         string UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the expiration.
+        /// </summary>
+        /// <value>
+        /// The expiration.
+        /// </value>
+        DateTime? Expiration { get; set; }
     }
 }

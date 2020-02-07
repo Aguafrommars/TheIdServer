@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ReferenceTokenStore : GrantStore<ReferenceToken, Token>, IReferenceTokenStore
     {
-        public ReferenceTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<ReferenceTokenStore> logger)
+        public ReferenceTokenStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<ReferenceTokenStore> logger)
             : base(context, serializer, logger)
         {
         }
@@ -24,7 +24,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             => RemoveAsync(subjectId, clientId);
 
         public Task<string> StoreReferenceTokenAsync(Token token)
-            => StoreAsync(token);
+            => StoreAsync(token, token.CreationTime.AddSeconds(token.Lifetime));
 
         protected override string GetClientId(Token dto) 
             => dto?.ClientId;

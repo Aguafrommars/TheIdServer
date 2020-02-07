@@ -20,9 +20,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         /// </summary>
         public TestServer Sut { get; }
 
-        public ITestOutputHelper TestOutputHelper 
-        { 
-            get { return _testLoggerProvider.TestOutputHelper; } 
+        public ITestOutputHelper TestOutputHelper
+        {
+            get { return _testLoggerProvider.TestOutputHelper; }
             set { _testLoggerProvider.TestOutputHelper = value; }
         }
 
@@ -30,20 +30,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         {
             var dbName = Guid.NewGuid().ToString();
             Sut = TestUtils.CreateTestServer(
-                // We use Sqlite in memory mode for tests. https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/sqlite
                 services =>
                 {
                     services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseInMemoryDatabase(dbName))
-                    .AddIdentityServer4EntityFrameworkStores<ApplicationUser, ApplicationDbContext>(options =>
+                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                    .AddIdentityProviderStore()
+                    .AddConfigurationEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
-                    .AddIdentityProviderStore();
+                    .AddOperationalEntityFrameworkStores(options =>
+                        options.UseInMemoryDatabase(dbName));
                 });
 
             using var scope = Sut.Host.Services.CreateScope();
             using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
             identityContext.Database.EnsureCreated();
+            using var operationalContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+            operationalContext.Database.EnsureCreated();
             using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             appContext.Database.EnsureCreated();
         }
@@ -53,7 +57,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         /// </summary>
         /// <param name="action">The action to perform</param>
         /// <returns></returns>
-        public Task DbActionAsync<T>(Func<T, Task> action) where T: DbContext
+        public Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
         {
             var services = Sut.Host.Services;
             using var scope = services.CreateScope();

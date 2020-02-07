@@ -1,7 +1,7 @@
-﻿using Aguacongas.TheIdServer.Blazor.Oidc;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void WhenNonWriter_should_disable_inputs()
         {
             CreateTestHost("Bob Smith",
-                AuthorizationOptionsExtensions.READER,
+                SharedConstants.READER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -48,7 +48,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void WhenWriter_should_enable_inputs()
         {
             CreateTestHost("Alice Smith",
-                AuthorizationOptionsExtensions.WRITER,
+                SharedConstants.WRITER,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -72,7 +72,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     new SerializableClaim
                     {
                         Type = "role",
-                        Value = AuthorizationOptionsExtensions.READER
+                        Value = SharedConstants.READER
                     },
                     new SerializableClaim
                     {

@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace Aguacongas.TheIdServer
@@ -138,7 +140,25 @@ namespace Aguacongas.TheIdServer
                             Value = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d".Sha256(),
                         }
                     }
-                }
+                },
+
+                new Client
+                {
+                    ClientId = "public-server",
+                    ClientName = "Public server Credentials Client",
+
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets = { new Secret("84137599-13d6-469c-9376-9e372dd2c1bd".Sha256()) },
+
+                    AllowedScopes = { "theidserveradminapi" },
+                    Claims = new List<Claim>
+                    {
+                        new Claim("role", SharedConstants.READER),
+                        new Claim("role", SharedConstants.WRITER),
+                        new Claim("name", "public-server")
+                    }
+                },
+
             };
         }
     }

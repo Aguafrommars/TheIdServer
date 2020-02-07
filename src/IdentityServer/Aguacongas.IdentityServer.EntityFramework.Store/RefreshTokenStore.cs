@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
-        public RefreshTokenStore(IdentityServerDbContext context, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
+        public RefreshTokenStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
             : base(context, serializer, logger)
         {
         }
@@ -24,10 +24,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             => RemoveAsync(subjectId, clientId);
 
         public Task<string> StoreRefreshTokenAsync(Models.RefreshToken refreshToken)
-            => StoreAsync(refreshToken);
+            => StoreAsync(refreshToken, refreshToken.CreationTime.AddSeconds(refreshToken.Lifetime));
 
         public Task UpdateRefreshTokenAsync(string handle, Models.RefreshToken refreshToken)
-            => UpdateAsync(handle, refreshToken);
+            => UpdateAsync(handle, refreshToken, refreshToken.CreationTime.AddSeconds(refreshToken.Lifetime));
 
         protected override string GetClientId(Models.RefreshToken dto)
             => dto?.ClientId;

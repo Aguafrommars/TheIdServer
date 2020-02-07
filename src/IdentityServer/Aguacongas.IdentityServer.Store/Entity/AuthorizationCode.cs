@@ -51,11 +51,11 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the client.
+        /// Gets or sets the expiration.
         /// </summary>
         /// <value>
-        /// The client.
+        /// The expiration.
         /// </value>
-        public virtual Client Client { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

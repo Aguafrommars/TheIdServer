@@ -36,6 +36,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Code { get; set; }
 
         /// <summary>
+        /// Gets or sets the user code.
+        /// </summary>
+        /// <value>
+        /// The user code.
+        /// </value>
+        [MaxLength(200)]
+        public string UserCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the subject identifier.
         /// </summary>
         /// <value>
@@ -75,13 +84,5 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
-
-        /// <summary>
-        /// Gets or sets the client.
-        /// </summary>
-        /// <value>
-        /// The client.
-        /// </value>
-        public virtual Client Client { get; set; }
     }
 }
