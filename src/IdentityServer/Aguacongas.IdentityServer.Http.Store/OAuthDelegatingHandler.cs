@@ -22,9 +22,9 @@ namespace Aguacongas.IdentityServer.Http.Store
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var accessToken = await _manager.GetTokenAsync();
+            var accessToken = await _manager.GetTokenAsync().ConfigureAwait(false);
             request.Headers.Authorization = accessToken;
-            return await base.SendAsync(request, cancellationToken);
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
     }
 }

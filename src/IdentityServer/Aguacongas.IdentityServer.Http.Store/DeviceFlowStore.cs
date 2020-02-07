@@ -71,7 +71,7 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             foreach(var entity in response.Items)
             {
-                await _store.DeleteAsync(entity.Id);
+                await _store.DeleteAsync(entity.Id).ConfigureAwait(false);
             }
         }
 

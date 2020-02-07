@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 Filter = $"Id eq '{code}'",
                 Select = "Data"
-            });
+            }).ConfigureAwait(false);
             if (response.Count == 1)
             {
                 return _serializer.Deserialize<AuthorizationCode>(response.Items.First().Data);
@@ -45,10 +45,10 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 Filter = $"Id eq '{code}'",
                 Select = "Id"
-            });
+            }).ConfigureAwait(false);
             foreach(var item in response.Items)
             {
-                await _store.DeleteAsync(item.Id);
+                await _store.DeleteAsync(item.Id).ConfigureAwait(false);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 Expiration = code.CreationTime.AddSeconds(code.Lifetime)
             };
 
-            var entity = await _store.CreateAsync(newEntity);
+            var entity = await _store.CreateAsync(newEntity).ConfigureAwait(false);
             return entity.Id;
         }
     }
