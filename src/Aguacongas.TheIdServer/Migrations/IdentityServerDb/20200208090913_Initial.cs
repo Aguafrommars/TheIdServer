@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
 {
@@ -65,6 +65,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                     FrontChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
                     BackChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
                     AllowRememberConsent = table.Column<bool>(nullable: false),
+                    NonEditable = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true)
                 },
@@ -187,27 +188,6 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "AuthorizationCodes",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuthorizationCodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AuthorizationCodes_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClientClaims",
                 columns: table => new
                 {
@@ -251,7 +231,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientIdPRestriction",
+                name: "ClientIdpRestriction",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -262,9 +242,9 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientIdPRestriction", x => x.Id);
+                    table.PrimaryKey("PK_ClientIdpRestriction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientIdPRestriction_Clients_ClientId",
+                        name: "FK_ClientIdpRestriction_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -354,96 +334,6 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                     table.PrimaryKey("PK_ClientUris", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ClientUris_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeviceCodes",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: false),
-                    Code = table.Column<string>(maxLength: 200, nullable: true),
-                    SubjectId = table.Column<string>(maxLength: 200, nullable: true),
-                    Expiration = table.Column<DateTime>(nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceCodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeviceCodes_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReferenceTokens",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: false),
-                    SubjectId = table.Column<string>(maxLength: 200, nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReferenceTokens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReferenceTokens_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RefreshTokens",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: false),
-                    SubjectId = table.Column<string>(maxLength: 200, nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RefreshTokens_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserConstents",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ClientId = table.Column<string>(nullable: false),
-                    SubjectId = table.Column<string>(maxLength: 200, nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserConstents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserConstents_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -556,11 +446,6 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 column: "ApiId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorizationCodes_ClientId",
-                table: "AuthorizationCodes",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ClientClaims_ClientId",
                 table: "ClientClaims",
                 column: "ClientId");
@@ -572,8 +457,8 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientIdPRestriction_ClientId_Provider",
-                table: "ClientIdPRestriction",
+                name: "IX_ClientIdpRestriction_ClientId_Provider",
+                table: "ClientIdpRestriction",
                 columns: new[] { "ClientId", "Provider" },
                 unique: true);
 
@@ -601,11 +486,6 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeviceCodes_ClientId",
-                table: "DeviceCodes",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_IdentityClaims_IdentityId_Type",
                 table: "IdentityClaims",
                 columns: new[] { "IdentityId", "Type" },
@@ -617,21 +497,6 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 table: "IdentityProperties",
                 columns: new[] { "IdentityId", "Key" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReferenceTokens_ClientId",
-                table: "ReferenceTokens",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_ClientId",
-                table: "RefreshTokens",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserConstents_ClientId",
-                table: "UserConstents",
-                column: "ClientId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -649,16 +514,13 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 name: "ApiSecrets");
 
             migrationBuilder.DropTable(
-                name: "AuthorizationCodes");
-
-            migrationBuilder.DropTable(
                 name: "ClientClaims");
 
             migrationBuilder.DropTable(
                 name: "ClientGrantTypes");
 
             migrationBuilder.DropTable(
-                name: "ClientIdPRestriction");
+                name: "ClientIdpRestriction");
 
             migrationBuilder.DropTable(
                 name: "ClientProperties");
@@ -673,31 +535,19 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                 name: "ClientUris");
 
             migrationBuilder.DropTable(
-                name: "DeviceCodes");
-
-            migrationBuilder.DropTable(
                 name: "IdentityClaims");
 
             migrationBuilder.DropTable(
                 name: "IdentityProperties");
 
             migrationBuilder.DropTable(
-                name: "ReferenceTokens");
-
-            migrationBuilder.DropTable(
-                name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "UserConstents");
-
-            migrationBuilder.DropTable(
                 name: "ApiScopes");
 
             migrationBuilder.DropTable(
-                name: "Identities");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Identities");
 
             migrationBuilder.DropTable(
                 name: "Apis");
