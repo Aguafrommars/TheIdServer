@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = identityId
             }));
@@ -73,7 +73,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            host.WaitForNextRender(() => input.Change(expected));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(expected));
 
             var markup = component.GetMarkup();
 
@@ -83,7 +83,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 

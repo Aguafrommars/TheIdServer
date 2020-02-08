@@ -43,7 +43,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = apiId
             }));
@@ -70,7 +70,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var input = host.WaitForNode(component, "#displayName");
 
             var expected = GenerateId();
-            host.WaitForNextRender(() => input.Change(expected));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(expected));
 
             var markup = component.GetMarkup();
 
@@ -80,7 +80,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 
@@ -107,31 +107,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#name");
 
-            host.WaitForNextRender(() => input.Change(apiId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
             input = component.Find("#displayName");
 
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.Change(apiId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
             input = component.Find("#scopes #scope");
 
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.Change(apiId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
             input = component.Find("#scopes #displayName");
 
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.Change(apiId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 
@@ -158,11 +158,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#delete-entity input");
 
-            host.WaitForNextRender(() => input.Change(apiId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            host.WaitForNextRender(() => confirm.Click());
+            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
 
             WaitForDeletedToast(host, component);
 
@@ -211,14 +211,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             var expected = buttons.Count;
-            host.WaitForNextRender(() => buttons.First().Click());
+            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
 
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            host.WaitForNextRender(() => buttons.Last().Click());
+            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
 
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
@@ -244,14 +244,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             var expected = buttons.Count;
-            host.WaitForNextRender(() => buttons.First().Click());
+            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
 
             buttons = component.FindAll("#scopes button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            host.WaitForNextRender(() => buttons.Last().Click());
+            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
 
             buttons = component.FindAll("#scopes button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
@@ -277,14 +277,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             var expected = buttons.Count;
-            host.WaitForNextRender(() => buttons.First().Click());
+            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            host.WaitForNextRender(() => buttons.Last().Click());
+            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
@@ -307,7 +307,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#claims input.new-claim");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
 
             var button = component.Find("#claims button.dropdown-item");
             while (button == null)
@@ -318,13 +318,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(button);
 
-            host.WaitForNextRender(() => button.Click());
+            await host.WaitForNextRenderAsync(() => button.ClickAsync());
 
             var divs = component.FindAll("#claims div.select");
 
             Assert.NotEmpty(divs);
 
-            host.WaitForNextRender(() => divs.Last().Click());
+            await host.WaitForNextRenderAsync(() => divs.Last().ClickAsync());
         }
 
         [Fact]
@@ -342,11 +342,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var div = WaitForNode(host, component, "#scopes div.select");
 
-            host.WaitForNextRender(() => div.Click());
+            await host.WaitForNextRenderAsync(() => div.ClickAsync());
 
             var form = component.Find("form");
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 
@@ -380,7 +380,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#scopes input.new-claim");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
 
             var button = component.Find("#scopes button.dropdown-item");
             while (button == null)
@@ -389,11 +389,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 button = component.Find("#scopes button.dropdown-item");
             }
 
-            host.WaitForNextRender(() => button.Click());
+            await host.WaitForNextRenderAsync(() => button.ClickAsync());
 
             var form = component.Find("form");
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 

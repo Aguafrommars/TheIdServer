@@ -9,33 +9,14 @@ namespace Microsoft.AspNetCore.Components.Testing
 {
     public static class EventDispatchExtensions
     {
-        public static void Click(this HtmlNode element)
-        {
-            _ = ClickAsync(element);
-        }
-
         public static Task ClickAsync(this HtmlNode element)
         {
             return element.TriggerEventAsync("onclick", new MouseEventArgs());
-        }
-        public static void Submit(this HtmlNode element)
-        {
-            _ = SubmitAsync(element);
         }
 
         public static Task SubmitAsync(this HtmlNode element)
         {
             return element.TriggerEventAsync("onsubmit", new EventArgs());
-        }
-
-        public static void Change(this HtmlNode element, string newValue)
-        {
-            _ = ChangeAsync(element, newValue);
-        }
-
-        public static void Change(this HtmlNode element, bool newValue)
-        {
-            _ = ChangeAsync(element, newValue);
         }
 
         public static Task ChangeAsync(this HtmlNode element, string newValue)

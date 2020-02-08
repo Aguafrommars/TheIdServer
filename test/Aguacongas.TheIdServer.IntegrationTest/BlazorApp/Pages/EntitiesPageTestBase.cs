@@ -98,7 +98,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.Contains(typeof(TEntity).Name.ToLower(), uri);
             };
 
-            host.WaitForNextRender(() => tr.Click());
+            await host.WaitForNextRenderAsync(() => tr.ClickAsync());
 
             Assert.True(called);
         }
@@ -122,7 +122,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            host.WaitForNextRender(() => th.Click());
+            await host.WaitForNextRenderAsync(() => th.ClickAsync());
 
             var arrow = component.Find(".oi-arrow-bottom");
 
@@ -132,7 +132,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            host.WaitForNextRender(() => th.Click());
+            await host.WaitForNextRenderAsync(() => th.ClickAsync());
 
             arrow = component.Find(".oi-arrow-top");
 
@@ -142,11 +142,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            host.WaitForNextRender(() => th.Click());
+            await host.WaitForNextRenderAsync(() => th.ClickAsync());
 
             arrow = component.Find(".oi-arrow-");
 
-            Assert.NotNull(th);
+            Assert.NotNull(arrow);
         }
 
         protected abstract Task PopulateList();

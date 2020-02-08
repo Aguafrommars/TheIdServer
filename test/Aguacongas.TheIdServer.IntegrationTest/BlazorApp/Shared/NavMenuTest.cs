@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -22,7 +23,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         }
 
         [Fact]
-        public void ToggleNavMenu_should_update_nav_menu_class()
+        public async Task ToggleNavMenu_should_update_nav_menu_class()
         {
             var navigationInterceptionMock = new Mock<INavigationInterception>();
 
@@ -38,7 +39,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             var div = component.Find("div.collapse");
             Assert.NotNull(div);
 
-            host.WaitForNextRender(() => div.Click());
+            await host.WaitForNextRenderAsync(() => div.ClickAsync());
 
             Assert.Null(component.Find("div.collapse"));
         }
