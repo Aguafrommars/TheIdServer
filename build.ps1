@@ -36,8 +36,9 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 if ($LASTEXITCODE -ne 0) {
-	$result = $LASTEXITCODE
+	exit $result
 }
+
 $merge = ""
 Get-ChildItem -rec `
 | Where-Object { $_.Name -eq "coverage.cobertura.xml" } `
@@ -50,6 +51,6 @@ ReportGenerator\tools\netcoreapp3.0\ReportGenerator.exe "-reports:$merge" "-targ
 	
 dotnet sonarscanner end -d:sonar.login=$env:sonarqube
 
-exit $result
+exit $LASTEXITCODE
 
   
