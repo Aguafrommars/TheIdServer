@@ -1,8 +1,8 @@
 using Aguacongas.IdentityServer.Store.Entity;
+using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -10,6 +10,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
 {
     public class DeviceFlowStoreTest
     {
+        [Fact]
+        public void Constructor_should_validate_parameters()
+        {
+            var builder = new ServiceCollection()
+                .AddOperationalEntityFrameworkStores(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
+                .BuildServiceProvider();
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(builder.GetRequiredService<OperationalDbContext>(), null, null));
+            Assert.Throws<ArgumentNullException>(() => 
+                new DeviceFlowStore(builder.GetRequiredService<OperationalDbContext>(),
+                builder.GetRequiredService<IPersistentGrantSerializer>(), null));
+        }
+
         [Fact]
         public async Task FindByDeviceCodeAsync_should_return_DeviceCode()
         {
