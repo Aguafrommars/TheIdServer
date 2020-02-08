@@ -45,9 +45,7 @@ namespace Aguacongas.TheIdServer.ApiSample
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication()
-                .UseHttpsRedirection()
-                .UseRouting()
+            app.UseHttpsRedirection()
                 .UseCors(configurePolicy =>
                 {
                     configurePolicy.WithOrigins("http://localhost:5002")
@@ -55,9 +53,10 @@ namespace Aguacongas.TheIdServer.ApiSample
                         .AllowAnyHeader();
                 });
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseRouting()
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Components.Testing
 {
@@ -61,6 +62,26 @@ namespace Microsoft.AspNetCore.Components.Testing
             }
         }
 
+        public async Task WaitForNextRenderAsync(Func<Task> trigger = null)
+        {
+            var task = Renderer.NextRender;
+            await trigger?.Invoke();
+            if (Debugger.IsAttached)
+            {
+                task.Wait();
+            }
+            else
+            {
+                task.Wait(5000);
+            }
+
+
+            if (!task.IsCompleted)
+            {
+                throw new TimeoutException("No render occurred within the timeout period.");
+            }
+        }
+
         public RenderedComponent<TComponent> AddComponent<TComponent>(ParameterView? parameterView = null) where TComponent : IComponent
         {
             var result = new RenderedComponent<TComponent>(Renderer);
@@ -86,7 +107,7 @@ namespace Microsoft.AspNetCore.Components.Testing
                     }
                     catch(InvalidOperationException)
                     {
-                        _renderer.Value.Dispose();
+                        // silent
                     }
 #pragma warning restore BL0006 // Do not use RenderTree types
                 }

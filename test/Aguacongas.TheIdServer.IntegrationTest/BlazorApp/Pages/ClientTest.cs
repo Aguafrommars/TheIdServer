@@ -70,7 +70,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#grantTypes input");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
 
             var message = component.Find(".validation-message");
 
@@ -79,7 +79,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" }));
 
             message = component.Find(".validation-message");
 
@@ -89,7 +89,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
 
             message = component.Find(".validation-message");
 
@@ -100,8 +100,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
-
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
         }
 
         [Theory]
@@ -127,7 +126,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#access-token");
 
-            host.WaitForNextRender(() => input.Change("test test"));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync("test test"));
 
             var message = component.Find(".validation-message");
 
@@ -135,7 +134,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.StartsWith("The token expression doesn&#x27;t match a valid format.", message.InnerText);
 
             input = component.Find("#access-token");
-            host.WaitForNextRender(() => input.Change(value));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(value));
 
             message = component.Find(".validation-message");
 
@@ -187,19 +186,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var expected = 1;
             var input = WaitForNode(host, component, "#scopes input");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }));
+            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }));
 
             var nodes = host.WaitForAllNodes(component, "#scopes .dropdown-item");
 
             Assert.Equal(expected, nodes.Count);
 
-            host.WaitForNextRender(() => nodes.First().Click());
+            await host.WaitForNextRenderAsync(() => nodes.First().ClickAsync());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 
@@ -228,13 +227,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var button = WaitForNode(host, component, "#grantTypes div.select");
 
-            host.WaitForNextRender(() => button.Click());
+            await host.WaitForNextRenderAsync(() => button.ClickAsync());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             var message = component.Find(".validation-message");
 
@@ -415,11 +414,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#delete-entity input");
 
-            host.WaitForNextRender(() => input.Change(clientId));
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(clientId));
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            host.WaitForNextRender(() => confirm.Click());
+            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
 
             WaitForDeletedToast(host, component);
 
@@ -451,23 +450,23 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var dropdownButton = component.Find("#grantTypes button.dropdown-item");
 
-            host.WaitForNextRender(() => dropdownButton.Click());
+            await host.WaitForNextRenderAsync(() => dropdownButton.ClickAsync());
 
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
 
             var clientId = GenerateId();
-            host.WaitForNextRender(() => idInput.Change(clientId));
+            await host.WaitForNextRenderAsync(() => idInput.ChangeAsync(clientId));
 
             var nameInput = component.Find("#name");
             
             Assert.NotNull(nameInput);
-            host.WaitForNextRender(() => nameInput.Change(clientId));
+            await host.WaitForNextRenderAsync(() => nameInput.ChangeAsync(clientId));
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            host.WaitForNextRender(() => form.Submit());
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
             WaitForSavedToast(host, component);
 

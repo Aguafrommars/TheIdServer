@@ -104,6 +104,19 @@ namespace Aguacongas.TheIdServer
                     AllowedScopes = { "openid", "profile", "api1" }
                 },
 
+                // Device flow
+                new Client
+                {
+                    ClientId = "device",
+                    ClientName = "Device flow client",
+                    AllowedGrantTypes = GrantTypes.DeviceFlow,
+                    RequireClientSecret = false,
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "api1" },
+                    FrontChannelLogoutSessionRequired = false,
+                    BackChannelLogoutSessionRequired = false
+                },
+
                 // SPA client using code flow + pkce
                 new Client
                 {
@@ -141,6 +154,8 @@ namespace Aguacongas.TheIdServer
                         }
                     }
                 },
+
+                // Multi-tiers public server client
 
                 new Client
                 {

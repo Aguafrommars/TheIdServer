@@ -69,6 +69,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var entity = new DeviceCode
             {
+                Id = Guid.NewGuid().ToString(),
                 Code = deviceCode,
                 UserCode = userCode,
                 Data = _serializer.Serialize(data),
