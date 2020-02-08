@@ -242,6 +242,44 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
+        public async Task Add_delete_click_test()
+        {
+            string clientId = await CreateClient();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var deleteButtons = WaitForAllNodes(host, component,"span.oi-trash").ToList();
+            var addButtons = WaitForAllNodes(host, component, "button.btn.btn-sm.btn-primary.ml-md-auto").ToList();
+
+            for(int i = 0; i < addButtons.Count; i++)
+            {
+                await host.WaitForNextRenderAsync(() => addButtons[i].ClickAsync());
+                addButtons = WaitForAllNodes(host, component, "button.btn.btn-sm.btn-primary.ml-md-auto").ToList();
+            }
+
+            deleteButtons = WaitForAllNodes(host, component, "span.oi-trash").ToList();
+
+            do
+            {
+                await host.WaitForNextRenderAsync(() => deleteButtons.Last().ParentNode.ClickAsync());
+                deleteButtons = WaitForAllNodes(host, component, "span.oi-trash").ToList();
+            } while (deleteButtons.Count > 1);
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+        }
+
+        [Fact]
         public async Task Hybrid_client_should_have_consent()
         {
             string clientId = await CreateClient();
