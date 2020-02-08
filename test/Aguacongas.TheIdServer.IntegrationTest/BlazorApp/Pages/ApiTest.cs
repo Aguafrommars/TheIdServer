@@ -216,6 +216,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
+            while (buttons.Count == expected)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll("#secrets button")
+                    .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            }
+
             Assert.NotEqual(expected, buttons.Count);
 
             await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
@@ -223,6 +230,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
+            while(buttons.Count != expected)
+            {
+                host.WaitForNextRender();
+                buttons = component.FindAll("#secrets button")
+                    .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            }
             Assert.Equal(expected, buttons.Count);
         }
 
