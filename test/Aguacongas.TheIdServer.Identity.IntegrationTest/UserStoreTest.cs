@@ -1,11 +1,13 @@
 // Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Test;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,19 +38,45 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
         protected override void AddUserStore(IServiceCollection services, object context = null)
         {            
             var userType = typeof(TestUser);
-            var keyType = typeof(string);
-            var userStoreType = typeof(UserStore<,>).MakeGenericType(userType, typeof(TestRole));
+            var roleType = typeof(TestRole);
+            var userStoreType = typeof(UserStore<,>).MakeGenericType(userType, roleType);
             var userOnlyStoreType = typeof(UserOnlyStore<>).MakeGenericType(userType);
-            services.TryAddSingleton(typeof(UserOnlyStore<>).MakeGenericType(userType), provider => userOnlyStoreType.GetConstructor(new Type[] { typeof(IDatabase), typeof(IdentityErrorDescriber) })
-                .Invoke(new object[] { _fixture.Database, null }));
-            services.TryAddSingleton(typeof(IUserStore<>).MakeGenericType(userType), provider => userStoreType.GetConstructor(new Type[] { typeof(IDatabase), userOnlyStoreType, typeof(IdentityErrorDescriber) })
-                .Invoke(new object[] { _fixture.Database, provider.GetService(userOnlyStoreType), null }));
+            services.TryAddSingleton(typeof(UserOnlyStore<>).MakeGenericType(userType), 
+                p => p.CreateUserOnlyStore(userOnlyStoreType));
+            services.TryAddSingleton(typeof(IUserStore<>).MakeGenericType(userType),
+                p => p.CreateUserStore(userOnlyStoreType, userStoreType));
+            var httpClient = _fixture.Sut.CreateClient();
+            httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "/api");
+            services.AddIdentityServer4AdminHttpStores(p =>
+            {
+                return Task.FromResult(httpClient);
+            });
+            _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
+                new Claim[]
+                {
+                    new Claim("role", SharedConstants.WRITER),
+                    new Claim("role", SharedConstants.READER)
+                });
         }
 
         protected override void AddRoleStore(IServiceCollection services, object context = null)
         {
             var roleType = typeof(TestRole);
-            services.TryAddSingleton(typeof(IRoleStore<>).MakeGenericType(roleType), provider => new RoleStore<TestRole>(_fixture.Database));
+            var roleStoreType = typeof(IRoleStore<>).MakeGenericType(roleType);
+            services.TryAddSingleton(typeof(IRoleStore<>).MakeGenericType(roleType), 
+                p => p.CreateRoleStore(roleStoreType));
+            var httpClient = _fixture.Sut.CreateClient();
+            httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "/api"); 
+            services.AddIdentityServer4AdminHttpStores(p =>
+            {
+                return Task.FromResult(httpClient);
+            });
+            _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
+                new Claim[]
+                {
+                    new Claim("role", SharedConstants.WRITER),
+                    new Claim("role", SharedConstants.READER)
+                });
         }
 
         protected override object CreateTestContext()

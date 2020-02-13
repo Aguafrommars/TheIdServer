@@ -1,6 +1,7 @@
 ﻿// Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,21 +18,21 @@ namespace Aguacongas.TheIdServer.Identity
     /// </summary>
     /// <typeparam name="TRole">The type of the class representing a role.</typeparam>
     public class RoleStore<TRole>
-        where TRole : IdentityRole
+        where TRole : IdentityRole, new()
     {
-        private readonly IAdminStore<TRole> _store;
-        private readonly IAdminStore<IdentityRoleClaim<string>> _claimStore;
+        private readonly IAdminStore<Role> _roleStore;
+        private readonly IAdminStore<RoleClaim> _claimStore;
         private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleStore{TRole, TKey, TUserRole, TRoleClaim}"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
+        /// <param name="roleStore">The store.</param>
         /// <param name="describer">The describer.</param>
         /// <exception cref="System.ArgumentNullException">store</exception>
-        public RoleStore(IAdminStore<TRole> store, IAdminStore<IdentityRoleClaim<string>> claimStore, IdentityErrorDescriber describer = null)
+        public RoleStore(IAdminStore<Role> roleStore, IAdminStore<RoleClaim> claimStore, IdentityErrorDescriber describer = null)
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _roleStore = roleStore ?? throw new ArgumentNullException(nameof(roleStore));
             _claimStore = claimStore ?? throw new ArgumentNullException(nameof(claimStore));
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -55,7 +56,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.CreateAsync(role, cancellationToken).ConfigureAwait(false);
+                await _roleStore.CreateAsync(role, cancellationToken).ConfigureAwait(false);
 
                 return IdentityResult.Success;
             }
@@ -84,7 +85,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.UpdateAsync(role, cancellationToken).ConfigureAwait(false);
+                await _roleStore.UpdateAsync(role, cancellationToken).ConfigureAwait(false);
 
                 return IdentityResult.Success;
             }
@@ -112,7 +113,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.DeleteAsync(role.Id, cancellationToken).ConfigureAwait(false);
+                await _roleStore.DeleteAsync(role.Id, cancellationToken).ConfigureAwait(false);
 
                 return IdentityResult.Success;
             }
@@ -184,7 +185,8 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            return await _store.GetAsync(roleId, null, cancellationToken).ConfigureAwait(false);
+            var entity = await _roleStore.GetAsync(roleId, null, cancellationToken).ConfigureAwait(false);
+            return entity.ToIdentityRole<TRole>();
         }
 
         /// <summary>
@@ -198,14 +200,14 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            var response = await _store.GetAsync(new PageRequest
+            var response = await _roleStore.GetAsync(new PageRequest
             {
                 Filter = $"NormalizedName eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+                return response.Items.First().ToIdentityRole<TRole>();
             }
 
             return default;
@@ -277,7 +279,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"RoleId eq '{role.Id}"
             }, cancellationToken).ConfigureAwait(false);
 
-            return response.Items.Select(c => c.ToClaim()).ToList();
+            return response.Items.Select(CreateClaim).ToList();
         }
 
         /// <summary>
@@ -338,6 +340,11 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 throw new ArgumentNullException(pName);
             }
+        }
+
+        private Claim CreateClaim(RoleClaim claim)
+        {
+            return new Claim(claim.Type, claim.Value);
         }
     }
 }

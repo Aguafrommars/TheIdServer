@@ -1,6 +1,7 @@
 // Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Concurrent;
@@ -26,7 +27,11 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="loginStore"></param>
         /// <param name="tokenStore"></param>
         /// <param name="describer">The <see cref="T:Microsoft.AspNetCore.Identity.IdentityErrorDescriber" /> used to describe store errors.</param>
-        public UserOnlyStore(IAdminStore<IdentityUser> store, IAdminStore<IdentityUserClaim<string>> claimStore, IAdminStore<IdentityUserLogin<string>> loginStore, IAdminStore<IdentityUserToken<string>> tokenStore, IdentityErrorDescriber describer = null) : base(store, claimStore, loginStore, tokenStore, describer)
+        public UserOnlyStore(IAdminStore<User> store,
+            IAdminStore<UserClaim> claimStore, 
+            IAdminStore<UserLogin> loginStore, 
+            IAdminStore<UserToken> tokenStore, 
+            IdentityErrorDescriber describer = null) : base(store, claimStore, loginStore, tokenStore, describer)
         {
         }
     }
@@ -39,25 +44,25 @@ namespace Aguacongas.TheIdServer.Identity
             IdentityUserClaim<string>, 
             IdentityUserLogin<string>, 
             IdentityUserToken<string>>
-        where TUser: IdentityUser
+        where TUser: IdentityUser, new()
     {
-        private readonly IAdminStore<TUser> _store;
-        private readonly IAdminStore<IdentityUserClaim<string>> _claimStore;
-        private readonly IAdminStore<IdentityUserLogin<string>> _loginStore;
-        private readonly IAdminStore<IdentityUserToken<string>> _tokenStore;
+        private readonly IAdminStore<User> _userStore;
+        private readonly IAdminStore<UserClaim> _claimStore;
+        private readonly IAdminStore<UserLogin> _loginStore;
+        private readonly IAdminStore<UserToken> _tokenStore;
 
         /// <summary>
         /// Creates a new instance of the store.
         /// </summary>
         /// <param name="db">The <see cref="IDatabase"/>.</param>
         /// <param name="describer">The <see cref="IdentityErrorDescriber"/> used to describe store errors.</param>
-        public UserOnlyStore(IAdminStore<TUser> store,
-            IAdminStore<IdentityUserClaim<string>> claimStore,
-            IAdminStore<IdentityUserLogin<string>> loginStore,
-            IAdminStore<IdentityUserToken<string>> tokenStore,
+        public UserOnlyStore(IAdminStore<User> userStore,
+            IAdminStore<UserClaim> claimStore,
+            IAdminStore<UserLogin> loginStore,
+            IAdminStore<UserToken> tokenStore,
             IdentityErrorDescriber describer = null) : base(describer ?? new IdentityErrorDescriber())
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _userStore = userStore ?? throw new ArgumentNullException(nameof(userStore));
             _claimStore = claimStore ?? throw new ArgumentNullException(nameof(claimStore));
             _loginStore = loginStore ?? throw new ArgumentNullException(nameof(loginStore));
             _tokenStore = tokenStore ?? throw new ArgumentNullException(nameof(tokenStore));
@@ -78,7 +83,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.CreateAsync(user, cancellationToken).ConfigureAwait(false);
+                await _userStore.CreateAsync(user.ToEntity(), cancellationToken).ConfigureAwait(false);
                 return IdentityResult.Success;
             }
             catch(Exception e)
@@ -105,7 +110,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.UpdateAsync(user, cancellationToken).ConfigureAwait(false);
+                await _userStore.UpdateAsync(user.ToEntity(), cancellationToken).ConfigureAwait(false);
                 return IdentityResult.Success;
             }
             catch (Exception e)
@@ -132,7 +137,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _store.DeleteAsync(user.Id, cancellationToken).ConfigureAwait(false);
+                await _userStore.DeleteAsync(user.Id, cancellationToken).ConfigureAwait(false);
                 return IdentityResult.Success;
             }
             catch (Exception e)
@@ -180,14 +185,14 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            var response = await _store.GetAsync(new PageRequest
+            var response = await _userStore.GetAsync(new PageRequest
             {
                 Filter = $"Id eq '{userId}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+                return CreateUser(response.Items.First());
             }
 
             return default;
@@ -205,14 +210,15 @@ namespace Aguacongas.TheIdServer.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
-            var response = await _store.GetAsync(new PageRequest
+            var response = await _userStore.GetAsync(new PageRequest
             {
                 Filter = $"NormalizedUserName eq '{normalizedUserName}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+
+                return CreateUser(response.Items.First());
             }
 
             return default;
@@ -235,7 +241,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"UserId eq '{user.Id}"
             }, cancellationToken).ConfigureAwait(false);
 
-            return response.Items.Select(c => c.ToClaim()).ToList();
+            return response.Items.Select(CreateClaim).ToList();
         }
 
         /// <summary>
@@ -425,14 +431,14 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            var response = await _store.GetAsync(new PageRequest
+            var response = await _userStore.GetAsync(new PageRequest
             {
-                Filter = $"NormalizedEmail = '{normalizedEmail}'"
+                Filter = $"NormalizedEmail eq '{normalizedEmail}'"
             }).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+                return CreateUser(response.Items.First());
             }
 
             return default;
@@ -552,7 +558,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+                return CreateIdentityUserLogin(response.Items.First());
             }
             return null;
         }
@@ -574,7 +580,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             if (response.Count == 1)
             {
-                return response.Items.First();
+                return CreateIdentityUserLogin(response.Items.First());
             }
             return null;
         }
@@ -591,7 +597,7 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 Filter = $"UserId eq '{user.Id}'"
             }, cancellationToken).ConfigureAwait(false);
-            return response.Items.ToList();
+            return response.Items.Select(IdentityUserToken).ToList();
         }
 
         /// <summary>
@@ -618,7 +624,7 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 Filter = $"UserId eq'{user.Id}'"
             }).ConfigureAwait(false);
-            return response.Items.ToList();
+            return response.Items.Select(CreateIdentityUserClaim).ToList();
         }
 
         protected virtual async Task<List<IdentityUserLogin<string>>> GetUserLoginsAsync(string userId)
@@ -627,7 +633,44 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 Filter = $"UserId eq'{userId}'"
             }).ConfigureAwait(false);
-            return response.Items.ToList();
+            return response.Items.Select(CreateIdentityUserLogin).ToList();
         }
+
+        private IdentityUserToken<string> IdentityUserToken(UserToken entity)
+        {
+            return new IdentityUserToken<string>
+            {
+                UserId = entity.UserId,
+                LoginProvider = entity.LoginProvider,
+                Name = entity.Name,
+                Value = entity.Value
+            };
+        }
+        private IdentityUserClaim<string> CreateIdentityUserClaim(UserClaim entity)
+        {
+            return new IdentityUserClaim<string>
+            {
+                UserId = entity.UserId,
+                ClaimType = entity.Type,
+                ClaimValue = entity.Value,
+                Id = int.Parse(entity.Id)
+            };
+        }
+        private static IdentityUserLogin<string> CreateIdentityUserLogin(UserLogin entity)
+        {
+            return new IdentityUserLogin<string>
+            {
+                LoginProvider = entity.LoginProvider,
+                ProviderDisplayName = entity.ProviderDisplayName,
+                ProviderKey = entity.ProviderKey,
+                UserId = entity.UserId
+            };
+        }
+
+        private Claim CreateClaim(UserClaim claim)
+        {
+            return new Claim(claim.Type, claim.Value);
+        }
+
     }
 }

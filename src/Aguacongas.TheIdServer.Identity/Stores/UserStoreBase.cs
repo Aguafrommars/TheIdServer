@@ -1,5 +1,6 @@
 // Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Aguacongas.TheIdServer.Identity
         IUserAuthenticatorKeyStore<TUser>,
         IUserTwoFactorRecoveryCodeStore<TUser>
         where TKey: IEquatable<TKey>
-        where TUser : IdentityUser<TKey>
+        where TUser : IdentityUser<TKey>, new()
         where TUserClaim : IdentityUserClaim<TKey>, new()
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserToken : IdentityUserToken<TKey>, new()
@@ -838,6 +839,21 @@ namespace Aguacongas.TheIdServer.Identity
         }
 
         /// <summary>
+        /// Converts the provided <paramref name="id"/> to its string representation.
+        /// </summary>
+        /// <param name="id">The id to convert.</param>
+        /// <returns>An <see cref="string"/> representation of the provided <paramref name="id"/>.</returns>
+        public virtual string ConvertIdToString(TKey id)
+        {
+            if (Equals(id, default(TKey)))
+            {
+                return null;
+            }
+            return id.ToString();
+        }
+
+
+        /// <summary>
         /// Dispose the store
         /// </summary>
         public void Dispose()
@@ -908,11 +924,11 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="user">The associated user.</param>
         /// <param name="login">The sasociated login.</param>
         /// <returns></returns>
-        protected virtual TUserLogin CreateUserLogin(TUser user, UserLoginInfo login)
+        protected virtual UserLogin CreateUserLogin(TUser user, UserLoginInfo login)
         {
-            return new TUserLogin
+            return new UserLogin
             {
-                UserId = user.Id,
+                UserId =ConvertIdToString( user.Id),
                 ProviderKey = login.ProviderKey,
                 LoginProvider = login.LoginProvider,
                 ProviderDisplayName = login.ProviderDisplayName
@@ -975,6 +991,28 @@ namespace Aguacongas.TheIdServer.Identity
                 throw new ArgumentNullException(pName);
             }
         }
+
+        protected virtual TUser CreateUser(User entity)
+        {
+            return new TUser
+            {
+                Id = ConvertIdFromString(entity.Id),
+                AccessFailedCount = entity.AccessFailedCount,
+                ConcurrencyStamp = entity.ConcurrencyStamp,
+                Email = entity.Email,
+                EmailConfirmed = entity.EmailConfirmed,
+                LockoutEnabled = entity.LockoutEnabled,
+                LockoutEnd = entity.LockoutEnd,
+                NormalizedEmail = entity.NormalizedEmail,
+                NormalizedUserName = entity.NormalizedUserName,
+                PasswordHash = entity.PasswordHash,
+                PhoneNumber = entity.PhoneNumber,
+                PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
+                SecurityStamp = entity.SecurityStamp,
+                TwoFactorEnabled = entity.TwoFactorEnabled,
+                UserName = entity.UserName
+            };
+        }
     }
 
 
@@ -995,7 +1033,7 @@ namespace Aguacongas.TheIdServer.Identity
         TheIdServerUserStoreBase<TUser, TKey, TUserClaim, TUserLogin, TUserToken>,
         IUserRoleStore<TUser>
         where TKey: IEquatable<TKey>
-        where TUser : IdentityUser<TKey>
+        where TUser : IdentityUser<TKey>, new()
         where TRole : IdentityRole<TKey> 
         where TUserClaim : IdentityUserClaim<TKey>, new()
         where TUserRole : IdentityUserRole<TKey>, new()

@@ -1,6 +1,7 @@
 ﻿// Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Aguacongas.TheIdServer.Identity
     /// of <see cref="IdentityUser{string}"/> with a string as a primary key.
     /// </summary>
     public class UserStore<TUser> : UserStore<TUser, IdentityRole>
-        where TUser : IdentityUser
+        where TUser : IdentityUser, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserStore{TUser}"/> class.
@@ -26,8 +27,8 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="userRoleStore">The user role store.</param>
         /// <param name="userOnlyStore">The user only store.</param>
         /// <param name="describer">The <see cref="T:Microsoft.AspNetCore.Identity.IdentityErrorDescriber" /> used to describe store errors.</param>
-        public UserStore(IAdminStore<IdentityRole> store,
-            IAdminStore<IdentityUserRole<string>> userRoleStore,
+        public UserStore(IAdminStore<Role> store,
+            IAdminStore<UserRole> userRoleStore,
             UserOnlyStore<TUser> userOnlyStore,
             IdentityErrorDescriber describer = null)
             : base(store, userRoleStore, userOnlyStore, describer)
@@ -47,17 +48,17 @@ namespace Aguacongas.TheIdServer.Identity
         IdentityUserLogin<string>,
         IdentityUserToken<string>,
         IdentityRoleClaim<string>>
-        where TUser : IdentityUser
-        where TRole : IdentityRole
+        where TUser : IdentityUser, new()
+        where TRole : IdentityRole, new()
     {
-        private readonly IAdminStore<TRole> _store;
-        private readonly IAdminStore<IdentityUserRole<string>> _userRoleStore;
+        private readonly IAdminStore<Role> _roleStore;
+        private readonly IAdminStore<UserRole> _userRoleStore;
         private readonly UserOnlyStore<TUser> _userOnlyStore;
 
         /// <summary>
         /// Creates a new instance of the store.
         /// </summary>
-        /// <param name="store">The store.</param>
+        /// <param name="roleStore">The store.</param>
         /// <param name="userRoleStore">The user role store.</param>
         /// <param name="userOnlyStore">The user only store.</param>
         /// <param name="describer">The <see cref="IdentityErrorDescriber" /> used to describe store errors.</param>
@@ -68,13 +69,13 @@ namespace Aguacongas.TheIdServer.Identity
         /// or
         /// userOnlyStore
         /// </exception>
-        public UserStore(IAdminStore<TRole> store,
-            IAdminStore<IdentityUserRole<string>> userRoleStore,
+        public UserStore(IAdminStore<Role> roleStore,
+            IAdminStore<UserRole> userRoleStore,
             UserOnlyStore<TUser> userOnlyStore,
             IdentityErrorDescriber describer = null)
             : base(describer ?? new IdentityErrorDescriber())
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _roleStore = roleStore ?? throw new ArgumentNullException(nameof(roleStore));
             _userRoleStore = userRoleStore ?? throw new ArgumentNullException(nameof(userRoleStore));
             _userOnlyStore = userOnlyStore ?? throw new ArgumentNullException(nameof(userOnlyStore));
         }
@@ -394,14 +395,14 @@ namespace Aguacongas.TheIdServer.Identity
         /// <returns>The role if it exists.</returns>
         protected override async Task<TRole> FindRoleAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            var respone = await _store.GetAsync(new PageRequest
+            var respone = await _roleStore.GetAsync(new PageRequest
             {
                 Filter = $"NormalizedName eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (respone.Count == 1)
             {
-                return respone.Items.First();
+                return respone.Items.First().ToIdentityRole<TRole>();
             }
             return default;
         }
@@ -480,7 +481,8 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            return await _store.GetAsync(id, null, cancellationToken).ConfigureAwait(false);
+            return (await _roleStore.GetAsync(id, null, cancellationToken).ConfigureAwait(false))
+                .ToIdentityRole<TRole>();
         }
 
         protected virtual async Task<List<IdentityUserRole<string>>> GetUserRolesAsync(string userId, CancellationToken cancellationToken)
@@ -490,7 +492,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"UserId eq '{userId}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            return response.Items.ToList();
+            return response.Items.Select(CreateIdentityUserRole).ToList();
         }
 
         private static void AssertNotNullOrEmpty(string p, string pName)
@@ -499,6 +501,15 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 throw new ArgumentNullException(pName);
             }
+        }
+
+        private static IdentityUserRole<string> CreateIdentityUserRole(UserRole entity)
+        {
+            return new IdentityUserRole<string>
+            {
+                RoleId = entity.RoleId,
+                UserId = entity.UserId
+            };
         }
     }
 

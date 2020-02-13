@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddHttpClient(options.HttpClientName)
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
-            return services.AddConfigurationHttpStores(p => CreateApiHttpClient(p, options), configureOptions);
+            return services.AddConfigurationHttpStores(p => p.CreateApiHttpClient(options), configureOptions);
         }
 
         /// <summary>
@@ -63,10 +63,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
         }
 
-
-        private static Task<HttpClient> CreateApiHttpClient(IServiceProvider p, AuthorizationOptions options)
+        /// <summary>
+        /// Creates the API HTTP client.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public static Task<HttpClient> CreateApiHttpClient(this IServiceProvider provider, AuthorizationOptions options)
         {
-            var factory = p.GetRequiredService<IHttpClientFactory>();
+            var factory = provider.GetRequiredService<IHttpClientFactory>();
             var client = factory.CreateClient(options.HttpClientName);
             client.BaseAddress = new Uri(options.ApiUrl);
             return Task.FromResult(client);
