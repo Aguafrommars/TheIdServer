@@ -110,7 +110,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var settingsRequest = httpMock.Capture("/settings.json");
             host.ConfigureServices(services =>
             {
-                new blazorApp.Startup().ConfigureServices(services);
+                blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
                 httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
                 sut.Services.GetRequiredService<TestUserService>()

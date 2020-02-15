@@ -148,10 +148,10 @@ namespace Aguacongas.TheIdServer
                 .Map("/admin", child =>
                 {
                     child.UseRouting()
-                    .UseClientSideBlazorFiles<BlazorApp.Startup>()
+                    .UseClientSideBlazorFiles<BlazorApp.Program>()
                     .UseEndpoints(endpoints =>
                     {
-                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Startup>("index.html");
+                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Program>("index.html");
                     });
                 })
                 .UseIdentityServerAdminApi("/api", child =>
