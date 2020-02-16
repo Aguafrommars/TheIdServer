@@ -66,6 +66,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var role = await GetRoleAsync(entity.Id)
                 .ConfigureAwait(false);
             role.Name = entity.Name;
+            role.ConcurrencyStamp = entity.ConcurrencyStamp;
+            role.NormalizedName = entity.NormalizedName;
             var result = await _roleManager.UpdateAsync(role)
                 .ConfigureAwait(false);
             if (result.Succeeded)

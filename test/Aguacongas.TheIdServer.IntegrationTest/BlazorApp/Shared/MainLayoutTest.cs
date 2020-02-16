@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             using var host = new TestHost();
             host.ConfigureServices(services =>
             {
-                new blazorApp.Startup().ConfigureServices(services);                
+                blazorApp.Program.ConfigureServices(services);                
                 services
                     .AddLogging(configure =>
                     {
@@ -127,7 +127,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             _host = host;
             host.ConfigureServices(services =>
             {
-                new blazorApp.Startup().ConfigureServices(services);
+                blazorApp.Program.ConfigureServices(services);
                 services.AddLogging(configure =>
                 {
                     configure.AddProvider(new TestLoggerProvider(_testOutputHelper));

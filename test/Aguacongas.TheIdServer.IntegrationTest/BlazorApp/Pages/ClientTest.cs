@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            var markup = WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             host.WaitForContains(component, "filtered");
 
@@ -49,7 +49,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = clientId
             }));
 
-            markup = component.GetMarkup();
+            var markup = component.GetMarkup();
 
             Assert.DoesNotContain("filtered", markup);
         }
@@ -537,7 +537,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     },
                     RedirectUris = new List<ClientUri>
                     {
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = 1 }
+                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect }
                     },
                     ClientClaims = new List<ClientClaim>
                     {

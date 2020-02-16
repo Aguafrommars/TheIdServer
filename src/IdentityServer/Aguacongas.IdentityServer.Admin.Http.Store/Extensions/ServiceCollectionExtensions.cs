@@ -19,18 +19,25 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var entityType in entityTypeList)
             {
-                var iAdminStoreType = typeof(IAdminStore<>)
-                    .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-
-                services.AddTransient(iAdminStoreType, provider =>
-                {
-                    return CreateStore(getHttpClient, provider, entityType);
-                });
+                AddHttpAdminStore(services, entityType, getHttpClient);
             }
-            
+
             return services.AddTransient<IIdentityProviderStore>(
                 p => new IdentityProviderStore(getHttpClient.Invoke(p),
                     p.GetRequiredService<ILogger<IdentityProviderStore>>()));
+        }
+
+        private static void AddHttpAdminStore(IServiceCollection services,
+            Type entityType,
+            Func<IServiceProvider, Task<HttpClient>> getHttpClient)
+        {
+            var iAdminStoreType = typeof(IAdminStore<>)
+                                .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+
+            services.AddTransient(iAdminStoreType, provider =>
+            {
+                return CreateStore(getHttpClient, provider, entityType);
+            });
         }
 
         private static IEnumerable<Type> GetEntityTypes()

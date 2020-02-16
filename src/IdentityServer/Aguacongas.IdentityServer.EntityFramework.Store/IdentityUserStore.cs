@@ -73,15 +73,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var user = await _context.Users.FindAsync(new object[] { id }, cancellationToken)
-                .ConfigureAwait(false);
+            var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
             return user.ToUserEntity();
         }
 
         public async Task<PageResponse<User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _userManager.Users.AsNoTracking().GetODataQuery(request);
+            var odataQuery = _context.Users.AsNoTracking().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -104,9 +103,24 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             user.EmailConfirmed = entity.EmailConfirmed;
             user.TwoFactorEnabled = entity.TwoFactorEnabled;
             user.LockoutEnabled = entity.LockoutEnabled;
-            user.LockoutEnd = entity.LockoutEnd;
+
+            if (entity.LockoutEnd.HasValue)
+            {
+                var lockoutEnd = entity.LockoutEnd.Value;
+                user.LockoutEnd = lockoutEnd != DateTime.MinValue ? new DateTimeOffset(lockoutEnd) : DateTimeOffset.MinValue;
+            }
+            else
+            {
+                user.LockoutEnd = null;
+            }
             user.PhoneNumber = entity.PhoneNumber;
             user.PhoneNumberConfirmed = entity.PhoneNumberConfirmed;
+            user.SecurityStamp = entity.SecurityStamp;
+            user.UserName = entity.UserName;
+            user.NormalizedUserName = entity.NormalizedUserName;
+            user.NormalizedEmail = entity.NormalizedEmail;
+            user.ConcurrencyStamp = entity.ConcurrencyStamp;
+            user.PasswordHash = entity.PasswordHash;
             var result = await _userManager.UpdateAsync(user)
                 .ConfigureAwait(false);
             if (result.Succeeded)

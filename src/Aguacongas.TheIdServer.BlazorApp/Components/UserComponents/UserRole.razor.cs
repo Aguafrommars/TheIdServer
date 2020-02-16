@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 {
@@ -27,7 +28,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
-            _pageRequest.Filter = $"contains(Name,'{term}')";
+            _pageRequest.Filter = $"contains({nameof(entity.Role.Name)},'{term}')";
             var response = await _store.GetAsync(_pageRequest)
                 .ConfigureAwait(false);
 

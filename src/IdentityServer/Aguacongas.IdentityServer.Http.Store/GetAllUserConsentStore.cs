@@ -24,8 +24,8 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             return (await _store.GetAsync(new PageRequest
             {
-                Filter = $"UserId eq '{subjectId}'",
-                Select = "Data"
+                Filter = $"{nameof(UserConsent.UserId)} eq '{subjectId}'",
+                Select = nameof(UserConsent.Data)
             }).ConfigureAwait(false)).Items
                 .Select(c => _serializer.Deserialize<Consent>(c.Data));
         }

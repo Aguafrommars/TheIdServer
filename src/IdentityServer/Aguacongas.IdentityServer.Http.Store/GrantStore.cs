@@ -121,7 +121,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             return (await _store.GetAsync(new PageRequest
             {
-                Filter = $"UserId eq '{subjectId}' And ClientId eq '{clientId}'"
+                Filter = $"{nameof(UserConsent.UserId)} eq '{subjectId}' And {nameof(UserConsent.ClientId)} eq '{clientId}'"
             }).ConfigureAwait(false)).Items.FirstOrDefault();
         }
 

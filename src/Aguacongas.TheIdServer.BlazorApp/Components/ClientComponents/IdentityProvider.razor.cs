@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class IdentityProvider
     {
         private bool _isReadOnly;
-        private IEnumerable<Entity.IdentityProvider> _filteredProviders;
+        private IEnumerable<entity.IdentityProvider> _filteredProviders;
         private string _providerName;
         private readonly PageRequest _pageRequest = new PageRequest
         {
@@ -34,7 +34,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
-            _pageRequest.Filter = $"contains(Id,'{term}') or contains(DisplayName,'{term}')";
+            _pageRequest.Filter = $"contains({nameof(entity.IdentityProvider.Id)},'{term}') or contains({nameof(entity.IdentityProvider.DisplayName)},'{term}')";
             var response = await _store.GetAsync(_pageRequest)
                 .ConfigureAwait(false);
 

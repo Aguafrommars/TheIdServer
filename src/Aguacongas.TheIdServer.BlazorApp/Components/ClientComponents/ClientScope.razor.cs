@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
@@ -14,7 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         private bool _isReadOnly;
 
         [Parameter]
-        public Entity.Client Model { get; set; }
+        public entity.Client Model { get; set; }
 
         private static readonly ScopeComparer _comparer = new ScopeComparer();
         private IEnumerable<Scope> _filterScopes;
@@ -41,8 +41,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
-            _idPageRequest.Filter = $"contains(Id,'{term}') or contains(DisplayName,'{term}')";
-            _scopeRequest.Filter = $"contains(Scope,'{term}') or contains(DisplayName,'{term}')";
+            _idPageRequest.Filter = $"contains({nameof(entity.IdentityResource.Id)},'{term}') or contains({nameof(entity.IdentityResource.DisplayName)},'{term}')";
+            _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Scope)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
             var identityResponse = _identityStore.GetAsync(_idPageRequest);
             var apiResponse = _apiStore.GetAsync(_idPageRequest);
             var apiScopeResponse = _apiScopeStore.GetAsync(_scopeRequest);

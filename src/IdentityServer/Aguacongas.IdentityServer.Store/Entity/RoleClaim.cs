@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         [MaxLength(250)]
-        public string Type { get; set; }
+        public string ClaimType { get; set; }
 
         /// <summary>
         /// Gets or sets the value.
@@ -40,6 +40,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The value.
         /// </value>
-        public string Value { get; set; }
+        public string ClaimValue { get; set; }
     }
 }

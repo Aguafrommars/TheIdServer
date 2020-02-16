@@ -62,10 +62,10 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText Id="type" @bind-Value="@claim.Type" />
+                                <AuthorizeText Id="type" @bind-Value="@claim.ClaimType" />
                             </td>
                             <td>
-                                <AuthorizeText Id="value" @bind-Value="@claim.Value" />
+                                <AuthorizeText Id="value" @bind-Value="@claim.ClaimValue" />
                             </td>
                             <td>
                                 <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">

@@ -21,6 +21,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
+            entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
             using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
@@ -37,12 +38,14 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
+            entity = entity ?? throw new ArgumentNullException(nameof(entity));
             return await CreateAsync(entity as T, cancellationToken)
                 .ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
+            id = id ?? throw new ArgumentNullException(nameof(id));
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
 
@@ -78,6 +81,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
+            entity = entity ?? throw new ArgumentNullException(nameof(entity));
             return await UpdateAsync(entity as T, cancellationToken)
                 .ConfigureAwait(false);
         }

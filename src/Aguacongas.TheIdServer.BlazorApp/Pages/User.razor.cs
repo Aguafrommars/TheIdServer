@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override bool NonEditable => false;
 
-        protected override string BackUrl => "roles";
+        protected override string BackUrl => "users";
 
         protected override async Task OnInitializedAsync()
         {
@@ -28,17 +28,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             return new Models.User
             {
-                Claims = new List<Entity.UserClaim>(),
-                Consents = new List<Entity.UserConsent>(),
-                Logins = new List<Entity.UserLogin>(),
-                Roles = new List<Entity.Role>(),
-                Tokens = new List<Entity.UserToken>()
+                Claims = new List<entity.UserClaim>(),
+                Consents = new List<entity.UserConsent>(),
+                Logins = new List<entity.UserLogin>(),
+                Roles = new List<entity.Role>(),
+                Tokens = new List<entity.UserToken>()
             };
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is Entity.UserClaim claim)
+            if (entity is entity.UserClaim claim)
             {
                 claim.UserId = Model.Id;
             }
@@ -55,43 +55,43 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var pageRequest = new PageRequest
             {
-                Filter = $"UserId eq '{model.Id}'"
+                Filter = $"{nameof(entity.UserClaim.UserId)} eq '{model.Id}'"
             };
 
-            var userClaimStore = GetStore<Entity.UserClaim>();
+            var userClaimStore = GetStore<entity.UserClaim>();
             var claimsResponse = await userClaimStore.GetAsync(pageRequest);
 
             model.Claims = claimsResponse.Items.ToList();
 
-            var userLoginStore = GetStore<Entity.UserLogin>();
+            var userLoginStore = GetStore<entity.UserLogin>();
             var loginsRespone = await userLoginStore.GetAsync(pageRequest);
 
             model.Logins = loginsRespone.Items.ToList();
 
-            var userRoleStore = GetStore<Entity.UserRole>();
+            var userRoleStore = GetStore<entity.UserRole>();
             var userRolesResponse = await userRoleStore.GetAsync(pageRequest);
 
             var userRoles = userRolesResponse.Items;
             if (userRoles.Any())
             {
-                var userStore = GetStore<Entity.Role>();
-                var rolesResponse = await userStore.GetAsync(new PageRequest
+                var roleStore = GetStore<entity.Role>();
+                var rolesResponse = await roleStore.GetAsync(new PageRequest
                 {
-                    Filter = string.Join(" or ", userRolesResponse.Items.Select(r => $"Id eq '{r.RoleId}'"))
+                    Filter = string.Join(" or ", userRolesResponse.Items.Select(r => $"{nameof(entity.Role.Id)} eq '{r.RoleId}'"))
                 });
                 model.Roles = rolesResponse.Items.ToList();
             }
             else
             {
-                model.Roles = new List<Entity.Role>();
+                model.Roles = new List<entity.Role>();
             }
 
-            var userConsentStore = GetStore<Entity.UserConsent>();
+            var userConsentStore = GetStore<entity.UserConsent>();
             var userConsentsResponse = await userConsentStore.GetAsync(pageRequest);
 
             model.Consents = userConsentsResponse.Items.ToList();
 
-            var userTokenStore = GetStore<Entity.UserToken>();
+            var userTokenStore = GetStore<entity.UserToken>();
             var userTokensResponse = await userTokenStore.GetAsync(pageRequest);
 
             model.Tokens = userTokensResponse.Items.ToList();
@@ -101,20 +101,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected async override Task<object> CreateAsync(Type entityType, object entity)
         {
-            if (entity is Entity.Role role)
+            if (entity is entity.Role role)
             {
-                var roleStore = GetStore<Entity.Role>();
+                var roleStore = GetStore<entity.Role>();
                 var roleResponse = await roleStore.GetAsync(new PageRequest
                 {
                     Select = "Id",
                     Take = 1,
-                    Filter = $"Name eq '{role.Name}'"
+                    Filter = $"{nameof(role.Name)} eq '{role.Name}'"
                 });
 
                 var roles = roleResponse.Items;
                 if (roles.Any())
                 {
-                    await base.CreateAsync(typeof(Entity.UserRole), new Entity.UserRole
+                    await base.CreateAsync(typeof(entity.UserRole), new entity.UserRole
                     {
                         RoleId = roles.First().Id,
                         UserId = Model.Id
@@ -127,9 +127,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override Task<object> DeleteAsync(Type entityType, object entity)
         {
-            if (entity is Entity.Role role)
+            if (entity is entity.Role role)
             {
-                return base.DeleteAsync(typeof(Entity.UserRole), new Entity.UserRole
+                return base.DeleteAsync(typeof(entity.UserRole), new entity.UserRole
                 {
                     Id = $"{Model.Id}@{role.Id}"
                 });
@@ -138,12 +138,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
         private void AddEmptyRole()
         {
-            Model.Roles.Add(new Entity.Role());
+            Model.Roles.Add(new entity.Role());
         }
 
         private void OnFilterChanged(string term)
         {
-            Model.Claims = State.Claims.Where(c => c.Type.Contains(term) || c.Value.Contains(term))
+            Model.Claims = State.Claims.Where(c => c.ClaimType.Contains(term) || c.ClaimValue.Contains(term))
                 .ToList();
 
             Model.Logins = State.Logins.Where(l => l.ProviderDisplayName.Contains(term))
@@ -163,48 +163,48 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnAddClaimClicked()
         {
-            var claim = new Entity.UserClaim();
+            var claim = new entity.UserClaim();
             State.Claims.Add(claim);
             EntityCreated(claim);
             StateHasChanged();
         }
 
-        private void OnDeleteClaimClicked(Entity.UserClaim claim)
+        private void OnDeleteClaimClicked(entity.UserClaim claim)
         {
             Model.Claims.Remove(claim);
             EntityDeleted(claim);
             StateHasChanged();
         }
 
-        private void OnDeleteRoleClicked(Entity.Role role)
+        private void OnDeleteRoleClicked(entity.Role role)
         {
             Model.Roles.Remove(role);
             EntityDeleted(role);
             StateHasChanged();
         }
 
-        private void OnRoleValueChanged(Entity.Role role)
+        private void OnRoleValueChanged(entity.Role role)
         {
             EntityCreated(role);
             AddEmptyRole();
             StateHasChanged();
         }
 
-        private void OnDeleteUserTokenClicked(Entity.UserToken token)
+        private void OnDeleteUserTokenClicked(entity.UserToken token)
         {
             Model.Tokens.Remove(token);
             EntityDeleted(token);
             StateHasChanged();
         }
 
-        private void OnDeleteUserLoginClicked(Entity.UserLogin login)
+        private void OnDeleteUserLoginClicked(entity.UserLogin login)
         {
             Model.Logins.Remove(login);
             EntityDeleted(login);
             StateHasChanged();
         }
 
-        private void OnDeleteUserConsentClicked(Entity.UserConsent consent)
+        private void OnDeleteUserConsentClicked(entity.UserConsent consent)
         {
             Model.Consents.Remove(consent);
             EntityDeleted(consent);

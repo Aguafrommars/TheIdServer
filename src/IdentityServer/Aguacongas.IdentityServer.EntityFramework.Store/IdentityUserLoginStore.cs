@@ -23,7 +23,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
 
-        public IdentityUserLoginStore(UserManager<TUser> userManager, 
+        public IdentityUserLoginStore(UserManager<TUser> userManager,
             IdentityDbContext<TUser> context,
             ILogger<IdentityUserLoginStore<TUser>> logger)
         {
@@ -32,14 +32,34 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<UserLogin> CreateAsync(UserLogin entity, CancellationToken cancellationToken = default)
+        public async Task<UserLogin> CreateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(entity.UserId).ConfigureAwait(false);
+            if (user ==  null)
+            {
+                throw new IdentityException($"User at id {entity.UserId} is not found.");
+            }
+
+            var result =  await _userManager.AddLoginAsync(user, new UserLoginInfo
+            (
+                entity.LoginProvider,
+                entity.ProviderKey,
+                entity.ProviderDisplayName
+            )).ConfigureAwait(false);
+            if (!result.Succeeded)
+            {
+                throw new IdentityException
+                {
+                    Errors = result.Errors
+                };
+            }
+            entity.Id = $"{entity.UserId}@{entity.LoginProvider}@{entity.ProviderKey}";
+            return entity;
         }
 
-        public Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await CreateAsync(entity as UserLogin, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
@@ -59,14 +79,16 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger.LogInformation("Entity {EntityId} deleted", id, login);
         }
 
-        public Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
+        public async Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(entity.UserId).ConfigureAwait(false);
+            await _userManager.RemoveLoginAsync(user, entity.LoginProvider, entity.ProviderKey).ConfigureAwait(false);
+            return await CreateAsync(entity, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity as UserLogin, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<UserLogin> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)

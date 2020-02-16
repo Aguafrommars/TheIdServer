@@ -99,6 +99,45 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The access failed count.
         /// </value>
         public int AccessFailedCount { get; set; }
+        /// <summary>
+        /// Gets or sets the concurrency stamp.
+        /// </summary>
+        /// <value>
+        /// The concurrency stamp.
+        /// </value>
+        public string ConcurrencyStamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the normalized email.
+        /// </summary>
+        /// <value>
+        /// The normalized email.
+        /// </value>
+        public string NormalizedEmail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the normalized user.
+        /// </summary>
+        /// <value>
+        /// The name of the normalized user.
+        /// </value>
+        public string NormalizedUserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password hash.
+        /// </summary>
+        /// <value>
+        /// The password hash.
+        /// </value>
+        public string PasswordHash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the security stamp.
+        /// </summary>
+        /// <value>
+        /// The security stamp.
+        /// </value>
+        public string SecurityStamp { get; set; }
 
         /// <summary>
         /// Clones this instance.
