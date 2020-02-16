@@ -1,5 +1,4 @@
-﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.Identity;
+﻿using Aguacongas.TheIdServer.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;

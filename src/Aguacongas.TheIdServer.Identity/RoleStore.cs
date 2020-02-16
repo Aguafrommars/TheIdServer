@@ -50,7 +50,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role to create in the store.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that represents the <see cref="IdentityResult"/> of the asynchronous query.</returns>
-        public async virtual Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken = default)
+        public async virtual Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -78,7 +78,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role to update in the store.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that represents the <see cref="IdentityResult"/> of the asynchronous query.</returns>
-        public async virtual Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken = default)
+        public async virtual Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -107,7 +107,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role to delete from the store.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that represents the <see cref="IdentityResult"/> of the asynchronous query.</returns>
-        public async virtual Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken = default)
+        public async virtual Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -135,7 +135,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role whose ID should be returned.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the ID of the role.</returns>
-        public virtual Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -150,7 +150,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role whose name should be returned.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the name of the role.</returns>
-        public virtual Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -166,7 +166,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="roleName">The name of the role.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken = default)
+        public virtual Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -182,7 +182,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="roleId">The role ID to look for.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that result of the look up.</returns>
-        public virtual async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken = default)
+        public virtual async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -204,7 +204,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="normalizedRoleName">The normalized role name to look for.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that result of the look up.</returns>
-        public virtual async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
+        public virtual async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -228,7 +228,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The role whose normalized name should be retrieved.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the name of the role.</returns>
-        public virtual Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -244,7 +244,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="normalizedName">The normalized name to set</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken = default)
+        public virtual Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
@@ -298,7 +298,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="claim">The claim to add to the role.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual async Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
+        public virtual async Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken =default)
         {
             ThrowIfDisposed();
             AssertNotNull(role, nameof(role));
