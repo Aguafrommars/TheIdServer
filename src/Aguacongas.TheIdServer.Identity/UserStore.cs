@@ -360,12 +360,12 @@ namespace Aguacongas.TheIdServer.Identity
                 .ConfigureAwait(false);
             if (roleEntity == null)
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "RoleNotFound {0}", roleName));
+                return new List<TUser>(0);
             }
 
             var userRoles = await _userRoleStore.GetAsync(new PageRequest
             {
-                Filter = $"RoleId eq '{roleEntity.Id}'"
+                Filter = $"{nameof(UserRole.RoleId)} eq '{roleEntity.Id}'"
             }, cancellationToken).ConfigureAwait(false);
             var taskList = new List<Task<TUser>>(userRoles.Count);
             foreach(var userRole in userRoles.Items)
@@ -381,11 +381,42 @@ namespace Aguacongas.TheIdServer.Identity
                 .ToList();
         }
 
+        /// <summary>
+        /// Sets the given normalized name for the specified <paramref name="user" />.
+        /// </summary>
+        /// <param name="user">The user whose name should be set.</param>
+        /// <param name="normalizedName">The normalized name to set.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>
+        /// The <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.
+        /// </returns>
         public override Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken = default)
              => _userOnlyStore.SetNormalizedUserNameAsync(user, normalizedName, cancellationToken);
 
+        /// <summary>
+        /// Sets the normalized email for the specified <paramref name="user" />.
+        /// </summary>
+        /// <param name="user">The user whose email address to set.</param>
+        /// <param name="normalizedEmail">The normalized email to set for the specified <paramref name="user" />.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>
+        /// The task object representing the asynchronous operation.
+        /// </returns>
         public override Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken = default)
             => _userOnlyStore.SetNormalizedEmailAsync(user, normalizedEmail, cancellationToken);
+
+        /// <summary>
+        /// Deletes a token for a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="loginProvider">The authentication provider for the token.</param>
+        /// <param name="name">The name of the token.</param>
+        /// <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" /> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns>
+        /// The <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.
+        /// </returns>
+        public override Task RemoveTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+            => _userOnlyStore.RemoveTokenAsync(user, loginProvider, name, cancellationToken);
 
         /// <summary>
         /// Return a role with the normalized name if it exists.
@@ -397,7 +428,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var respone = await _roleStore.GetAsync(new PageRequest
             {
-                Filter = $"NormalizedName eq '{normalizedRoleName}'"
+                Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (respone.Count == 1)
@@ -489,7 +520,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var response = await _userRoleStore.GetAsync(new PageRequest
             {
-                Filter = $"UserId eq '{userId}'"
+                Filter = $"{nameof(UserRole.UserId)} eq '{userId}'"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(CreateIdentityUserRole).ToList();

@@ -5,21 +5,26 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Test;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.Identity.IntegrationTest
 {
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public UserStoreTest(TheIdServerTestFixture fixture)
+        public UserStoreTest(ITestOutputHelper testOutputHelper, TheIdServerTestFixture fixture)
         {
             _fixture = fixture;
+            fixture.TestOutputHelper = testOutputHelper;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -50,7 +55,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddIdentityServer4AdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            });
+            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
@@ -62,7 +67,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
         protected override void AddRoleStore(IServiceCollection services, object context = null)
         {
             var roleType = typeof(TestRole);
-            var roleStoreType = typeof(IRoleStore<>).MakeGenericType(roleType);
+            var roleStoreType = typeof(RoleStore<>).MakeGenericType(roleType);
             services.TryAddSingleton(typeof(IRoleStore<>).MakeGenericType(roleType), 
                 p => p.CreateRoleStore(roleStoreType));
             var httpClient = _fixture.Sut.CreateClient();
@@ -70,7 +75,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddIdentityServer4AdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            });
+            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {

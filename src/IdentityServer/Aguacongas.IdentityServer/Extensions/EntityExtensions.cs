@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Store
             }
 
             var redirectUris = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKinds.Redirect) == (int)Entity.UriKinds.Redirect);
+                    .Where(u => (u.Kind & Entity.UriKinds.Redirect) == Entity.UriKinds.Redirect);
 
             return new Client
             {
@@ -38,7 +38,7 @@ namespace Aguacongas.IdentityServer.Store
                 AccessTokenType = (AccessTokenType)client.AccessTokenType,
                 AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
                 AllowedCorsOrigins = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKinds.Cors) == (int)Entity.UriKinds.Cors)
+                    .Where(u => (u.Kind & Entity.UriKinds.Cors) == Entity.UriKinds.Cors)
                     .Select(u => new Uri(u.Uri))
                     .Select(u => $"{u.Scheme}://{u.Host}{u.UriPortString()}")
                     .ToList(),
@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Store
                 ProtocolType = client.ProtocolType,
                 RefreshTokenExpiration = (TokenExpiration)client.RefreshTokenExpiration,
                 RedirectUris = client.RedirectUris
-                    .Where(u => (u.Kind & (int)Entity.UriKinds.Redirect) == (int)Entity.UriKinds.Redirect)
+                    .Where(u => (u.Kind & Entity.UriKinds.Redirect) == Entity.UriKinds.Redirect)
                     .Select(u => u.Uri).ToList(),
                 RefreshTokenUsage = (TokenUsage)client.RefreshTokenUsage,
                 RequireClientSecret = client.RequireClientSecret,

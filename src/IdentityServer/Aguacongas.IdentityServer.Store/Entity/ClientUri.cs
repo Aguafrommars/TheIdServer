@@ -44,7 +44,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The kind.
         /// </value>
         [Required]
-        public int Kind { get; set; }
+        public UriKinds Kind { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.

@@ -51,9 +51,7 @@ namespace Aguacongas.TheIdServer
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews(options =>
-                {
-                    options.AddIdentityServerAdminFilters();
-                })
+                    options.AddIdentityServerAdminFilters())
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;
@@ -91,9 +89,7 @@ namespace Aguacongas.TheIdServer
             }
 
             services.AddAuthorization(options =>
-                {
-                    options.AddIdentityServerPolicies();
-                })
+                    options.AddIdentityServerPolicies())
                 .AddAuthentication()
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
@@ -122,9 +118,7 @@ namespace Aguacongas.TheIdServer
                          new[] { "application/octet-stream" });
                  })
                 .AddRazorPages(options =>
-                {
-                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
-                });
+                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]

@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using System;
 using System.Linq;
@@ -34,10 +35,10 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             var url = origin.ToUpperInvariant();
             var corsUri = new Uri(origin);
-            var corsValue = (int)Entity.UriKinds.Cors;
+            var corsValue = UriKinds.Cors;
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"startswith(toupper(Uri), '{url}')"
+                Filter = $"startswith(toupper({nameof(ClientUri.Uri)}), '{url}')"
             }).ConfigureAwait(false);
             return response.Items.Any(o => (o.Kind & corsValue) == corsValue && corsUri.CorsMatch(o.Uri));
         }

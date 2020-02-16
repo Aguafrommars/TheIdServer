@@ -28,8 +28,8 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"Code eq '{deviceCode}'",
-                Select = "Data"
+                Filter = $"{nameof(DeviceCode.Code)} eq '{deviceCode}'",
+                Select = nameof(DeviceCode.Data)
             }).ConfigureAwait(false);
 
             if (response.Count == 1)
@@ -46,8 +46,8 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"UserCode eq '{userCode}'",
-                Select = "Data"
+                Filter = $"{nameof(DeviceCode.UserCode)} eq '{userCode}'",
+                Select = nameof(DeviceCode.Data)
             }).ConfigureAwait(false);
 
             if (response.Count == 1)
@@ -64,8 +64,8 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"Code eq '{deviceCode}'",
-                Select = "Id"
+                Filter = $"{nameof(DeviceCode.Code)} eq '{deviceCode}'",
+                Select = nameof(DeviceCode.Id)
             }).ConfigureAwait(false);
 
 
@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.Http.Store
 
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"UserCode eq '{userCode}'"
+                Filter = $"{nameof(DeviceCode.UserCode)} eq '{userCode}'"
             }).ConfigureAwait(false);
 
             if (response.Count == 1)

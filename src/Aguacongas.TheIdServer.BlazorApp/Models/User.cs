@@ -34,7 +34,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 TwoFactorEnabled = user.TwoFactorEnabled,
-                UserName = user.UserName
+                UserName = user.UserName,
+                PasswordHash = user.PasswordHash,
+                ConcurrencyStamp = user.ConcurrencyStamp,
+                NormalizedEmail = user.NormalizedEmail,
+                NormalizedUserName = user.NormalizedUserName,
+                SecurityStamp = user.SecurityStamp
             };
         }
     }

@@ -76,7 +76,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     EntityList = page.Items;
 
                     await InvokeAsync(() => StateHasChanged())
-                        .ConfigureAwait(false);                    
+                        .ConfigureAwait(false);
                 }, TaskScheduler.Default);
         }
 

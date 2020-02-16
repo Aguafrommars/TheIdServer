@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private readonly PageRequest _pageRequest = new PageRequest
         {
-            Select = "Type",
+            Select = nameof(IClaimType.Type),
             Take = 5
         };
 
@@ -27,7 +28,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
-            _pageRequest.Filter = $"contains(Type,'{term}')";
+            _pageRequest.Filter = $"contains({nameof(Entity.Type)},'{term}')";
             var response = await _store.GetAsync(_pageRequest)
                 .ConfigureAwait(false);
 

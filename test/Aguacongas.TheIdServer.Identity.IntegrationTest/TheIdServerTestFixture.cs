@@ -26,6 +26,14 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             set { _testLoggerProvider.TestOutputHelper = value; }
         }
 
+        public ILoggerProvider LoggerProvider
+        {
+            get
+            {
+                return _testLoggerProvider;
+            }
+        }
+
         public TheIdServerTestFixture()
         {
             var dbName = Guid.NewGuid().ToString();

@@ -17,36 +17,56 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     public class IdentityUserTokenStore<TUser> : IAdminStore<UserToken>
         where TUser : IdentityUser
     {
+        private readonly UserManager<TUser> _userManager;
         private readonly IdentityDbContext<TUser> _context;
         private readonly ILogger<IdentityUserTokenStore<TUser>> _logger;
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
 
-        public IdentityUserTokenStore(IdentityDbContext<TUser> context,
+        public IdentityUserTokenStore(UserManager<TUser> userManager,
+            IdentityDbContext<TUser> context,
             ILogger<IdentityUserTokenStore<TUser>> logger)
         {
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<UserToken> CreateAsync(UserToken entity, CancellationToken cancellationToken = default)
+        public async Task<UserToken> CreateAsync(UserToken entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(entity.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                throw new IdentityException($"User at id {entity.UserId} is not found.");
+            }
+
+            var result = await _userManager.SetAuthenticationTokenAsync(user,
+                entity.LoginProvider,
+                entity.Name,
+                entity.Value).ConfigureAwait(false);
+            if (!result.Succeeded)
+            {
+                throw new IdentityException
+                {
+                    Errors = result.Errors
+                };
+            }
+            entity.Id = $"{entity.UserId}@{entity.LoginProvider}@{entity.Name}";
+            return entity;
         }
 
-        public Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await CreateAsync(entity as UserToken, cancellationToken).ConfigureAwait(false);
         }
 
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var token = await GetTokenAsync(id, cancellationToken).ConfigureAwait(false);
-            _context.UserTokens.Remove(token);
-            await _context.SaveChangesAsync()
-                .ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} deleted", id, token);
+            var info = id.Split('@');
+            var user = await _userManager.FindByIdAsync(info[0]).ConfigureAwait(false);
+            await _userManager.RemoveAuthenticationTokenAsync(user, info[1], info[2]).ConfigureAwait(false);
+            _logger.LogInformation("Entity {EntityId} deleted", id);
         }
 
         public Task<UserToken> UpdateAsync(UserToken entity, CancellationToken cancellationToken = default)
@@ -91,16 +111,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         private async Task<IdentityUserToken<string>> GetTokenAsync(string id, CancellationToken cancellationToken)
         {
             var info = id.Split('@');
-            var login = await _context.UserTokens.FirstOrDefaultAsync(l => l.UserId == info[0] &&
+            var token = await _context.UserTokens.FirstOrDefaultAsync(l => l.UserId == info[0] &&
                 l.LoginProvider == info[1] &&
                 l.Name == info[2], cancellationToken)
                             .ConfigureAwait(false);
-            if (login == null)
-            {
-                throw new DbUpdateException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
-            }
 
-            return login;
+            return token;
         }
 
         private static IEdmModel GetEdmModel()

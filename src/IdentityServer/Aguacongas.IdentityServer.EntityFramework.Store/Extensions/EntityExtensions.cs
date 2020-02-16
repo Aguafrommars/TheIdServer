@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = Guid.NewGuid().ToString(),
                 Uri = o,
-                Kind = (int)Entity.UriKinds.Redirect
+                Kind = Entity.UriKinds.Redirect
             }).ToList();
 
             foreach (var origin in client.AllowedCorsOrigins)
@@ -31,12 +31,12 @@ namespace Aguacongas.IdentityServer.Store
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = origin,
-                        Kind = (int)Entity.UriKinds.Cors
+                        Kind = Entity.UriKinds.Cors
                     });
                     continue;
                 }
 
-                uri.Kind |= (int)Entity.UriKinds.Cors;
+                uri.Kind |= Entity.UriKinds.Cors;
             }
 
             foreach (var postLogout in client.PostLogoutRedirectUris)
@@ -48,12 +48,12 @@ namespace Aguacongas.IdentityServer.Store
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = postLogout,
-                        Kind = (int)Entity.UriKinds.PostLogout
+                        Kind = Entity.UriKinds.PostLogout
                     });
                     continue;
                 }
 
-                uri.Kind |= (int)Entity.UriKinds.Redirect;
+                uri.Kind |= Entity.UriKinds.Redirect;
             }
 
             return new Entity.Client
@@ -220,8 +220,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = claim.Id.ToString(),
                 RoleId = claim.RoleId,
-                Type = claim.ClaimType,
-                Value = claim.ClaimValue
+                ClaimType = claim.ClaimType,
+                ClaimValue = claim.ClaimValue
             };
         }
 
@@ -231,8 +231,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = claim.Id.ToString(),
                 UserId = claim.UserId,
-                Type = claim.ClaimType,
-                Value = claim.ClaimValue
+                ClaimType = claim.ClaimType,
+                ClaimValue = claim.ClaimValue
             };
         }
 
@@ -279,7 +279,9 @@ namespace Aguacongas.IdentityServer.Store
             return new Entity.Role
             {
                 Id = role.Id,
-                Name = role.Name
+                Name = role.Name,
+                ConcurrencyStamp = role.ConcurrencyStamp,
+                NormalizedName = role.NormalizedName
             };
         }
 
@@ -296,7 +298,12 @@ namespace Aguacongas.IdentityServer.Store
                 PhoneNumber = entity.PhoneNumber,
                 PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
                 TwoFactorEnabled = entity.TwoFactorEnabled,
-                UserName = entity.UserName
+                UserName = entity.UserName,
+                ConcurrencyStamp = entity.ConcurrencyStamp,
+                NormalizedEmail = entity.NormalizedEmail,
+                NormalizedUserName = entity.NormalizedUserName,
+                PasswordHash = entity.PasswordHash,
+                SecurityStamp = entity.SecurityStamp
             };
         }
 
@@ -316,8 +323,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = id,
                 RoleId = claim.RoleId,
-                ClaimType = claim.Type,
-                ClaimValue = claim.Value
+                ClaimType = claim.ClaimType,
+                ClaimValue = claim.ClaimValue
             };
         }
 
@@ -327,8 +334,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Id = claim.Id != null ? int.Parse(claim.Id) : 0,
                 UserId = claim.UserId,
-                ClaimType = claim.Type,
-                ClaimValue = claim.Value
+                ClaimType = claim.ClaimType,
+                ClaimValue = claim.ClaimValue
             };
         }
 
@@ -354,6 +361,11 @@ namespace Aguacongas.IdentityServer.Store
                 PhoneNumber = user.PhoneNumber,
                 EmailConfirmed = user.EmailConfirmed,
                 LockoutEnabled = user.LockoutEnabled,
+                ConcurrencyStamp = user.ConcurrencyStamp,
+                NormalizedEmail = user.NormalizedEmail,
+                NormalizedUserName = user.NormalizedUserName,
+                PasswordHash = user.PasswordHash,
+                SecurityStamp = user.SecurityStamp,
                 LockoutEnd = user.LockoutEnd.HasValue ? user.LockoutEnd.Value.DateTime : (DateTime?)null
             };
         }

@@ -51,8 +51,8 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
-                    Filter = $"Scopes/any(s:s/Scope eq '{name}')",
-                    Expand = "ApiClaims,ApiScopeClaims,Secrets,Scopes,Properties"
+                    Filter = $"{nameof(ProtectResource.Scopes)}/any(s:s/{nameof(ApiScope.Scope)} eq '{name}')",
+                    Expand = $"{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -74,8 +74,8 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 taskList.Add(_identityStore.GetAsync(new PageRequest
                 {
-                    Filter = $"Id eq '{name}'",
-                    Expand = "IdentityClaims,Properties"
+                    Filter = $"{nameof(IdentityResource.Id)} eq '{name}'",
+                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)}"
                 }));
             }
             await Task.WhenAll(taskList)

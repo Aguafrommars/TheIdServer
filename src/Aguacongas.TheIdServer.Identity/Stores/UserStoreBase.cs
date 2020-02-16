@@ -722,19 +722,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public virtual async Task RemoveTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
-            AssertNotNull(user, nameof(user));
-
-            var tokens = await GetUserTokensAsync(user, cancellationToken)
-                .ConfigureAwait(false);
-            tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
-
-            await SaveUserTokensAsync(user, tokens, cancellationToken)
-                .ConfigureAwait(false);
-        }
+        public abstract Task RemoveTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken);
 
         /// <summary>
         /// Returns the token value.
@@ -911,11 +899,16 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="user">The associated user.</param>
         /// <param name="claim">The associated claim.</param>
         /// <returns></returns>
-        protected virtual TUserClaim CreateUserClaim(TUser user, Claim claim)
+        protected virtual UserClaim CreateUserClaim(TUser user, Claim claim)
         {
             var userClaim = new TUserClaim { UserId = user.Id };
             userClaim.InitializeFromClaim(claim);
-            return userClaim;
+            return new UserClaim
+            {
+                ClaimType = userClaim.ClaimType,
+                ClaimValue = userClaim.ClaimValue,
+                UserId = ConvertIdToString(user.Id)
+            };
         }
 
         /// <summary>
@@ -928,7 +921,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             return new UserLogin
             {
-                UserId =ConvertIdToString( user.Id),
+                UserId = ConvertIdToString(user.Id),
                 ProviderKey = login.ProviderKey,
                 LoginProvider = login.LoginProvider,
                 ProviderDisplayName = login.ProviderDisplayName
@@ -1116,12 +1109,13 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="user">The associated user.</param>
         /// <param name="role">The associated role.</param>
         /// <returns></returns>
-        protected virtual TUserRole CreateUserRole(TUser user, TRole role)
+        protected virtual UserRole CreateUserRole(TUser user, TRole role)
         {
-            return new TUserRole()
+            return new UserRole()
             {                
-                UserId = user.Id,
-                RoleId = role.Id
+                Id = $"{user.Id}@{role.Id}",
+                UserId = ConvertIdToString(user.Id),
+                RoleId = ConvertIdToString(role.Id)
             };
         }
     }

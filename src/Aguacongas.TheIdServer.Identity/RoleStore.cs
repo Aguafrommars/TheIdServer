@@ -17,7 +17,9 @@ namespace Aguacongas.TheIdServer.Identity
     /// Creates a new instance of a persistence store for roles.
     /// </summary>
     /// <typeparam name="TRole">The type of the class representing a role.</typeparam>
-    public class RoleStore<TRole>
+    [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "Nothing to dispose")]
+    [SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Nothing to dispose")]
+    public class RoleStore<TRole> : IRoleClaimStore<TRole>
         where TRole : IdentityRole, new()
     {
         private readonly IAdminStore<Role> _roleStore;
@@ -56,8 +58,8 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _roleStore.CreateAsync(role, cancellationToken).ConfigureAwait(false);
-
+                var created = await _roleStore.CreateAsync(role.ToRole(), cancellationToken).ConfigureAwait(false);
+                role.Id = created.Id;
                 return IdentityResult.Success;
             }
             catch(Exception e)
@@ -85,7 +87,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             try
             {
-                await _roleStore.UpdateAsync(role, cancellationToken).ConfigureAwait(false);
+                await _roleStore.UpdateAsync(role.ToRole(), cancellationToken).ConfigureAwait(false);
 
                 return IdentityResult.Success;
             }
@@ -185,8 +187,15 @@ namespace Aguacongas.TheIdServer.Identity
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
-            var entity = await _roleStore.GetAsync(roleId, null, cancellationToken).ConfigureAwait(false);
-            return entity.ToIdentityRole<TRole>();
+            var response = await _roleStore.GetAsync(new PageRequest
+            {
+                Filter = $"{nameof(Role.Id)} eq '{roleId}'"
+            }, cancellationToken).ConfigureAwait(false);
+            if (response.Count == 1)
+            {
+                return response.Items.First().ToIdentityRole<TRole>();
+            }
+            return null;
         }
 
         /// <summary>
@@ -202,7 +211,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _roleStore.GetAsync(new PageRequest
             {
-                Filter = $"NormalizedName eq '{normalizedRoleName}'"
+                Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
@@ -276,7 +285,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"RoleId eq '{role.Id}"
+                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(CreateClaim).ToList();
@@ -313,7 +322,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"RoleId eq '{role.Id}' and ClaimType eq '{claim.Type}' and ClaimValue eq'{claim.Value}"
+                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}' and {nameof(RoleClaim.ClaimType)} eq '{claim.Type}' and {nameof(RoleClaim.ClaimValue)} eq '{claim.Value}'"
             }, cancellationToken).ConfigureAwait(false);
 
             var taskList = new List<Task>(response.Count);
@@ -331,8 +340,8 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="role">The associated role.</param>
         /// <param name="claim">The associated claim.</param>
         /// <returns>The role claim entity.</returns>
-        protected virtual IdentityRoleClaim<string> CreateRoleClaim(TRole role, Claim claim)
-            => new IdentityRoleClaim<string> { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
+        protected virtual RoleClaim CreateRoleClaim(TRole role, Claim claim)
+            => new RoleClaim { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
 
         private static void AssertNotNull(object p, string pName)
         {
@@ -344,7 +353,7 @@ namespace Aguacongas.TheIdServer.Identity
 
         private Claim CreateClaim(RoleClaim claim)
         {
-            return new Claim(claim.Type, claim.Value);
+            return new Claim(claim.ClaimType, claim.ClaimValue);
         }
     }
 }

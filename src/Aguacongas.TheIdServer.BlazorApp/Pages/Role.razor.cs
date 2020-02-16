@@ -4,7 +4,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
@@ -22,7 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             return new Models.Role
             {
-                Claims =new List<Entity.RoleClaim>()
+                Claims =new List<entity.RoleClaim>()
             };
         }
 
@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var claimsResponse = await _roleClaimStore.GetAsync(new PageRequest
             {
-                Filter = $"RoleId eq '{role.Id}'"
+                Filter = $"{nameof(entity.RoleClaim.RoleId)} eq '{role.Id}'"
             });
 
             role.Claims = claimsResponse.Items.ToList();
@@ -55,7 +55,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnFilterChanged(string term)
         {
-            Model.Claims = State.Claims.Where(c => c.Type.Contains(term) || c.Value.Contains(term))
+            Model.Claims = State.Claims.Where(c => c.ClaimType.Contains(term) || c.ClaimValue.Contains(term))
                 .ToList();
         }
 
