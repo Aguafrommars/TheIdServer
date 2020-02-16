@@ -1,5 +1,4 @@
 $result = 0
-
 Get-ChildItem -rec `
 | Where-Object { $_.Name -eq "TestResults" } `
 | ForEach-Object {
@@ -36,7 +35,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 if ($LASTEXITCODE -ne 0) {
-	exit $result
+	$result = $LASTEXITCODE
 }
 
 $merge = ""
@@ -51,6 +50,6 @@ ReportGenerator\tools\netcoreapp3.0\ReportGenerator.exe "-reports:$merge" "-targ
 	
 dotnet sonarscanner end -d:sonar.login=$env:sonarqube
 
-exit $LASTEXITCODE
+exit $result
 
   
