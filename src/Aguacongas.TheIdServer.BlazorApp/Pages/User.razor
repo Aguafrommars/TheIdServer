@@ -126,7 +126,7 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimType" />
+                                <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
                             </td>
                             <td>
                                 <AuthorizeText @bind-Value="@claim.ClaimValue" />

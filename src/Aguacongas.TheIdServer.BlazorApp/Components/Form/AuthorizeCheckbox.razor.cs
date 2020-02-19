@@ -9,5 +9,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
 
         [Parameter]
         public string Label { get; set; }
+
+        private void Togle()
+        {
+            Value = !Value;
+        }
     }
 }

@@ -21,10 +21,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configureOptions">The configure options.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">configureOptions</exception>
-        public static IdentityBuilder AddTheIdServerStores(this IdentityBuilder builder, Action<AuthorizationOptions> configureOptions)
+        public static IdentityBuilder AddTheIdServerStores(this IdentityBuilder builder, Action<IdentityServerOptions> configureOptions)
         {
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
-            var options = new AuthorizationOptions();
+            var options = new IdentityServerOptions();
             configureOptions(options);
             var services = builder.Services;
             services.AddTransient<OAuthDelegatingHandler>()

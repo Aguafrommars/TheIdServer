@@ -148,7 +148,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var firstId = GenerateId();
             var secondId = GenerateId();
-            await DbActionAsync<IdentityServerDbContext>(async c =>
+            await DbActionAsync<ConfigurationDbContext>(async c =>
             {
                 await c.Apis.AddAsync(new ProtectResource
                 {
@@ -202,7 +202,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var scope = await context.ClientScopes.FirstOrDefaultAsync(s => s.ClientId == clientId && s.Scope == firstId);
                 Assert.NotNull(scope);
@@ -460,7 +460,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForDeletedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var client = await context.Clients.FirstOrDefaultAsync(a => a.Id == clientId);
                 Assert.Null(client);
@@ -471,9 +471,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_create_client()
         {
+            string clientId = await CreateClient();
+
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITER,
-                null,
+                clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -493,7 +495,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
 
-            var clientId = GenerateId();
             await host.WaitForNextRenderAsync(() => idInput.ChangeAsync(clientId));
 
             var nameInput = component.Find("#name");
@@ -508,7 +509,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var client = await context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
@@ -517,10 +518,66 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task SaveClick_should_sanetize_cors_uri()
+        {
+            string clientId = await CreateClient("authorization_code");
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#urls input[name=\"cors\"]");
+
+            host.WaitForNextRender(() => input.ChangeAsync(true));
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ConfigurationDbContext>(async context =>
+            {
+                var client = await context.Clients.Include(c => c.RedirectUris)
+                    .FirstOrDefaultAsync(c => c.Id == clientId);
+                Assert.NotNull(client);
+                var uri = client.RedirectUris.FirstOrDefault(u => (u.Kind & UriKinds.Cors) == UriKinds.Cors);
+                Assert.NotNull(uri);
+                Assert.Equal("HTTP://FILTERED:80", uri.SanetizedCorsUri);
+            });
+
+            input = WaitForNode(host, component, "#urls input[name=\"cors\"]");
+
+            host.WaitForNextRender(() => input.ChangeAsync(false));
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+
+            WaitForSavedToast(host, component);
+
+            await DbActionAsync<ConfigurationDbContext>(async context =>
+            {
+                var client = await context.Clients.Include(c => c.RedirectUris)
+                    .FirstOrDefaultAsync(c => c.Id == clientId);
+                Assert.NotNull(client);
+                var uri = client.RedirectUris.FirstOrDefault();
+                Assert.NotNull(uri);
+                Assert.Null(uri.SanetizedCorsUri);
+            });
+        }
+
         private async Task<string> CreateClient(string grantType = "hybrid")
         {
             var clientId = GenerateId();
-            await DbActionAsync<IdentityServerDbContext>(context =>
+            await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Clients.Add(new Client
                 {

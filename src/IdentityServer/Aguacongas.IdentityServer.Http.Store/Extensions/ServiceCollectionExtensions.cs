@@ -11,10 +11,10 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
-            Action<AuthorizationOptions> configureOptions)
+            Action<IdentityServerOptions> configureOptions)
         {
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
-            var options = new AuthorizationOptions();
+            var options = new IdentityServerOptions();
             configureOptions(options);
             services.AddTransient<OAuthDelegatingHandler>()
                 .AddTransient<HttpClient>()
@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
         Func<IServiceProvider, Task<HttpClient>> getHttpClient,
-        Action<AuthorizationOptions> configureOptions)
+        Action<IdentityServerOptions> configureOptions)
         {
             getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
@@ -69,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="provider">The provider.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public static Task<HttpClient> CreateApiHttpClient(this IServiceProvider provider, AuthorizationOptions options)
+        public static Task<HttpClient> CreateApiHttpClient(this IServiceProvider provider, IdentityServerOptions options)
         {
             var factory = provider.GetRequiredService<IHttpClientFactory>();
             var client = factory.CreateClient(options.HttpClientName);

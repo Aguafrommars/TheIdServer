@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityServerDbContext : DbContext
+    public class ConfigurationDbContext : DbContext
     {
-        public IdentityServerDbContext(DbContextOptions<IdentityServerDbContext> options):base(options)
+        public ConfigurationDbContext(DbContextOptions<ConfigurationDbContext> options):base(options)
         {
         }
 

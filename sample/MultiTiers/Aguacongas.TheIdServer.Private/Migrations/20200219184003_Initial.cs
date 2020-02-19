@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
+namespace Aguacongas.TheIdServer.Private.Migrations
 {
     public partial class Initial : Migration
     {
@@ -325,6 +325,7 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
                     Id = table.Column<string>(nullable: false),
                     ClientId = table.Column<string>(nullable: false),
                     Uri = table.Column<string>(maxLength: 2000, nullable: false),
+                    SanetizedCorsUri = table.Column<string>(maxLength: 2000, nullable: true),
                     Kind = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true)

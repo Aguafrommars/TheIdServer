@@ -2,16 +2,21 @@
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class ClientUri: Entity.ClientUri
+    public class ClientUri
     {
         public ClientUri(Entity.ClientUri parent)
         {
             Parent = parent;
-            Id = parent.Id;
             Uri = parent.Uri;
         }
         public Entity.ClientUri Parent { get; }
 
+        public string Id => Parent.Id;
+        public string Uri
+        {
+            get => Parent.Uri;
+            set => Parent.Uri = value;
+        }
         public bool Cors
         {
             get { return (Parent.Kind & Entity.UriKinds.Cors) == Entity.UriKinds.Cors; }

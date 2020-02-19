@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected override Task PopulateList()
         {
-            return DbActionAsync<IdentityServerDbContext>(context =>
+            return DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Apis.Add(new ProtectResource
                 {

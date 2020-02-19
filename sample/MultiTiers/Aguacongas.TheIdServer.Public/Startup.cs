@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-using Aguacongas.TheIdServer.Data;
+using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,21 +31,16 @@ namespace Aguacongas.TheIdServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            void configureOptions(IdentityServerOptions options) 
+                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(connectionString))
-                .AddIdentityProviderStore()
-                .AddConfigurationHttpStores(options =>
-                {
-                    options.Authority = "https://localhost:6443";
-                    options.ApiUrl = "https://localhost:7443";
-                })
+            services.AddIdentityProviderStore()
+                .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews(options =>

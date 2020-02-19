@@ -33,14 +33,14 @@ namespace Aguacongas.IdentityServer.Http.Store
         /// <returns></returns>
         public async Task<bool> IsOriginAllowedAsync(string origin)
         {
-            var url = origin.ToUpperInvariant();
             var corsUri = new Uri(origin);
-            var corsValue = UriKinds.Cors;
+            var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"startswith(toupper({nameof(ClientUri.Uri)}), '{url}')"
+                Filter = $"{nameof(ClientUri.SanetizedCorsUri)} eq '{sanetized}'",
+                Select = nameof(ClientUri.SanetizedCorsUri)
             }).ConfigureAwait(false);
-            return response.Items.Any(o => (o.Kind & corsValue) == corsValue && corsUri.CorsMatch(o.Uri));
+            return response.Count > 0;
         }
 
     }

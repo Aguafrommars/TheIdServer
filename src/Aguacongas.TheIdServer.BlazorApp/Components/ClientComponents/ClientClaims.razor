@@ -24,7 +24,7 @@
         else
         {
             <td>
-                <AuthorizeText Id="type" @bind-Value="@claim.Type" />
+                <AuthorizeText Id="type" @bind-Value="@claim.Type" MaxLength="250" />
             </td>
         }
         <td>
@@ -39,18 +39,22 @@
 </EntitiesGrid>
 @if (Model.ClientClaims.Any())
 {
+<div class="col">
     <div class="form-group row">
+        <label class="col-2 col-form-label" for="clientUri">
+            claims prefix
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <div class="row col-4">
+                <AuthorizeText Id="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" MaxLength="250" />
+            </div>
+        </div>
+        <label class="col-2 col-form-label">
+        </label>
         <div class="col-lg-10 col-sm-12">
             <AuthorizeCheckbox Label="always send claims" @bind-Value="@Model.AlwaysSendClientClaims" />
         </div>
     </div>
-    <div class="form-group row">
-        <label class="col col-form-label" for="clientUri">
-            claims prefix
-        </label>
-        <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" />
-        </div>
     </div>
 }
 

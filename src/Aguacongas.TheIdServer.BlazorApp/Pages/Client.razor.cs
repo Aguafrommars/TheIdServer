@@ -52,6 +52,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 client.RedirectUris = null;
                 client.AllowedScopes = null;
                 client.Properties = null;
+                return;
+            }
+            if (entity is Entity.ClientUri clientUri && clientUri.Uri != null)
+            {
+                if ((clientUri.Kind & Entity.UriKinds.Cors) == Entity.UriKinds.Cors)
+                {
+                    var corsUri = new Uri(clientUri.Uri);
+                    clientUri.SanetizedCorsUri = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
+                    return;
+                }
+                clientUri.SanetizedCorsUri = null;
             }
         }
 

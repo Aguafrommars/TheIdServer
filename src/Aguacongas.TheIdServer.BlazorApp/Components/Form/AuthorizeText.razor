@@ -1,7 +1,7 @@
 ﻿@inherits InputText
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <InputText id="@Id" class="form-control" placeholder="@Placeholder"
+        <InputText id="@Id" class="form-control" placeholder="@Placeholder" maxlength="@MaxLength"
                    ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
     </Authorized>
     <NotAuthorized>

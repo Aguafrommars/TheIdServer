@@ -27,11 +27,15 @@ namespace Aguacongas.IdentityServer.Store
                 var uri = uris.FirstOrDefault(u => cors.CorsMatch(u.Uri));
                 if (uri == null)
                 {
+                    var corsUri = new Uri(origin);
+                    var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
+
                     uris.Add(new Entity.ClientUri
                     {
                         Id = Guid.NewGuid().ToString(),
                         Uri = origin,
-                        Kind = Entity.UriKinds.Cors
+                        Kind = Entity.UriKinds.Cors,
+                        SanetizedCorsUri = sanetized
                     });
                     continue;
                 }

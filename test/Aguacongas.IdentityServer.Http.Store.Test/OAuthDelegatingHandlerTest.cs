@@ -46,8 +46,8 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             });
 
-            var optionsMock = new Mock<IOptions<AuthorizationOptions>>();
-            optionsMock.SetupGet(m => m.Value).Returns(new AuthorizationOptions
+            var optionsMock = new Mock<IOptions<IdentityServerOptions>>();
+            optionsMock.SetupGet(m => m.Value).Returns(new IdentityServerOptions
             {
                 Authority = "https://exemple.com"
             });

@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
                 Assert.Equal(expected, api.DisplayName);
@@ -135,7 +135,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
                 Assert.Equal(apiId, api.DisplayName);
@@ -166,7 +166,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForDeletedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
                 Assert.Null(api);
@@ -363,7 +363,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
                 Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
@@ -376,7 +376,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var apiId = await CreateApi();
             ApiScope scope = null;
             int expected = 0;
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
                 expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
@@ -410,7 +410,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
                 Assert.True(expected <= count);
@@ -420,7 +420,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();
-            await DbActionAsync<IdentityServerDbContext>(context =>
+            await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Apis.Add(new ProtectResource
                 {

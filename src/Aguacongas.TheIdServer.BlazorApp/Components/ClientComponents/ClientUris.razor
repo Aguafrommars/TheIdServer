@@ -40,7 +40,7 @@
         else
         {
             <td>
-                <AuthorizeText Id="uri" @bind-Value="@url.Uri" />
+                <AuthorizeText Id="uri" @bind-Value="@url.Uri" MaxLength="2000" />
             </td>
         }
         @if (Model.IsSpaClient())

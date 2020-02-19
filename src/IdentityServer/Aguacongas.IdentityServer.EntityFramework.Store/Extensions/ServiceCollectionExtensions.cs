@@ -66,7 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
             foreach (var entityType in entityTypeList)
             {
                 var adminStoreType = typeof(AdminStore<,>)
-                        .MakeGenericType(entityType.GetTypeInfo(), typeof(IdentityServerDbContext).GetTypeInfo()).GetTypeInfo();
+                        .MakeGenericType(entityType.GetTypeInfo(), typeof(ConfigurationDbContext).GetTypeInfo()).GetTypeInfo();
                 var iAdminStoreType = typeof(IAdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
                 services.AddTransient(iAdminStoreType, adminStoreType);
@@ -94,7 +94,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
-            return services.AddDbContext<IdentityServerDbContext>(optionsAction)
+            return services.AddDbContext<ConfigurationDbContext>(optionsAction)
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<IResourceStore, ResourceStore>()
                 .AddTransient<ICorsPolicyService, CorsPolicyService>();

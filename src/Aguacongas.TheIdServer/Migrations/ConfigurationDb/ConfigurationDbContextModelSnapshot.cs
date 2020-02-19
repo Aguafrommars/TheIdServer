@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
+namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
 {
-    [DbContext(typeof(IdentityServerDbContext))]
-    partial class IdentityServerDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ConfigurationDbContext))]
+    partial class ConfigurationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -536,6 +536,10 @@ namespace Aguacongas.TheIdServer.Migrations.IdentityServerDb
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SanetizedCorsUri")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Uri")
                         .IsRequired()

@@ -130,17 +130,20 @@ namespace Aguacongas.TheIdServer
 
                     RedirectUris =
                     {
+                        "http://localhost:5001/",
                         "https://localhost:5443/admin/",
                         "http://exemple.com/"
                     },
 
                     PostLogoutRedirectUris = 
-                    { 
+                    {
+                        "http://localhost:5001/",
                         "https://localhost:5443/admin/",
                         "http://exemple.com/"
                     },
                     AllowedCorsOrigins = 
                     {
+                        "http://localhost:5001/",
                         "https://localhost:5443",
                         "http://exemple.com/"
                     },
@@ -159,6 +162,7 @@ namespace Aguacongas.TheIdServer
 
                 new Client
                 {
+                    ClientClaimsPrefix = null,
                     ClientId = "public-server",
                     ClientName = "Public server Credentials Client",
 
@@ -169,8 +173,7 @@ namespace Aguacongas.TheIdServer
                     Claims = new List<Claim>
                     {
                         new Claim("role", SharedConstants.READER),
-                        new Claim("role", SharedConstants.WRITER),
-                        new Claim("name", "public-server")
+                        new Claim("role", SharedConstants.WRITER)
                     }
                 },
 
