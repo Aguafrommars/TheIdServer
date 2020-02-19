@@ -81,14 +81,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByIdAsync(entity.UserId).ConfigureAwait(false);
-            await _userManager.RemoveLoginAsync(user, entity.LoginProvider, entity.ProviderKey).ConfigureAwait(false);
-            return await CreateAsync(entity, cancellationToken).ConfigureAwait(false);
+            throw new NotImplementedException();
         }
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as UserLogin, cancellationToken).ConfigureAwait(false);
+            throw new NotImplementedException();
         }
 
         public async Task<UserLogin> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)

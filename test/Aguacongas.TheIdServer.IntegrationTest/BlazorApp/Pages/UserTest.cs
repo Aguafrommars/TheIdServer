@@ -386,8 +386,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            host.WaitForNextRender();
-
             var input = WaitForNode(host, component, "#name");
 
             var userId = GenerateId();
