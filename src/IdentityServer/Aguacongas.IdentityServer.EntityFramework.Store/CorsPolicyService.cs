@@ -1,8 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store

@@ -32,7 +32,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Consents = new List<entity.UserConsent>(),
                 Logins = new List<entity.UserLogin>(),
                 Roles = new List<entity.Role>(),
-                Tokens = new List<entity.UserToken>()
+                Tokens = new List<entity.UserToken>(),
+                ReferenceTokens = new List<entity.ReferenceToken>(),
+                RefreshTokens = new List<entity.RefreshToken>()
             };
         }
 
@@ -51,33 +53,57 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task<Models.User> GetModelAsync()
         {
-            var model = await base.GetModelAsync();
-
             var pageRequest = new PageRequest
             {
-                Filter = $"{nameof(entity.UserClaim.UserId)} eq '{model.Id}'"
+                Filter = $"{nameof(entity.UserClaim.UserId)} eq '{Id}'"
             };
 
-            var userClaimStore = GetStore<entity.UserClaim>();
-            var claimsResponse = await userClaimStore.GetAsync(pageRequest);
+            var getModelTask = base.GetModelAsync();
 
-            model.Claims = claimsResponse.Items.ToList();
+            var userClaimStore = GetStore<entity.UserClaim>();
+            var getClaimsTask =userClaimStore.GetAsync(pageRequest);
 
             var userLoginStore = GetStore<entity.UserLogin>();
-            var loginsRespone = await userLoginStore.GetAsync(pageRequest);
-
-            model.Logins = loginsRespone.Items.ToList();
+            var getLoginsTask = userLoginStore.GetAsync(pageRequest);
 
             var userRoleStore = GetStore<entity.UserRole>();
-            var userRolesResponse = await userRoleStore.GetAsync(pageRequest);
+            var getUserRolesTask = userRoleStore.GetAsync(pageRequest);
 
-            var userRoles = userRolesResponse.Items;
+            var userConsentStore = GetStore<entity.UserConsent>();
+            var getUserConsentsTask = userConsentStore.GetAsync(pageRequest);
+            
+            var userTokenStore = GetStore<entity.UserToken>();
+            var getUserTokensTask =userTokenStore.GetAsync(pageRequest);
+
+            var referenceTokenStore = GetStore<entity.ReferenceToken>();
+            var getReferenceTokenTask = referenceTokenStore.GetAsync(pageRequest);
+
+            var refreshTokenStore = GetStore<entity.RefreshToken>();
+            var getRefreshTokenTask = refreshTokenStore.GetAsync(pageRequest);
+
+            await Task.WhenAll(getModelTask,
+                getClaimsTask,
+                getLoginsTask,
+                getUserRolesTask,
+                getUserConsentsTask,
+                getUserTokensTask,
+                getReferenceTokenTask).ConfigureAwait(false);
+
+            var model = getModelTask.Result;
+            model.Claims = getClaimsTask.Result.Items.ToList();
+            model.Logins = getLoginsTask.Result.Items.ToList();
+            model.Consents = getUserConsentsTask.Result.Items.ToList();
+            model.Tokens = getUserTokensTask.Result.Items.ToList();
+            model.ReferenceTokens = getReferenceTokenTask.Result.Items.ToList();
+            model.RefreshTokens = getRefreshTokenTask.Result.Items.ToList();
+
+            var userRoles = getUserRolesTask.Result.Items;
             if (userRoles.Any())
             {
                 var roleStore = GetStore<entity.Role>();
                 var rolesResponse = await roleStore.GetAsync(new PageRequest
                 {
-                    Filter = string.Join(" or ", userRolesResponse.Items.Select(r => $"{nameof(entity.Role.Id)} eq '{r.RoleId}'"))
+                    Filter = string.Join(" or ", userRoles.Select(r => $"{nameof(entity.Role.Id)} eq '{r.RoleId}'"))
                 });
                 model.Roles = rolesResponse.Items.ToList();
             }
@@ -85,16 +111,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 model.Roles = new List<entity.Role>();
             }
-
-            var userConsentStore = GetStore<entity.UserConsent>();
-            var userConsentsResponse = await userConsentStore.GetAsync(pageRequest);
-
-            model.Consents = userConsentsResponse.Items.ToList();
-
-            var userTokenStore = GetStore<entity.UserToken>();
-            var userTokensResponse = await userTokenStore.GetAsync(pageRequest);
-
-            model.Tokens = userTokensResponse.Items.ToList();
 
             return model;
         }

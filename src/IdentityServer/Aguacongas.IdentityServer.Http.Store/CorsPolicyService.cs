@@ -2,9 +2,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.Http.Store
 {
@@ -14,14 +12,14 @@ namespace Aguacongas.IdentityServer.Http.Store
     /// <seealso cref="ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly IAdminStore<Entity.ClientUri> _store;
+        private readonly IAdminStore<ClientUri> _store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(IAdminStore<Entity.ClientUri> store)
+        public CorsPolicyService(IAdminStore<ClientUri> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }

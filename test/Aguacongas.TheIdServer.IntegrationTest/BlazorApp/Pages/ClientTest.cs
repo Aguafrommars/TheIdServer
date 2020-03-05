@@ -471,11 +471,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_create_client()
         {
-            string clientId = await CreateClient();
+            string clientId = GenerateId();
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITER,
-                clientId,
+                null,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
