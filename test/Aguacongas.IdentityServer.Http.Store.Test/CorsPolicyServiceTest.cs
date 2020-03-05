@@ -24,7 +24,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             await sut.IsOriginAllowedAsync("http://test");
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "startswith(toupper(Uri), 'HTTP://TEST')"), default));
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == $"{nameof(ClientUri.SanetizedCorsUri)} eq 'HTTP://TEST:80'"), default));
         }
     }
 }
