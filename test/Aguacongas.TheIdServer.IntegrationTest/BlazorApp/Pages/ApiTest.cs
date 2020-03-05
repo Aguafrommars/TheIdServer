@@ -187,10 +187,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.Dispose();
 
-            Assert.Throws<ArgumentException>(() => 
+            string markup = null;
+            try
             {
-                component.GetMarkup();
-            });
+                markup = component.GetMarkup();
+            }
+            catch(ArgumentException)
+            { }
+
+            Assert.Null(markup);
+            
         }
 
         [Fact]
