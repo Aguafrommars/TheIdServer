@@ -12,8 +12,8 @@ image:
 environment:
   GH_TOKEN: 
     secure: 0NJdORJRFjpB0dwUYv7bVNsbkldkoBhnvWik/CTOwAF/k9kP+/uTWMFnDcpEpt8E
-  donetsdk: 3.1.100
-  blazorversion: 3.1.0-preview4.19579.2
+  donetsdk: 3.1.102
+  blazorversion: 3.2.0-preview1.20073.1
 init:
   - cmd: git config --global core.autocrlf true
 install:
