@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                 });
 
             using var scope = Sut.Host.Services.CreateScope();
-            using var identityContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            using var identityContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             identityContext.Database.EnsureCreated();
             using var operationalContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
             operationalContext.Database.EnsureCreated();

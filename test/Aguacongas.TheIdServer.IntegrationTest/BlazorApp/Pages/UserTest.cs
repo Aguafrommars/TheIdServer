@@ -525,7 +525,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 return context.SaveChangesAsync();
             });
             var clientId = GenerateId();
-            await DbActionAsync<IdentityServerDbContext>(context =>
+            await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Clients.Add(new Client
                 {

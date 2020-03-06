@@ -46,7 +46,7 @@ namespace Aguacongas.TheIdServer
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             context.Database.Migrate();
 
             var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
@@ -58,7 +58,7 @@ namespace Aguacongas.TheIdServer
 
         public static void SeedConfiguration(IServiceScope scope)
         {
-            var context = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             
             if (!context.Clients.Any())
             {

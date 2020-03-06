@@ -1,6 +1,6 @@
 ﻿namespace Aguacongas.IdentityServer.Http.Store
 {
-    public class AuthorizationOptions
+    public class IdentityServerOptions
     {
         public string Authority { get; set; }
 

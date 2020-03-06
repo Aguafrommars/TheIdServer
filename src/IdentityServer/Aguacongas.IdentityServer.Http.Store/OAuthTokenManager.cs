@@ -11,7 +11,7 @@ namespace Aguacongas.IdentityServer.Http.Store
     public class OAuthTokenManager : IDisposable
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptions<AuthorizationOptions> _options;
+        private readonly IOptions<IdentityServerOptions> _options;
         private readonly object _syncObject = new object();
         private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
         private DiscoveryDocumentResponse _discoveryResponse;
@@ -19,7 +19,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         private AuthenticationHeaderValue _accessToken;
 
         public OAuthTokenManager(HttpClient httpClient,
-            IOptions<AuthorizationOptions> options)
+            IOptions<IdentityServerOptions> options)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));

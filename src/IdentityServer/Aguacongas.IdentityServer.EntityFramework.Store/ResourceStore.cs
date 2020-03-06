@@ -16,9 +16,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     /// <seealso cref="IdentityServer4.Stores.IResourceStore" />
     public class ResourceStore : IResourceStore
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly ConfigurationDbContext _context;
 
-        public ResourceStore(IdentityServerDbContext context)
+        public ResourceStore(ConfigurationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

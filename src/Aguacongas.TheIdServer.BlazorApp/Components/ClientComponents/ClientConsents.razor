@@ -12,7 +12,7 @@
             display name
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" />
+            <AuthorizeText Id="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" MaxLength="200" />
         </div>
     </div>
     <div class="form-group row">
@@ -20,7 +20,7 @@
             logo uri
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" />
+            <AuthorizeText Id="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" MaxLength="2000" />
         </div>
     </div>
     <div class="form-group row">
@@ -28,7 +28,7 @@
             client uri
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" />
+            <AuthorizeText Id="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" MaxLength="2000" />
         </div>
     </div>
     <div class="form-group row">

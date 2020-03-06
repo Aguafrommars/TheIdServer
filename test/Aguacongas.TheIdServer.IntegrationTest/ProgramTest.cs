@@ -14,12 +14,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;database=TheIdServer.Test.SeedData;trusted_connection=yes;";
 
             var provider = new ServiceCollection()
-                .AddDbContext<IdentityServerDbContext>(option => option.UseSqlServer(connectionString))
+                .AddDbContext<ConfigurationDbContext>(option => option.UseSqlServer(connectionString))
                 .AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(connectionString))
                 .BuildServiceProvider();
 
             using var scope1 = provider.CreateScope();
-            using var is4DbContext1 = scope1.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            using var is4DbContext1 = scope1.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             is4DbContext1.Database.EnsureDeleted();
 
             Program.Main(new string[]
@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             });
 
             using var scope2 = provider.CreateScope();
-            using var is4DbContext2 = scope2.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+            using var is4DbContext2 = scope2.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             using var appDbContext = scope2.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             Assert.NotEmpty(is4DbContext2.Apis);

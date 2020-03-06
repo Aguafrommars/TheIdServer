@@ -1,8 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -13,14 +11,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly ConfigurationDbContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(IdentityServerDbContext context)
+        public CorsPolicyService(ConfigurationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -30,17 +28,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <returns></returns>
-        public async Task<bool> IsOriginAllowedAsync(string origin)
+        public Task<bool> IsOriginAllowedAsync(string origin)
         {
-            var url = origin.ToUpperInvariant();
             var corsUri = new Uri(origin);
             var corsValue = IdentityServer.Store.Entity.UriKinds.Cors;
-            var corsUris = await _context.ClientUris
+            var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
+            return _context.ClientUris
                 .AsNoTracking()
-                .Where(o => o.Uri.ToUpperInvariant().StartsWith(url) && (o.Kind & corsValue) == corsValue)
-                .ToListAsync()
-                .ConfigureAwait(false);
-            return corsUris.Any(o => corsUri.CorsMatch(o.Uri));
+                .AnyAsync(o => (o.Kind & corsValue) == corsValue && o.SanetizedCorsUri == sanetized);
         }
 
     }

@@ -15,7 +15,7 @@
                 display name
             </label>
             <div class="col-lg-10 col-sm-12">
-                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Scope.DisplayName" />
+                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Scope.DisplayName" MaxLength="200" />
             </div>
         </div>
         <div class="form-group row">
@@ -23,7 +23,7 @@
                 description
             </label>
             <div class="col-lg-10 col-sm-12">
-                <AuthorizeTextArea Id="description" Placeholder="description" @bind-Value="@Scope.Description" />
+                <AuthorizeTextArea Id="description" Placeholder="description" @bind-Value="@Scope.Description" MaxLength="1000" />
             </div>
         </div>
         <div class="form-group row">

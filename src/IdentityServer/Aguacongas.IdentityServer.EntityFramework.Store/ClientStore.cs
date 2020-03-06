@@ -9,9 +9,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
     public class ClientStore : IClientStore
     {
-        private readonly IdentityServerDbContext _context;
+        private readonly ConfigurationDbContext _context;
 
-        public ClientStore(IdentityServerDbContext context)
+        public ClientStore(ConfigurationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

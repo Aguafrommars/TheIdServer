@@ -158,9 +158,8 @@ namespace Aguacongas.TheIdServer
                     Claims = new List<Claim>
                     {
                         new Claim("role", "Is4-Writer"),
-                        new Claim("role", "Is4-Reader"),
-                        new Claim("name", "public-server")
-                    }
+                        new Claim("role", "Is4-Reader")
+                    }                    
                 },
 
             };

@@ -11,5 +11,10 @@ namespace FluentValidation
             return ruleBuilder.SetValidator(new UniqueValidator<TItem>(items));
         }
 
+        public static IRuleBuilderOptions<T, string> Uri<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new UriValidator());
+        }
+
     }
 }

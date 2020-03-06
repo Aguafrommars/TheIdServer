@@ -87,7 +87,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForSavedToast(host, component);
 
-            await DbActionAsync<IdentityServerDbContext>(async context =>
+            await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var identity = await context.Identities.FirstOrDefaultAsync(a => a.Id == identityId);
                 Assert.Equal(expected, identity.DisplayName);
@@ -97,7 +97,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         private async Task<string> CreateEntity()
         {
             var identityId = GenerateId();
-            await DbActionAsync<IdentityServerDbContext>(context =>
+            await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Identities.Add(new IdentityResource
                 {

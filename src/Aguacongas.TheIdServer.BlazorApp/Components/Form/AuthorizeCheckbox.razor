@@ -3,12 +3,15 @@
     <AuthorizeView Policy="Is4-Writer">
         <Authorized>
             <InputCheckbox name="@Name" class="form-check-input" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+            <label class="form-check-label" for="@Name" @onclick="Togle">
+                @Label
+            </label>
         </Authorized>
         <NotAuthorized>
             <InputCheckbox name="@Name" class="form-check-input" disabled ValueExpression="ValueExpression" Value="@Value" />
+            <label class="form-check-label" for="@Name">
+                @Label
+            </label>
         </NotAuthorized>
     </AuthorizeView>
-    <label class="form-check-label" for="@Name">
-        @Label
-    </label>
 </div>

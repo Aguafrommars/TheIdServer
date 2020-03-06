@@ -8,5 +8,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         public string Id { get; set; }
         [Parameter]
         public string Placeholder { get; set; }
+
+        [Parameter]
+        public int? MaxLength { get; set; }
     }
 }

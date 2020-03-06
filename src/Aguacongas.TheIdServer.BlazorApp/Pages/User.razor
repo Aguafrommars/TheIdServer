@@ -37,6 +37,26 @@ else
                 <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
             </div>
             <div class="w-100"></div>
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#roles" @onclick='() => ScrollTo("roles")' @onclick:preventDefault>roles</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#consents" @onclick='() => ScrollTo("consents")' @onclick:preventDefault>consents</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#external-logins" @onclick='() => ScrollTo("external-logins")' @onclick:preventDefault>external logins</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#external-logins-tokens" @onclick='() => ScrollTo("external-logins-tokens")' @onclick:preventDefault>external logins tokens</a>
+                    </li>
+                </ul>
+            </div>
+
             <FluentValidationValidator />
             <ValidationSummary class="col" />
         </div>
@@ -126,7 +146,7 @@ else
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimType" />
+                                <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
                             </td>
                             <td>
                                 <AuthorizeText @bind-Value="@claim.ClaimValue" />

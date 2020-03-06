@@ -10,7 +10,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
     /// <seealso cref="AbstractValidator{Client}" />
     public class ClientValidator : AbstractValidator<Client>
     {
-        private readonly string _urlPattern = "^(http|https)://";
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientValidator"/> class.
         /// </summary>
@@ -23,18 +22,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.ProtocolType).NotEmpty().WithMessage("The type of protocol is required");
             RuleFor(m => m.ProtocolType).MaximumLength(200).WithMessage("The type of protocol cannot exceed 200 char.");
             RuleFor(m => m.ClientUri).MaximumLength(2000).WithMessage("The url cannot exceed 2000 char.");
-            RuleFor(m => m.ClientUri).Matches(_urlPattern).WithMessage("The url is not valid.");
+            RuleFor(m => m.ClientUri).Uri().WithMessage("The url is not valid.");
             RuleFor(m => m.LogoUri).MaximumLength(2000).WithMessage("The logo url cannot exceed 2000 char.");
-            RuleFor(m => m.LogoUri).Matches(_urlPattern).WithMessage("The logo url is not valid.");
+            RuleFor(m => m.LogoUri).Uri().WithMessage("The logo url is not valid.");
             RuleFor(m => m.FrontChannelLogoutUri).MaximumLength(2000).WithMessage("The front channel logout url cannot exceed 2000 char.");
-            RuleFor(m => m.FrontChannelLogoutUri).Matches(_urlPattern).WithMessage("The front channel logout url is not valid.");
-            RuleFor(m => m.FrontChannelLogoutUri).Must(u => !client.FrontChannelLogoutSessionRequired || 
-                (client.FrontChannelLogoutSessionRequired && !string.IsNullOrEmpty(u)))
+            RuleFor(m => m.FrontChannelLogoutUri).Uri().WithMessage("The front channel logout url is not valid.");
+            RuleFor(m => m.FrontChannelLogoutUri).Must(u => !client.FrontChannelLogoutSessionRequired || !string.IsNullOrEmpty(u))
                 .WithMessage("The front channel logout url is required.");
             RuleFor(m => m.BackChannelLogoutUri).MaximumLength(2000).WithMessage("The back channel logout url cannot exceed 2000 char.");
-            RuleFor(m => m.BackChannelLogoutUri).Matches(_urlPattern).WithMessage("The back logout url is not valid.");
-            RuleFor(m => m.BackChannelLogoutUri).Must(u => !client.BackChannelLogoutSessionRequired || 
-                (client.BackChannelLogoutSessionRequired && !string.IsNullOrEmpty(u)))
+            RuleFor(m => m.BackChannelLogoutUri).Uri().WithMessage("The back logout url is not valid.");
+            RuleFor(m => m.BackChannelLogoutUri).Must(u => !client.BackChannelLogoutSessionRequired || !string.IsNullOrEmpty(u))
                 .WithMessage("The back channel logout url is required.");
             RuleFor(m => m.ClientName).MaximumLength(200).WithMessage("The name cannot exceed 200 char.");
             RuleFor(m => m.ClientName).Must(n => !client.RequireConsent || 
@@ -45,6 +42,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
                 .SetValidator(new ClientGrantTypeValidator(client));
             RuleFor(m => m.AllowedGrantTypes).Must(g => g.Any(g => !string.IsNullOrEmpty(g.GrantType)))
                 .WithMessage("The client should contain at least one grant type.");
+            RuleForEach(m => m.RedirectUris).SetValidator(new ClientRedirectUriValidator(client));
+            RuleForEach(m => m.Properties).SetValidator(new ClientPropertyValidator(client));
+            RuleForEach(m => m.AllowedScopes)
+                .Where(m => m.Scope != null)
+                .SetValidator(new ClientScopeValidator(client));
+
         }
     }
 }

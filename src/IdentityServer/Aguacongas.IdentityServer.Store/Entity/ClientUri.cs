@@ -38,6 +38,16 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Uri { get; set; }
 
         /// <summary>
+        /// Gets or sets the sanetized cors URI.
+        /// </summary>
+        /// <value>
+        /// The sanetized cors URI.
+        /// </value>
+        [Url]
+        [MaxLength(2000)]
+        public string SanetizedCorsUri { get; set; }
+
+        /// <summary>
         /// Gets or sets the kind.
         /// </summary>
         /// <value>
