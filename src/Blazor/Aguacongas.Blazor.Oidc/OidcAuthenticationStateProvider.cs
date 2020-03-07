@@ -42,31 +42,28 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task LoginAsync()
+        public async Task LogoffAsync()
         {
             var options = await _getOptionsTask.ConfigureAwait(false);
-            var discoveryResponse = await GetDicoveryDocumentAsync(options)
-                .ConfigureAwait(false);
+            var endpoint = await GetItemAsync<string>(options.RevocationEndpointStorageKey);
+            var token = await GetItemAsync<string>(options.TokensStorageKey);
+            await ClearStorageAsync(options);
 
-            var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-
-            var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", options.VerifierStorageKey, verifier);
-            var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
-
-            var authorizationUri = QueryHelpers.AddQueryString(discoveryResponse.AuthorizeEndpoint, new Dictionary<string, string>
+            await _httpClient.RevokeTokenAsync(new TokenRevocationRequest
             {
-                ["client_id"] = options.ClientId,
-                ["redirect_uri"] = options.RedirectUri,
-                ["scope"] = options.Scope,
-                ["response_type"] = "code",
-                ["nonce"] = nonce,
-                ["code_challenge"] = challenge,
-                ["code_challenge_method"] = "S256"
-            });
+                Address = endpoint,
+                ClientId = options.ClientId,
+                Token = token
+            }).ConfigureAwait(false);
 
-            await SetItemAsync(options.BackUriStorageKey, _navigationManager.Uri);
-            _navigationManager.NavigateTo(authorizationUri, true);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
+            _navigationManager.NavigateTo(options.LogoutUri);
+        }
+
+        public void Login()
+        {
+            NotifyAuthenticationStateChanged(LoginAsync());
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -111,6 +108,53 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
         }
 
+        private async Task<AuthenticationState> LoginAsync()
+        {
+            var options = await _getOptionsTask.ConfigureAwait(false);
+            await ClearStorageAsync(options).ConfigureAwait(false);
+
+            var discoveryResponse = await GetDicoveryDocumentAsync(options)
+                .ConfigureAwait(false);
+
+            var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
+
+            var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", options.VerifierStorageKey, verifier);
+            var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
+
+            var authorizationUri = QueryHelpers.AddQueryString(discoveryResponse.AuthorizeEndpoint, new Dictionary<string, string>
+            {
+                ["client_id"] = options.ClientId,
+                ["redirect_uri"] = options.RedirectUri,
+                ["scope"] = options.Scope,
+                ["response_type"] = "code",
+                ["nonce"] = nonce,
+                ["code_challenge"] = challenge,
+                ["code_challenge_method"] = "S256"
+            });
+
+            await SetItemAsync(options.BackUriStorageKey, _navigationManager.Uri);
+            _navigationManager.NavigateTo(authorizationUri);
+
+            return await GetAuthenticationStateAsync().ConfigureAwait(false);
+        }
+
+        private async Task ClearStorageAsync(AuthorizationOptions options)
+        {
+            _userStore.User = null;
+            _userStore.AccessToken = null;
+            _userStore.AuthenticationScheme = null;
+
+            await DeleteItemAsync(options.RevocationEndpointStorageKey);
+            await DeleteItemAsync(options.TokenEndpointStorageKey);
+            await DeleteItemAsync(options.TokensStorageKey);
+            await DeleteItemAsync(options.UserInfoEndpointStorageKey);
+            await DeleteItemAsync(options.VerifierStorageKey);
+            await DeleteItemAsync(options.BackUriStorageKey);
+            await DeleteItemAsync(options.ClaimsStorageKey);
+            await DeleteItemAsync(options.ExpireAtStorageKey);
+        }
+
         private async Task GetUserFromSessionStorage(AuthorizationOptions options)
         {
             var expireAtString = await GetItemAsync<string>(options.ExpireAtStorageKey);
@@ -145,6 +189,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             }
 
             await SetItemAsync(options.TokenEndpointStorageKey, discoveryResponse.TokenEndpoint);
+            await SetItemAsync(options.RevocationEndpointStorageKey, discoveryResponse.RevocationEndpoint);
             await SetItemAsync(options.UserInfoEndpointStorageKey, discoveryResponse.UserInfoEndpoint);
 
             return discoveryResponse;
@@ -253,6 +298,11 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         private ValueTask SetItemAsync<T>(string key, T value)
         {
             return _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, value);
+        }
+
+        private ValueTask DeleteItemAsync(string key)
+        {
+            return _jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", key);
         }
     }
 }

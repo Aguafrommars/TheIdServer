@@ -10,6 +10,8 @@
 
         public string RedirectUri { get; set; }
 
+        public string LogoutUri { get; set; } = "/account/logout";
+
         public string NameClaimType { get; set; } = "name";
 
         public string RoleClaimType { get; set; } = "role";
@@ -29,5 +31,7 @@
         public string TokensStorageKey => $"{StoragePrefix}tokens";
 
         public string ExpireAtStorageKey => $"{StoragePrefix}expireAt";
+
+        public string RevocationEndpointStorageKey => $"{StoragePrefix}revocation";
     }
 }
