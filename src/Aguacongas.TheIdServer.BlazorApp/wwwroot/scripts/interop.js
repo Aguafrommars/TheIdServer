@@ -7,9 +7,11 @@
         });
         $(query).toast('show');
     },
+    showModal: id => {
+        $(`#${id}`).modal('show');
+    },
     dismissModal: id => {
-        const query = `#${id}`;
-        $(query).modal('hide');
+        $(`#${id}`).modal('hide');
     },
     showDropDownMenu: id => {
         $(`#${id}`).dropdown('show');
@@ -35,5 +37,11 @@ window.browserInteropt = {
                     .then(_ => { });
             }
         };
+    }
+};
+window.showDownInteropt = {
+    convert: (id, data) => {
+        const converter = new Markdown.Converter();
+        document.getElementById(id).innerHtml = converter.makeHtml(data);
     }
 };

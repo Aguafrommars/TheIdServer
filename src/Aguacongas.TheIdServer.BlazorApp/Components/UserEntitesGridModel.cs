@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
+namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public class UserEntitesGridModel<T> : ComponentBase
     {

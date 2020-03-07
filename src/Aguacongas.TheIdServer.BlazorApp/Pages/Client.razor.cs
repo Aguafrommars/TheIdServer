@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -154,6 +155,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
+        private void OnTokenTypeChanged(AccessTokenType accessTokenType)
+        {
+            Model.AccessTokenType = (int)accessTokenType;
+            base.OnEntityUpdated(Model.GetType(), Model);
+        }
         private void OnAddUrlClicked()
         {
             var url = new Entity.ClientUri();

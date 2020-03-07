@@ -9,14 +9,14 @@
                     <input class="form-check-input" type="radio" name="access-token-type"
                            value="0"
                            checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Jwt)"
-                           @onchange="@(() => Model.AccessTokenType = (int)Models.AccessTokenType.Jwt)" />
+                           @onchange="@(() => SetTokenType(Models.AccessTokenType.Jwt))" />
                     <label class="form-check-label" for="jwt">JWT</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="access-token-type"
                            value="1"
                            checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Reference)"
-                           @onchange="@(() => Model.AccessTokenType = (int)Models.AccessTokenType.Reference)" />
+                           @onchange="@(() => SetTokenType(Models.AccessTokenType.Reference))" />
                     <label class="form-check-label" for="reference">Reference</label>
                 </div>
             </Authorized>

@@ -81,23 +81,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var refreshTokenStore = GetStore<entity.RefreshToken>();
             var getRefreshTokenTask = refreshTokenStore.GetAsync(pageRequest);
 
-            await Task.WhenAll(getModelTask,
-                getClaimsTask,
-                getLoginsTask,
-                getUserRolesTask,
-                getUserConsentsTask,
-                getUserTokensTask,
-                getReferenceTokenTask).ConfigureAwait(false);
+            var model = await getModelTask.ConfigureAwait(false);
+            model.Claims = (await getClaimsTask.ConfigureAwait(false)).Items.ToList();
+            model.Logins = (await getLoginsTask.ConfigureAwait(false)).Items.ToList();
+            model.Consents = (await getUserConsentsTask.ConfigureAwait(false)).Items.ToList();
+            model.Tokens = (await getUserTokensTask.ConfigureAwait(false)).Items.ToList();
+            model.ReferenceTokens = (await getReferenceTokenTask.ConfigureAwait(false)).Items.ToList();
+            model.RefreshTokens = (await getRefreshTokenTask.ConfigureAwait(false)).Items.ToList();
 
-            var model = getModelTask.Result;
-            model.Claims = getClaimsTask.Result.Items.ToList();
-            model.Logins = getLoginsTask.Result.Items.ToList();
-            model.Consents = getUserConsentsTask.Result.Items.ToList();
-            model.Tokens = getUserTokensTask.Result.Items.ToList();
-            model.ReferenceTokens = getReferenceTokenTask.Result.Items.ToList();
-            model.RefreshTokens = getRefreshTokenTask.Result.Items.ToList();
-
-            var userRoles = getUserRolesTask.Result.Items;
+            var userRoles = (await getUserRolesTask.ConfigureAwait(false)).Items;
             if (userRoles.Any())
             {
                 var roleStore = GetStore<entity.Role>();
@@ -174,6 +166,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.Tokens = State.Tokens.Where(t => t.LoginProvider.Contains(term) || t.Name.Contains(term) || t.Value.Contains(term))
                 .ToList();
 
+            Model.RefreshTokens = State.RefreshTokens.Where(t => t.ClientId.Contains(term) || t.Data.Contains(term))
+                .ToList();
+
+            Model.ReferenceTokens = State.ReferenceTokens.Where(t => t.ClientId.Contains(term) || t.Data.Contains(term))
+                .ToList();
+
             AddEmptyRole();
         }
 
@@ -209,6 +207,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private void OnDeleteUserTokenClicked(entity.UserToken token)
         {
             Model.Tokens.Remove(token);
+            EntityDeleted(token);
+            StateHasChanged();
+        }
+
+
+        private void OnDeleteRefreshTokenClicked(entity.RefreshToken token)
+        {
+            Model.RefreshTokens.Remove(token);
+            EntityDeleted(token);
+            StateHasChanged();
+        }
+
+        private void OnDeleteReferenceTokenClicked(entity.ReferenceToken token)
+        {
+            Model.ReferenceTokens.Remove(token);
             EntityDeleted(token);
             StateHasChanged();
         }

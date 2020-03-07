@@ -54,6 +54,12 @@ else
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#external-logins-tokens" @onclick='() => ScrollTo("external-logins-tokens")' @onclick:preventDefault>external logins tokens</a>
                     </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#reference-tokens" @onclick='() => ScrollTo("reference-tokens")' @onclick:preventDefault>reference tokens</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#refresh-tokens" @onclick='() => ScrollTo("refresh-tokens")' @onclick:preventDefault>refresh tokens</a>
+                    </li>
                 </ul>
             </div>
 
@@ -198,6 +204,26 @@ else
                 </div>
                 <div class="card-body">
                     <UserTokens Model="@Model.Tokens" DeleteEntityClicked="OnDeleteUserTokenClicked" />
+                </div>
+            </div>
+            <div id="reference-tokens" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Reference tokens</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ReferenceToken Model="@Model.ReferenceTokens" DeleteEntityClicked="OnDeleteReferenceTokenClicked" />
+                </div>
+            </div>
+            <div id="refresh-tokens" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <h5 class="col">Refresh tokens</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <RefreshToken Model="@Model.RefreshTokens" DeleteEntityClicked="OnDeleteRefreshTokenClicked" />
                 </div>
             </div>
         </div>
