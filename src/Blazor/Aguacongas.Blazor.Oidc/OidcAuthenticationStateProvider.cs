@@ -1,5 +1,6 @@
 ﻿using IdentityModel;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Blazor.Http;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.WebUtilities;
@@ -26,7 +27,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         private readonly IUserStore _userStore;
         private readonly Task<AuthorizationOptions> _getOptionsTask;
         private readonly ILogger<OidcAuthenticationStateProvider> _logger;
-
+        private bool renewFrameCreated;
         public OidcAuthenticationStateProvider(HttpClient httpClient,
             NavigationManager navigationManager,
             IJSRuntime JsRuntime,
@@ -45,16 +46,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         public async Task LogoffAsync()
         {
             var options = await _getOptionsTask.ConfigureAwait(false);
-            var endpoint = await GetItemAsync<string>(options.RevocationEndpointStorageKey);
-            var token = await GetItemAsync<string>(options.TokensStorageKey);
-            await ClearStorageAsync(options);
-
-            await _httpClient.RevokeTokenAsync(new TokenRevocationRequest
-            {
-                Address = endpoint,
-                ClientId = options.ClientId,
-                Token = token
-            }).ConfigureAwait(false);
+            await ClearStorageAsync(options).ConfigureAwait(false);
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
@@ -64,6 +56,19 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
         public void Login()
         {
             NotifyAuthenticationStateChanged(LoginAsync());
+        }
+
+        [JSInvokable]
+        public async Task SilentRenewAsync(string url)
+        {
+            _logger.LogInformation($"SilentRenewAsync called from {url}");
+            var options = await _getOptionsTask.ConfigureAwait(false);
+            await GetTokenFromUriAsync(options, url, GetRediectUri(options)).ConfigureAwait(false);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            if (_userStore.User != null)
+            {
+                await StartRenewTask(options).ConfigureAwait(false);
+            }
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -84,28 +89,51 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
             }
 
-            var uri = new Uri(_navigationManager.Uri);
-
             if (_userStore.User == null)
             {
                 await GetUserFromSessionStorage(options)
                     .ConfigureAwait(false);
             }
 
-            var queryParams = QueryHelpers.ParseQuery(uri.Query);
-            if (_userStore.User == null && queryParams.ContainsKey("code"))
+            if (_userStore.User == null)
             {
-                var code = queryParams["code"];
-                await GetTokensAsync(code, options)
-                    .ConfigureAwait(false);
+                await GetTokenFromUriAsync(options, _navigationManager.Uri, options.RedirectUri).ConfigureAwait(false);
             }
+
             if (_userStore.User != null)
             {
                 _logger.LogInformation("User found with name {UserName}", _userStore.User.Identity.Name);
+                await CreateRenewFrame(options).ConfigureAwait(false);
                 return new AuthenticationState(_userStore.User);
             }
             _logger.LogInformation("No user, returning not authenticate identity");
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("Oidc.NotConnected", "") })));
+        }
+
+        private async Task<DateTime> GetExireDateAsync(AuthorizationOptions options)
+        {
+            var expireAtString = await GetItemAsync<string>(options.ExpireAtStorageKey);
+            var expireAt = DateTime.MinValue;
+            if (!string.IsNullOrEmpty(expireAtString))
+            {
+                expireAt = DateTime.Parse(expireAtString);
+            }
+
+            _logger.LogInformation($"Token expire at {expireAt}");
+
+            return expireAt;
+        }
+
+        private async Task GetTokenFromUriAsync(AuthorizationOptions options, string url, string redirectUri)
+        {
+            var uri = new Uri(url);
+            var queryParams = QueryHelpers.ParseQuery(uri.Query);
+            if (queryParams.ContainsKey("code"))
+            {
+                var code = queryParams["code"];
+                await GetTokensAsync(redirectUri, code, options)
+                    .ConfigureAwait(false);
+            }
         }
 
         private async Task<AuthenticationState> LoginAsync()
@@ -119,7 +147,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
 
             var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
-            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", options.VerifierStorageKey, verifier);
+            await SetItemAsync(options.VerifierStorageKey, verifier);
             var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
 
             var authorizationUri = QueryHelpers.AddQueryString(discoveryResponse.AuthorizeEndpoint, new Dictionary<string, string>
@@ -141,6 +169,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private async Task ClearStorageAsync(AuthorizationOptions options)
         {
+            _logger.LogDebug("ClearStorage");
             _userStore.User = null;
             _userStore.AccessToken = null;
             _userStore.AuthenticationScheme = null;
@@ -157,12 +186,7 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private async Task GetUserFromSessionStorage(AuthorizationOptions options)
         {
-            var expireAtString = await GetItemAsync<string>(options.ExpireAtStorageKey);
-            var expireAt = DateTime.MinValue;
-            if (!string.IsNullOrEmpty(expireAtString))
-            {
-                expireAt = DateTime.Parse(expireAtString);
-            }
+            var expireAt = await GetExireDateAsync(options).ConfigureAwait(false);
             if (DateTime.UtcNow < expireAt)
             {
                 var tokensString = await GetItemAsync<string>(options.TokensStorageKey);
@@ -179,6 +203,9 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
         private async Task<DiscoveryDocumentResponse> GetDicoveryDocumentAsync(AuthorizationOptions options)
         {
+            // TODO: Remove this when httpclient support per request fetch options
+            WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Omit;
+
             var discoveryResponse = await _httpClient.GetDiscoveryDocumentAsync(options.Authority)
                 .ConfigureAwait(false);
 
@@ -189,15 +216,16 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             }
 
             await SetItemAsync(options.TokenEndpointStorageKey, discoveryResponse.TokenEndpoint);
+            await SetItemAsync(options.AuthorizeEndpointStorageKey, discoveryResponse.AuthorizeEndpoint);
             await SetItemAsync(options.RevocationEndpointStorageKey, discoveryResponse.RevocationEndpoint);
             await SetItemAsync(options.UserInfoEndpointStorageKey, discoveryResponse.UserInfoEndpoint);
 
             return discoveryResponse;
         }
 
-        private async Task GetTokensAsync(StringValues code, AuthorizationOptions options)
+        private async Task GetTokensAsync(string redirectUri, StringValues code, AuthorizationOptions options)
         {
-            var authorizeEnpoint = await GetItemAsync<string>(options.TokenEndpointStorageKey);
+            var tokenEnpoint = await GetItemAsync<string>(options.TokenEndpointStorageKey);
             var codeVerifier = await GetItemAsync<string>(options.VerifierStorageKey);
             codeVerifier = codeVerifier.Replace("=", "")
                     .Replace('+', '-')
@@ -205,20 +233,23 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
 
             using var authorizationCodeRequest = new AuthorizationCodeTokenRequest
             {
-                Address = authorizeEnpoint,
+                Address = tokenEnpoint,
                 ClientId = options.ClientId,
-                RedirectUri = options.RedirectUri,
+                RedirectUri = redirectUri,
                 Code = code,
                 CodeVerifier = codeVerifier
             };
+
             try
             {
+                // TODO: Remove this when httpclient support per request fetch options
                 var tokenResponse = await _httpClient.RequestAuthorizationCodeTokenAsync(authorizationCodeRequest)
                     .ConfigureAwait(false);
 
                 if (tokenResponse.IsError)
                 {
                     _logger.LogError("Token response error {Error} {Description}", tokenResponse.Error, tokenResponse.ErrorDescription);
+                    await ClearStorageAsync(options).ConfigureAwait(false);
                     return;
                 }
 
@@ -231,6 +262,9 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
                     Address = await GetItemAsync<string>(options.UserInfoEndpointStorageKey),
                     Token = tokenResponse.AccessToken
                 };
+
+                // TODO: Remove this when httpclient support per request fetch options
+                WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Omit;
                 var userInfoResponse = await _httpClient.GetUserInfoAsync(userInfoRequest)
                     .ConfigureAwait(false);
 
@@ -255,11 +289,64 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             catch (HttpRequestException e)
             {
                 _logger.LogError("{Error}", e.Message);
+                await ClearStorageAsync(options).ConfigureAwait(false);
                 return;
             }
 
             var redirectTo = await GetItemAsync<string>(options.BackUriStorageKey);
             _navigationManager.NavigateTo(redirectTo);
+        }
+
+        private async Task StartRenewTask(AuthorizationOptions options)
+        {
+            if (string.IsNullOrEmpty(options.SilentRenewUri))
+            {
+                return;
+            }
+
+            var expireAt = await GetExireDateAsync(options).ConfigureAwait(false);
+            var expireIn = expireAt - DateTime.UtcNow;
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Delay(expireIn.Add(TimeSpan.FromSeconds(-3))).ContinueWith(async t =>
+            {
+                var nonce = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
+
+                var verifier = ToUrlBase64String(CryptoRandom.CreateRandomKey(64));
+                await SetItemAsync(options.VerifierStorageKey, verifier);
+                var challenge = GetChallenge(Encoding.ASCII.GetBytes(verifier));
+
+                var authorizeEndpoint = await GetItemAsync<string>(options.AuthorizeEndpointStorageKey);
+                var authorizationUri = QueryHelpers.AddQueryString(authorizeEndpoint, new Dictionary<string, string>
+                {
+                    ["client_id"] = options.ClientId,
+                    ["redirect_uri"] = GetRediectUri(options),
+                    ["scope"] = options.Scope,
+                    ["response_type"] = "code",
+                    ["nonce"] = nonce,
+                    ["code_challenge"] = challenge,
+                    ["code_challenge_method"] = "S256",
+                    ["prompt"] = "none"
+                });
+
+                await _jsRuntime.InvokeVoidAsync("aguacongasTheIdServerBlazorOidcInteropt.renewToken", authorizationUri);
+            });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        private string GetRediectUri(AuthorizationOptions options)
+        {
+            return new Uri(new Uri(_navigationManager.BaseUri), options.SilentRenewUri).ToString();
+        }
+
+        private async Task CreateRenewFrame(AuthorizationOptions options)
+        {
+            if (!renewFrameCreated && !string.IsNullOrEmpty(options.SilentRenewUri))
+            {
+                await _jsRuntime.InvokeVoidAsync("aguacongasTheIdServerBlazorOidcInteropt.createSilentRenewIFrame", options.SilentRenewUri, DotNetObjectReference.Create(this));
+                await StartRenewTask(options).ConfigureAwait(false);
+                renewFrameCreated = true;
+            }
         }
 
         private ClaimsPrincipal CreateUser(AuthorizationOptions options,

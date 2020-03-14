@@ -10,6 +10,8 @@
 
         public string RedirectUri { get; set; }
 
+        public string SilentRenewUri { get; set; } = "oidc-renew.html";
+
         public string LogoutUri { get; set; } = "/account/logout";
 
         public string NameClaimType { get; set; } = "name";
@@ -19,6 +21,8 @@
         public string StoragePrefix { get; set; } = "oidc.";
 
         public string BackUriStorageKey => $"{StoragePrefix}backUri";
+
+        public string AuthorizeEndpointStorageKey => $"{StoragePrefix}authorizeEnpoint";
 
         public string TokenEndpointStorageKey => $"{StoragePrefix}tokenEnpoint";
 

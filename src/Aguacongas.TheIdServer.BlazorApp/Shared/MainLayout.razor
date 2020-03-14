@@ -1,6 +1,4 @@
-﻿@using Aguacongas.TheIdServer.Blazor.Oidc
-@inject OidcAuthenticationStateProvider _provider;
-@inject Notifier _notifier;
+﻿@inject Notifier _notifier;
 
 @inherits LayoutComponentBase
 
@@ -9,56 +7,12 @@
 </div>
 
 <div class="main bg-light mb-2">
-    <div class="top-row px-4">
-        <AuthorizeView>
-            <Authorized>
-                <button class="ml-md-auto btn btn-secondary btn-sm" @onclick="Logoff">
-                    <span class="oi oi-account-logout"></span> logout
-                </button>
-            </Authorized>
-        </AuthorizeView>
+    <div class="top-row px-4 auth">
+        <LoginDisplay />
     </div>
 
     <div class="content px-4">
-        <AuthorizeView Policy="Is4-Reader">
-            <Authorized>
-                @ShowToast(context.User.Identity.Name)
-                @Body
-            </Authorized>
-            <Authorizing>
-                <p>Authentication in progress.</p>
-            </Authorizing>
-            <NotAuthorized>
-                <h1>Welcome</h1>
-                @if (!_pending)
-                {
-                    @if (!context.User.Claims.Any(c => c.Type == "Oidc.NotConnected"))
-                    {
-                        <p class="text-alerte">
-                            You're not authorize to use this application.
-                        </p>
-                    }
-                    else
-                    {
-                        <p>
-                            Click the login button to access to the server administration application.
-                        </p>
-                        <button class="btn btn-primary" @onclick="LoginAsync">
-                            <span class="oi oi-account-login"></span> Login
-                        </button>
-                        <div class="text-danger">@_loginError</div>
-                    }
-                }
-                else if (_login)
-                {
-                    <p>You are redirecting to the login page, please wait.</p>
-                }
-                else
-                {
-                    <p>You are redirecting to the logpout page, please wait.</p>
-                }
-            </NotAuthorized>
-        </AuthorizeView>
+        @Body
     </div>
 </div>
 <div class="fixed-bottom bg-light">

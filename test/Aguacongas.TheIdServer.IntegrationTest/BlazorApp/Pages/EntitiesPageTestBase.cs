@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
@@ -7,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -158,19 +156,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             out MockHttpMessageHandler mockHttp)
         {
             TestUtils.CreateTestHost(userName,
-                new List<SerializableClaim>
-                {
-                    new SerializableClaim
-                    {
-                        Type = "role",
-                        Value = SharedConstants.READER
-                    },
-                    new SerializableClaim
-                    {
-                        Type = "role",
-                        Value = role
-                    }
-                },
                 $"http://exemple.com/{Entities}",
                 _fixture.Sut,
                 _fixture.TestOutputHelper,

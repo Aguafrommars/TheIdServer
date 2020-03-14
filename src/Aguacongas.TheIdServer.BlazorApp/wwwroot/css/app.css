@@ -31,23 +31,29 @@ span.input-group-text.oi {
     .main .top-row {
         background-color: #e6e6e6;
         border-bottom: 1px solid #d6d5d5;
+        justify-content: flex-end;
     }
 
-    .sidebar .top-row {
-        background-color: #e6e6e6;
-        border-bottom: 1px solid #969595;
-    }
+        .main .top-row > a, .main .top-row .btn-link {
+            white-space: nowrap;
+            margin-left: 1.5rem;
+        }
 
-    .sidebar .navbar-brand {
-        font-size: 1.1rem;
-    }
+.sidebar .top-row {
+    background-color: #e6e6e6;
+    border-bottom: 1px solid #969595;
+}
 
-    .sidebar .oi {
-        width: 2rem;
-        font-size: 1.1rem;
-        vertical-align: text-top;
-        top: -2px;
-    }
+.sidebar .navbar-brand {
+    font-size: 1.1rem;
+}
+
+.sidebar .oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
 
 .nav-item {
     font-size: 0.9rem;
@@ -151,11 +157,17 @@ span.input-group-text.oi {
         top: 0.5rem;
     }
 
-
 @media (max-width: 767.98px) {
     .main .top-row {
         display: none;
     }
+        .main .top-row.auth {
+            justify-content: space-between;
+        }
+
+        .main .top-row a, .main .top-row .btn-link {
+            margin-left: 0;
+        }
 }
 
 @media (min-width: 768px) {

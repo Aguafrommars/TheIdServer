@@ -118,7 +118,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private void OnFieldChanged(object sender, FieldChangedEventArgs e)
         {
-
             var scope = Model.Scopes.FirstOrDefault();
             if (IsNew && scope != null)
             {

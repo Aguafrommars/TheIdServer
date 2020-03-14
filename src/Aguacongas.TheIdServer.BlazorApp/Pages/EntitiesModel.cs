@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
+    [Authorize(Policy = "Is4-Reader")]
     public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
     {
         private PageRequest _pageRequest;

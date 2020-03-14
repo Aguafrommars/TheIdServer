@@ -1,5 +1,4 @@
-﻿using Aguacongas.TheIdServer.Blazor.Oidc;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
@@ -72,7 +71,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         }
 
         public static void CreateTestHost(string userName,
-            List<SerializableClaim> claims,
             string url,
             TestServer sut,
             ITestOutputHelper testOutputHelper,
@@ -80,28 +78,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             out RenderedComponent<blazorApp.App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            var options = new AuthorizationOptions();
-            var jsRuntimeMock = new Mock<IJSRuntime>();
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ExpireAtStorageKey }))
-                .ReturnsAsync(DateTime.UtcNow.AddHours(1).ToString());
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.TokensStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(new Tokens
-                {
-                    AccessToken = "test",
-                    TokenType = "Bearer"
-                }));
-            
-            if (!claims.Any(c => c.Type == "name"))
-            {
-                claims.Add(new SerializableClaim
-                {
-                    Type = "name",
-                    Value = userName
-                });
-            }
-            jsRuntimeMock.Setup(m => m.InvokeAsync<string>("sessionStorage.getItem", new object[] { options.ClaimsStorageKey }))
-                .ReturnsAsync(JsonSerializer.Serialize(claims));
-
             var navigationInterceptionMock = new Mock<INavigationInterception>();
 
             host = new TestHost();
@@ -113,8 +89,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
                 httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
-                sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
                 services
                     .AddLogging(configure =>
@@ -124,7 +98,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddIdentityServer4AdminHttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
-                    .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
             });
 
@@ -132,16 +105,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             var markup = component.GetMarkup();
             Assert.Contains("Authentication in progress", markup);
-
-            host.WaitForNextRender(() =>
-            {
-                settingsRequest.SetResult(new AuthorizationOptions
-                {
-                    Authority = "https://exemple.com",
-                    ClientId = "test",
-                    Scope = "openid profile apitest"
-                });
-            });
         }
     }
 

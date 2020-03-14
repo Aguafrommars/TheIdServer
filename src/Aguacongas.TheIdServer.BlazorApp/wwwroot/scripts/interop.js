@@ -39,9 +39,3 @@ window.browserInteropt = {
         };
     }
 };
-window.showDownInteropt = {
-    convert: (id, data) => {
-        const converter = new Markdown.Converter();
-        document.getElementById(id).innerHtml = converter.makeHtml(data);
-    }
-};

@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
+    [Authorize(Policy = "Is4-Reader")]
     public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, new()
     {
         const int HEADER_HEIGHT = 95;

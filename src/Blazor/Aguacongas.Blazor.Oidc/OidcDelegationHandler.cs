@@ -20,11 +20,13 @@ namespace Aguacongas.TheIdServer.Blazor.Oidc
             _innerHanler = innerHanler ?? throw new ArgumentNullException(nameof(innerHanler));
             var type = innerHanler.GetType();
             _method = type.GetMethod("SendAsync", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod) ?? throw new InvalidOperationException("Cannot get SendAsync method");
-            WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Include;
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue(_userStore.AuthenticationScheme, _userStore.AccessToken);            
+            // TODO: Remove this when httpclient support per request fetch options
+            WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Include;
+            request.Headers.Authorization = new AuthenticationHeaderValue(_userStore.AuthenticationScheme, _userStore.AccessToken);
+
             return _method.Invoke(_innerHanler, new object[] { request, cancellationToken }) as Task<HttpResponseMessage>;
         }
     }

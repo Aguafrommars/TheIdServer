@@ -48,7 +48,7 @@
         access token lifetime
     </label>
     <div class="col-lg-8 col-sm-12">
-        <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" />
+        <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" TokenValueChanged="TokenChanded" />
         <div>
             <AuthorizeCheckbox Name="include-jwt-id" Label="Include Jwt Id" @bind-Value="@Model.IncludeJwtId" />
         </div>

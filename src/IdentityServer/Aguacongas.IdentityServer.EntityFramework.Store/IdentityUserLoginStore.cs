@@ -79,12 +79,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger.LogInformation("Entity {EntityId} deleted", id, login);
         }
 
-        public async Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
+        public Task<UserLogin> UpdateAsync(UserLogin entity, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

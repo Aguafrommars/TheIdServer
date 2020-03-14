@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +14,6 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
 
 namespace Aguacongas.TheIdServer
@@ -50,16 +48,6 @@ namespace Aguacongas.TheIdServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews(options =>
-                    options.AddIdentityServerAdminFilters())
-                .AddNewtonsoftJson(options =>
-                {
-                    var settings = options.SerializerSettings;
-                    settings.NullValueHandling = NullValueHandling.Ignore;
-                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin();
-
             services.Configure<IISOptions>(iis =>
             {
                 iis.AuthenticationDisplayName = "Windows";
@@ -67,12 +55,12 @@ namespace Aguacongas.TheIdServer
             });
 
             var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                })
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators();
@@ -111,14 +99,16 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-
-            services.AddResponseCompression(opts =>
-                 {
-                     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                         new[] { "application/octet-stream" });
-                 })
-                .AddRazorPages(options =>
-                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+            services.AddControllersWithViews(options =>
+                    options.AddIdentityServerAdminFilters())
+                .AddNewtonsoftJson(options =>
+                {
+                    var settings = options.SerializerSettings;
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                })
+                .AddIdentityServerAdmin();
+            services.AddRazorPages();
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -137,17 +127,6 @@ namespace Aguacongas.TheIdServer
 
             app.UseSerilogRequestLogging()
                 .UseHttpsRedirection()
-                .UseResponseCompression()
-                .UseStaticFiles()
-                .Map("/admin", child =>
-                {
-                    child.UseRouting()
-                    .UseClientSideBlazorFiles<BlazorApp.Program>()
-                    .UseEndpoints(endpoints =>
-                    {
-                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Program>("index.html");
-                    });
-                })
                 .UseIdentityServerAdminApi("/api", child =>
                 {
                     child.UseOpenApi()
@@ -160,15 +139,18 @@ namespace Aguacongas.TheIdServer
                                 .AllowCredentials();
                         });
                 })
-                .UseIdentityServer()
+                .UseBlazorFrameworkFiles()
+                .UseStaticFiles()
                 .UseRouting()
                 .UseAuthentication()
+                .UseIdentityServer()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
-                }); 
+                    endpoints.MapDefaultControllerRoute();
+                    endpoints.MapFallbackToFile("index.html");
+                });
         }
     }
 }

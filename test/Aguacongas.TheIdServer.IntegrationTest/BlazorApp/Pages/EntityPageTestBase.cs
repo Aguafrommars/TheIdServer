@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.Blazor.Oidc;
 using Aguacongas.TheIdServer.BlazorApp;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components.Testing;
@@ -67,19 +66,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             out MockHttpMessageHandler mockHttp)
         {
             TestUtils.CreateTestHost(userName,
-                new List<SerializableClaim>
-                {
-                    new SerializableClaim
-                    {
-                        Type = "role",
-                        Value = SharedConstants.READER
-                    },
-                    new SerializableClaim
-                    {
-                        Type = "role",
-                        Value = role
-                    }
-                },
                 $"http://exemple.com/{Entity}/{id}",
                 Fixture.Sut,
                 Fixture.TestOutputHelper,
