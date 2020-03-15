@@ -14,17 +14,6 @@
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="obj\Migrations\20191025173732_Initial.cs" />
-    <Compile Include="obj\Migrations\20191025173732_Initial.Designer.cs" />
-    <Compile Include="obj\Migrations\ApplicationDbContextModelSnapshot.cs" />
-    <Compile Include="obj\Migrations\ConfigurationDb\20200219183225_Initial.cs" />
-    <Compile Include="obj\Migrations\ConfigurationDb\20200219183225_Initial.Designer.cs" />
-    <Compile Include="obj\Migrations\ConfigurationDb\ConfigurationDbContextModelSnapshot.cs" />
-    <Compile Include="obj\Migrations\OperationalDb\20200208090339_Initial.cs" />
-    <Compile Include="obj\Migrations\OperationalDb\20200208090339_Initial.Designer.cs" />
-    <Compile Include="obj\Migrations\OperationalDb\OperationalDbContextModelSnapshot.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.1.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.0" />
