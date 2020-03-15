@@ -1,5 +1,7 @@
-﻿@model GrantsViewModel
-
+﻿@page
+@model GrantsModel
+@{
+}
 <div class="grants">
     <div class="row page-header">
         <div class="col-sm-10">
@@ -48,7 +50,7 @@
                             <div class="granttype">Identity Grants</div>
                             <ul>
                                 @foreach (var name in grant.IdentityGrantNames)
-                        {
+                                {
                                     <li>@name</li>
                                 }
                             </ul>
@@ -68,9 +70,9 @@
                     }
                 </div>
                 <div class="col-sm-2">
-                    <form asp-action="Revoke">
+                    <form method="post">
                         <input type="hidden" name="clientId" value="@grant.ClientId">
-                        <button class="btn btn-danger">Revoke Access</button>
+                        <button class="btn btn-danger" asp-page-handler="Revoke">Revoke Access</button>
                     </form>
                 </div>
             </div>

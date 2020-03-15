@@ -1,32 +1,26 @@
-// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer4.Quickstart.UI
+namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
-    /// <summary>
-    /// This sample controller allows a user to revoke grants given to clients
-    /// </summary>
-    [SecurityHeaders]
-    [Authorize]
-    public class GrantsController : Controller
+    public class GrantsModel : PageModel
     {
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clients;
         private readonly IResourceStore _resources;
         private readonly IEventService _events;
 
-        public GrantsController(IIdentityServerInteractionService interaction,
+        public IEnumerable<GrantViewModel> Grants { get; set; }
+
+        public GrantsModel(IIdentityServerInteractionService interaction,
             IClientStore clients,
             IResourceStore resources,
             IEventService events)
@@ -37,34 +31,26 @@ namespace IdentityServer4.Quickstart.UI
             _events = events;
         }
 
-        /// <summary>
-        /// Show list of grants
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> OnGetAsync()
         {
-            return View("Index", await BuildViewModelAsync());
+            await BuildViewModelAsync().ConfigureAwait(false);
+            return Page();
         }
 
-        /// <summary>
-        /// Handle postback to revoke a client
-        /// </summary>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Revoke(string clientId)
+        public async Task<IActionResult> OnPostRevokeAsync(string clientId)
         {
             await _interaction.RevokeUserConsentAsync(clientId);
             await _events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId));
 
-            return RedirectToAction("Index");
+            return RedirectToPage();
         }
 
-        private async Task<GrantsViewModel> BuildViewModelAsync()
+        private async Task BuildViewModelAsync()
         {
             var grants = await _interaction.GetAllUserConsentsAsync();
 
             var list = new List<GrantViewModel>();
-            foreach(var grant in grants)
+            foreach (var grant in grants)
             {
                 var client = await _clients.FindClientByIdAsync(grant.ClientId);
                 if (client != null)
@@ -87,10 +73,19 @@ namespace IdentityServer4.Quickstart.UI
                 }
             }
 
-            return new GrantsViewModel
-            {
-                Grants = list
-            };
+            Grants = list;
+        }
+
+        public class GrantViewModel
+        {
+            public string ClientId { get; set; }
+            public string ClientName { get; set; }
+            public string ClientUrl { get; set; }
+            public string ClientLogoUrl { get; set; }
+            public DateTime Created { get; set; }
+            public DateTime? Expires { get; set; }
+            public IEnumerable<string> IdentityGrantNames { get; set; }
+            public IEnumerable<string> ApiGrantNames { get; set; }
         }
     }
 }
