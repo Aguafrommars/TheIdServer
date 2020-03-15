@@ -54,7 +54,7 @@ namespace Aguacongas.TheIdServer
                 iis.AutomaticAuthentication = false;
             });
 
-            var builder = services.AddIdentityServer(options =>
+            services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
@@ -63,18 +63,8 @@ namespace Aguacongas.TheIdServer
             })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators();
-
-            if (Environment.IsDevelopment())
-            {
-                builder.AddDeveloperSigningCredential();
-            }
-            else
-            {
-#pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception("need to configure key material");
-#pragma warning restore S112 // General exceptions should never be thrown
-            }
+                .AddDefaultSecretValidators()
+                .AddSigningCredentials();
 
             services.AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
@@ -108,7 +98,7 @@ namespace Aguacongas.TheIdServer
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
                 .AddIdentityServerAdmin();
-            services.AddRazorPages();
+            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
