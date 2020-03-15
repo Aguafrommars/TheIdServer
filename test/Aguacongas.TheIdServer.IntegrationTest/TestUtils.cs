@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
@@ -71,6 +74,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         }
 
         public static void CreateTestHost(string userName,
+            IEnumerable<Claim> claims,
             string url,
             TestServer sut,
             ITestOutputHelper testOutputHelper,
@@ -78,17 +82,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             out RenderedComponent<blazorApp.App> component,
             out MockHttpMessageHandler mockHttp)
         {
-            var navigationInterceptionMock = new Mock<INavigationInterception>();
+            CreateTestHost(userName, claims, url, sut, testOutputHelper, out host, out mockHttp);
 
+            component = host.AddComponent<blazorApp.App>();
+        }
+
+        public static void CreateTestHost(string userName, IEnumerable<Claim> claims, string url, TestServer sut, ITestOutputHelper testOutputHelper, out TestHost host, out MockHttpMessageHandler mockHttp)
+        {
+            var navigationInterceptionMock = new Mock<INavigationInterception>();
+            var jsRuntimeMock = new Mock<IJSRuntime>();
             host = new TestHost();
             var httpMock = host.AddMockHttp();
             mockHttp = httpMock;
-            var settingsRequest = httpMock.Capture("/settings.json");
             host.ConfigureServices(services =>
             {
                 blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
                 httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
                 services
                     .AddLogging(configure =>
@@ -98,13 +110,82 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddIdentityServer4AdminHttpStores(p => Task.FromResult(httpClient))
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
-                    .AddSingleton(p => navigationInterceptionMock.Object);
+                    .AddSingleton(p => navigationInterceptionMock.Object)
+                    .AddSingleton(p => jsRuntimeMock.Object)
+                    .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
+                    .AddSingleton<AuthenticationStateProvider>(p => new FakeAuthenticationStateProvider(userName, claims));
             });
+        }
 
-            component = host.AddComponent<blazorApp.App>();
+        public class FakeAuthenticationStateProvider : AuthenticationStateProvider
+        {
+            private readonly AuthenticationState _state;
 
-            var markup = component.GetMarkup();
-            Assert.Contains("Authentication in progress", markup);
+            public FakeAuthenticationStateProvider(string userName, IEnumerable<Claim> claims)
+            {
+                if (claims != null && !claims.Any(c => c.Type == "name"))
+                {
+                    var list = claims.ToList();
+                    list.Add(new Claim("name", userName));
+                    claims = list;
+                }
+                _state = new AuthenticationState(new FakeClaimsPrincipal(new FakeIdendity(userName, claims)));
+            }
+
+            public override Task<AuthenticationState> GetAuthenticationStateAsync()
+            {
+                return Task.FromResult(_state);
+            }
+        }
+
+        public class FakeClaimsPrincipal : ClaimsPrincipal
+        {
+            public FakeClaimsPrincipal(FakeIdendity idendity) : base(idendity)
+            {
+
+            }
+
+            public override bool IsInRole(string role)
+            {
+                return Identity.IsAuthenticated && Claims != null && Claims.Any(c => c.Type == "role" && c.Value == role);
+            }
+        }
+
+        public class FakeIdendity : ClaimsIdentity
+        {
+            private readonly string _userName;
+            private bool _IsAuthenticated = true;
+
+            public FakeIdendity(string userName, IEnumerable<Claim> claims) : base(claims)
+            {
+                _userName = userName;
+            }
+            public override string AuthenticationType => "Bearer";
+
+            public override bool IsAuthenticated => _IsAuthenticated;
+
+            public void SetIsAuthenticated(bool value)
+            {
+                _IsAuthenticated = value;
+            }
+
+            public override string Name => _userName;
+        }
+
+        class FakeSignOutSessionStateManager : SignOutSessionStateManager
+        {
+            public FakeSignOutSessionStateManager(IJSRuntime jsRuntime) : base(jsRuntime)
+            { }
+
+            public override ValueTask SetSignOutState()
+            {
+                return new ValueTask();
+            }
+
+            public override Task<bool> ValidateSignOutState()
+            {
+                return Task.FromResult(true);
+            }
         }
     }
 

@@ -486,12 +486,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
 
-            WaitForNode(host, component, "#grantTypes button.dropdown-item");
-
-            var dropdownButton = component.Find("#grantTypes button.dropdown-item");
-
-            await host.WaitForNextRenderAsync(() => dropdownButton.ClickAsync());
-
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
 
@@ -513,8 +507,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             {
                 var client = await context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
-                var grantType = await context.ClientGrantTypes.FirstOrDefaultAsync(g => g.ClientId == clientId);
-                Assert.NotNull(grantType);
             });
         }
 

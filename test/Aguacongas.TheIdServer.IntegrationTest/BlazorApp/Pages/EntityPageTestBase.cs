@@ -7,6 +7,7 @@ using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -66,6 +67,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             out MockHttpMessageHandler mockHttp)
         {
             TestUtils.CreateTestHost(userName,
+                new Claim[] 
+                {
+                    new Claim("role", SharedConstants.READER),
+                    new Claim("role", role) 
+                },
                 $"http://exemple.com/{Entity}/{id}",
                 Fixture.Sut,
                 Fixture.TestOutputHelper,

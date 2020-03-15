@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -156,6 +157,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             out MockHttpMessageHandler mockHttp)
         {
             TestUtils.CreateTestHost(userName,
+                new Claim[]
+                {
+                    new Claim("role", SharedConstants.READER),
+                    new Claim("role", role)
+                },
                 $"http://exemple.com/{Entities}",
                 _fixture.Sut,
                 _fixture.TestOutputHelper,
