@@ -205,7 +205,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ClientTokens Model="@Model" />
+                    <ClientTokens Model="@Model" TokenTypeChanged="OnTokenTypeChanged" ModelChanged="OnModelChanged" />
                 </div>
             </div>
             <div id="secrets" class="card mb-3">

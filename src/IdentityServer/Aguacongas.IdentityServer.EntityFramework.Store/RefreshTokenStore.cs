@@ -2,12 +2,13 @@
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
+    public class RefreshTokenStore : GrantStore<IdentityServer.Store.Entity.RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
         public RefreshTokenStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
             : base(context, serializer, logger)
@@ -34,5 +35,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         protected override string GetSubjectId(Models.RefreshToken dto)
             => dto?.SubjectId;
+
+        protected override DateTime? GetExpiration(Models.RefreshToken dto)
+            => dto.CreationTime.AddSeconds(dto.Lifetime);
     }
 }

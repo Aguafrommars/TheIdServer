@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -158,12 +157,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
         private static void OpenLogggedPage(TestLoggerProvider testLoggerProvider, HttpClient httpClient, ConcurrentDictionary<object, object> sessionStore, string location)
         {
             using var host = new TestHost();
-            var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
             var navigationManager = new TestNavigationManager(uri: location);
-
-            options.Authority = httpClient.BaseAddress.ToString();
 
             host.ConfigureServices(services =>
             {
@@ -215,8 +211,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             {
                 settingsRequest.SetResult(new
                 {
-                    ApiBaseUrl = $"{options.Authority}api",
-                    Authority = options.Authority.TrimEnd('/'),
                     ClientId = "theidserveradmin",
                     Scope = "openid profile theidserveradminapi"
                 });
@@ -234,14 +228,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             SeedData.SeedConfiguration(scope);
 
             using var host = new TestHost();
-            var options = new Blazor.Oidc.AuthorizationOptions();
             var jsRuntimeMock = new Mock<IJSRuntime>();
             var navigationInterceptionMock = new Mock<INavigationInterception>();
             var navigationManager = new TestNavigationManager(uri: "http://exemple.com");
 
             var client = server.CreateClient();
             httpClient = client;
-            options.Authority = httpClient.BaseAddress.ToString();
 
             host.ConfigureServices(services =>
             {
@@ -282,8 +274,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             {
                 settingsRequest.SetResult(new
                 {
-                    ApiBaseUrl = $"{options.Authority}api",
-                    Authority = options.Authority.TrimEnd('/'),
                     ClientId = "theidserveradmin",
                     Scope = "openid profile theidserveradminapi"
                 });

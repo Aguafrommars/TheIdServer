@@ -20,6 +20,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         public EventCallback<T> ValueChanged { get; set; }
 
         [Parameter]
+        public EventCallback TokenValueChanged { get; set; }
+
+        [Parameter]
         public IDictionary<string, TimeSpan?> QuickValues { get; set; }
 
         [Parameter]
@@ -102,6 +105,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             {
                 Value = default;
                 ValueChanged.InvokeAsync(Value);
+                TokenValueChanged.InvokeAsync(Value);
                 _token.ValueString = null;
             }
             else
@@ -109,6 +113,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                 var timeValue = time.Value;
                 Value = (T)Convert.ChangeType(timeValue.TotalSeconds, typeof(T));
                 ValueChanged.InvokeAsync(Value);
+                TokenValueChanged.InvokeAsync(Value);
                 _token.ValueString = timeValue.ToString(DISPLAY_FORMAT);
             }
 

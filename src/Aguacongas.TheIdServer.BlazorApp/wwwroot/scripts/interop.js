@@ -7,9 +7,11 @@
         });
         $(query).toast('show');
     },
+    showModal: id => {
+        $(`#${id}`).modal('show');
+    },
     dismissModal: id => {
-        const query = `#${id}`;
-        $(query).modal('hide');
+        $(`#${id}`).modal('hide');
     },
     showDropDownMenu: id => {
         $(`#${id}`).dropdown('show');

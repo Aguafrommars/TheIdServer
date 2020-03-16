@@ -120,7 +120,9 @@ namespace Aguacongas.TheIdServer
             {
                 alice = new ApplicationUser
                 {
-                    UserName = "alice"
+                    UserName = "alice@theidserver.com",
+                    Email = "alice@theidserver.com",
+                    EmailConfirmed = true,
                 };
                 ExcuteAndCheckResult(() => userMgr.CreateAsync(alice, "Pass123$"))
                     .GetAwaiter().GetResult();
@@ -129,7 +131,7 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Name, "Alice Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Alice"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
+                        new Claim(JwtClaimTypes.Email, "alice@theidserver.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
                         new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
@@ -145,12 +147,14 @@ namespace Aguacongas.TheIdServer
                 Console.WriteLine("alice already exists");
             }
 
-            var bob = userMgr.FindByNameAsync("bob").GetAwaiter().GetResult();
+            var bob = userMgr.FindByNameAsync("bob@theidserver.com").GetAwaiter().GetResult();
             if (bob == null)
             {
                 bob = new ApplicationUser
                 {
-                    UserName = "bob"
+                    UserName = "bob@theidserver.com",
+                    Email = "bob@theidserver.com",
+                    EmailConfirmed = true
                 };
                 ExcuteAndCheckResult(() => userMgr.CreateAsync(bob, "Pass123$"))
                     .GetAwaiter().GetResult();
@@ -159,7 +163,7 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Name, "Bob Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Bob"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
+                        new Claim(JwtClaimTypes.Email, "bob@theidserver.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                         new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),

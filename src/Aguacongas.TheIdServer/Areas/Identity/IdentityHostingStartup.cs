@@ -10,8 +10,8 @@ namespace Aguacongas.TheIdServer.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.Configure<AuthMessageSenderOptions>(context.Configuration);
-                services.AddTransient<IEmailSender, EmailSender>();
+                services.Configure<AuthMessageSenderOptions>(context.Configuration)
+                    .AddTransient<IEmailSender, EmailSender>();
             });
         }
     }

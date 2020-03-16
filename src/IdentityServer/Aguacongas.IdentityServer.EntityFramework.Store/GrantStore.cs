@@ -109,6 +109,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             else
             {
                 entity.Data = _serializer.Serialize(dto);
+                entity.Expiration = GetExpiration(dto);
             }
 
             try
@@ -120,20 +121,22 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return entity.Id;
         }
 
+        protected abstract DateTime? GetExpiration(TDto dto);
+
         protected abstract string GetClientId(TDto dto);
 
         protected abstract string GetSubjectId(TDto dto);
 
         protected virtual async Task<TEntity> GetEntityByHandle(string handle)
         {
-            return await _context
-                .FindAsync<TEntity>(handle)
+            return await _context.Set<TEntity>()
+                .FirstOrDefaultAsync(t => t.Id == handle)
                 .ConfigureAwait(false);
         }
 
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
-            return await _context.Set<TEntity>().AsNoTracking()
+            return await _context.Set<TEntity>()
                 .FirstOrDefaultAsync(c => c.UserId == subjectId && c.ClientId == clientId)
                 .ConfigureAwait(false);
         }

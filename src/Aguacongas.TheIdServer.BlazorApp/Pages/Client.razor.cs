@@ -154,6 +154,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
+        private void OnTokenTypeChanged(AccessTokenType accessTokenType)
+        {
+            Model.AccessTokenType = (int)accessTokenType;
+            base.OnEntityUpdated(Model.GetType(), Model);
+        }
+
+        private void OnModelChanged()
+        {
+            base.OnEntityUpdated(Model.GetType(), Model);
+        }
+
         private void OnAddUrlClicked()
         {
             var url = new Entity.ClientUri();

@@ -1,0 +1,63 @@
+﻿@typeparam T
+@inherits UserEntitesGridModel<T>
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigationManager
+
+<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="token">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="ClientId"
+                            Text="client id"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Data"
+                            Text="data"
+                            GridState="GridState" />
+        </th>
+        <th>
+            <SortableHeader Property="Expiration"
+                            Text="expire at"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        <td>
+            <a href="@(_navigationManager.BaseUri)/client/@(token.ClientId)">@token.ClientId</a>
+        </td>
+        <td>
+            <button type="button" class="btn btn-secondary" @onclick="() => ShowData(token)">
+                <span class="oi oi-code"></span>
+            </button>
+        </td>
+        <td>
+            @token.Expiration
+        </td>
+        <td>
+            <AuthorizeButton CssSubClass="btn-primary" Type="button" Clicked="() => OnDeleteEntityClicked(token)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>
+<div class="modal fade" id="token-data" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="delete-modal-header">Token</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col text-monospace text-body">
+                        <small><code><pre>@_selectedData</pre></code></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

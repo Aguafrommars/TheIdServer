@@ -2,12 +2,13 @@
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
@@ -18,15 +19,20 @@ namespace Aguacongas.TheIdServer.BlazorApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            ConfigureServices(builder.Services);
             builder.RootComponents.Add<App>("app");
-
+            ConfigureServices(builder.Services);
             await builder.Build().RunAsync();
         }
 
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions()
+                .AddBaseAddressHttpClient()
+                .AddApiAuthorization(options =>
+                {
+                    options.ProviderOptions.ConfigurationEndpoint = "settings.json";
+                    options.UserOptions.RoleClaim = "role";
+                })
                 .AddAuthorizationCore(options =>
                 {
                     options.AddIdentityServerPolicies();
@@ -36,19 +42,22 @@ namespace Aguacongas.TheIdServer.BlazorApp
                     return await CreateApiHttpClient(p)
                         .ConfigureAwait(false);
                 })
-                .AddOidc(async p => {
-                    var settings = await p.GetRequiredService<Task<Settings>>()
-                        .ConfigureAwait(false);
-                    settings.RedirectUri = p.GetRequiredService<NavigationManager>().BaseUri;
-                    return settings;
-                });
+                .AddTransient(p =>
+                {
+                    var type = Assembly.Load("WebAssembly.Net.Http")
+                        .GetType("WebAssembly.Net.Http.HttpClient.WasmHttpMessageHandler");
+                    return Activator.CreateInstance(type) as HttpMessageHandler;
+                })
+                .AddTransient<OidcDelegationHandler>()
+                .AddHttpClient("oidc")
+                .AddHttpMessageHandler<OidcDelegationHandler>();
 
             services.AddSingleton(async p =>
-            {
-                var httpClient = p.GetRequiredService<HttpClient>();
-                return await httpClient.GetJsonAsync<Settings>("settings.json")
-                    .ConfigureAwait(false);
-            })
+                {
+                    var httpClient = p.GetRequiredService<HttpClient>();
+                    return await httpClient.GetJsonAsync<Settings>("settings.json")
+                        .ConfigureAwait(false);
+                })
                 .AddSingleton<Notifier>()
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>();

@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
@@ -31,5 +32,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         protected override string GetSubjectId(Token dto)
             => dto?.SubjectId;
+
+        protected override DateTime? GetExpiration(Token dto)
+            => dto.CreationTime.AddSeconds(dto.Lifetime);
     }
 }

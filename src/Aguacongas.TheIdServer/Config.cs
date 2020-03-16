@@ -122,17 +122,17 @@ namespace Aguacongas.TheIdServer
                 {
                     ClientId = "theidserveradmin",
                     ClientName = "TheIdServer admin SPA Client",
-                    ClientUri = "https://localhost:5443/admin/",
-
+                    ClientUri = "https://localhost:5443/",
+                    ClientClaimsPrefix = null, // don't prefix claims
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
 
                     RedirectUris =
                     {
-                        "http://localhost:5001/",
-                        "https://localhost:5443/admin/",
-                        "http://exemple.com/"
+                        "http://localhost:5001/authentication/login-callback",
+                        "https://localhost:5443/authentication/login-callback",
+                        "http://exemple.com/authentication/login-callback"
                     },
 
                     PostLogoutRedirectUris = 
@@ -147,15 +147,7 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443",
                         "http://exemple.com/"
                     },
-                    AllowedScopes = { "openid", "profile", "theidserveradminapi" },
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret()
-                        {
-                            Type = SecretTypes.SharedSecret,
-                            Value = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d".Sha256(),
-                        }
-                    }
+                    AllowedScopes = { "openid", "profile", "theidserveradminapi" }
                 },
 
                 // Multi-tiers public server client
