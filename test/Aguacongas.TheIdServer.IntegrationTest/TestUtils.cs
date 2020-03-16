@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text.Json;
@@ -98,7 +99,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
-                httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
@@ -107,7 +108,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     {
                         configure.AddProvider(new TestLoggerProvider(testOutputHelper));
                     })
-                    .AddIdentityServer4AdminHttpStores(p => Task.FromResult(httpClient))
+                    .AddIdentityServer4AdminHttpStores(p =>
+                    {
+                        
+                        var client = new HttpClient(new blazorApp.OidcDelegationHandler(p.GetRequiredService<IAccessTokenProvider>(), sut.CreateHandler()));
+                        client.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                        return Task.FromResult(client);
+                    })
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => navigationInterceptionMock.Object)
@@ -117,7 +124,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             });
         }
 
-        public class FakeAuthenticationStateProvider : AuthenticationStateProvider
+        public class FakeAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
         {
             private readonly AuthenticationState _state;
 
@@ -135,6 +142,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             public override Task<AuthenticationState> GetAuthenticationStateAsync()
             {
                 return Task.FromResult(_state);
+            }
+
+            public ValueTask<AccessTokenResult> RequestAccessToken()
+            {
+                return new ValueTask<AccessTokenResult>(new AccessTokenResult(AccessTokenResultStatus.Success, new AccessToken
+                {
+                    Expires = DateTimeOffset.Now.AddDays(1),
+                    GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
+                    Value = "test"
+                }, "http://exemple.com"));
+            }
+
+            public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options)
+            {
+                throw new NotImplementedException();
             }
         }
 

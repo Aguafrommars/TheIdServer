@@ -147,7 +147,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             {
                 if (disposing)
                 {
-                    _host.Dispose();
+                    _host?.Dispose();
                 }
 
                 disposedValue = true;

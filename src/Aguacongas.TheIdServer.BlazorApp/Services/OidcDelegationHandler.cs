@@ -21,8 +21,6 @@ namespace Aguacongas.TheIdServer.BlazorApp
             _innerHanler = innerHanler ?? throw new ArgumentNullException(nameof(innerHanler));
             var type = innerHanler.GetType();
             _method = type.GetMethod("SendAsync", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod) ?? throw new InvalidOperationException("Cannot get SendAsync method");
-            WebAssemblyHttpMessageHandlerOptions.DefaultCredentials = FetchCredentialsOption.Include;
-
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
