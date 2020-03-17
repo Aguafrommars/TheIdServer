@@ -127,7 +127,8 @@ namespace Aguacongas.TheIdServer
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
-
+                    BackChannelLogoutSessionRequired = false,
+                    FrontChannelLogoutSessionRequired = false,
                     RedirectUris =
                     {
                         "http://localhost:5001/authentication/login-callback",
