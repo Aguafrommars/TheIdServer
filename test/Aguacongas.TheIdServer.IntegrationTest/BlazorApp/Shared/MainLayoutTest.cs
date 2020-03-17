@@ -1,19 +1,14 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Moq;
 using RichardSzalay.MockHttp;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using static Aguacongas.TheIdServer.IntegrationTest.TestUtils;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
@@ -32,7 +27,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         }
 
         [Fact]
-        public async Task WhenNoAuthorized_should_redirect_to_login()
+        public async Task WhenNotAuthenticated_should_redirect_to_login()
         {
             TestUtils.CreateTestHost(
                 "test",
@@ -44,13 +39,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 out MockHttpMessageHandler mockHttp);
             var provider = host.ServiceProvider.GetRequiredService<AuthenticationStateProvider>();
             var state = await provider.GetAuthenticationStateAsync();
-            var idendity = state.User.Identity as FakeIdendity;
+            var idendity = state.User.Identity as TestUtils.FakeIdendity;
             idendity.SetIsAuthenticated(false);
 
             var component = host.AddComponent<App>();
 
             var markup = component.GetMarkup();
             Assert.DoesNotContain("Clients.", markup);
+        }
+
+        [Fact]
+        public void WhenNotAuthaurized_should_displax_message()
+        {
+            TestUtils.CreateTestHost(
+                "test",
+                Array.Empty<Claim>(),
+                "http://exemple.com/clients",
+                _fixture.Sut,
+                _testOutputHelper,
+                out TestHost host,
+                out MockHttpMessageHandler _);
+
+            var component = host.AddComponent<App>();
+
+            var markup = component.GetMarkup();
+            Assert.Contains("Your are not authorized to view this page.", markup);
         }
 
         [Fact]
@@ -74,8 +87,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 _fixture.Sut,
                 _fixture.TestOutputHelper,
                 out TestHost host,
-                out RenderedComponent<blazorApp.App> component,
-                out MockHttpMessageHandler mockHttp);
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler _);
             _host = host;
 
             return component;
