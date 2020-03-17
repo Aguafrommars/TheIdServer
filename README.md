@@ -1,6 +1,6 @@
 # TheIdServer
 
-OpenID/Connect server base on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
+[OpenID/Connect](https://openid.net/connect/) server base on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
 ## Management application
 
@@ -8,13 +8,13 @@ OpenID/Connect server base on [IdentityServer4](https://identityserver4.readthed
 
 ### Main features
 
-*TODO: describe features*
+![home](/doc/assets/home.png)
 
-* User management
-* Role management
-* Client management
-* Api management
-* Identity management
+* [Users management](/doc/USER.md)
+* [Roles management](/doc/ROLE.md)
+* [Clients management](/doc/CLIENT.md)
+* [Apis management](/doc/API.md)
+* [Identities management](/doc/IDENTITY.md)
 
 ## Multi-tiers installation
 
