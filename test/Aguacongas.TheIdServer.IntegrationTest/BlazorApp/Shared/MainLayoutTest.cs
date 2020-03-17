@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         }
 
         [Fact]
-        public async Task WhenNoAuthorized_should_display_message()
+        public async Task WhenNoAuthorized_should_redirect_to_login()
         {
             TestUtils.CreateTestHost(
                 "test",
@@ -50,7 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             var component = host.AddComponent<App>();
 
             var markup = component.GetMarkup();
-            Assert.Contains("You're not authorized to reach this page.", markup);
+            Assert.DoesNotContain("Clients.", markup);
         }
 
         [Fact]

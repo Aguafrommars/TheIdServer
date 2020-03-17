@@ -3,5 +3,7 @@
     public class Settings
     {
         public string ApiBaseUrl { get; set; }
+
+        public string AdministratorEmail { get; set; }
     }
 }
