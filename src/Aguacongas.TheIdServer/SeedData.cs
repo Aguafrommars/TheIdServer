@@ -120,7 +120,7 @@ namespace Aguacongas.TheIdServer
             {
                 alice = new ApplicationUser
                 {
-                    UserName = "alice@theidserver.com",
+                    UserName = "alice",
                     Email = "alice@theidserver.com",
                     EmailConfirmed = true,
                 };
@@ -147,12 +147,12 @@ namespace Aguacongas.TheIdServer
                 Console.WriteLine("alice already exists");
             }
 
-            var bob = userMgr.FindByNameAsync("bob@theidserver.com").GetAwaiter().GetResult();
+            var bob = userMgr.FindByNameAsync("bob").GetAwaiter().GetResult();
             if (bob == null)
             {
                 bob = new ApplicationUser
                 {
-                    UserName = "bob@theidserver.com",
+                    UserName = "bob",
                     Email = "bob@theidserver.com",
                     EmailConfirmed = true
                 };

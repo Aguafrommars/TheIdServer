@@ -1,5 +1,6 @@
 {
   "apiBaseUrl": "https://localhost:5443/api",
+  "administratorEmail": "aguacongas@gmail.com",
   "authority": "https://localhost:5443",
   "client_id": "theidserveradmin",
   "redirect_uri": "https://localhost:5443/authentication/login-callback",
