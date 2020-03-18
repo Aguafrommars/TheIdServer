@@ -36,9 +36,8 @@ namespace Aguacongas.TheIdServer
 
             services.AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
-                .AddOperationalHttpStores();
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(
+                .AddOperationalHttpStores()
+                .AddIdentity<ApplicationUser, IdentityRole>(
                     options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
