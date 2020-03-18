@@ -4,7 +4,7 @@
 
 ## Management application
 
-[*src/Aguacongas.TheIdServer.BlazorApp*](src/Aguacongas.TheIdServer.BlazorApp) contains management applicationthe code.
+[*src/Aguacongas.TheIdServer.BlazorApp*](src/Aguacongas.TheIdServer.BlazorApp) contains the management applicationthe code.
 
 ### Main features
 
@@ -16,6 +16,6 @@
 * [Apis management](/doc/API.md)
 * [Identities management](/doc/IDENTITY.md)
 
-## Multi-tiers installation
+## Setup
 
-*TODO: describe the multi-tiers instal*
+*TODO: describe setup*
