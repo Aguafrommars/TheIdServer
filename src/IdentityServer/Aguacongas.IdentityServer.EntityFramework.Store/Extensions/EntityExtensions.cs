@@ -17,18 +17,18 @@ namespace Aguacongas.IdentityServer.Store
             var uris = client.RedirectUris.Select(o => new Entity.ClientUri
             {
                 Id = Guid.NewGuid().ToString(),
-                Uri = o,
-                Kind = Entity.UriKinds.Redirect
+                Uri = o
             }).ToList();
 
             foreach (var origin in client.AllowedCorsOrigins)
             {
                 var cors = new Uri(origin);
                 var uri = uris.FirstOrDefault(u => cors.CorsMatch(u.Uri));
+                var corsUri = new Uri(origin);
+                var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
+
                 if (uri == null)
                 {
-                    var corsUri = new Uri(origin);
-                    var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
 
                     uris.Add(new Entity.ClientUri
                     {
@@ -40,7 +40,8 @@ namespace Aguacongas.IdentityServer.Store
                     continue;
                 }
 
-                uri.Kind |= Entity.UriKinds.Cors;
+                uri.SanetizedCorsUri = sanetized;
+                uri.Kind = Entity.UriKinds.Redirect | Entity.UriKinds.Cors;
             }
 
             foreach (var postLogout in client.PostLogoutRedirectUris)
