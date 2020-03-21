@@ -299,41 +299,51 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                             .Select(m => m.Key);
         }
 
-        private Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
+        private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
-            var tasks = new List<Task>();
             foreach (var entity in addList)
             {
                 SetNavigationProperty(entity);
                 SanetizeEntityToSaved(entity);
-                tasks.Add(CreateAsync(entityType, entity)
-                    .ContinueWith(t =>
-                    {
-                        if (t.Exception != null)
-                        {
-                            HandleModificationError(t.Exception);
-                        }
-                        SetCreatedEntityId(entity, t.Result);
-                        SetModelEntityId(entityType, t.Result);
-                    }));
+                try
+                {
+                    var result = await CreateAsync(entityType, entity).ConfigureAwait(false);
+
+                    SetCreatedEntityId(entity, result);
+                    SetModelEntityId(entityType, result);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
             var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
             foreach (var entity in updateList)
             {
                 SanetizeEntityToSaved(entity);
-                tasks.Add(UpdateAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception)));
+                try
+                {
+                    await UpdateAsync(entityType, entity).ConfigureAwait(false);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
             var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
             foreach (var entity in deleteList)
             {
-                tasks.Add(DeleteAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception)));
+                try
+                {
+                    await DeleteAsync(entityType, entity).ConfigureAwait(false);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
-
-            return Task.WhenAll(tasks);
         }
 
         private void HandleModificationError(AggregateException exception)

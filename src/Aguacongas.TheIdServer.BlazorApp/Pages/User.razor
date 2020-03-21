@@ -14,14 +14,7 @@ else
     <CascadingValue Value="HandleModificationState">
         <div class="row bg-light sticky-top mb-3">
             <div class="col">
-                @if (IsNew)
-                {
-                    <AuthorizeText Id="name" Placeholder="role name" @bind-Value="@Model.UserName" />
-                }
-                else
-                {
-                    <h3>@Model.UserName</h3>
-                }
+                <h3>@Model.UserName</h3>
             </div>
             <div>
                 <AuthorizeButton Type="submit" CssSubClass="btn-primary">
@@ -70,6 +63,14 @@ else
         <div class="entity-details">
             <div class="card mb-3">
                 <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="email">
+                            user name
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Id="name" @bind-Value="@Model.UserName" />
+                        </div>
+                    </div>
                     @if (IsNew)
                     {
                         <div class="form-group row">

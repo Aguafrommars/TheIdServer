@@ -43,7 +43,7 @@ else
         <div class="entity-details">
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims" Collection="Model.Claims" CreateModel="CreateClaim" />
+                    <EntitySubGridTitle Text="Claims" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
