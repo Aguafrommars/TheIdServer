@@ -131,9 +131,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ClientGrantTypes Model="@Model"
-                                      GrantTypeDeletedClicked="OnGrantTypeDeleted"
-                                      GrantTypeValueChanged="OnGrantTypeValueChanged" />
+                    <ClientGrantTypes Model="@Model" />
                 </div>
             </div>
             @if (IsWebClient())
@@ -150,10 +148,10 @@ else
                 </div>
                 <div id="urls" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="URLs" Collection="Model.RedirectUris" CreateModel="CreateRedirectUri" />
+                        <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />
                     </div>
                     <div class="card-body">
-                        <ClientUris Model="@Model" DeleteEntityClicked="OnDeleteUrlClicked" />
+                        <ClientUris Model="@Model" Collection="@Model.RedirectUris" />
                     </div>
                 </div>
                 <div id="providers" class="card mb-3">
@@ -163,9 +161,7 @@ else
                         </div>
                     </div>
                     <div class="card-body">
-                        <ClientIdpRestrictions Model="@Model"
-                                               ProviderDeletedClicked="OnProviderDeleted"
-                                               ProviderValueChanged="OnProviderValueChanged" />
+                        <ClientIdpRestrictions Model="@Model" />
                     </div>
                 </div>
             }
@@ -205,15 +201,15 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ClientTokens Model="@Model" TokenTypeChanged="OnTokenTypeChanged" ModelChanged="OnModelChanged" />
+                    <ClientTokens Model="@Model" />
                 </div>
             </div>
             <div id="secrets" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Secrets" Collection="Model.ClientSecrets" CreateModel="CreateSecret" />
+                    <EntitySubGridTitle Text="Secrets" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
                 </div>
                 <div class="card-body">
-                    <ClientSecrets Model="@Model" DeleteEntityClicked="OnDeleteSecretClicked" />
+                    <ClientSecrets Collection="@Model.ClientSecrets" />
                     <div class="col">
                         <AuthorizeCheckbox Name="require-secret" Label="require secret" @bind-Value="@Model.RequireClientSecret" />
                     </div>
@@ -221,18 +217,18 @@ else
             </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims" Collection="Model.ClientClaims" CreateModel="CreateClaim" />
+                    <EntitySubGridTitle Text="Claims" Collection="@Model.ClientClaims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
-                    <ClientClaims Model="@Model" DeleteEntityClicked="OnDeleteClaimClicked" />
+                    <ClientClaims Model="@Model" Collection="@Model.ClientClaims" />
                 </div>
             </div>
             <div id="properties" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Properties" Collection="Model.Properties" CreateModel="CreateProperty" />
+                    <EntitySubGridTitle Text="Properties" Collection="@Model.Properties" CreateModel="CreateProperty" />
                 </div>
                 <div class="card-body">
-                    <ClientProperties Model="@Model" DeleteEntityClicked="OnDeletePropertyClicked" />
+                    <ClientProperties Collection="@Model.Properties" />
                 </div>
             </div>
         </div>

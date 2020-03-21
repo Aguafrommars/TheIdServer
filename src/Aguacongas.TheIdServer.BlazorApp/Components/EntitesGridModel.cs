@@ -3,14 +3,13 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
+namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
-    public class ApiEntitesGridModel<T> : ComponentBase where T: IEntityId
+    public class EntitesGridModel<T> : ComponentBase where T: IEntityId
     {
         protected GridState GridState { get; } = new GridState();
 
         [Parameter]
-
         public ICollection<T> Collection { get; set; }
 
         [CascadingParameter]

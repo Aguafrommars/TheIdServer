@@ -1,4 +1,5 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -54,20 +55,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         [Parameter]
         public Entity.Client Model { get; set; }
 
-        [Parameter]
-        public EventCallback<AccessTokenType> TokenTypeChanged { get; set; }
 
-        [Parameter]
-        public EventCallback ModelChanged { get; set; }
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
 
         private void SetTokenType(AccessTokenType accessTokenType)
         {
-            TokenTypeChanged.InvokeAsync(accessTokenType);
+            Model.AccessTokenType = (int)accessTokenType;
+            TokenChanded();
         }
 
         private void TokenChanded()
         {
-            ModelChanged.InvokeAsync(Model);
+            HandleModificationState.EntityUpdated(Model);
         }
     }
 }

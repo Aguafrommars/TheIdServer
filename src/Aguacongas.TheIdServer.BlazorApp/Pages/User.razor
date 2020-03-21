@@ -133,7 +133,7 @@ else
             </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims" Collection="Model.Claims" />
+                    <EntitySubGridTitle Text="Claims" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
@@ -183,7 +183,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserConsents Model="@Model.Consents" DeleteEntityClicked="OnDeleteUserConsentClicked" />
+                    <UserConsents Collection="@Model.Consents"  />
                 </div>
             </div>
             <div id="external-logins" class="card mb-3">
@@ -193,7 +193,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserLogins Model="@Model.Logins" DeleteEntityClicked="OnDeleteUserLoginClicked" />
+                    <UserLogins Collection="@Model.Logins"  />
                 </div>
             </div>
             <div id="external-logins-tokens" class="card mb-3">
@@ -203,7 +203,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserTokens Model="@Model.Tokens" DeleteEntityClicked="OnDeleteUserTokenClicked" />
+                    <UserTokens Collection="@Model.Tokens" />
                 </div>
             </div>
             <div id="reference-tokens" class="card mb-3">
@@ -213,7 +213,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ReferenceToken Model="@Model.ReferenceTokens" DeleteEntityClicked="OnDeleteReferenceTokenClicked" />
+                    <ReferenceToken Collection="@Model.ReferenceTokens" />
                 </div>
             </div>
             <div id="refresh-tokens" class="card mb-3">
@@ -223,7 +223,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <RefreshToken Model="@Model.RefreshTokens" DeleteEntityClicked="OnDeleteRefreshTokenClicked" />
+                    <RefreshToken Collection="@Model.RefreshTokens"  />
                 </div>
             </div>
         </div>

@@ -61,26 +61,5 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             AddEmpyClaimsTypes();
         }
-
-        private void OnClaimTypeValueChanged(IdentityClaim claim)
-        {
-            EntityCreated(claim);
-            Model.IdentityClaims.Add(new IdentityClaim());
-            StateHasChanged();
-        }
-
-        private void OnClaimTypeDeleted(IdentityClaim claim)
-        {
-            Model.IdentityClaims.Remove(claim);
-            EntityDeleted(claim);
-            StateHasChanged();
-        }
-
-        private void OnDeletePropertyClicked(IdentityProperty property)
-        {
-            Model.Properties.Remove(property);
-            EntityDeleted(property);
-            StateHasChanged();
-        }
     }
 }

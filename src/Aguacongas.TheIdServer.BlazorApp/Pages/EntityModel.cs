@@ -59,7 +59,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             HandleModificationState = new HandleModificationState
             {
-                OnStateChange = StateHasChanged
+                OnStateChange = OnStateChange
             };
         }
 
@@ -190,6 +190,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Header = GetModelId(Model),
                 Message = "Deleted"
             });
+        }
+
+        protected virtual void OnStateChange()
+        {
+            StateHasChanged();
         }
 
         protected virtual Task<T> GetModelAsync()

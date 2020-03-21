@@ -5,8 +5,8 @@
             {
                 <li class="list-inline-item">
                     <IdentityProvider Entity="@provider"
-                               DeleteClicked="() => ProviderDeletedClicked.InvokeAsync(provider)"
-                               ValueChanged="() => ProviderValueChanged.InvokeAsync(provider)" />
+                               DeleteClicked="() => OnProviderDeletedClicked(provider)"
+                               ValueChanged="() => OnProviderValueChanged(provider)" />
                 </li>
             }
         </ul>

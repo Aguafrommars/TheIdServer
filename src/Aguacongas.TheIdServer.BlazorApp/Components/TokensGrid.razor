@@ -1,9 +1,9 @@
 ﻿@typeparam T
-@inherits UserEntitesGridModel<T>
+@inherits EntitesGridModel<T>
 @inject IJSRuntime _jsRuntime
 @inject NavigationManager _navigationManager
 
-<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="token">
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="token">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ClientId"

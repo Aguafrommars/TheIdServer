@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.IdentityComponents
@@ -8,10 +9,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.IdentityComponents
         [Parameter]
         public IdentityResource Model { get; set; }
 
-        [Parameter]
-        public EventCallback<IdentityClaim> DeleteClaimClicked { get; set; }
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
 
-        [Parameter]
-        public EventCallback<IdentityClaim> ClaimValueChanged { get; set; }
+        private void OnClaimDeletedClicked(IdentityClaim claim)
+        {
+            Model.IdentityClaims.Remove(claim);
+            HandleModificationState.EntityDeleted(claim);
+        }
+
+        private void OnClaimValueChanged(IdentityClaim claim)
+        {
+            Model.IdentityClaims.Add(new IdentityClaim());
+            HandleModificationState.EntityCreated(claim);
+        }
     }
 }

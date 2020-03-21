@@ -96,15 +96,15 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <IdentityClaimTypes Model="@Model" ClaimValueChanged="OnClaimTypeValueChanged" DeleteClaimClicked="OnClaimTypeDeleted" />
+                    <IdentityClaimTypes Model="@Model"  />
                 </div>
             </div>
             <div id="properties" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Properties" Collection="Model.Properties" />
+                    <EntitySubGridTitle Text="Properties" Collection="@Model.Properties" />
                 </div>
                 <div class="card-body">
-                    <IdentityProperties Model="@Model" DeleteEntityClicked="OnDeletePropertyClicked" />
+                    <IdentityProperties Collection="@Model.Properties" />
                 </div>
             </div>
         </div>

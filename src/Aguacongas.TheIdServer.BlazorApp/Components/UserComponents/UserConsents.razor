@@ -1,6 +1,6 @@
-﻿@inherits UserEntitesGridModel<Entity.UserConsent>
+﻿@inherits EntitesGridModel<Entity.UserConsent>
 
-<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="consent">
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="consent">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ClientId"
