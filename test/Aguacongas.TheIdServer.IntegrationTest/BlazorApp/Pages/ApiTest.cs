@@ -2,16 +2,9 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
-using Aguacongas.TheIdServer.BlazorApp.Pages;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
-using Moq;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
@@ -19,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
@@ -43,7 +35,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
+#pragma warning disable S1854 // Unused assignments should be removed
             string markup = WaitForLoaded(host, component);
+#pragma warning restore S1854 // Unused assignments should be removed
 
             WaitForContains(host, component, "filtered");
 
@@ -201,7 +195,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 markup = component.GetMarkup();
             }
             catch(ArgumentException)
-            { }
+            {
+                // silent catch
+            }
 
             Assert.Null(markup);
             
@@ -409,12 +405,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
 
-            var button = component.Find("#scopes button.dropdown-item");
-            while (button == null)
-            {
-                host.WaitForNextRender();
-                button = component.Find("#scopes button.dropdown-item");
-            }
+            var button = host.WaitForNode(component, "#scopes button.dropdown-item");
 
             await host.WaitForNextRenderAsync(() => button.ClickAsync());
 

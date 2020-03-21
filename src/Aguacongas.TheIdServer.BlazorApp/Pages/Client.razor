@@ -10,7 +10,8 @@
 }
 else
 {
-    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+    <CascadingValue Value="HandleModificationState">
         <div class="row bg-light sticky-top">
             <div class="col">
                 @if (IsNew)
@@ -130,8 +131,8 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ClientGrantTypes Model="@Model" 
-                                      GrantTypeDeletedClicked="OnGrantTypeDeleted" 
+                    <ClientGrantTypes Model="@Model"
+                                      GrantTypeDeletedClicked="OnGrantTypeDeleted"
                                       GrantTypeValueChanged="OnGrantTypeValueChanged" />
                 </div>
             </div>
@@ -149,8 +150,7 @@ else
                 </div>
                 <div id="urls" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="URLs"
-                                            AddClicked="OnAddUrlClicked" />
+                        <EntitySubGridTitle Text="URLs" Collection="Model.RedirectUris" CreateModel="CreateRedirectUri" />
                     </div>
                     <div class="card-body">
                         <ClientUris Model="@Model" DeleteEntityClicked="OnDeleteUrlClicked" />
@@ -164,8 +164,8 @@ else
                     </div>
                     <div class="card-body">
                         <ClientIdpRestrictions Model="@Model"
-                                               ProviderDeletedClicked="OnProviderDeleted" 
-                                               ProviderValueChanged="OnProviderValueChanged"/>
+                                               ProviderDeletedClicked="OnProviderDeleted"
+                                               ProviderValueChanged="OnProviderValueChanged" />
                     </div>
                 </div>
             }
@@ -210,8 +210,7 @@ else
             </div>
             <div id="secrets" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Secrets"
-                                        AddClicked="OnAddSecretClicked" />
+                    <EntitySubGridTitle Text="Secrets" Collection="Model.ClientSecrets" CreateModel="CreateSecret" />
                 </div>
                 <div class="card-body">
                     <ClientSecrets Model="@Model" DeleteEntityClicked="OnDeleteSecretClicked" />
@@ -222,8 +221,7 @@ else
             </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims"
-                                        AddClicked="OnAddClaimClicked" />
+                    <EntitySubGridTitle Text="Claims" Collection="Model.ClientClaims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
                     <ClientClaims Model="@Model" DeleteEntityClicked="OnDeleteClaimClicked" />
@@ -231,13 +229,13 @@ else
             </div>
             <div id="properties" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Properties"
-                                        AddClicked="OnAddPropertyClicked" />
+                    <EntitySubGridTitle Text="Properties" Collection="Model.Properties" CreateModel="CreateProperty" />
                 </div>
                 <div class="card-body">
                     <ClientProperties Model="@Model" DeleteEntityClicked="OnDeletePropertyClicked" />
                 </div>
             </div>
         </div>
-    </EditForm>
+    </CascadingValue
+></EditForm>
 }

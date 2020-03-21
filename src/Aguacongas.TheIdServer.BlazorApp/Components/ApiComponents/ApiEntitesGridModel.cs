@@ -1,22 +1,26 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
 {
-    public class ApiEntitesGridModel<T> : ComponentBase
+    public class ApiEntitesGridModel<T> : ComponentBase where T: IEntityId
     {
         protected GridState GridState { get; } = new GridState();
 
         [Parameter]
-        public ProtectResource Model { get; set; }
 
-        [Parameter]
-        public EventCallback<T> DeleteEntityClicked { get; set; }
+        public ICollection<T> Collection { get; set; }
+
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
 
         protected void OnDeleteEntityClicked(T entity)
         {
-            DeleteEntityClicked.InvokeAsync(entity);
+            Collection.Remove(entity);
+            HandleModificationState.EntityDeleted(entity);
+            StateHasChanged();
         }
     }
 }

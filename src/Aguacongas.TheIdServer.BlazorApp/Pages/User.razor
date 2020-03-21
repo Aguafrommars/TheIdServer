@@ -10,7 +10,8 @@
 }
 else
 {
-    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+    <CascadingValue Value="HandleModificationState">
         <div class="row bg-light sticky-top mb-3">
             <div class="col">
                 @if (IsNew)
@@ -132,8 +133,7 @@ else
             </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims"
-                                        AddClicked="OnAddClaimClicked" />
+                    <EntitySubGridTitle Text="Claims" Collection="Model.Claims" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
@@ -227,5 +227,6 @@ else
                 </div>
             </div>
         </div>
-    </EditForm>
+    </CascadingValue>
+</EditForm>
 }

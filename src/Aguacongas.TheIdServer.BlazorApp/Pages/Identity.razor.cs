@@ -76,14 +76,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
-        private void OnAddPropertyClicked()
-        {
-            var property = new IdentityProperty();
-            Model.Properties.Add(property);
-            EntityCreated(property);
-            StateHasChanged();
-        }
-
         private void OnDeletePropertyClicked(IdentityProperty property)
         {
             Model.Properties.Remove(property);

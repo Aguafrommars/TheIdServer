@@ -175,14 +175,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmptyRole();
         }
 
-        private void OnAddClaimClicked()
-        {
-            var claim = new entity.UserClaim();
-            State.Claims.Add(claim);
-            EntityCreated(claim);
-            StateHasChanged();
-        }
-
         private void OnDeleteClaimClicked(entity.UserClaim claim)
         {
             Model.Claims.Remove(claim);

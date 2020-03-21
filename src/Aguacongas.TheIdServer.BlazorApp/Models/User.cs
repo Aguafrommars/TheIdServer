@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -16,8 +15,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public ICollection<Entity.Role> Roles { get; set; }
 
         public ICollection<Entity.UserToken> Tokens { get; set; }
-        public List<ReferenceToken> ReferenceTokens { get; internal set; }
-        public List<RefreshToken> RefreshTokens { get; internal set; }
+        public List<Entity.ReferenceToken> ReferenceTokens { get; internal set; }
+        public List<Entity.RefreshToken> RefreshTokens { get; internal set; }
 
         public new User Clone()
         {

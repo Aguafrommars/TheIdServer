@@ -162,39 +162,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmpyClaimsTypes();
         }
 
-        private void OnAddSecretClicked()
-        {
-            var secret = new ApiSecret
+        private ApiSecret CreateSecret()
+         =>  new ApiSecret
             {
                 Type = "SharedSecret"
             };
-            Model.Secrets.Add(secret);
-            EntityCreated(secret);
-            StateHasChanged();
-        }
 
-        private void OnDeleteSecretClicked(ApiSecret secret)
-        {
-            Model.Secrets.Remove(secret);
-            EntityDeleted(secret);
-            StateHasChanged();
-        }
-
-        private void OnClaimTypeValueChanged(ApiClaim claim)
-        {
-            EntityCreated(claim);
-            Model.ApiClaims.Add(new ApiClaim());
-            StateHasChanged();
-        }
-
-        private void OnClaimTypeDeleted(ApiClaim claim)
-        {
-            Model.ApiClaims.Remove(claim);
-            EntityDeleted(claim);
-            StateHasChanged();
-        }
-
-        private void OnAddScopeClicked()
+        private ApiScope CreateApiScope()
         {
             var claim = new ApiScopeClaim();
             var claims = new List<ApiScopeClaim>()
@@ -206,47 +180,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 ApiScopeClaims = claims
             };
             claim.ApiScpope = scope;
-            Model.Scopes.Add(scope);
-            EntityCreated(scope);
-            StateHasChanged();
+            return scope;
         }
 
-        private void OnDeleteScopeClicked(ApiScope scope)
-        {
-            Model.Scopes.Remove(scope);
-            EntityDeleted(scope);
-            StateHasChanged();
-        }
+        private ApiProperty CreateProperty()
+            => new ApiProperty();
 
-        private void OnScopeClaimDeleted(ApiScope scope, ApiScopeClaim claim)
-        {
-            scope.ApiScopeClaims.Remove(claim);
-            EntityDeleted(claim);
-            StateHasChanged();
-        }
-
-        private void OnScopeClaimValueChanged(ApiScope scope, ApiScopeClaim claim)
-        {
-            claim.ApiScpope = scope;
-            EntityCreated(claim);
-            scope.ApiScopeClaims.Add(new ApiScopeClaim { ApiScpope = scope });
-            StateHasChanged();
-        }
-
-        private void OnAddPropertyClicked()
-        {
-            var property = new ApiProperty();
-            Model.Properties.Add(property);
-            EntityCreated(property);
-            StateHasChanged();
-        }
-
-        private void OnDeletePropertyClicked(ApiProperty property)
-        {
-            Model.Properties.Remove(property);
-            EntityDeleted(property);
-            StateHasChanged();
-        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

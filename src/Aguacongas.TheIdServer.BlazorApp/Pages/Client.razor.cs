@@ -165,14 +165,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             base.OnEntityUpdated(Model.GetType(), Model);
         }
 
-        private void OnAddUrlClicked()
-        {
-            var url = new Entity.ClientUri();
-            Model.RedirectUris.Add(url);
-            EntityCreated(url);
-            StateHasChanged();
-        }
-
         private void OnDeleteUrlClicked(Entity.ClientUri url)
         {
             Model.RedirectUris.Remove(url);
@@ -180,29 +172,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
-        private void OnAddSecretClicked()
-        {
-            var secret = new Entity.ClientSecret
+        private Entity.ClientSecret CreateSecret()
+            => new Entity.ClientSecret
             {
                 Type = "SharedSecret"
             };
-            Model.ClientSecrets.Add(secret);
-            EntityCreated(secret);
-            StateHasChanged();
-        }
 
+        private Entity.ClientUri CreateRedirectUri()
+            => new Entity.ClientUri();
+
+        private Entity.ClientClaim CreateClaim()
+            => new Entity.ClientClaim();
+
+        private Entity.ClientProperty CreateProperty()
+            => new Entity.ClientProperty();
         private void OnDeleteSecretClicked(Entity.ClientSecret secret)
         {
             Model.ClientSecrets.Remove(secret);
             EntityDeleted(secret);
-            StateHasChanged();
-        }
-
-        private void OnAddClaimClicked()
-        {
-            var claim = new Entity.ClientClaim();
-            Model.ClientClaims.Add(claim);
-            EntityCreated(claim);
             StateHasChanged();
         }
 
@@ -254,14 +241,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Model.AllowedScopes.Remove(scope);
             EntityDeleted(scope);
-            StateHasChanged();
-        }
-
-        private void OnAddPropertyClicked()
-        {
-            var property = new Entity.ClientProperty();
-            Model.Properties.Add(property);
-            EntityCreated(property);
             StateHasChanged();
         }
 

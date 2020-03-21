@@ -1,10 +1,10 @@
 ﻿<ul class="list-inline">
-    @foreach (var claim in Scope.ApiScopeClaims)
+    @foreach (var claim in Model.ApiScopeClaims)
     {
         <li class="list-inline-item">
             <ClaimType Entity="@claim"
-                       DeleteClicked="() => DeleteClaimClicked.InvokeAsync(claim)"
-                       ValueChanged="() => ClaimValueChanged.InvokeAsync(claim)" />
+                       DeleteClicked="() => OnDeleteClaimClicked(claim)"
+                       ValueChanged="() => OnClaimValueChanged(claim)" />
         </li>
     }
 </ul>
