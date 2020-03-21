@@ -10,17 +10,11 @@
 }
 else
 {
-    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+    <CascadingValue Value="HandleModificationState">
         <div class="row bg-light sticky-top mb-3">
             <div class="col">
-                @if (IsNew)
-                {
-                    <AuthorizeText Id="name" Placeholder="role name" @bind-Value="@Model.UserName" />
-                }
-                else
-                {
-                    <h3>@Model.UserName</h3>
-                }
+                <h3>@Model.UserName</h3>
             </div>
             <div>
                 <AuthorizeButton Type="submit" CssSubClass="btn-primary">
@@ -69,6 +63,14 @@ else
         <div class="entity-details">
             <div class="card mb-3">
                 <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col col-form-label" for="email">
+                            user name
+                        </label>
+                        <div class="col-lg-10 col-sm-12">
+                            <AuthorizeText Id="name" @bind-Value="@Model.UserName" />
+                        </div>
+                    </div>
                     @if (IsNew)
                     {
                         <div class="form-group row">
@@ -132,8 +134,7 @@ else
             </div>
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims"
-                                        AddClicked="OnAddClaimClicked" />
+                    <EntitySubGridTitle Text="Claims" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
@@ -183,7 +184,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserConsents Model="@Model.Consents" DeleteEntityClicked="OnDeleteUserConsentClicked" />
+                    <UserConsents Collection="@Model.Consents"  />
                 </div>
             </div>
             <div id="external-logins" class="card mb-3">
@@ -193,7 +194,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserLogins Model="@Model.Logins" DeleteEntityClicked="OnDeleteUserLoginClicked" />
+                    <UserLogins Collection="@Model.Logins"  />
                 </div>
             </div>
             <div id="external-logins-tokens" class="card mb-3">
@@ -203,7 +204,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserTokens Model="@Model.Tokens" DeleteEntityClicked="OnDeleteUserTokenClicked" />
+                    <UserTokens Collection="@Model.Tokens" />
                 </div>
             </div>
             <div id="reference-tokens" class="card mb-3">
@@ -213,7 +214,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <ReferenceToken Model="@Model.ReferenceTokens" DeleteEntityClicked="OnDeleteReferenceTokenClicked" />
+                    <ReferenceToken Collection="@Model.ReferenceTokens" />
                 </div>
             </div>
             <div id="refresh-tokens" class="card mb-3">
@@ -223,9 +224,10 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <RefreshToken Model="@Model.RefreshTokens" DeleteEntityClicked="OnDeleteRefreshTokenClicked" />
+                    <RefreshToken Collection="@Model.RefreshTokens"  />
                 </div>
             </div>
         </div>
-    </EditForm>
+    </CascadingValue>
+</EditForm>
 }

@@ -52,11 +52,11 @@
                 claims
             </label>
             <div class="col-lg-10 col-sm-12">
-                <ApiScopeClaimTypes Scope="@Scope" ClaimValueChanged="OnScopeClaimValueChanged" DeleteClaimClicked="OnScopeClaimDeleted" />
+                <ApiScopeClaimTypes Model="Scope" />
             </div>
         </div>
     </div>
-    @if (Model.Scopes.Count() > 1)
+    @if (Collection.Count() > 1)
     {
         <div class="card-footer">
             <AuthorizeButton Type="button" CssSubClass="btn-sm btn-primary" Clicked="OnDeleteScopeClicked">

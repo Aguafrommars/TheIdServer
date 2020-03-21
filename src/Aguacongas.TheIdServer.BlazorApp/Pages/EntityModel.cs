@@ -53,8 +53,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected abstract string BackUrl { get; }
 #pragma warning restore CA1056 // Uri properties should not be strings
 
-        private readonly Dictionary<Type, Dictionary<object, ModificationKind>> _changes =
-            new Dictionary<Type, Dictionary<object, ModificationKind>>();
+        protected HandleModificationState HandleModificationState { get; }
+
+        protected EntityModel()
+        {
+            HandleModificationState = new HandleModificationState
+            {
+                OnStateChange = OnStateChange
+            };
+        }
 
         public virtual int Compare(Type x, Type y)
         {
@@ -89,7 +96,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected async Task HandleValidSubmit()
         {
-            if (!_changes.Any())
+            var changes = HandleModificationState.Changes;
+            if (!changes.Any())
             {
                 Notifier.Notify(new Models.Notification
                 {
@@ -105,20 +113,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Id = GetModelId(Model);
             IsNew = false;
 
-            var keys = _changes.Keys
+            var keys = changes.Keys
                 .OrderBy(k => k, this);
 
             try
             {
                 foreach (var key in keys)
                 {
-                    await HandleMoficationList(key, _changes[key])
+                    await HandleMoficationList(key, changes[key])
                         .ConfigureAwait(false);
                 }
             }
             finally
             {
-                _changes.Clear();
+                changes.Clear();
             }
 
             Notifier.Notify(new Models.Notification
@@ -132,33 +140,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
         {
-            entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var entityType = typeof(TEntity);
-            var modifications = GetModifications(entityType);
-            if (!modifications.TryAdd(entity, ModificationKind.Add))
-            {
-                var modification = modifications[entity];
-                Console.WriteLine($"Replace change for entity {entityType.Name} {GetModelId(entity)} {modification} with {ModificationKind.Add}");
-                modifications[entity] = ModificationKind.Add;
-                return;
-            }
-            Console.WriteLine($"Add created change for entity {entityType.Name} {GetModelId(entity)}");
+            HandleModificationState.EntityCreated(entity);
         }
 
-        protected void EntityDeleted<TEntity>(TEntity entity) where TEntity : class
+        protected void EntityDeleted<TEntity>(TEntity entity) where TEntity : class, IEntityId
         {
-            entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var entityType = typeof(TEntity);
-            var modifications = GetModifications(entityType);
-            var id = GetModelId(entity);
-            if (id == null)
-            {
-                Console.WriteLine($"Remove change for entity {entityType.Name}");
-                modifications.Remove(entity);
-                return;
-            }
-            Console.WriteLine($"Add delete change for entity {entityType.Name} {id}");
-            modifications.Add(entity, ModificationKind.Delete);
+            HandleModificationState.EntityDeleted(entity);
         }
 
         protected ValueTask ScrollTo(string id)
@@ -205,6 +192,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
+        protected virtual void OnStateChange()
+        {
+            StateHasChanged();
+        }
+
         protected virtual Task<T> GetModelAsync()
         {
             return AdminStore.GetAsync(Id, new GetRequest
@@ -221,7 +213,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             throw new NotSupportedException();
         }
-        protected virtual string GetModelId<TEntity>(TEntity model)
+        protected string GetModelId<TEntity>(TEntity model)
         {
             if (model is IEntityId entity)
             {
@@ -292,13 +284,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected virtual void OnEntityUpdated(Type entityType, IEntityId entityModel)
         {
-            var modifications = GetModifications(entityType);
-
-            if (entityModel != null && !modifications.ContainsKey(entityModel))
-            {
-                Console.WriteLine($"Add update modification for entity {entityType} {entityModel.Id}");
-                modifications.Add(entityModel, ModificationKind.Update);
-            }
+            HandleModificationState.EntityUpdated(entityType, entityModel);
         }
 
         protected abstract T Create();
@@ -313,41 +299,51 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                             .Select(m => m.Key);
         }
 
-        private Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
+        private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
-            var tasks = new List<Task>();
             foreach (var entity in addList)
             {
                 SetNavigationProperty(entity);
                 SanetizeEntityToSaved(entity);
-                tasks.Add(CreateAsync(entityType, entity)
-                    .ContinueWith(t =>
-                    {
-                        if (t.Exception != null)
-                        {
-                            HandleModificationError(t.Exception);
-                        }
-                        SetCreatedEntityId(entity, t.Result);
-                        SetModelEntityId(entityType, t.Result);
-                    }));
+                try
+                {
+                    var result = await CreateAsync(entityType, entity).ConfigureAwait(false);
+
+                    SetCreatedEntityId(entity, result);
+                    SetModelEntityId(entityType, result);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
             var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
             foreach (var entity in updateList)
             {
                 SanetizeEntityToSaved(entity);
-                tasks.Add(UpdateAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception)));
+                try
+                {
+                    await UpdateAsync(entityType, entity).ConfigureAwait(false);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
             var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
             foreach (var entity in deleteList)
             {
-                tasks.Add(DeleteAsync(entityType, entity)
-                    .ContinueWith(t => HandleModificationError(t.Exception)));
+                try
+                {
+                    await DeleteAsync(entityType, entity).ConfigureAwait(false);
+                }
+                catch (AggregateException e)
+                {
+                    HandleModificationError(e);
+                }
             }
-
-            return Task.WhenAll(tasks);
         }
 
         private void HandleModificationError(AggregateException exception)
@@ -394,17 +390,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
         }
 
-        private Dictionary<object, ModificationKind> GetModifications(Type entityType)
-        {
-            if (!_changes.TryGetValue(entityType, out Dictionary<object, ModificationKind> modifications))
-            {
-                modifications = new Dictionary<object, ModificationKind>();
-                _changes.Add(entityType, modifications);
-            }
-
-            return modifications;
-        }
-
         private Task<object> StoreAsync(Type entityType, object entity, Func<IAdminStore, object, Task<object>> action)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
@@ -416,13 +401,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
-        }
-
-        private enum ModificationKind
-        {
-            Add,
-            Update,
-            Delete
         }
     }
 }

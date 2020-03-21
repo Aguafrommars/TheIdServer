@@ -7,8 +7,8 @@
             {
                 <li class="list-inline-item">
                     <ClaimType Entity="@claim"
-                               DeleteClicked="() => DeleteClaimClicked.InvokeAsync(claim)"
-                               ValueChanged="() => ClaimValueChanged.InvokeAsync(claim)" />
+                               DeleteClicked="() => OnDeleteClaimClicked(claim)"
+                               ValueChanged="() => OnClaimValueChanged(claim)" />
                 </li>
             }
         </ul>

@@ -1,6 +1,6 @@
-﻿@inherits  UserEntitesGridModel<Entity.UserLogin>
+﻿@inherits  EntitesGridModel<Entity.UserLogin>
 
-<EntitiesGrid Items="@Model" TableClass="table table-hover" Context="login">
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="login">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ProviderDisplayName"

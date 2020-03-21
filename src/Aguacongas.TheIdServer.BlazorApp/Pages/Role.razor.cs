@@ -59,13 +59,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
         }
 
-        private void OnAddClaimClicked()
-        {
-            var claim = new RoleClaim();
-            Model.Claims.Add(claim);
-            EntityCreated(claim);
-            StateHasChanged();
-        }
+        private RoleClaim CreateClaim()
+            => new RoleClaim();
 
         private void OnDeleteClaimClicked(RoleClaim claim)
         {

@@ -1,6 +1,6 @@
-﻿@inherits ClientEntitiesGridModel<Entity.ClientClaim>
+﻿@inherits EntitesGridModel<Entity.ClientClaim>
 
-<EntitiesGrid Items="@Model.ClientClaims" TableClass="table table-hover" Context="claim">
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="claim">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Type"
@@ -37,7 +37,7 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
-@if (Model.ClientClaims.Any())
+@if (Collection.Any())
 {
 <div class="col">
     <div class="form-group row">

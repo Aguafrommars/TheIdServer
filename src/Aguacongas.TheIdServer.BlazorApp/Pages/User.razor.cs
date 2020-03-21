@@ -175,14 +175,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmptyRole();
         }
 
-        private void OnAddClaimClicked()
-        {
-            var claim = new entity.UserClaim();
-            State.Claims.Add(claim);
-            EntityCreated(claim);
-            StateHasChanged();
-        }
-
+        private entity.UserClaim CreateClaim()
+            => new entity.UserClaim();
         private void OnDeleteClaimClicked(entity.UserClaim claim)
         {
             Model.Claims.Remove(claim);
@@ -201,42 +195,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             EntityCreated(role);
             AddEmptyRole();
-            StateHasChanged();
-        }
-
-        private void OnDeleteUserTokenClicked(entity.UserToken token)
-        {
-            Model.Tokens.Remove(token);
-            EntityDeleted(token);
-            StateHasChanged();
-        }
-
-
-        private void OnDeleteRefreshTokenClicked(entity.RefreshToken token)
-        {
-            Model.RefreshTokens.Remove(token);
-            EntityDeleted(token);
-            StateHasChanged();
-        }
-
-        private void OnDeleteReferenceTokenClicked(entity.ReferenceToken token)
-        {
-            Model.ReferenceTokens.Remove(token);
-            EntityDeleted(token);
-            StateHasChanged();
-        }
-
-        private void OnDeleteUserLoginClicked(entity.UserLogin login)
-        {
-            Model.Logins.Remove(login);
-            EntityDeleted(login);
-            StateHasChanged();
-        }
-
-        private void OnDeleteUserConsentClicked(entity.UserConsent consent)
-        {
-            Model.Consents.Remove(consent);
-            EntityDeleted(consent);
             StateHasChanged();
         }
     }

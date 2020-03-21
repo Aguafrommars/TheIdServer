@@ -14,7 +14,6 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace Aguacongas.TheIdServer
 {
@@ -31,16 +30,15 @@ namespace Aguacongas.TheIdServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var connectionString = Configuration.GetConnectionString("DefaultConnection");            
             
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
+                    options.UseSqlServer(connectionString))
                 .AddOperationalEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
+                    options.UseSqlServer(connectionString))
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(

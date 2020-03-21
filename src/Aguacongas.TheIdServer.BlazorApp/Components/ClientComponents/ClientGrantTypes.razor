@@ -8,8 +8,8 @@
                 <li class="list-inline-item">
                     <GrantType Entity="@grantType"
                                Model="@Model"
-                               DeleteClicked="() => GrantTypeDeletedClicked.InvokeAsync(grantType)"
-                               ValueChanged="() => GrantTypeValueChanged.InvokeAsync(grantType)" />
+                               DeleteClicked="() => OnGrantTypeDeletedClicked(grantType)"
+                               ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
                 </li>
             }
         </ul>

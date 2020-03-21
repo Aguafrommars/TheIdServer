@@ -1,6 +1,6 @@
-﻿@inherits ApiEntitesGridModel<Entity.ApiProperty>
+﻿@inherits EntitesGridModel<Entity.ApiProperty>
 
-<EntitiesGrid Items="@Model.Properties" TableClass="table table-hover" Context="property">
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="property">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Key"

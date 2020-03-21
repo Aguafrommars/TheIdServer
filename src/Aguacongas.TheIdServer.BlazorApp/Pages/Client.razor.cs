@@ -20,6 +20,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override string BackUrl => "clients";
 
+        protected override void OnStateChange()
+        {
+            _isWebClient = Model.IsWebClient();
+            base.OnStateChange();
+        }
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -154,94 +160,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             StateHasChanged();
         }
 
-        private void OnTokenTypeChanged(AccessTokenType accessTokenType)
-        {
-            Model.AccessTokenType = (int)accessTokenType;
-            base.OnEntityUpdated(Model.GetType(), Model);
-        }
-
-        private void OnModelChanged()
-        {
-            base.OnEntityUpdated(Model.GetType(), Model);
-        }
-
-        private void OnAddUrlClicked()
-        {
-            var url = new Entity.ClientUri();
-            Model.RedirectUris.Add(url);
-            EntityCreated(url);
-            StateHasChanged();
-        }
-
-        private void OnDeleteUrlClicked(Entity.ClientUri url)
-        {
-            Model.RedirectUris.Remove(url);
-            EntityDeleted(url);
-            StateHasChanged();
-        }
-
-        private void OnAddSecretClicked()
-        {
-            var secret = new Entity.ClientSecret
+        private Entity.ClientSecret CreateSecret()
+            => new Entity.ClientSecret
             {
                 Type = "SharedSecret"
             };
-            Model.ClientSecrets.Add(secret);
-            EntityCreated(secret);
-            StateHasChanged();
-        }
 
-        private void OnDeleteSecretClicked(Entity.ClientSecret secret)
-        {
-            Model.ClientSecrets.Remove(secret);
-            EntityDeleted(secret);
-            StateHasChanged();
-        }
+        private Entity.ClientUri CreateRedirectUri()
+            => new Entity.ClientUri();
 
-        private void OnAddClaimClicked()
-        {
-            var claim = new Entity.ClientClaim();
-            Model.ClientClaims.Add(claim);
-            EntityCreated(claim);
-            StateHasChanged();
-        }
+        private Entity.ClientClaim CreateClaim()
+            => new Entity.ClientClaim();
 
-        private void OnDeleteClaimClicked(Entity.ClientClaim claim)
-        {
-            Model.ClientClaims.Remove(claim);
-            EntityDeleted(claim);
-            StateHasChanged();
-        }
-
-        private void OnGrantTypeValueChanged(Entity.ClientGrantType grantType)
-        {
-            EntityCreated(grantType);
-            Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
-            _isWebClient = Model.IsWebClient();
-            StateHasChanged();
-        }
-
-        private void OnGrantTypeDeleted(Entity.ClientGrantType grantType)
-        {
-            Model.AllowedGrantTypes.Remove(grantType);
-            EntityDeleted(grantType);
-            _isWebClient = Model.IsWebClient();
-            StateHasChanged();
-        }
-
-        private void OnProviderValueChanged(Entity.ClientIdpRestriction provider)
-        {
-            EntityCreated(provider);
-            Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
-            StateHasChanged();
-        }
-
-        private void OnProviderDeleted(Entity.ClientIdpRestriction provider)
-        {
-            Model.IdentityProviderRestrictions.Remove(provider);
-            EntityDeleted(provider);
-            StateHasChanged();
-        }
+        private Entity.ClientProperty CreateProperty()
+            => new Entity.ClientProperty();
 
         private void OnScopeValueChanged(Entity.ClientScope scope)
         {
@@ -254,21 +186,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Model.AllowedScopes.Remove(scope);
             EntityDeleted(scope);
-            StateHasChanged();
-        }
-
-        private void OnAddPropertyClicked()
-        {
-            var property = new Entity.ClientProperty();
-            Model.Properties.Add(property);
-            EntityCreated(property);
-            StateHasChanged();
-        }
-
-        private void OnDeletePropertyClicked(Entity.ClientProperty property)
-        {
-            Model.Properties.Remove(property);
-            EntityDeleted(property);
             StateHasChanged();
         }
     }
