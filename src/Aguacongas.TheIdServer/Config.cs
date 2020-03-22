@@ -148,7 +148,8 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443",
                         "http://exemple.com/"
                     },
-                    AllowedScopes = { "openid", "profile", "theidserveradminapi" }
+                    AllowedScopes = { "openid", "profile", "theidserveradminapi" },
+                    AccessTokenType = AccessTokenType.Reference
                 },
 
                 // Multi-tiers public server client

@@ -9,11 +9,11 @@ using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,19 +23,14 @@ namespace Aguacongas.TheIdServer
     public static class SeedData
 #pragma warning restore S1118 // Utility classes should not have public constructors
     {
-        public static void EnsureSeedData(string connectionString)
+        public static void EnsureSeedData(IConfiguration configuration)
         {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
+            
             var services = new ServiceCollection();
             services.AddLogging()
-                .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
-                .AddConfigurationEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly)))
-                .AddOperationalEntityFrameworkStores(options => 
-                    options.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly)))
+                .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(configuration))
+                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
+                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -46,14 +41,18 @@ namespace Aguacongas.TheIdServer
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
 
-            var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            configContext.Database.Migrate();
+            var dbType = configuration.GetValue<DbTypes>("DbType");
+            if (dbType != DbTypes.InMemory)
+            {
+                var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                configContext.Database.Migrate();
 
-            var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
-            opContext.Database.Migrate();
+                var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+                opContext.Database.Migrate();
 
-            var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-            appcontext.Database.Migrate();
+                var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                appcontext.Database.Migrate();
+            }
 
             SeedUsers(scope);
             SeedConfiguration(scope);
@@ -62,7 +61,7 @@ namespace Aguacongas.TheIdServer
         public static void SeedConfiguration(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            
+
             if (!context.Clients.Any())
             {
                 foreach (var client in Config.GetClients())
@@ -103,7 +102,7 @@ namespace Aguacongas.TheIdServer
                 SharedConstants.WRITER,
                 SharedConstants.READER
             };
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 if (roleMgr.FindByNameAsync(role).GetAwaiter().GetResult() == null)
                 {
