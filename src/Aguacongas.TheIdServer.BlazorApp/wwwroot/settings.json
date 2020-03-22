@@ -1,10 +1,10 @@
 {
-  "apiBaseUrl": "https://localhost:5443/api",
+  "apiBaseUrl": "https://theidserver.herokuapp.com/api",
   "administratorEmail": "aguacongas@gmail.com",
-  "authority": "https://localhost:5443",
+  "authority": "https://theidserver.herokuapp.com/",
   "client_id": "theidserveradmin",
-  "redirect_uri": "https://localhost:5443/authentication/login-callback",
-  "post_logout_redirect_uri": "https://localhost:5443/authentication/logout-callback",
+  "redirect_uri": "https://theidserver.herokuapp.com/authentication/login-callback",
+  "post_logout_redirect_uri": "https://theidserver.herokuapp.com/authentication/logout-callback",
   "response_type": "code",
   "scope": "openid profile theidserveradminapi"
 }
