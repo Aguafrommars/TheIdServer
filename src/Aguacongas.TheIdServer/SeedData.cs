@@ -25,6 +25,7 @@ namespace Aguacongas.TheIdServer
     {
         public static void EnsureSeedData(IConfiguration configuration)
         {
+            
             var services = new ServiceCollection();
             services.AddLogging()
                 .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(configuration))
