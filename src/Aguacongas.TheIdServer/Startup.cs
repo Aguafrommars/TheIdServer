@@ -106,12 +106,21 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error")
-                    .UseHsts();
+                app.UseExceptionHandler("/Home/Error");
+                if (Configuration.GetValue<bool>("UseHttps"))
+                {
+                    app.UseHsts();
+                }
             }
 
-            app.UseSerilogRequestLogging()
-                .UseHttpsRedirection()
+            app.UseSerilogRequestLogging();
+
+            if (Configuration.GetValue<bool>("UseHttps"))
+            {
+                app.UseHttpsRedirection();
+            }
+
+            app.UseHttpsRedirection()
                 .UseIdentityServerAdminApi("/api", child =>
                 {
                     child.UseOpenApi()
