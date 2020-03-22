@@ -29,16 +29,11 @@ namespace Aguacongas.TheIdServer
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");            
-            
-            services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(connectionString))
+        {            
+            services.AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                .AddConfigurationEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString))
-                .AddOperationalEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString))
+                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
@@ -141,6 +136,13 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapFallbackToFile("index.html");
                 });
+
+            if (Configuration.GetValue<DbTypes>("DbType") == DbTypes.InMemory)
+            {
+                using var scope = app.ApplicationServices.CreateScope();
+                SeedData.SeedConfiguration(scope);
+                SeedData.SeedUsers(scope);
+            }
         }
     }
 }

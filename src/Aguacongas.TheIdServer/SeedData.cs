@@ -9,6 +9,7 @@ using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -23,19 +24,13 @@ namespace Aguacongas.TheIdServer
     public static class SeedData
 #pragma warning restore S1118 // Utility classes should not have public constructors
     {
-        public static void EnsureSeedData(string connectionString)
+        public static void EnsureSeedData(IConfiguration configuration)
         {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
             var services = new ServiceCollection();
             services.AddLogging()
-                .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
-                .AddConfigurationEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly)))
-                .AddOperationalEntityFrameworkStores(options => 
-                    options.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly)))
+                .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(configuration))
+                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
+                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();

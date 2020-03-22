@@ -28,8 +28,7 @@ namespace Aguacongas.TheIdServer
             if (seed)
             {
                 var config = host.Services.GetRequiredService<IConfiguration>();
-                var connectionString = config.GetConnectionString("DefaultConnection");
-                SeedData.EnsureSeedData(connectionString);
+                SeedData.EnsureSeedData(config);
                 return;
             }
 
