@@ -1,10 +1,19 @@
 {
   "apiBaseUrl": "https://theidserver.herokuapp.com/api",
-  "administratorEmail": "aguacongas@gmail.com",
   "authority": "https://theidserver.herokuapp.com/",
+  "administratorEmail": "aguacongas@gmail.com",
   "client_id": "theidserveradmin",
   "redirect_uri": "https://theidserver.herokuapp.com/authentication/login-callback",
   "post_logout_redirect_uri": "https://theidserver.herokuapp.com/authentication/logout-callback",
   "response_type": "code",
-  "scope": "openid profile theidserveradminapi"
+  "scope": "openid profile theidserveradminapi",
+  "metadata": {
+    "issuer": "http://theidserver.herokuapp.com",
+    "jwks_uri": "https://theidserver.herokuapp.com/.well-known/openid-configuration/jwks",
+    "authorization_endpoint": "https://theidserver.herokuapp.com/connect/authorize",
+    "token_endpoint": "https://theidserver.herokuapp.com/connect/token",
+    "userinfo_endpoint": "https://theidserver.herokuapp.com/connect/userinfo",
+    "end_session_endpoint": "https://theidserver.herokuapp.com/connect/endsession",
+    "check_session_iframe": "https://theidserver.herokuapp.com/connect/checksession"
+  }
 }

@@ -19,10 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Xunit;
 using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
