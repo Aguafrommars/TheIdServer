@@ -1,5 +1,6 @@
 {
   "apiBaseUrl": "https://theidserver.herokuapp.com/api",
+  "authority": "https://theidserver.herokuapp.com/",
   "administratorEmail": "aguacongas@gmail.com",
   "client_id": "theidserveradmin",
   "redirect_uri": "https://theidserver.herokuapp.com/authentication/login-callback",
