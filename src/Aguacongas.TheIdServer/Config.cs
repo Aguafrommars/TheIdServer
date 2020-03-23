@@ -133,20 +133,23 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/authentication/login-callback",
                         "https://localhost:5443/authentication/login-callback",
-                        "http://exemple.com/authentication/login-callback"
+                        "http://exemple.com/authentication/login-callback",
+                        "https://theidserver.herokuapp.com/authentication/login-callback"
                     },
 
                     PostLogoutRedirectUris = 
                     {
-                        "http://localhost:5001/",
-                        "https://localhost:5443/admin/",
-                        "http://exemple.com/"
+                        "http://localhost:5001/authentication/logout-callback",
+                        "https://localhost:5443/authentication/logout-callback",
+                        "http://exemple.com/authentication/logout-callback",
+                        "https://theidserver.herokuapp.com/authentication/logout-callback"
                     },
                     AllowedCorsOrigins = 
                     {
                         "http://localhost:5001/",
                         "https://localhost:5443",
-                        "http://exemple.com/"
+                        "http://exemple.com/",
+                        "https://theidserver.herokuapp.com"
                     },
                     AllowedScopes = { "openid", "profile", "theidserveradminapi" },
                     AccessTokenType = AccessTokenType.Reference
