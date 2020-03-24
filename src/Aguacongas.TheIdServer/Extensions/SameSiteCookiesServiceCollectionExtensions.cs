@@ -67,7 +67,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     options.SameSite = Unspecified;
                 }
-            }
+                else
+                {
+                    options.Secure = true;
+                }
+            }            
         }
 
         /// <summary>
