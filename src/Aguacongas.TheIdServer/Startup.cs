@@ -47,7 +47,8 @@ namespace Aguacongas.TheIdServer
                 iis.AutomaticAuthentication = false;
             });
 
-            services.AddIdentityServer(options =>
+            services.ConfigureNonBreakingSameSiteCookies()
+                .AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;

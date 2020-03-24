@@ -16,6 +16,10 @@
 * [Apis management](/doc/API.md)
 * [Identities management](/doc/IDENTITY.md)
 
+### Preview 
+
+An in memory db version is deployed on [heroku](https://www.heroku.com/) at [https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
+
 ## Setup
 
 *TODO: describe setup*
