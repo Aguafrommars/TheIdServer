@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/home"
+@inject HttpClient _httpClient
 
 <h1>Welcome</h1>
 <p>
@@ -8,3 +9,4 @@
 <p>
     Visit the <a href="https://github.com/aguacongas/TheIdServer">github site</a> for doc and source code.
 </p>
+@_renderFragment

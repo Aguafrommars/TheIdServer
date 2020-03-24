@@ -46,8 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = Unspecified;
-                // Always set the cookie secure to avoid not end-to-end https cookie issue as for heroku.
-                options.Secure = CookieSecurePolicy.Always; 
                 options.OnAppendCookie = cookieContext =>
                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
                 options.OnDeleteCookie = cookieContext =>
@@ -66,10 +64,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 if (DisallowsSameSiteNone(userAgent))
                 {
                     options.SameSite = Unspecified;
-                }
-                else
-                {
-                    options.Secure = true;
                 }
             }            
         }
