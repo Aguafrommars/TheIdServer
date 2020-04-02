@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Community.OData.Linq.Json" Version="1.4.2" />
     <PackageReference Include="IdentityServer4" Version="3.1.2" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.2.5" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.3.0" />
   </ItemGroup>
 
   <ItemGroup>
