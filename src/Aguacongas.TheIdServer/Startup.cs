@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
             services.AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
@@ -60,7 +60,7 @@ namespace Aguacongas.TheIdServer
                 .AddDefaultSecretValidators()
                 .AddSigningCredentials();
 
-            services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
+            var authBuilder = services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
@@ -73,17 +73,20 @@ namespace Aguacongas.TheIdServer
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
                     options.LegacyAudienceValidation = true;
-                })
-                .AddGoogle(options =>
-                {
+                });
+
+            var externalSettings = Configuration.GetSection("Google").Get<ExternalLoginOptions>();
+            if (externalSettings != null)
+            {
+                authBuilder.AddGoogle(options =>
+                 {
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to https://localhost:5443/signin-google
-                    var externalSettings = Configuration.GetSection("Google").Get<ExternalLoginOptions>();                    
-                    options.ClientId = externalSettings.ClientId;
-                    options.ClientSecret = externalSettings.ClientSecret;
-                });
-
+                     options.ClientId = externalSettings.ClientId;
+                     options.ClientSecret = externalSettings.ClientSecret;
+                 });
+            }
 
             services.AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
@@ -121,8 +124,7 @@ namespace Aguacongas.TheIdServer
                 app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection()
-                .UseIdentityServerAdminApi("/api", child =>
+            app.UseIdentityServerAdminApi("/api", child =>
                 {
                     child.UseOpenApi()
                         .UseSwaggerUi3()
