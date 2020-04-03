@@ -14,7 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
                 _navigationManager.NavigateTo($"authentication/login?returnUrl={_navigationManager.Uri}");
                 return;
             }
-            _administratorEmail = (await _getSettingsTask.ConfigureAwait(false)).AdministratorEmail;
+            _administratorEmail = _settings.AdministratorEmail;
         }
 
     }

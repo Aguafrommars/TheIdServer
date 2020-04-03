@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
@@ -115,7 +116,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => navigationInterceptionMock.Object)
-                    .AddSingleton(p => jsRuntimeMock.Object)
+                    .AddSingleton(p => jsRuntimeMock.Object)                    
+                    .AddSingleton<Settings>()
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
                     .AddSingleton<AuthenticationStateProvider>(p => new FakeAuthenticationStateProvider(userName, claims));
             });

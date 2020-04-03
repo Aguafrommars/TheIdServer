@@ -5,5 +5,6 @@
         public string ApiBaseUrl { get; set; }
 
         public string AdministratorEmail { get; set; }
+        public string WelcomeContenUrl { get;  set; }
     }
 }

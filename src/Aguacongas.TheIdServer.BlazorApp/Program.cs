@@ -2,8 +2,8 @@
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -18,7 +18,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);            
             builder.RootComponents.Add<App>("app");
             ConfigureServices(builder.Services);
             await builder.Build().RunAsync();
@@ -26,22 +26,32 @@ namespace Aguacongas.TheIdServer.BlazorApp
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions()
+            services
+                .AddOptions()
                 .AddBaseAddressHttpClient()
                 .AddApiAuthorization(options =>
                 {
-                    options.ProviderOptions.ConfigurationEndpoint = "settings.json";
+                    var provider = services.BuildServiceProvider();
+                    var configuration = provider.GetRequiredService<IConfiguration>();
+                    options.ProviderOptions.ConfigurationEndpoint = configuration.GetValue<string>("ConfigurationEndpoint");
                     options.UserOptions.RoleClaim = "role";
                 })
                 .AddAuthorizationCore(options =>
                 {
                     options.AddIdentityServerPolicies();
                 })
-                .AddIdentityServer4AdminHttpStores(async p =>
+                .AddIdentityServer4AdminHttpStores(p =>
                 {
-                    return await CreateApiHttpClient(p)
-                        .ConfigureAwait(false);
+                    return Task.FromResult(CreateApiHttpClient(p));
                 })
+                .AddSingleton(p =>
+                {
+                    var configuration = p.GetRequiredService<IConfiguration>();
+                    return configuration.Get<Settings>();
+                })
+                .AddSingleton<Notifier>()
+                .AddTransient<IAdminStore<User>, UserAdminStore>()
+                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient(p =>
                 {
                     var type = Assembly.Load("WebAssembly.Net.Http")
@@ -51,25 +61,14 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 .AddTransient<OidcDelegationHandler>()
                 .AddHttpClient("oidc")
                 .AddHttpMessageHandler<OidcDelegationHandler>();
-
-            services.AddSingleton(async p =>
-                {
-                    var httpClient = p.GetRequiredService<HttpClient>();
-                    return await httpClient.GetJsonAsync<Settings>("settings.json")
-                        .ConfigureAwait(false);
-                })
-                .AddSingleton<Notifier>()
-                .AddTransient<IAdminStore<User>, UserAdminStore>()
-                .AddTransient<IAdminStore<Role>, RoleAdminStore>();
         }
 
-        private static async Task<HttpClient> CreateApiHttpClient(IServiceProvider p)
+        private static HttpClient CreateApiHttpClient(IServiceProvider p)
         {
             var httpClient = p.GetRequiredService<IHttpClientFactory>()
                                     .CreateClient("oidc");
-            var settingsTask = p.GetRequiredService<Task<Settings>>();
-            var settings = await settingsTask
-                .ConfigureAwait(false);
+
+            var settings = p.GetRequiredService<Settings>();
             var apiUri = new Uri(settings.ApiBaseUrl);
 
             httpClient.BaseAddress = apiUri;
