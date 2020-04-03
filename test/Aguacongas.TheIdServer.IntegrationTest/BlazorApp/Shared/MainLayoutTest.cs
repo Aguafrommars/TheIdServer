@@ -1,8 +1,11 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using RichardSzalay.MockHttp;
 using System;
 using System.Security.Claims;
@@ -37,7 +40,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 _testOutputHelper,
                 out TestHost host,
                 out MockHttpMessageHandler mockHttp);
-            var provider = host.ServiceProvider.GetRequiredService<AuthenticationStateProvider>();
+            var serviceProvider = host.ServiceProvider;
+            
+            var provider = serviceProvider.GetRequiredService<AuthenticationStateProvider>();
             var state = await provider.GetAuthenticationStateAsync();
             var idendity = state.User.Identity as TestUtils.FakeIdendity;
             idendity.SetIsAuthenticated(false);
