@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -30,16 +33,34 @@ namespace Aguacongas.TheIdServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddIdentityProviderStore();
+            var isProxy = Configuration.GetValue<bool>("Proxy");
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
-                    options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            if (isProxy)
+            {
+                void configureOptions(HttpStore.IdentityServerOptions options)
+                    => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
+
+                services.AddIdentityProviderStore()
+                    .AddConfigurationHttpStores(configureOptions)
+                    .AddOperationalHttpStores()
+                    .AddIdentity<ApplicationUser, IdentityRole>(
+                        options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
+                    .AddTheIdServerStores(configureOptions)
+                    .AddDefaultTokenProviders();
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                    .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddIdentityProviderStore();
+
+                services.AddIdentity<ApplicationUser, IdentityRole>(
+                        options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
+            }
 
             services.Configure<IISOptions>(iis =>
             {
@@ -66,13 +87,7 @@ namespace Aguacongas.TheIdServer
                 .AddAuthentication()
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:5443";
-                    options.RequireHttpsMetadata = false;
-                    options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
-                    options.ApiName = "theidserveradminapi";
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(10);
-                    options.LegacyAudienceValidation = true;
+                    Configuration.GetSection("ApiAuthentication").Bind(options);
                 });
 
             var externalSettings = Configuration.GetSection("Google").Get<ExternalLoginOptions>();
@@ -103,6 +118,29 @@ namespace Aguacongas.TheIdServer
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
+            if (!Configuration.GetValue<bool>("Proxy"))
+            {
+                if (Configuration.GetValue<bool>("Migrate") && Configuration.GetValue<DbTypes>("DbType") != DbTypes.InMemory)
+                {
+                    using var scope = app.ApplicationServices.CreateScope();
+                    var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                    configContext.Database.Migrate();
+
+                    var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+                    opContext.Database.Migrate();
+
+                    var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    appcontext.Database.Migrate();
+                }
+
+                if (Configuration.GetValue<bool>("Seed"))
+                {
+                    using var scope = app.ApplicationServices.CreateScope();
+                    SeedData.SeedConfiguration(scope);
+                    SeedData.SeedUsers(scope);
+                }
+            }
+
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
@@ -149,12 +187,6 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToFile("index.html");
                 });
 
-            if (Configuration.GetValue<DbTypes>("DbType") == DbTypes.InMemory)
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                SeedData.SeedConfiguration(scope);
-                SeedData.SeedUsers(scope);
-            }
         }
     }
 }

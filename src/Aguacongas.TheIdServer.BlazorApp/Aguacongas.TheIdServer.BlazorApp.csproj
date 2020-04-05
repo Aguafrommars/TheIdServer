@@ -25,7 +25,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
-    <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="nginx.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

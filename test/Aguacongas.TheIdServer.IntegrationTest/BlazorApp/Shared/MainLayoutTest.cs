@@ -1,18 +1,14 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using RichardSzalay.MockHttp;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {

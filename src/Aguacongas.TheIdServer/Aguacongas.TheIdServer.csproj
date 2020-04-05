@@ -2,10 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
-    <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
+    <ProjectReference Include="..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+    <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
   </ItemGroup>
 </Project>
