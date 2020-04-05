@@ -15,7 +15,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
@@ -164,15 +166,26 @@ namespace Aguacongas.TheIdServer
 
             app.UseIdentityServerAdminApi("/api", child =>
                 {
-                    child.UseOpenApi()
-                        .UseSwaggerUi3()
-                        .UseCors(configure =>
+                    if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
+                    {
+                        child.UseOpenApi()
+                            .UseSwaggerUi3(options =>
+                            {
+                                var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                                options.OAuth2Client = settings.OAuth2Client;
+                            });
+                    }
+                    var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+                    if (allowedOrigin != null)
+                    {
+                        child.UseCors(configure =>
                         {
-                            configure.SetIsOriginAllowed(origin => true)
+                            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                                 .AllowCredentials();
                         });
+                    }
                 })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()

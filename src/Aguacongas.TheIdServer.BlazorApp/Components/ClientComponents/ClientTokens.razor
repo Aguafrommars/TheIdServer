@@ -1,4 +1,11 @@
 ﻿<div class="form-group row">
+    <label class="col col-form-label">
+    </label>
+    <div class="col-lg-8 col-sm-12">
+        <AuthorizeCheckbox Name="show-all" Label="show all options" @bind-Value="@_showAllOptions" />
+    </div>
+</div>
+<div class="form-group row">
     <label class="col col-form-label pt-0" for="access-token-type">
         access token type
     </label>
@@ -26,7 +33,7 @@
         </AuthorizeView>
     </div>
 </div>
-@if (Model.IsAuthorizationCodeClient())
+@if (_showAllOptions || Model.IsAuthorizationCodeClient())
 {
     <div class="form-group row">
         <label class="col col-form-label">
@@ -50,11 +57,17 @@
     <div class="col-lg-8 col-sm-12">
         <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" TokenValueChanged="TokenChanded" />
         <div>
-            <AuthorizeCheckbox Name="include-jwt-id" Label="Include Jwt Id" @bind-Value="@Model.IncludeJwtId" />
+            <AuthorizeCheckbox Name="include-jwt-id" Label="include JWT id" @bind-Value="@Model.IncludeJwtId" />
         </div>
+        @if (_showAllOptions || Model.IsSpaClient())
+        {
+            <div>
+                <AuthorizeCheckbox Name="allow-access-token-via-browser" Label="allow access tokens via browser" @bind-Value="@Model.AllowAccessTokensViaBrowser" />
+            </div>
+        }
     </div>
 </div>
-@if (Model.HasUser())
+@if (_showAllOptions || Model.HasUser())
 {
     <div class="form-group row">
         <label class="col col-form-label" for="id-token">
@@ -63,7 +76,7 @@
         <div class="col-lg-8 col-sm-12">
             <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" />
             <div>
-                <AuthorizeCheckbox Name="include-claims" Label="always include user claims in Id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
+                <AuthorizeCheckbox Name="include-claims" Label="always include user claims in id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
             </div>
         </div>
     </div>
@@ -76,7 +89,7 @@
         </div>
     </div>
 }
-@if (Model.CanUseRefreshToken())
+@if (_showAllOptions || Model.CanUseRefreshToken())
 {
     <div class="form-group row">
         <label class="col col-form-label pt-0" for="refesh-token-usage">
@@ -115,16 +128,16 @@
                 <Authorized Context="refreshTokenExpiration">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="refresh-token-expiration"
-                               value="0"
-                               checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
-                               @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
+                                value="0"
+                                checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
+                                @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
                         <label class="form-check-label" for="jwt">Sliding</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="refresh-token-expiration"
-                               value="1"
-                               checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
-                               @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
+                                value="1"
+                                checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
+                                @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
                         <label class="form-check-label" for="reference">Absolute</label>
                     </div>
                 </Authorized>
@@ -146,7 +159,7 @@
                     <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
                 </div>
             </div>
-        </div>
+        </div> 
     }
     else
     {
@@ -171,7 +184,7 @@
         <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" />
     </div>
 </div>
-@if (Model.IsDevice())
+@if (_showAllOptions || Model.IsDevice())
 {
     <div class="form-group row">
         <label class="col col-form-label" for="device-flow-lifetime">
