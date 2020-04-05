@@ -1,0 +1,6 @@
+ASPNETCORE_ENVIRONMENT=Development
+ASPNETCORE_URLS=https://+:443;http://+:80
+ASPNETCORE_HTTPS_PORT=5443
+DbType=Sqlite
+ConnectionStrings__DefaultConnection=Data Source=./db.sql
+Migrate=true

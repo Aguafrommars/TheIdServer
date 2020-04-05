@@ -210,9 +210,12 @@ else
                 </div>
                 <div class="card-body">
                     <ClientSecrets Collection="@Model.ClientSecrets" />
-                    <div class="col">
-                        <AuthorizeCheckbox Name="require-secret" Label="require secret" @bind-Value="@Model.RequireClientSecret" />
-                    </div>
+                    @if(Model.ClientSecrets.Any())
+                    {
+                        <div class="col">
+                            <AuthorizeCheckbox Name="require-secret" Label="require secret" @bind-Value="@Model.RequireClientSecret" />
+                        </div>
+                    }
                 </div>
             </div>
             <div id="claims" class="card mb-3">

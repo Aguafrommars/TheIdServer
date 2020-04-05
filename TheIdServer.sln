@@ -65,7 +65,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Iden
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAssembly.Net.Http", "test\WebAssembly.Net.Http\WebAssembly.Net.Http.csproj", "{1FC45D3A-B43E-4688-94DD-2F34A6C60496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.Test", "test\Aguacongas.TheIdServer.Identity.Test\Aguacongas.TheIdServer.Identity.Test.csproj", "{87F13507-EAE4-456D-BBE3-2D2C94C3356A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.Test", "test\Aguacongas.TheIdServer.Identity.Test\Aguacongas.TheIdServer.Identity.Test.csproj", "{87F13507-EAE4-456D-BBE3-2D2C94C3356A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

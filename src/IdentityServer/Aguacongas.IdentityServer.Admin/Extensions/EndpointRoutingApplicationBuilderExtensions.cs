@@ -25,7 +25,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseIdentityServerAdminApi(this IApplicationBuilder builder,
             string basePath,
             Action<IApplicationBuilder> configure,
-            string authicationScheme = null)
+            string authicationScheme = "Bearer")
         {
             var entityTypeList = Utils.GetEntityTypeList();
 

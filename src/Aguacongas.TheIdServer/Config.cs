@@ -173,7 +173,27 @@ namespace Aguacongas.TheIdServer
                         new Claim("role", SharedConstants.WRITER)
                     }
                 },
+                new Client
+                {
+                    ClientClaimsPrefix = null,
+                    ClientId = "theidserver-swagger",
+                    ClientName = "TheIdServer Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,RequireClientSecret = false,
+                    BackChannelLogoutSessionRequired = false,
+                    FrontChannelLogoutSessionRequired = false,
+                    RedirectUris =
+                    {
+                        "https://localhost:5443/api/swagger/oauth2-redirect.html",
+                        "https://theidserver.herokuapp.com/api/swagger/oauth2-redirect.html"
+                    },
 
+                    AllowedCorsOrigins =
+                    {
+                        "https://localhost:5443",
+                        "https://theidserver.herokuapp.com"
+                    },
+                    AllowedScopes = { "theidserveradminapi" }
+                }
             };
         }
     }

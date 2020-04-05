@@ -111,7 +111,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             else
             {
                 var timeValue = time.Value;
-                Value = (T)Convert.ChangeType(timeValue.TotalSeconds, typeof(T));
+                var type = typeof(T);
+                if (type.IsGenericType)
+                {
+                    type = type.GetGenericArguments()[0];
+                }
+                Value = (T)Convert.ChangeType(timeValue.TotalSeconds, type);
                 ValueChanged.InvokeAsync(Value);
                 TokenValueChanged.InvokeAsync(Value);
                 _token.ValueString = timeValue.ToString(DISPLAY_FORMAT);

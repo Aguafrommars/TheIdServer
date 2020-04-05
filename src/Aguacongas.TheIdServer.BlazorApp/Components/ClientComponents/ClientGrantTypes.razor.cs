@@ -21,6 +21,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         private void OnGrantTypeValueChanged(Entity.ClientGrantType grantType)
         {
             Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
+            if (grantType.GrantType == "implicit")
+            {
+                Model.AllowAccessTokensViaBrowser = true;
+            }
             HandleModificationState.EntityCreated(grantType);
         }
     }
