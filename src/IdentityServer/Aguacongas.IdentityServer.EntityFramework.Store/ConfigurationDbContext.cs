@@ -43,6 +43,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<IdentityProperty> IdentityProperties { get; set; }
 
+        public virtual DbSet<SchemeDefinition> Providers { get; set; }
+
+
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +82,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             modelBuilder.Entity<IdentityClaim>()
                 .HasIndex(e => new { e.IdentityId, e.Type })
                 .IsUnique(true);
+
+            modelBuilder.Entity<SchemeDefinition>(b =>
+            {
+                b.Ignore(p => p.Id)
+                  .Ignore(p => p.Options)
+                  .Ignore(p => p.HandlerType)
+                  .HasKey(p => p.Scheme);
+                b.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
+            });
 
             base.OnModelCreating(modelBuilder);
         }
