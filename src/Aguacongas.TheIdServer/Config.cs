@@ -192,7 +192,8 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443",
                         "https://theidserver.herokuapp.com"
                     },
-                    AllowedScopes = { "theidserveradminapi" }
+                    AllowedScopes = { "theidserveradminapi" },
+                    AllowAccessTokensViaBrowser = true
                 }
             };
         }

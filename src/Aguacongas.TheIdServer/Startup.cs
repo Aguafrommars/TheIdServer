@@ -1,9 +1,12 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text.Json;
 using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
@@ -92,18 +99,49 @@ namespace Aguacongas.TheIdServer
                     Configuration.GetSection("ApiAuthentication").Bind(options);
                 });
 
-            var externalSettings = Configuration.GetSection("Google").Get<ExternalLoginOptions>();
-            if (externalSettings != null)
-            {
-                authBuilder.AddGoogle(options =>
-                 {
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5443/signin-google
-                     options.ClientId = externalSettings.ClientId;
-                     options.ClientSecret = externalSettings.ClientSecret;
-                 });
-            }
+
+            authBuilder.AddDynamic<SchemeDefinition>()
+                .AddEntityFrameworkStore<ConfigurationDbContext>()
+                .AddGoogle()
+                .AddJwtBearer()
+                .AddFacebook()
+                .AddOpenIdConnect()
+                .AddTwitter()
+                .AddWsFederation()
+                .AddOAuth("Github", "Github", options =>
+                {
+                    // You can defined default configuration for managed handlers.
+                    options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
+                    options.TokenEndpoint = "https://github.com/login/oauth/access_token";
+                    options.UserInformationEndpoint = "https://api.github.com/user";
+                    options.ClaimsIssuer = "OAuth2-Github";
+                    // Retrieving user information is unique to each provider.
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "login");
+                    options.ClaimActions.MapJsonKey("urn:github:name", "name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email", ClaimValueTypes.Email);
+                    options.ClaimActions.MapJsonKey("urn:github:url", "url");
+                    options.Events = new OAuthEvents
+                    {
+                        OnCreatingTicket = async context =>
+                        {
+                            // Get the GitHub user
+                            var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            // A user-agent header is required by GitHub. See (https://developer.github.com/v3/#user-agent-required)
+                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
+
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                            var content = await response.Content.ReadAsStringAsync();
+                            response.EnsureSuccessStatusCode();
+
+                            using var doc = JsonDocument.Parse(content);
+
+                            context.RunClaimActions(doc.RootElement);
+                        }
+                    };
+                });
 
             services.AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
@@ -140,6 +178,7 @@ namespace Aguacongas.TheIdServer
                     using var scope = app.ApplicationServices.CreateScope();
                     SeedData.SeedConfiguration(scope);
                     SeedData.SeedUsers(scope);
+                    SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
                 }
             }
 
@@ -198,7 +237,8 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapRazorPages();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapFallbackToFile("index.html");
-                });
+                })
+                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
 
         }
     }
