@@ -97,9 +97,17 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-            authBuilder.AddDynamic<SchemeDefinition>()
-                .AddEntityFrameworkStore<ConfigurationDbContext>()
-                .AddGoogle()
+            var dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>();
+            if (isProxy)
+            {
+                dynamicAuthBuilder.AddTheIdServerHttpStore();
+            }
+            else
+            {
+                dynamicAuthBuilder.AddEntityFrameworkStore<ConfigurationDbContext>();
+            }
+
+            dynamicAuthBuilder.AddGoogle()
                 .AddFacebook()
                 .AddOpenIdConnect()
                 .AddTwitter()
