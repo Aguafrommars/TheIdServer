@@ -1,0 +1,25 @@
+﻿@inherits ProviderOptionsBase<TwitterOptions>
+
+<div class="form-group row">
+    <label class="col col-form-label" for="consumerKey">
+        consumer key
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="consumerKey" Placeholder="consumer key" @bind-Value="@Options.ConsumerKey" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="consumerSecret">
+        consumer secret
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="consumerSecret" Placeholder="consumer secret" @bind-Value="@Options.ConsumerSecret" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="retrieveUserDetails">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="retrieveUserDetails" Label="retrieve user details" @bind-Value="@Options.RetrieveUserDetails" />
+    </div>
+</div>

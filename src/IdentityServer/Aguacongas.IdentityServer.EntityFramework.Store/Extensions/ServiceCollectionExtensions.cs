@@ -92,7 +92,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<UserToken>, IdentityUserTokenStore<TUser>>()
                 .AddTransient<IAdminStore<Role>, IdentityRoleStore<TUser, TRole>>()
                 .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>();
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore>();
         }
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)

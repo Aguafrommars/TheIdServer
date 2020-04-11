@@ -23,12 +23,20 @@
         public string DisplayName { get; set; }
 
         /// <summary>
+        /// Gets or sets the kind of the provider.
+        /// </summary>
+        /// <value>
+        /// The name of the provider.
+        /// </value>
+        public string KindName { get; set; }
+
+        /// <summary>
         /// Gets or sets the serialized handler type.
         /// </summary>
         /// <value>
         /// The name of the serialized handler type.
         /// </value>
-        public string SerializedHandlerType { get; set; }
+        public virtual string SerializedHandlerType { get; set; }
 
         /// <summary>
         /// Gets or sets the serialized options.
@@ -36,6 +44,6 @@
         /// <value>
         /// The serialized options.
         /// </value>
-        public string SerializedOptions { get; set; }
+        public virtual string SerializedOptions { get; set; }
     }
 }

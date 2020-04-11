@@ -1,0 +1,26 @@
+﻿@inject IExternalProviderKindStore _store
+@inherits InputSelect<string>
+
+<AuthorizeView Policy="Is4-Writer">
+    <Authorized>
+        <InputSelect id="@Id" class="form-control" Value="Value" ValueChanged="ValueChanged" ValueExpression="ValueExpression">
+            @if (Kinds == null)
+            {
+                <em>loading...</em>
+            }
+            else
+            {
+                <option value="">Select a kind of provider ...</option>
+                @foreach (var provider in Kinds)
+                {
+                    <option value="@provider.KindName">@provider.KindName</option>
+                }
+            }
+        </InputSelect>
+    </Authorized>
+    <NotAuthorized>
+        <div id="@Id" class="col-form-label">
+            @Value
+        </div>        
+    </NotAuthorized>
+</AuthorizeView>

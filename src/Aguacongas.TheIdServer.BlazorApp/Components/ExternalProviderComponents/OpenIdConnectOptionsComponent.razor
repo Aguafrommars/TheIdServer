@@ -1,0 +1,117 @@
+﻿@inherits ProviderOptionsBase<OpenIdConnectOptions>
+
+<div class="form-group row">
+    <label class="col col-form-label" for="clientId">
+        client id
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="clientId" Placeholder="client id" @bind-Value="@Options.ClientId" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="clientSecret">
+        client secret
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="clientSecret" Placeholder="client secret" @bind-Value="@Options.ClientSecret" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="authority">
+        authority
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="authority" Placeholder="https://acme.com" @bind-Value="@Options.Authority" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="responseMode">
+        response mode
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="responseMode" Placeholder="responseMode" @bind-Value="@Options.ResponseMode" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="responseType">
+        response type
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="responseType" Placeholder="responseType" @bind-Value="@Options.ResponseType" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="prompt">
+        prompt
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="prompt" Placeholder="prompt" @bind-Value="@Options.Prompt" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="resource">
+        resource
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="resource" Placeholder="resource" @bind-Value="@Options.Resource" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="signOutScheme">
+        sign-out scheme
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="signOutScheme" Placeholder="sign-out scheme" @bind-Value="@Options.SignOutScheme" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="remoteSignOutPath">
+        remote sign-out path
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="remoteSignOutPath" Placeholder="/sign-out" @bind-Value="@Options.RemoteSignOutPath" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="scope">
+        scopes
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <ScopeCollection Id="scope" Collection="@Options.Scope" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="requireHttpsMetadata">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="requireHttpsMetadata" Label="require https metadata" @bind-Value="@Options.RequireHttpsMetadata" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="usePKCE">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Options.UsePkce" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="useTokenLifetime">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="use token lifetime" @bind-Value="@Options.UseTokenLifetime" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="skipUnrecognizedRequests">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="skip unrecognized requests" @bind-Value="@Options.SkipUnrecognizedRequests" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="disableTelemetry">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="disableTelemetry" Label="disable telemetry" @bind-Value="@Options.DisableTelemetry" />
+    </div>
+</div>

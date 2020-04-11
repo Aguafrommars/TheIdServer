@@ -3,7 +3,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="Providers" Url="provider"></PageListHeader>
+        <PageListHeader Name="Providers" Url="externalprovider"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -15,9 +15,14 @@
                                 Text="id"
                                 GridState="GridState" />
             </th>
-            <th class="w-75" scope="col">
+            <th class="w-50" scope="col">
                 <SortableHeader Property="DisplayName"
                                 Text="name"
+                                GridState="GridState" />
+            </th>
+            <th class="w-25" scope="col">
+                <SortableHeader Property="KindName"
+                                Text="type"
                                 GridState="GridState" />
             </th>
         </TableHeader>
@@ -34,9 +39,8 @@
               RowClicked="(Entity.ExternalProvider item) => OnRowClicked(item)">
             <RowTemplate>
                 <td class="w-25">@context.Id</td>
-                <td class="w-75">
-                    @context.DisplayName
-                </td>
+                <td class="w-50">@context.DisplayName</td>
+                <td class="w-25">@context.KindName</td>
             </RowTemplate>
         </EntitiesGrid>
     }

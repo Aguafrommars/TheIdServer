@@ -15,6 +15,7 @@
 * [Clients management](/doc/CLIENT.md)
 * [Apis management](/doc/API.md)
 * [Identities management](/doc/IDENTITY.md)
+* [External providers management](/doc/PROVIDER.md)
 
 ### Preview 
 

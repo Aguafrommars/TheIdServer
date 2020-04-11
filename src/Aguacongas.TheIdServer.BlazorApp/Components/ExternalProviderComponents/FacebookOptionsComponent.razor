@@ -1,0 +1,34 @@
+﻿@inherits ProviderOptionsBase<FacebookOptions>
+
+<div class="form-group row">
+    <label class="col col-form-label" for="appId">
+        app id
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="appId" Placeholder="app id" @bind-Value="@Options.AppId" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="appSecret">
+        app secret
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="appSecret" Placeholder="app secret" @bind-Value="@Options.AppSecret" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="fields">
+        fields
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <ScopeCollection Id="fields" Placeholder="field" Collection="@Options.Fields" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="sendAppSecretProof">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="sendAppSecretProof" Label="send app secret proof" @bind-Value="@Options.SendAppSecretProof" />
+    </div>
+</div>
+<OAuthOptionsProperties Options="@Options" />
