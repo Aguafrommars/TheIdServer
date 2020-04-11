@@ -1,0 +1,39 @@
+﻿<div class="form-group row">
+    <label class="col col-form-label" for="authorizationEndpoint">
+        authorization endpoint
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="authorizationEndpoint" Placeholder="https://acme.com/authorize" @bind-Value="@Options.AuthorizationEndpoint" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="tokenEndpoint">
+        token enpoint
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="tokenEndpoint" Placeholder="https://acme.com/token" @bind-Value="@Options.TokenEndpoint" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="userEndpoint">
+        user enpoint
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="userEndpoint" Placeholder="https://acme.com/user" @bind-Value="@Options.UserInformationEndpoint" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="scope">
+        scopes
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <ScopeCollection Id="scope" Placeholder="scope" Collection="@Options.Scope" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="usePKCE">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Options.UsePkce" />
+    </div>
+</div>

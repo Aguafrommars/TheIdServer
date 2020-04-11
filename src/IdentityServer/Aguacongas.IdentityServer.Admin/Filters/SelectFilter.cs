@@ -1,12 +1,15 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Community.OData.Linq.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.OData.Edm;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +63,11 @@ namespace Aguacongas.IdentityServer.Admin.Filters
 
             private JToken Select(IEnumerable<T> items, string select, string expand)
             {
+                if (typeof(T) == typeof(ExternalProvider))
+                {
+                    var list = ((IEnumerable<ExternalProvider>)items).Select(e => new WrapProvider(e));
+                    return list.AsQueryable().OData(edmModel: WrapProvider.GetEdmModel()).SelectExpand(select, expand).ToJson(options => options.ContractResolver = _resolver);
+                }
                 return items.AsQueryable().OData().SelectExpand(select, expand).ToJson(options => options.ContractResolver = _resolver);
             }
         }
@@ -74,6 +82,34 @@ namespace Aguacongas.IdentityServer.Admin.Filters
             public int Count { get; set; }
 
             public JToken Items { get; set; }
+        }
+
+        class WrapProvider
+        {
+            private static IEdmModel _edmModel;
+            public static IEdmModel GetEdmModel()
+            {
+                if (_edmModel != null)
+                {
+                    return _edmModel;
+                }
+                var builder = new ODataConventionModelBuilder();
+                var entitySet = builder.EntitySet<WrapProvider>(typeof(WrapProvider).Name);
+                var entityType = entitySet.EntityType;
+                entityType.HasKey(e => e.Id);
+                _edmModel =  builder.GetEdmModel();
+                return _edmModel;
+            }
+            public WrapProvider(ExternalProvider provider)
+            {
+                Id = provider.Id;
+                DisplayName = provider.DisplayName;
+                KindName = provider.KindName;
+            }
+
+            public string Id { get; set; }
+            public string DisplayName { get; set; }
+            public string KindName { get; set; }
         }
     }
 }

@@ -13,9 +13,9 @@
 else
 {
     <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="claim type" value="@SelectedValue"
+        <input type="text" class="form-control new-claim" placeholder="claim type"
                @oninput="OnInputChanged" />
-        <div class="input-group-append">
+        <div class="input-group-append" @onclick="() => SetSelectedValue(SelectedValue)">
             <span class="input-group-text oi oi-plus" />
         </div>
     </div>

@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         }
 
         public async Task<ExternalProvider> CreateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
-        {
+        {           
             var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
             await _manager.AddAsync(new SchemeDefinition
             {
@@ -62,6 +62,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<ExternalProvider>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
+            request.Filter = request.Filter?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
+                .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
+
             var odataQuery = _context.Providers.AsNoTracking().GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -73,7 +76,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return new PageResponse<ExternalProvider>
             {
                 Count = count,
-                Items = items.Select(CreateEntity)
+                Items = items.Select(p => CreateEntity(p))
             };
         }
 
@@ -111,13 +114,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 return null;
             }
 
-            var hanlderType = definition.HandlerType;
+            var hanlderType = definition.HandlerType ?? _serializer.DeserializeType(definition.SerializedHandlerType);
+            var optionsType = hanlderType.GetAuthenticationSchemeOptionsType();
             return new ExternalProvider
             {
                 DisplayName = definition.DisplayName,
                 Id = definition.Scheme,
+                KindName = optionsType.Name.Replace("Options", ""),
                 SerializedHandlerType = definition.SerializedHandlerType ?? _serializer.SerializeType(hanlderType),
-                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, hanlderType.GetAuthenticationSchemeOptionsType())
+                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType)
             };
         }
 
@@ -128,7 +133,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entityType = entitySet.EntityType;
             entityType.HasKey(e => e.Scheme);
             entityType.Ignore(e => e.HandlerType);
-            entityType.Ignore(e => e.Options);
+            entityType.Ignore(e => e.Options); 
             return builder.GetEdmModel();
         }
     }

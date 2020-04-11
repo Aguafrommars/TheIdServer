@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -50,8 +51,10 @@ namespace Aguacongas.TheIdServer.BlazorApp
                     return configuration.Get<Settings>();
                 })
                 .AddSingleton<Notifier>()
+                .AddSingleton<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddTransient(p =>
                 {
                     var type = Assembly.Load("WebAssembly.Net.Http")
