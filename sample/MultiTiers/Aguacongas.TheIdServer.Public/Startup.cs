@@ -1,20 +1,25 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Aguacongas.IdentityServer.Http.Store;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
-using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace Aguacongas.TheIdServer
 {
@@ -42,25 +47,7 @@ namespace Aguacongas.TheIdServer
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews(options =>
-                {
-                    options.AddIdentityServerAdminFilters();
-                })
-                .AddNewtonsoftJson(options =>
-                {
-                    var settings = options.SerializerSettings;
-                    settings.NullValueHandling = NullValueHandling.Ignore;
-                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin();
-
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            var builder = services.AddIdentityServer(options =>
+            services.AddIdentityServer(options =>
                 {
                     options.Events.RaiseErrorEvents = true;
                     options.Events.RaiseInformationEvents = true;
@@ -69,54 +56,64 @@ namespace Aguacongas.TheIdServer
                 })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators();
+                .AddDefaultSecretValidators()
+                .AddSigningCredentials();
 
-            if (Environment.IsDevelopment())
-            {
-                builder.AddDeveloperSigningCredential(filename: "..\\tempkey.rsa");
-            }
-            else
-            {
-#pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception("need to configure key material");
-#pragma warning restore S112 // General exceptions should never be thrown
-            }
-
-            services.AddAuthorization(options =>
-                {
-                    options.AddIdentityServerPolicies();
-                })
+            var authBuilder = services.AddAuthorization(options =>
+                    options.AddIdentityServerPolicies())
                 .AddAuthentication()
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:5443";
-                    options.RequireHttpsMetadata = false;
-                    options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
-                    options.ApiName = "theidserveradminapi";
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(10);
-                    options.LegacyAudienceValidation = true;
+                    Configuration.GetSection("ApiAuthentication").Bind(options);
+                });
+
+
+            authBuilder.AddDynamic<SchemeDefinition>()
+                .AddTheIdServerHttpStore()
+                .AddGoogle()
+                .AddFacebook()
+                .AddOpenIdConnect()
+                .AddTwitter()
+                .AddMicrosoftAccount()
+                .AddOAuth("OAuth", options =>
+                {
+                    options.ClaimActions.MapAll();
+                    options.Events = new OAuthEvents
+                    {
+                        OnCreatingTicket = async context =>
+                        {
+                            var contextOption = context.Options;
+                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
+                            {
+                                return;
+                            }
+
+                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
+                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
+
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                            var content = await response.Content.ReadAsStringAsync();
+                            response.EnsureSuccessStatusCode();
+
+                            using var doc = JsonDocument.Parse(content);
+
+                            context.RunClaimActions(doc.RootElement);
+                        }
+                    };
+                });
+
+            services.AddControllersWithViews(options =>
+                    options.AddIdentityServerAdminFilters())
+                .AddNewtonsoftJson(options =>
+                {
+                    var settings = options.SerializerSettings;
+                    settings.NullValueHandling = NullValueHandling.Ignore;
+                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddGoogle(options =>
-                {
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
-
-
-
-            services.AddResponseCompression(opts =>
-                 {
-                     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                         new[] { "application/octet-stream" });
-                 })
-                .AddRazorPages(options =>
-                {
-                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
-                });
+                .AddIdentityServerAdmin();
+            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -135,38 +132,42 @@ namespace Aguacongas.TheIdServer
 
             app.UseSerilogRequestLogging()
                 .UseHttpsRedirection()
-                .UseResponseCompression()
-                .UseStaticFiles()
-                .Map("/admin", child =>
-                {
-                    child.UseRouting()
-                    .UseClientSideBlazorFiles<BlazorApp.Program>()
-                    .UseEndpoints(endpoints =>
-                    {
-                        endpoints.MapFallbackToClientSideBlazor<BlazorApp.Program>("index.html");
-                    });
-                })
                 .UseIdentityServerAdminApi("/api", child =>
                 {
-                    child.UseOpenApi()
-                        .UseSwaggerUi3()
-                        .UseCors(configure =>
+                    if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
+                    {
+                        child.UseOpenApi()
+                            .UseSwaggerUi3(options =>
+                            {
+                                var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                                options.OAuth2Client = settings.OAuth2Client;
+                            });
+                    }
+                    var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+                    if (allowedOrigin != null)
+                    {
+                        child.UseCors(configure =>
                         {
-                            configure.SetIsOriginAllowed(origin => true)
+                            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
                                 .AllowAnyMethod()
                                 .AllowAnyHeader()
                                 .AllowCredentials();
                         });
+                    }
                 })
-                .UseIdentityServer()
+                .UseBlazorFrameworkFiles()
+                .UseStaticFiles()
                 .UseRouting()
                 .UseAuthentication()
+                .UseIdentityServer()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
-                }); 
+                    endpoints.MapDefaultControllerRoute();
+                    endpoints.MapFallbackToFile("index.html");
+                })
+                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
     }
 }

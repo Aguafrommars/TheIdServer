@@ -1,3 +1,4 @@
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
@@ -77,10 +78,20 @@ namespace Aguacongas.TheIdServer.Api
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
                     options.LegacyAudienceValidation = true;
+                })
+                .AddDynamic<SchemeDefinition>()
+                .AddEntityFrameworkStore<ConfigurationDbContext>()
+                .AddGoogle()
+                .AddFacebook()
+                .AddOpenIdConnect()
+                .AddTwitter()
+                .AddMicrosoftAccount()
+                .AddOAuth("OAuth", options =>
+                {
                 });
 
 
-            services.AddResponseCompression(opts =>
+                    services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
