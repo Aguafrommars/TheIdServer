@@ -24,6 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()
+                .AddTransient<SendGridEmailSender>()
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
