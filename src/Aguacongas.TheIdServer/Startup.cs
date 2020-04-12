@@ -68,12 +68,6 @@ namespace Aguacongas.TheIdServer
                     .AddDefaultTokenProviders();
             }
 
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
             services.ConfigureNonBreakingSameSiteCookies()
                 .AddIdentityServer(options =>
             {
