@@ -3,9 +3,7 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
@@ -18,8 +16,13 @@ namespace Aguacongas.IdentityServer.Admin
     [Route("[controller]")]
     public class EmailController : Controller
     {
-        private SendGridEmailSender _sender;
+        private readonly SendGridEmailSender _sender;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailController"/> class.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <exception cref="ArgumentNullException">sender</exception>
         public EmailController(SendGridEmailSender sender)
         {
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));

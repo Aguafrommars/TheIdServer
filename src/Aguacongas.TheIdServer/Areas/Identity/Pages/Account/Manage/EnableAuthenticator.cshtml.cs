@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
@@ -16,17 +17,19 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
-
+        private readonly string _issuer;
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         public EnableAuthenticatorModel(
             UserManager<ApplicationUser> userManager,
             ILogger<EnableAuthenticatorModel> logger,
-            UrlEncoder urlEncoder)
+            UrlEncoder urlEncoder,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _issuer = configuration.GetValue<string>("AuthenticatorIssuer") ?? "Aguaconags.TheIdServer";
         }
 
         public string SharedKey { get; set; }
@@ -146,7 +149,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Aguacongas.TheIdServer"),
+                _urlEncoder.Encode(_issuer),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
