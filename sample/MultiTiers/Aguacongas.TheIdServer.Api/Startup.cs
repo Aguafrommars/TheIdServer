@@ -1,3 +1,4 @@
+using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
@@ -43,7 +44,8 @@ namespace Aguacongas.TheIdServer.Api
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>();
 
-            services.AddControllersWithViews(options =>
+            services.Configure<SendGridOptions>(Configuration)
+                .AddControllersWithViews(options =>
             {
                 options.AddIdentityServerAdminFilters();
             })
@@ -91,7 +93,7 @@ namespace Aguacongas.TheIdServer.Api
                 });
 
 
-                    services.AddResponseCompression(opts =>
+            services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });

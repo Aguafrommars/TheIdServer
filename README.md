@@ -29,4 +29,9 @@ An in memory db version is deployed on [heroku](https://www.heroku.com/) at [htt
 
 ## Setup
 
-*TODO: describe setup*
+Read the [server README](src/Aguacongas.TheIdServer/README.md) for server configuration.  
+Read the [application README](src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
+
+## Build from source
+
+You can build the solution with Visual Studio or use the `dotnet build` command.
