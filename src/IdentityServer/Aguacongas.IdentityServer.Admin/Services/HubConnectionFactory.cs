@@ -8,17 +8,30 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
 {
-    class HubConnectionFactory: IDisposable
+    /// <summary>
+    /// Hub connection factory
+    /// </summary>
+    /// <seealso cref="System.IDisposable" />
+    public class HubConnectionFactory: IDisposable
     {
         private readonly IConfiguration _configuration;
         private HubConnection _hubConnection;
         private bool disposedValue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HubConnectionFactory"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <exception cref="ArgumentNullException">configuration</exception>
         public HubConnectionFactory(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
+        /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        /// <returns></returns>
         public HubConnection GetConnection()
         {
             var hubUrl = _configuration.GetValue<string>("SignalR:HubUrl");
@@ -44,9 +57,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 return StartConnectionAsync();
             };
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            StartConnectionAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            StartConnectionAsync().GetAwaiter().GetResult();
 
             return _hubConnection;
 
@@ -77,6 +88,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -90,6 +105,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 disposedValue = true;
             }
         }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method

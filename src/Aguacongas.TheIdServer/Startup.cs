@@ -27,6 +27,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HttpStore = Aguacongas.IdentityServer.Http.Store;
+using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
 {
@@ -50,7 +51,8 @@ namespace Aguacongas.TheIdServer
                 void configureOptions(HttpStore.IdentityServerOptions options)
                     => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
-                services.AddIdentityProviderStore()
+                services.AddTransient<SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+                    .AddIdentityProviderStore()
                     .AddConfigurationHttpStores(configureOptions)
                     .AddOperationalHttpStores()
                     .AddIdentity<ApplicationUser, IdentityRole>(
@@ -60,7 +62,8 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                services.AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
+                services.AddTransient<SchemeChangeSubscriber<SchemeDefinition>>()
+                    .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
@@ -184,7 +187,8 @@ namespace Aguacongas.TheIdServer
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
-            if (!Configuration.GetValue<bool>("Proxy"))
+            var isProxy = Configuration.GetValue<bool>("Proxy");
+            if (!isProxy)
             {
                 ConfigureInitialData(app);
             }
@@ -243,11 +247,24 @@ namespace Aguacongas.TheIdServer
                 {
                     endpoints.MapRazorPages();
                     endpoints.MapDefaultControllerRoute();
-                    endpoints.MapHub<ProviderHub>("/providerhub");
+                    if (!isProxy)
+                    {
+                        endpoints.MapHub<ProviderHub>("/providerhub");
+                    }
+                    
                     endpoints.MapFallbackToFile("index.html");
                 })
                 .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
 
+            if (isProxy)
+            {
+                app.ApplicationServices.GetRequiredService<SchemeChangeSubscriber<Auth.SchemeDefinition>>().Subscribe();
+            }
+            else
+            {
+                var scope = app.ApplicationServices.CreateScope();
+                scope.ServiceProvider.GetRequiredService<SchemeChangeSubscriber<SchemeDefinition>>().Subscribe();
+            }
         }
 
         private void ConfigureInitialData(IApplicationBuilder app)
