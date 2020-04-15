@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Admin;
+﻿using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Services;
@@ -25,6 +26,17 @@ namespace Microsoft.Extensions.DependencyInjection
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()
                 .AddTransient<SendGridEmailSender>()
+                .AddSingleton<HubConnectionFactory>()                
+                .AddTransient<IProviderClient>(p =>
+                {
+                    var hubConnection = p.GetRequiredService<HubConnectionFactory>().GetConnection();
+                    if (hubConnection == null)
+                    {
+                        return null;
+                    }
+
+                    return new ProviderClient(hubConnection);
+                })
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
@@ -35,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         document.Info.Contact = new NSwag.OpenApiContact
                         {
                             Name = "Olivier Lefebvre",
-                            Email = string.Empty,
+                            Email = "olivier.lefebvre@live.com",
                             Url = "https://github.com/aguacongas"
                         };
                         document.Info.License = new NSwag.OpenApiLicense

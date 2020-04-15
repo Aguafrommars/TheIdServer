@@ -1,7 +1,9 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using System;
@@ -17,29 +19,39 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         private readonly PersistentDynamicManager<SchemeDefinition> _manager;
         private readonly IAuthenticationSchemeOptionsSerializer _serializer;
         private readonly ConfigurationDbContext _context;
+        private readonly IProviderClient _providerClient;
 #pragma warning disable S2743 // Static fields should not be used in generic types
         private static readonly IEdmModel _edmModel = GetEdmModel();
 #pragma warning restore S2743 // Static fields should not be used in generic types
 
         public ExternalProviderStore(PersistentDynamicManager<SchemeDefinition> manager, 
             IAuthenticationSchemeOptionsSerializer serializer,
-            ConfigurationDbContext context)
+            ConfigurationDbContext context,
+            IProviderClient providerClient = null)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _providerClient = providerClient;
         }
 
         public async Task<ExternalProvider> CreateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
-        {           
+        {
             var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
+            var options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
+            SanetizeCallbackPath(entity, options);
+
             await _manager.AddAsync(new SchemeDefinition
             {
                 DisplayName = entity.DisplayName,
                 HandlerType = handlerType,
-                Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType()),
+                Options = options,
                 Scheme = entity.Id
             }, cancellationToken).ConfigureAwait(false);
+            if (_providerClient != null)
+            {
+                await _providerClient.ProviderAdded(entity.Id, cancellationToken).ConfigureAwait(false);
+            }
             return entity;
         }
 
@@ -48,9 +60,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return await CreateAsync(entity as ExternalProvider, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            return _manager.RemoveAsync(id, cancellationToken);
+            await _manager.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
+            if (_providerClient != null)
+            {
+                await _providerClient.ProviderRemoved(id, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         public async Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
@@ -88,7 +104,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             definition.DisplayName = entity.DisplayName;
             definition.HandlerType = handlerType;
             definition.Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
+
+            SanetizeCallbackPath(entity, definition.Options);
+
             await _manager.UpdateAsync(definition, cancellationToken).ConfigureAwait(false);
+            if (_providerClient != null)
+            {
+                await _providerClient.ProviderUpdated(entity.Id, cancellationToken).ConfigureAwait(false);
+            }
             return entity;
         }
 
@@ -124,6 +147,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 SerializedHandlerType = definition.SerializedHandlerType ?? _serializer.SerializeType(hanlderType),
                 SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType)
             };
+        }
+
+        private static void SanetizeCallbackPath(ExternalProvider entity, AuthenticationSchemeOptions options)
+        {
+            if (options is RemoteAuthenticationOptions remoteAuthenticationOptions)
+            {
+                remoteAuthenticationOptions.CallbackPath = $"/signin-{entity.Id}";
+            }
         }
 
         private static IEdmModel GetEdmModel()

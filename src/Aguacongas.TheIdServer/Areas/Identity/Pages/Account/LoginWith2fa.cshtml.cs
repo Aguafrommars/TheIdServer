@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Aguacongas.TheIdServer.Models;
+using IdentityServer4.Events;
+using IdentityServer4.Quickstart.UI;
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
-using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using IdentityServer4.Services;
-using IdentityServer4.Models;
-using IdentityServer4.Events;
-using IdentityServer4.Quickstart.UI;
-using IdentityServer4.Stores;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "Scafolded code")]
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
