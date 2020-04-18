@@ -29,6 +29,8 @@ using System.Threading.Tasks;
 using HttpStore = Aguacongas.IdentityServer.Http.Store;
 using Auth = Aguacongas.TheIdServer.Authentication;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Aguacongas.TheIdServer
 {
@@ -127,23 +129,22 @@ namespace Aguacongas.TheIdServer
                             ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
                         };
                     }
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
 
-                            // If the request is for our hub...
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/providerhub")))
-                            {
-                                // Read the token out of the query string
-                                context.Token = accessToken;
-                            }
-                            return Task.CompletedTask;
+                    static string tokenRetriever(HttpRequest request)
+                    {
+                        var accessToken = TokenRetrieval.FromQueryString()(request);
+
+                        // If the request is for our hub...
+                        var path = request.Path;
+                        if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                        {
+                            // Read the token out of the query string
+                            return accessToken;
                         }
-                    };
+                        return TokenRetrieval.FromAuthorizationHeader()(request);
+                    }
+
+                    options.TokenRetriever = tokenRetriever;
                 });
 
 

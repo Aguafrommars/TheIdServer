@@ -46,7 +46,8 @@
         "EmailApiAuthentication__Authority": "https://localhost",
         "EmailApiAuthentication__ApiUrl": "https://localhost/api/email",
         "EmailApiAuthentication__RedisConnectionString": "localhost:63790",
-        "SignalR__HubOptions__HubUrl": "https://localhost/providerhub"
+        "SignalR__HubOptions__HubUrl": "https://localhost/providerhub",
+        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false"
       }
     }
   }
