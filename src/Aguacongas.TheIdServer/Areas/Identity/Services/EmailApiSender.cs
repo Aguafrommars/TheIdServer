@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Http.Store;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -12,9 +13,9 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Services
     public class EmailApiSender : IEmailSender
     {
         private readonly HttpClient _httpClient;
-        private readonly IdentityServerOptions _options;
+        private readonly IOptions<EmailOptions> _options;
 
-        public EmailApiSender(HttpClient httpClient, IdentityServerOptions options)
+        public EmailApiSender(HttpClient httpClient, IOptions<EmailOptions> options)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -28,7 +29,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Services
                 Message = htmlMessage,
                 Subject = subject
             }), Encoding.UTF8, "application/json");
-            using var response = await _httpClient.PostAsync(_options.ApiUrl, content)
+            using var response = await _httpClient.PostAsync(_options.Value.ApiUrl, content)
                 .ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }

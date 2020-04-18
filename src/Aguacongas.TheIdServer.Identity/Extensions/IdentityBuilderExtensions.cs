@@ -28,8 +28,8 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions(options);
             var services = builder.Services;
             services.AddTransient<OAuthDelegatingHandler>()
-                .AddTransient<HttpClient>()
                 .AddHttpClient(options.HttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
             builder.AddTheIdServerStores(provider => provider.CreateApiHttpClient(options));

@@ -28,6 +28,9 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using HttpStore = Aguacongas.IdentityServer.Http.Store;
 using Auth = Aguacongas.TheIdServer.Authentication;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Aguacongas.TheIdServer
 {
@@ -100,6 +103,18 @@ namespace Aguacongas.TheIdServer
                 .AddDefaultSecretValidators()
                 .AddSigningCredentials();
 
+            services.AddTransient(p =>
+                {
+                    var handler = new HttpClientHandler();
+                    if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                    {
+                        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
+                    }
+                    return handler;
+                })
+                .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
+
             var authBuilder = services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
@@ -107,23 +122,29 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
                     Configuration.GetSection("ApiAuthentication").Bind(options);
-                    options.Events = new JwtBearerEvents
+                    if (Configuration.GetValue<bool>("DisableStrictSsl"))
                     {
-                        OnMessageReceived = context =>
+                        options.JwtBackChannelHandler = new HttpClientHandler
                         {
-                            var accessToken = context.Request.Query["access_token"];
+                            ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+                        };
+                    }
 
-                            // If the request is for our hub...
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/hubs/chat")))
-                            {
-                                // Read the token out of the query string
-                                context.Token = accessToken;
-                            }
-                            return Task.CompletedTask;
+                    static string tokenRetriever(HttpRequest request)
+                    {
+                        var accessToken = TokenRetrieval.FromQueryString()(request);
+
+                        // If the request is for our hub...
+                        var path = request.Path;
+                        if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                        {
+                            // Read the token out of the query string
+                            return accessToken;
                         }
-                    };
+                        return TokenRetrieval.FromAuthorizationHeader()(request);
+                    }
+
+                    options.TokenRetriever = tokenRetriever;
                 });
 
 

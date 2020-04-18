@@ -333,3 +333,4 @@ ASALocalRun/
 /ReportGenerator
 /.sonarqube
 /coverage
+/src/Aguacongas.TheIdServer/db.sql

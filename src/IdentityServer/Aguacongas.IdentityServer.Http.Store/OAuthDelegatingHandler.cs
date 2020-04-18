@@ -5,16 +5,27 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Http.Store
 {
-    public class OAuthDelegatingHandler : DelegatingHandler
+    public class OAuthDelegatingHandler: OAuthDelegatingHandler<IdentityServerOptions>
     {
-        private readonly OAuthTokenManager _manager;
+        public OAuthDelegatingHandler(OAuthTokenManager manager, HttpMessageHandler innerHandler)
+            : base(manager, innerHandler)
+        { }
 
-        public OAuthDelegatingHandler(OAuthTokenManager manager, HttpMessageHandler innerHandler):base(innerHandler)
+        public OAuthDelegatingHandler(OAuthTokenManager manager)
+            : base(manager)
+        { }
+    }
+
+    public class OAuthDelegatingHandler<T> : DelegatingHandler where T: IdentityServerOptions, new()
+    {
+        private readonly OAuthTokenManager<T> _manager;
+
+        public OAuthDelegatingHandler(OAuthTokenManager<T> manager, HttpMessageHandler innerHandler):base(innerHandler)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
-        public OAuthDelegatingHandler(OAuthTokenManager manager) : base()
+        public OAuthDelegatingHandler(OAuthTokenManager<T> manager)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
