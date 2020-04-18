@@ -20,24 +20,24 @@ namespace Aguacongas.TheIdServer.BlazorApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);            
-            builder.RootComponents.Add<App>("app");
-            ConfigureServices(builder.Services);
+            builder.RootComponents.Add<App>("app");            
+            ConfigureServices(builder.Services, builder.HostEnvironment.BaseAddress);
             await builder.Build().RunAsync();
         }
 
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, string baseAddress)
         {
             services
                 .AddOptions()
-                .AddBaseAddressHttpClient()
                 .AddApiAuthorization(options =>
                 {
                     var provider = services.BuildServiceProvider();
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     options.ProviderOptions.ConfigurationEndpoint = configuration.GetValue<string>("ConfigurationEndpoint");
                     options.UserOptions.RoleClaim = "role";
-                })
-                .AddAuthorizationCore(options =>
+                });
+
+            services.AddAuthorizationCore(options =>
                 {
                     options.AddIdentityServerPolicies();
                 })
@@ -45,6 +45,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 {
                     return Task.FromResult(CreateApiHttpClient(p));
                 })
+                .AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddSingleton(p =>
                 {
                     var configuration = p.GetRequiredService<IConfiguration>();

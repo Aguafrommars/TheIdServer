@@ -38,10 +38,15 @@
       "useSSL": true,
       "sslPort": 5443,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "DbType": "Sqlite",
-        "ConnectionStrings:DefaultConnection": "Data Source=./db.sql",
-        "Migrate": "true"
+        "ConnectionStrings__DefaultConnection": "Data Source=./db.sql",
+        "Migrate": "true",
+        "DisableStrictSsl": "true",
+        "ApiAuthentication__Authority": "https://localhost",
+        "EmailApiAuthentication__Authority": "https://localhost",
+        "EmailApiAuthentication__ApiUrl": "https://localhost/api/email",
+        "EmailApiAuthentication__RedisConnectionString": "localhost:63790",
+        "SignalR__HubOptions__HubUrl": "https://localhost/providerhub"
       }
     }
   }

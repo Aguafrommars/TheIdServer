@@ -95,9 +95,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             mockHttp = httpMock;
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
-                
+                blazorApp.Program.ConfigureServices(services, httpClient.BaseAddress.ToString());
+
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
@@ -108,9 +108,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     })
                     .AddIdentityServer4AdminHttpStores(p =>
                     {
-                        
-                        var client = new HttpClient(new blazorApp.OidcDelegationHandler(p.GetRequiredService<IAccessTokenProvider>(), sut.CreateHandler()));
-                        client.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+
+                        var client = new HttpClient(new blazorApp.OidcDelegationHandler(p.GetRequiredService<IAccessTokenProvider>(), sut.CreateHandler()))
+                        {
+                            BaseAddress = new Uri(httpClient.BaseAddress, "api")
+                        };
                         return Task.FromResult(client);
                     })
                     .AddSingleton(p => new TestNavigationManager(uri: url))
@@ -119,15 +121,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton(p => jsRuntimeMock.Object)                    
                     .AddSingleton<Settings>()
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
-                    .AddSingleton<AuthenticationStateProvider>(p => new FakeAuthenticationStateProvider(userName, claims));
+                    .AddSingleton<AuthenticationStateProvider>(p => new FakeAuthenticationStateProvider(p.GetRequiredService<NavigationManager>(),
+                        userName,
+                        claims));
             });
         }
 
         public class FakeAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
         {
             private readonly AuthenticationState _state;
+            private readonly NavigationManager _navigationManager;
 
-            public FakeAuthenticationStateProvider(string userName, IEnumerable<Claim> claims)
+            public FakeAuthenticationStateProvider(NavigationManager navigationManager, string userName, IEnumerable<Claim> claims)
             {
                 if (claims != null && !claims.Any(c => c.Type == "name"))
                 {
@@ -135,6 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     list.Add(new Claim("name", userName));
                     claims = list;
                 }
+                _navigationManager = navigationManager;
                 _state = new AuthenticationState(new FakeClaimsPrincipal(new FakeIdendity(userName, claims)));
             }
 
@@ -145,12 +151,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             public ValueTask<AccessTokenResult> RequestAccessToken()
             {
-                return new ValueTask<AccessTokenResult>(new AccessTokenResult(AccessTokenResultStatus.Success, new AccessToken
-                {
-                    Expires = DateTimeOffset.Now.AddDays(1),
-                    GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
-                    Value = "test"
-                }, "http://exemple.com"));
+                return new ValueTask<AccessTokenResult>(new AccessTokenResult(AccessTokenResultStatus.Success,
+                    new AccessToken
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(1),
+                        GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
+                        Value = "test"
+                    },
+                    _navigationManager,
+                    "http://exemple.com"));
             }
 
             public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options)

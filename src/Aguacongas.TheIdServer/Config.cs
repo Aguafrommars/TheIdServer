@@ -133,6 +133,7 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/authentication/login-callback",
                         "https://localhost:5443/authentication/login-callback",
+                        "https://localhost:443/authentication/login-callback",
                         "http://exemple.com/authentication/login-callback",
                         "https://theidserver.herokuapp.com/authentication/login-callback"
                     },
@@ -141,6 +142,7 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/authentication/logout-callback",
                         "https://localhost:5443/authentication/logout-callback",
+                        "https://localhost:443/authentication/logout-callback",
                         "http://exemple.com/authentication/logout-callback",
                         "https://theidserver.herokuapp.com/authentication/logout-callback"
                     },
@@ -148,11 +150,11 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/",
                         "https://localhost:5443",
+                        "https://localhost:443",
                         "http://exemple.com/",
                         "https://theidserver.herokuapp.com"
                     },
-                    AllowedScopes = { "openid", "profile", "theidserveradminapi" },
-                    AccessTokenType = AccessTokenType.Reference
+                    AllowedScopes = { "openid", "profile", "theidserveradminapi" }
                 },
 
                 // Multi-tiers public server client

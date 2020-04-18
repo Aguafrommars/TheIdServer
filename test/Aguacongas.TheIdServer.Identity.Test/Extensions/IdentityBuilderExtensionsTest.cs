@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 using Xunit;
 
 namespace Aguacongas.TheIdServer.Identity.Test.Extensions
@@ -10,7 +11,9 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
         public void AddTheIdServerStores_should_add_identity_stores()
         {
             var services = new ServiceCollection();
-            services.AddIdentityProviderStore()
+            services.AddTransient<HttpClient>()
+                .AddTransient<HttpClientHandler>()
+                .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentity<IdentityUser, IdentityRole>()
@@ -24,7 +27,9 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
 
 
             services = new ServiceCollection();
-            services.AddIdentityProviderStore()
+            services.AddTransient<HttpClient>()
+                .AddTransient<HttpClientHandler>()
+                .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentityCore<IdentityUser>()
