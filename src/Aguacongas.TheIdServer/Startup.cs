@@ -134,11 +134,9 @@ namespace Aguacongas.TheIdServer
                     {
                         var accessToken = TokenRetrieval.FromQueryString()(request);
 
-                        // If the request is for our hub...
                         var path = request.Path;
                         if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
                         {
-                            // Read the token out of the query string
                             return accessToken;
                         }
                         return TokenRetrieval.FromAuthorizationHeader()(request);
