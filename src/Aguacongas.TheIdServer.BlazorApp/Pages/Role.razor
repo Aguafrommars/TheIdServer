@@ -68,7 +68,7 @@ else
                                 <AuthorizeText Id="value" @bind-Value="@claim.ClaimValue" MaxLength="250" />
                             </td>
                             <td>
-                                <AuthorizeButton CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
+                                <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
                                     <span class="oi oi-trash"></span>
                                 </AuthorizeButton>
                             </td>

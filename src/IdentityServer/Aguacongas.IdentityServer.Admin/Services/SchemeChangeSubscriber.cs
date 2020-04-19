@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <summary>
     /// Subscribe to provider configuration change
     /// </summary>
-    public class SchemeChangeSubscriber<TSchemeDefinition> where TSchemeDefinition : SchemeDefinitionBase, new()
+    public class SchemeChangeSubscriber<TSchemeDefinition> : ISchemeChangeSubscriber where TSchemeDefinition : SchemeDefinitionBase, new()
     {
         private readonly HubConnectionFactory _factory;
         private readonly NoPersistentDynamicManager<TSchemeDefinition> _manager;

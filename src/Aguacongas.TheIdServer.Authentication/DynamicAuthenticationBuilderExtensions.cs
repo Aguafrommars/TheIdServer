@@ -17,7 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             var services = builder.Services;
-            services.AddTransient<IDynamicProviderStore<TSchemeDefinition>, DynamicProviderStore<TSchemeDefinition>>()
+            services.AddTransient<NoPersistentDynamicManager<TSchemeDefinition>>()
+                .AddTransient<IDynamicProviderStore<TSchemeDefinition>, DynamicProviderStore<TSchemeDefinition>>()
                 .AddTransient<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>();
             if (getHttpClient != null)
             {
