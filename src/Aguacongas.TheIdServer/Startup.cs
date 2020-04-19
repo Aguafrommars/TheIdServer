@@ -119,7 +119,10 @@ namespace Aguacongas.TheIdServer
             var dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>();
             if (isProxy)
             {
-                dynamicAuthBuilder.AddTheIdServerHttpStore();
+                services.AddTransient<NoPersistentDynamicManager<Auth.SchemeDefinition>>()
+                    .AddTransient<PersistentDynamicManager<Auth.SchemeDefinition>>();
+                dynamicAuthBuilder
+                    .AddTheIdServerHttpStore();
             }
             else
             {
@@ -241,10 +244,19 @@ namespace Aguacongas.TheIdServer
                     {
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
-                    
+
                     endpoints.MapFallbackToFile("index.html");
-                })
-                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+                });
+
+            if (isProxy)
+            {
+                app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
+            }
+            else
+            {
+                app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+            }
+                
 
             var scope = app.ApplicationServices.CreateScope();
             scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
