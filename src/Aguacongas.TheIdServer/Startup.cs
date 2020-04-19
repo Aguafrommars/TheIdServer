@@ -241,10 +241,19 @@ namespace Aguacongas.TheIdServer
                     {
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
-                    
+
                     endpoints.MapFallbackToFile("index.html");
-                })
-                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+                });
+
+            if (isProxy)
+            {
+                app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
+            }
+            else
+            {
+                app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+            }
+                
 
             var scope = app.ApplicationServices.CreateScope();
             scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();

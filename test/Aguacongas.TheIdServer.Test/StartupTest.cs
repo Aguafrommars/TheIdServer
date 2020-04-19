@@ -1,16 +1,20 @@
-using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
@@ -39,6 +43,8 @@ namespace Aguacongas.TheIdServer.Test
             Assert.NotNull(schemeChangeSubscriber);
             Assert.Equal(typeof(SchemeChangeSubscriber<SchemeDefinition>), schemeChangeSubscriber.GetType());
             Assert.NotNull(provider.GetService<ApplicationDbContext>());
+            Assert.Null(provider.GetService<NoPersistentDynamicManager<SchemeDefinition>>());
+            Assert.Null(provider.GetService<PersistentDynamicManager<SchemeDefinition>>());
         }
 
         [Fact]
@@ -46,9 +52,7 @@ namespace Aguacongas.TheIdServer.Test
         {
             var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
             {
-                ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString(),
                 ["PrivateServerAuthentication:ApiUrl"] = "https://localhost:7443/api",
-                ["DbType"] = "InMemory",
                 ["Proxy"] = "true"
             }).Build();
 
@@ -91,6 +95,67 @@ namespace Aguacongas.TheIdServer.Test
             Assert.NotNull(hubProtocolResolver);
             var hubLifetimeManager = provider.GetServices<RedisHubLifetimeManager<ProviderHub>>();
             Assert.NotNull(hubLifetimeManager);
+        }
+
+        [Fact]
+        public void Configure_should_configure_initial_data()
+        {
+            var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["ConnectionStrings:DefaultConnection"] = "Data source=./db.sql",
+                ["DbType"] = "Sqlite",
+                ["Migrate"] = "true",
+                ["Seed"] = "true",
+                ["SeedProvider"] = "true"
+            }).Build();
+            var environementMock = new Mock<IWebHostEnvironment>();
+            var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
+            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
+
+            var sut = new Startup(configuration, environementMock.Object);
+
+            using var host = WebHost.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    sut.ConfigureServices(services);
+                    services.AddTransient(p => storeMock.Object);
+                })
+                .Configure(builder => sut.Configure(builder))
+                .UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
+                .Build();
+
+            host.Start();
+
+            storeMock.Verify();
+        }
+
+        [Fact]
+        public void Configure_should_load_provider_configuration()
+        {
+            var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["PrivateServerAuthentication:ApiUrl"] = "https://localhost:7443/api",
+                ["Proxy"] = "true"
+            }).Build();
+            var environementMock = new Mock<IWebHostEnvironment>();
+            var storeMock = new Mock<IDynamicProviderStore<Auth.SchemeDefinition>>();
+            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<Auth.SchemeDefinition>().AsQueryable()).Verifiable();
+            var sut = new Startup(configuration, environementMock.Object);
+            using var host = WebHost.CreateDefaultBuilder()
+                .ConfigureServices(services => 
+                {
+                    sut.ConfigureServices(services);
+                    services.AddTransient(p => storeMock.Object);
+                })
+                .Configure(builder => sut.Configure(builder))
+                .UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
+                .Build();
+
+            host.Start();
+
+            storeMock.Verify();
         }
     }
 }
