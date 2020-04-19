@@ -2,7 +2,6 @@
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

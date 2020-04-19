@@ -67,9 +67,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAssembly.Net.Http", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.Test", "test\Aguacongas.TheIdServer.Identity.Test\Aguacongas.TheIdServer.Identity.Test.csproj", "{87F13507-EAE4-456D-BBE3-2D2C94C3356A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Authentication", "src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj", "{9F64CDFF-6347-4F62-B74F-C6CA2743E667}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication", "src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj", "{9F64CDFF-6347-4F62-B74F-C6CA2743E667}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication.IntegrationTest", "test\Aguacongas.TheIdServer.Authentication..Integration.Test\Aguacongas.TheIdServer.Authentication.IntegrationTest.csproj", "{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Test", "test\Aguacongas.TheIdServer.Test\Aguacongas.TheIdServer.Test.csproj", "{34B6748E-64C1-46A3-AABE-56E215204542}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -429,6 +431,18 @@ Global
 		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x64.Build.0 = Release|Any CPU
 		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x86.Build.0 = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|x64.Build.0 = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|x86.Build.0 = Debug|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|x64.ActiveCfg = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|x64.Build.0 = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|x86.ActiveCfg = Release|Any CPU
+		{34B6748E-64C1-46A3-AABE-56E215204542}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -465,6 +479,7 @@ Global
 		{87F13507-EAE4-456D-BBE3-2D2C94C3356A} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{9F64CDFF-6347-4F62-B74F-C6CA2743E667} = {DF545B54-78FB-42D0-A842-A1490A579B37}
 		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB} = {DE50F426-4409-4573-8502-93364ED12E0C}
+		{34B6748E-64C1-46A3-AABE-56E215204542} = {DE50F426-4409-4573-8502-93364ED12E0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

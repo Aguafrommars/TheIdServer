@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,12 +27,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
-using HttpStore = Aguacongas.IdentityServer.Http.Store;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using IdentityModel.AspNetCore.OAuth2Introspection;
-using System;
-using Microsoft.AspNetCore.Http;
+using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -51,43 +49,11 @@ namespace Aguacongas.TheIdServer
 
             if (isProxy)
             {
-                void configureOptions(HttpStore.IdentityServerOptions options)
-                    => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
-
-                services.AddTransient<SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                    .AddIdentityProviderStore()
-                    .AddConfigurationHttpStores(configureOptions)
-                    .AddOperationalHttpStores()
-                    .AddIdentity<ApplicationUser, IdentityRole>(
-                        options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
-                    .AddTheIdServerStores(configureOptions)
-                    .AddDefaultTokenProviders();
+                AddProxyServices(services);
             }
             else
             {
-                services.AddTransient<SchemeChangeSubscriber<SchemeDefinition>>()
-                    .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                    .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddIdentityProviderStore();
-
-                services.AddIdentity<ApplicationUser, IdentityRole>(
-                        options => Configuration.GetSection("IdentityOptions").Bind(options))
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
-
-                var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
-                if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
-                {
-                    signalRBuilder.AddMessagePackProtocol();
-                }
-
-                var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
-                if (!string.IsNullOrEmpty(redisConnectionString))
-                {
-                    signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
-                }
+                AddDefaultServices(services);
             }
 
             services.ConfigureNonBreakingSameSiteCookies()
@@ -108,7 +74,9 @@ namespace Aguacongas.TheIdServer
                     var handler = new HttpClientHandler();
                     if (Configuration.GetValue<bool>("DisableStrictSsl"))
                     {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
                         handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                     }
                     return handler;
                 })
@@ -126,7 +94,9 @@ namespace Aguacongas.TheIdServer
                     {
                         options.JwtBackChannelHandler = new HttpClientHandler
                         {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
                             ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                         };
                     }
 
@@ -134,11 +104,9 @@ namespace Aguacongas.TheIdServer
                     {
                         var accessToken = TokenRetrieval.FromQueryString()(request);
 
-                        // If the request is for our hub...
                         var path = request.Path;
                         if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
                         {
-                            // Read the token out of the query string
                             return accessToken;
                         }
                         return TokenRetrieval.FromAuthorizationHeader()(request);
@@ -204,6 +172,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityServerAdmin();
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
+
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
@@ -277,15 +246,50 @@ namespace Aguacongas.TheIdServer
                 })
                 .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
 
-            if (isProxy)
+            var scope = app.ApplicationServices.CreateScope();
+            scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
+        }
+
+        private void AddDefaultServices(IServiceCollection services)
+        {
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
+                .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
+                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                .AddIdentityProviderStore();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                    options => Configuration.GetSection("IdentityOptions").Bind(options))
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
+            if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
-                app.ApplicationServices.GetRequiredService<SchemeChangeSubscriber<Auth.SchemeDefinition>>().Subscribe();
+                signalRBuilder.AddMessagePackProtocol();
             }
-            else
+
+            var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
+            if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                var scope = app.ApplicationServices.CreateScope();
-                scope.ServiceProvider.GetRequiredService<SchemeChangeSubscriber<SchemeDefinition>>().Subscribe();
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
             }
+        }
+
+        private void AddProxyServices(IServiceCollection services)
+        {
+            void configureOptions(HttpStore.IdentityServerOptions options)
+                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
+
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+                .AddIdentityProviderStore()
+                .AddConfigurationHttpStores(configureOptions)
+                .AddOperationalHttpStores()
+                .AddIdentity<ApplicationUser, IdentityRole>(
+                    options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
+                .AddTheIdServerStores(configureOptions)
+                .AddDefaultTokenProviders();
         }
 
         private void ConfigureInitialData(IApplicationBuilder app)
