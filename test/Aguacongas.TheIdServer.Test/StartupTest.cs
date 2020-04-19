@@ -43,8 +43,6 @@ namespace Aguacongas.TheIdServer.Test
             Assert.NotNull(schemeChangeSubscriber);
             Assert.Equal(typeof(SchemeChangeSubscriber<SchemeDefinition>), schemeChangeSubscriber.GetType());
             Assert.NotNull(provider.GetService<ApplicationDbContext>());
-            Assert.Null(provider.GetService<NoPersistentDynamicManager<SchemeDefinition>>());
-            Assert.Null(provider.GetService<PersistentDynamicManager<SchemeDefinition>>());
         }
 
         [Fact]

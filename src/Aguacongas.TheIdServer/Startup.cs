@@ -119,7 +119,10 @@ namespace Aguacongas.TheIdServer
             var dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>();
             if (isProxy)
             {
-                dynamicAuthBuilder.AddTheIdServerHttpStore();
+                services.AddTransient<NoPersistentDynamicManager<Auth.SchemeDefinition>>()
+                    .AddTransient<PersistentDynamicManager<Auth.SchemeDefinition>>();
+                dynamicAuthBuilder
+                    .AddTheIdServerHttpStore();
             }
             else
             {
