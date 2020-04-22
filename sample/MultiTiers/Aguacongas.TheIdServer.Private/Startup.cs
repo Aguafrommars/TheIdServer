@@ -143,6 +143,7 @@ namespace Aguacongas.TheIdServer
                 .UseIdentityServer()
                 .UseRouting()
                 .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultControllerRoute();

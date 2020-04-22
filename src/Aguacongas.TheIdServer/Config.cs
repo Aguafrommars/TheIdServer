@@ -174,7 +174,10 @@ namespace Aguacongas.TheIdServer
                     {
                         new Claim("role", SharedConstants.READER),
                         new Claim("role", SharedConstants.WRITER)
-                    }
+                    },
+                    BackChannelLogoutSessionRequired = false,
+                    FrontChannelLogoutSessionRequired = false,
+                    AccessTokenType = AccessTokenType.Reference
                 },
                 new Client
                 {

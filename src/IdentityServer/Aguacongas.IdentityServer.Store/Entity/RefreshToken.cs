@@ -32,7 +32,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The subject identifier.
         /// </value>
-        [Required]
         [MaxLength(200)]
         public string UserId { get; set; }
 

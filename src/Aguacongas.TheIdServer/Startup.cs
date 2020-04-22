@@ -294,7 +294,7 @@ namespace Aguacongas.TheIdServer
             void configureOptions(HttpStore.IdentityServerOptions options)
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()                
                 .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()

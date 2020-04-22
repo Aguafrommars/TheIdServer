@@ -105,7 +105,6 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -136,7 +135,6 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 

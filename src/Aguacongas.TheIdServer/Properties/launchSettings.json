@@ -37,17 +37,19 @@
       "publishAllPorts": true,
       "useSSL": true,
       "sslPort": 5443,
+      "commandLineArgs": "--network agua",
       "environmentVariables": {
         "DbType": "Sqlite",
         "ConnectionStrings__DefaultConnection": "Data Source=./db.sql",
         "Migrate": "true",
         "DisableStrictSsl": "true",
-        "ApiAuthentication__Authority": "https://localhost",
-        "EmailApiAuthentication__Authority": "https://localhost",
-        "EmailApiAuthentication__ApiUrl": "https://localhost/api/email",
-        "EmailApiAuthentication__RedisConnectionString": "localhost:63790",
-        "SignalR__HubOptions__HubUrl": "https://localhost/providerhub",
-        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false"
+        "Proxy": "true",
+        "ApiAuthentication__Authority": "https://localthost:5443",
+        "PrivateServerAuthentication__Authority": "https://theidserverprivate",
+        "PrivateServerAuthentication__ApiUrl": "https://theidserverprivate/api",
+        "SignalR__HubOptions__HubUrl": "https://theidserverprivate/providerhub",
+        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false",
+        "PrivateServerAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false"
       }
     }
   }
