@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,10 +18,11 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new IdentityServerOptions();
             configureOptions(options);
             services
-                .AddSingleton<OAuthTokenManager>()
+                .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
+                .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
                 .AddTransient<OAuthDelegatingHandler>()
                 .AddHttpClient(options.HttpClientName)
-                .ConfigurePrimaryHttpMessageHandler<HttpClientHandler>()
+                .ConfigurePrimaryHttpMessageHandler((p => p.GetRequiredService<HttpClientHandler>()))
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
             return services.AddConfigurationHttpStores(p => p.CreateApiHttpClient(options), configureOptions);

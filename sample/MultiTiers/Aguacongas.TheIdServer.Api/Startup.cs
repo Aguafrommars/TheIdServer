@@ -73,10 +73,11 @@ namespace Aguacongas.TheIdServer.Api
                 .AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:6443";
+                    options.Authority = "https://localhost:7443";
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
                     options.ApiName = "theidserveradminapi";
+                    options.ApiSecret = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d";
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
                     options.LegacyAudienceValidation = true;

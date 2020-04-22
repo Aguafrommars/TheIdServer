@@ -40,6 +40,8 @@ namespace Aguacongas.TheIdServer
             void configureOptions(IdentityServerOptions options) 
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
+            services.AddTransient<HttpClientHandler>();
+
             services.AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()

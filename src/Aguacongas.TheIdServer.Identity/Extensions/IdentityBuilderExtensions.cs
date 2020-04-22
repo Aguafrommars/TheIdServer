@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new IdentityServerOptions();
             configureOptions(options);
             var services = builder.Services;
-            services.AddTransient<HttpClient>()
+            services
                 .AddTransient<OAuthDelegatingHandler>()
                 .AddHttpClient(options.HttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
