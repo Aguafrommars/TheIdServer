@@ -116,17 +116,16 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-            var dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>();
+            DynamicAuthenticationBuilder dynamicAuthBuilder;
             if (isProxy)
             {
-                services.AddTransient<NoPersistentDynamicManager<Auth.SchemeDefinition>>()
-                    .AddTransient<PersistentDynamicManager<Auth.SchemeDefinition>>();
-                dynamicAuthBuilder
+                dynamicAuthBuilder = authBuilder.AddDynamic<Auth.SchemeDefinition>()
                     .AddTheIdServerHttpStore();
             }
             else
             {
-                dynamicAuthBuilder.AddEntityFrameworkStore<ConfigurationDbContext>();
+                dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>()
+                    .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
 
             dynamicAuthBuilder.AddGoogle()
