@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services, httpClient.BaseAddress.ToString());
+                blazorApp.Program.ConfigureServices(services, TestUtils.CreateApplicationConfiguration(httpClient), httpClient.BaseAddress.ToString());
                 services
                     .AddLogging(configure =>
                     {
@@ -237,7 +237,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services, client.BaseAddress.ToString());
+                blazorApp.Program.ConfigureServices(services, TestUtils.CreateApplicationConfiguration(client), client.BaseAddress.ToString());
                 services
                     .AddLogging(configure =>
                     {
