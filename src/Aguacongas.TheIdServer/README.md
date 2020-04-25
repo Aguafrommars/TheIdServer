@@ -270,13 +270,59 @@ The **SignalR** section defines the configuration for both SignalR hub and clien
 If needed, the hub can use [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1) can be used. **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configure the backplane.  
 **SignalR:RedisOptions** is binded to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
 
+## Configre logs
+
+The section **Serilog** define the [Serilog](https://serilog.net/) configuration.
+
+```json
+"Serilog": {
+  "LevelSwitches": {
+    "$controlSwitch": "Information"
+  },
+  "MinimumLevel": {
+    "ControlledBy": "$controlSwitch"
+  },
+  "WriteTo": [
+    {
+      "Name": "Seq",
+      "Args": {
+        "serverUrl": "http://localhost:5341",
+        "controlLevelSwitch": "$controlSwitch",
+        "apiKey": "DVYuookX2vOq078fuOyJ"
+      }
+    },
+    {
+      "Name": "Console",
+      "Args": {
+        "outputTemplate": "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+        "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Literate, Serilog.Sinks.Console"
+      }
+    },
+    {
+      "Name": "Debug",
+      "Args": {
+        "outputTemplate": "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}"
+      }
+    }
+  ],
+  "Enrich": [
+    "FromLogContext",
+    "WithMachineName",
+    "WithThreadId"
+  ]
+}
+```
+
+For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
+
+
 ## Docker support
 
 A [Linux server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
 
 Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
 
@@ -284,6 +330,7 @@ Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft
 
 * [DymamicAuthProviders](https://github.com/Aguafrommars/DymamicAuthProviders)
 * [Set up a Redis backplane for ASP.NET Core SignalR scale-out](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
-* [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
+* [Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
+* [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md)
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1)
 
