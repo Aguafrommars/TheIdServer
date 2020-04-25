@@ -24,6 +24,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Initializes a new instance of the <see cref="HubConnectionFactory"/> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="provider">The service provider</param>
         /// <exception cref="ArgumentNullException">configuration</exception>
         public HubConnectionFactory(IConfiguration configuration, IServiceProvider provider)
         {
