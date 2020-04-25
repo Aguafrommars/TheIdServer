@@ -32,12 +32,12 @@ namespace Aguacongas.TheIdServer.BlazorApp
             var settings = configuration.Get<Settings>();
             services
                 .AddOptions()
-                .AddOidcAuthentication<RemoteAuthenticationState, OidcAccount>(options =>
+                .AddOidcAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
                 {
-                    options.UserOptions.RoleClaim = "role";
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
                     configuration.Bind("ProviderOptions", options.ProviderOptions);
                 })
-                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, OidcAccount, ClaimsPrincipalFactory>();
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 
             services.AddAuthorizationCore(options =>
                 {

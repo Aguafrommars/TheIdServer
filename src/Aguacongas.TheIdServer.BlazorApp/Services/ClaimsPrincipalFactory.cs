@@ -1,16 +1,16 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Services
 {
-    public class ClaimsPrincipalFactory : AccountClaimsPrincipalFactory<OidcAccount>
+    public class ClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount>
     {
         private readonly ILogger<ClaimsPrincipalFactory> _logger;
 
@@ -19,17 +19,27 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async ValueTask<ClaimsPrincipal> CreateUserAsync(OidcAccount account, RemoteAuthenticationUserOptions options)
+        public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
         {
             var user = await base.CreateUserAsync(account, options);
             if (user.Identity.IsAuthenticated)
             {
                 var identity = user.Identity as ClaimsIdentity;
                 _logger.LogInformation($"User connected {identity.Name}");
-                foreach (var value in account.Roles)
+                foreach (var claim in user.Claims.ToArray())
                 {
-                    _logger.LogInformation($"Add role claim {value}");
-                    identity.AddClaim(new Claim("role", value));
+                    var value = claim.Value;
+                    if (value.StartsWith("["))
+                    {
+                        var values = JsonSerializer.Deserialize<IEnumerable<string>>(value);
+                        var type = claim.Type;
+                        foreach(var item in values)
+                        {
+                            _logger.LogInformation($"Add {type} claim {item}");
+                            identity.AddClaim(new Claim(type, item));
+                        }
+                        identity.RemoveClaim(claim);
+                    }
                 }
             }
             
