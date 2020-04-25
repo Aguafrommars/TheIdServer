@@ -34,6 +34,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 .AddOptions()
                 .AddOidcAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
                 {
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
                     configuration.GetSection("UserOptions").Bind(options.UserOptions);
                     configuration.Bind("ProviderOptions", options.ProviderOptions);
                 })
