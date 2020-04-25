@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using System.Linq;
 
 namespace Microsoft.AspNetCore.Authorization
 {
