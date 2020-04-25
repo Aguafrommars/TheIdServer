@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -15,6 +16,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     public class HubConnectionFactory: IDisposable
     {
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _provider;
         private HubConnection _hubConnection;
         private bool disposedValue;
 
@@ -23,9 +25,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">configuration</exception>
-        public HubConnectionFactory(IConfiguration configuration)
+        public HubConnectionFactory(IConfiguration configuration, IServiceProvider provider)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
         /// <summary>
@@ -42,7 +45,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
 
             var builder = new HubConnectionBuilder()
-                .WithUrl(hubUrl)
+                .WithUrl(hubUrl, options =>
+                {
+                    options.HttpMessageHandlerFactory = _ => _provider.GetRequiredService<HttpClientHandler>();
+                })
                 .WithAutomaticReconnect();
 
             if (_configuration.GetValue<bool>("SignalR:UseMessagePack"))

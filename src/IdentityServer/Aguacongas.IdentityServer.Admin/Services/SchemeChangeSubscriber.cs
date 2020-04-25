@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </summary>
         public void Subscribe()
         {
-            Task.Delay(1000).ContinueWith(t =>
+            Task.Delay(100).ContinueWith(t =>
             {
                 var connection = _factory.GetConnection();
                 if (connection == null)

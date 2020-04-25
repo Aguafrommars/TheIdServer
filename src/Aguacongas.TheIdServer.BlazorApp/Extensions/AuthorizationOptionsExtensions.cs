@@ -9,14 +9,10 @@ namespace Microsoft.AspNetCore.Authorization
         {
             options.AddPolicy(SharedConstants.WRITER, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
-                    context.User.Claims
-                        .Any(c => c.Type == "role" && c.Value.Contains(SharedConstants.WRITER))
-                   ));
+                    context.User.IsInRole(SharedConstants.WRITER)));
             options.AddPolicy(SharedConstants.READER, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
-                    context.User.Claims
-                        .Any(c => c.Type == "role" && c.Value.Contains(SharedConstants.READER))
-                   ));
+                    context.User.IsInRole(SharedConstants.READER)));
         }
     }
 }
