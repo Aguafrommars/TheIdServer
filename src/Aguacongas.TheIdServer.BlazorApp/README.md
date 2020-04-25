@@ -10,38 +10,68 @@ The application reads its configuration from *appsettings.json* and environment 
 
 ```json
 {
-  "configurationEndpoint": "appsettings.json", // the endpoint uri returning OIDC configuration
-  "apiBaseUrl": "https://localhost:5443/api", // the api endpoint uri
-  "welcomeContenUrl": "/welcome-fragment.html", // the endpoint uri returning the welcome page html code 
-  "administratorEmail": "aguacongas@gmail.com", // the administrator email
+  "administratorEmail": "aguacongas@gmail.com",
+  "apiBaseUrl": "https://localhost:5443/api",
+  "authenticationPaths": {
+    "remoteRegisterPath": "/identity/account/register",
+    "remoteProfilePath": "/identity/account/manage"
+  },
+  "userOptions": {
+    "roleClaim": "role"
+  },
+  "providerOptions": {
+    "authority": "https://localhost:5443/",
+    "clientId": "theidserveradmin",
+    "defaultScopes": [
+      "openid",
+      "profile",
+      "theidserveradminapi"
+    ],
+    "postLogoutRedirectUri": "https://localhost:5443/authentication/logout-callback",
+    "redirectUri": "https://localhost:5443/authentication/login-callback",
+    "responseType": "code"
+  },
+  "welcomeContenUrl": "/welcome-fragment.html"
 }
 ```
 
-### configurationEndpoint
+For more informations read [ASP.NET Core Blazor hosting model configuration / Blazor WebAssembly / Configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration).
 
-The configuration endpoint must return a JSON containing OIDC configuration for the application with the same structure than [oidc-client-js configuration](https://github.com/IdentityModel/oidc-client-js/wiki#configuration)
+### apiBaseUrl
 
-**full sample**
+Defines the URL to the API.
 
-```json
-{
-  "client_id": "theidserveradmin", // application id
-  "response_type": "code", // OAuth response type
-  "scope": "openid profile theidserveradminapi", // requested scopes
-  "authority": "https://theidserver.herokuapp.com/", // OAuth server address
-  "redirect_uri": "https://theidserver.herokuapp.com/authentication/login-callback", // login redirect uri
-  "post_logout_redirect_uri": "https://theidserver.herokuapp.com/authentication/logout-callback", // logout redirect uri
-  "metadata": { // optional, this to override value return by IdentityServer4 descovery document. 
-    "issuer": "http://theidserver.herokuapp.com",
-    "jwks_uri": "https://theidserver.herokuapp.com/.well-known/openid-configuration/jwks",
-    "authorization_endpoint": "https://theidserver.herokuapp.com/connect/authorize",
-    "token_endpoint": "https://theidserver.herokuapp.com/connect/token",
-    "userinfo_endpoint": "https://theidserver.herokuapp.com/connect/userinfo",
-    "end_session_endpoint": "https://theidserver.herokuapp.com/connect/endsession",
-    "check_session_iframe": "https://theidserver.herokuapp.com/connect/checksession"
-  }
-}
-```
+### administratorEmail
+
+Defines the adminitrator eMail address.
+
+### authenticationPaths
+
+The section **authenticationPaths** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationApplicationPathsOptions`.  
+The application doesn't contain pages to register a new user or manage the current user, so we set the **authenticationPaths:remoteRegisterPath** and **authenticationPaths:remoteProfilePath** with their corresponding url on the identity server.
+
+ For more informations read [ASP.NET Core Blazor WebAssembly additional security scenarios / Customize app routes](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes).
+
+### userOptions
+
+The section **userOptions** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationUserOptions`.  
+This configuration defines how users are authorized. The application and the API share the same authorization policy : 
+
+* **Is4-Writer** authorize users in this role to write data
+* **Is4-Reader** authorize users in this role to read data
+
+The role claims type is defined by **userOptions:roleClaim**.
+
+### providerOptions
+
+The section **providerOptions** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.OidcProviderOptions`.  
+This configuration section defines how the application is authentified.  
+
+For more informations read [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library / Authentication service support](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support).
+
+### welcomeContenUrl
+
+Defines the URL to the welcome page content.
 
 ## Welcome page customization
 
@@ -70,3 +100,9 @@ This endpoint should return an html fragment code.
     The passord is <i>Pass123$</i>
 </p>
 ```
+
+## Additional resources
+
+* [ASP.NET Core Blazor hosting model configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration)
+* [ASP.NET Core Blazor WebAssembly additional security scenarios](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes)
+* [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support)

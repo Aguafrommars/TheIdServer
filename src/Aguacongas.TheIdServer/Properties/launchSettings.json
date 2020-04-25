@@ -43,13 +43,29 @@
         "ConnectionStrings__DefaultConnection": "Data Source=./db.sql",
         "Migrate": "true",
         "DisableStrictSsl": "true",
+        "Proxy": "false",
+        "ApiAuthentication__Authority": "https://localhost",
+        "SignalR__HubUrl": "https://localhost/providerhub",
+        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false"
+      }
+    },
+    "Docker as proxy": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true,
+      "sslPort": 5443,
+      "commandLineArgs": "--network agua",
+      "environmentVariables": {
+        "DisableStrictSsl": "true",
         "Proxy": "true",
         "ApiAuthentication__Authority": "https://localhost",
+        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false",
         "PrivateServerAuthentication__Authority": "https://theidserverprivate",
         "PrivateServerAuthentication__ApiUrl": "https://theidserverprivate/api",
-        "SignalR__HubUrl": "https://theidserverprivate/providerhub",
-        "ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false",
-        "PrivateServerAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false"
+        "PrivateServerAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName": "false",
+        "SignalR__HubUrl": "https://theidserverprivate/providerhub"
       }
     }
   }

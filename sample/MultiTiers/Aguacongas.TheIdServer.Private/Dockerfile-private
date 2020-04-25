@@ -2,7 +2,6 @@ FROM aguacongas/aguacongastheidserver:unstable as base
 EXPOSE 443
 COPY aspnetapp.pfx /usr/local/share/ca-certificates/aspnetapp.pfx
 COPY Aguacongas.TheIdServer.Private/appsettings.Docker.json .
-COPY Aguacongas.TheIdServer.Private/wwwroot/appsettings.Docker.json ./wwwroot/appsettings.json
 ENV ASPNETCORE_ENVIRONMENT=Docker
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/usr/local/share/ca-certificates/aspnetapp.pfx
 ENV ASPNETCORE_URLS="https://+"
