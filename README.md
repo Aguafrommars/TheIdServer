@@ -14,14 +14,21 @@
 
 ### Main features
 
-![home](/doc/assets/home.png)
+#### Application
+![home](doc/assets/home.png)
 
-* [Users management](/doc/USER.md)
-* [Roles management](/doc/ROLE.md)
-* [Clients management](/doc/CLIENT.md)
-* [Apis management](/doc/API.md)
-* [Identities management](/doc/IDENTITY.md)
-* [External providers management](/doc/PROVIDER.md)
+* [Users management](doc/USER.md)
+* [Roles management](doc/ROLE.md)
+* [Clients management](doc/CLIENT.md)
+* [Apis management](doc/API.md)
+* [Identities management](doc/IDENTITY.md)
+* [External providers management](doc/PROVIDER.md)
+
+#### Server
+
+* [Dynamic external provider configuration](src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
+* [Public / Private installation](src/Aguacongas.TheIdServer/README.md#using-the-api)
+* [Docker support](src/Aguacongas.TheIdServer/README.md#docker-support)
 
 ### Preview 
 

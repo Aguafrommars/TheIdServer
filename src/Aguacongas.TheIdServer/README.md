@@ -30,14 +30,40 @@ If you don't want to expose a database with your server, you can setup a second 
 ```json
 "Proxy": true,
 "PrivateServerAuthentication": {
-  "Authority": "https://localhost:7443",
-  "ApiUrl": "https://localhost:7443/api",
+  "Authority": "https://theidserverprivate",
+  "ApiUrl": "https://theidserverprivate/api",
   "ClientId": "public-server",
   "ClientSecret": "84137599-13d6-469c-9376-9e372dd2c1bd",
   "Scope": "theidserveradminapi",
   "HttpClientName": "is4"
+},
+"SignalR": {
+  "HubUrl": "https://theidserverprivate/providerhub"
+  "HubOptions": {
+    "EnableDetailedErrors": true
+  },
+  "UseMessagePack": true
 }
 ```
+
+#### Proxy
+
+Start the server with in proxy mode.
+
+#### PrivateServerAuthentication
+
+Defines how to authenticate the public server on private server API.
+
+#### SignalR
+
+Defines the [SignalR client](https://docs.microsoft.com/en-us/aspnet/core/signalr/dotnet-client?view=aspnetcore-3.1&tabs=visual-studio) configuration.  
+This client is used to update the external provider configuration of a running instance. When an external provider configuration changes, the API send a SignalR notification to inform other running instances.  
+
+For more informations read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
+
+The SignalR hub accept request at */providerhub* and supporte [MessagePack](https://msgpack.org/index.html) protocol.
+
+For more informations read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
 
 ### Database migration and data seeding
 
@@ -163,7 +189,7 @@ The section *ApiAuthentication* define the authentication configuration for the 
 
 ```json
 "ApiAuthentication": {
-  "Authority": "https://localhost:5443",
+  "Authority": "https://localhost",
   "RequireHttpsMetadata": false,
   "SupportedTokens": "Both",
   "ApiName": "theidserveradminapi",
@@ -212,3 +238,52 @@ If you want to diseable HTTPS set **UseHttps** to `false`
 ```json
 "UseHttps": false
 ```
+
+If you use a self signed certificat you can disable strict SSL by settings **DisableStrictSsl** to `true`.
+
+```json
+"DisableStrictSsl": true
+```
+
+## Configure the provider hub
+
+External providers are dynamicaly configured with [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders).  
+In a [load balanced](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario) configuration, the provider hub is used to inform other running instances that an external provider configuration changes.  
+The **SignalR** section defines the configuration for both SignalR hub and client.
+
+```json
+"SignalR": {
+  "HubUrl": "https://theidserverprivate/providerhub",
+  "HubOptions": {
+    "EnableDetailedErrors": true
+  },
+  "UseMessagePack": true,
+  "RedisConnectionString": "redis:6379",
+  "RedisOptions": {
+    "Configuration": {
+      "ChannelPrefix": "TheIdServer"
+    }
+  }
+}
+```
+
+If needed, the hub can use [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1) can be used. **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configure the backplane.  
+**SignalR:RedisOptions** is binded to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
+
+## Docker support
+
+A [Linux server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
+
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+
+Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
+
+## Additional resources
+
+* [DymamicAuthProviders](https://github.com/Aguafrommars/DymamicAuthProviders)
+* [Set up a Redis backplane for ASP.NET Core SignalR scale-out](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
+* [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
+* [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1)
+

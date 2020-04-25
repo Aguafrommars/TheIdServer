@@ -1,8 +1,33 @@
+# Public server image sample
+# To build the image use (from MultiTiers folder):
+# docker build -t theidserverpublic:dev -f Aguacongas.TheIdServer.Public/Dockerfile-public .
+# To run a container use :
+# docker run -dt --name theidserverpublic --network {YOUR DOCKER NETWORK NAME} -e "ASPNETCORE_Kestrel__Certificates__Default__Password={YOUR CERTICATES PWD}" -p 5443:5443 -p 5000:5000 theidserverpublic:dev
+# This commande expose ports 5000 and 5443, so the server can be accessed through thoose ports. 
+
+# From the latest CI sever image build
 FROM aguacongas/aguacongastheidserver:unstable as base
+EXPOSE 5000
+EXPOSE 5443
+
+# Copy the developer self signed certificate (https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
 COPY aspnetapp.pfx /usr/local/share/ca-certificates/aspnetapp.pfx
+
+# Copy the Docker environment configuration
+# In this sample, the Docker environment configuration assumes you have :
+# - a running private server container named "theidserverprivate"
+# - a Seq server container named "seq" (https://hub.docker.com/r/datalust/seq)
+# on the same docker network
 COPY Aguacongas.TheIdServer.Public/appsettings.Docker.json .
+
+# Set the ASP.Net Core environment name
 ENV ASPNETCORE_ENVIRONMENT=Docker
+
+# Set HTTPS certificate path
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/usr/local/share/ca-certificates/aspnetapp.pfx
+
+# Set Kestrel listening URLs
 ENV ASPNETCORE_URLS="https://+:5443;http://+:5000"
+
+# Set Kestrel HTTPS port
 ENV ASPNETCORE_HTTPS_PORT=5443
-RUN rm ./wwwroot/appsettings.Development.json
