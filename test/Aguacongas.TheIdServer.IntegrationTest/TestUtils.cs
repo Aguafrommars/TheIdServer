@@ -1,10 +1,12 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.TheIdServer.BlazorApp;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -92,12 +94,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var jsRuntimeMock = new Mock<IJSRuntime>();
             host = new TestHost();
             var httpMock = host.AddMockHttp();
-            mockHttp = httpMock;
+            mockHttp = httpMock;            
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services);
                 var httpClient = sut.CreateClient();
-                
+                var appConfiguration = CreateApplicationConfiguration(httpClient);
+
+                blazorApp.Program.ConfigureServices(services, appConfiguration, httpClient.BaseAddress.ToString());
+
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
@@ -106,28 +110,60 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     {
                         configure.AddProvider(new TestLoggerProvider(testOutputHelper));
                     })
+                    .AddTransient(p => sut.CreateHandler())
                     .AddIdentityServer4AdminHttpStores(p =>
                     {
-                        
-                        var client = new HttpClient(new blazorApp.OidcDelegationHandler(p.GetRequiredService<IAccessTokenProvider>(), sut.CreateHandler()));
-                        client.BaseAddress = new Uri(httpClient.BaseAddress, "api");
+                        var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
+                            p.GetRequiredService<NavigationManager>())
+                        {
+                            InnerHandler = sut.CreateHandler()
+                        })
+                        {
+                            BaseAddress = new Uri(httpClient.BaseAddress, "api")
+                        };
                         return Task.FromResult(client);
                     })
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(p => navigationInterceptionMock.Object)
-                    .AddSingleton(p => jsRuntimeMock.Object)                    
+                    .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton<Settings>()
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
-                    .AddSingleton<AuthenticationStateProvider>(p => new FakeAuthenticationStateProvider(userName, claims));
+                    .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
+                    .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
+                    .AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
+                    .AddSingleton(p => new FakeAuthenticationStateProvider(p.GetRequiredService<NavigationManager>(),
+                        userName,
+                        claims));
             });
+        }
+
+        public static IConfigurationRoot CreateApplicationConfiguration(HttpClient httpClient)
+        {
+            var appConfigurationDictionary = new Dictionary<string, string>
+            {
+                ["AdministratorEmail"] = "aguacongas@gmail.com",
+                ["ApiBaseUrl"] = new Uri(httpClient.BaseAddress, "api").ToString(),
+                ["ProviderOptions:Authority"] = httpClient.BaseAddress.ToString(),
+                ["ProviderOptions:ClientId"] = "theidserveradmin",
+                ["ProviderOptions:DefaultScopes[0]"] = "openid",
+                ["ProviderOptions:DefaultScopes[1]"] = "profile",
+                ["ProviderOptions:DefaultScopes[2]"] = "theidserveradminapi",
+                ["ProviderOptions:PostLogoutRedirectUri"] = new Uri(httpClient.BaseAddress, "authentication/logout-callback").ToString(),
+                ["ProviderOptions:RedirectUri"] = new Uri(httpClient.BaseAddress, "authentication/login-callback").ToString(),
+                ["ProviderOptions:ResponseType"] = "code",
+                ["WelcomeContenUrl"] = "/welcome-fragment.html"
+            };
+            var appConfiguration = new ConfigurationBuilder().AddInMemoryCollection(appConfigurationDictionary).Build();
+            return appConfiguration;
         }
 
         public class FakeAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
         {
             private readonly AuthenticationState _state;
+            private readonly NavigationManager _navigationManager;
 
-            public FakeAuthenticationStateProvider(string userName, IEnumerable<Claim> claims)
+            public FakeAuthenticationStateProvider(NavigationManager navigationManager, string userName, IEnumerable<Claim> claims)
             {
                 if (claims != null && !claims.Any(c => c.Type == "name"))
                 {
@@ -135,6 +171,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     list.Add(new Claim("name", userName));
                     claims = list;
                 }
+                _navigationManager = navigationManager;
                 _state = new AuthenticationState(new FakeClaimsPrincipal(new FakeIdendity(userName, claims)));
             }
 
@@ -145,18 +182,30 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             public ValueTask<AccessTokenResult> RequestAccessToken()
             {
-                return new ValueTask<AccessTokenResult>(new AccessTokenResult(AccessTokenResultStatus.Success, new AccessToken
-                {
-                    Expires = DateTimeOffset.Now.AddDays(1),
-                    GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
-                    Value = "test"
-                }, "http://exemple.com"));
+                return new ValueTask<AccessTokenResult>(new AccessTokenResult(AccessTokenResultStatus.Success,
+                    new AccessToken
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(1),
+                        GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
+                        Value = "test"
+                    },
+                    "http://exemple.com"));
             }
 
             public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options)
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public class AccessTokenProviderAccessor : IAccessTokenProviderAccessor
+        {
+            public AccessTokenProviderAccessor(IAccessTokenProvider accessTokenProvider)
+            {
+                TokenProvider = accessTokenProvider;
+            }
+
+            public IAccessTokenProvider TokenProvider { get; }
         }
 
         public class FakeClaimsPrincipal : ClaimsPrincipal

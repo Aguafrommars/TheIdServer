@@ -23,8 +23,11 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return services.AddTransient<IIdentityProviderStore>(
-                p => new IdentityProviderStore(getHttpClient.Invoke(p),
-                    p.GetRequiredService<ILogger<IdentityProviderStore>>()));
+                    p => new IdentityProviderStore(getHttpClient.Invoke(p),
+                        p.GetRequiredService<ILogger<IdentityProviderStore>>()))
+                .AddTransient<IExternalProviderKindStore>(
+                    p => new ExternalProviderKindStore(getHttpClient.Invoke(p),
+                        p.GetRequiredService<ILogger<ExternalProviderKindStore>>()));
         }
 
         private static void AddHttpAdminStore(IServiceCollection services,

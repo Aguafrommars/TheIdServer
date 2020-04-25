@@ -2,11 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -188,6 +190,25 @@ namespace Aguacongas.TheIdServer
                 throw new Exception(result.Errors.First().Description);
             }
 
+        }
+        internal static void SeedProviders(IConfiguration configuration, PersistentDynamicManager<SchemeDefinition> persistentDynamicManager)
+        {
+            var googleDefinition = persistentDynamicManager.FindBySchemeAsync("Google").GetAwaiter().GetResult();
+            if (googleDefinition == null)
+            {
+                var options = new GoogleOptions
+                {
+                    ClientId = configuration.GetValue<string>("Google:ClientId"),
+                    ClientSecret = configuration.GetValue<string>("Google:ClientSecret"),
+                };
+                persistentDynamicManager.AddAsync(new SchemeDefinition
+                {
+                    Scheme = "Google",
+                    DisplayName = "Google",
+                    HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
+                    Options = options
+                }).ConfigureAwait(false);
+            }
         }
     }
 }

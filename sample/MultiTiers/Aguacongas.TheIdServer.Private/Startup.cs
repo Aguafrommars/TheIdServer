@@ -1,21 +1,25 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Aguacongas.TheIdServer
 {
@@ -49,66 +53,74 @@ namespace Aguacongas.TheIdServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews(options =>
+            services.AddIdentityServer(options =>
+                 {
+                     options.Events.RaiseErrorEvents = true;
+                     options.Events.RaiseInformationEvents = true;
+                     options.Events.RaiseFailureEvents = true;
+                     options.Events.RaiseSuccessEvents = true;
+                 })
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddDefaultSecretParsers()
+                .AddDefaultSecretValidators()
+                .AddSigningCredentials();
+
+            var authBuilder = services
+                .AddAuthorization(options =>
+                    options.AddIdentityServerPolicies())
+                .AddAuthentication()
+                .AddIdentityServerAuthentication("Bearer", options =>
                 {
-                    options.AddIdentityServerAdminFilters();
-                })
+                    Configuration.GetSection("ApiAuthentication").Bind(options);
+                });
+
+
+            authBuilder.AddDynamic<SchemeDefinition>()
+                .AddEntityFrameworkStore<ConfigurationDbContext>()
+                .AddGoogle()
+                .AddFacebook()
+                .AddOpenIdConnect()
+                .AddTwitter()
+                .AddMicrosoftAccount()
+                .AddOAuth("OAuth", options =>
+                {
+                    options.ClaimActions.MapAll();
+                    options.Events = new OAuthEvents
+                    {
+                        OnCreatingTicket = async context =>
+                        {
+                            var contextOption = context.Options;
+                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
+                            {
+                                return;
+                            }
+
+                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
+                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
+
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+                            var content = await response.Content.ReadAsStringAsync();
+                            response.EnsureSuccessStatusCode();
+
+                            using var doc = JsonDocument.Parse(content);
+
+                            context.RunClaimActions(doc.RootElement);
+                        }
+                    };
+                });
+
+            services.AddControllersWithViews(options =>
+                    options.AddIdentityServerAdminFilters())
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
-
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
                 })
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators();
-
-            if (Environment.IsDevelopment())
-            {
-                builder.AddDeveloperSigningCredential(filename: "..\\tempkey.rsa");
-            }
-            else
-            {
-#pragma warning disable S112 // General exceptions should never be thrown
-                throw new Exception("need to configure key material");
-#pragma warning restore S112 // General exceptions should never be thrown
-            }
-
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
-
-
-
-            services.AddResponseCompression(opts =>
-                 {
-                     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                         new[] { "application/octet-stream" });
-                 })
-                .AddRazorPages(options =>
-                {
-                    options.Conventions.AuthorizeAreaFolder("Identity", "/Account");
-                });
+                .AddIdentityServerAdmin();
+            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -127,11 +139,11 @@ namespace Aguacongas.TheIdServer
 
             app.UseSerilogRequestLogging()
                 .UseHttpsRedirection()
-                .UseResponseCompression()
                 .UseStaticFiles()
                 .UseIdentityServer()
                 .UseRouting()
                 .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultControllerRoute();

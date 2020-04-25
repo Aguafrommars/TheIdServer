@@ -27,9 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new IdentityServerOptions();
             configureOptions(options);
             var services = builder.Services;
-            services.AddTransient<OAuthDelegatingHandler>()
-                .AddTransient<HttpClient>()
+            services
+                .AddTransient<OAuthDelegatingHandler>()
                 .AddHttpClient(options.HttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
             builder.AddTheIdServerStores(provider => provider.CreateApiHttpClient(options));

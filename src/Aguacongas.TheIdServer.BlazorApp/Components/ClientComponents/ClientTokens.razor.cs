@@ -9,6 +9,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class ClientTokens
     {
+        private bool _showAllOptions;
+
         private readonly Dictionary<string, TimeSpan?> _accessTokenQuickValues = new Dictionary<string, TimeSpan?>
         {
             ["15:00"] = TimeSpan.FromMinutes(15),

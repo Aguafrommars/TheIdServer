@@ -133,6 +133,7 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/authentication/login-callback",
                         "https://localhost:5443/authentication/login-callback",
+                        "https://localhost:443/authentication/login-callback",
                         "http://exemple.com/authentication/login-callback",
                         "https://theidserver.herokuapp.com/authentication/login-callback"
                     },
@@ -141,6 +142,7 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/authentication/logout-callback",
                         "https://localhost:5443/authentication/logout-callback",
+                        "https://localhost:443/authentication/logout-callback",
                         "http://exemple.com/authentication/logout-callback",
                         "https://theidserver.herokuapp.com/authentication/logout-callback"
                     },
@@ -148,6 +150,7 @@ namespace Aguacongas.TheIdServer
                     {
                         "http://localhost:5001/",
                         "https://localhost:5443",
+                        "https://localhost:443",
                         "http://exemple.com/",
                         "https://theidserver.herokuapp.com"
                     },
@@ -171,9 +174,33 @@ namespace Aguacongas.TheIdServer
                     {
                         new Claim("role", SharedConstants.READER),
                         new Claim("role", SharedConstants.WRITER)
-                    }
+                    },
+                    BackChannelLogoutSessionRequired = false,
+                    FrontChannelLogoutSessionRequired = false,
+                    AccessTokenType = AccessTokenType.Reference
                 },
+                new Client
+                {
+                    ClientClaimsPrefix = null,
+                    ClientId = "theidserver-swagger",
+                    ClientName = "TheIdServer Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,RequireClientSecret = false,
+                    BackChannelLogoutSessionRequired = false,
+                    FrontChannelLogoutSessionRequired = false,
+                    RedirectUris =
+                    {
+                        "https://localhost:5443/api/swagger/oauth2-redirect.html",
+                        "https://theidserver.herokuapp.com/api/swagger/oauth2-redirect.html"
+                    },
 
+                    AllowedCorsOrigins =
+                    {
+                        "https://localhost:5443",
+                        "https://theidserver.herokuapp.com"
+                    },
+                    AllowedScopes = { "theidserveradminapi" },
+                    AllowAccessTokensViaBrowser = true
+                }
             };
         }
     }

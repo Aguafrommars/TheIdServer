@@ -1,14 +1,15 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
@@ -19,58 +20,53 @@ namespace Aguacongas.TheIdServer.BlazorApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);            
-            builder.RootComponents.Add<App>("app");
-            ConfigureServices(builder.Services);
+            builder.RootComponents.Add<App>("app");            
+            ConfigureServices(builder.Services, builder.Configuration, builder.HostEnvironment.BaseAddress);
             await builder.Build().RunAsync();
         }
 
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, string baseAddress)
         {
+            var providerOptions = configuration.GetSection("ProviderOptions").Get<OidcProviderOptions>();
+            var settings = configuration.Get<Settings>();
             services
                 .AddOptions()
-                .AddBaseAddressHttpClient()
-                .AddApiAuthorization(options =>
+                .AddOidcAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
                 {
-                    var provider = services.BuildServiceProvider();
-                    var configuration = provider.GetRequiredService<IConfiguration>();
-                    options.ProviderOptions.ConfigurationEndpoint = configuration.GetValue<string>("ConfigurationEndpoint");
-                    options.UserOptions.RoleClaim = "role";
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    configuration.Bind("ProviderOptions", options.ProviderOptions);
                 })
-                .AddAuthorizationCore(options =>
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+
+            services.AddAuthorizationCore(options =>
                 {
                     options.AddIdentityServerPolicies();
-                })
+                });
+                
+
+            services
                 .AddIdentityServer4AdminHttpStores(p =>
                 {
-                    return Task.FromResult(CreateApiHttpClient(p));
+                    return Task.FromResult(CreateApiHttpClient(p, settings));
                 })
-                .AddSingleton(p =>
-                {
-                    var configuration = p.GetRequiredService<IConfiguration>();
-                    return configuration.Get<Settings>();
-                })
+                .AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
+                .AddSingleton(p => settings)
                 .AddSingleton<Notifier>()
+                .AddSingleton<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
-                .AddTransient(p =>
-                {
-                    var type = Assembly.Load("WebAssembly.Net.Http")
-                        .GetType("WebAssembly.Net.Http.HttpClient.WasmHttpMessageHandler");
-                    return Activator.CreateInstance(type) as HttpMessageHandler;
-                })
-                .AddTransient<OidcDelegationHandler>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddHttpClient("oidc")
-                .AddHttpMessageHandler<OidcDelegationHandler>();
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
         }
 
-        private static HttpClient CreateApiHttpClient(IServiceProvider p)
+        private static HttpClient CreateApiHttpClient(IServiceProvider p, Settings settings)
         {
             var httpClient = p.GetRequiredService<IHttpClientFactory>()
                                     .CreateClient("oidc");
 
-            var settings = p.GetRequiredService<Settings>();
             var apiUri = new Uri(settings.ApiBaseUrl);
-
             httpClient.BaseAddress = apiUri;
             return httpClient;
         }

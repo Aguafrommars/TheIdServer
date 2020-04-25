@@ -2,10 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
-    <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
+    <DockerfileRunArguments>--network agua</DockerfileRunArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
@@ -17,8 +18,14 @@
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.1.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview3.20168.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview5.20216.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
@@ -42,8 +49,11 @@
     <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
     <ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
+    <ProjectReference Include="..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
     <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+    <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
   </ItemGroup>
 </Project>

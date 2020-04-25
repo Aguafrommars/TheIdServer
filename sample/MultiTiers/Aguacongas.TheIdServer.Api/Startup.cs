@@ -1,3 +1,5 @@
+using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
@@ -42,7 +44,8 @@ namespace Aguacongas.TheIdServer.Api
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>();
 
-            services.AddControllersWithViews(options =>
+            services.Configure<SendGridOptions>(Configuration)
+                .AddControllersWithViews(options =>
             {
                 options.AddIdentityServerAdminFilters();
             })
@@ -70,13 +73,24 @@ namespace Aguacongas.TheIdServer.Api
                 .AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
-                    options.Authority = "https://localhost:6443";
+                    options.Authority = "https://localhost:7443";
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
                     options.ApiName = "theidserveradminapi";
+                    options.ApiSecret = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d";
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromMinutes(10);
                     options.LegacyAudienceValidation = true;
+                })
+                .AddDynamic<SchemeDefinition>()
+                .AddEntityFrameworkStore<ConfigurationDbContext>()
+                .AddGoogle()
+                .AddFacebook()
+                .AddOpenIdConnect()
+                .AddTwitter()
+                .AddMicrosoftAccount()
+                .AddOAuth("OAuth", options =>
+                {
                 });
 
 

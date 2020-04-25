@@ -1,0 +1,19 @@
+﻿@inherits ProviderOptionsBase<OAuthOptions>
+
+<div class="form-group row">
+    <label class="col col-form-label" for="clientId">
+        client id
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="clientId" Placeholder="client id" @bind-Value="@Options.ClientId" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="clientSecret">
+        client secret
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="clientSecret" Placeholder="client secret" @bind-Value="@Options.ClientSecret" />
+    </div>
+</div>
+<OAuthOptionsProperties Options="@Options" />

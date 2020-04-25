@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Http.Store
 {
-    public class OAuthTokenManager : IDisposable
+    public class OAuthTokenManager: OAuthTokenManager<IdentityServerOptions>
+    {
+        public OAuthTokenManager(HttpClient httpClient, IOptions<IdentityServerOptions> options)
+            : base(httpClient, options)
+        { }
+    }
+
+    public class OAuthTokenManager<T> : IDisposable where T: IdentityServerOptions, new()
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptions<IdentityServerOptions> _options;
+        private readonly IOptions<T> _options;
         private readonly object _syncObject = new object();
         private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
         private DiscoveryDocumentResponse _discoveryResponse;
@@ -19,7 +26,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         private AuthenticationHeaderValue _accessToken;
 
         public OAuthTokenManager(HttpClient httpClient,
-            IOptions<IdentityServerOptions> options)
+            IOptions<T> options)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));

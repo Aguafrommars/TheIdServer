@@ -1,10 +1,21 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj", "src/Aguacongas.TheIdServer/"]
+COPY ["src/Aguacongas.TheIdServer.Identity/Aguacongas.TheIdServer.Identity.csproj", "src/Aguacongas.TheIdServer.Identity/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.Http.Store/Aguacongas.IdentityServer.Http.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Http.Store/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin.Http.Store/Aguacongas.IdentityServer.Admin.Http.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin.Http.Store/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.Store/Aguacongas.IdentityServer.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Store/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer/Aguacongas.IdentityServer.csproj", "src/IdentityServer/Aguacongas.IdentityServer/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/Aguacongas.IdentityServer.EntityFramework.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/"]
+COPY ["src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj", "src/Aguacongas.TheIdServer.BlazorApp/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin/Aguacongas.IdentityServer.Admin.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin/"]
 RUN dotnet restore "src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer"

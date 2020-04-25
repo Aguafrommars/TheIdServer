@@ -159,7 +159,10 @@ namespace Aguacongas.TheIdServer
                     {
                         new Claim("role", "Is4-Writer"),
                         new Claim("role", "Is4-Reader")
-                    }                    
+                    },
+                    FrontChannelLogoutSessionRequired = false,
+                    BackChannelLogoutSessionRequired = false,
+                    AccessTokenType = AccessTokenType.Reference
                 },
 
             };

@@ -4,7 +4,6 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
@@ -22,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             return new Models.Role
             {
-                Claims =new List<entity.RoleClaim>()
+                Claims =new List<RoleClaim>()
             };
         }
 
@@ -45,7 +44,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var claimsResponse = await _roleClaimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(entity.RoleClaim.RoleId)} eq '{role.Id}'"
+                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
             });
 
             role.Claims = claimsResponse.Items.ToList();

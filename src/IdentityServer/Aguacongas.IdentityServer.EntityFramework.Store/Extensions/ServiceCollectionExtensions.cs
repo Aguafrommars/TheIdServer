@@ -41,6 +41,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return AddIdentityServer4AdminEntityFrameworkStores<TUser, IdentityRole, TContext>(services);
         }
+
+
         /// <summary>
         /// Adds the identity server4 admin entity framework stores.
         /// </summary>
@@ -89,7 +91,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<UserRole>, IdentityUserRoleStore<TUser>>()
                 .AddTransient<IAdminStore<UserToken>, IdentityUserTokenStore<TUser>>()
                 .AddTransient<IAdminStore<Role>, IdentityRoleStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>();
+                .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore>();
         }
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
