@@ -1,8 +1,7 @@
-﻿using Aguacongas.IdentityServer.Http.Store;
+﻿using Aguacongas.IdentityServer;
 using Aguacongas.TheIdServer.Areas.Identity.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.CodeAnalysis.Emit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

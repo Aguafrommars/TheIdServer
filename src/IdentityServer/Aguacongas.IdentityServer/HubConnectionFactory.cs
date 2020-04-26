@@ -49,6 +49,12 @@ namespace Aguacongas.IdentityServer
                 .WithUrl(hubUrl, options =>
                 {
                     options.HttpMessageHandlerFactory = _ => _provider.GetRequiredService<HttpClientHandler>();
+                    options.AccessTokenProvider = async () =>
+                    {
+                        var manager = _provider.GetRequiredService<OAuthTokenManager>();
+                        var token = await manager.GetTokenAsync().ConfigureAwait(false);
+                        return token.Parameter;
+                    };
                 })
                 .WithAutomaticReconnect();
 

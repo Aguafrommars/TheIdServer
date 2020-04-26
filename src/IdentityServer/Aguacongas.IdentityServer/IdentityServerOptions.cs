@@ -1,4 +1,4 @@
-﻿namespace Aguacongas.IdentityServer.Http.Store
+﻿namespace Aguacongas.IdentityServer
 {
     public class IdentityServerOptions
     {

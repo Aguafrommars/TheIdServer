@@ -1,6 +1,6 @@
 // Project: aguacongas/Identity.Firebase
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Http.Store;
+using Aguacongas.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Net.Http;
@@ -28,7 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions(options);
             var services = builder.Services;
             services
-                .AddTransient<OAuthDelegatingHandler>()
                 .AddHttpClient(options.HttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
