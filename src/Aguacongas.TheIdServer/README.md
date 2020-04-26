@@ -61,7 +61,7 @@ This client is used to update the external provider configuration of a running i
 
 For more informations read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
 
-The SignalR hub accept request at */providerhub* and supporte [MessagePack](https://msgpack.org/index.html) protocol.
+The SignalR hub accept request at */providerhub* and support [MessagePack](https://msgpack.org/index.html) protocol.
 
 For more informations read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
 
