@@ -3,8 +3,7 @@ $path = (Get-Location).Path
 
 Get-ChildItem -Path src -rec `
 | Where-Object { $_.Name -like "*.csproj" -and 
-        $_.Name -ne "Aguacongas.TheIdServer.csproj" -and 
-        $_.Name -ne "Aguacongas.TheIdServer.BlazorApp.csproj"
+        $_.Name -ne "Aguacongas.TheIdServer.csproj"
      } `
 | ForEach-Object { 
     dotnet msbuild $_.FullName -t:Build -p:Configuration=Release -p:OutputPath=$path\artifacts\build -p:GeneratePackageOnBuild=true -p:Version=$env:Version -p:FileVersion=$fileversion

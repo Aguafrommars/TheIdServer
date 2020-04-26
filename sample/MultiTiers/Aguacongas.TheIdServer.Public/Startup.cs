@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.TheIdServer.Authentication;
@@ -172,6 +173,9 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToFile("index.html");
                 })
                 .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+
+            var scope = app.ApplicationServices.CreateScope();
+            scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
         }
     }
 }

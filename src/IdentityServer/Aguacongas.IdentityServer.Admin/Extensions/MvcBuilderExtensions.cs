@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Abstractions;
+﻿using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
