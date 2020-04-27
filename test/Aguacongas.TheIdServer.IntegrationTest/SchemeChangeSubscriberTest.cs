@@ -65,7 +65,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             await store.UpdateAsync(extProvider).ConfigureAwait(false);
             await store.DeleteAsync("google").ConfigureAwait(false);
 
-            await Task.Delay(200).ConfigureAwait(false)
+            await Task.Delay(1000).ConfigureAwait(false);
         }
 
         class MockHttpMessageHandler : DelegatingHandler
