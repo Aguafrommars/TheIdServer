@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -15,8 +16,10 @@ namespace Aguacongas.IdentityServer
     /// <seealso cref="System.IDisposable" />
     public class HubConnectionFactory : IDisposable
     {
+        private readonly object _syncLock = new object();
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _provider;
+        private readonly ILogger<HubConnectionFactory> _logger;
         private HubConnection _hubConnection;
         private bool disposedValue;
 
@@ -26,10 +29,11 @@ namespace Aguacongas.IdentityServer
         /// <param name="configuration">The configuration.</param>
         /// <param name="provider">The service provider</param>
         /// <exception cref="ArgumentNullException">configuration</exception>
-        public HubConnectionFactory(IConfiguration configuration, IServiceProvider provider)
+        public HubConnectionFactory(IConfiguration configuration, IServiceProvider provider, ILogger<HubConnectionFactory> logger)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -45,39 +49,49 @@ namespace Aguacongas.IdentityServer
                 return null;
             }
 
-            var builder = new HubConnectionBuilder()
-                .WithUrl(hubUrl, options =>
-                {
-                    options.HttpMessageHandlerFactory = _ => _provider.GetRequiredService<HttpClientHandler>();
-                    options.AccessTokenProvider = async () =>
-                    {
-                        var manager = _provider.GetRequiredService<OAuthTokenManager>();
-                        var token = await manager.GetTokenAsync().ConfigureAwait(false);
-                        return token.Parameter;
-                    };
-                })
-                .WithAutomaticReconnect();
-
-            if (_configuration.GetValue<bool>("SignalR:UseMessagePack"))
+            if (_hubConnection != null)
             {
-                builder.AddMessagePackProtocol();
+                return _hubConnection;
             }
 
-            _hubConnection = builder.Build();
-
-            _hubConnection.Closed += (error) =>
+            lock (_syncLock)
             {
-                return StartConnectionAsync();
-            };
+                if (_hubConnection != null)
+                {
+                    return _hubConnection;
+                }
 
-            StartConnectionAsync().GetAwaiter().GetResult();
+                var builder = new HubConnectionBuilder()
+                    .WithUrl(hubUrl, options =>
+                    {
+                        options.HttpMessageHandlerFactory = _ => _provider.GetRequiredService<HubHttpMessageHandlerAccessor>().Handler;
+                        options.AccessTokenProvider = async () =>
+                        {
+                            var manager = _provider.GetRequiredService<OAuthTokenManager>();
+                            var token = await manager.GetTokenAsync().ConfigureAwait(false);
+                            return token.Parameter;
+                        };
+                    })
+                    .WithAutomaticReconnect();
 
-            return _hubConnection;
+                if (_configuration.GetValue<bool>("SignalR:UseMessagePack"))
+                {
+                    builder.AddMessagePackProtocol();
+                }
 
+                _hubConnection = builder.Build();
+
+                _hubConnection.Closed += (error) =>
+                {
+                    return StartConnectionAsync();
+                };
+
+                return _hubConnection;
+            }
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "infinite auto reconnection")]
-        private async Task StartConnectionAsync()
+        public async Task StartConnectionAsync()
         {
             while (true)
             {
@@ -92,10 +106,10 @@ namespace Aguacongas.IdentityServer
                     Debug.Assert(_hubConnection.State == HubConnectionState.Connected);
                     return;
                 }
-                catch
+                catch(Exception e)
                 {
                     // Failed to connect, trying again in 5000 ms.
-                    Debug.Assert(_hubConnection.State == HubConnectionState.Disconnected);
+                    _logger.LogError(e, e.Message);
                     await Task.Delay(5000).ConfigureAwait(false);
                 }
             }

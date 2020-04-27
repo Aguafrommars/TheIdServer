@@ -17,7 +17,6 @@ namespace Aguacongas.TheIdServer.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.Configure<EmailOptions>(context.Configuration.GetSection("EmailApiAuthentication"))
                     .AddSingleton<OAuthTokenManager<EmailOptions>>()
-                    .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
                     .AddTransient<IEmailSender>(p =>
                     {
                         var factory = p.GetRequiredService<IHttpClientFactory>();

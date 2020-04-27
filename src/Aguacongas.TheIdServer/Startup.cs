@@ -30,7 +30,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -81,7 +80,7 @@ namespace Aguacongas.TheIdServer
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                     }
                     return handler;
-                })
+                })                
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 

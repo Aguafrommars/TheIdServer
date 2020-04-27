@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer
         /// </summary>
         public void Subscribe()
         {
-            Task.Delay(100).ContinueWith(t =>
+            Task.Delay(100).ContinueWith(async t =>
             {
                 var connection = _factory.GetConnection();
                 if (connection == null)
@@ -66,6 +66,8 @@ namespace Aguacongas.IdentityServer
                     var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
                     await _manager.UpdateAsync(definition).ConfigureAwait(false);
                 });
+
+                await _factory.StartConnectionAsync().ConfigureAwait(false);
             });
         }
     }
