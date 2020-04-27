@@ -2,7 +2,6 @@
 using Aguacongas.IdentityServer.Store;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
