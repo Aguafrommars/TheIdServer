@@ -50,7 +50,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }, cancellationToken).ConfigureAwait(false);
             if (_providerClient != null)
             {
-                await _providerClient.ProviderAdded(entity.Id, cancellationToken).ConfigureAwait(false);
+                await _providerClient.ProviderAddedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             }
             return entity;
         }
@@ -65,7 +65,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _manager.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
             if (_providerClient != null)
             {
-                await _providerClient.ProviderRemoved(id, cancellationToken).ConfigureAwait(false);
+                await _providerClient.ProviderRemovedAsync(id, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -110,7 +110,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _manager.UpdateAsync(definition, cancellationToken).ConfigureAwait(false);
             if (_providerClient != null)
             {
-                await _providerClient.ProviderUpdated(entity.Id, cancellationToken).ConfigureAwait(false);
+                await _providerClient.ProviderUpdatedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             }
             return entity;
         }

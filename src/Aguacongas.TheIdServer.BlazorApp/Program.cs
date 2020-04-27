@@ -27,7 +27,6 @@ namespace Aguacongas.TheIdServer.BlazorApp
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, string baseAddress)
         {
-            var providerOptions = configuration.GetSection("ProviderOptions").Get<OidcProviderOptions>();
             var settings = configuration.Get<Settings>();
             services
                 .AddOptions()

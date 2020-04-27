@@ -4,6 +4,30 @@ The configuration can be read from *appsettings.json*, *appsettings.{Environment
 
 Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1) for more information.
 
+## Instalation
+
+### From Docker
+
+A [Linux server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
+
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+
+Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
+
+### From Github Release
+
+Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
+Unzip in the destination of your choice, as any ASP.Net Core web site it can run in IIS or as a stand alone server using the plateform of your choice.
+
+Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1) for more information.
+
+### From Nuget Packages
+
+If you need more customization, you can use published Nuget packages.
+[sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from Nuget packages.
+
 ## Configure stores
 
 ### Using EF core
@@ -61,7 +85,7 @@ This client is used to update the external provider configuration of a running i
 
 For more informations read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
 
-The SignalR hub accept request at */providerhub* and supporte [MessagePack](https://msgpack.org/index.html) protocol.
+The SignalR hub accept request at */providerhub* and support [MessagePack](https://msgpack.org/index.html) protocol.
 
 For more informations read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
 
@@ -315,19 +339,9 @@ The section **Serilog** define the [Serilog](https://serilog.net/) configuration
 
 For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
 
-
-## Docker support
-
-A [Linux server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
-
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
-
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
-
-Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
-
 ## Additional resources
 
+* [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1)
 * [DymamicAuthProviders](https://github.com/Aguafrommars/DymamicAuthProviders)
 * [Set up a Redis backplane for ASP.NET Core SignalR scale-out](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
 * [Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)

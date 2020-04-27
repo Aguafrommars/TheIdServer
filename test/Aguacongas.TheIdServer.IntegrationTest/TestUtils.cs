@@ -1,5 +1,4 @@
-﻿using Aguacongas.TheIdServer.BlazorApp;
-using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

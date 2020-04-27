@@ -1,6 +1,7 @@
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,13 @@ namespace Aguacongas.TheIdServer.Api
                 .AddOperationalEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>();
+
+            var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
+            if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
+            {
+                signalRBuilder.AddMessagePackProtocol();
+            }
+
 
             services.Configure<SendGridOptions>(Configuration)
                 .AddControllersWithViews(options =>
@@ -122,9 +130,10 @@ namespace Aguacongas.TheIdServer.Api
                 .UseRouting()
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(enpoints =>
+                .UseEndpoints(endpoints =>
                 {
-                    enpoints.MapAdminApiControllers();
+                    endpoints.MapAdminApiControllers();
+                    endpoints.MapHub<ProviderHub>("/providerhub");
                 });
         }
     }

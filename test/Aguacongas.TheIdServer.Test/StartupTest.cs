@@ -1,4 +1,5 @@
 using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;

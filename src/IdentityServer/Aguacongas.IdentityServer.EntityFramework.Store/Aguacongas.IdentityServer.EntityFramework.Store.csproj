@@ -1,29 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Authors>Olivier Lefebvre</Authors>
+		<Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
+		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>theidserver;identityserver4;administration</PackageTags>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="3.1.1" />
-    <PackageReference Include="Community.OData.Linq" Version="1.4.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="3.1.1" />
+		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
-    <ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
+	</ItemGroup>
 
 </Project>
