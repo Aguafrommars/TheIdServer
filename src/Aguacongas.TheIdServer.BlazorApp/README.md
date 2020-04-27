@@ -2,6 +2,20 @@
 
 This project contains the code of the [Blazor wasm](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
+### From Docker
+
+The application is embeded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
+If you prefer, you can install the [standalone application'sLinux image](https://hub.docker.com/r/aguacongas/aguacongastheidserverblazorapp).  
+This image uses an [nginx](http://nginx.org/) server to host the application.
+
+### From Github Release
+
+The application is embeded in the [server's Github release](../Aguacongas.TheIdServer/README.md#from-github-release).  
+You can choose to install the standalone application by selecting *Aguacongas.TheIdServer.BlazorApp{version}.zip* in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases).   
+Unzip in the destination of your choice, and use the server of your choice.
+
+Read [Host and deploy ASP.NET Core Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/blazor/webassembly?view=aspnetcore-3.1) for more information.
+
 ## Configuration
 
 The application reads its configuration from *appsettings.json* and environment specific configuration data from *appsettings.{environment}.json*
