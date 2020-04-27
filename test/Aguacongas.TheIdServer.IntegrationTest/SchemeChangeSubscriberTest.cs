@@ -1,16 +1,13 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
-using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -62,44 +59,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 SerializedOptions = serializer.SerializeOptions(new GoogleOptions(), typeof(GoogleOptions))
             };
 
-            var connection = new HubConnectionBuilder()
-                    .WithUrl(new Uri(server.BaseAddress, "/providerhub"), options =>
-                    {
-                        options.HttpMessageHandlerFactory = _ => server.CreateHandler();
-                        options.AccessTokenProvider = async () =>
-                        {
-                            var manager = provider.GetRequiredService<OAuthTokenManager>();
-                            var token = await manager.GetTokenAsync().ConfigureAwait(false);
-                            return token.Parameter;
-                        };
-                    })
-                    .Build();
-
-            connection.On<string>(nameof(IProviderHub.ProviderAdded), scheme =>
-            {
-                waitHandle.Set();
-            });
-
-            connection.On<string>(nameof(IProviderHub.ProviderRemoved), scheme =>
-            {
-                waitHandle.Set();
-            });
-
-            connection.On<string>(nameof(IProviderHub.ProviderUpdated), scheme =>
-            {
-                waitHandle.Set();
-            });
-
-            await connection.StartAsync();
-
             provider.GetRequiredService<IConfiguration>()["SignalR:HubUrl"] = null;
 
-            waitHandle.Reset();
             await store.CreateAsync(extProvider).ConfigureAwait(false);
             await store.UpdateAsync(extProvider).ConfigureAwait(false);
             await store.DeleteAsync("google").ConfigureAwait(false);
 
-            Assert.True(waitHandle.WaitOne(5000));
+            await Task.Delay(200).ConfigureAwait(false)
         }
 
         class MockHttpMessageHandler : DelegatingHandler
