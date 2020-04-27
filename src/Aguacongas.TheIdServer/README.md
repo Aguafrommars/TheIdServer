@@ -8,7 +8,7 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ### From Docker
 
-A [Linux server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
 
 [*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
 
