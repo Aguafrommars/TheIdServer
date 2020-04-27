@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     {
 
         [Fact]
-        public async Task SubscribeTest_should_subcribe_to_hub_events()
+        public async Task Subscribe_should_subcribe_to_hub_events()
         {
             var waitHandle = new ManualResetEvent(false);
 
@@ -96,14 +96,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             waitHandle.Reset();
             await store.CreateAsync(extProvider).ConfigureAwait(false);
-            Assert.True(waitHandle.WaitOne(5000));
-
-            waitHandle.Reset();
             await store.UpdateAsync(extProvider).ConfigureAwait(false);
-            Assert.True(waitHandle.WaitOne(5000));
-
-            waitHandle.Reset();
             await store.DeleteAsync("google").ConfigureAwait(false);
+
             Assert.True(waitHandle.WaitOne(5000));
         }
 
