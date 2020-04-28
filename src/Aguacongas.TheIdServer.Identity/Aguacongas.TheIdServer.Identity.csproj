@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+	  <Authors>Olivier Lefebvre</Authors>
+	  <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+	  <PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+	  <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Identity</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>theidserver;aspnetcore;identity;security</PackageTags>
+	  <Description>TheIdServer management application.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

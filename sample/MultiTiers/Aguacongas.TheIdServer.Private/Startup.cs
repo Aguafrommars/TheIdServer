@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
@@ -111,15 +112,13 @@ namespace Aguacongas.TheIdServer
                     };
                 });
 
-            services.AddControllersWithViews(options =>
-                    options.AddIdentityServerAdminFilters())
+            services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin();
+                });
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
@@ -148,7 +147,11 @@ namespace Aguacongas.TheIdServer
                 {
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
-                }); 
+                })
+                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+
+            var scope = app.ApplicationServices.CreateScope();
+            scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
         }
     }
 }

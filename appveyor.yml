@@ -31,7 +31,9 @@ test_script:
   - cmd: publish.cmd
 artifacts:
   - path: artifacts/**/*.nupkg
-    name: nuget    
+    name: nuget
+  - path: artifacts/**/*.zip
+    name: zip    
 deploy:
   - provider: NuGet
     api_key:

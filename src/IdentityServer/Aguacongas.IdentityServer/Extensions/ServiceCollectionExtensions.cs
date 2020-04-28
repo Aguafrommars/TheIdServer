@@ -1,4 +1,7 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Store;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,7 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddIdentityProviderStore(this IServiceCollection services)
         {
-            return services.AddTransient<IIdentityProviderStore, IdentityProviderStore>();
+            return services
+                .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
+                .AddSingleton<HubConnectionFactory>()
+                .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
+                .AddTransient<OAuthDelegatingHandler>()
+                .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
+                .AddTransient<IIdentityProviderStore, IdentityProviderStore>();
         }
     }
 }

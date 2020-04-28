@@ -29,20 +29,10 @@ namespace Microsoft.AspNetCore.Builder
         {
             var entityTypeList = Utils.GetEntityTypeList();
 
-            Func<HttpContext, Task<AuthenticateResult>> authenticate;
-            if (authicationScheme != null)
-            {
-                authenticate = context => context.AuthenticateAsync(authicationScheme);
-            }
-            else
-            {
-                authenticate = context => context.AuthenticateAsync();
-            }
-
             return builder.Map(basePath, child =>
             {
                 configure(child);
-                AuthenticateUserMiddleware(child, authenticate);
+                AuthenticateUserMiddleware(child, basePath, authicationScheme);
             })
             .Use(async (context, next) =>
             {
@@ -67,37 +57,59 @@ namespace Microsoft.AspNetCore.Builder
             });
         }
 
-        private static void AuthenticateUserMiddleware(IApplicationBuilder child, Func<HttpContext, Task<AuthenticateResult>> authenticate)
+        /// <summary>
+        /// Uses the identity server admin authentication.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="basePath">The base path.</param>
+        /// <param name="authicationScheme">The authication scheme.</param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseIdentityServerAdminAuthentication(this IApplicationBuilder builder,
+            string basePath, string authicationScheme)
+        {
+            return builder.Use((context, next) =>
+            {
+                return Authenticate(context, next, basePath, authicationScheme);
+            });
+        }
+
+        private static void AuthenticateUserMiddleware(IApplicationBuilder child, string basePath, string authicationScheme)
         {
             child.UseRouting()
-                .Use(async (context, next) =>
-                {
-                    if (!context.Request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) &&
-                        !context.User.Identity.IsAuthenticated)
-                    {
-                        var result = await authenticate(context)
-                            .ConfigureAwait(false);
-                        if (result.Succeeded)
-                        {
-                            context.User = result.Principal;
-                        }
-                        else
-                        {
-                            var response = context.Response;
-                            response.StatusCode = (int)HttpStatusCode.Forbidden;
-                            await response.CompleteAsync()
-                                .ConfigureAwait(false);
-                            return;
-                        }
-                    }
-                    await next()
-                        .ConfigureAwait(false);
-                })
+                .UseIdentityServerAdminAuthentication(basePath, authicationScheme)
                 .UseAuthorization()
                 .UseEndpoints(enpoints =>
                 {
                     enpoints.MapAdminApiControllers();
                 });
+        }
+
+        private static async Task Authenticate(HttpContext context, Func<Task> next, string basePath, string authicationScheme)
+        {
+            var resquest = context.Request;
+
+            if ((resquest.PathBase.StartsWithSegments(basePath) || resquest.Path.StartsWithSegments(basePath)) && 
+                !resquest.Method.Equals("option", StringComparison.OrdinalIgnoreCase) &&
+                !context.User.Identity.IsAuthenticated)
+            {
+                var result = await context.AuthenticateAsync(authicationScheme)
+                    .ConfigureAwait(false);
+
+                if (result.Succeeded)
+                {
+                    context.User = result.Principal;
+                }
+                else
+                {
+                    var response = context.Response;
+                    response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    await response.CompleteAsync()
+                        .ConfigureAwait(false);
+                    return;
+                }
+            }
+            await next()
+                .ConfigureAwait(false);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.TheIdServer.Admin.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading;
@@ -12,16 +14,23 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="IProviderClient" />
     public class ProviderClient : IProviderClient
     {
-        private readonly HubConnection _connection;
+        private readonly IHubContext<ProviderHub> _context;
+        private readonly HubConnectionFactory _hubConnectionFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProviderClient"/> class.
         /// </summary>
-        /// <param name="connection">The connection.</param>
-        /// <exception cref="ArgumentNullException">connection</exception>
-        public ProviderClient(HubConnection connection)
+        /// <param name="context">The context.</param>
+        /// <param name="hubConnectionFactory">The hub connection factory.</param>
+        /// <exception cref="ArgumentNullException">
+        /// context
+        /// or
+        /// hubConnectionFactory
+        /// </exception>
+        public ProviderClient(IHubContext<ProviderHub> context, HubConnectionFactory hubConnectionFactory)
         {
-            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _hubConnectionFactory = hubConnectionFactory ?? throw new ArgumentNullException(nameof(hubConnectionFactory));
         }
 
         /// <summary>
@@ -30,9 +39,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="scheme">The scheme.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task ProviderAdded(string scheme, CancellationToken cancellationToken = default)
+        public Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return _connection.InvokeAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
+            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -41,9 +50,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="scheme">The scheme.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task ProviderRemoved(string scheme, CancellationToken cancellationToken = default)
+        public Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return _connection.InvokeAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
+            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -52,9 +61,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="scheme">The scheme.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task ProviderUpdated(string scheme, CancellationToken cancellationToken = default)
+        public Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return _connection.InvokeAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
+            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
+        }
+
+        private IClientProxy GetClientProxy()
+        {
+            var connection = _hubConnectionFactory.GetConnection();
+            return _context.Clients.AllExcept(connection?.ConnectionId);
         }
     }
 }

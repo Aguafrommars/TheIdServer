@@ -5,10 +5,10 @@ namespace Aguacongas.IdentityServer.Abstractions
 {
     public interface IProviderClient
     {
-        Task ProviderAdded(string scheme, CancellationToken cancellationToken = default);
+        Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default);
 
-        Task ProviderUpdated(string scheme, CancellationToken cancellationToken = default);
+        Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default);
 
-        Task ProviderRemoved(string scheme, CancellationToken cancellationToken = default);
+        Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default);
     }
 }

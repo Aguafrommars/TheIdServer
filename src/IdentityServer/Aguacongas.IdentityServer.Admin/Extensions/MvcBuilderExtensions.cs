@@ -26,17 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()
                 .AddTransient<SendGridEmailSender>()
-                .AddSingleton<HubConnectionFactory>()                
-                .AddTransient<IProviderClient>(p =>
-                {
-                    var hubConnection = p.GetRequiredService<HubConnectionFactory>().GetConnection();
-                    if (hubConnection == null)
-                    {
-                        return null;
-                    }
-
-                    return new ProviderClient(hubConnection);
-                })
+                .AddTransient<IProviderClient, ProviderClient>()
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>

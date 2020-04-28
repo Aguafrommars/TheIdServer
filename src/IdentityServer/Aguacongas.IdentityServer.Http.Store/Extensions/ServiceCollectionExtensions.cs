@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Http.Store;
+﻿using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -17,10 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             var options = new IdentityServerOptions();
             configureOptions(options);
-            services
-                .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
-                .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
-                .AddTransient<OAuthDelegatingHandler>()
+            services.AddIdentityProviderStore()
                 .AddHttpClient(options.HttpClientName)
                 .ConfigurePrimaryHttpMessageHandler((p => p.GetRequiredService<HttpClientHandler>()))
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
@@ -41,7 +39,6 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
                 .AddIdentityServer4AdminHttpStores(getHttpClient)
-                .AddSingleton<OAuthTokenManager>()
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<IResourceStore, ResourceStore>()
                 .AddTransient<ICorsPolicyService, CorsPolicyService>();

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.Http.Store
+namespace Aguacongas.IdentityServer
 {
     public class OAuthDelegatingHandler: OAuthDelegatingHandler<IdentityServerOptions>
     {

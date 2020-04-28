@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
@@ -9,6 +10,7 @@ using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -28,7 +30,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using HttpStore = Aguacongas.IdentityServer.Http.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -79,7 +80,7 @@ namespace Aguacongas.TheIdServer
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                     }
                     return handler;
-                })
+                })                
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
@@ -87,7 +88,7 @@ namespace Aguacongas.TheIdServer
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
-                .AddIdentityServerAuthentication("Bearer", options =>
+                .AddIdentityServerAuthentication(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     Configuration.GetSection("ApiAuthentication").Bind(options);
                     if (Configuration.GetValue<bool>("DisableStrictSsl"))
@@ -133,7 +134,7 @@ namespace Aguacongas.TheIdServer
                 .AddOpenIdConnect()
                 .AddTwitter()
                 .AddMicrosoftAccount()
-                .AddOAuth("OAuth", options => 
+                .AddOAuth("OAuth", options =>
                 {
                     options.ClaimActions.MapAll();
                     options.Events = new OAuthEvents
@@ -232,8 +233,14 @@ namespace Aguacongas.TheIdServer
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
-                .UseAuthentication()
-                .UseIdentityServer()
+                .UseAuthentication();
+
+            if (!isProxy)
+            {
+                app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
+            }
+
+            app.UseIdentityServer()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
@@ -255,7 +262,7 @@ namespace Aguacongas.TheIdServer
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
             }
-                
+
 
             var scope = app.ApplicationServices.CreateScope();
             scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
@@ -263,7 +270,8 @@ namespace Aguacongas.TheIdServer
 
         private void AddDefaultServices(IServiceCollection services)
         {
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
+            services.Configure<IdentityServerOptions>(options => Configuration.GetSection("ApiAuthentication").Bind(options))
+                .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
                 .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
@@ -290,10 +298,10 @@ namespace Aguacongas.TheIdServer
 
         private void AddProxyServices(IServiceCollection services)
         {
-            void configureOptions(HttpStore.IdentityServerOptions options)
+            void configureOptions(IdentityServerOptions options)
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()                
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
                 .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
