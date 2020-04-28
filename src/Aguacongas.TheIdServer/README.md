@@ -28,6 +28,22 @@ Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core
 If you need more customization, you can use published Nuget packages.
 [sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from Nuget packages.
 
+## Configure IdentityServer4
+
+The section **IdentityServerOptions** is binded to the class [`IdentityServer4.Configuration.IdentityServerOptions`](http://docs.identityserver.io/en/latest/reference/options.html).  
+So you can set any IdentityServer4 options you want from configuration
+
+```json
+"IdentityServerOptions": {
+  "Events": {
+    "RaiseErrorEvents": true,
+    "RaiseInformationEvents": true,
+    "RaiseFailureEvents": true,
+    "RaiseSuccessEvents": true
+  }
+}
+```
+
 ## Configure stores
 
 ### Using EF core
@@ -267,6 +283,16 @@ If you use a self signed certificat you can disable strict SSL by settings **Dis
 
 ```json
 "DisableStrictSsl": true
+```
+
+### Configure Forwarded Headers
+
+The section **ForwardedHeadersOptions** is binded to the class [`Microsoft.AspNetCore.Builder.ForwardedHeadersOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions?view=aspnetcore-3.1).  
+
+```json
+"ForwardedHeadersOptions": {
+  "ForwardedHeaders": "All"
+}
 ```
 
 ## Configure the provider hub
