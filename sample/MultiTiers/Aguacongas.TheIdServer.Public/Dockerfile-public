@@ -6,11 +6,11 @@
 # This commande expose ports 5000 and 5443, so the server can be accessed through thoose ports. 
 
 # From the latest CI sever image build
-FROM aguacongas/aguacongastheidserver:unstable as base
+FROM aguacongas/aguacongastheidserver:preview-1.0.0 as base
 EXPOSE 5000
 EXPOSE 5443
 
-# Copy the developer self signed certificate (https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
+# Copy the developer self signed certificate (https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-3.1&tabs=visual-studio#trust-https-certificate-from-windows-subsystem-for-linux)
 COPY aspnetapp.pfx /usr/local/share/ca-certificates/aspnetapp.pfx
 
 # Copy the Docker environment configuration
