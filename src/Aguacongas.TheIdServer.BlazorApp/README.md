@@ -2,6 +2,8 @@
 
 This project contains the code of the [Blazor wasm](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
+## Instalation
+
 ### From Docker
 
 The application is embeded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
@@ -16,6 +18,14 @@ Unzip in the destination of your choice, and use the server of your choice.
 
 Read [Host and deploy ASP.NET Core Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/blazor/webassembly?view=aspnetcore-3.1) for more information.
 
+### From Nuget packages
+
+Nuget packages composing the application are available on [nuget.org](https://www.nuget.org/):
+
+* **Aguacongas.TheIdServer.BlazorApp.Infrastructure** contains application models, services, validators and extensions
+* **Aguacongas.TheIdServer.BlazorApp.Components** contains application components
+* **Aguacongas.TheIdServer.BlazorApp.Pages** contains application pages
+
 ## Configuration
 
 The application reads its configuration from *appsettings.json* and environment specific configuration data from *appsettings.{environment}.json*
@@ -29,6 +39,19 @@ The application reads its configuration from *appsettings.json* and environment 
   "authenticationPaths": {
     "remoteRegisterPath": "/identity/account/register",
     "remoteProfilePath": "/identity/account/manage"
+  },
+  "loggingOptions": {
+    "minimum": "Debug",
+    "filters": [
+      {       
+        "category": "System",
+        "level": "Warning"
+      },
+      {
+        "category": "Microsoft",
+        "level": "Information"
+      }
+    ]
   },
   "userOptions": {
     "roleClaim": "role"
@@ -65,6 +88,18 @@ The section **authenticationPaths** is binded to the class `Microsoft.AspNetCore
 The application doesn't contain pages to register a new user or manage the current user, so we set the **authenticationPaths:remoteRegisterPath** and **authenticationPaths:remoteProfilePath** with their corresponding url on the identity server.
 
  For more informations read [ASP.NET Core Blazor WebAssembly additional security scenarios / Customize app routes](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes).
+
+### loggingOptions
+
+Defines logging options.
+
+#### minimum
+
+Defines the [log minimum level](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loglevel?view=dotnet-plat-ext-3.1).
+
+#### filters
+
+Each item in this array add a log filter by category and [LogLevel](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loglevel?view=dotnet-plat-ext-3.1)
 
 ### userOptions
 
@@ -120,3 +155,4 @@ This endpoint should return an html fragment code.
 * [ASP.NET Core Blazor hosting model configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration)
 * [ASP.NET Core Blazor WebAssembly additional security scenarios](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes)
 * [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support)
+* [LogLevel Enum](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loglevel?view=dotnet-plat-ext-3.1)
