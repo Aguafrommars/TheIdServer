@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+
+  aguacongas.theidserver.private:
+    env_file: theidserver.env
+    image: ${DOCKER_REGISTRY-}theidserverprivate:dev
+    build:
+      context: .
+      dockerfile: Aguacongas.TheIdServer.Private/Dockerfile-private
+    volumes:
+      - ./.db:/db
+  
+  aguacongas.theidserver.public:
+    env_file: theidserver.env
+    image: ${DOCKER_REGISTRY-}theidserverpublic:dev
+    build:
+      context: .
+      dockerfile: Aguacongas.TheIdServer.Public/Dockerfile-public
+    links:
+      - "aguacongas.theidserver.private:theidserverprivate"
+    depends_on:
+      - "aguacongas.theidserver.private"
+
+networks:
+   default:
+     external:
+       name: agua

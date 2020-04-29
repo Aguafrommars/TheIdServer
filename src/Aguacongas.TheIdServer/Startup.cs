@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -57,14 +58,9 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
-            services.ConfigureNonBreakingSameSiteCookies()
-                .AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
+            services.Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
+                .ConfigureNonBreakingSameSiteCookies()
+                .AddIdentityServer(options => Configuration.GetSection("IdentityServerOptions").Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
@@ -80,7 +76,7 @@ namespace Aguacongas.TheIdServer
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                     }
                     return handler;
-                })                
+                })
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
