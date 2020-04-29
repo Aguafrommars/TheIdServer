@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Authors>Olivier Lefebvre</Authors>
+		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
+		<Description>TheIdServer administration application pages.</Description>
+		<DebugType>Full</DebugType>
+		<RazorLangVersion>3.0</RazorLangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp.Components\Aguacongas.TheIdServer.BlazorApp.Components.csproj" />
+	</ItemGroup>
+
+
+</Project>

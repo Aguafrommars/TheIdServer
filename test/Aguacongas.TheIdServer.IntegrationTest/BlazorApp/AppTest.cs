@@ -1,4 +1,5 @@
-﻿using Aguacongas.TheIdServer.Data;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.TestHost;
@@ -163,7 +165,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services, TestUtils.CreateApplicationConfiguration(httpClient), httpClient.BaseAddress.ToString());
+                var configuration = TestUtils.CreateApplicationConfiguration(httpClient);
+                WebAssemblyHostBuilderExtensions.ConfigureServices(services, configuration, configuration.Get<Settings>(), httpClient.BaseAddress.ToString());
                 services
                     .AddLogging(configure =>
                     {
@@ -237,7 +240,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
             host.ConfigureServices(services =>
             {
-                blazorApp.Program.ConfigureServices(services, TestUtils.CreateApplicationConfiguration(client), client.BaseAddress.ToString());
+                var configuration = TestUtils.CreateApplicationConfiguration(client);
+                WebAssemblyHostBuilderExtensions.ConfigureServices(services, configuration, configuration.Get<Settings>(), client.BaseAddress.ToString());
                 services
                     .AddLogging(configure =>
                     {
