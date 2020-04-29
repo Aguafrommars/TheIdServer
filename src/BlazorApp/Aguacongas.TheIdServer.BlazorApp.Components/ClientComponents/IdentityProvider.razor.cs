@@ -28,8 +28,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override async Task OnInitializedAsync()
         {
-            _providerName = await GetProviderName(Entity.Provider);
-            await base.OnInitializedAsync();
+            _providerName = await GetProviderName(Entity.Provider).ConfigureAwait(false);
+            await base.OnInitializedAsync().ConfigureAwait(false);
         }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)

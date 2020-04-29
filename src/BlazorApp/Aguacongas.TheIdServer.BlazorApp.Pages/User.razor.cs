@@ -20,7 +20,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
+            await base.OnInitializedAsync().ConfigureAwait(false);
             AddEmptyRole();
         }
 
@@ -96,7 +96,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 var rolesResponse = await roleStore.GetAsync(new PageRequest
                 {
                     Filter = string.Join(" or ", userRoles.Select(r => $"{nameof(entity.Role.Id)} eq '{r.RoleId}'"))
-                });
+                }).ConfigureAwait(false);
                 model.Roles = rolesResponse.Items.ToList();
             }
             else
@@ -117,7 +117,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     Select = "Id",
                     Take = 1,
                     Filter = $"{nameof(role.Name)} eq '{role.Name}'"
-                });
+                }).ConfigureAwait(false);
 
                 var roles = roleResponse.Items;
                 if (roles.Any())
@@ -126,11 +126,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     {
                         RoleId = roles.First().Id,
                         UserId = Model.Id
-                    });                   
+                    }).ConfigureAwait(false);
                 }
                 return role;
             }
-            return await base.CreateAsync(entityType, entity);
+            return await base.CreateAsync(entityType, entity).ConfigureAwait(false);
         }
 
         protected override Task<object> DeleteAsync(Type entityType, object entity)
