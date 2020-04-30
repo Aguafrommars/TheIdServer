@@ -40,12 +40,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task<Models.Role> GetModelAsync()
         {
-            var role = await base.GetModelAsync();
+            var role = await base.GetModelAsync().ConfigureAwait(false);
 
             var claimsResponse = await _roleClaimStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
-            });
+            }).ConfigureAwait(false);
 
             role.Claims = claimsResponse.Items.ToList();
             

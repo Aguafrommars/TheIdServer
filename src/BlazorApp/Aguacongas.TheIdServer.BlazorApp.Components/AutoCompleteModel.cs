@@ -94,7 +94,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                         {
                             await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", Id);
                         }
-                       await InvokeAsync(StateHasChanged);
+                       await InvokeAsync(StateHasChanged).ConfigureAwait(false);
                     }, TaskScheduler.Default);
         }
 

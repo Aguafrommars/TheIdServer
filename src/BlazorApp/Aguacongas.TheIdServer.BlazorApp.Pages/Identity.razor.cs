@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
+            await base.OnInitializedAsync().ConfigureAwait(false);
             AddEmpyClaimsTypes();
         }
 
