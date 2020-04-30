@@ -1,0 +1,90 @@
+﻿@using Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
+
+@page "/externalprovider"
+@page "/externalprovider/{id}"
+@inherits EntityModel<Models.ExternalProvider>
+@inject IExternalProviderKindStore _providerKindStore
+
+@if (Model == null)
+{
+    <p class="col"><em>Loading...</em></p> 
+}
+else
+{
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <CascadingValue Value="Model">
+            <div class="row bg-light sticky-top mb-3">
+                <div class="col">
+                    @if (IsNew)
+                    {
+                        <AuthorizeText Id="name" Placeholder="scheme" @bind-Value="@Model.Id" />
+                    }
+                    else
+                    {
+                        <h3>@Id</h3>
+                    }
+                </div>
+                <div class="col d-flex">
+                    <AuthorizeButton Type="submit" CssSubClass="ml-auto mr-1 btn-primary">
+                        <span class="oi oi-data-transfer-download"></span>
+                        Save
+                    </AuthorizeButton>
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
+                </div>
+                <div class="w-100"></div>
+                <div class="w-100"></div>
+                <FluentValidationValidator />
+                <ValidationSummary class="col" />
+            </div>
+            <div class="entity-details">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @if (IsNew)
+                        {
+                            <div class="form-group row">
+                                <label class="col col-form-label" for="type">
+                                    type
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <ProviderSelect Id="type" @bind-Value="@Model.KindName" Kinds="@Model.Kinds" />
+                                </div>
+                            </div>
+                                                }
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="displayName">
+                                display name
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
+                            </div>
+                        </div>
+                        @switch (Model.KindName)
+                        {
+                            case "Google":
+                                <GoogleOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                            case "Facebook":
+                                <FacebookOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                            case "MicrosoftAccount":
+                                <MicrosoftAccountOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                            case "OAuth":
+                                <OAuthOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                            case "OpenIdConnect":
+                                <OpenIdConnectOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                            case "Twitter":
+                                <TwitterOptionsComponent @ref="_optionsComponent"  />
+                            break;
+                        }
+                    </div>
+                </div>
+            </div>
+        </CascadingValue>
+    </EditForm>
+}

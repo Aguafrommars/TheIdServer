@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  aguacongas.theidserver.private:
+    ports:
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    
+  aguacongas.theidserver.public:
+    ports:
+      - "5443:5443"
+      - "5000:5000"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    restart: on-failure

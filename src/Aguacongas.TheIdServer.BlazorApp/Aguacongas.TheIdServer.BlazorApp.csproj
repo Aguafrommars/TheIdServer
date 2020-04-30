@@ -8,8 +8,8 @@
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identity</PackageTags>
-		<Description>Identity stores implementation for TheIdServer API.</Description>
+		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
+		<Description>TheIdServer administration application.</Description>
 		<DebugType>Full</DebugType>
 		<RazorLangVersion>3.0</RazorLangVersion>
 	</PropertyGroup>
@@ -20,6 +20,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.BlazorApp.ruleset</CodeAnalysisRuleSet>
+		<NoWarn>1701;1702</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,8 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="3.1.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview5.20216.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview5.20216.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview5.20216.8" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview3.20168.3" />
@@ -41,6 +40,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
+	  <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
 	</ItemGroup>
 </Project>

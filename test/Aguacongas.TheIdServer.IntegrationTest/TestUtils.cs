@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -99,7 +100,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 var httpClient = sut.CreateClient();
                 var appConfiguration = CreateApplicationConfiguration(httpClient);
 
-                blazorApp.Program.ConfigureServices(services, appConfiguration, httpClient.BaseAddress.ToString());
+                WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>(), httpClient.BaseAddress.ToString());
 
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));

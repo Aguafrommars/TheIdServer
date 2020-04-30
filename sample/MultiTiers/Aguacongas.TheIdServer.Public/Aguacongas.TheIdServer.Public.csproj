@@ -6,6 +6,7 @@
 		<DockerfileContext>..\..</DockerfileContext>
 		<UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Public.ruleset</CodeAnalysisRuleSet>

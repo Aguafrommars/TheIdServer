@@ -1,0 +1,22 @@
+﻿<ul class="list-inline">
+    @foreach (var item in Collection)
+    {
+        <li class="list-inline-item">
+            <div class="input-group input-group-sm mb-3">
+                <div class="form-control" disabled>@item</div>
+                <div class="input-group-append select" @onclick="() => OnDelete(item)">
+                    <span class="input-group-text oi oi-trash" />
+                </div>
+            </div>
+        </li>
+    }
+    <li class="list-inline-item">
+        <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+            <input type="text" class="form-control new-claim" placeholder="@Placeholder" value="@_value"
+                   @onchange="OnInputChanged" @oninput="OnInput" />
+            <div class="input-group-append" @onclick="AddValue">
+                <span class="input-group-text oi oi-plus" />
+            </div>
+        </div>
+    </li>
+</ul>
