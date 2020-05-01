@@ -50,11 +50,21 @@ namespace Aguacongas.IdentityServer.Admin.Filters
         public void OnActionExecuting(ActionExecutingContext context)
         {
             var controlerType = context.Controller.GetType();
+            if (!controlerType.FullName
+                .StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController",
+                    StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            if (!context.ModelState.IsValid)
+            {
+                context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState));
+                return;
+            }
+
             var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
             if (actionDescriptor.ActionName == "Update" &&
-                controlerType.FullName
-                .StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController",
-                    StringComparison.Ordinal) &&
                 context.ActionArguments["entity"] is IEntityId entity &&
                 entity.Id != context.ActionArguments["id"] as string)
             {

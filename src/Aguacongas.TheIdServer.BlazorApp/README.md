@@ -150,6 +150,13 @@ This endpoint should return an html fragment code.
 </p>
 ```
 
+## Client and API secrets
+
+The application doesn't generate secrets and they are stored has is. 
+
+* If you want to store a SharedSecret you need first to generate the SHA256 value.
+* If you want to store a Base64 X509 certificat you need to convert the value as Base64 string by yourself.
+
 ## Additional resources
 
 * [ASP.NET Core Blazor hosting model configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration)

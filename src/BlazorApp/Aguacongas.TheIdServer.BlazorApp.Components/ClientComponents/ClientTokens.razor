@@ -74,7 +74,7 @@
             id token lifetime
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" />
+            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
             <div>
                 <AuthorizeCheckbox Name="include-claims" Label="always include user claims in id token" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
             </div>
@@ -154,7 +154,7 @@
                 absolute refresh token lifetime
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" />
+                <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
                 <div>
                     <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
                 </div>
@@ -168,7 +168,7 @@
                 sliding refresh token lifetime
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" />
+                <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
                 <div>
                     <AuthorizeCheckbox Name="update-access-token" Label="update access token on refresh" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
                 </div>
@@ -181,7 +181,7 @@
         sso lifetime
     </label>
     <div class="col-lg-8 col-sm-12">
-        <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" />
+        <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" TokenValueChanged="TokenChanded" />
     </div>
 </div>
 @if (_showAllOptions || Model.IsDevice())

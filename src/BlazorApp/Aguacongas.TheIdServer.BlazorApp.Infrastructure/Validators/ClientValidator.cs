@@ -43,6 +43,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.AllowedGrantTypes).Must(g => g.Any(g => !string.IsNullOrEmpty(g.GrantType)))
                 .WithMessage("The client should contain at least one grant type.");
             RuleForEach(m => m.RedirectUris).SetValidator(new ClientRedirectUriValidator(client));
+            RuleForEach(m => m.ClientSecrets).SetValidator(new ClientSecretValidator(client));
             RuleForEach(m => m.Properties).SetValidator(new ClientPropertyValidator(client));
             RuleForEach(m => m.AllowedScopes)
                 .Where(m => m.Scope != null)
