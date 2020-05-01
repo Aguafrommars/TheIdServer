@@ -152,7 +152,7 @@ This endpoint should return an html fragment code.
 
 ## Client and API secrets
 
-The application doesn't generate secrets and they are stored has is. 
+The application doesn't generate secrets and they are stored as is. 
 
 * If you want to store a SharedSecret you need first to generate the SHA256 value.
 * If you want to store a Base64 X509 certificat you need to convert the value as Base64 string by yourself.
