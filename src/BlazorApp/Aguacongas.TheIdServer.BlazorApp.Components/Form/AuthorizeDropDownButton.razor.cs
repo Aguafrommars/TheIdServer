@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
 {
@@ -25,10 +26,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
             return value == SelectedValue ? "active" : null;
         }
 
-        private void SetSelectValue(string value)
+        private async Task SetSelectValue(string value)
         {
             SelectedValue = value;
-            SelectedValueChanged.InvokeAsync(value);
+            await SelectedValueChanged.InvokeAsync(value).ConfigureAwait(false);
             StateHasChanged();
         }
     }

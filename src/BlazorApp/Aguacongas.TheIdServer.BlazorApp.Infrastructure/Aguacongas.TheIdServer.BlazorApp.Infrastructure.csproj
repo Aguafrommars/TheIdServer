@@ -12,6 +12,7 @@
 		<Description>TheIdServer administration application models, services, validators and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
