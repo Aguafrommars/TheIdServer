@@ -153,34 +153,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return JSRuntime.InvokeVoidAsync("browserInteropt.scrollTo", id, -HEADER_HEIGHT);
         }
 
-        protected async Task DeleteEntity()
+        protected virtual async Task DeleteEntity()
         {
             try
             {
                 await AdminStore.DeleteAsync(GetModelId(Model))
                     .ConfigureAwait(false);
             }
-            catch (ProblemException pe)
-            {
-                Notifier.Notify(new Models.Notification
-                {
-                    Header = "Error",
-                    IsError = true,
-                    Message = pe.Details.Detail
-                });
-                throw;
-            }
-#pragma warning disable CA1031 // Do not catch general exception types. We want to notify all error
             catch (Exception e)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
-                Notifier.Notify(new Models.Notification
-                {
-                    Header = "Error",
-                    IsError = true,
-                    Message = e.Message
-                });
-                throw;
+                HandleModificationError(e);
             }
 
             NavigationManager.NavigateTo(BackUrl);
@@ -303,77 +285,59 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
-            foreach (var entity in addList)
+            try
             {
-                SetNavigationProperty(entity);
-                SanetizeEntityToSaved(entity);
-                try
+                foreach (var entity in addList)
                 {
+                    SetNavigationProperty(entity);
+                    SanetizeEntityToSaved(entity);
                     var result = await CreateAsync(entityType, entity).ConfigureAwait(false);
 
                     SetCreatedEntityId(entity, result);
                     SetModelEntityId(entityType, result);
                 }
-                catch (AggregateException e)
+                var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
+                foreach (var entity in updateList)
                 {
-                    HandleModificationError(e);
-                }
-            }
-            var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
-            foreach (var entity in updateList)
-            {
-                SanetizeEntityToSaved(entity);
-                try
-                {
+                    SanetizeEntityToSaved(entity);
                     await UpdateAsync(entityType, entity).ConfigureAwait(false);
                 }
-                catch (AggregateException e)
-                {
-                    HandleModificationError(e);
-                }
-            }
-            var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
-            foreach (var entity in deleteList)
-            {
-                try
+                var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
+                foreach (var entity in deleteList)
                 {
                     await DeleteAsync(entityType, entity).ConfigureAwait(false);
                 }
-                catch (AggregateException e)
-                {
-                    HandleModificationError(e);
-                }
+            }
+            catch (Exception e)
+            {
+                HandleModificationError(e);
             }
         }
 
-        private void HandleModificationError(AggregateException exception)
+        private void HandleModificationError(Exception exception)
         {
-            if(exception == null)
+            if (exception == null)
             {
                 return;
             }
 
-            foreach(var e in exception.InnerExceptions)
+            if (exception is ProblemException pe)
             {
-                if (e is ProblemException pe)
-                {
-                    Notifier.Notify(new Models.Notification
-                    {
-                        Header = "Error",
-                        IsError = true,
-                        Message = pe.Details.Detail
-                    });
-
-                    continue;
-                }
-
                 Notifier.Notify(new Models.Notification
                 {
                     Header = "Error",
                     IsError = true,
-                    Message = e.Message
+                    Message = pe.Details.Detail
                 });
+
             }
+
+            Notifier.Notify(new Models.Notification
+            {
+                Header = "Error",
+                IsError = true,
+                Message = exception.Message
+            });
 
             throw exception;
         }

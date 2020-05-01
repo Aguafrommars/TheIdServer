@@ -75,11 +75,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazorApp", "BlazorApp", "{8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.BlazorApp.Infrastructure", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Infrastructure\Aguacongas.TheIdServer.BlazorApp.Infrastructure.csproj", "{C2806393-D1EB-4DDE-8A4B-AA65014B8D08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.BlazorApp.Infrastructure", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Infrastructure\Aguacongas.TheIdServer.BlazorApp.Infrastructure.csproj", "{C2806393-D1EB-4DDE-8A4B-AA65014B8D08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.BlazorApp.Components", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Components\Aguacongas.TheIdServer.BlazorApp.Components.csproj", "{54A378B8-9BA4-4082-A044-2A8DEA7DEAEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.BlazorApp.Components", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Components\Aguacongas.TheIdServer.BlazorApp.Components.csproj", "{54A378B8-9BA4-4082-A044-2A8DEA7DEAEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.BlazorApp.Pages", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj", "{665F5796-7F54-44D7-8976-9ADA169353F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.BlazorApp.Pages", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj", "{665F5796-7F54-44D7-8976-9ADA169353F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

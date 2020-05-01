@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using SQLitePCL;
 using System;
 using Xunit.Abstractions;
 

@@ -12,10 +12,10 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
         {
             if (obj is IdentityUser<string> other)
             {
-                return other.Email == Email
+                return other.Email == (string.IsNullOrEmpty(Email) ? null : Email)
                     && other.Id == Id
                     && other.PasswordHash == PasswordHash
-                    && other.PhoneNumber == PhoneNumber
+                    && other.PhoneNumber == (string.IsNullOrEmpty(PhoneNumber) ? null : PhoneNumber)
                     && other.UserName == UserName;
             }
             return false;
