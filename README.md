@@ -42,3 +42,9 @@ Read the [application README](src/Aguacongas.TheIdServer.BlazorApp/README.md) fo
 ## Build from source
 
 You can build the solution with Visual Studio or use the `dotnet build` command.
+
+## Contribute
+
+Contributions are warmly welcome. You can contribute by opening an issue, sugest new a feature or submit a pull request.
+
+Read [How to contribute](CONTRIBUTING.md) and [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md) for more informations.
