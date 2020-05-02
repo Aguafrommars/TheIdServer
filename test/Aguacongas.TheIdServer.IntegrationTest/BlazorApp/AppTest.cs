@@ -322,7 +322,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName))
                     .AddOperationalEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName))
-                    .AddIdentityProviderStore();
+                    .AddIdentityProviderStore<ApplicationUser>();
 
                     services.AddIdentity<ApplicationUser, IdentityRole>(
                             options => options.SignIn.RequireConfirmedAccount = false)
