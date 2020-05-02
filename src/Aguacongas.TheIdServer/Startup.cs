@@ -12,6 +12,8 @@ using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,12 +25,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
@@ -124,16 +128,47 @@ namespace Aguacongas.TheIdServer
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
 
-            dynamicAuthBuilder.AddGoogle()
-                .AddFacebook()
-                .AddOpenIdConnect()
-                .AddTwitter()
-                .AddMicrosoftAccount()
+            dynamicAuthBuilder.AddGoogle(options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived()
+                    };
+                })
+                .AddFacebook(options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived()
+                    };
+                })
+                .AddTwitter(options =>
+                {
+                    options.Events = new TwitterEvents
+                    {
+                        OnTicketReceived = OnTicketReceived()
+                    };
+                })
+                .AddMicrosoftAccount(options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived()
+                    };
+                })
+                .AddOpenIdConnect(options =>
+                {
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnTicketReceived = OnTicketReceived()
+                    };
+                })
                 .AddOAuth("OAuth", options =>
                 {
                     options.ClaimActions.MapAll();
                     options.Events = new OAuthEvents
                     {
+                        OnTicketReceived = OnTicketReceived(),
                         OnCreatingTicket = async context =>
                         {
                             var contextOption = context.Options;
@@ -145,7 +180,7 @@ namespace Aguacongas.TheIdServer
                             var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
                             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
                             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
+                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("TheIdServer", "1.0.0"));
 
                             var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
                             var content = await response.Content.ReadAsStringAsync();
@@ -171,11 +206,11 @@ namespace Aguacongas.TheIdServer
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
-
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
+            var disableHttps = Configuration.GetValue<bool>("DisableHttps");
             if (!isProxy)
             {
                 ConfigureInitialData(app);
@@ -189,7 +224,7 @@ namespace Aguacongas.TheIdServer
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                if (Configuration.GetValue<bool>("UseHttps"))
+                if (!disableHttps)
                 {
                     app.UseHsts();
                 }
@@ -197,7 +232,7 @@ namespace Aguacongas.TheIdServer
 
             app.UseSerilogRequestLogging();
 
-            if (Configuration.GetValue<bool>("UseHttps"))
+            if (!disableHttps)
             {
                 app.UseHttpsRedirection();
             }
@@ -271,7 +306,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddIdentityProviderStore();
+                .AddIdentityProviderStore<ApplicationUser>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection("IdentityOptions").Bind(options))
@@ -297,7 +332,7 @@ namespace Aguacongas.TheIdServer
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                .AddIdentityProviderStore()
+                .AddIdentityProviderStore<ApplicationUser>()
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
@@ -333,6 +368,16 @@ namespace Aguacongas.TheIdServer
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
             }
+        }
+
+        private static Func<TicketReceivedContext, Task> OnTicketReceived()
+        {
+            return async context =>
+            {
+                using var scope = context.HttpContext.RequestServices.CreateScope();
+                var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
+                context.Principal = await transformer.TransformPrincipal(context.Principal, context.Scheme.Name);
+            };
         }
     }
 }

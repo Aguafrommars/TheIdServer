@@ -6,12 +6,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
 {
     public partial class OAuthOptionsProperties
     {
-        [Parameter]
-        public OAuthOptions Options { get; set; }
+        [CascadingParameter]
+        public ExternalProvider<OAuthOptions> Model { get; set; }
 
         protected override void OnInitialized()
         {
-            Options.Scope = Options.Scope ?? new List<string>();
+            Model.Options.Scope = Model.Options.Scope ?? new List<string>();
             base.OnInitialized();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 
@@ -15,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The collection of service.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityProviderStore(this IServiceCollection services)
+        public static IServiceCollection AddIdentityProviderStore<TUser>(this IServiceCollection services) where TUser: IdentityUser, new()
         {
             return services
                 .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
@@ -23,7 +24,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<OAuthDelegatingHandler>()
                 .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
-                .AddTransient<IIdentityProviderStore, IdentityProviderStore>();
+                .AddTransient<IIdentityProviderStore, IdentityProviderStore>()
+                .AddTransient<ExternalClaimsTransformer<TUser>>();
         }
     }
 }

@@ -284,9 +284,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
             Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
-            var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
             try
             {
+                var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
                 foreach (var entity in addList)
                 {
                     SetNavigationProperty(entity);

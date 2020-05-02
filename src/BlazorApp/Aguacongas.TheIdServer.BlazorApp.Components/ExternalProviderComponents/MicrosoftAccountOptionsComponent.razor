@@ -5,7 +5,7 @@
         client id
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="clientId" Placeholder="client id" @bind-Value="@Options.ClientId" />
+        <AuthorizeText Id="clientId" Placeholder="client id" @bind-Value="@Model.Options.ClientId" />
     </div>
 </div>
 <div class="form-group row">
@@ -13,7 +13,7 @@
         client secret
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="clientSecret" Placeholder="client secret" @bind-Value="@Options.ClientSecret" />
+        <AuthorizeText Id="clientSecret" Placeholder="client secret" @bind-Value="@Model.Options.ClientSecret" />
     </div>
 </div>
-<OAuthOptionsProperties Options="@Options" />
+<OAuthOptionsProperties />

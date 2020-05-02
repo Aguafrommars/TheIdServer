@@ -17,8 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             var options = new IdentityServerOptions();
             configureOptions(options);
-            services.AddIdentityProviderStore()
-                .AddHttpClient(options.HttpClientName)
+            services.AddHttpClient(options.HttpClientName)
                 .ConfigurePrimaryHttpMessageHandler((p => p.GetRequiredService<HttpClientHandler>()))
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 

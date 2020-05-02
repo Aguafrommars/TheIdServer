@@ -5,7 +5,7 @@
         consumer key
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="consumerKey" Placeholder="consumer key" @bind-Value="@Options.ConsumerKey" />
+        <AuthorizeText Id="consumerKey" Placeholder="consumer key" @bind-Value="@Model.Options.ConsumerKey" />
     </div>
 </div>
 <div class="form-group row">
@@ -13,13 +13,13 @@
         consumer secret
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="consumerSecret" Placeholder="consumer secret" @bind-Value="@Options.ConsumerSecret" />
+        <AuthorizeText Id="consumerSecret" Placeholder="consumer secret" @bind-Value="@Model.Options.ConsumerSecret" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="retrieveUserDetails">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="retrieveUserDetails" Label="retrieve user details" @bind-Value="@Options.RetrieveUserDetails" />
+        <AuthorizeCheckbox Name="retrieveUserDetails" Label="retrieve user details" @bind-Value="@Model.Options.RetrieveUserDetails" />
     </div>
 </div>

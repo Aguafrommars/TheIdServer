@@ -273,10 +273,10 @@ The section *CorsAllowedOrigin* define allowed CORS origins
 
 ## Configure HTTPS
 
-If you want to diseable HTTPS set **UseHttps** to `false`
+If you want to diseable HTTPS set **DisableHttps** to `false`
 
 ```json
-"UseHttps": false
+"DisableHttps": true
 ```
 
 If you use a self signed certificat you can disable strict SSL by settings **DisableStrictSsl** to `true`.

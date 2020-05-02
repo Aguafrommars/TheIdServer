@@ -8,10 +8,15 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class ExternalProvider : Entity.ExternalProvider, ICloneable<ExternalProvider>
+    public class ExternalProvider : ExternalProvider<RemoteAuthenticationOptions>
+    {
+
+    }
+
+    public class ExternalProvider<TOptions> : Entity.ExternalProvider, ICloneable<ExternalProvider>, IExternalProvider<TOptions> where TOptions : RemoteAuthenticationOptions
     {
         [JsonIgnore]
-        public RemoteAuthenticationOptions Options { get; set; }
+        public virtual TOptions Options { get; set; }
 
         [JsonIgnore]
         public IEnumerable<Entity.ExternalProviderKind> Kinds { get; set; }
@@ -26,10 +31,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             }
         }
 
-        public override string SerializedHandlerType 
+        public override string SerializedHandlerType
         {
-            get => Kinds.First(k => k.KindName == KindName).SerializedHandlerType; 
-            set => base.SerializedHandlerType = value; 
+            get => Kinds.First(k => k.KindName == KindName).SerializedHandlerType;
+            set => base.SerializedHandlerType = value;
         }
 
         public ExternalProvider Clone()
@@ -49,9 +54,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             };
         }
 
-        private static RemoteAuthenticationOptions Deserialize(string options, Type optionsType)
+        private static TOptions Deserialize(string options, Type optionsType)
         {
-            return JsonSerializer.Deserialize(options, optionsType) as RemoteAuthenticationOptions;
+            return JsonSerializer.Deserialize(options, optionsType) as TOptions;
         }
 
         private static Type GetOptionsType(Entity.ExternalProvider externalProvider)

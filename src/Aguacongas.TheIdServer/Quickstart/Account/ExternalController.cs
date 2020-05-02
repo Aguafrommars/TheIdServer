@@ -54,10 +54,10 @@ namespace IdentityServer4.Quickstart.UI
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
-            if (Url.IsLocalUrl(returnUrl) == false && _interaction.IsValidReturnUrl(returnUrl) == false)
+            if (!Url.IsLocalUrl(returnUrl) && !_interaction.IsValidReturnUrl(returnUrl))
             {
                 // user might have clicked on a malicious link - should be logged
-                throw new Exception("invalid return URL");
+                throw new InvalidOperationException("invalid return URL");
             }
 
             if (AccountOptions.WindowsAuthenticationSchemeName == provider)
@@ -92,7 +92,7 @@ namespace IdentityServer4.Quickstart.UI
             var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
             if (result?.Succeeded != true)
             {
-                throw new Exception("External authentication error");
+                throw new InvalidOperationException("External authentication error");
             }
 
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -117,8 +117,6 @@ namespace IdentityServer4.Quickstart.UI
             var additionalLocalClaims = new List<Claim>();
             var localSignInProps = new AuthenticationProperties();
             ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
-            ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
-            ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
 
             // issue authentication cookie for user
             // we must issue the cookie maually, and can't use the SignInManager because
@@ -138,14 +136,11 @@ namespace IdentityServer4.Quickstart.UI
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.ClientId));
 
-            if (context != null)
+            if (context != null && await _clientStore.IsPkceClientAsync(context.ClientId))
             {
-                if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                {
-                    // if the client is PKCE then we assume it's native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
-                }
+                // if the client is PKCE then we assume it's native, so this change in how to
+                // return the response is for better UX for the end user.
+                return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
             }
 
             return Redirect(returnUrl);
@@ -265,19 +260,19 @@ namespace IdentityServer4.Quickstart.UI
 
             var user = new ApplicationUser
             {
-                UserName = Guid.NewGuid().ToString(),
+                UserName = email ?? Guid.NewGuid().ToString(),
             };
             var identityResult = await _userManager.CreateAsync(user);
-            if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+            if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
 
             if (filtered.Any())
             {
                 identityResult = await _userManager.AddClaimsAsync(user, filtered);
-                if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+                if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
             }
 
             identityResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
-            if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+            if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
 
             return user;
         }
@@ -299,14 +294,6 @@ namespace IdentityServer4.Quickstart.UI
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
             }
-        }
-
-        private void ProcessLoginCallbackForWsFed(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
-        {
-        }
-
-        private void ProcessLoginCallbackForSaml2p(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
-        {
         }
     }
 }
