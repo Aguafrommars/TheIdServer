@@ -343,7 +343,7 @@ namespace Aguacongas.IdentityServer.Store
                 ClaimType = claim.ClaimType,
                 ClaimValue = claim.ClaimValue,
                 Issuer = claim.Issuer,
-                OriginalValue = claim.OriginalValue
+                OriginalType = claim.OriginalType
             };
         }
 

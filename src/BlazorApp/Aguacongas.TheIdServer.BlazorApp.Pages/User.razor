@@ -149,20 +149,39 @@ else
                                                 Text="value"
                                                 GridState="_gridState" />
                             </th>
-                            <th></th>
+                            <th scope="col">
+                                <SortableHeader Property="Issuer"
+                                                Text="issuer"
+                                                GridState="_gridState" />
+                            </th>
                         </TableHeader>
                         <RowTemplate>
-                            <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
-                            </td>
-                            <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimValue" />
-                            </td>
-                            <td>
-                                <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
-                                    <span class="oi oi-trash"></span>
-                                </AuthorizeButton>
-                            </td>
+                            @if (claim.Issuer == System.Security.Claims.ClaimsIdentity.DefaultIssuer)
+                            {
+                                <td>
+                                    <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
+                                </td>
+                                <td>
+                                    <AuthorizeText @bind-Value="@claim.ClaimValue" />
+                                </td>
+                                <td>
+                                    <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
+                                        <span class="oi oi-trash"></span>
+                                    </AuthorizeButton>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @claim.ClaimType
+                                </td>
+                                <td>
+                                    @claim.ClaimValue
+                                </td>
+                                <td>
+                                    @claim.Issuer
+                                </td>
+                            }
                         </RowTemplate>
                     </EntitiesGrid>
                 </div>

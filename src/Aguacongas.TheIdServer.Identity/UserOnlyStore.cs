@@ -692,7 +692,7 @@ namespace Aguacongas.TheIdServer.Identity
         private Claim CreateClaim(UserClaim userClaim)
         {
             var claim = new Claim(userClaim.ClaimType, userClaim.ClaimValue, userClaim.Issuer);
-            claim.Properties.Add("OriginalValue", userClaim.OriginalValue);
+            claim.Properties.Add(nameof(UserClaim.OriginalType), userClaim.OriginalType);
             return claim;
         }
 

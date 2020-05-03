@@ -907,9 +907,9 @@ namespace Aguacongas.TheIdServer.Identity
                 UserId = ConvertIdToString(user.Id),
                 Issuer = claim.Issuer
             };
-            if (claim.Properties.TryGetValue("OriginalValue", out string orginalValue))
+            if (claim.Properties.TryGetValue(nameof(UserClaim.OriginalType), out string orginalValue))
             {
-                userClaim.OriginalValue = orginalValue;
+                userClaim.OriginalType = orginalValue;
             }
             return userClaim;
         }

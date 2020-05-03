@@ -19,7 +19,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <value>
         /// The original value.
         /// </value>
-        public virtual string OriginalValue { get; set; }
+        public virtual string OriginalType { get; set; }
 
         /// <summary>
         /// Converts to claim.
@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public override Claim ToClaim()
         {
             var claim = new Claim(ClaimType, ClaimValue, Issuer);
-            claim.Properties.Add("OriginalValue", OriginalValue);
+            claim.Properties.Add(nameof(OriginalType), OriginalType);
             return claim;
         }
 
@@ -40,9 +40,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             base.InitializeFromClaim(claim);
             Issuer = claim.Issuer;
-            if (claim.Properties.TryGetValue("OriginalValue", out string originalValue))
+            if (claim.Properties.TryGetValue(nameof(OriginalType), out string originalType))
             {
-                OriginalValue = originalValue;
+                OriginalType = originalType;
             }
         }
     }

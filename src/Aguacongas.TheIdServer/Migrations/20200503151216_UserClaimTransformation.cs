@@ -12,7 +12,7 @@ namespace Aguacongas.TheIdServer.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "OriginalValue",
+                name: "OriginalType",
                 table: "AspNetUserClaims",
                 nullable: true);
         }
@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.Migrations
                 table: "AspNetUserClaims");
 
             migrationBuilder.DropColumn(
-                name: "OriginalValue",
+                name: "OriginalType",
                 table: "AspNetUserClaims");
         }
     }

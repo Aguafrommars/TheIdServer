@@ -72,7 +72,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var definition = await GetEntity(id).ConfigureAwait(false);
+            var query = _context.Providers.AsNoTracking();
+            query = query.Expand(request?.Expand);
+            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id).ConfigureAwait(false);
             return CreateEntity(definition);
         }
 
@@ -148,7 +150,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 StoreClaims = definition.StoreClaims,
                 KindName = optionsType.Name.Replace("Options", ""),
                 SerializedHandlerType = definition.SerializedHandlerType ?? _serializer.SerializeType(hanlderType),
-                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType)
+                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType),
+                ClaimTransformations = definition.ClaimTransformations
             };
         }
 

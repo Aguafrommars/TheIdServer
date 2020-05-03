@@ -40,7 +40,9 @@ namespace Aguacongas.IdentityServer
                 var transformation = transformationList.FirstOrDefault(t => t.FromClaimType == claim.Type);
                 if (transformation != null)
                 {
-                    claims.Add(new Claim(transformation.ToClaimType, claim.Value));
+                    var newClaim = new Claim(transformation.ToClaimType, claim.Value, claim.Issuer);
+                    newClaim.Properties.Add(nameof(UserClaim.OriginalType), claim.Type);
+                    claims.Add(newClaim);
                 }
                 // copy the claim as-is
                 else
@@ -65,15 +67,32 @@ namespace Aguacongas.IdentityServer
 
             if (user == null)
             {
-                user = await AutoProvisionUserAsync(provider, providerUserId, claims)
+                await AutoProvisionUserAsync(provider, providerUserId, claims)
                     .ConfigureAwait(false);
-            }
-            else
-            {
-                await _userManager.RemoveClaimsAsync(user, claims).ConfigureAwait(false);
+                return;
             }
 
-            await _userManager.AddClaimsAsync(user, claims).ConfigureAwait(false);
+            var userClaims = await _userManager.GetClaimsAsync(user).ConfigureAwait(false);
+            // remove delete claims
+            var deleteClaims = userClaims
+                    .Where(c => !claims.Any(uc => uc.Type == c.Type &&
+                        uc.Value == c.Value &&
+                        uc.Issuer == c.Issuer));
+            if (deleteClaims.Any())
+            {
+                await _userManager.RemoveClaimsAsync(user, deleteClaims)
+                    .ConfigureAwait(false);
+            }
+            // add new claims
+            var newClaims = claims
+                    .Where(c => !userClaims.Any(uc => uc.Type == c.Type &&
+                        uc.Value == c.Value &&
+                        uc.Issuer == c.Issuer));
+            if (newClaims.Any())
+            {
+                await _userManager.AddClaimsAsync(user, newClaims)
+                    .ConfigureAwait(false);
+            }
         }
 
         private async Task<(TUser user, string providerUserId)>
@@ -98,7 +117,7 @@ namespace Aguacongas.IdentityServer
             return (user, providerUserId);
         }
 
-        private async Task<TUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
+        private async Task AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
         {            
             // email
             var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
@@ -123,7 +142,7 @@ namespace Aguacongas.IdentityServer
                 throw new InvalidOperationException(identityResult.Errors.First().Description);
             }
 
-            return user;
+            await _userManager.AddClaimsAsync(user, claims).ConfigureAwait(false);
         }
 
     }

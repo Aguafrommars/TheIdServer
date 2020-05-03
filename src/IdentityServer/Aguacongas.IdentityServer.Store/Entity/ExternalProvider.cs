@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Store.Entity
+﻿using System.Collections.Generic;
+
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
     /// SchemeDefinition entity
@@ -53,5 +55,13 @@
         ///   <c>true</c> if [store claims]; otherwise, <c>false</c>.
         /// </value>
         public bool StoreClaims { get; set; }
+
+        /// <summary>
+        /// Gets or sets the claim transformations.
+        /// </summary>
+        /// <value>
+        /// The claim transformations.
+        /// </value>
+        public virtual ICollection<ExternalClaimTransformation> ClaimTransformations { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var getModelTask = base.GetModelAsync();
 
             var userClaimStore = GetStore<entity.UserClaim>();
-            var getClaimsTask =userClaimStore.GetAsync(pageRequest);
+            var getClaimsTask = userClaimStore.GetAsync(pageRequest);
 
             var userLoginStore = GetStore<entity.UserLogin>();
             var getLoginsTask = userLoginStore.GetAsync(pageRequest);

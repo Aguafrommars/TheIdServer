@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.Migrations
                     b.Property<string>("Issuer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OriginalValue")
+                    b.Property<string>("OriginalType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")

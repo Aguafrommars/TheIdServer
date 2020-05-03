@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The original value.
         /// </value>
-        public string OriginalValue { get; set; }
+        public string OriginalType { get; set; }
 
     }
 }
