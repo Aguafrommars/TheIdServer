@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer
                 await _userManager.RemoveClaimsAsync(user, claims).ConfigureAwait(false);
             }
 
-            await _userManager.AddClaimsAsync(user, claims);
+            await _userManager.AddClaimsAsync(user, claims).ConfigureAwait(false);
         }
 
         private async Task<(TUser user, string providerUserId)>
