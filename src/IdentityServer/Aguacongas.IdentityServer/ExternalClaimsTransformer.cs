@@ -28,12 +28,6 @@ namespace Aguacongas.IdentityServer
         public async Task<ClaimsPrincipal> TransformPrincipalAsync(ClaimsPrincipal externalUser, string provider)
         {            
             var claims = new List<Claim>(externalUser.Claims.Count());
-            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
-            if (externalProvider.StoreClaims)
-            {
-                await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
-            }
-
             var transformationsResponse = await _claimTransformationStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ExternalClaimTransformation.Scheme)} eq '{provider}'"
@@ -53,6 +47,12 @@ namespace Aguacongas.IdentityServer
                 {
                     claims.Add(claim);
                 }
+            }
+
+            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
+            if (externalProvider.StoreClaims)
+            {
+                await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
             }
 
             return new ClaimsPrincipal(new ClaimsIdentity(claims, provider));
