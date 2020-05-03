@@ -1,18 +1,22 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
 {
     public partial class OAuthOptionsProperties
     {
+        private ExternalProviderWrapper<OAuthOptions> _wrapper;
+        protected IExternalProvider<OAuthOptions> Model => _wrapper;
+
         [CascadingParameter]
-        public ExternalProvider<OAuthOptions> Model { get; set; }
+        public Models.ExternalProvider ModelBase { get; set; }
 
         protected override void OnInitialized()
         {
-            Model.Options.Scope = Model.Options.Scope ?? new List<string>();
+            _wrapper = new ExternalProviderWrapper<OAuthOptions>(ModelBase);
+            _wrapper.Options ??= _wrapper.DefaultOptions;
             base.OnInitialized();
         }
+
     }
 }

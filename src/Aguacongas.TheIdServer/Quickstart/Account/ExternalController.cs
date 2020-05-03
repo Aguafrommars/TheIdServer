@@ -102,13 +102,13 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             // lookup our user and external provider info
-            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result).ConfigureAwait(false);
             if (user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                user = await AutoProvisionUserAsync(provider, providerUserId, claims);
+                user = await AutoProvisionUserAsync(provider, providerUserId, claims).ConfigureAwait(false);
             }
 
             // this allows us to collect any additonal claims or properties

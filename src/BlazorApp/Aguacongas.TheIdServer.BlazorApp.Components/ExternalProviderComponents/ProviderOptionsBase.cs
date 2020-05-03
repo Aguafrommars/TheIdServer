@@ -1,7 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
@@ -17,12 +15,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
         protected IExternalProvider<T> Model => _wrapper;
 
         [CascadingParameter]
-        public Models.ExternalProvider ModelBase { get; set; }
+        public ExternalProvider ModelBase { get; set; }
 
         protected override void OnInitialized()
         {
             _wrapper = new ExternalProviderWrapper(ModelBase);
-            _wrapper.Options = _wrapper.Options ?? _wrapper.DefaultOptions as T;
+            _wrapper.Options ??= _wrapper.DefaultOptions;
             base.OnInitialized();
         }
 
@@ -32,19 +30,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
             return JsonSerializer.Serialize(Model.Options);
         }
 
-        class ExternalProviderWrapper : IExternalProvider<T>
+        private class ExternalProviderWrapper : ExternalProviderWrapper<T>
         {
-            private readonly Models.ExternalProvider _parent;
-
-            public ExternalProviderWrapper(Models.ExternalProvider parent)
+            public ExternalProviderWrapper(ExternalProvider parent)
+                : base(parent)
             {
-                _parent = parent;
+
             }
-
-            public RemoteAuthenticationOptions DefaultOptions => _parent.DefaultOptions;
-
-            public IEnumerable<ExternalProviderKind> Kinds { get => _parent.Kinds; set => _parent.Kinds = value; }
-            public T Options { get => (T)_parent.Options; set => _parent.Options = value; }
         }
     }
 }

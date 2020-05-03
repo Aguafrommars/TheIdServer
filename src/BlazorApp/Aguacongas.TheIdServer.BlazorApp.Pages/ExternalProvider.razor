@@ -62,6 +62,13 @@ else
                                 <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="storeClaims">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="storeClaims" Label="store claims" @bind-Value="@Model.StoreClaims" />
+                            </div>
+                        </div>
                         @switch (Model.KindName)
                         {
                             case "Google":
