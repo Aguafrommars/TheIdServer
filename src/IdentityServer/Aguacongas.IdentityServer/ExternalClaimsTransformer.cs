@@ -25,9 +25,15 @@ namespace Aguacongas.IdentityServer
             _externalProviderStore = externalProviderStore ?? throw new ArgumentNullException(nameof(externalProviderStore));
         }
 
-        public async Task<ClaimsPrincipal> TransformPrincipal(ClaimsPrincipal externalUser, string provider)
+        public async Task<ClaimsPrincipal> TransformPrincipalAsync(ClaimsPrincipal externalUser, string provider)
         {            
             var claims = new List<Claim>(externalUser.Claims.Count());
+            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
+            if (externalProvider.StoreClaims)
+            {
+                await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
+            }
+
             var transformationsResponse = await _claimTransformationStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ExternalClaimTransformation.Scheme)} eq '{provider}'"
@@ -49,18 +55,12 @@ namespace Aguacongas.IdentityServer
                 }
             }
 
-            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
-            if (externalProvider.StoreClaims)
-            {
-                await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
-            }
-
             return new ClaimsPrincipal(new ClaimsIdentity(claims, provider));
         }
 
         private async Task StoreClaims(ClaimsPrincipal externalUser, string provider, List<Claim> claims)
         {
-            var (user, providerUserId, userClaims) = await FindUserFromExternalProviderAsync(externalUser, provider)
+            var (user, providerUserId) = await FindUserFromExternalProviderAsync(externalUser, provider)
                 .ConfigureAwait(false);
 
             if (user == null)
@@ -84,7 +84,7 @@ namespace Aguacongas.IdentityServer
             // depending on the external provider, some other claim type might be used
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
-                              throw new Exception("Unknown userid");
+                              throw new InvalidOperationException("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user
             var claims = externalUser.Claims.ToList();

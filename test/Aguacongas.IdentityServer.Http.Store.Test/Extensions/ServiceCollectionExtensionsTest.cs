@@ -2,6 +2,7 @@
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
             var provider = new ServiceCollection()
                 .AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
+                .AddIdentityProviderStore<IdentityUser>()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://test")
                 .BuildServiceProvider();
 

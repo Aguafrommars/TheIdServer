@@ -13,7 +13,7 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             var services = new ServiceCollection();
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
-                .AddIdentityProviderStore<ApplicationUser>()
+                .AddIdentityProviderStore<IdentityUser>()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentity<IdentityUser, IdentityRole>()
@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             services = new ServiceCollection();
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
-                .AddIdentityProviderStore<ApplicationUser>()
+                .AddIdentityProviderStore<IdentityUser>()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentityCore<IdentityUser>()

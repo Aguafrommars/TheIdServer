@@ -376,7 +376,7 @@ namespace Aguacongas.TheIdServer
             {
                 using var scope = context.HttpContext.RequestServices.CreateScope();
                 var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
-                context.Principal = await transformer.TransformPrincipal(context.Principal, context.Scheme.Name);
+                context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name);
             };
         }
     }

@@ -22,7 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public IEnumerable<Entity.ExternalProviderKind> Kinds { get; set; }
 
         [JsonIgnore]
-        public RemoteAuthenticationOptions DefaultOptions
+        public TOptions DefaultOptions
         {
             get
             {
