@@ -76,15 +76,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services.AddScoped<IdentityDbContext<TUser>>(p => p.GetRequiredService<TContext>())
                 .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole, string>)
-                .AddTransient<ILookupNormalizer, UpperInvariantLookupNormalizer>()
-                .AddTransient<IPasswordHasher<TUser>, PasswordHasher<TUser>>()
-                .AddTransient<IdentityErrorDescriber>()
-                .AddTransient<RoleManager<TRole>>()
-                .AddTransient<UserManager<TUser>>()
-                .AddTransient<IRoleStore<TRole>>(p => 
-                    new RoleStore<TRole>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
-                .AddTransient<IUserStore<TUser>>(p =>
-                    new UserStore<TUser>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
                 .AddTransient<IAdminStore<User>, IdentityUserStore<TUser>>()
                 .AddTransient<IAdminStore<UserLogin>, IdentityUserLoginStore<TUser>>()
                 .AddTransient<IAdminStore<UserClaim>, IdentityUserClaimStore<TUser>>()

@@ -689,7 +689,7 @@ namespace Aguacongas.TheIdServer.Identity
 
         private Claim CreateClaim(UserClaim claim)
         {
-            return new Claim(claim.ClaimType, claim.ClaimValue);
+            return new Claim(claim.ClaimType, claim.ClaimValue, claim.Issuer, claim.OriginalIssuer);
         }
 
     }

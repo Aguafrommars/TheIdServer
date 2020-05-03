@@ -45,5 +45,13 @@
         /// The serialized options.
         /// </value>
         public virtual string SerializedOptions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [store claims].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [store claims]; otherwise, <c>false</c>.
+        /// </value>
+        public bool StoreClaims { get; set; }
     }
 }

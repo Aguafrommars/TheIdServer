@@ -5,7 +5,7 @@
         app id
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="appId" Placeholder="app id" @bind-Value="@Options.AppId" />
+        <AuthorizeText Id="appId" Placeholder="app id" @bind-Value="@Model.Options.AppId" />
     </div>
 </div>
 <div class="form-group row">
@@ -13,7 +13,7 @@
         app secret
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="appSecret" Placeholder="app secret" @bind-Value="@Options.AppSecret" />
+        <AuthorizeText Id="appSecret" Placeholder="app secret" @bind-Value="@Model.Options.AppSecret" />
     </div>
 </div>
 <div class="form-group row">
@@ -21,14 +21,14 @@
         fields
     </label>
     <div class="col-lg-10 col-sm-12">
-        <ScopeCollection Id="fields" Placeholder="field" Collection="@Options.Fields" />
+        <ScopeCollection Id="fields" Placeholder="field" Collection="@Model.Options.Fields" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="sendAppSecretProof">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="sendAppSecretProof" Label="send app secret proof" @bind-Value="@Options.SendAppSecretProof" />
+        <AuthorizeCheckbox Name="sendAppSecretProof" Label="send app secret proof" @bind-Value="@Model.Options.SendAppSecretProof" />
     </div>
 </div>
-<OAuthOptionsProperties Options="@Options" />
+<OAuthOptionsProperties />

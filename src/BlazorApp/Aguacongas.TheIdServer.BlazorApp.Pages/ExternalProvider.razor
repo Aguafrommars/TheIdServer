@@ -11,7 +11,8 @@
 }
 else
 {
-    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+    <CascadingValue Value="HandleModificationState">
         <CascadingValue Value="Model">
             <div class="row bg-light sticky-top mb-3">
                 <div class="col">
@@ -52,7 +53,7 @@ else
                                     <ProviderSelect Id="type" @bind-Value="@Model.KindName" Kinds="@Model.Kinds" />
                                 </div>
                             </div>
-                                                }
+                        }
                         <div class="form-group row">
                             <label class="col col-form-label" for="displayName">
                                 display name
@@ -61,30 +62,38 @@ else
                                 <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="storeClaims">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="storeClaims" Label="store claims" @bind-Value="@Model.StoreClaims" />
+                            </div>
+                        </div>
                         @switch (Model.KindName)
                         {
                             case "Google":
-                                <GoogleOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <GoogleOptionsComponent @ref="_optionsComponent" />
+                                break;
                             case "Facebook":
-                                <FacebookOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <FacebookOptionsComponent @ref="_optionsComponent" />
+                                break;
                             case "MicrosoftAccount":
-                                <MicrosoftAccountOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <MicrosoftAccountOptionsComponent @ref="_optionsComponent" />
+                                break;
                             case "OAuth":
-                                <OAuthOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <OAuthOptionsComponent @ref="_optionsComponent" />
+                                break;
                             case "OpenIdConnect":
-                                <OpenIdConnectOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <OpenIdConnectOptionsComponent @ref="_optionsComponent" />
+                                break;
                             case "Twitter":
-                                <TwitterOptionsComponent @ref="_optionsComponent"  />
-                            break;
+                                <TwitterOptionsComponent @ref="_optionsComponent" />
+                                break;
                         }
                     </div>
                 </div>
             </div>
         </CascadingValue>
-    </EditForm>
+    </CascadingValue>
+</EditForm>
 }

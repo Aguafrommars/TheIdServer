@@ -44,6 +44,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _manager.AddAsync(new SchemeDefinition
             {
                 DisplayName = entity.DisplayName,
+                StoreClaims = entity.StoreClaims,
                 HandlerType = handlerType,
                 Options = options,
                 Scheme = entity.Id
@@ -102,6 +103,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
 
             definition.DisplayName = entity.DisplayName;
+            definition.StoreClaims = entity.StoreClaims;
             definition.HandlerType = handlerType;
             definition.Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
 
@@ -143,6 +145,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             {
                 DisplayName = definition.DisplayName,
                 Id = definition.Scheme,
+                StoreClaims = definition.StoreClaims,
                 KindName = optionsType.Name.Replace("Options", ""),
                 SerializedHandlerType = definition.SerializedHandlerType ?? _serializer.SerializeType(hanlderType),
                 SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType)

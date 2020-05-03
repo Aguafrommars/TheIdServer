@@ -6,7 +6,7 @@
     public interface IEntityId
     {
         /// <summary>
-        /// Gets the identifier.
+        /// Gets or sets the identifier.
         /// </summary>
         /// <value>
         /// The identifier.

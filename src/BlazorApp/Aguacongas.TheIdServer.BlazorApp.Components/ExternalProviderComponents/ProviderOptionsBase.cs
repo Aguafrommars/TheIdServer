@@ -11,22 +11,32 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
 
     public abstract class ProviderOptionsBase<T> : ProviderOptionsBase where T: RemoteAuthenticationOptions
     {
-        protected T Options => Model.Options as T;
+        private ExternalProviderWrapper _wrapper;
+        protected IExternalProvider<T> Model => _wrapper;
 
         [CascadingParameter]
-        public ExternalProvider Model { get; set; }
+        public ExternalProvider ModelBase { get; set; }
 
         protected override void OnInitialized()
         {
-            Model.Options = Model.Options as T ?? Model.DefaultOptions as T;
+            _wrapper = new ExternalProviderWrapper(ModelBase);
+            _wrapper.Options ??= _wrapper.DefaultOptions;
             base.OnInitialized();
         }
 
 
         public override string SerializeOptions()
         {
-            return JsonSerializer.Serialize(Options);
+            return JsonSerializer.Serialize(Model.Options);
         }
 
+        private class ExternalProviderWrapper : ExternalProviderWrapper<T>
+        {
+            public ExternalProviderWrapper(ExternalProvider parent)
+                : base(parent)
+            {
+
+            }
+        }
     }
 }
