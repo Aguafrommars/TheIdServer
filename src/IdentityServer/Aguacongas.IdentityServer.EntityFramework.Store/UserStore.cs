@@ -48,53 +48,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
         }
 
-        /// <summary>
-        /// Replaces the <paramref name="claim"/> on the specified <paramref name="user"/>, with the <paramref name="newClaim"/>.
-        /// </summary>
-        /// <param name="user">The user to replace the claim on.</param>
-        /// <param name="claim">The claim replace.</param>
-        /// <param name="newClaim">The new claim replacing the <paramref name="claim"/>.</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-        /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public async override Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            CheckParameters(user, claim, newClaim);
-
-            var matchedClaims = await UserClaims.Where(uc => uc.UserId.Equals(user.Id) &&
-                uc.Issuer == claim.Issuer &&
-                uc.ClaimValue == claim.Value &&
-                uc.ClaimType == claim.Type)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
-
-            foreach (var matchedClaim in matchedClaims)
-            {
-                matchedClaim.ClaimValue = newClaim.Value;
-                matchedClaim.ClaimType = newClaim.Type;
-                if (newClaim.Properties.TryGetValue("OriginalValue", out string originalValue))
-                {
-                    matchedClaim.OriginalValue = originalValue;
-                }
-            }
-        }
-
-        private void CheckParameters(TUser user, Claim claim, Claim newClaim)
-        {
-            ThrowIfDisposed();
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-            if (claim == null)
-            {
-                throw new ArgumentNullException(nameof(claim));
-            }
-            if (newClaim == null)
-            {
-                throw new ArgumentNullException(nameof(newClaim));
-            }
-        }
-
         private void CheckParameters(TUser user, IEnumerable<Claim> claims)
         {
             ThrowIfDisposed();
