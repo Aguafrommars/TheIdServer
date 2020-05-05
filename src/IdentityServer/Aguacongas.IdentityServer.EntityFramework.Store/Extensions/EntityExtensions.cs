@@ -231,14 +231,16 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.UserClaim ToEntity(this IdentityUserClaim<string> claim)
+        public static Entity.UserClaim ToEntity(this UserClaim claim)
         {
             return new Entity.UserClaim
             {
                 Id = claim.Id.ToString(),
                 UserId = claim.UserId,
                 ClaimType = claim.ClaimType,
-                ClaimValue = claim.ClaimValue
+                ClaimValue = claim.ClaimValue,
+                Issuer = claim.Issuer,
+                OriginalType = claim.OriginalType
             };
         }
 

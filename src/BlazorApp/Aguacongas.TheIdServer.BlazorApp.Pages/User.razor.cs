@@ -3,6 +3,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -176,7 +177,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
 
         private entity.UserClaim CreateClaim()
-            => new entity.UserClaim();
+            => new entity.UserClaim
+            {
+                Issuer = ClaimsIdentity.DefaultIssuer
+            };
+
         private void OnDeleteClaimClicked(entity.UserClaim claim)
         {
             Model.Claims.Remove(claim);

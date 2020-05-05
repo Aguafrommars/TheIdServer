@@ -14,6 +14,5 @@ namespace Aguacongas.TheIdServer.BlazorApp
             builder.AddTheIdServerApp();
             await builder.Build().RunAsync();
         }
-
     }
 }

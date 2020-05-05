@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer
                 var transformation = transformationList.FirstOrDefault(t => t.FromClaimType == claim.Type);
                 if (transformation != null)
                 {
-                    var newClaim = new Claim(transformation.ToClaimType, claim.Value, claim.Issuer);
+                    var newClaim = new Claim(transformation.ToClaimType, claim.Value, claim.ValueType, claim.Issuer);
                     newClaim.Properties.Add(nameof(UserClaim.OriginalType), claim.Type);
                     claims.Add(newClaim);
                 }

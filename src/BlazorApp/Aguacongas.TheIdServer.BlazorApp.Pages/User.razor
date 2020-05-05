@@ -1,5 +1,6 @@
 ﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
-
+@using System.Security.Claims
+ 
 @page "/user"
 @page "/user/{id}"
 @inherits EntityModel<Models.User>
@@ -156,7 +157,7 @@ else
                             </th>
                         </TableHeader>
                         <RowTemplate>
-                            @if (claim.Issuer == System.Security.Claims.ClaimsIdentity.DefaultIssuer)
+                            @if (claim.Issuer == ClaimsIdentity.DefaultIssuer)
                             {
                                 <td>
                                     <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
@@ -173,7 +174,11 @@ else
                             else
                             {
                                 <td>
-                                    @claim.ClaimType
+                                    <div>@claim.ClaimType</div>
+                                    @if (claim.OriginalType != null)
+                                    {
+                                        <em class="small text-secondary">from: @claim.OriginalType</em>
+                                    }
                                 </td>
                                 <td>
                                     @claim.ClaimValue
