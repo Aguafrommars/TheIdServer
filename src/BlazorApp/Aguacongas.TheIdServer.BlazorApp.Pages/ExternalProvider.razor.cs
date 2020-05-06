@@ -4,7 +4,6 @@ using Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
