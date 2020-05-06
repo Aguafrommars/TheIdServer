@@ -29,8 +29,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = _context.Set<TEntity>().AsNoTracking();
             query = query.Expand(request?.Expand);
-            return query.Where(e => e.Id == id)
-                .FirstOrDefaultAsync();
+            return query.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)

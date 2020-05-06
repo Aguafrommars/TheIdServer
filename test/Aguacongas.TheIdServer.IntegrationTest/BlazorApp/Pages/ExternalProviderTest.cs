@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -138,6 +139,52 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var provider = await context.Providers.FirstOrDefaultAsync(p => p.Scheme == providerId);
                 Assert.Null(provider);
             });
+        }
+
+        [Fact]
+        public async Task ClickTransformationButtons_should_not_throw()
+        {
+            var apiId = await CreateProvider();
+            CreateTestHost("Alice Smith",
+                         SharedConstants.WRITER,
+                         apiId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var buttons = WaitForAllNodes(host, component, "#transformations button");
+
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            var expected = buttons.Count;
+            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
+
+            var from = host.WaitForNode(component, "#fromClaimType");
+            await host.WaitForNextRenderAsync(() => from.ChangeAsync("test"));
+
+            var to = host.WaitForNode(component, "#toClaimType");
+            await host.WaitForNextRenderAsync(() => to.ChangeAsync("test"));
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+
+            WaitForSavedToast(host, component);
+
+            buttons = component.FindAll("#transformations button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.NotEqual(expected, buttons.Count);
+
+            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
+
+            buttons = component.FindAll("#transformations button")
+                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+
+            Assert.Equal(expected, buttons.Count);
         }
 
         private async Task<string> CreateProvider()

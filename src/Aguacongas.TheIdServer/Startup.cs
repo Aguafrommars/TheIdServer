@@ -130,6 +130,7 @@ namespace Aguacongas.TheIdServer
 
             dynamicAuthBuilder.AddGoogle(options =>
                 {
+                    options.ClaimActions.MapAll();
                     options.Events = new OAuthEvents
                     {
                         OnTicketReceived = OnTicketReceived()
@@ -137,6 +138,7 @@ namespace Aguacongas.TheIdServer
                 })
                 .AddFacebook(options =>
                 {
+                    options.ClaimActions.MapAll();
                     options.Events = new OAuthEvents
                     {
                         OnTicketReceived = OnTicketReceived()
@@ -144,6 +146,7 @@ namespace Aguacongas.TheIdServer
                 })
                 .AddTwitter(options =>
                 {
+                    options.ClaimActions.MapAll();
                     options.Events = new TwitterEvents
                     {
                         OnTicketReceived = OnTicketReceived()
@@ -151,6 +154,7 @@ namespace Aguacongas.TheIdServer
                 })
                 .AddMicrosoftAccount(options =>
                 {
+                    options.ClaimActions.MapAll();
                     options.Events = new OAuthEvents
                     {
                         OnTicketReceived = OnTicketReceived()
@@ -158,6 +162,7 @@ namespace Aguacongas.TheIdServer
                 })
                 .AddOpenIdConnect(options =>
                 {
+                    options.ClaimActions.MapAll();
                     options.Events = new OpenIdConnectEvents
                     {
                         OnTicketReceived = OnTicketReceived()

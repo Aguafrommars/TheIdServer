@@ -59,7 +59,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             services
                 .AddIdentityServer4AdminHttpStores(p =>
                 {
-                    return Task.FromResult(CreateApiHttpClient(p, settings));
+                    return Task.FromResult(CreateApiHttpClient(p));
                 })
                 .AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddSingleton(p => settings)
@@ -69,17 +69,18 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddHttpClient("oidc")
+                .ConfigureHttpClient(httpClient =>
+                {
+                    var apiUri = new Uri(settings.ApiBaseUrl);
+                    httpClient.BaseAddress = apiUri;
+                })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
         }
 
-        private static HttpClient CreateApiHttpClient(IServiceProvider p, Settings settings)
+        private static HttpClient CreateApiHttpClient(IServiceProvider p)
         {
-            var httpClient = p.GetRequiredService<IHttpClientFactory>()
+            return p.GetRequiredService<IHttpClientFactory>()
                                     .CreateClient("oidc");
-
-            var apiUri = new Uri(settings.ApiBaseUrl);
-            httpClient.BaseAddress = apiUri;
-            return httpClient;
         }
 
     }

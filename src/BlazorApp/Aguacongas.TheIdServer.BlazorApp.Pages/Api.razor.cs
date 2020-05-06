@@ -46,9 +46,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 Secrets = new List<ApiSecret>(),
                 Scopes = new List<ApiScope>()
-            {
-                scope
-            },
+                {
+                    scope
+                },
                 ApiClaims = new List<ApiClaim>(),
                 Properties = new List<ApiProperty>()
             };

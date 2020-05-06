@@ -7,10 +7,12 @@ using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,6 +87,8 @@ namespace Aguacongas.TheIdServer.Test
             var result = await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
 
             Assert.Contains(result.Claims, c => c.Type == claimType);
+            var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            Assert.NotNull(applicationDbContext.UserClaims.FirstOrDefaultAsync(c => c.ClaimType == claimType));
         }
 
         [Fact]
@@ -203,6 +207,46 @@ namespace Aguacongas.TheIdServer.Test
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.TransformPrincipalAsync(principal, "test"))
                 .ConfigureAwait(false);
+        }
+
+        [Fact]
+        public async Task TransformPrincipal_should_add_remove_claims()
+        {
+            var builder = CreateServices().BuildServiceProvider();
+
+            using var scope = builder.CreateScope();
+            var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
+            configurationDbContext.Providers.Add(new SchemeDefinition
+            {
+                Id = "test",
+                StoreClaims = true,
+                SerializedHandlerType = serializer.SerializeType(typeof(GoogleHandler)),
+                SerializedOptions = serializer.SerializeOptions(new GoogleOptions(), typeof(GoogleOptions))
+            });
+            configurationDbContext.SaveChanges();
+
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "test"),
+                new Claim("test", "test"),
+            }));
+
+            var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
+
+            await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+
+            principal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "test"),
+                new Claim("new", "test"),
+            }));
+
+            await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+
+            var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            Assert.NotNull(applicationDbContext.UserClaims.FirstOrDefault(c => c.ClaimType == "new"));
+            Assert.Null(applicationDbContext.UserClaims.FirstOrDefault(c => c.ClaimType == "test"));
         }
 
         private static IServiceCollection CreateServices()

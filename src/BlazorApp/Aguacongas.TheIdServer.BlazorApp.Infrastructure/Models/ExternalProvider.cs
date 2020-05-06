@@ -50,7 +50,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
                 DisplayName = externalProvider.DisplayName,
                 Id = externalProvider.Id,
                 KindName = externalProvider.KindName,
-                Options = Deserialize(externalProvider.SerializedOptions, optionsType)
+                Options = Deserialize(externalProvider.SerializedOptions, optionsType),
+                StoreClaims = externalProvider.StoreClaims,
+                ClaimTransformations = externalProvider.ClaimTransformations
             };
         }
 

@@ -54,11 +54,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Issuer { get; set; }
 
         /// <summary>
-        /// Gets or sets the original issuer.
+        /// Gets or sets the original value.
         /// </summary>
         /// <value>
-        /// The original issuer.
+        /// The original value.
         /// </value>
-        public string OriginalIssuer { get; set; }
+        public string OriginalType { get; set; }
+
     }
 }

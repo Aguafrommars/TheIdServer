@@ -41,7 +41,6 @@ namespace Aguacongas.TheIdServer.Identity
     /// </summary>
     public class UserOnlyStore<TUser> : TheIdServerUserStoreBase<TUser, 
             string, 
-            IdentityUserClaim<string>, 
             IdentityUserLogin<string>, 
             IdentityUserToken<string>>
         where TUser: IdentityUser, new()
@@ -666,6 +665,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Value = entity.Value
             };
         }
+
         private IdentityUserClaim<string> CreateIdentityUserClaim(UserClaim entity)
         {
             return new IdentityUserClaim<string>
@@ -673,9 +673,11 @@ namespace Aguacongas.TheIdServer.Identity
                 UserId = entity.UserId,
                 ClaimType = entity.ClaimType,
                 ClaimValue = entity.ClaimValue,
+
                 Id = int.Parse(entity.Id)
             };
         }
+
         private static IdentityUserLogin<string> CreateIdentityUserLogin(UserLogin entity)
         {
             return new IdentityUserLogin<string>
@@ -687,9 +689,11 @@ namespace Aguacongas.TheIdServer.Identity
             };
         }
 
-        private Claim CreateClaim(UserClaim claim)
+        private Claim CreateClaim(UserClaim userClaim)
         {
-            return new Claim(claim.ClaimType, claim.ClaimValue, claim.Issuer, claim.OriginalIssuer);
+            var claim = new Claim(userClaim.ClaimType, userClaim.ClaimValue, userClaim.Issuer);
+            claim.Properties.Add(nameof(UserClaim.OriginalType), userClaim.OriginalType);
+            return claim;
         }
 
     }

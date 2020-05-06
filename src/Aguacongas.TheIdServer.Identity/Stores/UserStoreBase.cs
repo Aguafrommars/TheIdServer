@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.Identity
     [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "Nothing to dispose")]
     [SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "Identity store implementation")]
     [SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
-    public abstract class TheIdServerUserStoreBase<TUser, TKey, TUserClaim, TUserLogin, TUserToken> :
+    public abstract class TheIdServerUserStoreBase<TUser, TKey, TUserLogin, TUserToken> :
         IUserLoginStore<TUser>,
         IUserClaimStore<TUser>,
         IUserPasswordStore<TUser>,
@@ -37,7 +37,6 @@ namespace Aguacongas.TheIdServer.Identity
         IUserTwoFactorRecoveryCodeStore<TUser>
         where TKey: IEquatable<TKey>
         where TUser : IdentityUser<TKey>, new()
-        where TUserClaim : IdentityUserClaim<TKey>, new()
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserToken : IdentityUserToken<TKey>, new()
     {
@@ -901,16 +900,18 @@ namespace Aguacongas.TheIdServer.Identity
         /// <returns></returns>
         protected virtual UserClaim CreateUserClaim(TUser user, Claim claim)
         {
-            var userClaim = new TUserClaim { UserId = user.Id };
-            userClaim.InitializeFromClaim(claim);
-            return new UserClaim
+            var userClaim = new UserClaim
             {
-                ClaimType = userClaim.ClaimType,
-                ClaimValue = userClaim.ClaimValue,
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value,
                 UserId = ConvertIdToString(user.Id),
-                Issuer = claim.Issuer,
-                OriginalIssuer = claim.OriginalIssuer
+                Issuer = claim.Issuer
             };
+            if (claim.Properties.TryGetValue(nameof(UserClaim.OriginalType), out string orginalValue))
+            {
+                userClaim.OriginalType = orginalValue;
+            }
+            return userClaim;
         }
 
         /// <summary>
@@ -1024,13 +1025,12 @@ namespace Aguacongas.TheIdServer.Identity
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Idenity store implementation")]
     [SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "Idenity store implementation")]
     [SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
-    public abstract class TheIdServerUserStoreBase<TUser, TKey, TRole, TUserClaim, TUserRole, TUserLogin, TUserToken, TRoleClaim> :
-        TheIdServerUserStoreBase<TUser, TKey, TUserClaim, TUserLogin, TUserToken>,
+    public abstract class TheIdServerUserStoreBase<TUser, TKey, TRole, TUserRole, TUserLogin, TUserToken, TRoleClaim> :
+        TheIdServerUserStoreBase<TUser, TKey, TUserLogin, TUserToken>,
         IUserRoleStore<TUser>
         where TKey: IEquatable<TKey>
         where TUser : IdentityUser<TKey>, new()
         where TRole : IdentityRole<TKey> 
-        where TUserClaim : IdentityUserClaim<TKey>, new()
         where TUserRole : IdentityUserRole<TKey>, new()
         where TUserLogin : IdentityUserLogin<TKey>, new()
         where TUserToken : IdentityUserToken<TKey>, new()
