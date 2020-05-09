@@ -161,8 +161,10 @@ namespace Microsoft.Extensions.DependencyInjection
                             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                             request.Headers.UserAgent.Add(new ProductInfoHeaderValue("TheIdServer", "1.0.0"));
 
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            var content = await response.Content.ReadAsStringAsync();
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted)
+                                .ConfigureAwait(false);
+                            var content = await response.Content.ReadAsStringAsync()
+                                .ConfigureAwait(false);
                             response.EnsureSuccessStatusCode();
 
                             using var doc = JsonDocument.Parse(content);
@@ -194,7 +196,8 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 using var scope = context.HttpContext.RequestServices.CreateScope();
                 var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<TUser>>();
-                context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name);
+                context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name)
+                    .ConfigureAwait(false);
             };
         }
     }

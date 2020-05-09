@@ -1,6 +1,5 @@
 ﻿using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 
