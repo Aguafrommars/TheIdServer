@@ -16,16 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The collection of service.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityProviderStore<TUser>(this IServiceCollection services) where TUser: IdentityUser, new()
+        public static IServiceCollection AddIdentityProviderStore(this IServiceCollection services)
         {
             return services
                 .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
-                .AddSingleton<HubConnectionFactory>()
-                .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<OAuthDelegatingHandler>()
                 .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
-                .AddTransient<IIdentityProviderStore, IdentityProviderStore>()
-                .AddTransient<ExternalClaimsTransformer<TUser>>();
+                .AddTransient<IIdentityProviderStore, IdentityProviderStore>();
         }
     }
 }

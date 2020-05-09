@@ -94,9 +94,14 @@ else
                 </div>
                 <div id="transformations" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Transformations" Collection="Model.ClaimTransformations" CreateModel="CreateTransformation" />
+                        <EntitySubGridTitle Text="Claims transformations" Collection="Model.ClaimTransformations" CreateModel="CreateTransformation" />
                     </div>
                     <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col">
+                                <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="map default outbound JWT claim types" @bind-Value="@Model.MapDefaultOutboundClaimType" />
+                            </div>
+                        </div>
                         <ClaimTransformations Collection="Model.ClaimTransformations" />
                     </div>
                 </div>

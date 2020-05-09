@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
             var provider = new ServiceCollection()
                 .AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
-                .AddIdentityProviderStore<IdentityUser>()
+                .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(options => options.ApiUrl = "http://test")
                 .BuildServiceProvider();
 

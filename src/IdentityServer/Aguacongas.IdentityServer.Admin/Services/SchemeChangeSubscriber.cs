@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer
+namespace Aguacongas.IdentityServer.Admin.Services
 {
     /// <summary>
     /// Subscribe to provider configuration change

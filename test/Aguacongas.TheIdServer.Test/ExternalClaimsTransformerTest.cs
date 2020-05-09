@@ -1,5 +1,6 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
@@ -251,22 +253,25 @@ namespace Aguacongas.TheIdServer.Test
 
         private static IServiceCollection CreateServices()
         {
+            var configuration = new ConfigurationBuilder().Build();
             var dbId = Guid.NewGuid().ToString();
             var services = new ServiceCollection()
+                .AddTransient<IConfiguration>(p => configuration)
                 .AddLogging()
                 .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(dbId))
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
-                .AddIdentityProviderStore<ApplicationUser>();
+                .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication()
-                .AddDynamic<SchemeDefinition>()
-                .AddEntityFrameworkStore<ConfigurationDbContext>()
-                .AddGoogle();
+            services.AddSignalR();
+
+            services.AddControllersWithViews()
+                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                .AddEntityFrameworkStore<ConfigurationDbContext>();
 
             return services;
         }

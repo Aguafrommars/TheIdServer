@@ -52,6 +52,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
                 KindName = externalProvider.KindName,
                 Options = Deserialize(externalProvider.SerializedOptions, optionsType),
                 StoreClaims = externalProvider.StoreClaims,
+                MapDefaultOutboundClaimType = externalProvider.MapDefaultOutboundClaimType,
                 ClaimTransformations = externalProvider.ClaimTransformations
             };
         }

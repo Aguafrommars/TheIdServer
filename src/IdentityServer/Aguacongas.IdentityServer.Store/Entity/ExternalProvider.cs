@@ -57,6 +57,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool StoreClaims { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [map default outbound claim type].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [map default outbound claim type]; otherwise, <c>false</c>.
+        /// </value>
+        public bool MapDefaultOutboundClaimType { get; set; }
+
+        /// <summary>
         /// Gets or sets the claim transformations.
         /// </summary>
         /// <value>

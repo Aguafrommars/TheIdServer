@@ -9,11 +9,7 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,14 +21,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
@@ -83,7 +75,7 @@ namespace Aguacongas.TheIdServer
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
-            var authBuilder = services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
+            services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
@@ -116,89 +108,7 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-            DynamicAuthenticationBuilder dynamicAuthBuilder;
-            if (isProxy)
-            {
-                dynamicAuthBuilder = authBuilder.AddDynamic<Auth.SchemeDefinition>()
-                    .AddTheIdServerHttpStore();
-            }
-            else
-            {
-                dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>()
-                    .AddEntityFrameworkStore<ConfigurationDbContext>();
-            }
-
-            dynamicAuthBuilder.AddGoogle(options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnTicketReceived = OnTicketReceived()
-                    };
-                })
-                .AddFacebook(options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnTicketReceived = OnTicketReceived()
-                    };
-                })
-                .AddTwitter(options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new TwitterEvents
-                    {
-                        OnTicketReceived = OnTicketReceived()
-                    };
-                })
-                .AddMicrosoftAccount(options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnTicketReceived = OnTicketReceived()
-                    };
-                })
-                .AddOpenIdConnect(options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnTicketReceived = OnTicketReceived()
-                    };
-                })
-                .AddOAuth("OAuth", options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnTicketReceived = OnTicketReceived(),
-                        OnCreatingTicket = async context =>
-                        {
-                            var contextOption = context.Options;
-                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
-                            {
-                                return;
-                            }
-
-                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
-                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("TheIdServer", "1.0.0"));
-
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            var content = await response.Content.ReadAsStringAsync();
-                            response.EnsureSuccessStatusCode();
-
-                            using var doc = JsonDocument.Parse(content);
-
-                            context.RunClaimActions(doc.RootElement);
-                        }
-                    };
-                });
-
-            services.Configure<SendGridOptions>(Configuration)
+            var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
                 .AddNewtonsoftJson(options =>
@@ -206,8 +116,18 @@ namespace Aguacongas.TheIdServer
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin();
+                });
+            
+            if (isProxy)
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
+                    .AddTheIdServerHttpStore();
+            }
+            else
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                    .AddEntityFrameworkStore<ConfigurationDbContext>();
+            }
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
@@ -311,7 +231,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddIdentityProviderStore<ApplicationUser>();
+                .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection("IdentityOptions").Bind(options))
@@ -337,7 +257,7 @@ namespace Aguacongas.TheIdServer
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                .AddIdentityProviderStore<ApplicationUser>()
+                .AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
@@ -373,16 +293,6 @@ namespace Aguacongas.TheIdServer
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
             }
-        }
-
-        private static Func<TicketReceivedContext, Task> OnTicketReceived()
-        {
-            return async context =>
-            {
-                using var scope = context.HttpContext.RequestServices.CreateScope();
-                var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
-                context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name);
-            };
         }
     }
 }

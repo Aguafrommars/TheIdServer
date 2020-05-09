@@ -4,18 +4,36 @@ using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer
+namespace Aguacongas.IdentityServer.Admin.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TUser">The type of the user.</typeparam>
     public class ExternalClaimsTransformer<TUser> where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
         private readonly IAdminStore<ExternalClaimTransformation> _claimTransformationStore;
         private readonly IAdminStore<ExternalProvider> _externalProviderStore;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExternalClaimsTransformer{TUser}"/> class.
+        /// </summary>
+        /// <param name="userManager">The user manager.</param>
+        /// <param name="claimTransformationStore">The claim transformation store.</param>
+        /// <param name="externalProviderStore">The external provider store.</param>
+        /// <exception cref="ArgumentNullException">
+        /// userManager
+        /// or
+        /// claimTransformationStore
+        /// or
+        /// externalProviderStore
+        /// </exception>
         public ExternalClaimsTransformer(UserManager<TUser> userManager,
             IAdminStore<ExternalClaimTransformation> claimTransformationStore,
             IAdminStore<ExternalProvider> externalProviderStore)
@@ -25,6 +43,12 @@ namespace Aguacongas.IdentityServer
             _externalProviderStore = externalProviderStore ?? throw new ArgumentNullException(nameof(externalProviderStore));
         }
 
+        /// <summary>
+        /// Transforms the principal asynchronous.
+        /// </summary>
+        /// <param name="externalUser">The external user.</param>
+        /// <param name="provider">The provider.</param>
+        /// <returns></returns>
         public async Task<ClaimsPrincipal> TransformPrincipalAsync(ClaimsPrincipal externalUser, string provider)
         {            
             var claims = new List<Claim>(externalUser.Claims.Count());
@@ -32,32 +56,42 @@ namespace Aguacongas.IdentityServer
             {
                 Filter = $"{nameof(ExternalClaimTransformation.Scheme)} eq '{provider}'"
             }).ConfigureAwait(false);
-
+            
+            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
             var transformationList = transformationsResponse.Items;
+            var defaultOutboundClaimMap = JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap;
+            var mapDefaultOutboundClaimType = externalProvider.MapDefaultOutboundClaimType;
 
             foreach (var claim in externalUser.Claims)
             {
                 var transformation = transformationList.FirstOrDefault(t => t.FromClaimType == claim.Type);
                 if (transformation != null)
                 {
-                    var newClaim = new Claim(transformation.ToClaimType, claim.Value, claim.ValueType, claim.Issuer);
-                    newClaim.Properties.Add(nameof(UserClaim.OriginalType), claim.Type);
-                    claims.Add(newClaim);
+                    TransformClaimType(claims, claim, transformation.ToClaimType);
+                    continue;
+                }
+                if (mapDefaultOutboundClaimType && defaultOutboundClaimMap.TryGetValue(claim.Type, out string toClaimType))
+                {
+                    TransformClaimType(claims, claim, toClaimType);
+                    continue;
                 }
                 // copy the claim as-is
-                else
-                {
-                    claims.Add(claim);
-                }
+                claims.Add(claim);
             }
 
-            var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
             if (externalProvider.StoreClaims)
             {
                 await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
             }
 
             return new ClaimsPrincipal(new ClaimsIdentity(claims, provider));
+        }
+
+        private static void TransformClaimType(List<Claim> claims, Claim claim, string toClaimType)
+        {
+            var newClaim = new Claim(toClaimType, claim.Value, claim.ValueType, claim.Issuer);
+            newClaim.Properties.Add(nameof(UserClaim.OriginalType), claim.Type);
+            claims.Add(newClaim);
         }
 
         private async Task StoreClaims(ClaimsPrincipal externalUser, string provider, List<Claim> claims)
@@ -102,6 +136,7 @@ namespace Aguacongas.IdentityServer
             // the most common claim type for that are the sub claim and the NameIdentifier
             // depending on the external provider, some other claim type might be used
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
+                              externalUser.FindFirst(JwtClaimTypes.Id) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
                               throw new InvalidOperationException("Unknown userid");
 
