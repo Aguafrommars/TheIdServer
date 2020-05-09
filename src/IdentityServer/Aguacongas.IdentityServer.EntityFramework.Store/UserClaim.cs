@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public override Claim ToClaim()
         {
-            var claim = new Claim(ClaimType, ClaimValue, Issuer);
+            var claim = new Claim(ClaimType, ClaimValue, null, Issuer);
             claim.Properties.Add(nameof(OriginalType), OriginalType);
             return claim;
         }

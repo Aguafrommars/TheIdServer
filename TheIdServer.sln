@@ -12,6 +12,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.BlazorApp", "src\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj", "{EA6B36B1-DAD7-4CB6-BC6F-C3CC8C6ACEC3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{DF368D6C-D11F-49F9-BF41-090AE1D10C6D}"
+	ProjectSection(SolutionItems) = preProject
+		src\IdentityServer\Aguacongas.IdentityServer.Admin\Services\IdentityException.cs = src\IdentityServer\Aguacongas.IdentityServer.Admin\Services\IdentityException.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.EntityFramework.Store", "src\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj", "{5B677422-CB6A-458A-ADA3-2532B3DCD6CA}"
 EndProject

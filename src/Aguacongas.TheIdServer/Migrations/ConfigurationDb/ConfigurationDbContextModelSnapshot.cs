@@ -34,6 +34,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("MapDefaultOutboundClaimType")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 

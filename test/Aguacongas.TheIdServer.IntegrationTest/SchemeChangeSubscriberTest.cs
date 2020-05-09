@@ -1,5 +1,6 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authentication.Google;

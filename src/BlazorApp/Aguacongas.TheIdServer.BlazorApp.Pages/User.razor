@@ -155,20 +155,16 @@ else
                                                 Text="issuer"
                                                 GridState="_gridState" />
                             </th>
+                            <th></th>
                         </TableHeader>
                         <RowTemplate>
-                            @if (claim.Issuer == ClaimsIdentity.DefaultIssuer)
+                            @if (string.IsNullOrEmpty(claim.Issuer) || claim.Issuer == ClaimsIdentity.DefaultIssuer)
                             {
                                 <td>
                                     <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
                                 </td>
                                 <td>
                                     <AuthorizeText @bind-Value="@claim.ClaimValue" />
-                                </td>
-                                <td>
-                                    <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
-                                        <span class="oi oi-trash"></span>
-                                    </AuthorizeButton>
                                 </td>
                             }
                             else
@@ -183,10 +179,15 @@ else
                                 <td>
                                     @claim.ClaimValue
                                 </td>
-                                <td>
-                                    @claim.Issuer
-                                </td>
                             }
+                            <td>
+                                @claim.Issuer
+                            </td>
+                            <td>
+                                <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
+                                    <span class="oi oi-trash"></span>
+                                </AuthorizeButton>
+                            </td>
                         </RowTemplate>
                     </EntitiesGrid>
                 </div>

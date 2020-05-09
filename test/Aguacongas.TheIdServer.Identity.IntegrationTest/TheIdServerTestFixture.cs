@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     .AddDbContext<ApplicationDbContext>(options =>
                         options.UseInMemoryDatabase(dbName))
                     .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                    .AddIdentityProviderStore<ApplicationUser>()
+                    .AddIdentityProviderStore()
                     .AddConfigurationEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
                     .AddOperationalEntityFrameworkStores(options =>

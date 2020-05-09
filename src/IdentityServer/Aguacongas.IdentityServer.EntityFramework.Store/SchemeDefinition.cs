@@ -11,9 +11,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public bool StoreClaims { get; set; }
 
+        public bool MapDefaultOutboundClaimType { get; set; }
+
         public virtual ICollection<ExternalClaimTransformation> ClaimTransformations { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }        
     }
 }

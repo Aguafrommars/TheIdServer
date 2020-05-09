@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -203,6 +204,7 @@ namespace IdentityServer4.Quickstart.UI
             // depending on the external provider, some other claim type might be used
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+                              externalUser.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]) ??
                               throw new Exception("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user

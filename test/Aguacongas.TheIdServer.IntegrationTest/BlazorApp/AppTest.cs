@@ -1,4 +1,5 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using HtmlAgilityPack;
@@ -322,7 +323,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName))
                     .AddOperationalEntityFrameworkStores(options => options.UseInMemoryDatabase(dbName))
-                    .AddIdentityProviderStore<ApplicationUser>();
+                    .AddIdentityProviderStore();
 
                     services.AddIdentity<ApplicationUser, IdentityRole>(
                             options => options.SignIn.RequireConfirmedAccount = false)
@@ -337,7 +338,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                             settings.NullValueHandling = NullValueHandling.Ignore;
                             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         })
-                        .AddIdentityServerAdmin();
+                        .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
                     services.Configure<IISOptions>(iis =>
                     {
