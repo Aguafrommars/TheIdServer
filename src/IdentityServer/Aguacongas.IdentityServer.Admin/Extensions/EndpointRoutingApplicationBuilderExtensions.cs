@@ -21,6 +21,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="basePath">The base path.</param>
         /// <param name="configure">The configure.</param>
         /// <param name="authicationScheme">(Optional) authentication scheme to use</param>
+        /// <param name="notAllowedApiRewritePath">(Optional) the rewritten path when an api route match outside the base path</param>
         /// <returns></returns>
         public static IApplicationBuilder UseIdentityServerAdminApi(this IApplicationBuilder builder,
             string basePath,
