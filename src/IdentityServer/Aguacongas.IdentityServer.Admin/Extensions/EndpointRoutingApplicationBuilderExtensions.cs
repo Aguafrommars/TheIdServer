@@ -25,7 +25,8 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseIdentityServerAdminApi(this IApplicationBuilder builder,
             string basePath,
             Action<IApplicationBuilder> configure,
-            string authicationScheme = "Bearer")
+            string authicationScheme = "Bearer",
+            string notAllowedApiRewritePath = "not-allowed")
         {
             var entityTypeList = Utils.GetEntityTypeList();
 
@@ -45,7 +46,7 @@ namespace Microsoft.AspNetCore.Builder
                         (!path.StartsWithSegments(basePath) &&
                             segments.Any(s => entityTypeList.Any(t => t.Name.Equals(s, StringComparison.OrdinalIgnoreCase)))))
                     {
-                        context.Request.Path = new PathString("/");
+                        context.Request.Path = new PathString($"/{notAllowedApiRewritePath}");
                     }
                 }
                 return next();
