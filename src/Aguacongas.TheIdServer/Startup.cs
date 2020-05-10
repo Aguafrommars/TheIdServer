@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -184,6 +186,15 @@ namespace Aguacongas.TheIdServer
                                 .AllowCredentials();
                         });
                     }
+                })
+                .Map("/.well-known/acme-challenge", child =>
+                {
+                    child.Use((context, next) =>
+                    {
+                        context.Request.Path = $"{context.Request.Path}.txt";
+                        return next();
+                    })
+                    .UseStaticFiles();
                 })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
