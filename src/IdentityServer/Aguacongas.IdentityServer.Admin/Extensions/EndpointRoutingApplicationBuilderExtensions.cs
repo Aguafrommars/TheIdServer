@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore.Builder
                 configure(child);
                 AuthenticateUserMiddleware(child, basePath, authicationScheme);
             })
-            .Use(async (context, next) =>
+            .Use((context, next) =>
             {
                 // avoid accessing the api outside the path.
                 var path = context.Request.Path;
@@ -45,15 +45,10 @@ namespace Microsoft.AspNetCore.Builder
                         (!path.StartsWithSegments(basePath) &&
                             segments.Any(s => entityTypeList.Any(t => t.Name.Equals(s, StringComparison.OrdinalIgnoreCase)))))
                     {
-                        var response = context.Response;
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        await response.CompleteAsync()
-                            .ConfigureAwait(false);
-                        return;
+                        context.Request.Path = new PathString("/");
                     }
                 }
-                await next()
-                    .ConfigureAwait(false);
+                return next();
             });
         }
 
