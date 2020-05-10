@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
@@ -189,12 +188,15 @@ namespace Aguacongas.TheIdServer
                 })
                 .Map("/.well-known/acme-challenge", child =>
                 {
-                    child.Use((context, next) =>
+                    child.Use(async (context, next) =>
                     {
-                        context.Request.Path = $"{context.Request.Path}.txt";
-                        return next();
-                    })
-                    .UseStaticFiles();
+                        var response = context.Response;
+                        var body = response.Body;
+                        await body.WriteAsync(Encoding.UTF8.GetBytes(System.Environment.GetEnvironmentVariable("LETSENCRYPT")))
+                            .ConfigureAwait(false);
+                        await body.FlushAsync().ConfigureAwait(false);
+                        await response.CompleteAsync().ConfigureAwait(false);
+                    });
                 })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
