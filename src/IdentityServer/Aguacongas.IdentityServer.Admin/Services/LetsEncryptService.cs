@@ -65,6 +65,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
                         challenge = await challengeContext.Resource().ConfigureAwait(false);
                     } while (challenge.Status != ChallengeStatus.Invalid && challenge.Status != ChallengeStatus.Valid);
 
+                    if (challenge.Status == ChallengeStatus.Invalid)
+                    {
+                        return;
+                    }
+
                     var privateKey = KeyFactory.NewKey(KeyAlgorithm.ES256);
                     var certificationRequestBuilder = await orderContext.CreateCsr(privateKey).ConfigureAwait(false);
                     var csr = certificationRequestBuilder.Generate();
