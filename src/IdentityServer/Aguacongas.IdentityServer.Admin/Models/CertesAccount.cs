@@ -1,10 +1,18 @@
-﻿namespace Aguacongas.IdentityServer.Admin.Models
+﻿using System;
+
+namespace Aguacongas.IdentityServer.Admin.Models
 {
     /// <summary>
     /// defines a Certes account
     /// </summary>
     public class CertesAccount
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="CertesAccount"/> is enable.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if enable; otherwise, <c>false</c>.
+        /// </value>
         public bool Enable { get; set; }
         /// <summary>
         /// Gets or sets the domain.
@@ -45,5 +53,13 @@
         /// The PFX path.
         /// </value>
         public string PfxPath { get; set; } = "theidserver.pfx";
+
+        /// <summary>
+        /// Gets or sets the timeout.
+        /// </summary>
+        /// <value>
+        /// The timeout.
+        /// </value>
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(1);
     }
 }

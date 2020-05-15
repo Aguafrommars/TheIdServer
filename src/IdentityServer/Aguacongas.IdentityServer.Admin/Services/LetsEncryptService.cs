@@ -17,6 +17,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// </summary>
     public class LetsEncryptService
     {
+        private const string ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PATH = "ASPNETCORE_Kestrel__Certificates__Default__Path";
+        private const string ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PASSWORD = "ASPNETCORE_Kestrel__Certificates__Default__Password";
+
         private readonly IAcmeContext _context;
         private readonly IOptions<CertesAccount> _options;
         private IChallengeContext _challengeContext;
@@ -58,24 +61,42 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Creates the certificate.
         /// </summary>
         /// <param name="host">The host.</param>
-        public void CreateCertificate(IWebHost host)
+        public IWebHost CreateCertificate(IWebHost host)
         {
-            if (!_options.Value.Enable)
+            var settings = _options.Value;
+            if (!settings.Enable)
             {
-                return;
+                return host;
             }
 
-            host.Start();
-            var resetEvent = new ManualResetEvent(false);
-            OnCertificateReady = async () =>
+            using (host)
             {
-                await host.StopAsync().ConfigureAwait(false);
-                await CreateCredentialFileAsync().ConfigureAwait(false);
-                resetEvent.Set();
-            };
-            CreateNewAuthaurizationKeyAsync().GetAwaiter().GetResult();
+                host.Start();
+                var resetEvent = new ManualResetEvent(false);
+                OnCertificateReady = async () =>
+                {
+                    await CreateCredentialFileAsync().ConfigureAwait(false);
+                    resetEvent.Set();
+                };
+                CreateNewAuthaurizationKeyAsync().GetAwaiter().GetResult();
 
-            resetEvent.WaitOne(60000);
+                if (!resetEvent.WaitOne(settings.Timeout))
+                {
+                    var hasHttpsCertificate = Environment.GetEnvironmentVariable(ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PATH) == settings.PfxPath;
+                    if (hasHttpsCertificate)
+                    {
+                        Environment.SetEnvironmentVariable(ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PASSWORD, null);
+                        Environment.SetEnvironmentVariable(ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PATH, null);
+                    }
+                }
+
+                host.StopAsync()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+
+            return null;
         }
 
         private async Task CreateNewAuthaurizationKeyAsync()
@@ -122,6 +143,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var pfx = pfxBuilder.Build(pfxName, settings.PfxPassword);
 
             await File.WriteAllBytesAsync(settings.PfxPath, pfx).ConfigureAwait(false);
+
+            Environment.SetEnvironmentVariable(ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PASSWORD, settings.PfxPassword);
+            Environment.SetEnvironmentVariable(ASPNETCORE_KESTREL_CERTIFICATES_DEFAULT_PATH, settings.PfxPath);
         }
     }
 }
