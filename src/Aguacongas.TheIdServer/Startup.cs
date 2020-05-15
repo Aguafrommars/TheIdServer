@@ -3,7 +3,6 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
@@ -26,7 +25,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
@@ -110,8 +108,7 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-            var mvcBuilder = services.Configure<CertesAccount>(Configuration.GetSection("CertesAccount"))
-                .Configure<SendGridOptions>(Configuration)
+            var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
                 .AddNewtonsoftJson(options =>
@@ -187,21 +184,6 @@ namespace Aguacongas.TheIdServer
                                 .AllowCredentials();
                         });
                     }
-                })
-                .Map("/.well-known/acme-challenge", child =>
-                {
-                    child.Use(async (context, next) =>
-                    {
-                        var letsEncryptService = context.RequestServices.GetRequiredService<LetsEncryptService>();
-                        var response = context.Response;
-                        var body = response.Body;
-                        await body.WriteAsync(Encoding.UTF8.GetBytes(letsEncryptService.KeyAuthz))
-                            .ConfigureAwait(false);
-                        await body.FlushAsync().ConfigureAwait(false);
-                        await response.CompleteAsync().ConfigureAwait(false);
-
-                        letsEncryptService.OnCertificateReady();
-                    });
                 })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
