@@ -2,9 +2,7 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
-using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
-using Certes;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -13,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -42,17 +39,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             services.AddTransient<IPersistedGrantService, PersistedGrantService>()
-                .AddTransient((Func<IServiceProvider, IAcmeContext>)(p =>
-                {
-                    var options = p.GetRequiredService<IOptions<CertesAccount>>().Value;
-                    if (!options.Enable)
-                    {
-                        const string fakeUri = "http://fake";
-                        return new AcmeContext(new Uri(fakeUri));
-                    }
-                    return new AcmeContext(new Uri(options.ServerUrl), KeyFactory.FromDer(Convert.FromBase64String(options.AccountDer)));
-                }))
-                .AddSingleton<LetsEncryptService>()
                 .AddTransient<SendGridEmailSender>()
                 .AddTransient<IProviderClient, ProviderClient>()
                 .AddSingleton<HubConnectionFactory>()
