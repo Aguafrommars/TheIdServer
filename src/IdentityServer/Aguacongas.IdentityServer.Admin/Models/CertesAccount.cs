@@ -5,6 +5,7 @@
     /// </summary>
     public class CertesAccount
     {
+        public bool Enable { get; set; }
         /// <summary>
         /// Gets or sets the domain.
         /// </summary>

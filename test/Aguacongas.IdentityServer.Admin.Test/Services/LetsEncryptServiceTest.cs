@@ -3,12 +3,14 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Certes;
 using Certes.Acme;
 using Certes.Acme.Resource;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,6 +21,9 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
         [Fact]
         public async Task CreateCertificateAsync_should_create_certificate_file()
         {
+            var mockWebHost = new Mock<IWebHost>();
+            mockWebHost.Setup(m => m.StopAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
             var mockAcmeContext = new Mock<IAcmeContext>();
             var mockOrderContext = new Mock<IOrderContext>();
             var mockAuthorizationContext = new Mock<IAuthorizationContext>();
@@ -28,6 +33,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var certesAccount = new CertesAccount
             {
+                Enable = true,
                 ServerUrl = "http://test.com",
                 AccountDer = Convert.ToBase64String(Convert.FromBase64String("test")),
                 PfxPath = Guid.NewGuid().ToString()
@@ -71,14 +77,22 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var sut = new LetsEncryptService(mockAcmeContext.Object, mockOptions.Object);
 
-            await sut.CreateCertificateAsync();
+            var task = new TaskFactory().StartNew(() => sut.CreateCertificate(mockWebHost.Object));
 
-            Assert.True(File.Exists(certesAccount.PfxPath));            
+            await Task.Delay(200).ConfigureAwait(false);
+
+            sut.OnCertificateReady();
+
+            Assert.True(task.IsCompleted);
+            Assert.False(task.IsFaulted);
+            Assert.True(File.Exists(certesAccount.PfxPath));
         }
 
         [Fact]
         public async Task CreateCertificateAsync_should_verify_challemge_status()
         {
+            var mockWebHost = new Mock<IWebHost>();
+            mockWebHost.Setup(m => m.StopAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
             var mockAcmeContext = new Mock<IAcmeContext>();
             var mockOrderContext = new Mock<IOrderContext>();
             var mockAuthorizationContext = new Mock<IAuthorizationContext>();
@@ -88,6 +102,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var certesAccount = new CertesAccount
             {
+                Enable = true,
                 ServerUrl = "http://test.com",
                 AccountDer = Convert.ToBase64String(Convert.FromBase64String("test")),
                 PfxPath = Guid.NewGuid().ToString()
@@ -113,9 +128,33 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var sut = new LetsEncryptService(mockAcmeContext.Object, mockOptions.Object);
 
-            await sut.CreateCertificateAsync();
+            var task = new TaskFactory().StartNew(() => sut.CreateCertificate(mockWebHost.Object));
 
+            await Task.Delay(200).ConfigureAwait(false);
+            sut.OnCertificateReady();
+
+            Assert.True(task.IsCompleted);
+            Assert.False(task.IsFaulted);
             Assert.False(File.Exists(certesAccount.PfxPath));
+        }
+
+        [Fact]
+        public async Task CreateCertificateAsync_should_be_disablable()
+        {
+            var mockWebHost = new Mock<IWebHost>();
+            mockWebHost.Setup(m => m.StopAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            var mockAcmeContext = new Mock<IAcmeContext>();
+            var mockOptions = new Mock<IOptions<CertesAccount>>();
+            mockOptions.SetupGet(m => m.Value).Returns(new CertesAccount());
+
+            var sut = new LetsEncryptService(mockAcmeContext.Object, mockOptions.Object);
+
+            var task = new TaskFactory().StartNew(() => sut.CreateCertificate(mockWebHost.Object));
+
+            await Task.Delay(200).ConfigureAwait(false);
+
+            Assert.True(task.IsCompleted);
+            Assert.False(task.IsFaulted);
         }
     }
 }

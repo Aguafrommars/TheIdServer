@@ -192,12 +192,15 @@ namespace Aguacongas.TheIdServer
                 {
                     child.Use(async (context, next) =>
                     {
+                        var letsEncryptService = context.RequestServices.GetRequiredService<LetsEncryptService>();
                         var response = context.Response;
                         var body = response.Body;
-                        await body.WriteAsync(Encoding.UTF8.GetBytes(System.Environment.GetEnvironmentVariable("LETSENCRYPT")))
+                        await body.WriteAsync(Encoding.UTF8.GetBytes(letsEncryptService.KeyAuthz))
                             .ConfigureAwait(false);
                         await body.FlushAsync().ConfigureAwait(false);
                         await response.CompleteAsync().ConfigureAwait(false);
+
+                        letsEncryptService.OnCertificateReady();
                     });
                 })
                 .UseBlazorFrameworkFiles()

@@ -2,14 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Serilog;
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace Aguacongas.TheIdServer
 {
@@ -36,15 +39,14 @@ namespace Aguacongas.TheIdServer
                 return;
             }
 
-            CreateCertificate(host.Services);
-
+            CreateCertificate(host);
             host.Run();
         }
 
-        private static void CreateCertificate(IServiceProvider services)
+        private static void CreateCertificate(IWebHost host)
         {
-            var letsEncryptService = services.GetRequiredService<LetsEncryptService>();
-            letsEncryptService.CreateCertificateAsync().GetAwaiter().GetResult();
+            var letsEncryptService = host.Services.GetRequiredService<LetsEncryptService>();
+            letsEncryptService.CreateCertificate(host);
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
