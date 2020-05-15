@@ -42,11 +42,16 @@ namespace Microsoft.Extensions.DependencyInjection
             var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
             services.AddTransient<IPersistedGrantService, PersistedGrantService>()
-                .AddTransient<IAcmeContext>(p =>
+                .AddTransient((Func<IServiceProvider, IAcmeContext>)(p =>
                 {
                     var options = p.GetRequiredService<IOptions<CertesAccount>>().Value;
+                    if (!options.Enable)
+                    {
+                        const string fakeUri = "http://fake";
+                        return new AcmeContext(new Uri(fakeUri));
+                    }
                     return new AcmeContext(new Uri(options.ServerUrl), KeyFactory.FromDer(Convert.FromBase64String(options.AccountDer)));
-                })
+                }))
                 .AddSingleton<LetsEncryptService>()
                 .AddTransient<SendGridEmailSender>()
                 .AddTransient<IProviderClient, ProviderClient>()
