@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var user = await FindUserAsync(context.Subject.GetSubjectId()).ConfigureAwait(false);
-            var principal = await GetUserClaimsAsync(user).ConfigureAwait(false);
+            var principal = user != null ? await GetUserClaimsAsync(user).ConfigureAwait(false) : context.Subject;
 
             foreach (var resource in context.RequestedResources.IdentityResources)
             {
