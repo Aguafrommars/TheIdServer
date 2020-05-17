@@ -59,7 +59,8 @@ namespace Aguacongas.TheIdServer
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
-                .AddSigningCredentials();
+                .AddSigningCredentials()
+                .AddProfileService<ProfileService<ApplicationUser>>();
 
             services.AddTransient(p =>
                 {
