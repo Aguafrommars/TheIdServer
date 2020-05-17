@@ -47,7 +47,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimBuilderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName
                             }
                         }
                     },                    
@@ -67,6 +67,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
         public async Task GetProfileDataAsync_should_load_assemby_from_path()
         {
             var services = new ServiceCollection()
+                .AddLogging()
                 .AddDbContext<IdentityDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -86,14 +87,14 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             {
                 RequestedResources = new Resources
                 {
-                    IdentityResources = new List<IdentityResource>
+                    ApiResources = new List<ApiResource>
                     {
-                        new IdentityResource
+                        new ApiResource
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimBuilderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName,
-                                [ProfileServiceProperties.ClaimBuilderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName,
+                                [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
                             }
                         }
                     },
