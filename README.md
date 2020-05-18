@@ -29,6 +29,8 @@
 * [Dynamic external provider configuration](src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
 * [Public / Private installation](src/Aguacongas.TheIdServer/README.md#using-the-api)
 * [Docker support](src/Aguacongas.TheIdServer/README.md#from-docker)
+* [Claims providers](doc/CLAIMS_PROVIDER.md)
+* [External claims trnsformation](doc/EXTERNAL_CLAIMS_MAPPING.md)
 
 ### Preview 
 
