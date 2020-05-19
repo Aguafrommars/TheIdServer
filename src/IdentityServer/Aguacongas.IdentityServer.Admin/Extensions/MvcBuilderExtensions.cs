@@ -99,22 +99,29 @@ namespace Microsoft.Extensions.DependencyInjection
                         return true;
                     });
                 });
-            
+
             builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
                     apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));
 
+            return CreateDynamicAuthenticationBuilder<TUser, TSchemeDefinition>(services);
+        }
+
+        private static DynamicAuthenticationBuilder CreateDynamicAuthenticationBuilder<TUser, TSchemeDefinition>(IServiceCollection services)
+            where TUser : IdentityUser, new()
+            where TSchemeDefinition : SchemeDefinitionBase, new()
+        {
             var dynamicBuilder = services
-                .AddAuthentication()
-                .AddDynamic<TSchemeDefinition>();
+                            .AddAuthentication()
+                            .AddDynamic<TSchemeDefinition>();
 
             dynamicBuilder.AddGoogle(options =>
+            {
+                options.Events = new OAuthEvents
                 {
-                    options.Events = new OAuthEvents
-                    {
-                        OnTicketReceived = OnTicketReceived<TUser>()
-                    };
-                })
+                    OnTicketReceived = OnTicketReceived<TUser>()
+                };
+            })
                 .AddFacebook(options =>
                 {
                     options.Events = new OAuthEvents
