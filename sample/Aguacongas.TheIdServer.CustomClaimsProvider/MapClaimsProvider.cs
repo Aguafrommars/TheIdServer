@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Aguacongas.TheIdServer.CustomClaimsProvider
+namespace Aguacongas.TheIdServer.CustomClaimsProviders
 {
     public class MapClaimsProvider: IProvideClaims
     {

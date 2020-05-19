@@ -1,5 +1,4 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
-using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
@@ -8,7 +7,6 @@ using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -53,7 +53,8 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
-            services.Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
+            services.AddClaimsProviders(Configuration)
+                .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddIdentityServer(options => Configuration.GetSection("IdentityServerOptions").Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()

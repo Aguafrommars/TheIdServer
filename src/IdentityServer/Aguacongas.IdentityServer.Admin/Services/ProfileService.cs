@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,17 +34,23 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="DefaultProfileService" />
     public class ProfileService<TUser> : IdentityServer4.AspNetIdentity.ProfileService<TUser> where TUser : class
     {
+        private readonly IEnumerable<IProvideClaims> _claimsProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileService{TUser}"/> class.
         /// </summary>
         /// <param name="userManager">The user manager.</param>
         /// <param name="claimsFactory">The claims factory.</param>
+        /// <param name="claimsProviders">The claims providers.</param>
         /// <param name="logger">The logger.</param>
+        /// <exception cref="ArgumentNullException">claimsProviders</exception>
         public ProfileService(UserManager<TUser> userManager, 
             IUserClaimsPrincipalFactory<TUser> claimsFactory,
+            IEnumerable<IProvideClaims> claimsProviders,
             ILogger<ProfileService<TUser>> logger) : base(userManager, claimsFactory, logger)
-        { }
+        {
+            _claimsProvider = claimsProviders ?? throw new ArgumentNullException(nameof(claimsProviders));
+        }
 
         /// <summary>
         /// This method is called whenever claims about the user are requested (e.g. during token creation or via the userinfo endpoint)
@@ -101,27 +108,22 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller)
         {
-            if (!resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderTypeKey, out string builderTypeName))
+            if (!resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderTypeKey, out string providerTypeName))
             {
                 return Task.FromResult(Array.Empty<Claim>() as IEnumerable<Claim>);
             }
 
-            var type = Type.GetType(builderTypeName, assembyName =>
-            {
-                if (resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderAssemblyPathKey, out string path))
-                {
-#pragma warning disable S3885 // "Assembly.Load" should be used
-                    return Assembly.LoadFrom(path);
-#pragma warning restore S3885 // "Assembly.Load" should be used
-                }
-                
-                return Assembly.Load(assembyName);
-            }, (assembly, name, throwOnError) =>
-            {
-                return assembly?.GetType(name, throwOnError);
-            }, true);
+            var provider = _claimsProvider.FirstOrDefault(p => p.GetType().FullName == providerTypeName);
 
-            var provider = Activator.CreateInstance(type) as IProvideClaims;
+            if (provider == null)
+            {
+                var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
+#pragma warning disable S3885 // "Assembly.Load" should be used
+                var assembly = Assembly.LoadFrom(path);
+#pragma warning restore S3885 // "Assembly.Load" should be used
+                var type = assembly.GetType(providerTypeName);
+                provider = Activator.CreateInstance(type) as IProvideClaims;
+            }
 
             return provider.ProvideClaims(subject, client, caller, resource);
         }

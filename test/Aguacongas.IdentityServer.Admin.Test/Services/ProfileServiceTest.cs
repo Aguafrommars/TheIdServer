@@ -18,15 +18,15 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
     public class ProfileServiceTest
     {
         [Fact]
-        public async Task GetProfileDataAsync_should_resolve_provider_type()
+        public async Task GetProfileDataAsync_should_resolve_provider_type_from_di()
         {
             var services = new ServiceCollection()
                 .AddLogging()
+                .AddTransient<IProvideClaims, ClaimsProvider>()
                 .AddDbContext<IdentityDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>();
-
             var provider = services.BuildServiceProvider();
             var manager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
@@ -48,7 +48,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName
                             }
                         }
                     },                    
@@ -57,6 +57,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var sut = new ProfileService<IdentityUser>(provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>(),
+                provider.GetService<IEnumerable<IProvideClaims>>(),
                 provider.GetRequiredService<ILogger<ProfileService<IdentityUser>>>());
 
             await sut.GetProfileDataAsync(context);
@@ -95,7 +96,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName,
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
                                 [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
                             }
                         }
@@ -105,6 +106,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var sut = new ProfileService<IdentityUser>(provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>(),
+                provider.GetService<IEnumerable<IProvideClaims>>(),
                 provider.GetRequiredService<ILogger<ProfileService<IdentityUser>>>());
 
             await sut.GetProfileDataAsync(context);
@@ -143,7 +145,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).AssemblyQualifiedName,
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
                                 [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
                             }
                         }
@@ -153,6 +155,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var sut = new ProfileService<IdentityUser>(provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>(),
+                provider.GetService<IEnumerable<IProvideClaims>>(),
                 provider.GetRequiredService<ILogger<ProfileService<IdentityUser>>>());
 
             await sut.GetProfileDataAsync(context);
