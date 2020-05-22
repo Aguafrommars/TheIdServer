@@ -362,8 +362,11 @@ The section **Serilog** define the [Serilog](https://serilog.net/) configuration
   ]
 }
 ```
-
 For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
+
+## Configure claims providers
+
+The claims providers configuration is described in [Claims provider](../../doc/CLAIMS_PROVIDER.md)
 
 ## Additional resources
 

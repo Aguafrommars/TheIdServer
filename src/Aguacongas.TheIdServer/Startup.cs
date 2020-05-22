@@ -9,16 +9,19 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Generic;
@@ -53,15 +56,32 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
-            services.AddClaimsProviders(Configuration)
+            var identityBuilder = services.AddClaimsProviders(Configuration)
                 .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddIdentityServer(options => Configuration.GetSection("IdentityServerOptions").Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
-                .AddSigningCredentials()
-                .AddProfileService<ProfileService<ApplicationUser>>();
+                .AddSigningCredentials();
+
+            if (isProxy)
+            {
+                identityBuilder.Services.AddTransient<IProfileService>(p =>
+                {
+                    var options = p.GetRequiredService<IOptions<IdentityServerOptions>>().Value;
+                    var httpClient = p.GetRequiredService<IHttpClientFactory>().CreateClient(options.HttpClientName);
+                    return new ProxyProfilService<ApplicationUser>(httpClient,
+                        p.GetRequiredService<UserManager<ApplicationUser>>(),
+                        p.GetRequiredService<IUserClaimsPrincipalFactory<ApplicationUser>>(),
+                        p.GetRequiredService<IEnumerable<IProvideClaims>>(),
+                        p.GetRequiredService<ILogger<ProxyProfilService<ApplicationUser>>>());
+                });
+            }
+            else
+            {
+                identityBuilder.AddProfileService<ProfileService<ApplicationUser>>();
+            }
 
             services.AddTransient(p =>
                 {
@@ -263,7 +283,7 @@ namespace Aguacongas.TheIdServer
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
+                    options => Configuration.GetSection("IdentityOptions").Bind(options))
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
         }
