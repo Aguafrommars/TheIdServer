@@ -55,7 +55,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Services
                     {
                         new IdentityResource
                         {
-                            Name= "profile"
+                            Name= "test",
+                            Properties = new Dictionary<string, string>
+                            {
+                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ProxyProfilServiceTest).FullName
+                            }
+
                         }
                     },
                 }
