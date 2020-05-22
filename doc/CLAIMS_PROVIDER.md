@@ -1,18 +1,18 @@
 # Claims providers
 
-You can add your custom claims providers to the server. The [`ProfileService`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProfileService.cs) uses claims providers defined in resources properties.
+You can add your custom claims providers to the server. The [`ProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProfileService.cs) uses claims providers defined in resources properties.
 
-When a client ask for a resource (Identity or API), the [`ProfileService`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProfileService.cs) looks for **ClaimProviderType** key in its properties. If this key is found, it looks for this type's full name in `IProvideClaims` collection registered in the dependencies injection container and call the method  [`ProvideClaims`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) with the current context subject, client, caller and properties.
+When a client ask for a resource (Identity or API), the [`ProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProfileService.cs) looks for **ClaimProviderType** key in its properties. If this key is found, it looks for this type's full name in `IProvideClaims` collection registered in the dependencies injection container and call the method  [`ProvideClaims`](../src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) with the current context subject, client, caller and properties.
 
 If the provider is not found in DI container and the property **ClaimProviderAssemblyPath** is provided, it load the assembly from this path and create an instance of the provided type.
 
 ## Implement
 
-Claims providers must implement [`IProvideClaims`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) interface.
+Claims providers must implement [`IProvideClaims`](../TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) interface.
 
 **sample**
 
-> The project [sample/Aguacongas.TheIdServer.CustomClaimsProvider](sample/Aguacongas.TheIdServer.CustomClaimsProvider) contains an implementation sample.
+> The project [sample/Aguacongas.TheIdServer.CustomClaimsProvider](../sample/Aguacongas.TheIdServer.CustomClaimsProvider) contains an implementation sample.
 
 ```cs
 public class MapClaimsProvider: IProvideClaims
@@ -38,7 +38,7 @@ If your provider has dependencies, you can register it in the depencies injectio
 
 **sample**
 
-> The project [sample/Aguacongas.TheIdServer.CustomClaimsProvider](sample/Aguacongas.TheIdServer.CustomClaimsProvider) contains an implementation sample.
+> The project [sample/Aguacongas.TheIdServer.CustomClaimsProvider](../sample/Aguacongas.TheIdServer.CustomClaimsProvider) contains an implementation sample.
 
 ```cs
 public class ClaimsProvidersSetup : ISetupClaimsProvider
@@ -77,9 +77,22 @@ To register your claims providers in the DI container, add setups classes declar
 ]
 ```
 
-In a resource (Identity or API) your client ask for, add the property **ClaimProviderType** with full type name of a class implementing [`IProvideClaims`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) interface.
+In a resource (Identity or API) your client ask for, add the property **ClaimProviderType** with full type name of a class implementing [`IProvideClaims`](../src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs) interface.
 
 If you do not register your providers in the DI container, add the path to the assembly containing this class in the property **ClaimProviderAssemblyPath**.
 
 ![claims-provider](assets/claims-provider-configuration.png)
 
+## Public / private scenario
+
+When the server is acting as a proxy, the profile service is a [`ProxyProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProxyProfileService.cs) instance. This class forward each request to claims providers to the webservice endpoint */claimsprovider*.  
+This way you don't have to expose your claims providers to internet and don't have to open custom networks rules to access private resources (such as DB, private service, etc...) on public side.
+
+Read [Using the API](src/Aguacongas.TheIdServer/README.md#using-the-api) for informations to configure a Public / private cluster.
+
+## Additional resources
+
+ * [ProfileService class](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProfileService.cs)
+ * [IProvideClaims interface](../src/IdentityServer/Aguacongas.IdentityServer/Abstractions/IProvideClaims.cs)
+ * [ProxyProfileService class](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProxyProfileService.cs)
+ * [Using the API](src/Aguacongas.TheIdServer/README.md#using-the-api)

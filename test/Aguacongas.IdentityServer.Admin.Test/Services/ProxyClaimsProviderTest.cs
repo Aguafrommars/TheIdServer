@@ -24,13 +24,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             clientStoreMock.Setup(m => m.FindClientByIdAsync("test")).ReturnsAsync(new Client());
             var resourceStoreMock = new Mock<IResourceStore>();
             resourceStoreMock.Setup(m => m.FindApiResourceAsync("test"))
-                .ReturnsAsync(new ApiResource
-                        {
-                            Properties = new Dictionary<string, string>
-                            {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName
-                            }
-                        });
+                .ReturnsAsync(new ApiResource());
             resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeAsync(It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(Array.Empty<IdentityResource>());
 
@@ -59,7 +53,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test").ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }
@@ -75,7 +69,6 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                         {
                             Properties = new Dictionary<string, string>
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
                                 [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
                             }
                         });
@@ -107,7 +100,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test").ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }
@@ -123,13 +116,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeAsync(It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(new IdentityResource[]
                     {
-                        new IdentityResource
-                        {
-                            Properties = new Dictionary<string, string>
-                            {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName
-                            }
-                        }
+                        new IdentityResource()
                     });
 
             var services = new ServiceCollection()
@@ -158,7 +145,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test").ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }

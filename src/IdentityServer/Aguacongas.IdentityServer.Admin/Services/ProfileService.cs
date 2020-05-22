@@ -113,14 +113,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="subject">The subject.</param>
         /// <param name="client">The client.</param>
         /// <param name="caller">The caller.</param>
+        /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
-        protected virtual Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller)
+        protected virtual Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller, string providerTypeName)
         {
-            if (!resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderTypeKey, out string providerTypeName))
-            {
-                return Task.FromResult(Array.Empty<Claim>() as IEnumerable<Claim>);
-            }
-
             var provider = _claimsProvider.FirstOrDefault(p => p.GetType().FullName == providerTypeName);
 
             if (provider == null)
@@ -135,5 +131,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             return provider.ProvideClaims(subject, client, caller, resource);
         }
+
+        private Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller)
+        {
+            if (!resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderTypeKey, out string providerTypeName))
+            {
+                return Task.FromResult(Array.Empty<Claim>() as IEnumerable<Claim>);
+            }
+
+            return GetClaimsFromResource(resource, subject, client, caller, providerTypeName);
+        }
+
     }
 }

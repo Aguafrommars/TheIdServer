@@ -65,8 +65,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="userId">The user identifier.</param>
         /// <param name="clientId">The client identifier.</param>
         /// <param name="caller">The caller.</param>
+        /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
-        public async Task<PageResponse<Entity.UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller)
+        public async Task<PageResponse<Entity.UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName)
         {
             var identityResourceList = await _resourceStore.FindEnabledIdentityResourcesByScopeAsync(new string[] { resourceName })
                 .ConfigureAwait(false);
@@ -80,7 +81,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 claimList.AddRange(await GetClaimsFromResource(resource,
                     await _principalFactory.CreateAsync(user).ConfigureAwait(false),
                     client,
-                    caller).ConfigureAwait(false));
+                    caller,
+                    providerTypeName).ConfigureAwait(false));
             }
 
             if (apiResource != null)
@@ -88,7 +90,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 claimList.AddRange(await GetClaimsFromResource(apiResource,
                     await _principalFactory.CreateAsync(user).ConfigureAwait(false),
                     client,
-                    caller).ConfigureAwait(false));
+                    caller,
+                    providerTypeName).ConfigureAwait(false));
             }
 
             return new PageResponse<Entity.UserClaim>
@@ -98,13 +101,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
             };
         }
 
-        private Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller)
+        private Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller, string providerTypeName)
         {
-            if (!resource.Properties.TryGetValue(ProfileServiceProperties.ClaimProviderTypeKey, out string providerTypeName))
-            {
-                return Task.FromResult(Array.Empty<Claim>() as IEnumerable<Claim>);
-            }
-
             var provider = _claimsProviders.FirstOrDefault(p => p.GetType().FullName == providerTypeName);
 
             if (provider == null)

@@ -16,7 +16,8 @@ namespace Aguacongas.IdentityServer.Abstractions
         /// <param name="userId">The user identifier.</param>
         /// <param name="clientId">The client identifier.</param>
         /// <param name="caller">The caller.</param>
+        /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
-        Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller);
+        Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName);
     }
 }

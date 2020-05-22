@@ -54,11 +54,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="subject">The subject.</param>
         /// <param name="client">The client.</param>
         /// <param name="caller">The caller.</param>
+        /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
-        protected override async Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller)
+        protected override async Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller, string providerTypeName)
         {
             var response = await _httpClient
-                .GetAsync($"/claimsprovider?resource={resource.Name}&subject={subject.GetSubjectId()}&client={client.ClientId}&caller={caller}")
+                .GetAsync($"/claimsprovider?resource={resource.Name}&subject={subject.GetSubjectId()}&client={client.ClientId}&caller={caller}&type={providerTypeName}")
                 .ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();

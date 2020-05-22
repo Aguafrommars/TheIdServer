@@ -21,7 +21,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Services
         [Fact]
         public async Task GetProfileDataAsync_should_forward_request_to_webservice()
         {
-            var server = TestUtils.CreateTestServer();
+            var server = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
+            {
+                ["ConnectionStrings:DefaultConnection"] = "Data Source = (LocalDb)\\MSSQLLocalDB; database = TheIdServer.Test.Services; trusted_connection = yes; "
+            });
             var provider = server.Host.Services;
 
             var testUserService = provider.GetRequiredService<TestUserService>();

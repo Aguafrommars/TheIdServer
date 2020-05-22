@@ -36,10 +36,11 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="userId">The user identifier.</param>
         /// <param name="clientId">The client identifier.</param>
         /// <param name="caller">The caller.</param>
+        /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
         [HttpGet]
         [Authorize(Policy = "Is4-Reader")]
-        public Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller)
-            => _proxyClaimsProvider.GetAsync(resourceName, userId, clientId, caller);
+        public Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName)
+            => _proxyClaimsProvider.GetAsync(resourceName, userId, clientId, caller, providerTypeName);
     }
 }
