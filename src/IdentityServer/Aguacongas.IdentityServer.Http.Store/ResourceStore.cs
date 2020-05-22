@@ -13,7 +13,7 @@ namespace Aguacongas.IdentityServer.Http.Store
     /// <summary>
     /// <see cref="IResourceStore"/> implemtation
     /// </summary>
-    /// <seealso cref="IdentityServer4.Stores.IResourceStore" />
+    /// <seealso cref="IResourceStore" />
     public class ResourceStore : IResourceStore
     {
         private readonly IAdminStore<ProtectResource> _apiStore;

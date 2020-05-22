@@ -44,6 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<ExternalClaimsTransformer<TUser>>()
+                .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
