@@ -4,6 +4,7 @@
 
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using System.Collections.Generic;
 using System.Security.Claims;
 using static IdentityServer4.IdentityServerConstants;
@@ -62,7 +63,12 @@ namespace Aguacongas.TheIdServer
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "api1" },
+
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.API
+                    }
                 },
 
                 // MVC client using hybrid flow
@@ -79,7 +85,12 @@ namespace Aguacongas.TheIdServer
                     PostLogoutRedirectUris = { "http://localhost:5001/signout-callback-oidc", "http://localhost:5446/signout-callback-oidc" },
                     
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "api1" },
+                    
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = "MVC"
+                    }
                 },
 
                 // SPA client using code flow + pkce
@@ -101,7 +112,12 @@ namespace Aguacongas.TheIdServer
                     PostLogoutRedirectUris = { "http://localhost:5002" },
                     AllowedCorsOrigins = { "http://localhost:5002" },
 
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "api1" },
+
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.SPA
+                    }
                 },
 
                 // Device flow
@@ -114,7 +130,11 @@ namespace Aguacongas.TheIdServer
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api1" },
                     FrontChannelLogoutSessionRequired = false,
-                    BackChannelLogoutSessionRequired = false
+                    BackChannelLogoutSessionRequired = false,
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.NativeApp
+                    }
                 },
 
                 // SPA client using code flow + pkce
@@ -155,7 +175,12 @@ namespace Aguacongas.TheIdServer
                         "https://theidserver.herokuapp.com"
                     },
                     AllowedScopes = { "openid", "profile", "theidserveradminapi" },
-                    AccessTokenType = AccessTokenType.Reference
+                    AccessTokenType = AccessTokenType.Reference,
+
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.IdentityServerSPA
+                    }
                 },
 
                 // Multi-tiers public server client
@@ -177,7 +202,12 @@ namespace Aguacongas.TheIdServer
                     },
                     BackChannelLogoutSessionRequired = false,
                     FrontChannelLogoutSessionRequired = false,
-                    AccessTokenType = AccessTokenType.Reference
+                    AccessTokenType = AccessTokenType.Reference,
+
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.IdentityServerJwt
+                    }
                 },
                 new Client
                 {
@@ -199,7 +229,12 @@ namespace Aguacongas.TheIdServer
                         "https://theidserver.herokuapp.com"
                     },
                     AllowedScopes = { "theidserveradminapi" },
-                    AllowAccessTokensViaBrowser = true
+                    AllowAccessTokensViaBrowser = true,
+
+                    Properties = new Dictionary<string, string>
+                    {
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.SPA
+                    }
                 }
             };
         }

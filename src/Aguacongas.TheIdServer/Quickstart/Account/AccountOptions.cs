@@ -2,24 +2,25 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Microsoft.AspNetCore.Server.IISIntegration;
 using System;
 
 namespace IdentityServer4.Quickstart.UI
 {
     public class AccountOptions
     {
-        public static bool AllowLocalLogin = true;
-        public static bool AllowRememberLogin = true;
-        public static TimeSpan RememberMeLoginDuration = TimeSpan.FromDays(30);
+        public bool AllowLocalLogin { get; set; } = true;
+        public bool AllowRememberLogin { get; set; } = true;
+        public TimeSpan RememberMeLoginDuration { get; set; } = TimeSpan.FromDays(30);
 
-        public static bool ShowLogoutPrompt = true;
-        public static bool AutomaticRedirectAfterSignOut = false;
+        public bool ShowLogoutPrompt { get; set; } = true;
+        public bool AutomaticRedirectAfterSignOut { get; set; } = false;
 
         // specify the Windows authentication scheme being used
-        public static readonly string WindowsAuthenticationSchemeName = Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme;
+        public string WindowsAuthenticationSchemeName { get; } = IISDefaults.AuthenticationScheme;
         // if user uses windows auth, should we load the groups from windows
-        public static bool IncludeWindowsGroups = false;
+        public bool IncludeWindowsGroups { get; set; } = false;
 
-        public static string InvalidCredentialsErrorMessage = "Invalid username or password";
+        public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
     }
 }
