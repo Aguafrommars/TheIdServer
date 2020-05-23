@@ -214,7 +214,8 @@ namespace Aguacongas.TheIdServer
                     ClientClaimsPrefix = null,
                     ClientId = "theidserver-swagger",
                     ClientName = "TheIdServer Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,RequireClientSecret = false,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    RequireClientSecret = false,
                     BackChannelLogoutSessionRequired = false,
                     FrontChannelLogoutSessionRequired = false,
                     RedirectUris =
