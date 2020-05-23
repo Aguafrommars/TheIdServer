@@ -29,6 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using Auth = Aguacongas.TheIdServer.Authentication;
+using IdentityServer4.Quickstart.UI;
 
 namespace Aguacongas.TheIdServer
 {
@@ -57,12 +58,12 @@ namespace Aguacongas.TheIdServer
             }
 
             var identityBuilder = services.AddClaimsProviders(Configuration)
-                .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
+                .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection(nameof(ForwardedHeadersOptions)).Bind(options))
+                .Configure<AccountOptions>(options => Configuration.GetSection(nameof(AccountOptions)).Bind(options))
                 .ConfigureNonBreakingSameSiteCookies()
-                .AddIdentityServer(options => Configuration.GetSection("IdentityServerOptions").Bind(options))
+                .AddOidcStateDataFormatterCache()
+                .AddIdentityServer(options => Configuration.GetSection(nameof(IdentityServerOptions)).Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators()
                 .AddSigningCredentials();
 
             if (isProxy)
@@ -210,14 +211,14 @@ namespace Aguacongas.TheIdServer
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
-                .UseAuthentication();
+                .UseIdentityServer();
 
             if (!isProxy)
             {
                 app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
-            app.UseIdentityServer()
+            app
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
@@ -256,7 +257,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection("IdentityOptions").Bind(options))
+                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -283,7 +284,7 @@ namespace Aguacongas.TheIdServer
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection("IdentityOptions").Bind(options))
+                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
         }
