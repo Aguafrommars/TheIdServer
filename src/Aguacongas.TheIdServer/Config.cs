@@ -179,7 +179,7 @@ namespace Aguacongas.TheIdServer
 
                     Properties = new Dictionary<string, string>
                     {
-                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.IdentityServerSPA
+                        [ApplicationProfilesPropertyNames.Profile] = ApplicationProfiles.SPA
                     }
                 },
 
