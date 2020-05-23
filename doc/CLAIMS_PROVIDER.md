@@ -85,7 +85,7 @@ If you do not register your providers in the DI container, add the path to the a
 
 ## Public / private scenario
 
-When the server is acting as a proxy, the profile service is a [`ProxyProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProxyProfileService.cs) instance. This class forward each request to claims providers to the webservice endpoint */claimsprovider*.  
+When the server acts as a proxy, the profile service is a [`ProxyProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProxyProfileService.cs) instance. This class forward each request to claims providers to the webservice endpoint */claimsprovider*.  
 This way you don't have to expose your claims providers to internet and don't have to open custom networks rules to access private resources (such as DB, private service, etc...) on public side.
 
 Read [Using the API](src/Aguacongas.TheIdServer/README.md#using-the-api) for informations to configure a Public / private cluster.

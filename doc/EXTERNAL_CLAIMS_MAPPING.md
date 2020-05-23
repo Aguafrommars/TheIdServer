@@ -1,4 +1,4 @@
-# Extenal claims transformation
+# Extenal claims mapping
 
 The service [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) maps claims received from an external provider depending on the claims transformation configuration.  
 The service's method `TransformPrincipalAsync` is called on each [`OnTicketReceived`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.remoteauthenticationevents.onticketreceived) event.
