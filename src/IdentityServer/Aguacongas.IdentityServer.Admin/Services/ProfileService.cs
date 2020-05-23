@@ -81,7 +81,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         protected virtual async Task<ClaimsPrincipal> GetClaimsPrincipalAsync(TUser user)
         {
-            var principal = await ClaimsFactory.CreateAsync(user);
+            var principal = await ClaimsFactory.CreateAsync(user).ConfigureAwait(false);
             if (principal == null)
             {
                 throw new InvalidOperationException("ClaimsFactory failed to create a principal");
@@ -97,7 +97,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         protected virtual async Task<TUser> FindUserAsync(string subjectId)
         {
-            var user = await UserManager.FindByIdAsync(subjectId);
+            var user = await UserManager.FindByIdAsync(subjectId).ConfigureAwait(false);
             if (user == null)
             {
                 Logger?.LogWarning("No user found matching subject Id: {subjectId}", subjectId);
