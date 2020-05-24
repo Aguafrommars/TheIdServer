@@ -15,7 +15,7 @@
 ### Main features
 
 #### Application
-![home](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/assets/home.png)
+![home](https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/doc/assets/home.png)
 
 * [Users management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/USER.md)
 * [Roles management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/ROLE.md)
