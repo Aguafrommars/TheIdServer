@@ -10,25 +10,27 @@
 
 ## Management application
 
-[*src/Aguacongas.TheIdServer.BlazorApp*](src/Aguacongas.TheIdServer.BlazorApp) contains the management applicationthe code.
+[*src/Aguacongas.TheIdServer.BlazorApp*](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp) contains the management applicationthe code.
 
 ### Main features
 
 #### Application
-![home](doc/assets/home.png)
+![home](https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/doc/assets/home.png)
 
-* [Users management](doc/USER.md)
-* [Roles management](doc/ROLE.md)
-* [Clients management](doc/CLIENT.md)
-* [Apis management](doc/API.md)
-* [Identities management](doc/IDENTITY.md)
-* [External providers management](doc/PROVIDER.md)
+* [Users management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/USER.md)
+* [Roles management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/ROLE.md)
+* [Clients management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CLIENT.md)
+* [Apis management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/API.md)
+* [Identities management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/IDENTITY.md)
+* [External providers management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PROVIDER.md)
 
 #### Server
 
-* [Dynamic external provider configuration](src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
-* [Public / Private installation](src/Aguacongas.TheIdServer/README.md#using-the-api)
-* [Docker support](src/Aguacongas.TheIdServer/README.md#from-docker)
+* [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
+* [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#using-the-api)
+* [Docker support](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#from-docker)
+* [Claims providers](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CLAIMS_PROVIDER.md)
+* [External claims mapping](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/EXTERNAL_CLAIMS_MAPPING.md)
 
 ### Preview 
 
@@ -36,8 +38,8 @@ An in memory db version is deployed on [heroku](https://www.heroku.com/) at [htt
 
 ## Setup
 
-Read the [server README](src/Aguacongas.TheIdServer/README.md) for server configuration.  
-Read the [application README](src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
+Read the [server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md) for server configuration.  
+Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
 
 ## Build from source
 
@@ -47,4 +49,4 @@ You can build the solution with Visual Studio or use the `dotnet build` command.
 
 Contributions are warmly welcome. You can contribute by opening an issue, sugest new a feature or submit a pull request.
 
-Read [How to contribute](CONTRIBUTING.md) and [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md) for more informations.
+Read [How to contribute](https://github.com/Aguafrommars/TheIdServer/tree/master/CONTRIBUTING.md) and [Contributor Covenant Code of Conduct](https://github.com/Aguafrommars/TheIdServer/tree/master/CODE_OF_CONDUCT.md) for more informations.

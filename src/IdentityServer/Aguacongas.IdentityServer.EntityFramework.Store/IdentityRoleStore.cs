@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +15,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         where TUser : IdentityUser
     {
         private readonly RoleManager<TRole> _roleManager;
-        private readonly IdentityDbContext<TUser, TRole, string> _context;
+        private readonly IdentityDbContext<TUser, TRole> _context;
         private readonly ILogger<IdentityRoleStore<TUser, TRole>> _logger;
         public IdentityRoleStore(RoleManager<TRole> roleManager, 
-            IdentityDbContext<TUser, TRole, string> context,
+            IdentityDbContext<TUser, TRole> context,
             ILogger<IdentityRoleStore<TUser, TRole>> logger)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));

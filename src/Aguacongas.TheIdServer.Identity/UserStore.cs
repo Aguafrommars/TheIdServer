@@ -43,7 +43,6 @@ namespace Aguacongas.TheIdServer.Identity
     public class UserStore<TUser, TRole> : TheIdServerUserStoreBase<TUser,
         string, 
         TRole,
-        IdentityUserClaim<string>, 
         IdentityUserRole<string>,
         IdentityUserLogin<string>,
         IdentityUserToken<string>,

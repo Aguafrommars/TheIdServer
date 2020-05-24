@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Store.Entity
+﻿using System.Collections.Generic;
+
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
     /// SchemeDefinition entity
@@ -45,5 +47,29 @@
         /// The serialized options.
         /// </value>
         public virtual string SerializedOptions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [store claims].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [store claims]; otherwise, <c>false</c>.
+        /// </value>
+        public bool StoreClaims { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [map default outbound claim type].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [map default outbound claim type]; otherwise, <c>false</c>.
+        /// </value>
+        public bool MapDefaultOutboundClaimType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the claim transformations.
+        /// </summary>
+        /// <value>
+        /// The claim transformations.
+        /// </value>
+        public virtual ICollection<ExternalClaimTransformation> ClaimTransformations { get; set; }
     }
 }

@@ -1,0 +1,30 @@
+﻿@inherits EntitesGridModel<Entity.ExternalClaimTransformation>
+
+<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="transformation">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="FromClaimType"
+                            Text="from claim type"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="ToClaimType"
+                            Text="to claim type"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        <td>
+            <AuthorizeText Id="fromClaimType" @bind-Value="@transformation.FromClaimType" />
+        </td>
+        <td>
+            <AuthorizeText Id="toClaimType" @bind-Value="@transformation.ToClaimType" />
+        </td>
+        <td>
+            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(transformation)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

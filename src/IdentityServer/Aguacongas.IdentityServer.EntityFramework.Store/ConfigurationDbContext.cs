@@ -45,6 +45,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<SchemeDefinition> Providers { get; set; }
 
+        public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformation { get; set; }
+
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -81,6 +83,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .IsUnique(true);
             modelBuilder.Entity<IdentityClaim>()
                 .HasIndex(e => new { e.IdentityId, e.Type })
+                .IsUnique(true);
+            modelBuilder.Entity<ExternalClaimTransformation>()
+                .HasOne<SchemeDefinition>()
+                .WithMany(e => e.ClaimTransformations)
+                .HasForeignKey(e => e.Scheme);
+            modelBuilder.Entity<ExternalClaimTransformation>()
+                .HasIndex(e => new { e.Scheme, e.FromClaimType })
                 .IsUnique(true);
 
             modelBuilder.Entity<SchemeDefinition>(b =>

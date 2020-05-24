@@ -8,16 +8,21 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class ExternalProvider : Entity.ExternalProvider, ICloneable<ExternalProvider>
+    public class ExternalProvider : ExternalProvider<RemoteAuthenticationOptions>
+    {
+
+    }
+
+    public class ExternalProvider<TOptions> : Entity.ExternalProvider, ICloneable<ExternalProvider>, IExternalProvider<TOptions> where TOptions : RemoteAuthenticationOptions
     {
         [JsonIgnore]
-        public RemoteAuthenticationOptions Options { get; set; }
+        public virtual TOptions Options { get; set; }
 
         [JsonIgnore]
         public IEnumerable<Entity.ExternalProviderKind> Kinds { get; set; }
 
         [JsonIgnore]
-        public RemoteAuthenticationOptions DefaultOptions
+        public TOptions DefaultOptions
         {
             get
             {
@@ -26,10 +31,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             }
         }
 
-        public override string SerializedHandlerType 
+        public override string SerializedHandlerType
         {
-            get => Kinds.First(k => k.KindName == KindName).SerializedHandlerType; 
-            set => base.SerializedHandlerType = value; 
+            get => Kinds.First(k => k.KindName == KindName).SerializedHandlerType;
+            set => base.SerializedHandlerType = value;
         }
 
         public ExternalProvider Clone()
@@ -45,13 +50,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
                 DisplayName = externalProvider.DisplayName,
                 Id = externalProvider.Id,
                 KindName = externalProvider.KindName,
-                Options = Deserialize(externalProvider.SerializedOptions, optionsType)
+                Options = Deserialize(externalProvider.SerializedOptions, optionsType),
+                StoreClaims = externalProvider.StoreClaims,
+                MapDefaultOutboundClaimType = externalProvider.MapDefaultOutboundClaimType,
+                ClaimTransformations = externalProvider.ClaimTransformations
             };
         }
 
-        private static RemoteAuthenticationOptions Deserialize(string options, Type optionsType)
+        private static TOptions Deserialize(string options, Type optionsType)
         {
-            return JsonSerializer.Deserialize(options, optionsType) as RemoteAuthenticationOptions;
+            return JsonSerializer.Deserialize(options, optionsType) as TOptions;
         }
 
         private static Type GetOptionsType(Entity.ExternalProvider externalProvider)

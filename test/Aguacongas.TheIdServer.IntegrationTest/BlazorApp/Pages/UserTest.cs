@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -480,13 +481,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var user = await manager.FindByIdAsync(userId);
             var result = await manager.AddToRoleAsync(user, "filtered");
             Assert.True(result.Succeeded);
-
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITER,
                 userId,
                 out TestHost host,
                 out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out _);
 
             host.WaitForContains(component, "filtered");
 
@@ -496,16 +496,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await DbActionAsync<ApplicationDbContext>(context =>
             {
-                context.Users.Add(new Models.ApplicationUser
+                context.Users.Add(new ApplicationUser
                 {
                     Id = userId,
                     UserName = userId,
                     NormalizedUserName = userId.ToUpper()
                 });
-                context.UserClaims.Add(new IdentityUserClaim<string>
+                context.UserClaims.Add(new IdentityServer.EntityFramework.Store.UserClaim
                 {
                     ClaimType = "filtered",
                     ClaimValue = "filtered",
+                    Issuer = ClaimsIdentity.DefaultIssuer,
                     UserId = userId
                 });
                 context.UserTokens.Add(new IdentityUserToken<string>

@@ -16,10 +16,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
     {
         public LogLevel Minimum { get; set; }
 
-        public IEnumerable<Filter> Filters { get; set; }
+        public IEnumerable<LoggingFilter> Filters { get; set; }
     }
 
-    public class Filter
+    public class LoggingFilter
     {
         public string Category { get; set; }
 

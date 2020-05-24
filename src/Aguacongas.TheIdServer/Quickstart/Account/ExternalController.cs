@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -27,6 +29,7 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IEventService _events;
+        private readonly IOptions<AccountOptions> _options;
         private readonly ILogger<ExternalController> _logger;
 
         public ExternalController(
@@ -35,6 +38,7 @@ namespace IdentityServer4.Quickstart.UI
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService events,
+            IOptions<AccountOptions> options,
             ILogger<ExternalController> logger)
         {
             _userManager = userManager;
@@ -42,6 +46,7 @@ namespace IdentityServer4.Quickstart.UI
             _interaction = interaction;
             _clientStore = clientStore;
             _events = events;
+            _options = options;
             _logger = logger;
         }
 
@@ -54,13 +59,13 @@ namespace IdentityServer4.Quickstart.UI
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
-            if (Url.IsLocalUrl(returnUrl) == false && _interaction.IsValidReturnUrl(returnUrl) == false)
+            if (!Url.IsLocalUrl(returnUrl) && !_interaction.IsValidReturnUrl(returnUrl))
             {
                 // user might have clicked on a malicious link - should be logged
-                throw new Exception("invalid return URL");
+                throw new InvalidOperationException("invalid return URL");
             }
 
-            if (AccountOptions.WindowsAuthenticationSchemeName == provider)
+            if (_options.Value.WindowsAuthenticationSchemeName == provider)
             {
                 // windows authentication needs special handling
                 return await ProcessWindowsLoginAsync(returnUrl);
@@ -92,7 +97,7 @@ namespace IdentityServer4.Quickstart.UI
             var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
             if (result?.Succeeded != true)
             {
-                throw new Exception("External authentication error");
+                throw new InvalidOperationException("External authentication error");
             }
 
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -102,13 +107,13 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             // lookup our user and external provider info
-            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result).ConfigureAwait(false);
             if (user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                user = await AutoProvisionUserAsync(provider, providerUserId, claims);
+                user = await AutoProvisionUserAsync(provider, providerUserId, claims).ConfigureAwait(false);
             }
 
             // this allows us to collect any additonal claims or properties
@@ -117,8 +122,6 @@ namespace IdentityServer4.Quickstart.UI
             var additionalLocalClaims = new List<Claim>();
             var localSignInProps = new AuthenticationProperties();
             ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
-            ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
-            ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
 
             // issue authentication cookie for user
             // we must issue the cookie maually, and can't use the SignInManager because
@@ -138,14 +141,11 @@ namespace IdentityServer4.Quickstart.UI
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.ClientId));
 
-            if (context != null)
+            if (context != null && await _clientStore.IsPkceClientAsync(context.ClientId))
             {
-                if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                {
-                    // if the client is PKCE then we assume it's native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
-                }
+                // if the client is PKCE then we assume it's native, so this change in how to
+                // return the response is for better UX for the end user.
+                return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
             }
 
             return Redirect(returnUrl);
@@ -153,8 +153,9 @@ namespace IdentityServer4.Quickstart.UI
 
         private async Task<IActionResult> ProcessWindowsLoginAsync(string returnUrl)
         {
+            var settings = _options.Value;
             // see if windows auth has already been requested and succeeded
-            var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
+            var result = await HttpContext.AuthenticateAsync(settings.WindowsAuthenticationSchemeName);
             if (result?.Principal is WindowsPrincipal wp)
             {
                 // we will issue the external cookie and then redirect the
@@ -166,16 +167,16 @@ namespace IdentityServer4.Quickstart.UI
                     Items =
                     {
                         { "returnUrl", returnUrl },
-                        { "scheme", AccountOptions.WindowsAuthenticationSchemeName },
+                        { "scheme", settings.WindowsAuthenticationSchemeName },
                     }
                 };
 
-                var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
+                var id = new ClaimsIdentity(settings.WindowsAuthenticationSchemeName);
                 id.AddClaim(new Claim(JwtClaimTypes.Subject, wp.Identity.Name));
                 id.AddClaim(new Claim(JwtClaimTypes.Name, wp.Identity.Name));
 
                 // add the groups as claims -- be careful if the number of groups is too large
-                if (AccountOptions.IncludeWindowsGroups)
+                if (settings.IncludeWindowsGroups)
                 {
                     var wi = wp.Identity as WindowsIdentity;
                     var groups = wi.Groups.Translate(typeof(NTAccount));
@@ -194,7 +195,7 @@ namespace IdentityServer4.Quickstart.UI
                 // trigger windows auth
                 // since windows auth don't support the redirect uri,
                 // this URL is re-triggered when we call challenge
-                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
+                return Challenge(settings.WindowsAuthenticationSchemeName);
             }
         }
 
@@ -208,6 +209,7 @@ namespace IdentityServer4.Quickstart.UI
             // depending on the external provider, some other claim type might be used
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+                              externalUser.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]) ??
                               throw new Exception("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user
@@ -265,19 +267,19 @@ namespace IdentityServer4.Quickstart.UI
 
             var user = new ApplicationUser
             {
-                UserName = Guid.NewGuid().ToString(),
+                UserName = email ?? Guid.NewGuid().ToString(),
             };
             var identityResult = await _userManager.CreateAsync(user);
-            if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+            if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
 
             if (filtered.Any())
             {
                 identityResult = await _userManager.AddClaimsAsync(user, filtered);
-                if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+                if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
             }
 
             identityResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
-            if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+            if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
 
             return user;
         }
@@ -299,14 +301,6 @@ namespace IdentityServer4.Quickstart.UI
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
             }
-        }
-
-        private void ProcessLoginCallbackForWsFed(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
-        {
-        }
-
-        private void ProcessLoginCallbackForSaml2p(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
-        {
         }
     }
 }

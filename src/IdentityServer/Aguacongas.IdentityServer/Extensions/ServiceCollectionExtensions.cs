@@ -19,8 +19,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services
                 .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
-                .AddSingleton<HubConnectionFactory>()
-                .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<OAuthDelegatingHandler>()
                 .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
                 .AddTransient<IIdentityProviderStore, IdentityProviderStore>();

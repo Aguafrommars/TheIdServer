@@ -9,27 +9,27 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-using Microsoft.AspNetCore.Authentication;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
 using Auth = Aguacongas.TheIdServer.Authentication;
+using IdentityServer4.Quickstart.UI;
 
 namespace Aguacongas.TheIdServer
 {
@@ -57,13 +57,32 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
-            services.Configure<ForwardedHeadersOptions>(options => Configuration.GetSection("ForwardedHeadersOptions").Bind(options))
+            var identityBuilder = services.AddClaimsProviders(Configuration)
+                .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection(nameof(ForwardedHeadersOptions)).Bind(options))
+                .Configure<AccountOptions>(options => Configuration.GetSection(nameof(AccountOptions)).Bind(options))
                 .ConfigureNonBreakingSameSiteCookies()
-                .AddIdentityServer(options => Configuration.GetSection("IdentityServerOptions").Bind(options))
+                .AddOidcStateDataFormatterCache()
+                .AddIdentityServer(options => Configuration.GetSection(nameof(IdentityServerOptions)).Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators()
                 .AddSigningCredentials();
+
+            if (isProxy)
+            {
+                identityBuilder.Services.AddTransient<IProfileService>(p =>
+                {
+                    var options = p.GetRequiredService<IOptions<IdentityServerOptions>>().Value;
+                    var httpClient = p.GetRequiredService<IHttpClientFactory>().CreateClient(options.HttpClientName);
+                    return new ProxyProfilService<ApplicationUser>(httpClient,
+                        p.GetRequiredService<UserManager<ApplicationUser>>(),
+                        p.GetRequiredService<IUserClaimsPrincipalFactory<ApplicationUser>>(),
+                        p.GetRequiredService<IEnumerable<IProvideClaims>>(),
+                        p.GetRequiredService<ILogger<ProxyProfilService<ApplicationUser>>>());
+                });
+            }
+            else
+            {
+                identityBuilder.AddProfileService<ProfileService<ApplicationUser>>();
+            }
 
             services.AddTransient(p =>
                 {
@@ -79,7 +98,7 @@ namespace Aguacongas.TheIdServer
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
-            var authBuilder = services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
+            services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
@@ -112,53 +131,7 @@ namespace Aguacongas.TheIdServer
                 });
 
 
-            DynamicAuthenticationBuilder dynamicAuthBuilder;
-            if (isProxy)
-            {
-                dynamicAuthBuilder = authBuilder.AddDynamic<Auth.SchemeDefinition>()
-                    .AddTheIdServerHttpStore();
-            }
-            else
-            {
-                dynamicAuthBuilder = authBuilder.AddDynamic<SchemeDefinition>()
-                    .AddEntityFrameworkStore<ConfigurationDbContext>();
-            }
-
-            dynamicAuthBuilder.AddGoogle()
-                .AddFacebook()
-                .AddOpenIdConnect()
-                .AddTwitter()
-                .AddMicrosoftAccount()
-                .AddOAuth("OAuth", options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnCreatingTicket = async context =>
-                        {
-                            var contextOption = context.Options;
-                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
-                            {
-                                return;
-                            }
-
-                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
-                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
-
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            var content = await response.Content.ReadAsStringAsync();
-                            response.EnsureSuccessStatusCode();
-
-                            using var doc = JsonDocument.Parse(content);
-
-                            context.RunClaimActions(doc.RootElement);
-                        }
-                    };
-                });
-
-            services.Configure<SendGridOptions>(Configuration)
+            var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
                 .AddNewtonsoftJson(options =>
@@ -166,16 +139,26 @@ namespace Aguacongas.TheIdServer
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin();
+                });
+            
+            if (isProxy)
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
+                    .AddTheIdServerHttpStore();
+            }
+            else
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                    .AddEntityFrameworkStore<ConfigurationDbContext>();
+            }
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
-
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
+            var disableHttps = Configuration.GetValue<bool>("DisableHttps");
             if (!isProxy)
             {
                 ConfigureInitialData(app);
@@ -189,7 +172,7 @@ namespace Aguacongas.TheIdServer
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                if (Configuration.GetValue<bool>("UseHttps"))
+                if (!disableHttps)
                 {
                     app.UseHsts();
                 }
@@ -197,7 +180,7 @@ namespace Aguacongas.TheIdServer
 
             app.UseSerilogRequestLogging();
 
-            if (Configuration.GetValue<bool>("UseHttps"))
+            if (!disableHttps)
             {
                 app.UseHttpsRedirection();
             }
@@ -228,14 +211,14 @@ namespace Aguacongas.TheIdServer
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
-                .UseAuthentication();
+                .UseIdentityServer();
 
             if (!isProxy)
             {
                 app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
-            app.UseIdentityServer()
+            app
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
@@ -274,7 +257,7 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection("IdentityOptions").Bind(options))
+                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -301,7 +284,7 @@ namespace Aguacongas.TheIdServer
                 .AddConfigurationHttpStores(configureOptions)
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
+                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
         }

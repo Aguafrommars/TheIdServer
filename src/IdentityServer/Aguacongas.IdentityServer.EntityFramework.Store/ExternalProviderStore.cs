@@ -44,6 +44,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             await _manager.AddAsync(new SchemeDefinition
             {
                 DisplayName = entity.DisplayName,
+                StoreClaims = entity.StoreClaims,
+                MapDefaultOutboundClaimType = entity.MapDefaultOutboundClaimType,
                 HandlerType = handlerType,
                 Options = options,
                 Scheme = entity.Id
@@ -71,7 +73,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var definition = await GetEntity(id).ConfigureAwait(false);
+            var query = _context.Providers.AsNoTracking();
+            query = query.Expand(request?.Expand);
+            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id).ConfigureAwait(false);
             return CreateEntity(definition);
         }
 
@@ -102,6 +106,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
 
             definition.DisplayName = entity.DisplayName;
+            definition.StoreClaims = entity.StoreClaims;
+            definition.MapDefaultOutboundClaimType = entity.MapDefaultOutboundClaimType;
+
             definition.HandlerType = handlerType;
             definition.Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
 
@@ -143,9 +150,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             {
                 DisplayName = definition.DisplayName,
                 Id = definition.Scheme,
+                StoreClaims = definition.StoreClaims,
+                MapDefaultOutboundClaimType = definition.MapDefaultOutboundClaimType,
                 KindName = optionsType.Name.Replace("Options", ""),
                 SerializedHandlerType = definition.SerializedHandlerType ?? _serializer.SerializeType(hanlderType),
-                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType)
+                SerializedOptions = definition.SerializedOptions ?? _serializer.SerializeOptions(definition.Options, optionsType),
+                ClaimTransformations = definition.ClaimTransformations
             };
         }
 

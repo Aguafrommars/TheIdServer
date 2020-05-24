@@ -7,12 +7,12 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer
+namespace Aguacongas.IdentityServer.Admin.Services
 {
     /// <summary>
     /// Hub connection factory
     /// </summary>
-    /// <seealso cref="System.IDisposable" />
+    /// <seealso cref="IDisposable" />
     public class HubConnectionFactory : IDisposable
     {
         private readonly object _syncLock = new object();
@@ -27,6 +27,7 @@ namespace Aguacongas.IdentityServer
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="provider">The service provider</param>
+        /// <param name="logger">The logger.</param>
         /// <exception cref="ArgumentNullException">configuration</exception>
         public HubConnectionFactory(IConfiguration configuration, IServiceProvider provider, ILogger<HubConnectionFactory> logger)
         {
@@ -89,6 +90,9 @@ namespace Aguacongas.IdentityServer
             }
         }
 
+        /// <summary>
+        /// Starts the connection asynchronous.
+        /// </summary>
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "infinite auto reconnection")]
         public async Task StartConnectionAsync()
         {

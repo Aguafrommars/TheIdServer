@@ -8,10 +8,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityUserClaimStore<TUser> : IAdminStore<UserClaim>
+    public class IdentityUserClaimStore<TUser> : IAdminStore<Entity.UserClaim>
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
@@ -27,7 +28,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<UserClaim> CreateAsync(UserClaim entity, CancellationToken cancellationToken = default)
+        public async Task<Entity.UserClaim> CreateAsync(Entity.UserClaim entity, CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(entity.UserId)
                 .ConfigureAwait(false);
@@ -48,7 +49,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as UserClaim, cancellationToken)
+            return await CreateAsync(entity as Entity.UserClaim, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -70,7 +71,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger.LogInformation("Entity {EntityId} deleted", claim.Id, claim);
         }
 
-        public async Task<UserClaim> UpdateAsync(UserClaim entity, CancellationToken cancellationToken = default)
+        public async Task<Entity.UserClaim> UpdateAsync(Entity.UserClaim entity, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             var user = await GetUserAsync(entity.UserId)
@@ -87,11 +88,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as UserClaim, cancellationToken)
+            return await UpdateAsync(entity as Entity.UserClaim, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<UserClaim> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+        public async Task<Entity.UserClaim> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
             if (claim == null)
@@ -101,7 +102,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return claim.ToEntity();
         }
 
-        public async Task<PageResponse<UserClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<PageResponse<Entity.UserClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var odataQuery = _context.UserClaims.AsNoTracking().GetODataQuery(request);
@@ -112,7 +113,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            return new PageResponse<UserClaim>
+            return new PageResponse<Entity.UserClaim>
             {
                 Count = count,
                 Items = items.Select(r => r.ToEntity())
@@ -131,7 +132,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return user;
         }
 
-        private async Task<IdentityUserClaim<string>> GetClaimAsync(string id, CancellationToken cancellationToken)
+        private async Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
             var claim = await _context.UserClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
                             .ConfigureAwait(false);
@@ -153,6 +154,5 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 };
             }
         }
-
     }
 }

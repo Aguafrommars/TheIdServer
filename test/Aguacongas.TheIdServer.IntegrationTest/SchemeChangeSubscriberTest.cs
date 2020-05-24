@@ -1,5 +1,5 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
-using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Moq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -30,7 +29,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["SignalR:HubUrl"] = "http://localhost/providerhub",
                 ["SignalR:UseMessagePack"] = "false"
             };
-            var configurationMock = new Mock<IConfiguration>();
+            
             TestServer server = null;
             server = TestUtils.CreateTestServer(services =>
             {
@@ -94,7 +93,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
         class MockHttpClientHandler : HttpClientHandler
         {
-            HttpClient _client;
+            private readonly HttpClient _client;
             public MockHttpClientHandler(HttpClient client)
             {
                 _client = client;

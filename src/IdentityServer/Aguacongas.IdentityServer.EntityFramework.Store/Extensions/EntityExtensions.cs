@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
@@ -230,14 +231,16 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.UserClaim ToEntity(this IdentityUserClaim<string> claim)
+        public static Entity.UserClaim ToEntity(this UserClaim claim)
         {
             return new Entity.UserClaim
             {
                 Id = claim.Id.ToString(),
                 UserId = claim.UserId,
                 ClaimType = claim.ClaimType,
-                ClaimValue = claim.ClaimValue
+                ClaimValue = claim.ClaimValue,
+                Issuer = claim.Issuer,
+                OriginalType = claim.OriginalType
             };
         }
 
@@ -333,14 +336,16 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static IdentityUserClaim<string> ToUserClaim(this Entity.UserClaim claim)
+        public static UserClaim ToUserClaim(this Entity.UserClaim claim)
         {
-            return new IdentityUserClaim<string>
+            return new UserClaim
             {
                 Id = claim.Id != null ? int.Parse(claim.Id) : 0,
                 UserId = claim.UserId,
                 ClaimType = claim.ClaimType,
-                ClaimValue = claim.ClaimValue
+                ClaimValue = claim.ClaimValue,
+                Issuer = claim.Issuer,
+                OriginalType = claim.OriginalType
             };
         }
 

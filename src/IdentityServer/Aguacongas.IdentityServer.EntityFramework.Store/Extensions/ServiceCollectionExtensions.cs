@@ -1,15 +1,15 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Reflection;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
+using IdentityEntityFrameworkCore = Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
         public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TContext>(this IServiceCollection services)
-            where TContext : IdentityDbContext<IdentityUser>
+            where TContext : IdentityDbContext<IdentityUser, IdentityRole>
         {
             return AddIdentityServer4AdminEntityFrameworkStores<IdentityUser, IdentityRole, TContext>(services);
         }
@@ -37,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TContext>(this IServiceCollection services)
             where TUser : IdentityUser, new()
-            where TContext : IdentityDbContext<TUser>
+            where TContext : IdentityDbContext<TUser, IdentityRole>
         {
             return AddIdentityServer4AdminEntityFrameworkStores<TUser, IdentityRole, TContext>(services);
         }
@@ -52,16 +52,16 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores<TUser, TRole, TContext>(this IServiceCollection services)
             where TUser: IdentityUser, new()
             where TRole: IdentityRole, new()
-            where TContext: IdentityDbContext<TUser>
+            where TContext: IdentityDbContext<TUser, TRole>
         {
-            var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
+            var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
                 !t.IsAbstract &&
                 !t.IsGenericType &&
                 t.GetInterface("IEntityId") != null &&
                 t.GetInterface("IGrant") == null &&
-                t.Name != nameof(AuthorizationCode) &&
-                t.Name != nameof(DeviceCode) &&
+                t.Name != nameof(Entity.AuthorizationCode) &&
+                t.Name != nameof(Entity.DeviceCode) &&
                 t.GetInterface("IRoleSubEntity") == null &&
                 t.GetInterface("IUserSubEntity") == null);
 
@@ -74,25 +74,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddTransient(iAdminStoreType, adminStoreType);
             }
 
-            return services.AddScoped<IdentityDbContext<TUser>>(p => p.GetRequiredService<TContext>())
-                .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole, string>)
-                .AddTransient<ILookupNormalizer, UpperInvariantLookupNormalizer>()
-                .AddTransient<IPasswordHasher<TUser>, PasswordHasher<TUser>>()
-                .AddTransient<IdentityErrorDescriber>()
-                .AddTransient<RoleManager<TRole>>()
-                .AddTransient<UserManager<TUser>>()
-                .AddTransient<IRoleStore<TRole>>(p => 
-                    new RoleStore<TRole>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
-                .AddTransient<IUserStore<TUser>>(p =>
-                    new UserStore<TUser>(p.GetRequiredService<TContext>(), p.GetRequiredService<IdentityErrorDescriber>()))
-                .AddTransient<IAdminStore<User>, IdentityUserStore<TUser>>()
-                .AddTransient<IAdminStore<UserLogin>, IdentityUserLoginStore<TUser>>()
-                .AddTransient<IAdminStore<UserClaim>, IdentityUserClaimStore<TUser>>()
-                .AddTransient<IAdminStore<UserRole>, IdentityUserRoleStore<TUser>>()
-                .AddTransient<IAdminStore<UserToken>, IdentityUserTokenStore<TUser>>()
-                .AddTransient<IAdminStore<Role>, IdentityRoleStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+            return services.AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser>)
+                .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole>)
+                .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole, TContext>>()
+                .AddTransient<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()
+                .AddTransient<IAdminStore<Entity.UserLogin>, IdentityUserLoginStore<TUser>>()
+                .AddTransient<IAdminStore<Entity.UserClaim>, IdentityUserClaimStore<TUser>>()
+                .AddTransient<IAdminStore<Entity.UserRole>, IdentityUserRoleStore<TUser>>()
+                .AddTransient<IAdminStore<Entity.UserToken>, IdentityUserTokenStore<TUser>>()
+                .AddTransient<IAdminStore<Entity.Role>, IdentityRoleStore<TUser, TRole>>()
+                .AddTransient<IAdminStore<Entity.RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
+                .AddTransient<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
                 .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore>();
         }
 
@@ -114,16 +106,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<DeviceFlowStore>()
                 .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
                 .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IAdminStore<AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
+                .AddTransient<IAdminStore<Entity.AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IAdminStore<RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
+                .AddTransient<IAdminStore<Entity.RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IAdminStore<ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
+                .AddTransient<IAdminStore<Entity.ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IAdminStore<UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
+                .AddTransient<IAdminStore<Entity.UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
                 .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
-                .AddTransient<IAdminStore<DeviceCode>> (p => p.GetRequiredService<DeviceFlowStore>());
+                .AddTransient<IAdminStore<Entity.DeviceCode>> (p => p.GetRequiredService<DeviceFlowStore>());
         }
     }
 }

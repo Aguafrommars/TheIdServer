@@ -1,13 +1,24 @@
-﻿using Aguacongas.IdentityServer.Abstractions;
+﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -21,12 +32,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns></returns>
-        public static IMvcBuilder AddIdentityServerAdmin(this IMvcBuilder builder)
+        public static DynamicAuthenticationBuilder AddIdentityServerAdmin<TUser, TSchemeDefinition>(this IMvcBuilder builder) 
+            where TUser : IdentityUser, new()
+            where TSchemeDefinition: SchemeDefinitionBase, new()
         {
+            var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
-            builder.Services.AddTransient<IPersistedGrantService, PersistedGrantService>()
+            services.AddTransient<IPersistedGrantService, PersistedGrantService>()
                 .AddTransient<SendGridEmailSender>()
                 .AddTransient<IProviderClient, ProviderClient>()
+                .AddSingleton<HubConnectionFactory>()
+                .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
+                .AddTransient<ExternalClaimsTransformer<TUser>>()
+                .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
@@ -82,9 +100,89 @@ namespace Microsoft.Extensions.DependencyInjection
                         return true;
                     });
                 });
-            return builder.AddApplicationPart(assembly)
+
+            builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
                     apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));
+
+            return CreateDynamicAuthenticationBuilder<TUser, TSchemeDefinition>(services);
+        }
+
+        private static DynamicAuthenticationBuilder CreateDynamicAuthenticationBuilder<TUser, TSchemeDefinition>(IServiceCollection services)
+            where TUser : IdentityUser, new()
+            where TSchemeDefinition : SchemeDefinitionBase, new()
+        {
+            var dynamicBuilder = services
+                            .AddAuthentication()
+                            .AddDynamic<TSchemeDefinition>();
+
+            dynamicBuilder.AddGoogle(options =>
+            {
+                options.Events = new OAuthEvents
+                {
+                    OnTicketReceived = OnTicketReceived<TUser>()
+                };
+            })
+                .AddFacebook(options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
+                .AddTwitter(options =>
+                {
+                    options.Events = new TwitterEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
+                .AddMicrosoftAccount(options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
+                .AddOpenIdConnect(options =>
+                {
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
+                .AddOAuth("OAuth", options =>
+                {
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>(),
+                        OnCreatingTicket = async context =>
+                        {
+                            var contextOption = context.Options;
+                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
+                            {
+                                return;
+                            }
+
+                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
+                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("TheIdServer", "1.0.0"));
+
+                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted)
+                                .ConfigureAwait(false);
+                            var content = await response.Content.ReadAsStringAsync()
+                                .ConfigureAwait(false);
+                            response.EnsureSuccessStatusCode();
+
+                            using var doc = JsonDocument.Parse(content);
+
+                            context.RunClaimActions(doc.RootElement);
+                        }
+                    };
+                });
+
+            return dynamicBuilder;
         }
 
         /// <summary>
@@ -97,6 +195,18 @@ namespace Microsoft.Extensions.DependencyInjection
             filters.Add<SelectFilter>();
             filters.Add<ExceptionFilter>();
             filters.Add<ActionsFilter>();
+        }
+
+        private static Func<TicketReceivedContext, Task> OnTicketReceived<TUser>()
+            where TUser : IdentityUser, new()
+        {
+            return async context =>
+            {
+                using var scope = context.HttpContext.RequestServices.CreateScope();
+                var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<TUser>>();
+                context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name)
+                    .ConfigureAwait(false);
+            };
         }
     }
 }

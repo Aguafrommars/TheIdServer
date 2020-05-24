@@ -273,10 +273,10 @@ The section *CorsAllowedOrigin* define allowed CORS origins
 
 ## Configure HTTPS
 
-If you want to diseable HTTPS set **UseHttps** to `false`
+If you want to diseable HTTPS set **DisableHttps** to `false`
 
 ```json
-"UseHttps": false
+"DisableHttps": true
 ```
 
 If you use a self signed certificat you can disable strict SSL by settings **DisableStrictSsl** to `true`.
@@ -362,8 +362,11 @@ The section **Serilog** define the [Serilog](https://serilog.net/) configuration
   ]
 }
 ```
-
 For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
+
+## Configure claims providers
+
+The claims providers configuration is described in [Claims provider](../../doc/CLAIMS_PROVIDER.md)
 
 ## Additional resources
 

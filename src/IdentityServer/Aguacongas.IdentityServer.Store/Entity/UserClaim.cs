@@ -44,5 +44,22 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         public string ClaimValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the issuer.
+        /// </summary>
+        /// <value>
+        /// The issuer.
+        /// </value>
+        public string Issuer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original value.
+        /// </summary>
+        /// <value>
+        /// The original value.
+        /// </value>
+        public string OriginalType { get; set; }
+
     }
 }

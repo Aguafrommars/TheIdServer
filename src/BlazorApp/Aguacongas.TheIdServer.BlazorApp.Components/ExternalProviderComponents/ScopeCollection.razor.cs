@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
@@ -15,6 +17,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
 
         [Parameter]
         public ICollection<string> Collection { get; set; }
+
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
+
+        [CascadingParameter]
+        public ExternalProvider Model { get; set; }
 
         private void OnDelete(string item)
         {
@@ -39,6 +47,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
                 return;
             }
             Collection.Add(_value);
+            HandleModificationState.EntityUpdated(Model);
             _value = null;
         }
     }

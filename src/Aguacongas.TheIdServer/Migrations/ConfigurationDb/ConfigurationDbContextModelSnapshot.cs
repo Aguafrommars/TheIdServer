@@ -34,6 +34,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("MapDefaultOutboundClaimType")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -42,6 +45,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
 
                     b.Property<string>("SerializedOptions")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("StoreClaims")
+                        .HasColumnType("bit");
 
                     b.HasKey("Scheme");
 
@@ -583,6 +589,40 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.ToTable("ClientUris");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ExternalClaimTransformation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("AsMultipleValues")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromClaimType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ToClaimType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Scheme", "FromClaimType")
+                        .IsUnique();
+
+                    b.ToTable("ExternalClaimTransformation");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
                 {
                     b.Property<string>("Id")
@@ -821,6 +861,15 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
                         .WithMany("RedirectUris")
                         .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ExternalClaimTransformation", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.EntityFramework.Store.SchemeDefinition", null)
+                        .WithMany("ClaimTransformations")
+                        .HasForeignKey("Scheme")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

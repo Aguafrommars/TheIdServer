@@ -3,7 +3,7 @@
         authorization endpoint
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="authorizationEndpoint" Placeholder="https://acme.com/authorize" @bind-Value="@Options.AuthorizationEndpoint" />
+        <AuthorizeText Id="authorizationEndpoint" Placeholder="https://acme.com/authorize" @bind-Value="@Model.Options.AuthorizationEndpoint" />
     </div>
 </div>
 <div class="form-group row">
@@ -11,7 +11,7 @@
         token enpoint
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="tokenEndpoint" Placeholder="https://acme.com/token" @bind-Value="@Options.TokenEndpoint" />
+        <AuthorizeText Id="tokenEndpoint" Placeholder="https://acme.com/token" @bind-Value="@Model.Options.TokenEndpoint" />
     </div>
 </div>
 <div class="form-group row">
@@ -19,7 +19,7 @@
         user enpoint
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="userEndpoint" Placeholder="https://acme.com/user" @bind-Value="@Options.UserInformationEndpoint" />
+        <AuthorizeText Id="userEndpoint" Placeholder="https://acme.com/user" @bind-Value="@Model.Options.UserInformationEndpoint" />
     </div>
 </div>
 <div class="form-group row">
@@ -27,13 +27,20 @@
         scopes
     </label>
     <div class="col-lg-10 col-sm-12">
-        <ScopeCollection Id="scope" Placeholder="scope" Collection="@Options.Scope" />
+        <ScopeCollection Id="scope" Placeholder="scope" Collection="@Model.Options.Scope" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="usePKCE">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Options.UsePkce" />
+        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Model.Options.UsePkce" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="saveTokens">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="saveTokens" Label="save tokens" @bind-Value="@Model.Options.SaveTokens" />
     </div>
 </div>

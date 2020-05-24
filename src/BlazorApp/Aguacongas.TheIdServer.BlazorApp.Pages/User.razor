@@ -1,5 +1,6 @@
 ﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
-
+@using System.Security.Claims
+ 
 @page "/user"
 @page "/user/{id}"
 @inherits EntityModel<Models.User>
@@ -149,14 +150,38 @@ else
                                                 Text="value"
                                                 GridState="_gridState" />
                             </th>
+                            <th scope="col">
+                                <SortableHeader Property="Issuer"
+                                                Text="issuer"
+                                                GridState="_gridState" />
+                            </th>
                             <th></th>
                         </TableHeader>
                         <RowTemplate>
+                            @if (string.IsNullOrEmpty(claim.Issuer) || claim.Issuer == ClaimsIdentity.DefaultIssuer)
+                            {
+                                <td>
+                                    <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
+                                </td>
+                                <td>
+                                    <AuthorizeText @bind-Value="@claim.ClaimValue" />
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div>@claim.ClaimType</div>
+                                    @if (claim.OriginalType != null)
+                                    {
+                                        <em class="small text-secondary">from: @claim.OriginalType</em>
+                                    }
+                                </td>
+                                <td>
+                                    @claim.ClaimValue
+                                </td>
+                            }
                             <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
-                            </td>
-                            <td>
-                                <AuthorizeText @bind-Value="@claim.ClaimValue" />
+                                @claim.Issuer
                             </td>
                             <td>
                                 <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">

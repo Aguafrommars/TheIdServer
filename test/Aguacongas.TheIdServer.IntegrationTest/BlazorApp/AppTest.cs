@@ -1,4 +1,5 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using HtmlAgilityPack;
@@ -337,7 +338,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                             settings.NullValueHandling = NullValueHandling.Ignore;
                             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         })
-                        .AddIdentityServerAdmin();
+                        .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
                     services.Configure<IISOptions>(iis =>
                     {
