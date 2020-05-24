@@ -19,10 +19,10 @@ appveyor AddMessage "SemVer = $nextversion"
 
 if (![string]::IsNullOrEmpty($env:GitVersion_PreReleaseLabel))
 {
-    $preReleaseLabel = $env:GitVersion_PreReleaseTagWithDash.Trim()
+    $preReleaseLabel = $env:GitVersion_PreReleaseLabel.Trim()
     if (![string]::IsNullOrEmpty($preReleaseLabel))
     {
-        $nextversion = "$nextversion$preReleaseLabel.$env:GitVersion_CommitsSinceVersionSourcePadded"
+        $nextversion = "$nextversion-$preReleaseLabel$env:GitVersion_PreReleaseNumber-$env:GitVersion_CommitsSinceVersionSourcePadded"
     }
 }
 $nextversion = $nextversion.Trim()
