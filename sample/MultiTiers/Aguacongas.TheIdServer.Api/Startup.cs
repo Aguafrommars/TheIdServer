@@ -39,11 +39,11 @@ namespace Aguacongas.TheIdServer.Api
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
+                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                 .AddConfigurationEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddOperationalEntityFrameworkStores(options =>
-                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
-                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>();
+                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
@@ -63,7 +63,7 @@ namespace Aguacongas.TheIdServer.Api
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerAdmin();
+                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
             services.AddAuthorization(options =>
             {
