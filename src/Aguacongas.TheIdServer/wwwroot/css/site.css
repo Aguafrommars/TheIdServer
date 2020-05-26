@@ -1,6 +1,9 @@
 ﻿body {
   margin-top: 65px;
 }
+form fieldset legend {
+  display: none;
+}
 .navbar-header {
   position: relative;
   top: -4px;

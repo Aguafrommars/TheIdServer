@@ -47,6 +47,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformation { get; set; }
 
+        public virtual DbSet<Culture> Cultures { get; set; }
+
+        public virtual DbSet<LocalizedResource> LocalizedResources { get; set; }
+
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -100,6 +104,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                   .HasKey(p => p.Scheme);
                 b.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             });
+
+            var defaultCulture = new Culture
+            {
+                Id = "en-US",
+                CreatedAt = DateTime.UtcNow
+            };
+            modelBuilder.Entity<Culture>().HasData(defaultCulture);
 
             base.OnModelCreating(modelBuilder);
         }

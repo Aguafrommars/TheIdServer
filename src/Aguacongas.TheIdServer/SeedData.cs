@@ -18,6 +18,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer
 {
@@ -58,6 +59,7 @@ namespace Aguacongas.TheIdServer
 
             SeedUsers(scope);
             SeedConfiguration(scope);
+            SeedLocalizedResources(scope);
         }
 
         public static void SeedConfiguration(IServiceScope scope)
@@ -90,6 +92,7 @@ namespace Aguacongas.TheIdServer
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
                 }
             }
+
             context.SaveChanges();
         }
 
@@ -191,6 +194,7 @@ namespace Aguacongas.TheIdServer
             }
 
         }
+
         internal static void SeedProviders(IConfiguration configuration, PersistentDynamicManager<SchemeDefinition> persistentDynamicManager)
         {
             var googleDefinition = persistentDynamicManager.FindBySchemeAsync("Google").GetAwaiter().GetResult();
@@ -208,6 +212,89 @@ namespace Aguacongas.TheIdServer
                     HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
                     Options = options
                 }).ConfigureAwait(false);
+            }
+        }
+
+        internal static void SeedLocalizedResources(IServiceScope scope)
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            if (!context.LocalizedResources.Any())
+            {
+                var defaultCulture = context.Cultures.First(c => c.Id == "en-US");
+                var loginViewName = "Aguacongas.TheIdServer.Views.Account.Login";
+                var viewLocation = "Aguacongas.TheIdServer";
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Login",
+                    Location = viewLocation,
+                    Value = "Login"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Local Login",
+                    Location = viewLocation,
+                    Value = "Local Login"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Login form",
+                    Location = viewLocation,
+                    Value = "Login form"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Username",
+                    Location = viewLocation,
+                    Value = "Username"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Password",
+                    Location = viewLocation,
+                    Value = "Password"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Remember My Login",
+                    Location = viewLocation,
+                    Value = "Remember My Login"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Cancel",
+                    Location = viewLocation,
+                    Value = "Cancel"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "Invalid login request",
+                    Location = viewLocation,
+                    Value = "Invalid login request"
+                });
+                context.LocalizedResources.Add(new Entity.LocalizedResource
+                {
+                    BaseName = loginViewName,
+                    Culture = defaultCulture,
+                    Key = "There are no login schemes configured for this client.",
+                    Location = viewLocation,
+                    Value = "There are no login schemes configured for this client."
+                });
             }
         }
     }

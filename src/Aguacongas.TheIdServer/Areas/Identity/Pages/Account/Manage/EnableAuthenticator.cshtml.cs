@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
@@ -18,6 +19,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
         private readonly string _issuer;
+        private readonly IStringLocalizer _localizer;
 #pragma warning disable S1075 // URIs should not be hardcoded
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 #pragma warning restore S1075 // URIs should not be hardcoded
@@ -26,12 +28,14 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
             UserManager<ApplicationUser> userManager,
             ILogger<EnableAuthenticatorModel> logger,
             UrlEncoder urlEncoder,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IStringLocalizer<EnableAuthenticatorModel> localizer)
         {
             _userManager = userManager;
             _logger = logger;
             _urlEncoder = urlEncoder;
             _issuer = configuration.GetValue<string>("AuthenticatorIssuer") ?? "Aguaconags.TheIdServer";
+            _localizer = localizer;
         }
 
         public string SharedKey { get; set; }
@@ -91,7 +95,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
             if (!is2faTokenValid)
             {
-                ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                ModelState.AddModelError("Input.Code", _localizer["Verification code is invalid."]);
                 await LoadSharedKeyAndQrCodeUriAsync(user);
                 return Page();
             }
@@ -100,7 +104,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
 
-            StatusMessage = "Your authenticator app has been verified.";
+            StatusMessage = _localizer["Your authenticator app has been verified."];
 
             if (await _userManager.CountRecoveryCodesAsync(user) == 0)
             {

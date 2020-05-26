@@ -1,4 +1,6 @@
-﻿@model ScopeViewModel
+﻿@inject IViewLocalizer Localizer
+
+@model ScopeViewModel
 
 <li class="list-group-item">
     <label>
@@ -23,7 +25,7 @@
     </label>
     @if (Model.Required)
     {
-        <span><em>(required)</em></span>
+        <span><em>@Localizer["(required)"]</em></span>
     }
     @if (Model.Description != null)
     {

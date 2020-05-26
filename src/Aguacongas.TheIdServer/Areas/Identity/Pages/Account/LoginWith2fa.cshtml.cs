@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -24,18 +25,21 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
         private readonly IEventService _events;
         private readonly IClientStore _clientStore;
         private readonly ILogger<LoginWith2faModel> _logger;
+        private readonly IStringLocalizer _localizer;
 
         public LoginWith2faModel(SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IEventService events,
             IClientStore clientStore,
-            ILogger<LoginWith2faModel> logger)
+            ILogger<LoginWith2faModel> logger,
+            IStringLocalizer<LoginWith2faModel> localizer)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _events = events;
             _clientStore = clientStore;
             _logger = logger;
+            _localizer = localizer;
         }
 
         [BindProperty]
@@ -108,7 +112,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
             else
             {
                 _logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                ModelState.AddModelError(string.Empty, _localizer["Invalid authenticator code."]);
                 return Page();
             }
         }

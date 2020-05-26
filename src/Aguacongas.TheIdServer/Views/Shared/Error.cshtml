@@ -1,20 +1,22 @@
-﻿@model ErrorViewModel
+﻿@inject IViewLocalizer Localizer
+
+@model ErrorViewModel
 
 @{
-    var error = Model?.Error?.Error;
-    var errorDescription = Model?.Error?.ErrorDescription;
+    var error = Model?.Error?.Error != null ? Localizer[Model?.Error?.Error] : null;
+    var errorDescription = Model?.Error?.ErrorDescription != null ? Localizer[Model?.Error?.ErrorDescription] : null;
     var request_id = Model?.Error?.RequestId;
 }
 
 <div class="error-page">
     <div class="page-header">
-        <h1>Error</h1>
+        <h1>@Localizer["Error"]</h1>
     </div>
 
     <div class="row">
         <div class="col-sm-6">
             <div class="alert alert-danger">
-                Sorry, there was an error
+                @Localizer["Sorry, there was an error"]
 
                 @if (error != null)
                 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
@@ -11,6 +8,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
     {
         public void OnGet()
         {
+            // just return the html code
         }
     }
 }

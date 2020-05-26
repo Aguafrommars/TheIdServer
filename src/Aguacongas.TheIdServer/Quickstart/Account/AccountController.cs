@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly UrlEncoder _urlEncoder;
+        private readonly IStringLocalizer _localizer;
         private readonly IOptions<AccountOptions> _options;
 
         public AccountController(
@@ -42,6 +44,7 @@ namespace IdentityServer4.Quickstart.UI
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
             UrlEncoder urlEncoder,
+            IStringLocalizer<AccountController> localizer,
             IOptions<AccountOptions> options)
         {
             _userManager = userManager;
@@ -51,6 +54,7 @@ namespace IdentityServer4.Quickstart.UI
             _schemeProvider = schemeProvider;
             _events = events;
             _urlEncoder = urlEncoder;
+            _localizer = localizer;
             _options = options;
         }
 
@@ -102,7 +106,7 @@ namespace IdentityServer4.Quickstart.UI
                 }
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.ClientId));
-                ModelState.AddModelError(string.Empty, _options.Value.InvalidCredentialsErrorMessage);
+                ModelState.AddModelError(string.Empty, _localizer.GetString(_options.Value.InvalidCredentialsErrorMessage));
             }
 
             // something went wrong, show form with error
