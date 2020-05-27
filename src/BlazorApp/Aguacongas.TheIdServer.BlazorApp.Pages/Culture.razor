@@ -1,0 +1,72 @@
+﻿@using Aguacongas.TheIdServer.BlazorApp.Components.LocalizedResourceComponents
+@page "/culture"
+@page "/culture/{id}"
+@inherits EntityModel<Entity.Culture>
+
+@if (Model == null)
+{
+    <p class="col"><em>Loading...</em></p>
+}
+else
+{
+<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+    <CascadingValue Value="HandleModificationState">
+        <div class="row bg-light sticky-top mb-3">
+            <div class="col">
+                @if (IsNew)
+                {
+                    <AuthorizeText Id="name" Placeholder="culture name" @bind-Value="@Model.Id" />
+                }
+                else
+                {
+                    <h3>@Model.Id</h3>
+                }
+            </div>
+            <div>
+                <AuthorizeButton Type="submit" CssSubClass="btn-primary">
+                    <span class="oi oi-data-transfer-download"></span>
+                    Save
+                </AuthorizeButton>
+                @if (!IsNew && Model.Id != "en-US")
+                {
+                    <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                }
+            </div>
+
+            <div class="col">
+                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+            </div>
+            <div class="w-100"></div>
+            <FluentValidationValidator />
+            <ValidationSummary class="col" />
+        </div>
+        <div class="entity-details">
+            <div id="claims" class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col d-flex">
+                            <span class="h5">Resources</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <EntitiesGrid Items="@Model.Resources" TableClass="table table-hover" Context="resource">
+                        <TableHeader>
+                            <th scope="col">
+                                <SortableHeader Property="Key"
+                                                Text="key"
+                                                GridState="_gridState" />
+                            </th>
+                        </TableHeader>
+                        <RowTemplate>
+                            <td>
+                                <LocalizedResource Model="resource" />
+                            </td>
+                        </RowTemplate>
+                    </EntitiesGrid>
+                </div>
+            </div>
+        </div>
+    </CascadingValue>
+</EditForm>
+}

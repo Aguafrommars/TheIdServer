@@ -1,0 +1,27 @@
+﻿<div class="form-group row">
+    <label class="col-1 col-form-label">
+        key
+    </label>
+    <div class="col">
+        @if (string.IsNullOrEmpty(Model.Id))
+        {
+            <div class="resource">
+                <AuthorizeText Id="key" @bind-Value="@Model.Key" />
+            </div>
+        }
+        else
+        {
+            @Model.Key
+        }
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-1 col-form-label">
+        value
+    </label>
+    <div class="col">
+        <div class="resource">
+            <AuthorizeTextArea Id="value" @bind-Value="@Model.Value" />
+        </div>
+    </div>
+</div>

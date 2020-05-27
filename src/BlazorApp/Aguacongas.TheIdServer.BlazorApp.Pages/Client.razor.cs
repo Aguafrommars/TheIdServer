@@ -32,9 +32,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmpyEntities();
         }
 
-        protected override Entity.Client Create()
+        protected override Task<Entity.Client> Create()
         {
-            return new Entity.Client
+            return Task.FromResult(new Entity.Client
             {
                 ProtocolType = "oidc",
                 AllowedGrantTypes = new List<Entity.ClientGrantType>(),
@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
                 RedirectUris = new List<Entity.ClientUri>(),
                 Properties = new List<Entity.ClientProperty>()
-            };
+            });
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)

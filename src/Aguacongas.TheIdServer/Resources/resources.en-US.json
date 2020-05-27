@@ -288,10 +288,6 @@
     "value": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below."
   },
   {
-    "key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
-    "value": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below."
-  },
-  {
     "key": "Verification Code",
     "value": "Verification Code"
   },
@@ -314,10 +310,6 @@
   {
     "key": "Registered Logins",
     "value": "Registered Logins"
-  },
-  {
-    "key": "Remove this {0} login from your account",
-    "value": "Remove this {0} login from your account"
   },
   {
     "key": "Remove this {0} login from your account",
@@ -438,10 +430,6 @@
   {
     "key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
     "value": "If you reset your authenticator key your authenticator app will not work until you reconfigure it."
-  },
-  {
-    "key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
-    "value": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account."
   },
   {
     "key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
@@ -634,10 +622,6 @@
   {
     "key": "Use another service to register.",
     "value": "Use another service to register."
-  },
-  {
-    "key": "Log in using your {0} account",
-    "value": "Log in using your {0} account"
   },
   {
     "key": "Register confirmation",

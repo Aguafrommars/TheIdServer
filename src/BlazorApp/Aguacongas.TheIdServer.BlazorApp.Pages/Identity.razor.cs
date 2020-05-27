@@ -20,13 +20,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmpyClaimsTypes();
         }
 
-        protected override IdentityResource Create()
+        protected override Task<IdentityResource> Create()
         {
-            return new IdentityResource
+            return Task.FromResult(new IdentityResource
             {
                 IdentityClaims = new List<IdentityClaim>(),
                 Properties = new List<IdentityProperty>()
-            };
+            });
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)

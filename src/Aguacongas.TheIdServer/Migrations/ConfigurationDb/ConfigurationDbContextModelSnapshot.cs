@@ -608,7 +608,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en-US",
-                            CreatedAt = new DateTime(2020, 5, 24, 19, 22, 35, 496, DateTimeKind.Utc).AddTicks(8626)
+                            CreatedAt = new DateTime(2020, 5, 27, 20, 21, 25, 310, DateTimeKind.Utc).AddTicks(2838)
                         });
                 });
 
@@ -771,7 +771,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

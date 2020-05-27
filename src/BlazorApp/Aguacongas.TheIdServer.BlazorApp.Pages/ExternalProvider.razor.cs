@@ -25,12 +25,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // no nav
         }
 
-        protected override Models.ExternalProvider Create()
+        protected override Task<Models.ExternalProvider> Create()
         {
-            return new Models.ExternalProvider
+            return Task.FromResult(new Models.ExternalProvider
             {
                 ClaimTransformations = new List<ExternalClaimTransformation>()
-            };
+            });
         }
 
         protected override async Task OnInitializedAsync()

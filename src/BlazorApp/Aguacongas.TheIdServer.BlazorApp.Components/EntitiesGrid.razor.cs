@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         public IEnumerable<TItem> Items { get; set; }
 
         [Parameter]
-        public GridState GridState { get; set; } = new GridState();
+        public GridState GridState { get; set; }
 
         [Parameter]
         public EventCallback<TItem> RowClicked { get; set; }

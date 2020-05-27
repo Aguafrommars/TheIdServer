@@ -81,7 +81,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             if (Id == null)
             {
                 IsNew = true;
-                Model = Create();
+                Model = await Create().ConfigureAwait(false);
                 CreateEditContext(Model);
                 EntityCreated(Model);
                 State = CloneModel(Model);
@@ -269,7 +269,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             HandleModificationState.EntityUpdated(entityType, entityModel);
         }
 
-        protected abstract T Create();
+        protected abstract Task<T> Create();
         protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);

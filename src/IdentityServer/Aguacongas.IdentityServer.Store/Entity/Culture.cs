@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Defines a culture
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class Culture : IAuditable
+    public class Culture : IAuditable, ICloneable<Culture>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -40,5 +40,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public Culture Clone()
+        {
+            return MemberwiseClone() as Culture;
+        }
     }
 }

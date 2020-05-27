@@ -1,4 +1,6 @@
-﻿@typeparam TItem
+﻿@using Microsoft.Extensions.Logging
+@inject ILogger<EntitiesGrid<TItem>> _logger
+@typeparam TItem
 
 <table class="@TableClass">
     @if (TableHeader != null)

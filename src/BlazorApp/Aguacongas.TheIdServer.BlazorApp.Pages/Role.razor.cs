@@ -17,12 +17,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override string BackUrl => "roles";
 
-        protected override Models.Role Create()
+        protected override Task<Models.Role> Create()
         {
-            return new Models.Role
+            return Task.FromResult(new Models.Role
             {
                 Claims =new List<RoleClaim>()
-            };
+            });
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)

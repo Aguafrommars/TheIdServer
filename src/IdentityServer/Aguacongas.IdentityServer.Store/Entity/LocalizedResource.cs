@@ -32,7 +32,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The value.
         /// </value>
-        [Required]
         public string Value { get; set; }
 
         /// <summary>
@@ -52,12 +51,20 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Location { get; set; }
 
         /// <summary>
+        /// Gets or sets the culture identifier.
+        /// </summary>
+        /// <value>
+        /// The culture identifier.
+        /// </value>
+        [Required]
+        public string CultureId { get; set; }
+ 
+        /// <summary>
         /// Gets or sets the culture.
         /// </summary>
         /// <value>
         /// The culture.
         /// </value>
-        [Required]
         public virtual Culture Culture { get; set; }
 
         /// <summary>

@@ -5,20 +5,22 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer
 {
@@ -200,7 +202,7 @@ namespace Aguacongas.TheIdServer
             var googleDefinition = persistentDynamicManager.FindBySchemeAsync("Google").GetAwaiter().GetResult();
             if (googleDefinition == null)
             {
-                var options = new GoogleOptions
+                var options = new Microsoft.AspNetCore.Authentication.Google.GoogleOptions
                 {
                     ClientId = configuration.GetValue<string>("Google:ClientId"),
                     ClientSecret = configuration.GetValue<string>("Google:ClientSecret"),
@@ -221,80 +223,17 @@ namespace Aguacongas.TheIdServer
             if (!context.LocalizedResources.Any())
             {
                 var defaultCulture = context.Cultures.First(c => c.Id == "en-US");
-                var loginViewName = "Aguacongas.TheIdServer.Views.Account.Login";
-                var viewLocation = "Aguacongas.TheIdServer";
-                context.LocalizedResources.Add(new Entity.LocalizedResource
+                using var reader = File.OpenText("Resources/resources.en-US.json");
+                var localizedResources = JsonSerializer.Deserialize<IEnumerable<LocalizedResource>>(reader.ReadToEnd(), new JsonSerializerOptions
                 {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Login",
-                    Location = viewLocation,
-                    Value = "Login"
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
+                foreach(var resource in localizedResources)
                 {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Local Login",
-                    Location = viewLocation,
-                    Value = "Local Login"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Login form",
-                    Location = viewLocation,
-                    Value = "Login form"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Username",
-                    Location = viewLocation,
-                    Value = "Username"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Password",
-                    Location = viewLocation,
-                    Value = "Password"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Remember My Login",
-                    Location = viewLocation,
-                    Value = "Remember My Login"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Cancel",
-                    Location = viewLocation,
-                    Value = "Cancel"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "Invalid login request",
-                    Location = viewLocation,
-                    Value = "Invalid login request"
-                });
-                context.LocalizedResources.Add(new Entity.LocalizedResource
-                {
-                    BaseName = loginViewName,
-                    Culture = defaultCulture,
-                    Key = "There are no login schemes configured for this client.",
-                    Location = viewLocation,
-                    Value = "There are no login schemes configured for this client."
-                });
+                    resource.Culture = defaultCulture;
+                    context.LocalizedResources.Add(resource);
+                }
+                context.SaveChanges();
             }
         }
     }

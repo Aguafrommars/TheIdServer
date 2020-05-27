@@ -25,9 +25,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmptyRole();
         }
 
-        protected override Models.User Create()
+        protected override Task<Models.User> Create()
         {
-            return new Models.User
+            return Task.FromResult(new Models.User
             {
                 Claims = new List<entity.UserClaim>(),
                 Consents = new List<entity.UserConsent>(),
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Tokens = new List<entity.UserToken>(),
                 ReferenceTokens = new List<entity.ReferenceToken>(),
                 RefreshTokens = new List<entity.RefreshToken>()
-            };
+            });
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)

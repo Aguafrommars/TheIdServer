@@ -35,14 +35,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EditContext.OnFieldChanged += OnFieldChanged;
         }
 
-        protected override ProtectResource Create()
+        protected override Task<ProtectResource> Create()
         {
             var scope = new ApiScope
             {
                 ApiScopeClaims = new List<ApiScopeClaim>()
             };
             EntityCreated(scope);
-            return new ProtectResource
+            return Task.FromResult(new ProtectResource
             {
                 Secrets = new List<ApiSecret>(),
                 Scopes = new List<ApiScope>()
@@ -51,7 +51,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 },
                 ApiClaims = new List<ApiClaim>(),
                 Properties = new List<ApiProperty>()
-            };
+            });
         }
 
         protected override void SetNavigationProperty<TEntity>(TEntity entity)
