@@ -25,11 +25,11 @@
                             <fieldset>
                                 <legend>@Localizer["Login form"]</legend>
                                 <div class="form-group">
-                                    <label asp-for="Username"></label>
+                                    <label asp-for="Username">@Localizer["Username"]</label>
                                     <input class="form-control" placeholder="@Localizer["Username"]" asp-for="Username" autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="Password"></label>
+                                    <label asp-for="Password">@Localizer["Password"]</label>
                                     <input type="password" class="form-control" placeholder="@Localizer["Password"]" asp-for="Password" autocomplete="off">
                                 </div>
                                 @if (Model.AllowRememberLogin)

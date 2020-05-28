@@ -152,6 +152,10 @@
     "value": "External logins"
   },
   {
+    "key": "External Login",
+    "value": "External Login"
+  },
+  {
     "key": "Two-factor authentication",
     "value": "Two-factor authentication"
   },

@@ -135,6 +135,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 Message = "Saved"
             });
 
+            EditContext.MarkAsUnmodified();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 

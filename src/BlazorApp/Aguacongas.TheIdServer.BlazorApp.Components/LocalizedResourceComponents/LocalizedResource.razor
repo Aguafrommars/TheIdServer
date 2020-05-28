@@ -5,13 +5,11 @@
     <div class="col">
         @if (string.IsNullOrEmpty(Model.Id))
         {
-            <div class="resource">
-                <AuthorizeText Id="key" @bind-Value="@Model.Key" />
-            </div>
+            <AuthorizeText @bind-Value="@Model.Key" />
         }
         else
         {
-            @Model.Key
+            <input class="form-control" type="text" value="@Model.Key" readonly>
         }
     </div>
 </div>
@@ -20,8 +18,6 @@
         value
     </label>
     <div class="col">
-        <div class="resource">
-            <AuthorizeTextArea Id="value" @bind-Value="@Model.Value" />
-        </div>
+        <AuthorizeTextArea @bind-Value="@Model.Value" />
     </div>
 </div>

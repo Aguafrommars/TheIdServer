@@ -15,7 +15,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The identifier.
         /// </value>
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

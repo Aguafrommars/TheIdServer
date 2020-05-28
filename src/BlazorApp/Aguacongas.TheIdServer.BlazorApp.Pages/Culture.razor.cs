@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -28,6 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             foreach(var item in responses.Items)
             {
+                item.Id = Guid.NewGuid().ToString();
                 EntityCreated(item);
             }
 
@@ -57,7 +59,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 {
                     Model.Resources = Model.Resources.OrderBy(i => property.GetValue(i)).ToList();
                 }
-                StateHasChanged();
                 return Task.CompletedTask;
             };
         }
@@ -66,6 +67,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entity is Entity.LocalizedResource resource)
             {
+                if (string.IsNullOrEmpty(resource.Id))
+                {
+                    resource.Id = Guid.NewGuid().ToString();
+                }
                 resource.CultureId = Model.Id;
             }
             if (entity is Entity.Culture culture)
@@ -89,12 +94,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
         }
 
-        private void CreateResource()
-        {
-            var resource = new Entity.LocalizedResource();
-            Model.Resources.Add(resource);
-            EntityCreated(resource);
-        }
+        private Entity.LocalizedResource CreateResource()
+            => new Entity.LocalizedResource();
 
         private void OnDeleteResourceClicked(Entity.LocalizedResource resource)
         {

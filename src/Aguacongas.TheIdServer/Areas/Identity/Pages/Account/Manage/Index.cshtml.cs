@@ -24,6 +24,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
             _localizer = localizer;
         }
 
+        [Display(Name = "Username")]
         public string Username { get; set; }
 
         [TempData]

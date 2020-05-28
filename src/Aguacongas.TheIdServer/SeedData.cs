@@ -230,6 +230,7 @@ namespace Aguacongas.TheIdServer
                 });
                 foreach(var resource in localizedResources)
                 {
+                    resource.Id = Guid.NewGuid().ToString();
                     resource.Culture = defaultCulture;
                     context.LocalizedResources.Add(resource);
                 }
