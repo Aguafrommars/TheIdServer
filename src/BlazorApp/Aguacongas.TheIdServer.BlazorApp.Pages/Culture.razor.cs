@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Culture
     {
-        private readonly GridState _gridState = new GridState();
+        private readonly GridState _gridState = new GridState();        
 
         protected override string Expand => "Resources";
 
@@ -59,6 +59,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 {
                     Model.Resources = Model.Resources.OrderBy(i => property.GetValue(i)).ToList();
                 }
+
+                StateHasChanged();
                 return Task.CompletedTask;
             };
         }
@@ -92,6 +94,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 (r.Location != null && r.Location.Contains(term)) ||
                 (r.BaseName != null && r.BaseName.Contains(term)))
                 .ToList();
+
+            StateHasChanged();
         }
 
         private Entity.LocalizedResource CreateResource()

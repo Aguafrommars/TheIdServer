@@ -2,7 +2,7 @@
     @foreach (var claim in Model.ApiScopeClaims)
     {
         <li class="list-inline-item">
-            <ClaimType Entity="@claim"
+            <ClaimType @key="claim" Entity="@claim"
                        DeleteClicked="() => OnDeleteClaimClicked(claim)"
                        ValueChanged="() => OnClaimValueChanged(claim)" />
         </li>

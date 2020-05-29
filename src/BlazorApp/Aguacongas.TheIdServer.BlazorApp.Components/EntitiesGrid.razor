@@ -16,7 +16,7 @@
         {
             @foreach (var item in Items)
             {
-                <tr class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                <tr @key="item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
             }
         }
         else 

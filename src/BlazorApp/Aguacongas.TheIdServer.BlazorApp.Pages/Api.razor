@@ -25,10 +25,7 @@
             @if (!NonEditable)
             {
                 <div>
-                    <AuthorizeButton Type="submit" CssSubClass="btn-primary">
-                        <span class="oi oi-data-transfer-download"></span>
-                        Save
-                    </AuthorizeButton>
+                    <SaveButton />
                     @if (!IsNew)
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />

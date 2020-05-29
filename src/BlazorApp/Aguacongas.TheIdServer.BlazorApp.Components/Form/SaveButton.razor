@@ -1,4 +1,19 @@
-﻿<AuthorizeButton Type="submit" CssSubClass="btn-primary">
-    <span class="oi oi-data-transfer-download"></span>
-    Save
-</AuthorizeButton>
+﻿@inherits ButtonBase
+<AuthorizeView Policy="Is4-Writer">
+    <Authorized>
+        @if (Clicked.HasDelegate)
+        {
+            <button class="btn @CssSubClass" type="submit" @onclick="Clicked">
+                <span class="oi oi-data-transfer-download"></span>
+                Save
+            </button>
+        }
+        else
+        {
+            <button class="btn @CssSubClass" type="submit" disabled="@_disabled">
+                <span class="oi oi-data-transfer-download"></span>
+                Save
+            </button>
+        }
+    </Authorized>
+</AuthorizeView>

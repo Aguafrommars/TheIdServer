@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -34,12 +35,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
 
+        [Inject]
+        private ILogger<EntityModel<T>> Logger { get; set; }
+
         [Parameter]
         public string Id { get; set; }
 
         protected bool IsNew { get; private set; }
 
-        protected T Model { get; private set; }
+        protected T Model => EditContext?.Model as T;
 
         protected T State { get; set; }
 
@@ -53,15 +57,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected abstract string BackUrl { get; }
 #pragma warning restore CA1056 // Uri properties should not be strings
 
-        protected HandleModificationState HandleModificationState { get; }
-
-        protected EntityModel()
-        {
-            HandleModificationState = new HandleModificationState
-            {
-                OnStateChange = OnStateChange
-            };
-        }
+        protected HandleModificationState HandleModificationState { get; private set; }
 
         public virtual int Compare(Type x, Type y)
         {
@@ -78,19 +74,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            HandleModificationState = new HandleModificationState(Logger)
+            {
+                OnStateChange = OnStateChange
+            };
+
             if (Id == null)
             {
                 IsNew = true;
-                Model = await Create().ConfigureAwait(false);
-                CreateEditContext(Model);
+                var newModel = await Create().ConfigureAwait(false);
+                CreateEditContext(newModel);
                 EntityCreated(Model);
                 State = CloneModel(Model);
                 return;
             }
 
-            Model = await GetModelAsync()
+            var model = await GetModelAsync()
                 .ConfigureAwait(false);
-            CreateEditContext(Model);
+            CreateEditContext(model);
             State = CloneModel(Model);
         }
 
@@ -108,8 +109,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 return;
             }
 
-            State = CloneModel(Model);
-            Model = CloneModel(State);
             Id = GetModelId(Model);
             IsNew = false;
 
@@ -129,6 +128,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 changes.Clear();
             }
 
+            State = CloneModel(Model);
             Notifier.Notify(new Models.Notification
             {
                 Header = GetModelId(Model),
@@ -275,6 +275,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
+        private void CreateEditContext(T model)
+        {
+            if (EditContext != null)
+            {
+                EditContext.OnFieldChanged -= EditContext_OnFieldChanged;
+            }
+            EditContext = new EditContext(model);
+            EditContext.OnFieldChanged += EditContext_OnFieldChanged;
+        }
+
         private static IEnumerable<object> GetModifiedEntities(Dictionary<object, ModificationKind> modificationList, ModificationKind kind)
         {
             return modificationList
@@ -343,16 +353,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             throw exception;
         }
 
-        private void CreateEditContext(T model)
+        private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
         {
-            EditContext = new EditContext(model);
-            EditContext.OnFieldChanged += (s, e) =>
-            {
-                var identifier = e.FieldIdentifier;
-                var entityType = GetEntityType(identifier);
-                var entityModel = GetEntityModel(identifier);
-                OnEntityUpdated(entityType, entityModel);
-            };
+            var identifier = e.FieldIdentifier;
+            var entityType = GetEntityType(identifier);
+            var entityModel = GetEntityModel(identifier);
+            OnEntityUpdated(entityType, entityModel);
         }
 
         private Task<object> StoreAsync(Type entityType, object entity, Func<IAdminStore, object, Task<object>> action)

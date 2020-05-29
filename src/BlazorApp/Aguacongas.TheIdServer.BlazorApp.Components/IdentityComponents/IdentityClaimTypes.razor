@@ -6,7 +6,7 @@
             @foreach (var claim in Model.IdentityClaims)
             {
                 <li class="list-inline-item">
-                    <ClaimType Entity="@claim"
+                    <ClaimType @key="claim" Entity="@claim"
                                DeleteClicked="() => OnClaimDeletedClicked(claim)"
                                ValueChanged="() => OnClaimValueChanged(claim)" />
                 </li>

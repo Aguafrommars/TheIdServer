@@ -1,5 +1,5 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
@@ -29,9 +29,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         [Parameter]
         public IEnumerable<TItem> Items { get; set; }
-
-        [Parameter]
-        public GridState GridState { get; set; }
 
         [Parameter]
         public EventCallback<TItem> RowClicked { get; set; }
