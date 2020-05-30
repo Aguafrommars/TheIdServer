@@ -21,9 +21,8 @@
                     <div class="panel-body">
                         <form asp-route="Login">
                             <input type="hidden" asp-for="ReturnUrl" />
-
                             <fieldset>
-                                <legend>@Localizer["Login form"]</legend>
+                                <legend class="sr-only">@Localizer["Login form"]</legend>
                                 <div class="form-group">
                                     <label asp-for="Username">@Localizer["Username"]</label>
                                     <input class="form-control" placeholder="@Localizer["Username"]" asp-for="Username" autofocus>

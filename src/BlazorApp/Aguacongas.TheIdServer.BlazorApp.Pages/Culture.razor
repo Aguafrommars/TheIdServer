@@ -3,9 +3,10 @@
 @page "/culture/{id}"
 @inherits EntityModel<Entity.Culture>
 @inject IStringLocalizerAsync<Culture> Localizer
+@inject IAdminStore<Entity.LocalizedResource> _localizedResourceStore
 @if (Model == null)
 {
-    <p class="col"><em>Loading...</em></p>
+    <Loading />
 }
 else
 {
@@ -38,7 +39,7 @@ else
                 <ValidationSummary class="col" />
             </div>
             <div class="entity-details">
-                <div id="claims" class="card mb-3">
+                <div id="resources" class="card mb-3">
                     <div class="card-header">
                         <EntitySubGridTitle Text="@Localizer["Resources"]" Collection="@Model.Resources" CreateModel="CreateResource" />
                     </div>
@@ -63,6 +64,13 @@ else
                                 </td>
                             </RowTemplate>
                         </EntitiesGrid>
+                        @if (_hasMore)
+                        {
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-secondary btn-small" @onclick="LoadMoreAsync">@Localizer["next"]</button>
+                                <Spinner />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

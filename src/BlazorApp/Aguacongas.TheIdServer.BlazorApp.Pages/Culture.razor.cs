@@ -1,8 +1,10 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -10,9 +12,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Culture
     {
-        private readonly GridState _gridState = new GridState();        
+        private readonly GridState _gridState = new GridState();
+        private bool _hasMore;
+        private CancellationTokenSource _cancellationTokenSource;
+        private PageRequest _pageRequest;
 
-        protected override string Expand => "Resources";
+        [JSInvokable]
+        public Task ScrollBottomReach()
+        {
+            return LoadMoreAsync();
+        }
+
+        protected override string Expand => null;
 
         protected override bool NonEditable => false;
 
@@ -42,29 +53,28 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            var type = typeof(Entity.LocalizedResource);
-            _gridState.OnHeaderClicked += e =>
-            {
-                if (string.IsNullOrEmpty(e.OrderBy))
-                {
-                    return Task.CompletedTask;
-                }
-                var segments = e.OrderBy.Split(' ');
-                var property = type.GetProperty(segments[0]);
-                if (segments.Length > 1)
-                {
-                    Model.Resources = Model.Resources.OrderByDescending(i => property.GetValue(i)).ToList();
-                }
-                else
-                {
-                    Model.Resources = Model.Resources.OrderBy(i => property.GetValue(i)).ToList();
-                }
 
+            _gridState.OnHeaderClicked += async e =>
+            {
+                _pageRequest.Skip = 0;
+                _pageRequest.OrderBy = e.OrderBy;
+                await SetResourcesAsync(Model).ConfigureAwait(false);
                 StateHasChanged();
-                return Task.CompletedTask;
             };
+
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                const int resourceHeigth = 160;
+                await JSRuntime.InvokeVoidAsync("browserInteropt.onScrollEnd", DotNetObjectReference.Create(this), resourceHeigth);
+            }
+            base.OnAfterRender(firstRender);
+        }
+
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
         {
@@ -87,16 +97,66 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // nothing to do
         }
 
-        private void OnFilterChanged(string term)
+        private Task OnFilterChanged(string term)
         {
-            Model.Resources = State.Resources.Where(r =>
-                (r.Key != null && r.Key.Contains(term)) ||
-                (r.Value != null && r.Value.Contains(term)) ||
-                (r.Location != null && r.Location.Contains(term)) ||
-                (r.BaseName != null && r.BaseName.Contains(term)))
-                .ToList();
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
 
-            StateHasChanged();
+            return Task.Delay(500, token)
+                .ContinueWith(async task =>
+                {
+                    if (task.IsCanceled)
+                    {
+                        return;
+                    }
+
+                    var propertyArray = new string[]
+                    {
+                        nameof(Entity.LocalizedResource.Key),
+                        nameof(Entity.LocalizedResource.Value),
+                        nameof(Entity.LocalizedResource.BaseName),
+                        nameof(Entity.LocalizedResource.Location),
+                    };
+                    var expressionArray = new string[propertyArray.Length];
+                    for (int i = 0; i < propertyArray.Length; i++)
+                    {
+                        expressionArray[i] = $"contains({propertyArray[i]},'{term}')";
+                    }
+                    _pageRequest.Skip = 0;
+                    _pageRequest.Filter = $"{nameof(Entity.LocalizedResource.CultureId)} eq '{Model.Id}' and ({string.Join(" or ", expressionArray)})";
+
+                    await SetResourcesAsync(Model).ConfigureAwait(false);
+
+                    await InvokeAsync(() => StateHasChanged())
+                        .ConfigureAwait(false);
+                }, TaskScheduler.Default);
+        }
+
+        protected override async Task<Entity.Culture> GetModelAsync()
+        {
+            if (Model != null)
+            {
+                return Model;
+            }
+            var entity = await base.GetModelAsync().ConfigureAwait(false);
+            _pageRequest = new PageRequest
+            {
+                Filter = $"{nameof(Entity.LocalizedResource.CultureId)} eq '{entity.Id}'",
+                OrderBy = nameof(Entity.LocalizedResource.Key),
+                Skip = 0,
+                Take = 10
+            };
+            await SetResourcesAsync(entity).ConfigureAwait(false);
+            return entity;
+        }
+
+        private async Task SetResourcesAsync(Entity.Culture model)
+        {
+            var page = await _localizedResourceStore.GetAsync(_pageRequest).ConfigureAwait(false);
+            model.Resources = page.Items.ToList();
+            _hasMore = model.Resources.Count < page.Count;
         }
 
         private Entity.LocalizedResource CreateResource()
@@ -106,6 +166,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Model.Resources.Remove(resource);
             EntityDeleted(resource);
+            StateHasChanged();
+        }
+
+        private async Task LoadMoreAsync()
+        {
+            if (!_hasMore)
+            {
+                return;
+            }
+            _pageRequest.Skip += _pageRequest.Take;
+            var page = await _localizedResourceStore.GetAsync(_pageRequest).ConfigureAwait(false);
+            var resourceList = Model.Resources;
+            foreach (var resource in page.Items)
+            {
+                resourceList.Add(resource);
+            }
+            _hasMore = resourceList.Count < page.Count;
             StateHasChanged();
         }
     }

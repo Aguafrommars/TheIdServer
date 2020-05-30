@@ -11,8 +11,23 @@
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link href="css/app.css" rel="stylesheet" />
 </head>
-<body>
-    <app>Loading...</app>
+<body class="bg-light">
+    <app>
+        <div class="main">
+            <div class="content px-4">
+                <div class="row">
+                    <div class="col text-center">
+                        <h1>TheIdServer Admin</h1>
+                        <div>
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app>
     <script src="_content/Aguacongas.TheIdServer.BlazorApp.Infrastructure/TheIdServerInterop.js"></script>
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>

@@ -13,7 +13,7 @@
             <form asp-action="Logout">
                 <input type="hidden" name="logoutId" value="@Model.LogoutId" />
                 <fieldset>
-                    <legend>@Localizer["Logout form"]</legend>
+                    <legend class="sr-only">@Localizer["Logout form"]</legend>
                     <div class="form-group">
                         <button class="btn btn-primary">@Localizer["Yes"]</button>
                     </div>
