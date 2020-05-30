@@ -45,11 +45,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<SchemeDefinition> Providers { get; set; }
 
-        public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformation { get; set; }
+        public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformations { get; set; }
 
         public virtual DbSet<Culture> Cultures { get; set; }
 
         public virtual DbSet<LocalizedResource> LocalizedResources { get; set; }
+
+        public virtual DbSet<ApiLocalizedResource> ApiLocalizedResources { get; set; }
+
+        public virtual DbSet<ClientLocalizedResource> ClientLocalizedResources { get; set; }
+
+        public virtual DbSet<IdentityLocalizedResource> IdentityLocalizedResources { get; set; }
 
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]

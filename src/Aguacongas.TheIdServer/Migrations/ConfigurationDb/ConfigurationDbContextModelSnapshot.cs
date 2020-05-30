@@ -82,6 +82,40 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.ToTable("ApiClaims");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiLocalizedResource", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CultureId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiId");
+
+                    b.HasIndex("CultureId");
+
+                    b.ToTable("ApiLocalizedResources");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
                 {
                     b.Property<string>("Id")
@@ -455,6 +489,40 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.ToTable("ClientIdpRestriction");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientLocalizedResource", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CultureId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CultureId");
+
+                    b.ToTable("ClientLocalizedResources");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientProperty", b =>
                 {
                     b.Property<string>("Id")
@@ -608,7 +676,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en-US",
-                            CreatedAt = new DateTime(2020, 5, 27, 20, 21, 25, 310, DateTimeKind.Utc).AddTicks(2838)
+                            CreatedAt = new DateTime(2020, 5, 30, 20, 17, 11, 305, DateTimeKind.Utc).AddTicks(2599)
                         });
                 });
 
@@ -643,7 +711,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.HasIndex("Scheme", "FromClaimType")
                         .IsUnique();
 
-                    b.ToTable("ExternalClaimTransformation");
+                    b.ToTable("ExternalClaimTransformations");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
@@ -672,6 +740,40 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         .HasFilter("[Type] IS NOT NULL");
 
                     b.ToTable("IdentityClaims");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityLocalizedResource", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CultureId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdentityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CultureId");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("IdentityLocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>
@@ -820,6 +922,19 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiLocalizedResource", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
+                        .WithMany("Resources")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Culture", "Culture")
+                        .WithMany()
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.ProtectResource", "Api")
@@ -887,6 +1002,19 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientLocalizedResource", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
+                        .WithMany("Resources")
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Culture", "Culture")
+                        .WithMany()
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientProperty", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -939,6 +1067,19 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         .HasForeignKey("IdentityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityLocalizedResource", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Culture", "Culture")
+                        .WithMany()
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.IdentityResource", "Identity")
+                        .WithMany("Resources")
+                        .HasForeignKey("IdentityId");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>

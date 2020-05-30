@@ -5,15 +5,15 @@
     ViewData["Title"] = Localizer["Client Application Access"];
     ViewData["ActivePage"] = ManageNavPages.Grants;
 }
-<div class="grants">
-    <div class="row page-header">
-        <div class="col-sm-10">
-            <h1>
-                @ViewData["Title"]
-            </h1>
-            <div>@Localizer["Below is the list of applications you have given access to and the names of the resources they have access to."]</div>
-        </div>
+<div class="row">
+    <div class="col-sm-10">
+        <h4>
+            @ViewData["Title"]
+        </h4>
+        <h5>@Localizer["Below is the list of applications you have given access to and the names of the resources they have access to."]</h5>
     </div>
+</div>
+<div class="grants">
 
     @if (Model.Grants.Any() == false)
     {
@@ -34,6 +34,10 @@
                     @if (grant.ClientLogoUrl != null)
                     {
                         <img src="@grant.ClientLogoUrl" alt="logo">
+                    }
+                    else
+                    {
+                        <img src="/icons8-app-symbol-96.png" alt="logo">
                     }
                 </div>
                 <div class="col-sm-8">

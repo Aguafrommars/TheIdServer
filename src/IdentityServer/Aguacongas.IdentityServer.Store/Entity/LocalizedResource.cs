@@ -7,7 +7,31 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Defined a localized resource
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class LocalizedResource : IAuditable
+    public class LocalizedResource : LocalizedResourceBase, IAuditable
+    {
+        /// <summary>
+        /// Gets or sets the name of the base.
+        /// </summary>
+        /// <value>
+        /// The name of the base.
+        /// </value>
+        public string BaseName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location.
+        /// </summary>
+        /// <value>
+        /// The location.
+        /// </value>
+        public string Location { get; set; }
+
+    }
+
+    /// <summary>
+    /// Defined a localized resource
+    /// </summary>
+    /// <seealso cref="IAuditable" />
+    public abstract class LocalizedResourceBase : IAuditable
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -35,22 +59,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the base.
-        /// </summary>
-        /// <value>
-        /// The name of the base.
-        /// </value>
-        public string BaseName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the location.
-        /// </summary>
-        /// <value>
-        /// The location.
-        /// </value>
-        public string Location { get; set; }
-
-        /// <summary>
         /// Gets or sets the culture identifier.
         /// </summary>
         /// <value>
@@ -58,7 +66,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         [Required]
         public string CultureId { get; set; }
- 
+
         /// <summary>
         /// Gets or sets the culture.
         /// </summary>
@@ -83,4 +91,5 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public DateTime? ModifiedAt { get; set; }
     }
+
 }

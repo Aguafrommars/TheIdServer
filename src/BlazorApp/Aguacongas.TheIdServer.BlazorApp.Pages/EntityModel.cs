@@ -107,6 +107,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 return;
             }
 
+            Model = CloneModel(State);
             Id = GetModelId(Model);
             IsNew = false;
 
@@ -196,6 +197,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             throw new NotSupportedException();
         }
+
         protected string GetModelId<TEntity>(TEntity model)
         {
             if (model is IEntityId entity)

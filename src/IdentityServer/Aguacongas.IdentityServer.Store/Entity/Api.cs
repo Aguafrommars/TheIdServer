@@ -95,6 +95,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ApiProperty> Properties { get; set; }
 
         /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ApiLocalizedResource> Resources { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>

@@ -5,6 +5,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class LoginDisplay
     {
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
         private async Task BeginSignOut(MouseEventArgs args)
         {
             await _signOutManager.SetSignOutState();
