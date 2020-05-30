@@ -7,5 +7,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.LocalizedResourceComponent
     {
         [Parameter]
         public Entity.LocalizedResource Model { get; set; }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

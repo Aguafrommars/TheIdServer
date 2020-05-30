@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @page "/cultures"
 @inherits EntitiesModel<Entity.Culture>
+@inject IStringLocalizerAsync<Culture> Localizer
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="Supported cultures" Url="culture"></PageListHeader>
+        <PageListHeader Name="@Localizer["Supported cultures"]" Url="culture"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -13,7 +14,7 @@
         <TableHeader>
             <th scope="col">
                 <SortableHeader Property="Id"
-                                Text="name"
+                                Text="@Localizer["name"]"
                                 GridState="GridState" />
             </th>
         </TableHeader>

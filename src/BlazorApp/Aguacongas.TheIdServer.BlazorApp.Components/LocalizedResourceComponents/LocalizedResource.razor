@@ -1,11 +1,12 @@
-﻿<div class="form-group row">
+﻿@inject IStringLocalizerAsync<LocalizedResource> Localizer
+<div class="form-group row">
     <label class="col-2 col-form-label">
-        key
+        @Localizer["key"]
     </label>
     <div class="col">
         @if (string.IsNullOrEmpty(Model.Id))
         {
-            <AuthorizeText @bind-Value="@Model.Key" />
+            <AuthorizeText Placeholder="@Localizer["key"]" @bind-Value="@Model.Key" />
         }
         else
         {
@@ -15,9 +16,9 @@
 </div>
 <div class="form-group row">
     <label class="col-2 col-form-label">
-        value
+        @Localizer["value"]
     </label>
     <div class="col">
-        <AuthorizeTextArea @bind-Value="@Model.Value" />
+        <AuthorizeTextArea Placeholder="@Localizer["value"]" @bind-Value="@Model.Value" />
     </div>
 </div>

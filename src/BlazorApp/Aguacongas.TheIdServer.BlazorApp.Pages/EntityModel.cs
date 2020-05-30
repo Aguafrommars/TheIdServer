@@ -36,14 +36,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected IJSRuntime JSRuntime { get; set; }
 
         [Inject]
-        private ILogger<EntityModel<T>> Logger { get; set; }
+        protected ILogger<EntityModel<T>> Logger { get; set; }
 
         [Parameter]
         public string Id { get; set; }
 
         protected bool IsNew { get; private set; }
 
-        protected T Model => EditContext?.Model as T;
+        protected T Model { get; private set; }
 
         protected T State { get; set; }
 
@@ -85,14 +85,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 var newModel = await Create().ConfigureAwait(false);
                 CreateEditContext(newModel);
                 EntityCreated(Model);
-                State = CloneModel(Model);
                 return;
             }
 
             var model = await GetModelAsync()
                 .ConfigureAwait(false);
             CreateEditContext(model);
-            State = CloneModel(Model);
         }
 
         protected async Task HandleValidSubmit()
@@ -128,7 +126,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 changes.Clear();
             }
 
-            State = CloneModel(Model);
             Notifier.Notify(new Models.Notification
             {
                 Header = GetModelId(Model),
@@ -137,6 +134,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             EditContext.MarkAsUnmodified();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+
+            Model = await GetModelAsync().ConfigureAwait(false);
+            State = CloneModel(Model);
         }
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
@@ -271,7 +271,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
 
         protected abstract Task<T> Create();
-        protected abstract void SetNavigationProperty<TEntity>(TEntity entity);
+        protected abstract void RemoveNavigationProperty<TEntity>(TEntity entity);
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
@@ -283,6 +283,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             EditContext = new EditContext(model);
             EditContext.OnFieldChanged += EditContext_OnFieldChanged;
+            Model = model;
+            State = CloneModel(Model);
         }
 
         private static IEnumerable<object> GetModifiedEntities(Dictionary<object, ModificationKind> modificationList, ModificationKind kind)
@@ -294,35 +296,61 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
-            Console.WriteLine($"HandleMoficationList for type {entityType.Name}");
+            Logger.LogDebug($"HandleMoficationList for type {entityType.Name}");
             try
             {
                 var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
+                var taskList = new List<Task>(addList.Count());
                 foreach (var entity in addList)
                 {
-                    SetNavigationProperty(entity);
-                    SanetizeEntityToSaved(entity);
-                    var result = await CreateAsync(entityType, entity).ConfigureAwait(false);
-
-                    SetCreatedEntityId(entity, result);
-                    SetModelEntityId(entityType, result);
+                    taskList.Add(AddEntityAsync(entityType, entity));
                 }
+                await Task.WhenAll(taskList).ConfigureAwait(false);
+
                 var updateList = GetModifiedEntities(modificationList, ModificationKind.Update);
+                taskList = new List<Task>(updateList.Count());
                 foreach (var entity in updateList)
                 {
-                    SanetizeEntityToSaved(entity);
-                    await UpdateAsync(entityType, entity).ConfigureAwait(false);
+                    taskList.Add(UpdateEntityAsync(entityType, entity));
                 }
+                await Task.WhenAll(taskList).ConfigureAwait(false);
+
                 var deleteList = GetModifiedEntities(modificationList, ModificationKind.Delete);
+                taskList = new List<Task>(deleteList.Count());
                 foreach (var entity in deleteList)
                 {
-                    await DeleteAsync(entityType, entity).ConfigureAwait(false);
+                    taskList.Add(DeleteAsync(entityType, entity));
+                }
+                await Task.WhenAll(taskList).ConfigureAwait(false);
+            }
+            catch (AggregateException ae)
+            {
+                foreach(var e in ae.InnerExceptions)
+                {
+                    HandleModificationError(e);
                 }
             }
             catch (Exception e)
             {
                 HandleModificationError(e);
             }
+        }
+
+        private async Task UpdateEntityAsync(Type entityType, object entity)
+        {
+            RemoveNavigationProperty(entity);
+            SanetizeEntityToSaved(entity);
+            await UpdateAsync(entityType, entity).ConfigureAwait(false);
+        }
+
+        private async Task AddEntityAsync(Type entityType, object entity)
+        {
+            RemoveNavigationProperty(entity);
+            SanetizeEntityToSaved(entity);
+            var result = await CreateAsync(entityType, entity).ConfigureAwait(false);
+
+            SetCreatedEntityId(entity, result);
+            SetModelEntityId(entityType, result);
         }
 
         private void HandleModificationError(Exception exception)
@@ -340,7 +368,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     IsError = true,
                     Message = pe.Details.Detail
                 });
-
+                throw exception;
             }
 
             Notifier.Notify(new Models.Notification

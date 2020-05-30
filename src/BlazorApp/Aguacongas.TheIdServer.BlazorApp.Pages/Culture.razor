@@ -2,7 +2,7 @@
 @page "/culture"
 @page "/culture/{id}"
 @inherits EntityModel<Entity.Culture>
-
+@inject IStringLocalizerAsync<Culture> Localizer
 @if (Model == null)
 {
     <p class="col"><em>Loading...</em></p>
@@ -15,7 +15,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="name" Placeholder="culture name" @bind-Value="@Model.Id" />
+                        <AuthorizeText Id="id" Placeholder="@Localizer["culture name"]" @bind-Value="@Model.Id" />
                     }
                     else
                     {
@@ -40,14 +40,14 @@ else
             <div class="entity-details">
                 <div id="claims" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Resources" Collection="@Model.Resources" CreateModel="CreateResource" />
+                        <EntitySubGridTitle Text="@Localizer["Resources"]" Collection="@Model.Resources" CreateModel="CreateResource" />
                     </div>
                     <div class="card-body">
                         <EntitiesGrid Items="@Model.Resources" TableClass="table table-hover" Context="resource">
                             <TableHeader>
                                 <th class="col">
                                     <SortableHeader Property="Key"
-                                                    Text="key"
+                                                    Text="@Localizer["key"]"
                                                     GridState="_gridState" />
                                 </th>
                                 <th></th>

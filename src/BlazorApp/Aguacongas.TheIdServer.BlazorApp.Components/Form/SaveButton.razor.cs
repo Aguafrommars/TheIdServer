@@ -17,6 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
             EditContext.OnValidationStateChanged += EditContext_OnValidationStateChanged;
             EditContext.OnFieldChanged += EditContext_OnFieldChanged;
             EditContext.OnValidationRequested += EditContext_OnValidationRequested;
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             base.OnInitialized();
         }
 

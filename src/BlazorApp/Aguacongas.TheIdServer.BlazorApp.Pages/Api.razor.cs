@@ -54,7 +54,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
-        protected override void SetNavigationProperty<TEntity>(TEntity entity)
+        protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
             if (entity is IApiSubEntity subEntity)
             {

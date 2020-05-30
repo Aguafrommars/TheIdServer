@@ -1,10 +1,11 @@
 ﻿@inject IJSRuntime _jsRuntime
+@inject IStringLocalizerAsync<DeleteEntityButton> Localizer
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-entity">
             <span class="oi oi-trash"></span>
-            Delete
+            @Localizer["Delete"]
         </button>
 
         <!-- Modal -->
@@ -20,8 +21,8 @@
                     <div class="modal-body">
                         <div class="row">
                             <p class="col text-danger">
-                                Retype the '@EntityId' if you are sure to delete it.
-                            </p>                            
+                                @Localizer["Retype the \"{0}\" if you are sure to delete it.", EntityId]
+                            </p>
                         </div>
                         <div class="row">
                             <div class="col">
@@ -30,7 +31,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" @onclick="OnDeleteClicked">Delete</button>
+                        <button type="button" class="btn btn-danger" @onclick="OnDeleteClicked">@Localizer["Delete"]</button>
                     </div>
                 </div>
             </div>

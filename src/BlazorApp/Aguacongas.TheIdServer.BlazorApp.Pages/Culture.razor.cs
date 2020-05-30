@@ -63,6 +63,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 StateHasChanged();
                 return Task.CompletedTask;
             };
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
@@ -81,7 +82,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        protected override void SetNavigationProperty<TEntity>(TEntity entity)
+        protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
             // nothing to do
         }

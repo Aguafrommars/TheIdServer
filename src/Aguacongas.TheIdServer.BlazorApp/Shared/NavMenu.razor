@@ -1,4 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-light">
+﻿@inject IStringLocalizerAsync<NavMenu> Localizer
+
+<div class="top-row pl-4 navbar navbar-light">
     <a class="navbar-brand" href="">TheIdServer Admin</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -8,43 +10,43 @@
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> @Localizer["Home"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="users">
-                <span class="oi oi-people" aria-hidden="true"></span> Users
+                <span class="oi oi-people" aria-hidden="true"></span> @Localizer["Users"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="roles">
-                <span class="oi oi-shield" aria-hidden="true"></span> Roles
+                <span class="oi oi-shield" aria-hidden="true"></span> @Localizer["Roles"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="clients">
-                <span class="oi oi-browser" aria-hidden="true"></span> Clients
+                <span class="oi oi-browser" aria-hidden="true"></span> @Localizer["Clients"]
             </NavLink>
         </li>
         <li class="nav-text px-4">resources</li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="apis">
-                <span class="oi oi-key" aria-hidden="true"></span> Apis
+                <span class="oi oi-key" aria-hidden="true"></span> @Localizer["Apis"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="identities">
-                <span class="oi oi-puzzle-piece" aria-hidden="true"></span> Identities
+                <span class="oi oi-puzzle-piece" aria-hidden="true"></span> @Localizer["Identities"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="providers">
-                <span class="oi oi-cloud-upload" aria-hidden="true"></span> Providers
+                <span class="oi oi-cloud-upload" aria-hidden="true"></span> @Localizer["Providers"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="cultures">
-                <span class="oi oi-globe" aria-hidden="true"></span> Cultures
+                <span class="oi oi-globe" aria-hidden="true"></span> @Localizer["Cultures"]
             </NavLink>
         </li>
     </ul>

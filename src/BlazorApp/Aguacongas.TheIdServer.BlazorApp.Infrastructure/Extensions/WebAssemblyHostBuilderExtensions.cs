@@ -1,5 +1,6 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -69,6 +70,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddSingleton(typeof(SharedStringLocalizer<>))
+                .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddHttpClient("oidc")
                 .ConfigureHttpClient(httpClient =>
                 {

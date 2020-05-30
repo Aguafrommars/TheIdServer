@@ -20,7 +20,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override string BackUrl => "providers";
 
-        protected override void SetNavigationProperty<TEntity>(TEntity entity)
+        protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
             // no nav
         }
