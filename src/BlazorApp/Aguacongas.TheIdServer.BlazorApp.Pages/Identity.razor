@@ -4,6 +4,7 @@
 @page "/identityresource/{id}"
 
 @inherits EntityModel<Entity.IdentityResource>
+@inject IStringLocalizerAsync<Identity> Localizer
 
 @if (Model == null)
 {
@@ -11,100 +12,135 @@
 }
 else
 {
-<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
-    <CascadingValue Value="HandleModificationState">
-        <div class="row bg-light sticky-top">
-            <div class="col">
-                @if (IsNew)
-                {
-                    <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
-                }
-                else
-                {
-                    <h3>@Id</h3>
-                }
-            </div>
-            @if (!NonEditable)
-            {
-                <div>
-                    <SaveButton />
-                    @if (!IsNew)
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <CascadingValue Value="HandleModificationState">
+            <div class="row bg-light sticky-top">
+                <div class="col">
+                    @if (IsNew)
                     {
-                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
+                    }
+                    else
+                    {
+                        <h3>@Id</h3>
                     }
                 </div>
-            }
-            <div class="col">
-                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                @if (!NonEditable)
+                {
+                    <div>
+                        <SaveButton />
+                        @if (!IsNew)
+                        {
+                            <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        }
+                    </div>
+                }
+                <div class="col">
+                    <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                </div>
+                <div class="w-100"></div>
+                <div class="col">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-100"></div>
+                <FluentValidationValidator />
+                <ValidationSummary class="col" />
             </div>
-            <div class="w-100"></div>
-            <div class="col">
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="w-100"></div>
-            <FluentValidationValidator />
-            <ValidationSummary class="col" />
-        </div>
-        <div class="entity-details">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col col-form-label">
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
+            <div class="entity-details">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="displayName">
+                                @Localizer["display name"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">+</button>
+                            </div>
+                        </div>
+                        @foreach (var resource in Model.Resources.Where(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName))
+                        {
+                            <div @key="resource" class="form-group row">
+                                <div class="col" for="culture">
+                                    <AuthorizeText Placeholder="@Localizer["culture"]" @bind-Value="@resource.CultureId" />
+                                </div>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Placeholder="@Localizer["localized display name"]" @bind-Value="@resource.Value" MaxLength="200" />
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">-</button>
+                                </div>
+                            </div>
+
+                        }
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="description">
+                                @Localizer["description"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeTextArea Id="description" Placeholder="@Localizer["decription"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">+</button>
+                            </div>
+                        </div>
+                        @foreach (var resource in Model.Resources.Where(r => r.ResourceKind == Entity.EntityResourceKind.Description))
+                        {
+                            <div @key="resource" class="form-group row">
+                                <div class="col" for="culture">
+                                    <AuthorizeText Placeholder="@Localizer["culture"]" @bind-Value="@resource.CultureId" />
+                                </div>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Placeholder="@Localizer["localized description"]" @bind-Value="@resource.Value" MaxLength="200" />
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">-</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="claims" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Claims"]</h5>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col col-form-label" for="displayName">
-                            display name
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
-                        </div>
+                    <div class="card-body">
+                        <IdentityClaimTypes Model="@Model" />
                     </div>
-                    <div class="form-group row">
-                        <label class="col col-form-label" for="description">
-                            description
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeTextArea Id="description" Placeholder="decription" @bind-Value="@Model.Description" MaxLength="1000" />
-                        </div>
+                </div>
+                <div id="properties" class="card mb-3">
+                    <div class="card-header">
+                        <EntitySubGridTitle Text="Properties" Collection="@Model.Properties" CreateModel="CreateProperty" />
+                    </div>
+                    <div class="card-body">
+                        <IdentityProperties Collection="@Model.Properties" />
                     </div>
                 </div>
             </div>
-            <div id="claims" class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <h5 class="col">Claims</h5>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <IdentityClaimTypes Model="@Model"  />
-                </div>
-            </div>
-            <div id="properties" class="card mb-3">
-                <div class="card-header">
-                    <EntitySubGridTitle Text="Properties" Collection="@Model.Properties" CreateModel="CreateProperty" />
-                </div>
-                <div class="card-body">
-                    <IdentityProperties Collection="@Model.Properties" />
-                </div>
-            </div>
-        </div>
-    </CascadingValue>
-</EditForm>
+        </CascadingValue>
+    </EditForm>
 }

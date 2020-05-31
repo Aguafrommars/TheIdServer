@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var responses = await resourceStore.GetAsync(new PageRequest
             {
                 Select = nameof(Entity.LocalizedResource.Key),
-                Filter = $"{nameof(Entity.LocalizedResource.Culture)}/{nameof(Entity.Culture.Id)} eq 'en-US'"
+                Filter = $"{nameof(Entity.LocalizedResource.CultureId)} eq 'en-US'"
             }).ConfigureAwait(false);
 
             foreach(var item in responses.Items)

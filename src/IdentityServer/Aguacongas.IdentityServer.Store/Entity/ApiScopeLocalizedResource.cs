@@ -1,20 +1,19 @@
 ﻿namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
-    /// Identity localized resource
+    /// Api scope localized resource
     /// </summary>
     /// <seealso cref="LocalizedResourceBase" />
-    /// <seealso cref="IIdentitySubEntity" />
-    public class IdentityLocalizedResource : LocalizedResourceBase, IIdentitySubEntity, IEntityResource
+    /// <seealso cref="IEntityResource" />
+    public class ApiScopeLocalizedResource : LocalizedResourceBase, IEntityResource
     {
         /// <summary>
-        /// Gets or sets the identity resource identifier.
+        /// Gets or sets the API identifier.
         /// </summary>
         /// <value>
         /// The API identifier.
         /// </value>
-        public string IdentityId { get; set; }
-
+        public string ApiScopeId { get; set; }
 
         /// <summary>
         /// Gets or sets the kind of the resource.
@@ -24,13 +23,13 @@
         /// </value>
         public EntityResourceKind ResourceKind { get; set; }
 
-
         /// <summary>
-        /// Gets or sets the identity.
+        /// Gets or sets the API scope.
         /// </summary>
         /// <value>
-        /// The identity.
+        /// The API scope.
         /// </value>
-        public virtual IdentityResource Identity { get; set; }
+        public virtual ApiScope ApiScope { get; set; }
+
     }
 }

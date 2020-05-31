@@ -46,7 +46,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             var page = _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(LocalizedResource.Culture)}/{nameof(Culture.Id)} eq '{CultureInfo.CurrentCulture.Name}'",
+                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{CultureInfo.CurrentCulture.Name}'",
                 Select = $"{nameof(LocalizedResource.Key)},{nameof(LocalizedResource.Value)}"
             }).ConfigureAwait(false)
             .GetAwaiter()
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             var page = _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(LocalizedResource.Culture)}/{nameof(Culture.Id)} eq '{CultureInfo.CurrentCulture.Name}' And {nameof(LocalizedResource.Key)} eq '{name}'",
+                Filter = $"{nameof(LocalizedResource.Culture)} eq '{CultureInfo.CurrentCulture.Name}' And {nameof(LocalizedResource.Key)} eq '{name}'",
                 Select = nameof(LocalizedResource.Value)
             }).ConfigureAwait(false)
             .GetAwaiter()

@@ -10,6 +10,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
     public class LocalizedResource : LocalizedResourceBase, IAuditable
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
+        [Required]
+        public string Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the base.
         /// </summary>
         /// <value>
@@ -40,15 +49,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The identifier.
         /// </value>
         public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the key.
-        /// </summary>
-        /// <value>
-        /// The key.
-        /// </value>
-        [Required]
-        public string Key { get; set; }
 
         /// <summary>
         /// Gets or sets the value.

@@ -53,6 +53,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ApiLocalizedResource> ApiLocalizedResources { get; set; }
 
+        public virtual DbSet<ApiScopeLocalizedResource> ApiScopeLocalizedResources { get; set; }
+
         public virtual DbSet<ClientLocalizedResource> ClientLocalizedResources { get; set; }
 
         public virtual DbSet<IdentityLocalizedResource> IdentityLocalizedResources { get; set; }
@@ -101,6 +103,30 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             modelBuilder.Entity<ExternalClaimTransformation>()
                 .HasIndex(e => new { e.Scheme, e.FromClaimType })
                 .IsUnique(true);
+            modelBuilder.Entity<ApiLocalizedResource>()
+                .HasOne(e => e.Api)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ApiId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ApiScopeLocalizedResource>()
+                .HasOne(e => e.ApiScope)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ApiScopeId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ClientLocalizedResource>()
+                .HasOne(e => e.Client)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ClientId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<IdentityLocalizedResource>()
+                .HasOne(e => e.Identity)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.IdentityId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SchemeDefinition>(b =>
             {

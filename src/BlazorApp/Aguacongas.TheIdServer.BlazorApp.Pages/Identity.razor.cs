@@ -8,7 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Identity
     {
-        protected override string Expand => "IdentityClaims,Properties";
+        protected override string Expand => "IdentityClaims,Properties,Resources";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -59,11 +59,32 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.Properties = State.Properties
                 .Where(p => (p.Key != null && p.Key.Contains(term)) || (p.Value != null && p.Value.Contains(term)))
                 .ToList();
+            Model.Resources = State.Resources
+                .Where(p => p.Value != null && p.Value.Contains(term))
+                .ToList();
 
             AddEmpyClaimsTypes();
         }
 
         private IdentityProperty CreateProperty()
             => new IdentityProperty();
+
+        private Task AddResource(EntityResourceKind kind)
+        {
+            var entity = new IdentityLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
+        }
+
+        private Task DeleteResource(IdentityLocalizedResource entity)
+        {
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityDeleted(entity);
+            return Task.CompletedTask;
+        }
     }
 }

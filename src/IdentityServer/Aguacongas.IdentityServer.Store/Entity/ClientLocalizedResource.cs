@@ -5,7 +5,7 @@
     /// </summary>
     /// <seealso cref="LocalizedResourceBase" />
     /// <seealso cref="IClientSubEntity" />
-    public class ClientLocalizedResource : LocalizedResourceBase, IClientSubEntity
+    public class ClientLocalizedResource : LocalizedResourceBase, IClientSubEntity, IEntityResource
     {
         /// <summary>
         /// Gets the client identifier.
@@ -14,6 +14,14 @@
         /// The client identifier.
         /// </value>
         public string ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kind of the resource.
+        /// </summary>
+        /// <value>
+        /// The kind of the resource.
+        /// </value>
+        public EntityResourceKind ResourceKind { get; set; }
 
         /// <summary>
         /// Gets or sets the client.

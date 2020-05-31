@@ -80,6 +80,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool ShowInDiscoveryDocument { get; set; }
 
         /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ApiScopeLocalizedResource> Resources { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>

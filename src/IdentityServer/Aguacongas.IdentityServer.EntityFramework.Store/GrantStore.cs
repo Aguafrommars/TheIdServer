@@ -87,7 +87,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
-            { }
+            {
+                // remove can already be done
+            }
         }
 
         protected async Task<string> StoreAsync(TDto dto, DateTime? expiration)
@@ -117,7 +119,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateException e) when (e.InnerException == null)
-            { }
+            {
+                // store can already be done
+            }
             return entity.Id;
         }
 
