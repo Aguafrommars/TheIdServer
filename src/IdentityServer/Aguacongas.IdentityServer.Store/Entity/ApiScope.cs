@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an API scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>
+    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>, ILocalizable<ApiScopeLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.

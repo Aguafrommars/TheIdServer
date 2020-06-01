@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client appliction
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class Client : IAuditable, ICloneable<Client>
+    public class Client : IAuditable, ICloneable<Client>, ILocalizable<ClientLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.

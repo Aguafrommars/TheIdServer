@@ -25,15 +25,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return Task.FromResult(new IdentityResource
             {
                 IdentityClaims = new List<IdentityClaim>(),
-                Properties = new List<IdentityProperty>()
+                Properties = new List<IdentityProperty>(),
+                Resources = new List<IdentityLocalizedResource>()
             });
         }
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is IIdentitySubEntity subEntity)
+            if (entity is IdentityResource identity)
             {
-                subEntity.IdentityId = Model.Id;
+                identity.IdentityClaims = null;
+                identity.Properties = null;
+                identity.Resources = null;
             }
         }
 
@@ -41,8 +44,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entity is IdentityResource identity)
             {
-                identity.IdentityClaims = null;
-                identity.Properties = null;
+                Model.Id = identity.Id;
+            }
+            if (entity is IIdentitySubEntity subEntity)
+            {
+                subEntity.IdentityId = Model.Id;
             }
         }
 
@@ -66,6 +72,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             AddEmpyClaimsTypes();
         }
 
+        protected override IdentityResource CloneModel(IdentityResource entity)
+        {
+            var clone = base.CloneModel(entity);
+            clone.IdentityClaims = clone.IdentityClaims.ToList();
+            clone.Properties = clone.Properties.ToList();
+            clone.Resources = clone.Resources.ToList();
+            return clone;
+        }
+
         private IdentityProperty CreateProperty()
             => new IdentityProperty();
 
@@ -77,13 +92,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
             Model.Resources.Add(entity);
             HandleModificationState.EntityCreated(entity);
-            return Task.CompletedTask;
-        }
-
-        private Task DeleteResource(IdentityLocalizedResource entity)
-        {
-            Model.Resources.Add(entity);
-            HandleModificationState.EntityDeleted(entity);
             return Task.CompletedTask;
         }
     }

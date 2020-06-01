@@ -16,10 +16,10 @@
     </TableHeader>
     <RowTemplate>
         <td>
-            <AuthorizeText @key="transformation" Id="fromClaimType" @bind-Value="@transformation.FromClaimType" />
+            <AuthorizeText Id="fromClaimType" @bind-Value="@transformation.FromClaimType" />
         </td>
         <td>
-            <AuthorizeText @key="transformation" Id="toClaimType" @bind-Value="@transformation.ToClaimType" />
+            <AuthorizeText Id="toClaimType" @bind-Value="@transformation.ToClaimType" />
         </td>
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(transformation)">

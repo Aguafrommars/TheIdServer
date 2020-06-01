@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// <summary>
     /// Identity resource
     /// </summary>
-    public class IdentityResource : IAuditable, ICloneable<IdentityResource>
+    public class IdentityResource : IAuditable, ICloneable<IdentityResource>, ILocalizable<IdentityLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.

@@ -5,8 +5,8 @@
         <ul class="list-inline">
             @foreach (var claim in Model.ApiClaims)
             {
-                <li class="list-inline-item">
-                    <ClaimType @key="claim" Entity="@claim"
+                <li @key="@claim" class="list-inline-item">
+                    <ClaimType Entity="@claim"
                                DeleteClicked="() => OnDeleteClaimClicked(claim)"
                                ValueChanged="() => OnClaimValueChanged(claim)" />
                 </li>

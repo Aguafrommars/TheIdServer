@@ -24,11 +24,11 @@
         else
         {
             <td>
-                <AuthorizeText @key="claim" Id="type" @bind-Value="@claim.Type" MaxLength="250" />
+                <AuthorizeText Id="type" @bind-Value="@claim.Type" MaxLength="250" />
             </td>
         }
         <td>
-            <AuthorizeText @key="claim" Id="value" @bind-Value="@claim.Value" />
+            <AuthorizeText Id="value" @bind-Value="@claim.Value" />
         </td>
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(claim)">

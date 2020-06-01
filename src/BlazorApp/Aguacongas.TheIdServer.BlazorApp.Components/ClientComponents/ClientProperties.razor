@@ -24,11 +24,11 @@
         else
         {
             <td>
-                <AuthorizeText @key="property" Id="key" @bind-Value="@property.Key" MaxLength="250" />
+                <AuthorizeText Id="key" @bind-Value="@property.Key" MaxLength="250" />
             </td>
         }
         <td>
-            <AuthorizeText @key="property" Id="value" @bind-Value="@property.Value" MaxLength="2000" />
+            <AuthorizeText Id="value" @bind-Value="@property.Value" MaxLength="2000" />
         </td>
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(property)">

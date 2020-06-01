@@ -5,8 +5,8 @@
         <ul class="list-inline">
             @foreach (var grantType in Model.AllowedGrantTypes)
             {
-                <li class="list-inline-item">
-                    <GrantType @key="grantType" Entity="@grantType"
+                <li @key="@grantType" class="list-inline-item">
+                    <GrantType Entity="@grantType"
                                Model="@Model"
                                DeleteClicked="() => OnGrantTypeDeletedClicked(grantType)"
                                ValueChanged="() => OnGrantTypeValueChanged(grantType)" />

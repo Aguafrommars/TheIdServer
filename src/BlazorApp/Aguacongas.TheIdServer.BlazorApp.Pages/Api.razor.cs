@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Api : IDisposable
     {
-        protected override string Expand => "Secrets,Scopes,Scopes/ApiScopeClaims,ApiClaims,Properties";
+        protected override string Expand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -56,9 +57,37 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
+            if (entity is ProtectResource api)
+            {
+                api.ApiClaims = null;
+                api.Properties = null;
+                api.Scopes = null;
+                api.Secrets = null;
+                api.Resources = null;
+            }
+            if (entity is ApiScope scope)
+            {
+                scope.ApiScopeClaims = null;
+            }
+            if (entity is ApiSecret secret && secret.Id == null && secret.Type == "ShareSecret")
+            {
+                secret.Value = secret.Value.Sha256();
+            }
+        }
+
+        protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
+        {
+            if (entity is ProtectResource api)
+            {
+                Model.Id = api.Id;
+            }
             if (entity is IApiSubEntity subEntity)
             {
                 subEntity.ApiId = Model.Id;
+            }
+            if (entity is ApiScope scope)
+            {
+                scope.Id = Guid.NewGuid().ToString();
             }
             if (entity is ApiScopeClaim apiScopeClaim)
             {
@@ -75,36 +104,54 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
+        protected override void OnStateChange(ModificationKind kind, object entity)
         {
-            if (entity is ProtectResource api)
+            base.OnStateChange(kind, entity);
+            if (State == null)
             {
-                api.ApiClaims = null;
-                api.Properties = null;
-                api.Scopes = null;
-                api.Secrets = null;
+                return;
             }
-            if (entity is ApiScope scope)
+            var type = entity.GetType();
+            if (type == typeof(ApiClaim))
             {
-                scope.ApiScopeClaims = null;
+                OnStateChange(kind, State.ApiClaims, entity);
+                return;
             }
-            if (entity is ApiSecret secret && secret.Id == null)
+            if (type == typeof(ApiProperty))
             {
-                secret.Value = secret.Value.Sha256();
+                OnStateChange(kind, State.Properties, entity);
+                return;
+            }
+            if (type == typeof(ApiScope))
+            {
+                OnStateChange(kind, State.Scopes, entity);
+                return;
+            }
+            if (type == typeof(ApiSecret))
+            {
+                OnStateChange(kind, State.Secrets, entity);
+                return;
+            }
+            if (type == typeof(ApiScopeClaim))
+            {
+                var scopeClaim = entity as ApiScopeClaim;
+                var scope = State.Scopes.FirstOrDefault(s => s.Id == scopeClaim.ApiScpopeId);
+                if (scope != null)
+                {
+                    OnStateChange(kind, scope.ApiScopeClaims, entity);
+                }
             }
         }
 
-        protected override void SetModelEntityId(Type entityType, object result)
+        protected override ProtectResource CloneModel(ProtectResource entity)
         {
-            if (entityType == typeof(ApiScope))
-            {
-                var scope = result as ApiScope;
-                var modelScope = Model.Scopes.SingleOrDefault(s => s.Id == null && s.Scope == scope.Scope);
-                if (modelScope != null)
-                {
-                    modelScope.Id = scope.Id;
-                }
-            }
+            var clone = base.CloneModel(entity);
+            clone.Properties = clone.Properties.ToList();
+            clone.Resources = clone.Resources.ToList();
+            clone.Scopes = clone.Scopes.ToList();
+            clone.Secrets = clone.Secrets.ToList();
+            clone.ApiClaims = clone.ApiClaims.ToList();
+            return clone;
         }
 
         private void AddEmpyClaimsTypes()

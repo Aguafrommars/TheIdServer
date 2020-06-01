@@ -2,6 +2,8 @@ using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.AspNetCore;
@@ -15,6 +17,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xunit;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
@@ -139,12 +142,18 @@ namespace Aguacongas.TheIdServer.Test
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<Auth.SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<Auth.SchemeDefinition>().AsQueryable()).Verifiable();
+            var culturestoreMock = new Mock<IAdminStore<Culture>>();
+            culturestoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Culture>
+            {
+                Items = Array.Empty<Culture>()
+            });
             var sut = new Startup(configuration, environementMock.Object);
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services => 
                 {
                     sut.ConfigureServices(services);
                     services.AddTransient(p => storeMock.Object);
+                    services.AddTransient(p => culturestoreMock.Object);
                 })
                 .Configure(builder => sut.Configure(builder))
                 .UseSerilog((hostingContext, configuration) =>

@@ -16,7 +16,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="name" Placeholder="api id" @bind-Value="@Model.Id" />
+                        <AuthorizeText Id="name" Placeholder="@Localizer["api id"]" @bind-Value="@Model.Id" />
                     }
                     else
                     {
@@ -38,18 +38,18 @@ else
                 </div>
                 <div class="w-100"></div>
                 <div class="col">
-                    <ul class="list-inline">
+                    <ul class="list-inline text-lowercase">
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>secrets</a>
+                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>claims</a>
+                            <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>scopes</a>
+                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>properties</a>
+                            <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
                         </li>
                     </ul>
                 </div>
@@ -64,54 +64,54 @@ else
                             <label class="col col-form-label">
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeCheckbox Name="enabled" Label="enabled" @bind-Value="@Model.Enabled" />
+                                <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col col-form-label" for="displayName">
-                                display name
+                                @Localizer["display name"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
+                                <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col col-form-label" for="description">
-                                description
+                                @Localizer["description"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeTextArea Id="description" Placeholder="decription" @bind-Value="@Model.Description" MaxLength="1000" />
+                                <AuthorizeTextArea Id="description" Placeholder="@Localizer["decription"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="secrets" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Secrets" Collection="Model.Secrets" CreateModel="CreateSecret" />
+                        <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="Model.Secrets" CreateModel="CreateSecret" />
                     </div>
                     <div class="card-body">
-                        <ApiSecrets Collection="Model.Secrets" />
+                        <ApiSecrets Collection="@Model.Secrets" />
                     </div>
                 </div>
                 <div id="claims" class="card mb-3">
                     <div class="card-header">
                         <div class="row">
-                            <h5 class="col">Claims</h5>
+                            <h5 class="col">@Localizer["Claims"]</h5>
                         </div>
                     </div>
                     <div class="card-body">
-                        <ApiClaimTypes Model="Model" />
+                        <ApiClaimTypes Model="@Model" />
                     </div>
                 </div>
                 <div id="scopes" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Scopes" Collection="Model.Scopes" CreateModel="CreateApiScope" />
+                        <EntitySubGridTitle Text="@Localizer["Scopes"]" Collection="Model.Scopes" CreateModel="CreateApiScope" />
                     </div>
                     <div class="card-body">
                         <div class="row">
                             @foreach (var scope in Model.Scopes)
                             {
-                                <div class="col-12">
+                                <div @key="@scope" class="col-12">
                                     <ApiScope Collection="@Model.Scopes" Scope="@scope" />
                                 </div>
                             }
@@ -120,10 +120,10 @@ else
                 </div>
                 <div id="properties" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Properties" Collection="Model.Properties" CreateModel="CreateProperty" />
+                        <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="Model.Properties" CreateModel="CreateProperty" />
                     </div>
                     <div class="card-body">
-                        <ApiProperties Collection="Model.Properties" />
+                        <ApiProperties Collection="@Model.Properties" />
                     </div>
                 </div>
             </div>

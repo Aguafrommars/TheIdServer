@@ -3,7 +3,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Identies"]" Url="identityresource"></PageListHeader>
+        <PageListHeader Name="@Localizer["Identities"]" Url="identityresource"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -35,7 +35,7 @@ else
             <RowTemplate>
                 <td class="w-25">@context.Id</td>
                 <td class="w-75">
-                    @context.DisplayName
+                     @context.DisplayName
                     <div><em>@context.Description</em></div>
                 </td>
             </RowTemplate>

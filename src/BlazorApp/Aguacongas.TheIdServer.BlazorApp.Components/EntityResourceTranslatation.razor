@@ -1,0 +1,21 @@
+﻿@inject IStringLocalizerAsync<EntityResourceTranslatation> Localizer
+
+<div class="col" for="culture">
+    <AuthorizeText Id="@($"culture{Resource.CultureId}")" Placeholder="@Localizer["culture"]" @bind-Value="@Resource.CultureId" />
+</div>
+<div class="col-lg-9 col-sm-12">
+    @if (Resource.ResourceKind == Entity.EntityResourceKind.DisplayName)
+    {
+        <AuthorizeText Placeholder="@Localizer["localized display name"]" @bind-Value="@Resource.Value" MaxLength="200" />
+    }
+    else
+    {
+        <AuthorizeTextArea Placeholder="@Localizer["localized description"]" @bind-Value="@Resource.Value" MaxLength="1000" />
+    }
+</div>
+<div class="col-1">
+    <button type="button" class="btn btn-primary btn-sm" @onclick="OnDeleteClick">
+        <span class="oi oi-trash"></span><span class="sr-only">@Localizer["Delete"]</span>
+    </button>
+</div>
+ 

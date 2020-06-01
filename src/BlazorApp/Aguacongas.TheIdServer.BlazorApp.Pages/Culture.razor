@@ -2,7 +2,6 @@
 @page "/culture"
 @page "/culture/{id}"
 @inherits EntityModel<Entity.Culture>
-@inject IStringLocalizerAsync<Culture> Localizer
 @inject IAdminStore<Entity.LocalizedResource> _localizedResourceStore
 @if (Model == null)
 {

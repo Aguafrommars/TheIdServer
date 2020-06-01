@@ -220,9 +220,9 @@ namespace Aguacongas.TheIdServer
         internal static void SeedLocalizedResources(IServiceScope scope)
         {
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            if (!context.LocalizedResources.Any())
+            var defaultCulture = context.Cultures.FirstOrDefault(c => c.Id == "en-US");
+            if (defaultCulture != null && !context.LocalizedResources.Any())
             {
-                var defaultCulture = context.Cultures.First(c => c.Id == "en-US");
                 using var reader = File.OpenText("Resources/resources.en-US.json");
                 var localizedResources = JsonSerializer.Deserialize<IEnumerable<LocalizedResource>>(reader.ReadToEnd(), new JsonSerializerOptions
                 {

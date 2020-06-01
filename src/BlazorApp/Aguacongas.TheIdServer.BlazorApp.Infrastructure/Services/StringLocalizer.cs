@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,13 +18,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         private readonly Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
         public event Action ResourceReady;
 
-        public StringLocalizer(Settings settings, ILogger<AdminStore<LocalizedResource>> logger)
+        public StringLocalizer(HttpClient client, ILogger<AdminStore<LocalizedResource>> logger)
         {
-            settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(settings.ApiBaseUrl)
-            };
             _store = new AdminStore<LocalizedResource>(Task.FromResult(client), logger);
         }
 
@@ -37,7 +31,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 {
                     return _keyValuePairs[name] ?? name;
                 }
-                GetStringAsync(name).ContinueWith(t => SetResource(name, t.Result));
+                GetStringAsync(name).ContinueWith(t => SetResource(name, t));
                 return name;
             }
         }
@@ -50,7 +44,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 {
                     return string.Format(_keyValuePairs[name] ?? name, arguments);
                 }
-                GetStringAsync(name).ContinueWith(t => SetResource(name, t.Result));
+                GetStringAsync(name).ContinueWith(t => SetResource(name, t));
                 return string.Format(name, arguments);
             }
         }
@@ -69,9 +63,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 .FirstOrDefault()?.Value;
         }
 
-        private void SetResource(string name, string result)
+        private void SetResource(string name, Task<string> task)
         {
-            _keyValuePairs[name] = result;
+            if (task.Exception != null)
+            {
+                return;
+            }
+
+            _keyValuePairs[name] = task.Result;
             ResourceReady();
         }
     }
@@ -120,8 +119,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Create an instance by T")]
     public class SharedStringLocalizer<T> : StringLocalizer
     {
-        public SharedStringLocalizer(Settings settings, ILogger<AdminStore<LocalizedResource>> logger)
-            : base(settings, logger)
+        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> logger)
+            : base(factory.CreateClient("localizer"), logger)
         {
         }
     }

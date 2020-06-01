@@ -79,6 +79,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     httpClient.BaseAddress = apiUri;
                 })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            services.AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
+            {
+                var apiUri = new Uri(settings.ApiBaseUrl);
+                httpClient.BaseAddress = apiUri;
+            });
         }
 
         private static HttpClient CreateApiHttpClient(IServiceProvider p)

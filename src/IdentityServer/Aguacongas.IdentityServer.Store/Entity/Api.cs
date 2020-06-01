@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a protected resources
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ProtectResource : IAuditable, ICloneable<ProtectResource>
+    public class ProtectResource : IAuditable, ICloneable<ProtectResource>, ILocalizable<ApiLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.

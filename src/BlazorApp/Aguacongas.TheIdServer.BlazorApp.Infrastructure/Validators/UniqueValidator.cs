@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             var newValue = context.PropertyValue as string;
             var propertyName = context.PropertyName;
             propertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
-            var property = typeof(T).GetTypeInfo().GetDeclaredProperty(propertyName);
+            var property = typeof(T).GetTypeInfo().GetProperty(propertyName);
             return _items.All(item =>
               item.Equals(editedItem) || property.GetValue(item) as string != newValue);
         }

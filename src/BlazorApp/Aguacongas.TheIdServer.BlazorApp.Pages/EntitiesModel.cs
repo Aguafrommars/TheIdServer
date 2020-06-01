@@ -33,6 +33,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract string SelectProperties { get; }
 
+        protected virtual string Expand { get; }
+
         protected override async Task OnInitializedAsync()
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
@@ -40,6 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             _pageRequest = new PageRequest
             {
                 Select = SelectProperties,
+                Expand = Expand,
                 Take = 10
             };
             await GetEntityList(_pageRequest)

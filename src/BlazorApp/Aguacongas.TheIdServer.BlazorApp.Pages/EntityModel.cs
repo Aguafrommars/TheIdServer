@@ -177,11 +177,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
-        protected virtual void OnStateChange(ModificationKind kind, object entity)
-        {
-            StateHasChanged();
-        }
-
         protected virtual Task<T> GetModelAsync()
         {
             return AdminStore.GetAsync(Id, new GetRequest
@@ -278,6 +273,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
+        protected virtual void OnStateChange(ModificationKind kind, object entity)
+        {
+            StateHasChanged();
+        }
+
+        protected void OnStateChange<TEntity>(ModificationKind kind, ICollection<TEntity> collection, object entity)
+        {
+            switch(kind)
+            {
+                case ModificationKind.Add:
+                    collection.Add((TEntity)entity);
+                    break;
+                case ModificationKind.Delete:
+                    collection.Remove((TEntity)entity);
+                    break;
+            }
+        }
         private void CreateEditContext(T model)
         {
             if (EditContext != null)

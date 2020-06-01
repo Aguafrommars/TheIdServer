@@ -710,7 +710,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en-US",
-                            CreatedAt = new DateTime(2020, 5, 31, 7, 51, 39, 79, DateTimeKind.Utc).AddTicks(3780)
+                            CreatedAt = new DateTime(2020, 6, 1, 17, 59, 12, 769, DateTimeKind.Utc).AddTicks(9339)
                         });
                 });
 
