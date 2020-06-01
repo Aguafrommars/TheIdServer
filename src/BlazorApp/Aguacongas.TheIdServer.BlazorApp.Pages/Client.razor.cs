@@ -1,5 +1,6 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override string BackUrl => "clients";
 
-        protected override void OnStateChange()
+        protected override void OnStateChange(ModificationKind kind, object entity)
         {
+            // TODO: manage state
             _isWebClient = Model.IsWebClient();
-            base.OnStateChange();
+            base.OnStateChange(kind, entity);
         }
 
         protected override async Task OnInitializedAsync()

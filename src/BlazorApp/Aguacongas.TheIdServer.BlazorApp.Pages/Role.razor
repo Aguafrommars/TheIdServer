@@ -5,7 +5,7 @@
 
 @if (Model == null)
 {
-    <Loading />
+    <PageLoading />
 }
 else
 {
@@ -40,29 +40,29 @@ else
         <div class="entity-details">
             <div id="claims" class="card mb-3">
                 <div class="card-header">
-                    <EntitySubGridTitle Text="Claims" Collection="@Model.Claims" CreateModel="CreateClaim" />
+                    <EntitySubGridTitle Text="@Localizer["Claims"]" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
                     <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"
-                                                Text="type"
+                                                Text="@Localizer["type"]"
                                                 GridState="_gridState" />
                             </th>
                             <th scope="col">
-                                <SortableHeader Property="Value"
-                                                Text="value"
+                                <SortableHeader Property="value"
+                                                Text="@Localizer["value"]"
                                                 GridState="_gridState" />
                             </th>
                             <th></th>
                         </TableHeader>
                         <RowTemplate>
                             <td>
-                                <AuthorizeText Id="type" @bind-Value="@claim.ClaimType" MaxLength="250" />
+                                <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
                             </td>
                             <td>
-                                <AuthorizeText Id="value" @bind-Value="@claim.ClaimValue" MaxLength="250" />
+                                <AuthorizeText @bind-Value="@claim.ClaimValue" MaxLength="250" />
                             </td>
                             <td>
                                 <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">

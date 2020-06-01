@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
@@ -32,5 +31,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         [Parameter]
         public EventCallback<TItem> RowClicked { get; set; }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             var cultureName = CultureInfo.CurrentCulture.Name;
             var page = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{cultureName}' And {nameof(LocalizedResource.Key)} eq '{key}'",
+                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{cultureName}' and {nameof(LocalizedResource.Key)} eq '{key}'",
                 Select = nameof(LocalizedResource.Value),
                 Take = 1
             }).ConfigureAwait(false);

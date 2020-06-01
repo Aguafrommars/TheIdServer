@@ -6,7 +6,7 @@
 
 @if (Model == null)
 {
-    <Loading />
+    <PageLoading />
 }
 else
 {
@@ -39,7 +39,7 @@ else
             <div class="w-100"></div>
             <div class="col">
                 <ul class="list-inline">
-                    <li class="list-inline-item">
+                    <li class="list-inline-item text-lowercase">
                         <a href="@(NavigationManager.Uri)#grantTypes" @onclick='() => ScrollTo("grantTypes")' @onclick:preventDefault>grant types</a>
                     </li>
                     @if (Model.IsWebClient())

@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -23,6 +24,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        protected IStringLocalizerAsync<EntitiesModel<T>> Localizer { get; set; }
+
         protected IEnumerable<T> EntityList { get; private set; }
 
         public GridState GridState { get; } = new GridState();
@@ -31,6 +35,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             await base.OnInitializedAsync().ConfigureAwait(false);
             _pageRequest = new PageRequest
             {

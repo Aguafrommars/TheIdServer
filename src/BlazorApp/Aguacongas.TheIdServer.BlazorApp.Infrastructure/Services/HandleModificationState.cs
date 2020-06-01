@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             _logger = logger;
         }
 
-        public Action OnStateChange { get; set; }
+        public event Action<ModificationKind, object> OnStateChange;
         public Dictionary<Type, Dictionary<object, ModificationKind>> Changes { get; } = new Dictionary<Type, Dictionary<object, ModificationKind>>();
 
         public Dictionary<object, ModificationKind> GetModifications(Type entityType)
@@ -46,10 +46,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
                 var identifiable = entity as IEntityId;
                 _logger.LogDebug($"Replace change for entity {entityType.Name} {identifiable?.Id} {modification} with {ModificationKind.Add}");
                 modifications[entity] = ModificationKind.Add;
-                OnStateChange?.Invoke();
+                OnStateChange?.Invoke(ModificationKind.Add, entity);
                 return;
             }
-            OnStateChange?.Invoke();
+            OnStateChange?.Invoke(ModificationKind.Add, entity);
             _logger.LogDebug($"Add created change for entity {entityType.Name}");
         }
 
@@ -62,12 +62,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             {
                 _logger.LogDebug($"Remove change for entity {entityType.Name} {entity.Id}");
                 modifications.Remove(entity);
-                OnStateChange?.Invoke();
+                OnStateChange?.Invoke(ModificationKind.Delete, entity);
                 return;
             }
             _logger.LogDebug($"Add delete change for entity {entityType.Name} {entity.Id}");
             modifications.Add(entity, ModificationKind.Delete);
-            OnStateChange?.Invoke();
+            OnStateChange?.Invoke(ModificationKind.Delete, entity);
         }
 
         public void EntityUpdated<TEntity>(TEntity entity) where TEntity: IEntityId

@@ -152,6 +152,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return entity;
         }
 
+        protected override void OnStateChange(ModificationKind kind, object entity)
+        {
+            switch (kind)
+            {
+                case ModificationKind.Add:
+                    State.Resources.Add(entity as Entity.LocalizedResource);
+                    break;
+                case ModificationKind.Delete:
+                    State.Resources.Remove(entity as Entity.LocalizedResource);
+                    break;
+            }
+            base.OnStateChange(kind, entity);
+        }
+
         private async Task SetResourcesAsync(Entity.Culture model)
         {
             var page = await _localizedResourceStore.GetAsync(_pageRequest).ConfigureAwait(false);
@@ -166,7 +180,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Model.Resources.Remove(resource);
             EntityDeleted(resource);
-            StateHasChanged();
         }
 
         private async Task LoadMoreAsync()

@@ -4,7 +4,7 @@
     <Authorized>
         @if (Clicked.HasDelegate)
         {
-            <button class="btn @CssSubClass" type="submit" @onclick="Clicked">
+            <button class="btn @CssSubClass" type="submit" @onclick="OnClicked">
                 <span class="oi oi-data-transfer-download"></span>
                 @Localizer["Save"]
             </button>

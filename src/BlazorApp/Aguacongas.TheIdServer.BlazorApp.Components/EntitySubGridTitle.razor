@@ -1,11 +1,13 @@
 ﻿@typeparam T
+@inject IStringLocalizerAsync<EntitySubGridTitle<object>> Localizer
+
 <div class="row">
     <div class="col d-flex">
         <span class="h5">@Text</span>
         <AuthorizeView Policy="Is4-Writer">
             <Authorized>
                 <button type="button" class="btn btn-sm btn-primary ml-md-auto" @onclick="OnAddItenClicked">
-                    <span class="oi oi-plus"></span> Add
+                    <span class="oi oi-plus"></span> @Localizer["Add"]
                 </button>
             </Authorized>
         </AuthorizeView>

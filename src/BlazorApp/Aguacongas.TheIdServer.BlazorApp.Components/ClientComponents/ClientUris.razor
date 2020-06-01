@@ -4,27 +4,27 @@
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Uri"
-                            Text="uri"
+                            Text="@Localizer["uri"]"
                             GridState="GridState" />
         </th>
         @if (Model.IsSpaClient())
         {
             <th scope="col" class="text-center">
                 <SortableHeader Property="Cors"
-                                Text="cors"
+                                Text="@Localizer["cors"]"
                                 GridState="GridState" />
             </th>
         }
         <th scope="col" class="text-center">
             <SortableHeader Property="Redirect"
-                            Text="redirect"
+                            Text="@Localizer["redirect"]"
                             GridState="GridState" />
         </th>
         @if (Model.CanHandlePostLogout())
         {
             <th scope="col" class="text-center">
                 <SortableHeader Property="PostLogout"
-                                Text="post logout"
+                                Text="@Localizer["post logout"]"
                                 GridState="GridState" />
             </th>
         }

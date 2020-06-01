@@ -4,11 +4,11 @@
 @page "/identityresource/{id}"
 
 @inherits EntityModel<Entity.IdentityResource>
-@inject IStringLocalizerAsync<Identity> Localizer
+
 
 @if (Model == null)
 {
-    <Loading />
+    <PageLoading />
 }
 else
 {
@@ -40,7 +40,7 @@ else
                 </div>
                 <div class="w-100"></div>
                 <div class="col">
-                    <ul class="list-inline">
+                    <ul class="list-inline text-lowercase">
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
                         </li>
@@ -73,11 +73,13 @@ else
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>
-                            <div class="col-lg-10 col-sm-12">
+                            <div class="col-lg-9 col-sm-12">
                                 <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
                             <div class="col-1">
-                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">+</button>
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
                             </div>
                         </div>
                         @foreach (var resource in Model.Resources.Where(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName))
@@ -86,11 +88,13 @@ else
                                 <div class="col" for="culture">
                                     <AuthorizeText Placeholder="@Localizer["culture"]" @bind-Value="@resource.CultureId" />
                                 </div>
-                                <div class="col-lg-10 col-sm-12">
+                                <div class="col-lg-9 col-sm-12">
                                     <AuthorizeText Placeholder="@Localizer["localized display name"]" @bind-Value="@resource.Value" MaxLength="200" />
                                 </div>
                                 <div class="col-1">
-                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">-</button>
+                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">
+                                        <span class="oi oi-trash"></span><span class="sr-only">@Localizer["Delete"]</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -99,11 +103,13 @@ else
                             <label class="col col-form-label" for="description">
                                 @Localizer["description"]
                             </label>
-                            <div class="col-lg-10 col-sm-12">
+                            <div class="col-lg-9 col-sm-12">
                                 <AuthorizeTextArea Id="description" Placeholder="@Localizer["decription"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
                             <div class="col-1">
-                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">+</button>
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
                             </div>
                         </div>
                         @foreach (var resource in Model.Resources.Where(r => r.ResourceKind == Entity.EntityResourceKind.Description))
@@ -112,11 +118,13 @@ else
                                 <div class="col" for="culture">
                                     <AuthorizeText Placeholder="@Localizer["culture"]" @bind-Value="@resource.CultureId" />
                                 </div>
-                                <div class="col-lg-10 col-sm-12">
-                                    <AuthorizeText Placeholder="@Localizer["localized description"]" @bind-Value="@resource.Value" MaxLength="200" />
+                                <div class="col-lg-9 col-sm-12">
+                                    <AuthorizeTextArea Placeholder="@Localizer["localized description"]" @bind-Value="@resource.Value" MaxLength="1000" />
                                 </div>
                                 <div class="col-1">
-                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">-</button>
+                                    <button type="button" class="btn btn-primary btn-sm" @onclick="() => DeleteResource(resource)">
+                                        <span class="oi oi-trash"></span><span class="sr-only">@Localizer["Delete"]</span>
+                                    </button>
                                 </div>
                             </div>
                         }
@@ -134,7 +142,7 @@ else
                 </div>
                 <div id="properties" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Properties" Collection="@Model.Properties" CreateModel="CreateProperty" />
+                        <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="@Model.Properties" CreateModel="CreateProperty" />
                     </div>
                     <div class="card-body">
                         <IdentityProperties Collection="@Model.Properties" />

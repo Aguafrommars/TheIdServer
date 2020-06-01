@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -38,6 +39,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected ILogger<EntityModel<T>> Logger { get; set; }
 
+        [Inject]
+        protected IStringLocalizerAsync<EntityModel<T>> Localizer { get; set; }
+
         [Parameter]
         public string Id { get; set; }
 
@@ -74,10 +78,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            HandleModificationState = new HandleModificationState(Logger)
-            {
-                OnStateChange = OnStateChange
-            };
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            HandleModificationState = new HandleModificationState(Logger);
+            HandleModificationState.OnStateChange += OnStateChange;
 
             if (Id == null)
             {
@@ -108,6 +111,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
 
             Model = CloneModel(State);
+            State = CloneModel(Model);
             Id = GetModelId(Model);
             IsNew = false;
 
@@ -135,9 +139,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             EditContext.MarkAsUnmodified();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
-
-            Model = await GetModelAsync().ConfigureAwait(false);
-            State = CloneModel(Model);
         }
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
@@ -176,7 +177,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
-        protected virtual void OnStateChange()
+        protected virtual void OnStateChange(ModificationKind kind, object entity)
         {
             StateHasChanged();
         }

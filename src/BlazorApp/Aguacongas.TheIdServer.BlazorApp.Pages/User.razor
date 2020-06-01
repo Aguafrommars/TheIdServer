@@ -7,7 +7,7 @@
 
 @if (Model == null)
 {
-    <Loading />
+    <PageLoading />
 }
 else
 {
@@ -138,17 +138,17 @@ else
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"
-                                                Text="type"
+                                                Text="@Localizer["type¨"]"
                                                 GridState="_gridState" />
                             </th>
                             <th scope="col">
                                 <SortableHeader Property="Value"
-                                                Text="value"
+                                                Text="@Localizer["value"]"
                                                 GridState="_gridState" />
                             </th>
                             <th scope="col">
                                 <SortableHeader Property="Issuer"
-                                                Text="issuer"
+                                                Text="@Localizer["issuer"]"
                                                 GridState="_gridState" />
                             </th>
                             <th></th>

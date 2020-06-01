@@ -1,14 +1,20 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
 {
     public partial class SaveButton
     {
-        private bool _disabled;
+        private bool _disabled = true;
 
         [CascadingParameter]
         public EditContext EditContext { get; set; }
+
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
 
         protected override void OnInitialized()
         {
@@ -18,7 +24,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
             EditContext.OnFieldChanged += EditContext_OnFieldChanged;
             EditContext.OnValidationRequested += EditContext_OnValidationRequested;
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
             base.OnInitialized();
+        }
+
+        private Task OnClicked(MouseEventArgs args)
+        {
+            _disabled = true;
+            return Clicked.InvokeAsync(args);
+        }
+
+        private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
+        {
+            _disabled = false;
+            StateHasChanged();
         }
 
         private void EditContext_OnValidationRequested(object sender, ValidationRequestedEventArgs e)

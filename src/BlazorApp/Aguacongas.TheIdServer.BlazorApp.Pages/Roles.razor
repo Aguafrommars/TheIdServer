@@ -4,7 +4,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="Roles" Url="role"></PageListHeader>
+        <PageListHeader Name="@Localizer["Roles"]" Url="role"></PageListHeader>
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
@@ -13,12 +13,12 @@
         <TableHeader>
             <th class="w-50" scope="col">
                 <SortableHeader Property="Id"
-                                Text="id"
+                                Text="@Localizer["id"]"
                                 GridState="GridState" />
             </th>
             <th class="w-50" scope="col">
                 <SortableHeader Property="Name"
-                                Text="name"
+                                Text="@Localizer["name"]"
                                 GridState="GridState" />
             </th>
         </TableHeader>

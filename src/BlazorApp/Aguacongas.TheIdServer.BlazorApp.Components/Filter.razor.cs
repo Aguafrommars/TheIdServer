@@ -17,6 +17,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public EventCallback<bool> FocusChanged { get; set; }
 
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
         private Task OnTermChanged(ChangeEventArgs e)
         {
             Term = e.Value.ToString();

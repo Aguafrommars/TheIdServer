@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Extensions.Logging
-@inject ILogger<EntitiesGrid<TItem>> _logger
 @typeparam TItem
+@inject ILogger<EntitiesGrid<TItem>> _logger
+@inject IStringLocalizerAsync<EntitiesGrid<TItem>> Localizer
 
 <table class="@TableClass">
     @if (TableHeader != null)
@@ -12,17 +13,17 @@
     @if (Items != null && RowTemplate != null)
     {
         <tbody>
-        @if(Items.Any())
-        {
-            @foreach (var item in Items)
+            @if (Items.Any())
             {
-                <tr @key="item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                @foreach (var item in Items)
+                {
+                    <tr @key="item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                }
             }
-        }
-        else 
-        { 
-            <tr>Nothing here.</tr>
-        }
+            else
+            {
+                <tr>Nothing here.</tr>
+            }
         </tbody>
     }
     @if (TableFooter != null)

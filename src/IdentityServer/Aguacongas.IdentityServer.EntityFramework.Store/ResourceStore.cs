@@ -57,6 +57,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .Include(a => a.ApiClaims)
                             .Include(a => a.ApiScopeClaims)
                             .Include(a => a.Secrets)
+                            .Include(a => a.Resources)
                             .Include(a => a.Properties)
                             .Include(a => a.Scopes)
                             .ThenInclude(s => s.Resources)

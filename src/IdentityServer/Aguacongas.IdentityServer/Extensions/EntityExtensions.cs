@@ -139,7 +139,7 @@ namespace Aguacongas.IdentityServer.Store
 
             return new IdentityResource
             {
-                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
                     && r.CultureId == cultureId)?.Value ?? identity.Description,
                 DisplayName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
                     && r.CultureId == cultureId)?.Value ?? identity.DisplayName,
