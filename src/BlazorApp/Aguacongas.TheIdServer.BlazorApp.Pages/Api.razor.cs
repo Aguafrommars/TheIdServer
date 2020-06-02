@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Api : IDisposable
     {
-        protected override string Expand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
+        protected override string Expand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.Resources)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -40,7 +40,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             var scope = new ApiScope
             {
-                ApiScopeClaims = new List<ApiScopeClaim>()
+                ApiScopeClaims = new List<ApiScopeClaim>(),
+                Resources = new List<ApiScopeLocalizedResource>()
             };
             EntityCreated(scope);
             return Task.FromResult(new ProtectResource
@@ -51,7 +52,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     scope
                 },
                 ApiClaims = new List<ApiClaim>(),
-                Properties = new List<ApiProperty>()
+                Properties = new List<ApiProperty>(),
+                Resources = new List<ApiLocalizedResource>()
             });
         }
 
@@ -68,10 +70,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             if (entity is ApiScope scope)
             {
                 scope.ApiScopeClaims = null;
-            }
-            if (entity is ApiSecret secret && secret.Id == null && secret.Type == "ShareSecret")
-            {
-                secret.Value = secret.Value.Sha256();
+                scope.Resources = null;
             }
         }
 
@@ -101,6 +100,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 }
                 apiScopeClaim.ApiScpopeId = apiScopeClaim.ApiScpope.Id;
                 apiScopeClaim.ApiScpope = null;
+            }
+            if (entity is ApiSecret secret && secret.Id == null && secret.Type == "ShareSecret")
+            {
+                secret.Value = secret.Value.Sha256();
             }
         }
 

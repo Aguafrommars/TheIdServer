@@ -1,5 +1,4 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -15,7 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private bool _filtered;
         private bool _isWebClient;
 
-        protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
+        protected override string Expand => $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)}";
 
         protected override bool NonEditable => false;
 
@@ -23,7 +22,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void OnStateChange(ModificationKind kind, object entity)
         {
-            // TODO: manage state
             _isWebClient = Model.IsWebClient();
             base.OnStateChange(kind, entity);
         }
@@ -45,7 +43,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 ClientSecrets = new List<Entity.ClientSecret>(),
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
                 RedirectUris = new List<Entity.ClientUri>(),
-                Properties = new List<Entity.ClientProperty>()
+                Properties = new List<Entity.ClientProperty>(),
+                Resources = new List<Entity.ClientLocalizedResource>()
             });
         }
 
@@ -53,14 +52,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entity is Entity.Client client)
             {
-                client.IdentityProviderRestrictions = null;
-                client.ClientClaims = null;
-                client.ClientSecrets = null;
-                client.AllowedGrantTypes = null;
-                client.RedirectUris = null;
-                client.AllowedScopes = null;
-                client.Properties = null;
-                return;
+                Model.Id = client.Id;
+            }
+            if (entity is Entity.IClientSubEntity subEntity)
+            {
+                subEntity.ClientId = Model.Id;
             }
             if (entity is Entity.ClientUri clientUri && clientUri.Uri != null)
             {
@@ -76,15 +72,36 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is Entity.IClientSubEntity subEntity)
+            if (entity is Entity.Client client)
             {
-                subEntity.ClientId = Model.Id;
+                client.IdentityProviderRestrictions = null;
+                client.ClientClaims = null;
+                client.ClientSecrets = null;
+                client.AllowedGrantTypes = null;
+                client.RedirectUris = null;
+                client.AllowedScopes = null;
+                client.Properties = null;
+                client.Resources = null;
             }
+        }
+
+        protected override Entity.Client CloneModel(Entity.Client entity)
+        {
+            var clone = base.CloneModel(entity);
+            clone.IdentityProviderRestrictions = clone.IdentityProviderRestrictions.ToList();
+            clone.ClientClaims = clone.ClientClaims.ToList();
+            clone.ClientSecrets = clone.ClientSecrets.ToList();
+            clone.AllowedGrantTypes = clone.AllowedGrantTypes.ToList();
+            clone.RedirectUris = clone.RedirectUris.ToList();
+            clone.AllowedScopes = clone.AllowedScopes.ToList();
+            clone.Properties = clone.Properties.ToList();
+            clone.Resources = clone.Resources.ToList();
+            return clone;
         }
 
         protected override Type GetEntityType(FieldIdentifier identifier)
         {
-            if (identifier.Model is ClientUri)
+            if (identifier.Model is Models.ClientUri)
             {
                 return typeof(Entity.ClientUri);
             }
@@ -93,7 +110,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override Entity.IEntityId GetEntityModel(FieldIdentifier identifier)
         {
-            if (identifier.Model is ClientUri clientUri)
+            if (identifier.Model is Models.ClientUri clientUri)
             {
                 return clientUri.Parent;
             }

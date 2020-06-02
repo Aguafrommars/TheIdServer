@@ -603,7 +603,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     IdentityProviderRestrictions = new List<ClientIdpRestriction>
                     {
                         new ClientIdpRestriction{ Id = GenerateId(), Provider = "Google"}
-                    }
+                    },
+                    Resources = new List<ClientLocalizedResource>()
                 });
 
                 return context.SaveChangesAsync();

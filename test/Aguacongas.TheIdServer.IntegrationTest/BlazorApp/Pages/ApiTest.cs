@@ -449,20 +449,23 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                            ApiScopeClaims = new List<ApiScopeClaim>
                            {
                                new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
-                           }
+                           },
+                           Resources = new List<ApiScopeLocalizedResource>()
                        },
                        new ApiScope
                        {
                            Id = GenerateId(),
                            Scope = "filtered",
                            DisplayName = "filtered",
-                           ApiScopeClaims = new List<ApiScopeClaim>()
+                           ApiScopeClaims = new List<ApiScopeClaim>(),
+                           Resources = new List<ApiScopeLocalizedResource>()
                        }
                     },
                     Secrets = new List<ApiSecret>
                     {
                         new ApiSecret { Id = GenerateId(), Type="SHA256", Value = "filtered" }
-                    }
+                    },
+                    Resources = new List<ApiLocalizedResource>()
                 });
                 if (!context.IdentityClaims.Any(c => c.Type == "name"))
                 {
