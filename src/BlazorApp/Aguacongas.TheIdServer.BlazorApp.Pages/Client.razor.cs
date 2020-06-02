@@ -207,5 +207,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EntityDeleted(scope);
             StateHasChanged();
         }
+
+        private Task AddResource(Entity.EntityResourceKind kind)
+        {
+            var entity = new Entity.ClientLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
+        }
     }
 }

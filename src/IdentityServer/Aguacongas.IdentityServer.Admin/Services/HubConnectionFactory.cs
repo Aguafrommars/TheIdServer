@@ -109,6 +109,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     Debug.Assert(_hubConnection.State == HubConnectionState.Connected);
                     return;
                 }
+                catch(ObjectDisposedException)
+                {
+                    return;
+                }
                 catch(Exception e)
                 {
                     // Failed to connect, trying again in 5000 ms.

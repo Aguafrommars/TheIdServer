@@ -11,6 +11,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
         private void OnProviderDeletedClicked(Entity.ClientIdpRestriction restriction)
         {
             Model.IdentityProviderRestrictions.Remove(restriction);

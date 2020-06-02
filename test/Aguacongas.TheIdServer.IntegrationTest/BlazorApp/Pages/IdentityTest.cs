@@ -167,7 +167,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                         {
                             Id = GenerateId(),
                             ResourceKind = EntityResourceKind.DisplayName,
-                            CultureId = "en-US"
+                            CultureId = "en-US",
+                            Value = GenerateId()
                         }
                     }
                 });

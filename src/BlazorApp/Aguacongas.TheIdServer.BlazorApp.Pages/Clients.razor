@@ -35,8 +35,8 @@ else
             <RowTemplate>
                 <td class="w-25">@context.Id</td>
                 <td class="w-75">
-                    @context.ClientName
-                    <div><em>@context.Description</em></div>
+                    @LocalizeEntityProperty(context, context.ClientName, Entity.EntityResourceKind.DisplayName)
+                    <div><em>@LocalizeEntityProperty(context, context.Description, Entity.EntityResourceKind.Description)</em></div>
                 </td>
             </RowTemplate>
         </EntitiesGrid>

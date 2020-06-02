@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System;
@@ -11,6 +12,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public abstract class AutoCompleteModel<T> : ComponentBase, IDisposable
     {
+        [Inject]
+        protected IStringLocalizerAsync<AutoCompleteModel<T>> Localizer { get; set; }
+
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
 
@@ -46,10 +50,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             => EditContext.FieldCssClass(_fieldIdentifier);
 
 
-        private CancellationTokenSource _cancellationTokenSource;
-
-
-        private FieldIdentifier _fieldIdentifier;
         protected Task SetSelectedValue(string value)
         {
             SetValue(value);
@@ -62,6 +62,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         {
             base.OnParametersSet();
             _fieldIdentifier = new FieldIdentifier(Entity, PropertyName);
+        }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
         }
 
         protected override Task OnAfterRenderAsync(bool firstRender)
@@ -109,6 +115,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected abstract void SetValue(string inputValue);
 
         protected abstract Task<IEnumerable<string>> GetFilteredValues(string term);
+
+        private CancellationTokenSource _cancellationTokenSource;
+
+
+        private FieldIdentifier _fieldIdentifier;
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

@@ -1,4 +1,5 @@
 ﻿@typeparam T
+@inject IStringLocalizerAsync<AuthorizedToken<T>> Localizer
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <div class="btn-group">
@@ -9,7 +10,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 @foreach (var kv in QuickValues)
                 {
-                    <button type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@kv.Key</button>
+                <button @key="@kv" type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@Localizer[kv.Key]</button>
                 }
             </div>
         </div>

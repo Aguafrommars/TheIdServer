@@ -71,18 +71,30 @@ else
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>
-                            <div class="col-lg-10 col-sm-12">
+                            <div class="col-lg-9 col-sm-12">
                                 <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
+                            <div class="col-1">
+                                <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
+                            </div>
                         </div>
+                        <ApiResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName"></ApiResources>
                         <div class="form-group row">
                             <label class="col col-form-label" for="description">
                                 @Localizer["description"]
                             </label>
-                            <div class="col-lg-10 col-sm-12">
+                            <div class="col-lg-9 col-sm-12">
                                 <AuthorizeTextArea Id="description" Placeholder="@Localizer["decription"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
+                            <div class="col-1">
+                                <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
+                            </div>
                         </div>
+                        <ApiResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description"></ApiResources>
                     </div>
                 </div>
                 <div id="secrets" class="card mb-3">

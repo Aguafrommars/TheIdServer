@@ -425,6 +425,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();
+            var apiScopeId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Apis.Add(new ProtectResource
@@ -454,18 +455,38 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                        },
                        new ApiScope
                        {
-                           Id = GenerateId(),
+                           Id = apiScopeId,
                            Scope = "filtered",
                            DisplayName = "filtered",
                            ApiScopeClaims = new List<ApiScopeClaim>(),
-                           Resources = new List<ApiScopeLocalizedResource>()
+                           Resources = new List<ApiScopeLocalizedResource>
+                           {
+                               new ApiScopeLocalizedResource
+                               {
+                                   Id = GenerateId(),
+                                   ApiScopeId = apiScopeId,
+                                   CultureId = "en-US",
+                                   ResourceKind = EntityResourceKind.Description,
+                                   Value = GenerateId()
+                               }
+                           }
                        }
                     },
                     Secrets = new List<ApiSecret>
                     {
                         new ApiSecret { Id = GenerateId(), Type="SHA256", Value = "filtered" }
                     },
-                    Resources = new List<ApiLocalizedResource>()
+                    Resources = new List<ApiLocalizedResource>
+                    {
+                        new ApiLocalizedResource
+                        {
+                            Id = GenerateId(),
+                            ApiId = apiId,
+                            ResourceKind = EntityResourceKind.DisplayName,
+                            CultureId = "en-US",
+                            Value = GenerateId()
+                        }
+                    }
                 });
                 if (!context.IdentityClaims.Any(c => c.Type == "name"))
                 {

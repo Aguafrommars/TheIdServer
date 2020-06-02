@@ -1,48 +1,41 @@
-﻿<div class="form-group row">
+﻿@inject IStringLocalizerAsync<ClientConsents> Localizer
+<div class="form-group row">
     <label class="col col-form-label">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="require-consent" Label="require consent" @bind-Value="@Model.RequireConsent" />
+        <AuthorizeCheckbox Name="require-consent" Label="@Localizer["require consent"]" @bind-Value="@Model.RequireConsent" />
     </div>
 </div>
 @if (Model.RequireConsent)
 {
     <div class="form-group row">
-        <label class="col col-form-label" for="clientName">
-            display name
-        </label>
-        <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="clientName" Placeholder="client name" @bind-Value="@Model.ClientName" MaxLength="200" />
-        </div>
-    </div>
-    <div class="form-group row">
         <label class="col col-form-label" for="logoUri">
-            logo uri
+            @Localizer["logo uri"]
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="logoUri" Placeholder="logo uri" @bind-Value="@Model.LogoUri" MaxLength="2000" />
+            <AuthorizeText Id="logoUri" Placeholder="@Localizer["logo uri"]" @bind-Value="@Model.LogoUri" MaxLength="2000" />
         </div>
     </div>
     <div class="form-group row">
         <label class="col col-form-label" for="clientUri">
-            client uri
+            @Localizer["client uri"]
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="clientUri" Placeholder="client uri" @bind-Value="@Model.ClientUri" MaxLength="2000" />
+            <AuthorizeText Id="clientUri" Placeholder="@Localizer["client uri"]" @bind-Value="@Model.ClientUri" MaxLength="2000" />
         </div>
     </div>
     <div class="form-group row">
         <label class="col col-form-label">
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeCheckbox Name="remember-consent" Label="remenber consent" @bind-Value="@Model.AllowRememberConsent" />
+            <AuthorizeCheckbox Name="remember-consent" Label="@Localizer["remenber consent"]" @bind-Value="@Model.AllowRememberConsent" />
         </div>
     </div>
     @if (Model.AllowRememberConsent)
     {
         <div class="form-group row">
             <label class="col col-form-label" for="consent-lifetime">
-                consent lifetime
+                @Localizer["consent lifetime"]
             </label>
             <div class="col-lg-10 col-sm-12">
                 <AuthorizedToken Name="consent-lifetime" QuickValues="_consentLifetimeQuickValues" @bind-Value="@Model.ConsentLifetime" />

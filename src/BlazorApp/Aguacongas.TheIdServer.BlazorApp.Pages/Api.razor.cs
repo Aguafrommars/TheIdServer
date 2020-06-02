@@ -236,6 +236,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private ApiProperty CreateProperty()
             => new ApiProperty();
 
+        private Task AddResource(EntityResourceKind kind)
+        {
+            var entity = new ApiLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
+        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

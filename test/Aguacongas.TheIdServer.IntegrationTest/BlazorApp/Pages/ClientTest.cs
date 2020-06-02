@@ -604,7 +604,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ClientIdpRestriction{ Id = GenerateId(), Provider = "Google"}
                     },
-                    Resources = new List<ClientLocalizedResource>()
+                    Resources = new List<ClientLocalizedResource>
+                    {
+                        new ClientLocalizedResource
+                        {
+                            Id = GenerateId(),
+                            ClientId = clientId,
+                            ResourceKind = EntityResourceKind.DisplayName,
+                            Value = GenerateId()
+                        }
+                    }
                 });
 
                 return context.SaveChangesAsync();

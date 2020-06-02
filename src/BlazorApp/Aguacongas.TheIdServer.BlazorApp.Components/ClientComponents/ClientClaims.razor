@@ -24,11 +24,11 @@
         else
         {
             <td>
-                <AuthorizeText Id="type" @bind-Value="@claim.Type" MaxLength="250" />
+                <AuthorizeText @bind-Value="@claim.Type" MaxLength="250" />
             </td>
         }
         <td>
-            <AuthorizeText Id="value" @bind-Value="@claim.Value" />
+            <AuthorizeText @bind-Value="@claim.Value" />
         </td>
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(claim)">
@@ -42,17 +42,17 @@
 <div class="col">
     <div class="form-group row">
         <label class="col-2 col-form-label" for="clientUri">
-            claims prefix
+            @Localizer["claims prefix"]
         </label>
         <div class="col-lg-10 col-sm-12">
             <div class="row col-4">
-                <AuthorizeText Id="clientUri" Placeholder="prefix" @bind-Value="@Model.ClientClaimsPrefix" MaxLength="250" />
+                <AuthorizeText Id="clientUri" Placeholder="@Localizer["prefix"]" @bind-Value="@Model.ClientClaimsPrefix" MaxLength="250" />
             </div>
         </div>
         <label class="col-2 col-form-label">
         </label>
         <div class="col-lg-10 col-sm-12">
-            <AuthorizeCheckbox Label="always send claims" @bind-Value="@Model.AlwaysSendClientClaims" />
+            <AuthorizeCheckbox Label="@Localizer["always send claims"]" @bind-Value="@Model.AlwaysSendClientClaims" />
         </div>
     </div>
     </div>

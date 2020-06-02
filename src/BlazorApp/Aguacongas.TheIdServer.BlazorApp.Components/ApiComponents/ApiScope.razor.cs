@@ -1,6 +1,7 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
@@ -20,6 +21,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
         {
             Collection.Remove(Scope);
             HandleModificationState.EntityDeleted(Scope);
+        }
+
+        private Task AddResource(Entity.EntityResourceKind kind)
+        {
+            var entity = new Entity.ApiScopeLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Scope.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
         }
     }
 }
