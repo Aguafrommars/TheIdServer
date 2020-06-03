@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.IdentityServer.Admin.Http.Store;
+using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -25,6 +27,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -94,7 +97,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var jsRuntimeMock = new Mock<IJSRuntime>();
             host = new TestHost();
             var httpMock = host.AddMockHttp();
-            mockHttp = httpMock;            
+            mockHttp = httpMock;
+           
             host.ConfigureServices(services =>
             {
                 var httpClient = sut.CreateClient();
@@ -104,6 +108,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
+
+                httpMock.When($"/api/localizedresource*")
+                    .Respond(async request =>
+                    {
+                        return new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+                        {
+                            Content = new StringContent("{\"items\": []}")
+                        };
+                    });
+
+                var localizerClient = httpMock.ToHttpClient();
+                localizerClient.BaseAddress = new Uri(httpClient.BaseAddress, "api");
 
                 services
                     .AddLogging(configure =>
@@ -128,6 +144,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton(p => navigationInterceptionMock.Object)
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton<Settings>()
+                    .AddSingleton(p => new blazorApp.Infrastructure.Services.StringLocalizer(localizerClient, p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()))
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
                     .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
                     .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())

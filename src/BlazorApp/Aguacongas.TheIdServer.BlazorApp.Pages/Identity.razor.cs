@@ -57,7 +57,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.IdentityClaims.Add(new IdentityClaim());
         }
 
-        private void OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             Model.IdentityClaims = State.IdentityClaims
                 .Where(c => c.Type != null && c.Type.Contains(term))
@@ -70,6 +70,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
 
             AddEmpyClaimsTypes();
+            return Task.CompletedTask;
         }
 
         protected override IdentityResource CloneModel(IdentityResource entity)

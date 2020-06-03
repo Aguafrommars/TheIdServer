@@ -123,7 +123,7 @@ else
                         <div class="row">
                             @foreach (var scope in Model.Scopes)
                             {
-                                <div @key="@scope" class="col-12">
+                                <div class="col-12">
                                     <ApiScope Collection="@Model.Scopes" Scope="@scope" />
                                 </div>
                             }

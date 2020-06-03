@@ -16,6 +16,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     {
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
+        private IEnumerable<LocalizedResource> _resources;
         public event Action ResourceReady;
 
         public StringLocalizer(HttpClient client, ILogger<AdminStore<LocalizedResource>> logger)
@@ -52,15 +53,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         private async Task<string> GetStringAsync(string key)
         {
             var cultureName = CultureInfo.CurrentCulture.Name;
+            if (_resources != null)
+            {
+                return _resources.FirstOrDefault(r => r.Key == key)?.Value;
+            }
+            _resources = new LocalizedResource[0];
+
             var page = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{cultureName}' and {nameof(LocalizedResource.Key)} eq '{key}'",
-                Select = nameof(LocalizedResource.Value),
-                Take = 1
+                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{cultureName}'"
             }).ConfigureAwait(false);
 
-            return page.Items
-                .FirstOrDefault()?.Value;
+            _resources = page.Items;
+            foreach(var resource in _resources)
+            {
+                _keyValuePairs[resource.Key] = resource.Value;
+            }
+
+            ResourceReady();
+            return _resources.FirstOrDefault(r => r.Key == key)?.Value;
         }
 
         private void SetResource(string name, Task<string> task)
@@ -71,16 +82,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             }
 
             _keyValuePairs[name] = task.Result;
-            ResourceReady();
         }
     }
 
     public class StringLocalizer<T> : IStringLocalizerAsync<T>, IDisposable
     {
-        private readonly SharedStringLocalizer<T> _sharedStringLocalizer;
+        private readonly StringLocalizer _sharedStringLocalizer;
         private bool disposedValue;
 
-        public StringLocalizer(SharedStringLocalizer<T> sharedStringLocalizer) 
+        public StringLocalizer(StringLocalizer sharedStringLocalizer) 
         {
             _sharedStringLocalizer = sharedStringLocalizer ?? throw new ArgumentNullException(nameof(sharedStringLocalizer));
             _sharedStringLocalizer.ResourceReady += _sharedStringLocalizer_ResourceReady;

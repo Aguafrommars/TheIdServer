@@ -10,7 +10,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 @foreach (var kv in QuickValues)
                 {
-                <button @key="@kv" type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@Localizer[kv.Key]</button>
+                    <button type="button" class="dropdown-item" @onclick="() => SetValue(kv.Value)">@Localizer[kv.Key]</button>
                 }
             </div>
         </div>

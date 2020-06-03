@@ -4,7 +4,7 @@
         <ul class="list-inline">
             @foreach (var provider in Model.IdentityProviderRestrictions)
             {
-                <li @key="@provider" class="list-inline-item">
+                <li class="list-inline-item">
                     <IdentityProvider Entity="@provider"
                                       DeleteClicked="() => OnProviderDeletedClicked(provider)"
                                       ValueChanged="() => OnProviderValueChanged(provider)" />

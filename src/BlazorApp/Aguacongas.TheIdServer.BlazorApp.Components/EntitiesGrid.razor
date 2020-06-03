@@ -15,14 +15,24 @@
         <tbody>
             @if (Items.Any())
             {
-                @foreach (var item in Items)
+                @if (SetKey)
                 {
-                    <tr @key="@item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                    @foreach (var item in Items)
+                    {
+                        <tr @key="@item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                    }
+                }
+                else
+                {
+                    @foreach (var item in Items)
+                    {
+                        <tr class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
+                    }
                 }
             }
             else
             {
-                <tr>Nothing here.</tr>
+                <tr>@Localizer["Nothing here."]</tr>
             }
         </tbody>
     }

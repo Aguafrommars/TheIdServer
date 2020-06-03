@@ -52,10 +52,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return role;
         }
 
-        private void OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             Model.Claims = State.Claims.Where(c => c.ClaimType.Contains(term) || c.ClaimValue.Contains(term))
                 .ToList();
+            return Task.CompletedTask;
         }
 
         private RoleClaim CreateClaim()

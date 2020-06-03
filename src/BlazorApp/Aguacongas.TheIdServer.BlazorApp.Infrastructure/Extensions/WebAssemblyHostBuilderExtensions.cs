@@ -1,4 +1,5 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
+
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
@@ -70,6 +73,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddSingleton(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()))
                 .AddSingleton(typeof(SharedStringLocalizer<>))
                 .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddHttpClient("oidc")

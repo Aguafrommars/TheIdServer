@@ -19,7 +19,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         protected override void OnInitialized()
         {
             CssSubClass ??= "btn-primary";
-            SetIsDisabled();
             EditContext.OnValidationStateChanged += EditContext_OnValidationStateChanged;
             EditContext.OnFieldChanged += EditContext_OnFieldChanged;
             EditContext.OnValidationRequested += EditContext_OnValidationRequested;

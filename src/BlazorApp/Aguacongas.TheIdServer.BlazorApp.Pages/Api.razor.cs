@@ -152,6 +152,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             clone.Properties = clone.Properties.ToList();
             clone.Resources = clone.Resources.ToList();
             clone.Scopes = clone.Scopes.ToList();
+            foreach(var scope in clone.Scopes)
+            {
+                scope.ApiScopeClaims = scope.ApiScopeClaims.ToList();
+                scope.Resources = scope.Resources.ToList();
+            }
             clone.Secrets = clone.Secrets.ToList();
             clone.ApiClaims = clone.ApiClaims.ToList();
             return clone;
@@ -182,7 +187,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        private void OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             Model.ApiClaims = State.ApiClaims
                 .Where(c => c.Type != null && c.Type.Contains(term))
@@ -201,7 +206,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 if (stateScope != null)
                 {
                     scope.ApiScopeClaims = stateScope.ApiScopeClaims
-                        .Where(c => (c.Type != null && c.Type.Contains(term)))
+                        .Where(c => c.Type != null && c.Type.Contains(term))
                         .ToList();
                 }
             }
@@ -210,6 +215,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
 
             AddEmpyClaimsTypes();
+
+            return Task.CompletedTask;
         }
 
         private ApiSecret CreateSecret()
@@ -227,7 +234,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
             var scope = new ApiScope
             {
-                ApiScopeClaims = claims
+                ApiScopeClaims = claims,
+                Resources = new List<ApiScopeLocalizedResource>()
             };
             claim.ApiScpope = scope;
             return scope;

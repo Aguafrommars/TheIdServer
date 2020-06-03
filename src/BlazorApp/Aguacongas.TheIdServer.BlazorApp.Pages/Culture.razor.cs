@@ -97,7 +97,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // nothing to do
         }
 
-        private Task OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
@@ -122,7 +122,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     var expressionArray = new string[propertyArray.Length];
                     for (int i = 0; i < propertyArray.Length; i++)
                     {
-                        expressionArray[i] = $"contains({propertyArray[i]},'{term}')";
+                        expressionArray[i] = $"contains({propertyArray[i]},'{term.Replace("'", "''")}')";
                     }
                     _pageRequest.Skip = 0;
                     _pageRequest.Filter = $"{nameof(Entity.LocalizedResource.CultureId)} eq '{Model.Id}' and ({string.Join(" or ", expressionArray)})";

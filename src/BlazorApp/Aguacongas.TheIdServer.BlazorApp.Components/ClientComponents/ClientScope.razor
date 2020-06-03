@@ -3,7 +3,6 @@
 @inject IAdminStore<Entity.IdentityResource> _identityStore
 @inject IAdminStore<Entity.ProtectResource> _apiStore
 @inject IAdminStore<Entity.ApiScope> _apiScopeStore
-@inject IStringLocalizerAsync<ClientScope> Localizer
 
 @if (IsReadOnly)
 {
@@ -29,7 +28,7 @@ else
         {
             foreach (var scope in _filterScopes)
             {
-                <button @key="@scope" class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(scope.Value)">
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(scope.Value)">
                     <small>@scope.Value</small>
                     @if (scope.IsIdentity)
                     {

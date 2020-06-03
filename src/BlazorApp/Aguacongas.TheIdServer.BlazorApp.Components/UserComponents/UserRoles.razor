@@ -5,7 +5,7 @@
         <ul class="list-inline">
             @foreach (var role in Model)
             {
-                <li @key="@role" class="list-inline-item">
+                <li class="list-inline-item">
                     <UserRole Entity="@role"
                                DeleteClicked="() => DeleteRoleClicked.InvokeAsync(role)"
                                ValueChanged="() => RoleValueChanged.InvokeAsync(role)" />

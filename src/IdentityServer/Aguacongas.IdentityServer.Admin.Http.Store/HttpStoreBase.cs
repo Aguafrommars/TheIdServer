@@ -78,6 +78,11 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         {
             if (!response.IsSuccessStatusCode)
             {
+                if (response.Content == null)
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+
                 var content = await response.Content.ReadAsStringAsync()
                     .ConfigureAwait(false);
                 Logger.LogError("Error response received {@Response}", content);

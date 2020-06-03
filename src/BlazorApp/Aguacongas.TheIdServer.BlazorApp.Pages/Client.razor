@@ -186,7 +186,7 @@ else
                                 <ul class="list-inline">
                                     @foreach (var scope in Model.AllowedScopes)
                                     {
-                                        <li @key="@scope" class="list-inline-item">
+                                        <li class="list-inline-item">
                                             <ClientScope Entity="@scope"
                                                          Model="@Model"
                                                          DeleteClicked="() => OnScopeDeleted(scope)"

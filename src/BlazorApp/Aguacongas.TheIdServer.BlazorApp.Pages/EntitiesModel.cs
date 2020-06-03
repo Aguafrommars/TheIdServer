@@ -78,7 +78,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     var expressionArray = new string[propertyArray.Length];
                     for (int i = 0; i < propertyArray.Length; i++)
                     {
-                        expressionArray[i] = $"contains({propertyArray[i]},'{filter}')";
+                        expressionArray[i] = $"contains({propertyArray[i]},'{filter.Replace("'", "''")}')";
                     }
                     _pageRequest.Filter = string.Join(" or ", expressionArray);
 

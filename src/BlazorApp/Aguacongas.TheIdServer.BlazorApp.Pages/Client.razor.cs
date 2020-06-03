@@ -1,6 +1,5 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
 using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +22,38 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override void OnStateChange(ModificationKind kind, object entity)
         {
             _isWebClient = Model.IsWebClient();
+            if (entity is Entity.ClientGrantType)
+            {
+                OnStateChange(kind, State.AllowedGrantTypes, entity);
+            }
+            if (entity is Entity.ClientScope)
+            {
+                OnStateChange(kind, State.AllowedScopes, entity);
+            }
+            if (entity is Entity.ClientClaim)
+            {
+                OnStateChange(kind, State.ClientClaims, entity);
+            }
+            if (entity is Entity.ClientSecret)
+            {
+                OnStateChange(kind, State.ClientSecrets, entity);
+            }
+            if (entity is Entity.ClientIdpRestriction)
+            {
+                OnStateChange(kind, State.IdentityProviderRestrictions, entity);
+            }
+            if (entity is Entity.ClientProperty)
+            {
+                OnStateChange(kind, State.Properties, entity);
+            }
+            if (entity is Entity.ClientLocalizedResource)
+            {
+                OnStateChange(kind, State.Resources, entity);
+            }
+            if (entity is Entity.ClientUri)
+            {
+                OnStateChange(kind, State.RedirectUris, entity);
+            }
             base.OnStateChange(kind, entity);
         }
 
@@ -99,24 +130,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return clone;
         }
 
-        protected override Type GetEntityType(FieldIdentifier identifier)
-        {
-            if (identifier.Model is Models.ClientUri)
-            {
-                return typeof(Entity.ClientUri);
-            }
-            return base.GetEntityType(identifier);
-        }
-
-        protected override Entity.IEntityId GetEntityModel(FieldIdentifier identifier)
-        {
-            if (identifier.Model is Models.ClientUri clientUri)
-            {
-                return clientUri.Parent;
-            }
-            return base.GetEntityModel(identifier);
-        }
-
         protected override void OnEntityUpdated(Type entityType, Entity.IEntityId entityModel)
         {
             if (entityType == typeof(Entity.ClientGrantType))
@@ -151,7 +164,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
         }
 
-        private void OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             Model.AllowedScopes = State.AllowedScopes
                 .Where(s => s.Scope != null && s.Scope.Contains(term))
@@ -177,6 +190,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             AddEmpyEntities();
             StateHasChanged();
+
+            return Task.CompletedTask;
         }
 
         private Entity.ClientSecret CreateSecret()

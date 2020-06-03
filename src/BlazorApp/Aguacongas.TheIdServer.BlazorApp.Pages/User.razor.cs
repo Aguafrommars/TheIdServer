@@ -150,7 +150,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.Roles.Add(new entity.Role());
         }
 
-        private void OnFilterChanged(string term)
+        protected override Task OnFilterChanged(string term)
         {
             Model.Claims = State.Claims.Where(c => c.ClaimType.Contains(term) || c.ClaimValue.Contains(term))
                 .ToList();
@@ -174,6 +174,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ToList();
 
             AddEmptyRole();
+            return Task.CompletedTask;
         }
 
         private entity.UserClaim CreateClaim()
