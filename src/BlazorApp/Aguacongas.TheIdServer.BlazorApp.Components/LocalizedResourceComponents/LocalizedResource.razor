@@ -1,0 +1,24 @@
+﻿@inject IStringLocalizerAsync<LocalizedResource> Localizer
+<div class="form-group row">
+    <label class="col-2 col-form-label">
+        @Localizer["key"]
+    </label>
+    <div class="col">
+        @if (string.IsNullOrEmpty(Model.Id))
+        {
+            <AuthorizeText Placeholder="@Localizer["key"]" @bind-Value="@Model.Key" />
+        }
+        else
+        {
+            <input class="form-control" type="text" value="@Model.Key" readonly>
+        }
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-2 col-form-label">
+        @Localizer["value"]
+    </label>
+    <div class="col">
+        <AuthorizeTextArea Placeholder="@Localizer["value"]" @bind-Value="@Model.Value" />
+    </div>
+</div>

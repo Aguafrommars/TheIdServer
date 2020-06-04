@@ -1,4 +1,5 @@
-﻿<AuthorizeView Policy="Is4-Writer">
+﻿@inherits ButtonBase
+<AuthorizeView Policy="Is4-Writer">
     <Authorized>
         @if (Clicked.HasDelegate)
         {

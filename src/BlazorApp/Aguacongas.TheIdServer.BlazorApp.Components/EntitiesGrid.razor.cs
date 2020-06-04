@@ -1,11 +1,13 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class EntitiesGrid<TItem>
     {
+        [Parameter]
+        public bool SetKey { get; set; } = true;
+
         [Parameter]
         public string TableClass { get; set; } = "table";
 
@@ -31,9 +33,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         public IEnumerable<TItem> Items { get; set; }
 
         [Parameter]
-        public GridState GridState { get; set; } = new GridState();
-
-        [Parameter]
         public EventCallback<TItem> RowClicked { get; set; }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

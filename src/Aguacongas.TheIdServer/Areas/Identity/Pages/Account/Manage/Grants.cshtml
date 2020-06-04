@@ -1,23 +1,26 @@
 ﻿@page
+@inject IViewLocalizer Localizer
 @model GrantsModel
 @{
+    ViewData["Title"] = Localizer["Client Application Access"];
+    ViewData["ActivePage"] = ManageNavPages.Grants;
 }
-<div class="grants">
-    <div class="row page-header">
-        <div class="col-sm-10">
-            <h1>
-                Client Application Access
-            </h1>
-            <div>Below is the list of applications you have given access to and the names of the resources they have access to.</div>
-        </div>
+<div class="row">
+    <div class="col-sm-10">
+        <h4>
+            @ViewData["Title"]
+        </h4>
+        <h5>@Localizer["Below is the list of applications you have given access to and the names of the resources they have access to."]</h5>
     </div>
+</div>
+<div class="grants">
 
     @if (Model.Grants.Any() == false)
     {
         <div class="row">
             <div class="col-sm-8">
                 <div class="alert alert-info">
-                    You have not given access to any applications
+                    @Localizer["You have not given access to any applications"]
                 </div>
             </div>
         </div>
@@ -32,22 +35,26 @@
                     {
                         <img src="@grant.ClientLogoUrl" alt="logo">
                     }
+                    else
+                    {
+                        <img src="/icons8-app-symbol-96.png" alt="logo">
+                    }
                 </div>
                 <div class="col-sm-8">
                     <div class="clientname">@grant.ClientName</div>
                     <div>
-                        <span class="created">Created:</span> @grant.Created.ToString("yyyy-MM-dd")
+                        <span class="created">@Localizer["Created:"]</span> @grant.Created.ToString("yyyy-MM-dd")
                     </div>
                     @if (grant.Expires.HasValue)
                     {
                         <div>
-                            <span class="expires">Expires:</span> @grant.Expires.Value.ToString("yyyy-MM-dd")
+                            <span class="expires">@Localizer["Expires:"]</span> @grant.Expires.Value.ToString("yyyy-MM-dd")
                         </div>
                     }
                     @if (grant.IdentityGrantNames.Any())
                     {
                         <div>
-                            <div class="granttype">Identity Grants</div>
+                            <div class="granttype">@Localizer["Identity Grants"]</div>
                             <ul>
                                 @foreach (var name in grant.IdentityGrantNames)
                                 {
@@ -59,7 +66,7 @@
                     @if (grant.ApiGrantNames.Any())
                     {
                         <div>
-                            <div class="granttype">API Grants</div>
+                            <div class="granttype">@Localizer["API Grants"]</div>
                             <ul>
                                 @foreach (var name in grant.ApiGrantNames)
                                 {
@@ -72,7 +79,7 @@
                 <div class="col-sm-2">
                     <form method="post">
                         <input type="hidden" name="clientId" value="@grant.ClientId">
-                        <button class="btn btn-danger" asp-page-handler="Revoke">Revoke Access</button>
+                        <button class="btn btn-danger" asp-page-handler="Revoke">@Localizer["Revoke Access"]</button>
                     </form>
                 </div>
             </div>

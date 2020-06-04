@@ -5,18 +5,21 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer
@@ -58,6 +61,7 @@ namespace Aguacongas.TheIdServer
 
             SeedUsers(scope);
             SeedConfiguration(scope);
+            SeedLocalizedResources(scope);
         }
 
         public static void SeedConfiguration(IServiceScope scope)
@@ -90,6 +94,7 @@ namespace Aguacongas.TheIdServer
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
                 }
             }
+
             context.SaveChanges();
         }
 
@@ -191,12 +196,13 @@ namespace Aguacongas.TheIdServer
             }
 
         }
+
         internal static void SeedProviders(IConfiguration configuration, PersistentDynamicManager<SchemeDefinition> persistentDynamicManager)
         {
             var googleDefinition = persistentDynamicManager.FindBySchemeAsync("Google").GetAwaiter().GetResult();
             if (googleDefinition == null)
             {
-                var options = new GoogleOptions
+                var options = new Microsoft.AspNetCore.Authentication.Google.GoogleOptions
                 {
                     ClientId = configuration.GetValue<string>("Google:ClientId"),
                     ClientSecret = configuration.GetValue<string>("Google:ClientSecret"),
@@ -208,6 +214,27 @@ namespace Aguacongas.TheIdServer
                     HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
                     Options = options
                 }).ConfigureAwait(false);
+            }
+        }
+
+        internal static void SeedLocalizedResources(IServiceScope scope)
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            var defaultCulture = context.Cultures.FirstOrDefault(c => c.Id == "en-US");
+            if (defaultCulture != null && !context.LocalizedResources.Any())
+            {
+                using var reader = File.OpenText("Resources/resources.en-US.json");
+                var localizedResources = JsonSerializer.Deserialize<IEnumerable<LocalizedResource>>(reader.ReadToEnd(), new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+                foreach(var resource in localizedResources)
+                {
+                    resource.Id = Guid.NewGuid().ToString();
+                    resource.Culture = defaultCulture;
+                    context.LocalizedResources.Add(resource);
+                }
+                context.SaveChanges();
             }
         }
     }

@@ -18,6 +18,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.IdentityClaims).Must(c => c.Any(claim => !string.IsNullOrEmpty(claim.Type)))
                 .WithMessage("The identity should provide at least one claim.");
             RuleForEach(m => m.Properties).SetValidator(new IdentityProrpertyValidator(identity));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.DisplayName)
+                .SetValidator(new EntityResourceValidator<IdentityLocalizedResource>(identity, EntityResourceKind.DisplayName));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.Description)
+                .SetValidator(new EntityResourceValidator<IdentityLocalizedResource>(identity, EntityResourceKind.Description));
         }
     }
 }

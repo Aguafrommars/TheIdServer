@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿using Aguacongas.IdentityServer.Admin.Http.Store;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -25,6 +27,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -84,7 +87,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             out MockHttpMessageHandler mockHttp)
         {
             CreateTestHost(userName, claims, url, sut, testOutputHelper, out host, out mockHttp);
-
             component = host.AddComponent<blazorApp.App>();
         }
 
@@ -94,7 +96,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var jsRuntimeMock = new Mock<IJSRuntime>();
             host = new TestHost();
             var httpMock = host.AddMockHttp();
-            mockHttp = httpMock;            
+            mockHttp = httpMock;
+            var localizerMock = new Mock<ISharedStringLocalizerAsync>();
+            localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => key);
+            localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => string.Format(key, p));
+
             host.ConfigureServices(services =>
             {
                 var httpClient = sut.CreateClient();
@@ -104,7 +110,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
-
+                
                 services
                     .AddLogging(configure =>
                     {
@@ -128,6 +134,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton(p => navigationInterceptionMock.Object)
                     .AddSingleton(p => jsRuntimeMock.Object)
                     .AddSingleton<Settings>()
+                    .AddSingleton(localizerMock.Object)
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
                     .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
                     .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())

@@ -24,7 +24,8 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                     ClientClaims = new List<ClientClaim>(0),
                     ClientSecrets = new List<ClientSecret>(0),
                     IdentityProviderRestrictions = new List<ClientIdpRestriction>(0),
-                    Properties = new List<ClientProperty>(0)
+                    Properties = new List<ClientProperty>(0),
+                    Resources = new List<ClientLocalizedResource>(0)
                 })
                 .Verifiable();
 

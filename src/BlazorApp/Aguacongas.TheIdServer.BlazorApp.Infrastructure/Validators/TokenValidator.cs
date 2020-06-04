@@ -6,7 +6,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
     public class TokenValidator : AbstractValidator<Token>
     {
-        public TokenValidator(Client _)
+        public TokenValidator(IdentityServer.Store.Entity.Client _)
         {
             RuleFor(m => m.ValueString)
                 .Matches(Token.RegulatExpression)

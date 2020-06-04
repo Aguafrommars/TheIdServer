@@ -17,5 +17,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         [Parameter]
         public Entity.Client Model { get; set; }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

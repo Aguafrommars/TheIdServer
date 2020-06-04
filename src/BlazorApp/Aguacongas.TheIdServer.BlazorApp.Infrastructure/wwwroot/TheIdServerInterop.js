@@ -37,5 +37,17 @@ window.browserInteropt = {
                     .then(_ => { });
             }
         };
+    },
+    onScrollEnd: (dotnetHelper, margin) => {
+        let pending = false;
+        window.onscroll = async () => {
+            const top = $(window).scrollTop();
+            const diff = $(document).height() - $(window).height() - margin;
+            if (top >= diff && !pending) {
+                pending = true;
+                await dotnetHelper.invokeMethodAsync('ScrollBottomReach');
+                pending = false;
+            }
+        };
     }
 };

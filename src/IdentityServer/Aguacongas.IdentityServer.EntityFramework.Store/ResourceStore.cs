@@ -13,7 +13,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     /// <summary>
     /// <see cref="IResourceStore"/> implemtation
     /// </summary>
-    /// <seealso cref="IdentityServer4.Stores.IResourceStore" />
+    /// <seealso cref="IResourceStore" />
     public class ResourceStore : IResourceStore
     {
         private readonly ConfigurationDbContext _context;
@@ -30,14 +30,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public async Task<ApiResource> FindApiResourceAsync(string name)
         {
-            var entity = await _context.Apis
-                .Include(a => a.ApiClaims)
-                .Include(a => a.ApiScopeClaims)
-                .Include(a => a.Secrets)
-                .Include(a => a.Scopes)
-                .Include(a => a.Properties)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Id == name).ConfigureAwait(false);
+            var query = from api in _context.Apis
+                            .Include(a => a.ApiClaims)
+                            .Include(a => a.ApiScopeClaims)
+                            .Include(a => a.Secrets)
+                            .Include(a => a.Resources)
+                            .Include(a => a.Properties)
+                            .Include(a => a.Scopes)
+                            .ThenInclude(s => s.Resources)
+                            .Include(a => a.Scopes)
+                            .ThenInclude(s => s.ApiScopeClaims)
+                        select api;
+            var entity = await query.FirstOrDefaultAsync(api => api.Id == name).ConfigureAwait(false);
+
             return entity.ToApi();
         }
 
@@ -48,18 +53,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var query = from scope in _context.ApiScopes
-                        join api in _context.Apis
-                        on scope.ApiId equals api.Id
-                        where scopeNames.Contains(scope.Scope)
+            var query = from api in _context.Apis
+                            .Include(a => a.ApiClaims)
+                            .Include(a => a.ApiScopeClaims)
+                            .Include(a => a.Secrets)
+                            .Include(a => a.Resources)
+                            .Include(a => a.Properties)
+                            .Include(a => a.Scopes)
+                            .ThenInclude(s => s.Resources)
+                            .Include(a => a.Scopes)
+                            .ThenInclude(s => s.ApiScopeClaims)
                         select api;
 
             return await query
-                .Include(a => a.Scopes)
-                .Include(a => a.ApiClaims)
-                .Include(a => a.ApiScopeClaims)
-                .Include(a => a.Secrets)
-                .Include(a => a.Properties)
                 .AsNoTracking()
                 .Select(a => a.ToApi())
                 .ToListAsync()
@@ -73,11 +79,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// <returns></returns>
         public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            return await _context.Identities
-                .Include(i => i.IdentityClaims)
-                .Include(i => i.Properties)
+            var query = from identity in _context.Identities
+                            .Include(i => i.IdentityClaims)
+                            .Include(i => i.Properties)
+                            .Include(i => i.Resources)
+                        where scopeNames.Contains(identity.Id)
+                        select identity;
+
+            return await query
                 .AsNoTracking()
-                .Where(i => scopeNames.Contains(i.Id))
                 .Select(i => i.ToIdentity())
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -95,15 +105,24 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                     .Include(a => a.ApiClaims)
                     .Include(a => a.ApiScopeClaims)
                     .Include(a => a.Secrets)
-                    .Include(a => a.Scopes)
                     .Include(a => a.Properties)
+                    .Include(a => a.Resources)
+                    .Include(a => a.Scopes)
+                    .ThenInclude(s => s.ApiScopeClaims)
+                    .Include(a => a.Scopes)
+                    .ThenInclude(s => s.Resources)
                     .AsNoTracking()
-                    .Select(a => a.ToApi()).ToListAsync().ConfigureAwait(false),
+                    .Select(a => a.ToApi())
+                    .ToListAsync()
+                    .ConfigureAwait(false),
                 IdentityResources = await _context.Identities
                     .Include(i => i.IdentityClaims)
                     .Include(i => i.Properties)
+                    .Include(i => i.Resources)
                     .AsNoTracking()
-                    .Select(i => i.ToIdentity()).ToListAsync().ConfigureAwait(false)
+                    .Select(i => i.ToIdentity())
+                    .ToListAsync()
+                    .ConfigureAwait(false)
             };
         }
     }

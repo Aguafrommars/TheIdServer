@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.Test
 
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            configurationDbContext.ExternalClaimTransformation.Add(new ExternalClaimTransformation
+            configurationDbContext.ExternalClaimTransformations.Add(new ExternalClaimTransformation
             {
                 Id = Guid.NewGuid().ToString(),
                 FromClaimType = "test",

@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System;
@@ -484,7 +485,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(host, component, "#grantTypes input");
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
+            host.WaitForNextRender(() => input.TriggerEventAsync("onfocus", new FocusEventArgs()));
+
+            host.WaitForNoRender();
+
+            var button = WaitForNode(host, component, "#grantTypes .dropdown-item.m-0.p-0.pl-1.pr-1");
+            
+            host.WaitForNextRender(() => button.ClickAsync());
 
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
@@ -603,6 +610,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     IdentityProviderRestrictions = new List<ClientIdpRestriction>
                     {
                         new ClientIdpRestriction{ Id = GenerateId(), Provider = "Google"}
+                    },
+                    Resources = new List<ClientLocalizedResource>
+                    {
+                        new ClientLocalizedResource
+                        {
+                            Id = GenerateId(),
+                            ClientId = clientId,
+                            CultureId = "en-US",
+                            ResourceKind = EntityResourceKind.DisplayName,
+                            Value = GenerateId()
+                        }
                     }
                 });
 

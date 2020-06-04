@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an API scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>
+    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>, ILocalizable<ApiScopeLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -78,6 +78,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         ///   <c>true</c> if [show in discovery document]; otherwise, <c>false</c>.
         /// </value>
         public bool ShowInDiscoveryDocument { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ApiScopeLocalizedResource> Resources { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.

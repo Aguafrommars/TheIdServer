@@ -1,10 +1,10 @@
 ﻿@inherits EntitesGridModel<Entity.UserConsent>
 
-<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="consent">
+<EntitiesGrid Items="@Consents" TableClass="table table-hover" Context="consent">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ClientId"
-                            Text="client id"
+                            Text="@Localizer["client id"]"
                             GridState="GridState" />
         </th>
         <th scope="col">
@@ -12,7 +12,7 @@
         </th>
         <th>
             <SortableHeader Property="CreateAt"
-                            Text="create at"
+                            Text="@Localizer["create at"]"
                             GridState="GridState" />
         </th>
         <th></th>

@@ -10,5 +10,11 @@
         {
             collapseNavMenu = !collapseNavMenu;
         }
+
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

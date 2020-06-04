@@ -1,4 +1,6 @@
 ﻿@using IdentityServer4.Extensions
+@inject IViewLocalizer Localizer
+
 @{
     string name = null;
     if (!true.Equals(ViewData["signed-out"]))
@@ -42,7 +44,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <strong class="caret"></strong></a>
                         <ul class="dropdown-menu">
-                            <li><a asp-action="Logout" asp-controller="Account">Logout</a></li>
+                            <li><a asp-action="Logout" asp-controller="Account">@Localizer["Logout"]</a></li>
                         </ul>
                     </li>
                 </ul>

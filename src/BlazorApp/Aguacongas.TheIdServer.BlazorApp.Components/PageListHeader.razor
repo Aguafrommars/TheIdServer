@@ -1,10 +1,11 @@
-﻿<div class="row">
+﻿@inject IStringLocalizerAsync<PageListHeader> Localizer
+<div class="row">
     <h3 class="col">@Name</h3>
     <div class="col">
         <AuthorizeView Policy="Is4-Writer">
             <Authorized>
                 <a href="@Url" class="btn btn-sm btn-primary">
-                    <span class="oi oi-plus"></span> Add
+                    <span class="oi oi-plus"></span> @Localizer["Add"]
                 </a>
             </Authorized>
         </AuthorizeView>

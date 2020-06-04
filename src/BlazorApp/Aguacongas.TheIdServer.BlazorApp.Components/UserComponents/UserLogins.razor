@@ -1,20 +1,20 @@
 ﻿@inherits  EntitesGridModel<Entity.UserLogin>
 
-<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="login">
+<EntitiesGrid Items="@Logins" TableClass="table table-hover" Context="login">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ProviderDisplayName"
-                            Text="provider"
+                            Text="@Localizer["provider"]"
                             GridState="GridState" />
         </th>
         <th scope="col">
             <SortableHeader Property="ProviderKey"
-                            Text="key"
+                            Text="@Localizer["key"]"
                             GridState="GridState" />
         </th>
         <th>
             <SortableHeader Property="Value"
-                            Text="create at"
+                            Text="@Localizer["create at"]"
                             GridState="GridState" />
         </th>
         <th></th>

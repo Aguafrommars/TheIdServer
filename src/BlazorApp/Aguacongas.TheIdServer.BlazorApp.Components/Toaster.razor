@@ -5,7 +5,7 @@
     <div class="toast-list">
         @foreach (var notification in _notifications)
         {
-            <Toast Notification="notification" Closed="OnToastClosed" />
+            <Toast @key="@notification" Notification="notification" Closed="OnToastClosed" />
         }
     </div>
 </div>

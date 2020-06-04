@@ -1,15 +1,16 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Services
 {
     public class Notifier
     {
-        public Action<Notification> Show { get; set; }
+        public Func<Notification, Task> Show { get; set; }
 
-        public void Notify(Notification notification)
+        public Task NotifyAsync(Notification notification)
         {
-            Show?.Invoke(notification);
+            return Show?.Invoke(notification);
         }
     }
 }

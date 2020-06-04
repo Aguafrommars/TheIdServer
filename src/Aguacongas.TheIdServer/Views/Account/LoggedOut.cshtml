@@ -1,21 +1,22 @@
-﻿@model LoggedOutViewModel
+﻿@inject IViewLocalizer Localizer
 
-@{ 
+@model LoggedOutViewModel
+
+@{
     // set this so the layout rendering sees an anonymous user
     ViewData["signed-out"] = true;
 }
 
 <div class="page-header logged-out">
     <h1>
-        Logout
-        <small>You are now logged out</small>
+        @Localizer["Logout"]
+        <small>@Localizer["You are now logged out"]</small>
     </h1>
 
     @if (Model.PostLogoutRedirectUri != null)
     {
         <div>
-            Click <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">here</a> to return to the
-            <span>@Model.ClientName</span> application.
+            @Localizer["Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.", Model.PostLogoutRedirectUri, Model.ClientName]
         </div>
     }
 

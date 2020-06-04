@@ -27,5 +27,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             }
         }
 
+        protected override void OnInitialized()
+        {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
+            base.OnInitialized();
+        }
     }
 }

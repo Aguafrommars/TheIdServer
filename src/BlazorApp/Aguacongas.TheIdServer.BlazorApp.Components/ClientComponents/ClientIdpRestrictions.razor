@@ -1,15 +1,19 @@
-﻿<div class="row">
+﻿@inject IStringLocalizerAsync<ClientIdpRestrictions> Localizer
+<div class="row">
     <div class="col">
         <ul class="list-inline">
-            @foreach (var provider in Model.IdentityProviderRestrictions)
+            @foreach (var provider in Restrictions)
             {
-                <li class="list-inline-item">
+                <li @key="provider" class="list-inline-item">
                     <IdentityProvider Entity="@provider"
-                               DeleteClicked="() => OnProviderDeletedClicked(provider)"
-                               ValueChanged="() => OnProviderValueChanged(provider)" />
+                                      DeleteClicked="() => OnProviderDeletedClicked(provider)" />
                 </li>
             }
+            <li class="list-inline-item">
+                <IdentityProvider Entity="@_provider"
+                                  ValueChanged="() => OnProviderValueChanged(_provider)" />
+            </li>
         </ul>
-        <AuthorizeCheckbox Label="enable local login" @bind-Value="@Model.EnableLocalLogin" />
+        <AuthorizeCheckbox Label="@Localizer["enable local login"]" @bind-Value="@Model.EnableLocalLogin" />
     </div>
 </div>

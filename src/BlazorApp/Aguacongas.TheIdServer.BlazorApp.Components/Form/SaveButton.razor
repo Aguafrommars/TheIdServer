@@ -1,0 +1,20 @@
+﻿@inherits ButtonBase
+@inject IStringLocalizerAsync<SaveButton> Localizer
+<AuthorizeView Policy="Is4-Writer">
+    <Authorized>
+        @if (Clicked.HasDelegate)
+        {
+            <button id="@Id" class="btn @CssSubClass" type="submit" @onclick="OnClicked">
+                <span class="oi oi-data-transfer-download"></span>
+                @Localizer["Save"]
+            </button>
+        }
+        else
+        {
+            <button id="@Id" class="btn @CssSubClass" type="submit" disabled="@_disabled">
+                <span class="oi oi-data-transfer-download"></span>
+                @Localizer["Save"]
+            </button>
+        }
+    </Authorized>
+</AuthorizeView>

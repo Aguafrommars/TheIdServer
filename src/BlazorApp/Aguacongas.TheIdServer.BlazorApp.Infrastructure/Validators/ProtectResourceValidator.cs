@@ -17,6 +17,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.ApiClaims)
                 .Where(m => m.Type != null)
                 .SetValidator(new ApiClaimValidator(api));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.Description)
+                .SetValidator(new EntityResourceValidator<ApiLocalizedResource>(api, EntityResourceKind.Description));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.DisplayName)
+                .SetValidator(new EntityResourceValidator<ApiLocalizedResource>(api, EntityResourceKind.DisplayName));
         }
     }
 }

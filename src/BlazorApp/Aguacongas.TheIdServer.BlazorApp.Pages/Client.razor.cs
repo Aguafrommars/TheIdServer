@@ -1,9 +1,7 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
-using Aguacongas.TheIdServer.BlazorApp.Models;
-using Microsoft.AspNetCore.Components.Forms;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -14,27 +12,31 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private bool _filtered;
         private bool _isWebClient;
 
-        protected override string Expand => "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties";
+        protected override string Expand => $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)}";
 
         protected override bool NonEditable => false;
 
         protected override string BackUrl => "clients";
 
-        protected override void OnStateChange()
-        {
-            _isWebClient = Model.IsWebClient();
-            base.OnStateChange();
-        }
-
-        protected override async Task OnInitializedAsync()
+        protected override  async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-            AddEmpyEntities();
+            HandleModificationState.OnStateChange += OnStateChange;
         }
 
-        protected override Entity.Client Create()
+        protected void OnStateChange(ModificationKind kind, object entity)
         {
-            return new Entity.Client
+            var isWebClient = _isWebClient;
+            _isWebClient = Model.IsWebClient();
+            if (isWebClient != _isWebClient)
+            {
+                StateHasChanged();
+            }
+        }
+
+        protected override Task<Entity.Client> Create()
+        {
+            return Task.FromResult(new Entity.Client
             {
                 ProtocolType = "oidc",
                 AllowedGrantTypes = new List<Entity.ClientGrantType>(),
@@ -43,22 +45,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 ClientSecrets = new List<Entity.ClientSecret>(),
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
                 RedirectUris = new List<Entity.ClientUri>(),
-                Properties = new List<Entity.ClientProperty>()
-            };
+                Properties = new List<Entity.ClientProperty>(),
+                Resources = new List<Entity.ClientLocalizedResource>()
+            });
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
         {
             if (entity is Entity.Client client)
             {
-                client.IdentityProviderRestrictions = null;
-                client.ClientClaims = null;
-                client.ClientSecrets = null;
-                client.AllowedGrantTypes = null;
-                client.RedirectUris = null;
-                client.AllowedScopes = null;
-                client.Properties = null;
-                return;
+                Model.Id = client.Id;
+            }
+            if (entity is Entity.IClientSubEntity subEntity)
+            {
+                subEntity.ClientId = Model.Id;
             }
             if (entity is Entity.ClientUri clientUri && clientUri.Uri != null)
             {
@@ -72,30 +72,19 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        protected override void SetNavigationProperty<TEntity>(TEntity entity)
+        protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is Entity.IClientSubEntity subEntity)
+            if (entity is Entity.Client client)
             {
-                subEntity.ClientId = Model.Id;
+                client.IdentityProviderRestrictions = null;
+                client.ClientClaims = null;
+                client.ClientSecrets = null;
+                client.AllowedGrantTypes = null;
+                client.RedirectUris = null;
+                client.AllowedScopes = null;
+                client.Properties = null;
+                client.Resources = null;
             }
-        }
-
-        protected override Type GetEntityType(FieldIdentifier identifier)
-        {
-            if (identifier.Model is ClientUri)
-            {
-                return typeof(Entity.ClientUri);
-            }
-            return base.GetEntityType(identifier);
-        }
-
-        protected override Entity.IEntityId GetEntityModel(FieldIdentifier identifier)
-        {
-            if (identifier.Model is ClientUri clientUri)
-            {
-                return clientUri.Parent;
-            }
-            return base.GetEntityModel(identifier);
         }
 
         protected override void OnEntityUpdated(Type entityType, Entity.IEntityId entityModel)
@@ -125,41 +114,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return Model.IsWebClient();
         }
 
-        private void AddEmpyEntities()
-        {
-            Model.AllowedGrantTypes.Add(new Entity.ClientGrantType());
-            Model.AllowedScopes.Add(new Entity.ClientScope());
-            Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
-        }
-
-        private void OnFilterChanged(string term)
-        {
-            Model.AllowedScopes = State.AllowedScopes
-                .Where(s => s.Scope != null && s.Scope.Contains(term))
-                .ToList();
-            Model.AllowedGrantTypes = State.AllowedGrantTypes
-                .Where(g => g.GrantType != null && g.GrantType.Contains(term))
-                .ToList();
-            Model.ClientClaims = State.ClientClaims
-                .Where(c => (c.Type != null && c.Type.Contains(term)) || (c.Value != null && c.Value.Contains(term)))
-                .ToList();
-            Model.ClientSecrets = State.ClientSecrets
-                .Where(s => (s.Description != null && s.Description.Contains(term)) || (s.Type != null && s.Type.Contains(term)))
-                .ToList();
-            Model.IdentityProviderRestrictions = State.IdentityProviderRestrictions
-                .Where(i => i.Provider != null && i.Provider.Contains(term))
-                .ToList();
-            Model.RedirectUris = State.RedirectUris
-                .Where(u => u.Uri != null && u.Uri.Contains(term))
-                .ToList();
-            Model.Properties = State.Properties
-                .Where(p => p.Key.Contains(term) || p.Value.Contains(term))
-                .ToList();
-
-            AddEmpyEntities();
-            StateHasChanged();
-        }
-
         private Entity.ClientSecret CreateSecret()
             => new Entity.ClientSecret
             {
@@ -175,18 +129,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         private Entity.ClientProperty CreateProperty()
             => new Entity.ClientProperty();
 
-        private void OnScopeValueChanged(Entity.ClientScope scope)
+        private Task AddResource(Entity.EntityResourceKind kind)
         {
-            EntityCreated(scope);
-            Model.AllowedScopes.Add(new Entity.ClientScope());
-            StateHasChanged();
-        }
-
-        private void OnScopeDeleted(Entity.ClientScope scope)
-        {
-            Model.AllowedScopes.Remove(scope);
-            EntityDeleted(scope);
-            StateHasChanged();
+            var entity = new Entity.ClientLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
         }
     }
 }

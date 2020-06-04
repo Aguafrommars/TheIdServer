@@ -1,28 +1,29 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Microsoft.Extensions.Options
- 
+
 @inject NavigationManager _navigationManager
 @inject SignOutSessionStateManager _signOutManager
 @inject IOptions<RemoteAuthenticationApplicationPathsOptions> _options
+@inject IStringLocalizerAsync<Loading> Localizer
 
 <AuthorizeView>
     <Authorized>
         @if (!string.IsNullOrEmpty(_options.Value.RemoteProfilePath))
         {
-            <a href="authentication/profile">Hello, @context.User.Identity.Name!</a>
+            <a href="authentication/profile">@Localizer["Hello, {0}!", context.User.Identity.Name]</a>
         }
         else
         {
-            <span>Hello, @context.User.Identity.Name!</span>
+            <span>@Localizer["Hello, {0}!", context.User.Identity.Name]</span>
         }
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+        <button class="nav-link btn btn-link" @onclick="BeginSignOut">@Localizer["Log out"]</button>
     </Authorized>
     <NotAuthorized>
         @if (!string.IsNullOrEmpty(_options.Value.RemoteRegisterPath))
         {
-            <a href="authentication/register">Register</a>
+            <a href="authentication/register">@Localizer["Register"]</a>
         }
-        <a href="authentication/login">Log in</a>
+        <a href="authentication/login">@Localizer["Log in"]</a>
     </NotAuthorized>
 </AuthorizeView>

@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a client appliction
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class Client : IAuditable, ICloneable<Client>
+    public class Client : IAuditable, ICloneable<Client>, ILocalizable<ClientLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -384,6 +384,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The properties.
         /// </value>
         public virtual ICollection<ClientProperty> Properties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ClientLocalizedResource> Resources { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.

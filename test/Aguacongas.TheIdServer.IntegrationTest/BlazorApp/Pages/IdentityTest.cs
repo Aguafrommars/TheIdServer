@@ -2,12 +2,12 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,6 +22,56 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
         }
 
+        [Fact]
+        public async Task OnAddTranslation_should_add_validate_resource()
+        {
+            string identityId = await CreateEntity();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                identityId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var addButton = component.Find("#btnAddDisplayName");
+
+            Assert.NotNull(addButton);
+
+            await host.WaitForNextRenderAsync(() => addButton.ClickAsync());
+
+            var cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
+
+            Assert.NotNull(cultureInputs);
+
+            var cultureInput = cultureInputs.Last();
+
+            await host.WaitForNextRenderAsync(() => cultureInput.ChangeAsync("fr-FR"));
+
+            var addDescriptionButton = component.Find("#btnAddDescription");
+
+            Assert.NotNull(addButton);
+
+            await host.WaitForNextRenderAsync(() => addDescriptionButton.ClickAsync());
+
+            cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
+
+            Assert.NotNull(cultureInputs);
+
+            cultureInput = cultureInputs.Last();
+
+            await host.WaitForNextRenderAsync(() => cultureInput.ChangeAsync("fr-FR"));
+
+            var form = component.Find("form");
+
+            Assert.NotNull(form);
+
+            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+
+            WaitForSavedToast(host, component);
+        }
 
 
         [Fact]
@@ -36,7 +86,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            string markup = WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             WaitForContains(host, component, "filtered");
 
@@ -49,7 +99,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = identityId
             }));
 
-            markup = component.GetMarkup();
+            string markup = component.GetMarkup();
 
             Assert.DoesNotContain("filtered", markup);
         }
@@ -110,6 +160,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     Properties = new List<IdentityProperty>
                     {
                         new IdentityProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
+                    },
+                    Resources = new List<IdentityLocalizedResource>
+                    {
+                        new IdentityLocalizedResource
+                        {
+                            Id = GenerateId(),
+                            ResourceKind = EntityResourceKind.DisplayName,
+                            CultureId = "en-US",
+                            Value = GenerateId()
+                        }
                     }
                 });
 
