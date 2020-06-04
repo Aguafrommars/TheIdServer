@@ -50,8 +50,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
             {
                 Model.AllowAccessTokensViaBrowser = true;
             }
-            HandleModificationState.EntityCreated(grantType);
             _grantType = new Entity.ClientGrantType();
+            HandleModificationState.EntityCreated(grantType);
         }
     }
 }

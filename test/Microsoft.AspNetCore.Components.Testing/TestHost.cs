@@ -62,6 +62,15 @@ namespace Microsoft.AspNetCore.Components.Testing
             }
         }
 
+        public void WaitForNoRender()
+        {
+            var task = Renderer.NextRender;
+            while(task.Wait(200))
+            {
+                task = Renderer.NextRender;
+            }
+        }
+
         public async Task WaitForNextRenderAsync(Func<Task> trigger = null)
         {
             var task = Renderer.NextRender;

@@ -98,6 +98,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var httpMock = host.AddMockHttp();
             mockHttp = httpMock;
             var localizerMock = new Mock<ISharedStringLocalizerAsync>();
+            localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => key);
+            localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => string.Format(key, p));
+
             host.ConfigureServices(services =>
             {
                 var httpClient = sut.CreateClient();
@@ -107,16 +110,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
-
-                httpMock.When($"/api/localizedresource*")
-                    .Respond(request =>
-                    {
-                        return Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK)
-                        {
-                            Content = new StringContent("{\"items\": []}")
-                        });
-                    });
-
+                
                 services
                     .AddLogging(configure =>
                     {

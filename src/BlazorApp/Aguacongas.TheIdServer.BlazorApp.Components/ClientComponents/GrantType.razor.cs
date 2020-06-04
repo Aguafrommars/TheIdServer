@@ -7,7 +7,7 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
-    public partial class GrantType : AutoCompleteModel<Entity.ClientGrantType>
+    public partial class GrantType
     {
         private bool _isReadOnly;
         private List<Entity.ClientGrantType> _allowedGrantTypes;

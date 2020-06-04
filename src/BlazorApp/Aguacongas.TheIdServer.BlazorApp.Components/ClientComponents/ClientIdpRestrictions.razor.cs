@@ -48,8 +48,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         private void OnProviderValueChanged(Entity.ClientIdpRestriction restriction)
         {
             Model.IdentityProviderRestrictions.Add(restriction);
-            HandleModificationState.EntityCreated(restriction);
             _provider = new Entity.ClientIdpRestriction();
+            HandleModificationState.EntityCreated(restriction);
         }
     }
 }

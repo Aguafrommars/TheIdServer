@@ -26,7 +26,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected void OnStateChange(ModificationKind kind, object entity)
         {
+            var isWebClient = _isWebClient;
             _isWebClient = Model.IsWebClient();
+            if (isWebClient != _isWebClient)
+            {
+                StateHasChanged();
+            }
         }
 
         protected override Task<Entity.Client> Create()

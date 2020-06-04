@@ -10,6 +10,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
     {
         private bool _disabled = true;
 
+        [Parameter]
+        public string Id { get; set; }
+
         [CascadingParameter]
         public EditContext EditContext { get; set; }
 
@@ -27,10 +30,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
             base.OnInitialized();
         }
 
-        private Task OnClicked(MouseEventArgs args)
+        private async Task OnClicked(MouseEventArgs args)
         {
+            await Clicked.InvokeAsync(args).ConfigureAwait(false);
             _disabled = true;
-            return Clicked.InvokeAsync(args);
         }
 
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
