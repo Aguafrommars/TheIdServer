@@ -60,10 +60,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }    
         }
 
-        protected override Task OnFilterChanged(string term)
-        {
-            return Task.CompletedTask;
-        }
         private ExternalClaimTransformation CreateTransformation()
         {
             return new ExternalClaimTransformation

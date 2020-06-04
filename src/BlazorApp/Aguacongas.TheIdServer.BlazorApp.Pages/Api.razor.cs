@@ -32,7 +32,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-            AddEmpyClaimsTypes();
             EditContext.OnFieldChanged += OnFieldChanged;
         }
 
@@ -107,70 +106,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        protected override void OnStateChange(ModificationKind kind, object entity)
-        {
-            base.OnStateChange(kind, entity);
-            if (State == null)
-            {
-                return;
-            }
-            var type = entity.GetType();
-            if (type == typeof(ApiClaim))
-            {
-                OnStateChange(kind, State.ApiClaims, entity);
-                return;
-            }
-            if (type == typeof(ApiProperty))
-            {
-                OnStateChange(kind, State.Properties, entity);
-                return;
-            }
-            if (type == typeof(ApiScope))
-            {
-                OnStateChange(kind, State.Scopes, entity);
-                return;
-            }
-            if (type == typeof(ApiSecret))
-            {
-                OnStateChange(kind, State.Secrets, entity);
-                return;
-            }
-            if (type == typeof(ApiScopeClaim))
-            {
-                var scopeClaim = entity as ApiScopeClaim;
-                var scope = State.Scopes.FirstOrDefault(s => s.Id == scopeClaim.ApiScpopeId);
-                if (scope != null)
-                {
-                    OnStateChange(kind, scope.ApiScopeClaims, entity);
-                }
-            }
-        }
-
-        protected override ProtectResource CloneModel(ProtectResource entity)
-        {
-            var clone = base.CloneModel(entity);
-            clone.Properties = clone.Properties.ToList();
-            clone.Resources = clone.Resources.ToList();
-            clone.Scopes = clone.Scopes.ToList();
-            foreach(var scope in clone.Scopes)
-            {
-                scope.ApiScopeClaims = scope.ApiScopeClaims.ToList();
-                scope.Resources = scope.Resources.ToList();
-            }
-            clone.Secrets = clone.Secrets.ToList();
-            clone.ApiClaims = clone.ApiClaims.ToList();
-            return clone;
-        }
-
-        private void AddEmpyClaimsTypes()
-        {
-            Model.ApiClaims.Add(new ApiClaim());
-            foreach (var scope in Model.Scopes)
-            {
-                scope.ApiScopeClaims.Add(new ApiScopeClaim { ApiScpope = scope });
-            }
-        }
-
         private void OnFieldChanged(object sender, FieldChangedEventArgs e)
         {
             var scope = Model.Scopes.FirstOrDefault();
@@ -185,59 +120,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     scope.DisplayName = Model.DisplayName;
                 }
             }
-        }
-
-        protected override Task OnFilterChanged(string term)
-        {
-            Model.ApiClaims = State.ApiClaims
-                .Where(c => c.Type != null && c.Type.Contains(term))
-                .ToList();
-            Model.Secrets = State.Secrets
-                .Where(s => (s.Description != null && s.Description.Contains(term)) || (s.Type != null && s.Type.Contains(term)))
-                .ToList();
-            Model.Scopes = State.Scopes
-                .Where(s => (s.Description != null && s.Description.Contains(term)) ||
-                    (s.DisplayName != null && s.DisplayName.Contains(term)) ||
-                    (s.Scope != null && s.Scope.Contains(term)))
-                .ToList();
-            foreach (var scope in Model.Scopes)
-            {
-                var stateScope = State.Scopes.FirstOrDefault(s => s.Scope == scope.Scope);
-                if (stateScope != null)
-                {
-                    scope.ApiScopeClaims = stateScope.ApiScopeClaims
-                        .Where(c => c.Type != null && c.Type.Contains(term))
-                        .ToList();
-                }
-            }
-            Model.Properties = State.Properties
-                .Where(p => (p.Key != null && p.Key.Contains(term)) || (p.Value != null && p.Value.Contains(term)))
-                .ToList();
-
-            AddEmpyClaimsTypes();
-
-            return Task.CompletedTask;
-        }
+        }        
 
         private ApiSecret CreateSecret()
-         =>  new ApiSecret
-            {
-                Type = "SharedSecret"
-            };
+            =>  new ApiSecret
+                {
+                    Type = "SharedSecret"
+                };
 
         private ApiScope CreateApiScope()
         {
-            var claim = new ApiScopeClaim();
-            var claims = new List<ApiScopeClaim>()
-            {
-                claim
-            };
             var scope = new ApiScope
             {
-                ApiScopeClaims = claims,
+                ApiScopeClaims = new List<ApiScopeClaim>(),
                 Resources = new List<ApiScopeLocalizedResource>()
             };
-            claim.ApiScpope = scope;
             return scope;
         }
 

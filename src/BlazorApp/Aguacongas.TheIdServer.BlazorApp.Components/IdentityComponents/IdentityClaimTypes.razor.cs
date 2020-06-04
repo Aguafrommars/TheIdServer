@@ -1,16 +1,41 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.IdentityComponents
 {
     public partial class IdentityClaimTypes
     {
+        private IEnumerable<IdentityClaim> Claims => Model.IdentityClaims.Where(c => c.Type != null && c.Type.Contains(HandleModificationState.FilterTerm));
+        private IdentityClaim _claim = new IdentityClaim();
+
         [Parameter]
         public IdentityResource Model { get; set; }
 
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
+
+        protected override void OnInitialized()
+        {
+            HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
+            base.OnInitialized();
+        }
+
+        private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
+        {
+            if (entity is IdentityClaim)
+            {
+                StateHasChanged();
+            }
+        }
+
+        private void HandleModificationState_OnFilterChange(string obj)
+        {
+            StateHasChanged();
+        }
 
         private void OnClaimDeletedClicked(IdentityClaim claim)
         {
@@ -20,7 +45,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.IdentityComponents
 
         private void OnClaimValueChanged(IdentityClaim claim)
         {
-            Model.IdentityClaims.Add(new IdentityClaim());
+            Model.IdentityClaims.Add(claim);
+            _claim = new IdentityClaim();
             HandleModificationState.EntityCreated(claim);
         }
     }

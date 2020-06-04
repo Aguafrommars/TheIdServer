@@ -31,7 +31,7 @@ else
             </div>
 
             <div class="col">
-                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                <Filter CssClass="mt-1" />
             </div>
             <div class="w-100"></div>
             <FluentValidationValidator />
@@ -43,7 +43,7 @@ else
                     <EntitySubGridTitle Text="@Localizer["Claims"]" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
+                    <EntitiesGrid Items="@Claims" TableClass="table table-hover" Context="claim">
                         <TableHeader>
                             <th scope="col">
                                 <SortableHeader Property="Type"

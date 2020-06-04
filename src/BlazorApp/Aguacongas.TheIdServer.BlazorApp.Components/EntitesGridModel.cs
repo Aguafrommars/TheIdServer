@@ -19,11 +19,30 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
 
+        protected override void OnInitialized()
+        {
+            HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
+            base.OnInitialized();
+        }
+
+        private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
+        {
+            if (entity is T)
+            {
+                StateHasChanged();
+            }
+        }
+
+        private void HandleModificationState_OnFilterChange(string term)
+        {
+            StateHasChanged();
+        }
+
         protected void OnDeleteEntityClicked(T entity)
         {
             Collection.Remove(entity);
             HandleModificationState.EntityDeleted(entity);
-            StateHasChanged();
         }
     }
 }

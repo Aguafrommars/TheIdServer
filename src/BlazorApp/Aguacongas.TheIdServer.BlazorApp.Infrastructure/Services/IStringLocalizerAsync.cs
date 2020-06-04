@@ -8,7 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         string this[string name, params object[] arguments] { get; }
     }
 
-    public interface ISharedStringLocalizerAsync
+    public interface ISharedStringLocalizerAsync: IStringLocalizerAsync
     {
         event Action ResourceReady;
     }

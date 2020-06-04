@@ -97,7 +97,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             // nothing to do
         }
 
-        protected override Task OnFilterChanged(string term)
+        protected Task OnFilterChanged(string term)
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
@@ -150,20 +150,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             };
             await SetResourcesAsync(entity).ConfigureAwait(false);
             return entity;
-        }
-
-        protected override void OnStateChange(ModificationKind kind, object entity)
-        {
-            switch (kind)
-            {
-                case ModificationKind.Add:
-                    State.Resources.Add(entity as Entity.LocalizedResource);
-                    break;
-                case ModificationKind.Delete:
-                    State.Resources.Remove(entity as Entity.LocalizedResource);
-                    break;
-            }
-            base.OnStateChange(kind, entity);
         }
 
         private async Task SetResourcesAsync(Entity.Culture model)

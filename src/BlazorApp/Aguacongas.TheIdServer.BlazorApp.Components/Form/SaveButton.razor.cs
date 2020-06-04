@@ -57,7 +57,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         private void SetIsDisabled()
         {
             _disabled = !EditContext.IsModified();
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
         }
     }
 }

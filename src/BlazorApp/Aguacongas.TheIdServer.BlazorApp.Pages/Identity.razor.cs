@@ -1,14 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Identity
     {
-        protected override string Expand => "IdentityClaims,Properties,Resources";
+        protected override string Expand => $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -17,7 +15,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-            AddEmpyClaimsTypes();
         }
 
         protected override Task<IdentityResource> Create()
@@ -50,36 +47,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 subEntity.IdentityId = Model.Id;
             }
-        }
-
-        private void AddEmpyClaimsTypes()
-        {
-            Model.IdentityClaims.Add(new IdentityClaim());
-        }
-
-        protected override Task OnFilterChanged(string term)
-        {
-            Model.IdentityClaims = State.IdentityClaims
-                .Where(c => c.Type != null && c.Type.Contains(term))
-                .ToList();
-            Model.Properties = State.Properties
-                .Where(p => (p.Key != null && p.Key.Contains(term)) || (p.Value != null && p.Value.Contains(term)))
-                .ToList();
-            Model.Resources = State.Resources
-                .Where(p => p.Value != null && p.Value.Contains(term))
-                .ToList();
-
-            AddEmpyClaimsTypes();
-            return Task.CompletedTask;
-        }
-
-        protected override IdentityResource CloneModel(IdentityResource entity)
-        {
-            var clone = base.CloneModel(entity);
-            clone.IdentityClaims = clone.IdentityClaims.ToList();
-            clone.Properties = clone.Properties.ToList();
-            clone.Resources = clone.Resources.ToList();
-            return clone;
         }
 
         private IdentityProperty CreateProperty()

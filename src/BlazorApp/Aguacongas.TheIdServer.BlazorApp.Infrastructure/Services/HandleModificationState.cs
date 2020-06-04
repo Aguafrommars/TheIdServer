@@ -15,14 +15,31 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
     public class HandleModificationState
     {
         private readonly ILogger _logger;
+        private string _filterTerm = string.Empty;
+
+        public event Action<ModificationKind, object> OnStateChange;
+
+        public event Action<string> OnFilterChange;
+
+        public Dictionary<Type, Dictionary<object, ModificationKind>> Changes { get; } = new Dictionary<Type, Dictionary<object, ModificationKind>>();
+
+        public string FilterTerm 
+        {
+            get => _filterTerm;
+            set
+            {
+                if (value != _filterTerm)
+                {
+                    _filterTerm = value ?? string.Empty;
+                    OnFilterChange?.Invoke(value);
+                }                
+            }
+        }
 
         public HandleModificationState(ILogger logger)
         {
             _logger = logger;
         }
-
-        public event Action<ModificationKind, object> OnStateChange;
-        public Dictionary<Type, Dictionary<object, ModificationKind>> Changes { get; } = new Dictionary<Type, Dictionary<object, ModificationKind>>();
 
         public Dictionary<object, ModificationKind> GetModifications(Type entityType)
         {

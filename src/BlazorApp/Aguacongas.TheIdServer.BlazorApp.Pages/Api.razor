@@ -34,7 +34,7 @@ else
                     </div>
                 }
                 <div class="col">
-                    <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                    <Filter CssClass="mt-1" />
                 </div>
                 <div class="w-100"></div>
                 <div class="col">
@@ -120,14 +120,7 @@ else
                         <EntitySubGridTitle Text="@Localizer["Scopes"]" Collection="Model.Scopes" CreateModel="CreateApiScope" />
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            @foreach (var scope in Model.Scopes)
-                            {
-                                <div class="col-12">
-                                    <ApiScope Collection="@Model.Scopes" Scope="@scope" />
-                                </div>
-                            }
-                        </div>
+                        <ApiScopes Collection="@Model.Scopes" />
                     </div>
                 </div>
                 <div id="properties" class="card mb-3">

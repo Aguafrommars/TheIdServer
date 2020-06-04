@@ -73,7 +73,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
-                .AddSingleton(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()))
+                .AddSingleton<ISharedStringLocalizerAsync>(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()))
                 .AddSingleton(typeof(SharedStringLocalizer<>))
                 .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddHttpClient("oidc")

@@ -12,6 +12,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public abstract class AutoCompleteModel<T> : ComponentBase, IDisposable
     {
+        private FieldIdentifier _fieldIdentifier;
+
         [Inject]
         protected IStringLocalizerAsync<AutoCompleteModel<T>> Localizer { get; set; }
 
@@ -118,8 +120,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private CancellationTokenSource _cancellationTokenSource;
 
-
-        private FieldIdentifier _fieldIdentifier;
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

@@ -34,7 +34,7 @@ else
                     </div>
                 }
                 <div class="col">
-                    <Filter CssClass="mt-1" TermChanged="OnFilterChanged" FocusChanged="FilterFocusChanged" />
+                    <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
                 </div>
                 <div class="w-100"></div>
                 <div class="col">
@@ -107,7 +107,7 @@ else
                                 <AuthorizeTextArea Id="description" Placeholder="@Localizer["description"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
                             <div class="col-1">
-                                <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                                <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
                                     <span class="oi oi-plus"></span>
                                 </button>
                             </div>
@@ -181,26 +181,7 @@ else
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <ul class="list-inline">
-                                    @foreach (var scope in Model.AllowedScopes)
-                                    {
-                                        <li class="list-inline-item">
-                                            <ClientScope Entity="@scope"
-                                                         Model="@Model"
-                                                         DeleteClicked="() => OnScopeDeleted(scope)"
-                                                         ValueChanged="() => OnScopeValueChanged(scope)" />
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <AuthorizeCheckbox Name="allow-offline-access" Label="@Localizer["allow offline access"]" @bind-Value="@Model.AllowOfflineAccess" />
-                            </div>
-                        </div>
+                        <ClientScopes Model="@Model" />
                     </div>
                 </div>
                 <div id="tokens" class="card mb-3">

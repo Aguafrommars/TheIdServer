@@ -1,18 +1,19 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
+namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
-    public partial class UserRoles
+    public partial class ClientScopes
     {
-        private IEnumerable<Entity.Role> Collection => Model.Where(r => r.Name != null && r.Name.Contains(HandleModificationState.FilterTerm));
-        private Entity.Role _role = new Entity.Role();
+        private IEnumerable<Entity.ClientScope> Scopes => Model.AllowedScopes.Where(s => s.Scope != null && s.Scope.Contains(HandleModificationState.FilterTerm));
+        private Entity.ClientScope _scope = new Entity.ClientScope();
 
         [Parameter]
-        public ICollection<Entity.Role> Model { get; set; }
+        public Entity.Client Model { get; set; }
 
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
@@ -26,8 +27,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
         {
-            if (entity is Entity.Role)
+            if (entity is Entity.ClientScope)
             {
+                StateHasChanged();
             }
         }
 
@@ -36,17 +38,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
             StateHasChanged();
         }
 
-        private void OnDeleteRoleClicked(Entity.Role role)
+        private void OnScopeValueChanged(Entity.ClientScope scope)
         {
-            Model.Remove(role);
-            HandleModificationState.EntityDeleted(role);
+            Model.AllowedScopes.Add(scope);
+            _scope = new Entity.ClientScope();
+            HandleModificationState.EntityCreated(scope);
         }
 
-        private void OnRoleValueChanged(Entity.Role role)
+        private void OnScopeDeleted(Entity.ClientScope scope)
         {
-            Model.Add(role);
-            _role = new Entity.Role();
-            HandleModificationState.EntityCreated(role);
+            Model.AllowedScopes.Remove(scope);
+            HandleModificationState.EntityDeleted(scope);
         }
     }
 }

@@ -1,11 +1,17 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
     public partial class ClientIdpRestrictions
     {
+        private IEnumerable<Entity.ClientIdpRestriction> Restrictions => Model.IdentityProviderRestrictions.Where(i => i.Provider != null && i.Provider.Contains(HandleModificationState.FilterTerm));
+
+        private Entity.ClientIdpRestriction _provider = new  Entity.ClientIdpRestriction();
+
         [Parameter]
         public Entity.Client Model { get; set; }
 
@@ -14,9 +20,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override void OnInitialized()
         {
+            HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             base.OnInitialized();
         }
+
+        private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
+        {
+            if (entity is Entity.ClientGrantType)
+            {
+                StateHasChanged();
+            }
+        }
+
+        private void HandleModificationState_OnFilterChange(string obj)
+        {
+            StateHasChanged();
+        }
+
         private void OnProviderDeletedClicked(Entity.ClientIdpRestriction restriction)
         {
             Model.IdentityProviderRestrictions.Remove(restriction);
@@ -25,8 +47,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         private void OnProviderValueChanged(Entity.ClientIdpRestriction restriction)
         {
-            Model.IdentityProviderRestrictions.Add(new Entity.ClientIdpRestriction());
+            Model.IdentityProviderRestrictions.Add(restriction);
             HandleModificationState.EntityCreated(restriction);
+            _provider = new Entity.ClientIdpRestriction();
         }
     }
 }

@@ -84,6 +84,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             request = request ?? throw new ArgumentNullException(nameof(request));
             request.Filter = request.Filter?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
                 .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
+            request.OrderBy = request.OrderBy?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
+                .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
 
             var odataQuery = _context.Providers.AsNoTracking().GetODataQuery(request, _edmModel);
 

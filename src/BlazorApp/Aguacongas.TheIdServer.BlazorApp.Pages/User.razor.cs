@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +10,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class User
     {
-        private readonly GridState _gridState = new GridState();
-
         protected override string Expand => null;
 
         protected override bool NonEditable => false;
 
         protected override string BackUrl => "users";
-
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync().ConfigureAwait(false);
-            AddEmptyRole();
-        }
 
         protected override Task<Models.User> Create()
         {
@@ -150,58 +141,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Model.Roles.Add(new entity.Role());
         }
 
-        protected override Task OnFilterChanged(string term)
-        {
-            Model.Claims = State.Claims.Where(c => c.ClaimType.Contains(term) || c.ClaimValue.Contains(term))
-                .ToList();
-
-            Model.Logins = State.Logins.Where(l => l.ProviderDisplayName.Contains(term))
-                .ToList();
-
-            Model.Roles = State.Roles.Where(r => r.Name != null && r.Name.Contains(term))
-                .ToList();
-
-            Model.Consents = State.Consents.Where(c => c.ClientId.Contains(term))
-                .ToList();
-
-            Model.Tokens = State.Tokens.Where(t => t.LoginProvider.Contains(term) || t.Name.Contains(term) || t.Value.Contains(term))
-                .ToList();
-
-            Model.RefreshTokens = State.RefreshTokens.Where(t => t.ClientId.Contains(term) || t.Data.Contains(term))
-                .ToList();
-
-            Model.ReferenceTokens = State.ReferenceTokens.Where(t => t.ClientId.Contains(term) || t.Data.Contains(term))
-                .ToList();
-
-            AddEmptyRole();
-            return Task.CompletedTask;
-        }
-
         private entity.UserClaim CreateClaim()
             => new entity.UserClaim
             {
                 Issuer = ClaimsIdentity.DefaultIssuer
             };
-
-        private void OnDeleteClaimClicked(entity.UserClaim claim)
-        {
-            Model.Claims.Remove(claim);
-            EntityDeleted(claim);
-            StateHasChanged();
-        }
-
-        private void OnDeleteRoleClicked(entity.Role role)
-        {
-            Model.Roles.Remove(role);
-            EntityDeleted(role);
-            StateHasChanged();
-        }
-
-        private void OnRoleValueChanged(entity.Role role)
-        {
-            EntityCreated(role);
-            AddEmptyRole();
-            StateHasChanged();
-        }
     }
 }

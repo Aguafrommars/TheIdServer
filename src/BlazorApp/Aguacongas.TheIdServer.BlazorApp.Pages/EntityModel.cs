@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     [Authorize(Policy = "Is4-Reader")]
-    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, new()
+    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, ICloneable<T>, new()
     {
         const int HEADER_HEIGHT = 95;
 
@@ -49,8 +49,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected T Model { get; private set; }
 
-        protected T State { get; set; }
-
         protected EditContext EditContext { get; private set; }
 
         protected abstract string Expand { get; }
@@ -80,7 +78,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             HandleModificationState = new HandleModificationState(Logger);
-            HandleModificationState.OnStateChange += OnStateChange;
 
             if (Id == null)
             {
@@ -106,16 +103,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var changes = HandleModificationState.Changes;
             if (!changes.Any())
             {
-                Notifier.Notify(new Models.Notification
+                await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = GetModelId(Model),
                     IsError = false,
                     Message = "No changes"
-                });
+                }).ConfigureAwait(false);
                 return;
             }
 
-            Model = CloneModel(Model);
+            Model = Model.Clone();
 
             Id = GetModelId(Model);
             IsNew = false;
@@ -131,23 +128,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                         .ConfigureAwait(false);
                 }
 
-                Notifier.Notify(new Models.Notification
+                await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = GetModelId(Model),
                     Message = "Saved"
-                });
+                }).ConfigureAwait(false);
 
             }
             catch (AggregateException ae)
             {
                 foreach (var e in ae.InnerExceptions)
                 {
-                    HandleModificationError(e);
+                    await HandleModificationErrorAsync(e).ConfigureAwait(false);
                 }
             }
             catch (Exception e)
             {
-                HandleModificationError(e);
+                await HandleModificationErrorAsync(e).ConfigureAwait(false);
             }
             finally
             {
@@ -180,17 +177,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 await AdminStore.DeleteAsync(GetModelId(Model))
                     .ConfigureAwait(false);
 
-                Notifier.Notify(new Models.Notification
+                await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = GetModelId(Model),
                     Message = "Deleted"
-                });
+                }).ConfigureAwait(false);
 
                 NavigationManager.NavigateTo(BackUrl);
             }
             catch (Exception e)
             {
-                HandleModificationError(e);
+                await HandleModificationErrorAsync(e).ConfigureAwait(false);
             }
         }
 
@@ -202,11 +199,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             });
         }
 
-        protected virtual T CloneModel(T entity)
-        {
-            return CloneInteral(entity);
-        }
-
         protected string GetModelId<TEntity>(TEntity model)
         {
             if (model is IEntityId entity)
@@ -214,25 +206,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 return entity.Id;
             }
             throw new NotSupportedException();
-        }
-
-        protected void OnStateChange<TEntity>(ModificationKind kind, ICollection<TEntity> collection, object entity)
-        {
-            switch (kind)
-            {
-                case ModificationKind.Add:
-                    collection.Add((TEntity)entity);
-                    break;
-                case ModificationKind.Delete:
-                    collection.Remove((TEntity)entity);
-                    EditContext.Validate();
-                    break;
-            }
-        }
-
-        protected virtual void OnStateChange(ModificationKind kind, object entity)
-        {
-            InvokeAsync(StateHasChanged);
         }
 
         protected virtual void SetModelEntityId(Type entityType, object result)
@@ -305,7 +278,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
-        protected abstract Task OnFilterChanged(string term);
+        
 
         private void CreateEditContext(T model)
         {
@@ -316,7 +289,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EditContext = new EditContext(model);
             EditContext.OnFieldChanged += EditContext_OnFieldChanged;
             Model = model;
-            State = CloneModel(Model);
         }
 
         private static IEnumerable<object> GetModifiedEntities(Dictionary<object, ModificationKind> modificationList, ModificationKind kind)
@@ -371,7 +343,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             SetModelEntityId(entityType, result);
         }
 
-        private void HandleModificationError(Exception exception)
+        private async Task HandleModificationErrorAsync(Exception exception)
         {
             if (exception == null)
             {
@@ -380,21 +352,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             if (exception is ProblemException pe)
             {
-                Notifier.Notify(new Models.Notification
+                await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = "Error",
                     IsError = true,
                     Message = pe.Details.Title
-                });
+                }).ConfigureAwait(false);
                 return;
             }
 
-            Notifier.Notify(new Models.Notification
+            await Notifier.NotifyAsync(new Models.Notification
             {
                 Header = "Error",
                 IsError = true,
                 Message = exception.Message
-            });
+            }).ConfigureAwait(false);
         }
 
         private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
@@ -416,15 +388,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
-        }
-
-        private static T CloneInteral(T entity)
-        {
-            if (entity is ICloneable<T> cloneable)
-            {
-                return cloneable.Clone();
-            }
-            throw new NotSupportedException();
         }
     }
 }

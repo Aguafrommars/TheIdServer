@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 {
-    public class StringLocalizer : IStringLocalizerAsync, ISharedStringLocalizerAsync
+    public class StringLocalizer : ISharedStringLocalizerAsync
     {
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
@@ -87,10 +87,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
     public class StringLocalizer<T> : IStringLocalizerAsync<T>, IDisposable
     {
-        private readonly StringLocalizer _sharedStringLocalizer;
+        private readonly ISharedStringLocalizerAsync _sharedStringLocalizer;
         private bool disposedValue;
 
-        public StringLocalizer(StringLocalizer sharedStringLocalizer) 
+        public StringLocalizer(ISharedStringLocalizerAsync sharedStringLocalizer) 
         {
             _sharedStringLocalizer = sharedStringLocalizer ?? throw new ArgumentNullException(nameof(sharedStringLocalizer));
             _sharedStringLocalizer.ResourceReady += _sharedStringLocalizer_ResourceReady;

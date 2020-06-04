@@ -1,6 +1,6 @@
 ﻿@inherits EntitesGridModel<Entity.ClientUri>
 
-<EntitiesGrid Items="Collection" TableClass="table table-hover" Context="url" SetKey="false">
+<EntitiesGrid Items="@Uris" TableClass="table table-hover" Context="url" SetKey="false">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Uri"
