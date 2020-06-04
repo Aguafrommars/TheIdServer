@@ -65,7 +65,7 @@ namespace Microsoft.AspNetCore.Components.Testing
         public void WaitForNoRender()
         {
             var task = Renderer.NextRender;
-            while(task.Wait(200))
+            while(task.Wait(500))
             {
                 task = Renderer.NextRender;
             }

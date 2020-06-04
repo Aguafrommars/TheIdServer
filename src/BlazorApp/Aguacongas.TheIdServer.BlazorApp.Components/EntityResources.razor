@@ -4,6 +4,6 @@
 @foreach (var resource in Collection.Where(r => r.ResourceKind == ResourceKind))
 {
     <div @key="@resource" class="form-group row">
-        <EntityResourceTranslatation Resource="resource" DeleteResource="OnDeleteResource" />
+        <EntityResourceTranslatation Resource="resource" DeleteResource="OnDeleteResource" FieldExpression="() => resource.CultureId" />
     </div>
 }

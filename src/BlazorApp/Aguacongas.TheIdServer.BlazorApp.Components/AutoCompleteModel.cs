@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public abstract class AutoCompleteModel<T> : ComponentBase, IDisposable
     {
+        private Expression<Func<object>> _fieldExpression;
         private FieldIdentifier _fieldIdentifier;
 
         [Inject]
@@ -28,6 +30,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         [Parameter]
         public EventCallback<T> ValueChanged { get; set; }
+
+        [Parameter]
+        public Expression<Func<object>> FieldExpression 
+        {
+            get => _fieldExpression;
+            set
+            {
+                _fieldExpression = value;
+                _fieldIdentifier = FieldIdentifier.Create(value);
+            }
+        }
 
         [CascadingParameter]
         EditContext EditContext { get; set; }
@@ -52,18 +65,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             => EditContext.FieldCssClass(_fieldIdentifier);
 
 
-        protected Task SetSelectedValue(string value)
+        protected async Task SetSelectedValue(string value)
         {
             SetValue(value);
-            EditContext.NotifyFieldChanged(_fieldIdentifier);
             FilteredValues = null;
-            return ValueChanged.InvokeAsync(Entity);
+            await ValueChanged.InvokeAsync(Entity).ConfigureAwait(false);
+            EditContext.NotifyFieldChanged(_fieldIdentifier);
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _fieldIdentifier = new FieldIdentifier(Entity, PropertyName);
+            if (_fieldExpression == null)
+            {
+                _fieldIdentifier = new FieldIdentifier(Entity, PropertyName);
+            }
         }
 
         protected override void OnInitialized()
@@ -89,7 +105,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
 
-            return Task.Delay(250, token)
+            return Task.Delay(200, token)
                     .ContinueWith(async task =>
                     {
                         if (task.IsCanceled)
@@ -106,7 +122,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                     }, TaskScheduler.Default);
         }
 
-        protected Task OnInputChanged(ChangeEventArgs e)
+        protected virtual Task OnInputChanged(ChangeEventArgs e)
         {
             SelectedValue = e.Value as string;
             SetValue(SelectedValue);

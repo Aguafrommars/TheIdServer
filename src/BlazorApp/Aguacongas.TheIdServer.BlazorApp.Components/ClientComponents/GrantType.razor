@@ -13,7 +13,7 @@ else
 {
     <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
         <input type="text" class="form-control new-claim @FieldClass" placeholder="@Localizer["grant type"]" value="@SelectedValue"
-               @oninput="OnInputChanged" @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })' />
+               @oninput="OnInputChanged" @onfocus="() => OnInputChanged(new ChangeEventArgs { Value = string.Empty })" />
         <div class="input-group-append">
             <span class="input-group-text oi oi-plus" />
         </div>

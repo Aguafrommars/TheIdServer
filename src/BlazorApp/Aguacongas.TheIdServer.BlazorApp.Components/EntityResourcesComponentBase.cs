@@ -20,7 +20,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected Task OnDeleteResource(IEntityResource resource)
         {
             Collection.Remove((T)resource);
-            HandleModificationState.EntityDeleted(resource);
+            HandleModificationState.EntityDeleted((T)resource);
             return Task.CompletedTask;
         }
     }

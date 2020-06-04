@@ -3,6 +3,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     public partial class Culture
     {
         private readonly GridState _gridState = new GridState();
+        private CultureInfo _culture = CultureInfo.InvariantCulture;
         private bool _hasMore;
         private CancellationTokenSource _cancellationTokenSource;
         private PageRequest _pageRequest;
@@ -23,6 +25,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return LoadMoreAsync();
         }
 
+        private CultureInfo Info => CultureInfo.GetCultureInfo(Id);
         protected override string Expand => null;
 
         protected override bool NonEditable => false;
@@ -183,6 +186,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             _hasMore = resourceList.Count < page.Count;
             StateHasChanged();
+        }
+
+        private void CultureSelected(CultureInfo culture)
+        {
+            Console.WriteLine($"culture {culture}");
+            _culture = culture;
+            Model.Id = culture.Name;
         }
     }
 }
