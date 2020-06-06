@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 {
@@ -11,6 +12,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     public interface ISharedStringLocalizerAsync: IStringLocalizerAsync
     {
         event Action ResourceReady;
+
+        Task Reset();
     }
 
     public interface IStringLocalizerAsync<T> : IStringLocalizerAsync
