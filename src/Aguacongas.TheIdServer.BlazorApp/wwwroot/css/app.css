@@ -43,10 +43,10 @@ span.input-group-text.oi {
             margin-left: 1.5rem;
         }
 
-.sidebar .top-row {
-    background-color: #e6e6e6;
-    border-bottom: 1px solid #969595;
-}
+    .sidebar .top-row {
+        background-color: #e6e6e6;
+        border-bottom: 1px solid #969595;
+    }
 
 .sidebar .navbar-brand {
     font-size: 1.1rem;
@@ -141,6 +141,11 @@ span.input-group-text.oi {
         top: 0;
         right: 0;
     }
+
+.language-menu {
+    z-index: 2000;
+}
+
 
 #blazor-error-ui {
     background: lightyellow;

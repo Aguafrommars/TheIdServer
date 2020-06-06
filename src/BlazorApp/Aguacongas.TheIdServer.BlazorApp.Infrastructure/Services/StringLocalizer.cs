@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     public class StringLocalizer : ISharedStringLocalizerAsync
     {
         private readonly IAdminStore<LocalizedResource> _store;
-        private readonly Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
+        private Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
         private IEnumerable<LocalizedResource> _resources;
         public event Action ResourceReady;
 
@@ -50,13 +50,27 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             }
         }
 
+        public Task Reset()
+        {
+            _keyValuePairs = new Dictionary<string, string>();
+            _resources = null;
+            return GetAllResourcesAsync();
+        }
+
         private async Task<string> GetStringAsync(string key)
         {
-            var cultureName = CultureInfo.CurrentCulture.Name;
             if (_resources != null)
             {
                 return _resources.FirstOrDefault(r => r.Key == key)?.Value;
             }
+            await GetAllResourcesAsync().ConfigureAwait(false);
+            return _resources.FirstOrDefault(r => r.Key == key)?.Value;
+        }
+
+        private async Task GetAllResourcesAsync()
+        {
+            var cultureName = CultureInfo.CurrentCulture.Name;
+
             _resources = new LocalizedResource[0];
 
             var page = await _store.GetAsync(new PageRequest
@@ -65,13 +79,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             }).ConfigureAwait(false);
 
             _resources = page.Items;
-            foreach(var resource in _resources)
+            foreach (var resource in _resources)
             {
                 _keyValuePairs[resource.Key] = resource.Value;
             }
 
             ResourceReady();
-            return _resources.FirstOrDefault(r => r.Key == key)?.Value;
         }
 
         private void SetResource(string name, Task<string> task)
