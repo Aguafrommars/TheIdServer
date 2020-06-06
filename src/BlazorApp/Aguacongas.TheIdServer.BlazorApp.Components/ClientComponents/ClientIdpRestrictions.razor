@@ -5,13 +5,13 @@
             @foreach (var provider in Restrictions)
             {
                 <li @key="provider" class="list-inline-item">
-                    <IdentityProvider Entity="@provider"
+                    <IdentityProvider @bind-Value="@provider.Provider" Entity="@provider"
                                       DeleteClicked="() => OnProviderDeletedClicked(provider)" />
                 </li>
             }
             <li class="list-inline-item">
-                <IdentityProvider Entity="@_provider"
-                                  ValueChanged="() => OnProviderValueChanged(_provider)" />
+                <IdentityProvider @bind-Value="@_provider.Provider" Entity="@_provider"
+                                  EntityChanged="() => OnProviderValueChanged(_provider)" />
             </li>
         </ul>
         <AuthorizeCheckbox Label="@Localizer["enable local login"]" @bind-Value="@Model.EnableLocalLogin" />

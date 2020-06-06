@@ -15,11 +15,15 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="id" Placeholder="@Localizer["culture name"]" @bind-Value="@Model.Id" />
+                        <AuthorizeView Policy="Is4-Writer">
+                            <Authorized Context="culture">
+                                <CultureInfos @bind-Value="@Model.Id" />
+                            </Authorized>
+                        </AuthorizeView>                        
                     }
                     else
                     {
-                        <h3>@Model.Id</h3>
+                        <h3>@Model.Id <small><em>@Info.DisplayName</em></small></h3>
                     }
                 </div>
                 <div>

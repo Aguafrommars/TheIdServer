@@ -42,6 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         {
             Model.AllowedScopes.Add(scope);
             _scope = new Entity.ClientScope();
+            scope.Id = Guid.NewGuid().ToString();
             HandleModificationState.EntityCreated(scope);
         }
 

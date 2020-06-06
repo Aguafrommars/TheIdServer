@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using System.Globalization
+
 @page "/cultures"
 @inherits EntitiesModel<Entity.Culture>
 
@@ -29,7 +30,12 @@ else
         <EntitiesGrid Items="EntityList" TableClass="table table-hover"
                       RowClicked="(Entity.Culture item) => OnRowClicked(item)">
             <RowTemplate>
-                <td>@context.Id</td>
+                <td>
+                    @context.Id
+                    <div>
+                        <em>@CultureInfo.GetCultureInfo(context.Id).DisplayName</em>
+                    </div>
+                </td>
             </RowTemplate>
         </EntitiesGrid>
     </div>

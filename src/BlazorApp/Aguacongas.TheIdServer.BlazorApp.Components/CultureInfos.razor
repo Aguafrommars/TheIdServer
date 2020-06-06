@@ -1,0 +1,21 @@
+﻿@using System.Globalization
+@inherits AutoCompleteModel<CultureInfo>
+
+<div id="@Id" class="input-group" data-toggle="dropdown">
+    <input type="text" @key="@Entity" class="form-control @FieldClass" placeholder="@Localizer["culture"]" value="@CurrentValue"
+            @oninput="OnInputChanged" @onfocus="Filter" />
+</div>
+<div class="dropdown-menu m-0">
+    @if (_filterValues != null)
+    {
+        foreach (var value in _filterValues)
+        {
+            <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(value.Name)">
+                @value.Name
+                <div>
+                    <em><small>@value.DisplayName</small></em>
+                </div>
+            </button>
+        }
+    }
+</div>

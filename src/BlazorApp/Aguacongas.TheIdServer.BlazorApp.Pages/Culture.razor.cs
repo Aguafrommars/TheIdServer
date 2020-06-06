@@ -3,6 +3,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return LoadMoreAsync();
         }
 
+        private CultureInfo Info => CultureInfo.GetCultureInfo(Id);
         protected override string Expand => null;
 
         protected override bool NonEditable => false;

@@ -1,5 +1,6 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -49,6 +50,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
         {
             Model.ApiScopeClaims.Add(claim);
             _claim = new Entity.ApiScopeClaim { ApiScpope = Model };
+            claim.Id = Guid.NewGuid().ToString();
             HandleModificationState.EntityCreated(claim);
         }
     }

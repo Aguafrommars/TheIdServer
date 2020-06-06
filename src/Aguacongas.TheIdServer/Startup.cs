@@ -192,6 +192,7 @@ namespace Aguacongas.TheIdServer
                     options.DefaultRequestCulture = new RequestCulture("en-US");
                     options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
                     options.SupportedUICultures = options.SupportedCultures;
+                    options.FallBackToParentCultures = true;
                 })
                 .UseSerilogRequestLogging();
 

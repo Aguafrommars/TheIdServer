@@ -4,16 +4,16 @@
         <ul class="list-inline">
             @foreach (var scope in Scopes)
             {
-                <li @key="scope" class="list-inline-item">
-                    <ClientScope Entity="@scope"
+                <li class="list-inline-item">
+                    <ClientScope @bind-Value="@scope.Scope" Entity="@scope"
                                     Model="@Model"
                                     DeleteClicked="() => OnScopeDeleted(scope)" />
                 </li>
             }
             <li class="list-inline-item">
-                <ClientScope Entity="@_scope"
+                <ClientScope @bind-Value="@_scope.Scope" Entity="@_scope"
                                 Model="@Model"
-                                ValueChanged="() => OnScopeValueChanged(_scope)" />
+                                EntityChanged="() => OnScopeValueChanged(_scope)" />
             </li>
         </ul>
     </div>
