@@ -8,6 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class CultureInfos
     {
+        private IEnumerable<CultureInfo> _cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
         private IEnumerable<CultureInfo> _filterValues;
         protected override bool IsReadOnly => true;
 
@@ -16,7 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected override Task<IEnumerable<string>> GetFilteredValues(string term)
         {
             term = term ?? string.Empty;
-            _filterValues = CultureInfo.GetCultures(CultureTypes.AllCultures)
+            _filterValues = _cultureInfos
                 .Where(c => c.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || c.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase))
                 .Take(5);
 
@@ -25,7 +26,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override void SetValue(string inputValue)
         {
-            var cultureInfo = CultureInfo.GetCultures(CultureTypes.AllCultures)
+            var cultureInfo = _cultureInfos
                 .FirstOrDefault(c => c.Name == inputValue);
             if (cultureInfo != null)                
             {

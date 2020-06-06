@@ -15,9 +15,9 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeView>
+                        <AuthorizeView Policy="Is4-Writer">
                             <Authorized Context="culture">
-                                <CultureInfos @bind-Value="@Model.Id" Entity="_culture" EntityChanged="CultureSelected" />
+                                <CultureInfos @bind-Value="@Model.Id" />
                             </Authorized>
                         </AuthorizeView>                        
                     }

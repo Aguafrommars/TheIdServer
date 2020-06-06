@@ -14,7 +14,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     public partial class Culture
     {
         private readonly GridState _gridState = new GridState();
-        private CultureInfo _culture = CultureInfo.InvariantCulture;
         private bool _hasMore;
         private CancellationTokenSource _cancellationTokenSource;
         private PageRequest _pageRequest;
@@ -186,13 +185,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             _hasMore = resourceList.Count < page.Count;
             StateHasChanged();
-        }
-
-        private void CultureSelected(CultureInfo culture)
-        {
-            Console.WriteLine($"culture {culture}");
-            _culture = culture;
-            Model.Id = culture.Name;
         }
     }
 }
