@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _isReadOnly = Entity.Name != null;
+            _isReadOnly = Entity.Id != null;
         }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
@@ -37,7 +36,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
 
         protected override void SetValue(string inputValue)
         {
-            Entity.Id = Guid.NewGuid().ToString();
             Entity.Name = inputValue;
         }
     }

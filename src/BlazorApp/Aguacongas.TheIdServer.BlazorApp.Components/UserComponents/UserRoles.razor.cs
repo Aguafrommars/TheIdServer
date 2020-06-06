@@ -1,5 +1,6 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -28,6 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
         {
             if (entity is Entity.Role)
             {
+                StateHasChanged();
             }
         }
 
@@ -46,6 +48,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
         {
             Model.Add(role);
             _role = new Entity.Role();
+            role.Id = Guid.NewGuid().ToString();
             HandleModificationState.EntityCreated(role);
         }
     }

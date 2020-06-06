@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public async Task OnAddTranslation_should_add_validate_resource()
+        public async Task OnAddTranslation_should_validate_resource()
         {
             string identityId = await CreateEntity();
 
@@ -48,7 +49,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.ChangeAsync("fr-FR"));
+            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en-US" }));
+
+            var dropDownItem = WaitForNode(host, component, "button.dropdown-item");
+            Assert.NotNull(dropDownItem);
+
+            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
 
             var addDescriptionButton = component.Find("#btnAddDescription");
 
@@ -62,7 +68,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.ChangeAsync("fr-FR"));
+            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }));
+
+            var items = component.FindAll("button.dropdown-item");
+            dropDownItem = items.Last();
+            Assert.NotNull(dropDownItem);
+
+            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
+
+            cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
+
+            Assert.NotNull(cultureInputs);
+
+            cultureInput = cultureInputs.Last();
+
+            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }));
+
+            items = component.FindAll("button.dropdown-item");
+            dropDownItem = items.Last();
+            Assert.NotNull(dropDownItem);
+
+            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
 
             var form = component.Find("form");
 
@@ -70,7 +96,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
-            WaitForSavedToast(host, component);
+            Assert.Throws<TimeoutException>(() => WaitForSavedToast(host, component));
         }
 
 

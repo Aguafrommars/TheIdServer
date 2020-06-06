@@ -1,17 +1,16 @@
 ﻿@inject IStringLocalizerAsync<EntityResourceTranslatation> Localizer
-
-    <div class="col" for="culture">
-        @if (Resource.Id == null)
-        {
-            <CultureInfos Entity="@_cultureInfo" ValueChanged="CultureSelected" FieldExpression="FieldExpression" />
-        }
-        else
-        {
-            <div class="col-form-label">
-                @Resource.CultureId <em><small>@Localizer[_cultureInfo?.DisplayName ?? string.Empty]</small></em>
-            </div>
-        }        
-    </div>
+<div class="col" for="culture">
+    @if (Resource.Id == null)
+    {
+        <CultureInfos @bind-Value="@Resource.CultureId" Entity="@_cultureInfo" EntityChanged="CultureSelected" />
+    }
+    else
+    {
+        <div class="col-form-label">
+            @Resource.CultureId <em><small>@Localizer[_cultureInfo?.DisplayName ?? string.Empty]</small></em>
+        </div>
+    }        
+</div>
 <div class="col-lg-9 col-sm-12">
     @if (Resource.ResourceKind == Entity.EntityResourceKind.DisplayName)
     {

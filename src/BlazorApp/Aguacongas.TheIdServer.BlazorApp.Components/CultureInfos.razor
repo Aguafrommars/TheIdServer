@@ -1,10 +1,10 @@
 ﻿@using System.Globalization
 @inherits AutoCompleteModel<CultureInfo>
 
-    <div class="input-group" data-toggle="dropdown">
-        <input id="@Id" type="text" class="form-control @FieldClass" placeholder="@Localizer["culture"]" value="@Entity.Name"
-               @oninput="OnInputChanged" @onfocus="() => OnInputChanged(new ChangeEventArgs { Value = Entity.Name })" />
-    </div>
+<div id="@Id" class="input-group" data-toggle="dropdown">
+    <input type="text" @key="@Entity" class="form-control @FieldClass" placeholder="@Localizer["culture"]" value="@Entity.Name"
+            @oninput="OnInputChanged" @onfocus="Filter" />
+</div>
 <div class="dropdown-menu m-0">
     @if (_filterValues != null)
     {

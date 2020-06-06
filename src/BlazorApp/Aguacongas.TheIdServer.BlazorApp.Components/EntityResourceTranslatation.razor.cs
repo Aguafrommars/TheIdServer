@@ -1,9 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System;
 using System.Globalization;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
@@ -17,9 +15,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         [Parameter]
         public EventCallback<IEntityResource> DeleteResource { get; set; }
-
-        [Parameter]
-        public Expression<Func<object>> FieldExpression { get; set; }
 
         protected override void OnInitialized()
         {

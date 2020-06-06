@@ -3,16 +3,16 @@
         <ul class="list-inline">
             @foreach (var grantType in GrantTypes)
             {
-                <li @key="grantType" class="list-inline-item">
-                    <GrantType Entity="@grantType"
+                <li class="list-inline-item">
+                    <GrantType @bind-Value="@grantType.GrantType" Entity="@grantType"
                                Model="@Model"
                                DeleteClicked="() => OnGrantTypeDeletedClicked(grantType)" />
                 </li>
             }
             <li class="list-inline-item">
-                <GrantType Entity="@_grantType"
+                <GrantType @bind-Value="@_grantType.GrantType" Entity="@_grantType"
                            Model="@Model"
-                           ValueChanged="() => OnGrantTypeValueChanged(_grantType)" />
+                           EntityChanged="() => OnGrantTypeValueChanged(_grantType)" />
             </li>
         </ul>
     </div>

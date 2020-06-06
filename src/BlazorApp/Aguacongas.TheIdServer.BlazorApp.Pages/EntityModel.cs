@@ -78,6 +78,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             HandleModificationState = new HandleModificationState(Logger);
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
 
             if (Id == null)
             {
@@ -278,7 +279,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
 
-        
+        private void HandleModificationState_OnStateChange(ModificationKind kind, object _)
+        {
+            if (kind == ModificationKind.Delete)
+            {
+                EditContext.Validate();
+            }
+        }
 
         private void CreateEditContext(T model)
         {

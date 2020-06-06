@@ -4,7 +4,7 @@
 @if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@Entity.Type</div>
+        <div class="form-control @FieldClass" disabled>@Entity.Type</div>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
@@ -12,10 +12,10 @@
 }
 else
 {
-    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim @FieldClass" placeholder="@Localizer["claim type"]"
-               @oninput="OnInputChanged" />
-        <div class="input-group-append" @onclick="() => SetSelectedValue(SelectedValue)">
+    <div id="@Id" @key="@Entity" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="@Localizer["claim type"]" value="@CurrentValue"
+               @oninput="OnInputChanged" @onfocus="Filter" />
+        <div class="input-group-append" @onclick="() => SetSelectedValue(CurrentValue)">
             <span class="input-group-text oi oi-plus" />
         </div>
     </div>

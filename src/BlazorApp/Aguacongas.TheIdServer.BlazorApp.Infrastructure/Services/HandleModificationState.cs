@@ -75,7 +75,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var entityType = typeof(TEntity);
             var modifications = GetModifications(entityType);
-            if (entity.Id == null)
+            if (!modifications.TryAdd(entity, ModificationKind.Delete))
             {
                 _logger.LogDebug($"Remove change for entity {entityType.Name} {entity.Id}");
                 modifications.Remove(entity);
@@ -83,7 +83,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
                 return;
             }
             _logger.LogDebug($"Add delete change for entity {entityType.Name} {entity.Id}");
-            modifications.Add(entity, ModificationKind.Delete);
             OnStateChange?.Invoke(ModificationKind.Delete, entity);
         }
 

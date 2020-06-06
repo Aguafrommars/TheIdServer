@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
-    public class EntityResourceValidator<T>: AbstractValidator<T>  where T:class, IEntityResource
+    public class EntityResourceValidator<T>: AbstractValidator<T>  where T: class, IEntityResource
     {
         public EntityResourceValidator(ILocalizable<T> model, EntityResourceKind kind)
         {

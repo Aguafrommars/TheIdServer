@@ -9,7 +9,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     public partial class CultureInfos
     {
         private IEnumerable<CultureInfo> _filterValues;
-        protected override bool IsReadOnly => false;
+        protected override bool IsReadOnly => true;
 
         protected override string PropertyName => "Name";
 
@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         {
             var cultureInfo = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .FirstOrDefault(c => c.Name == inputValue);
-            if (cultureInfo != null)
+            if (cultureInfo != null)                
             {
                 Entity = cultureInfo;
             }

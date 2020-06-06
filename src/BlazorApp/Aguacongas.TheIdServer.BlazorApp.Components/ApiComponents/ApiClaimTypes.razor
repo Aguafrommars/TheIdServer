@@ -6,13 +6,13 @@
             @foreach (var claim in Claims)
             {
                 <li @key="claim" class="list-inline-item">
-                    <ClaimType Entity="@claim"
+                    <ClaimType @bind-Value="@claim.Type" Entity="@claim"
                                DeleteClicked="() => OnDeleteClaimClicked(claim)" />
                 </li>
             }
             <li class="list-inline-item">
-                <ClaimType Entity="@_claim"
-                           ValueChanged="() => OnClaimValueChanged(_claim)" />
+                <ClaimType @bind-Value="@_claim.Type" Entity="@_claim"
+                           EntityChanged="() => OnClaimValueChanged(_claim)" />
             </li>
         </ul>
     </div>

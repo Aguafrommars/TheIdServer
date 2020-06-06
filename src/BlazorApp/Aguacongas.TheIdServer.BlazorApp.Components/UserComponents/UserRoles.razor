@@ -3,14 +3,14 @@
         <ul class="list-inline">
             @foreach (var role in Collection)
             {
-                <li @key="@role" class="list-inline-item">
-                    <UserRole Entity="@role"
+                <li class="list-inline-item">
+                    <UserRole @bind-Value="@role.Name" Entity="@role"
                               DeleteClicked="() => OnDeleteRoleClicked(role)" />
                 </li>
             }
-            <li @key="@_role" class="list-inline-item">
-                <UserRole Entity="@_role"
-                          ValueChanged="() => OnRoleValueChanged(_role)" />
+            <li class="list-inline-item">
+                <UserRole @bind-Value="@_role.Name" Entity="@_role"
+                          EntityChanged="() => OnRoleValueChanged(_role)" />
             </li>
         </ul>
     </div>

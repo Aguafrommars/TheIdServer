@@ -17,7 +17,7 @@ else
                     {
                         <AuthorizeView>
                             <Authorized Context="culture">
-                                <CultureInfos Entity="_culture" ValueChanged="CultureSelected" FieldExpression="() => Model.Id" />
+                                <CultureInfos @bind-Value="@Model.Id" Entity="_culture" EntityChanged="CultureSelected" />
                             </Authorized>
                         </AuthorizeView>                        
                     }

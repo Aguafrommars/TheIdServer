@@ -15,8 +15,8 @@
 else
 {
     <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="@Localizer["provider"]" value="@SelectedValue"
-               @oninput="OnInputChanged" @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })'/>
+        <input type="text" class="form-control new-claim" placeholder="@Localizer["provider"]" value="@CurrentValue"
+               @oninput="OnInputChanged" @onfocus="Filter" />
         <div class="input-group-append">
             <span class="input-group-text oi oi-plus" />
         </div>

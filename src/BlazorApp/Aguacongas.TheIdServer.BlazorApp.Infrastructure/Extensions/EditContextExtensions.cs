@@ -75,6 +75,15 @@ namespace Microsoft.AspNetCore.Components.Forms
             {
                 return new ApiScopeClaimValidator(claim.ApiScpope);
             }
+            if (model is IEntityResource resource)
+            {
+                var entityValidatorType = typeof(EntityResourceValidator<>).MakeGenericType(model.GetType());              
+                if (entityValidatorType == null)
+                {
+                    return null;
+                }
+                return (IValidator)Activator.CreateInstance(entityValidatorType, entity, resource.ResourceKind);
+            }
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
             var modelValidatorType = Assembly.GetExecutingAssembly()
                 .GetTypes().FirstOrDefault(t => t.IsSubclassOf(abstractValidatorType));

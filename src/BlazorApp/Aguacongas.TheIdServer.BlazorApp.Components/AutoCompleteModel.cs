@@ -4,16 +4,13 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
-    public abstract class AutoCompleteModel<T> : ComponentBase, IDisposable
+    public abstract class AutoCompleteModel<T> : InputText
     {
-        private Expression<Func<object>> _fieldExpression;
         private FieldIdentifier _fieldIdentifier;
 
         [Inject]
@@ -29,26 +26,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         public EventCallback DeleteClicked { get; set; }
 
         [Parameter]
-        public EventCallback<T> ValueChanged { get; set; }
-
-        [Parameter]
-        public Expression<Func<object>> FieldExpression 
-        {
-            get => _fieldExpression;
-            set
-            {
-                _fieldExpression = value;
-                _fieldIdentifier = FieldIdentifier.Create(value);
-            }
-        }
-
-        [CascadingParameter]
-        EditContext EditContext { get; set; }
+        public EventCallback<T> EntityChanged { get; set; }
 
         [JSInvokable]
         public Task EnterKeyPressed()
         {
-            return SetSelectedValue(SelectedValue);
+            return SetSelectedValue(CurrentValue);
         }
 
         protected abstract bool IsReadOnly { get; }
@@ -56,8 +39,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected abstract string PropertyName { get; }
 
         protected string Id { get; } = Guid.NewGuid().ToString();
-
-        protected string SelectedValue { get; set; }
 
         protected IEnumerable<string> FilteredValues { get; private set; }
 
@@ -69,17 +50,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         {
             SetValue(value);
             FilteredValues = null;
-            await ValueChanged.InvokeAsync(Entity).ConfigureAwait(false);
-            EditContext.NotifyFieldChanged(_fieldIdentifier);
+            await EntityChanged.InvokeAsync(Entity).ConfigureAwait(false);
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            if (_fieldExpression == null)
-            {
-                _fieldIdentifier = new FieldIdentifier(Entity, PropertyName);
-            }
+            _fieldIdentifier = base.FieldIdentifier;
         }
 
         protected override void OnInitialized()
@@ -112,21 +89,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                         {
                             return;
                         }
-                        FilteredValues = await GetFilteredValues(SelectedValue)
+                        FilteredValues = await GetFilteredValues(CurrentValueAsString)
                             .ConfigureAwait(false);
-                        if (FilteredValues.Any())
-                        {
-                            await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", Id);
-                        }
+                       await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", Id);
                        await InvokeAsync(StateHasChanged).ConfigureAwait(false);
                     }, TaskScheduler.Default);
         }
 
         protected virtual Task OnInputChanged(ChangeEventArgs e)
         {
-            SelectedValue = e.Value as string;
-            SetValue(SelectedValue);
-            EditContext.NotifyFieldChanged(_fieldIdentifier);
+            CurrentValue = e.Value as string;
+            SetValue(CurrentValue);
+            EditContext.NotifyFieldChanged(FieldIdentifier);
             return Filter();
         }
 
@@ -140,8 +114,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
             if (!disposedValue)
             {
                 if (disposing)
@@ -151,13 +126,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
                 disposedValue = true;
             }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
         #endregion
     }
