@@ -28,7 +28,7 @@ else
                 </div>
                 <div>
                     <SaveButton />
-                    @if (!IsNew && Model.Id != "en-US")
+                    @if (!IsNew)
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }

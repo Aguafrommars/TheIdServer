@@ -63,6 +63,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .ThenInclude(s => s.Resources)
                             .Include(a => a.Scopes)
                             .ThenInclude(s => s.ApiScopeClaims)
+                        join scope in _context.ApiScopes
+                        on api.Id equals scope.ApiId
+                        where scopeNames.Contains(scope.Scope)
                         select api;
 
             return await query

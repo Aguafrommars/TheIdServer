@@ -555,7 +555,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    ApiScpopeId = table.Column<string>(nullable: false),
+                    ApiScopeId = table.Column<string>(nullable: false),
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true),
@@ -565,8 +565,8 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 {
                     table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApiScopeClaims_ApiScopes_ApiScpopeId",
-                        column: x => x.ApiScpopeId,
+                        name: "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
+                        column: x => x.ApiScopeId,
                         principalTable: "ApiScopes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -610,7 +610,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
             migrationBuilder.InsertData(
                 table: "Cultures",
                 columns: new[] { "Id", "CreatedAt", "ModifiedAt" },
-                values: new object[] { "en-US", new DateTime(2020, 6, 1, 17, 59, 12, 769, DateTimeKind.Utc).AddTicks(9339), null });
+                values: new object[] { "en", new DateTime(2020, 6, 1, 17, 59, 12, 769, DateTimeKind.Utc).AddTicks(9339), null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApiClaims_ApiId_Type",
@@ -640,9 +640,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 column: "ProtectResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_ApiScpopeId_Type",
+                name: "IX_ApiScopeClaims_ApiScopeId_Type",
                 table: "ApiScopeClaims",
-                columns: new[] { "ApiScpopeId", "Type" },
+                columns: new[] { "ApiScopeId", "Type" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

@@ -189,10 +189,11 @@ namespace Aguacongas.TheIdServer
 
             app.UseRequestLocalization(options =>
                 {
-                    options.DefaultRequestCulture = new RequestCulture("en-US");
+                    options.DefaultRequestCulture = new RequestCulture("en");
                     options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
                     options.SupportedUICultures = options.SupportedCultures;
                     options.FallBackToParentCultures = true;
+                    options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
                 })
                 .UseSerilogRequestLogging();
 

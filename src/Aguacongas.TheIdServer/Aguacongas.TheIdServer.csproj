@@ -74,4 +74,7 @@
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Controllers\" />
+	</ItemGroup>
 </Project>

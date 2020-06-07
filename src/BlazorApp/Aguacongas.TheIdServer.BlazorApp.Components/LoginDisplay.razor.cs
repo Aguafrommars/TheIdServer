@@ -1,6 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
-using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,25 +17,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             _supportedCultures = await _shareLocalizer.GetSupportedCulturesAsync().ConfigureAwait(false);
-            _selectedCulture = _supportedCultures.FirstOrDefault(c => c == CultureInfo.CurrentCulture.Name) ?? "en-US";
+            _selectedCulture = _supportedCultures.FirstOrDefault(c => c == CultureInfo.CurrentCulture.Name) ?? "en";
             await base.OnInitializedAsync().ConfigureAwait(false);
         }
         private async Task BeginSignOut(MouseEventArgs args)
         {
             await _signOutManager.SetSignOutState();
-            _navigationManager.NavigateTo("authentication/logout");
+            _navigationManager.NavigateTo(_options.Value.LogOutPath);
         }
 
         private string GetActiveClass(string culture)
             => _selectedCulture == culture ? "active" : null;
 
-        private Task SetSelectCulture(string culture)
+        private async Task SetSelectCulture(string culture)
         {
             _selectedCulture = culture;
             CultureInfo.CurrentCulture = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .FirstOrDefault(c => c.Name == culture) ?? CultureInfo.CurrentCulture;
-            Console.WriteLine($"CurrentCulture {CultureInfo.CurrentCulture}");
-            return _shareLocalizer.Reset();
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "culture", _selectedCulture).ConfigureAwait(false);
+            await _shareLocalizer.Reset().ConfigureAwait(false);
         }
     }
 }

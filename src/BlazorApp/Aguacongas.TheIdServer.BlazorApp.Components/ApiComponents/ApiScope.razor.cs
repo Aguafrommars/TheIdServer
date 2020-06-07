@@ -47,7 +47,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
         {
             var entity = new Entity.ApiScopeLocalizedResource
             {
-                ResourceKind = kind
+                ResourceKind = kind,
+                ApiScope = Scope
             };
             Scope.Resources.Add(entity);
             HandleModificationState.EntityCreated(entity);

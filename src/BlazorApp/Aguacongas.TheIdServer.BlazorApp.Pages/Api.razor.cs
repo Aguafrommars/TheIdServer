@@ -85,20 +85,33 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             if (entity is ApiScope scope)
             {
-                scope.Id = Guid.NewGuid().ToString();
+                scope.Id = scope.Id ?? Guid.NewGuid().ToString();
             }
             if (entity is ApiScopeClaim apiScopeClaim)
             {
-                if (apiScopeClaim.ApiScpope == null)
+                if (apiScopeClaim.ApiScope == null)
                 {
                     throw new InvalidOperationException("ApiScopeClaim.ApiScope property cannot be null.");
                 }
-                if (apiScopeClaim.ApiScpope.Id == null)
+                if (apiScopeClaim.ApiScope.Id == null)
                 {
                     throw new InvalidOperationException("ApiScopeClaim.ApiScope.Id property cannot be null.");
                 }
-                apiScopeClaim.ApiScpopeId = apiScopeClaim.ApiScpope.Id;
-                apiScopeClaim.ApiScpope = null;
+                apiScopeClaim.ApiScopeId = apiScopeClaim.ApiScope.Id;
+                apiScopeClaim.ApiScope = null;
+            }
+            if (entity is ApiScopeLocalizedResource apiScopeResource)
+            {
+                if (apiScopeResource.ApiScope == null)
+                {
+                    throw new InvalidOperationException("apiScopeResource.ApiScope property cannot be null.");
+                }
+                if (apiScopeResource.ApiScope.Id == null)
+                {
+                    throw new InvalidOperationException("apiScopeResource.ApiScope.Id property cannot be null.");
+                }
+                apiScopeResource.ApiScopeId = apiScopeResource.ApiScope.Id;
+                apiScopeResource.ApiScope = null;
             }
             if (entity is ApiSecret secret && secret.Id == null && secret.Type == "ShareSecret")
             {

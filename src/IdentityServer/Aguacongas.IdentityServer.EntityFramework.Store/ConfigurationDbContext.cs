@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .HasIndex(e => new { e.ApiId, e.Key })
                 .IsUnique(true);
             modelBuilder.Entity<ApiScopeClaim>()
-                .HasIndex(e => new { e.ApiScpopeId, e.Type })
+                .HasIndex(e => new { e.ApiScopeId, e.Type })
                 .IsUnique(true);
             modelBuilder.Entity<IdentityProperty>()
                 .HasIndex(e => new { e.IdentityId, e.Key })
@@ -139,7 +139,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var defaultCulture = new Culture
             {
-                Id = "en-US",
+                Id = "en",
                 CreatedAt = DateTime.UtcNow
             };
             modelBuilder.Entity<Culture>().HasData(defaultCulture);

@@ -121,7 +121,7 @@ namespace Aguacongas.IdentityServer.Store
                     Required = s.Required,
                     ShowInDiscoveryDocument = s.ShowInDiscoveryDocument,
                     UserClaims = api.ApiScopeClaims
-                        .Where(s => s.ApiScpopeId == s.Id)
+                        .Where(s => s.ApiScopeId == s.Id)
                         .Select(c => c.Type).ToList()
                 }).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()

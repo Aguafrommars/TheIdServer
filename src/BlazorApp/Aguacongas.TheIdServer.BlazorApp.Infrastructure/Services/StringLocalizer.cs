@@ -20,7 +20,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         private IEnumerable<LocalizedResource> _resources;
         public event Action ResourceReady;
 
-        public StringLocalizer(HttpClient client, ILogger<AdminStore<LocalizedResource>> resourceLogger, ILogger<AdminStore<Culture>> cultureLogger)
+        public StringLocalizer(HttpClient client,
+            ILogger<AdminStore<LocalizedResource>> resourceLogger,
+            ILogger<AdminStore<Culture>> cultureLogger)
         {
             _store = new AdminStore<LocalizedResource>(Task.FromResult(client), resourceLogger);
             _cultureStore = new AdminStore<Culture>(Task.FromResult(client), cultureLogger);
@@ -69,7 +71,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
             var cultureList = new List<string>
             {
-                "en-US"
+                "en"
             };
             cultureList.AddRange(response.Items.Select(c => c.Id));
             return cultureList.Distinct();
