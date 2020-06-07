@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
@@ -9,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            using var response = await _httpClient.GetAsync(_settings.WelcomeContenUrl).ConfigureAwait(false);
+            using var response = await _httpClient.GetAsync($"{_settings.WelcomeContenUrl}?culture={CultureInfo.CurrentCulture.Name}").ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             _renderFragment = builder =>
             {

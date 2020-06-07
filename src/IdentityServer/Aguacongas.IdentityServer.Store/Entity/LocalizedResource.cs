@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Defined a localized resource
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class LocalizedResource : LocalizedResourceBase, IAuditable
+    public class LocalizedResource : LocalizedResourceBase
     {
         /// <summary>
         /// Gets or sets the key.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
@@ -14,6 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         event Action ResourceReady;
 
         Task Reset();
+        Task<IEnumerable<string>> GetSupportedCulturesAsync();
     }
 
     public interface IStringLocalizerAsync<T> : IStringLocalizerAsync

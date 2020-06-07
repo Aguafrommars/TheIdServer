@@ -15,13 +15,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     public class StringLocalizer : ISharedStringLocalizerAsync
     {
         private readonly IAdminStore<LocalizedResource> _store;
+        private readonly IAdminStore<Culture> _cultureStore;
         private Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
         private IEnumerable<LocalizedResource> _resources;
         public event Action ResourceReady;
 
-        public StringLocalizer(HttpClient client, ILogger<AdminStore<LocalizedResource>> logger)
+        public StringLocalizer(HttpClient client, ILogger<AdminStore<LocalizedResource>> resourceLogger, ILogger<AdminStore<Culture>> cultureLogger)
         {
-            _store = new AdminStore<LocalizedResource>(Task.FromResult(client), logger);
+            _store = new AdminStore<LocalizedResource>(Task.FromResult(client), resourceLogger);
+            _cultureStore = new AdminStore<Culture>(Task.FromResult(client), cultureLogger);
         }
 
         public string this[string name]
@@ -55,6 +57,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             _keyValuePairs = new Dictionary<string, string>();
             _resources = null;
             return GetAllResourcesAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetSupportedCulturesAsync()
+        {
+            var response = await _cultureStore.GetAsync(new PageRequest
+            {
+                Select = nameof(Culture.Id),
+                OrderBy = nameof(Culture.Id)
+            }).ConfigureAwait(false);
+
+            var cultureList = new List<string>
+            {
+                "en-US"
+            };
+            cultureList.AddRange(response.Items.Select(c => c.Id));
+            return cultureList.Distinct();
         }
 
         private async Task<string> GetStringAsync(string key)
@@ -142,8 +160,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Create an instance by T")]
     public class SharedStringLocalizer<T> : StringLocalizer
     {
-        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> logger)
-            : base(factory.CreateClient("localizer"), logger)
+        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> logger, ILogger<AdminStore<Culture>> cultureLogger)
+            : base(factory.CreateClient("localizer"), logger, cultureLogger)
         {
         }
     }

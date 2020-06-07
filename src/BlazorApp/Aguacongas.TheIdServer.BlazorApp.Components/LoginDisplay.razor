@@ -6,7 +6,6 @@
 @inject SignOutSessionStateManager _signOutManager
 @inject IOptions<RemoteAuthenticationApplicationPathsOptions> _options
 @inject IStringLocalizerAsync<Loading> Localizer
-@inject IAdminStore<Entity.Culture> _store;
 @inject ISharedStringLocalizerAsync _shareLocalizer
 
 <AuthorizeView>
@@ -26,15 +25,18 @@
         {
             <a href="authentication/register">@Localizer["Register"]</a>
         }
-        <a href="authentication/login">@Localizer["Log in"]</a>
+        <a class="nav-link" href="authentication/login">@Localizer["Log in"]</a>
     </NotAuthorized>
 </AuthorizeView>
-<button class="nav-link btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    @_selectedCulture
-</button>
-<div class="dropdown-menu language-menu">    
-    @foreach (var value in _supportedCultures)
-    {
-        <div class="dropdown-item @GetActiveClass(value) select" @onclick="() => SetSelectCulture(value)">@value</div>
-    }
-</div>
+@if (_supportedCultures.Count() > 1)
+{
+    <button class="nav-link btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @_selectedCulture
+    </button>
+    <div class="dropdown-menu language-menu">
+        @foreach (var value in _supportedCultures)
+        {
+            <div class="dropdown-item @GetActiveClass(value) select" @onclick="() => SetSelectCulture(value)">@value</div>
+        }
+    </div>
+}

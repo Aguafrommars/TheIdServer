@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components.LocalizedResourceComponents
+namespace Aguacongas.TheIdServer.BlazorApp.Components.CultureComponents
 {
     public partial class LocalizedResource
     {

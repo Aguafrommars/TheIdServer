@@ -1,8 +1,8 @@
-﻿@using Aguacongas.TheIdServer.BlazorApp.Components.LocalizedResourceComponents
+﻿@using Aguacongas.TheIdServer.BlazorApp.Components.CultureComponents
 @page "/culture"
 @page "/culture/{id}"
 @inherits EntityModel<Entity.Culture>
-@inject IAdminStore<Entity.LocalizedResource> _localizedResourceStore
+
 @if (Model == null)
 {
     <PageLoading />
@@ -35,7 +35,7 @@ else
                 </div>
 
                 <div class="col">
-                    <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                    <Filter CssClass="mt-1" />
                 </div>
                 <div class="w-100"></div>
                 <FluentValidationValidator />
@@ -47,33 +47,7 @@ else
                         <EntitySubGridTitle Text="@Localizer["Resources"]" Collection="@Model.Resources" CreateModel="CreateResource" />
                     </div>
                     <div class="card-body">
-                        <EntitiesGrid Items="@Model.Resources" TableClass="table table-hover" Context="resource">
-                            <TableHeader>
-                                <th class="col">
-                                    <SortableHeader Property="Key"
-                                                    Text="@Localizer["key"]"
-                                                    GridState="_gridState" />
-                                </th>
-                                <th></th>
-                            </TableHeader>
-                            <RowTemplate>
-                                <td class="col">
-                                    <LocalizedResource Model="resource" />
-                                </td>
-                                <td class="col-1">
-                                    <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteResourceClicked(resource)">
-                                        <span class="oi oi-trash"></span>
-                                    </AuthorizeButton>
-                                </td>
-                            </RowTemplate>
-                        </EntitiesGrid>
-                        @if (_hasMore)
-                        {
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-secondary btn-small" @onclick="LoadMoreAsync">@Localizer["next"]</button>
-                                <Spinner />
-                            </div>
-                        }
+                        <LocalizedResources Collection="@Model.Resources" />
                     </div>
                 </div>
             </div>
