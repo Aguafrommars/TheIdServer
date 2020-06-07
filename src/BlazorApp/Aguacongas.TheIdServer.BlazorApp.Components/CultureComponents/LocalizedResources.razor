@@ -1,0 +1,21 @@
+﻿@inherits EntitesGridModel<Entity.LocalizedResource>
+<EntitiesGrid Items="@Resources" TableClass="table table-hover" Context="resource">
+    <TableHeader>
+        <th class="col">
+            <SortableHeader Property="Key"
+                            Text="@Localizer["key"]"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        <td class="col">
+            <LocalizedResource Model="resource" />
+        </td>
+        <td class="col-1">
+            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(resource)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

@@ -17,12 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected override async Task OnInitializedAsync()
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
-            var response = await _store.GetAsync(new PageRequest
-            {
-                Select = nameof(Culture.Id),
-                OrderBy = nameof(Culture.Id)
-            }).ConfigureAwait(false);
-            _supportedCultures = response.Items.Select(c => c.Id);
+            _supportedCultures = await _shareLocalizer.GetSupportedCulturesAsync().ConfigureAwait(false);
             _selectedCulture = _supportedCultures.FirstOrDefault(c => c == CultureInfo.CurrentCulture.Name) ?? "en-US";
             await base.OnInitializedAsync().ConfigureAwait(false);
         }
