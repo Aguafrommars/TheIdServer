@@ -49,7 +49,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en-US" }));
+            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en" }));
 
             var dropDownItem = WaitForNode(host, component, "button.dropdown-item");
             Assert.NotNull(dropDownItem);
@@ -96,7 +96,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
-            Assert.Throws<TimeoutException>(() => WaitForSavedToast(host, component));
+            WaitForSavedToast(host, component);
         }
 
 
@@ -193,7 +193,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                         {
                             Id = GenerateId(),
                             ResourceKind = EntityResourceKind.DisplayName,
-                            CultureId = "en-US",
+                            CultureId = "en",
                             Value = GenerateId()
                         }
                     }

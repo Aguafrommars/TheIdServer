@@ -198,7 +198,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApiScpopeId")
+                    b.Property<string>("ApiScopeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -220,7 +220,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ProtectResourceId");
 
-                    b.HasIndex("ApiScpopeId", "Type")
+                    b.HasIndex("ApiScopeId", "Type")
                         .IsUnique();
 
                     b.ToTable("ApiScopeClaims");
@@ -709,7 +709,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     b.HasData(
                         new
                         {
-                            Id = "en-US",
+                            Id = "en",
                             CreatedAt = new DateTime(2020, 6, 1, 17, 59, 12, 769, DateTimeKind.Utc).AddTicks(9339)
                         });
                 });
@@ -993,7 +993,7 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.ApiScope", "ApiScpope")
                         .WithMany("ApiScopeClaims")
-                        .HasForeignKey("ApiScpopeId")
+                        .HasForeignKey("ApiScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

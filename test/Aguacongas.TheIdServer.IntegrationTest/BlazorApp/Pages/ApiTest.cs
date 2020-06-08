@@ -376,7 +376,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
+                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScopeId == scope.Id));
             });
         }
 
@@ -389,7 +389,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
             });
 
             CreateTestHost("Alice Smith",
@@ -417,7 +417,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
                 Assert.True(expected <= count);
             });
         }
@@ -465,7 +465,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                                {
                                    Id = GenerateId(),
                                    ApiScopeId = apiScopeId,
-                                   CultureId = "en-US",
+                                   CultureId = "en",
                                    ResourceKind = EntityResourceKind.Description,
                                    Value = GenerateId()
                                }
@@ -483,7 +483,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                             Id = GenerateId(),
                             ApiId = apiId,
                             ResourceKind = EntityResourceKind.DisplayName,
-                            CultureId = "en-US",
+                            CultureId = "en",
                             Value = GenerateId()
                         }
                     }

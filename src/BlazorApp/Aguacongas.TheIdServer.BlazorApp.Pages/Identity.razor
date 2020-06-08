@@ -70,6 +70,13 @@ else
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="required" Label="@Localizer["required"]" @bind-Value="@Model.Required" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>

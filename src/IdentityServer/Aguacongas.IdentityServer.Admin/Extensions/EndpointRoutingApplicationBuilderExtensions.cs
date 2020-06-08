@@ -98,7 +98,8 @@ namespace Microsoft.AspNetCore.Builder
                 return;
             }
 
-            if ((path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
+            if ((path.StartsWithSegments($"/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
+                path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
                 path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) && 
                 request.Method == HttpMethods.Get &&
                 !context.User.IsInRole(SharedConstants.READER))

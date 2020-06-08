@@ -617,7 +617,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                         {
                             Id = GenerateId(),
                             ClientId = clientId,
-                            CultureId = "en-US",
+                            CultureId = "en",
                             ResourceKind = EntityResourceKind.DisplayName,
                             Value = GenerateId()
                         }
