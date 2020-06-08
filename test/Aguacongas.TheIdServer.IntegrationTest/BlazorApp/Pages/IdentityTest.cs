@@ -96,7 +96,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => form.SubmitAsync());
 
-            Assert.Throws<TimeoutException>(() => WaitForSavedToast(host, component));
+            WaitForSavedToast(host, component);
         }
 
 
