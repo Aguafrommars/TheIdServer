@@ -51,6 +51,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
+                    Take = null,
                     Filter = $"{nameof(ProtectResource.Scopes)}/any(s:s/{nameof(ApiScope.Scope)} eq '{name}')",
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
                 }));
@@ -74,6 +75,7 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 taskList.Add(_identityStore.GetAsync(new PageRequest
                 {
+                    Take = null,
                     Filter = $"{nameof(IdentityResource.Id)} eq '{name}'",
                     Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)}"
                 }));
@@ -95,10 +97,12 @@ namespace Aguacongas.IdentityServer.Http.Store
             {
                 ApiResources = (await _apiStore.GetAsync(new PageRequest
                 {
+                    Take = null,
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
                 }).ConfigureAwait(false)).Items.Select(a => a.ToApi()).ToList(),
                 IdentityResources = (await _identityStore.GetAsync(new PageRequest
                 {
+                    Take = null,
                     Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)}"
                 }).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList()
             };

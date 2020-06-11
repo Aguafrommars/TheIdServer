@@ -1,17 +1,14 @@
-﻿using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.EntityFramework.Store;
+﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Linq;
 using System.Reflection;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-using IdentityEntityFrameworkCore = Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -95,14 +92,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.AddDbContext<ConfigurationDbContext>(optionsAction)
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<ICorsPolicyService, CorsPolicyService>()
-                .AddTransient(p =>
-                {
-                    var scope = p.CreateScope();
-                    return new StringLocalizerFactory(scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>());
-                })
-                .AddTransient<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())
-                .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>());
+                .AddTransient<ICorsPolicyService, CorsPolicyService>();
         }
 
         public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)

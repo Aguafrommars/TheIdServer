@@ -40,9 +40,13 @@ namespace Microsoft.EntityFrameworkCore
         }
 
         public static IQueryable<T> GetPage<T>(this ODataQuery<T> odataQuery, PageRequest request) where T : class
-        {
+        {            
+            if (!request.Take.HasValue)
+            {
+                return odataQuery;
+            }
             var page = odataQuery.Skip(request.Skip ?? 0)
-                .Take(request.Take);
+                .Take(request.Take.Value);
 
             return page;
         }
