@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="Microsoft.Extensions.Localization.IStringLocalizerFactory" />
-    /// <seealso cref="Aguacongas.IdentityServer.Abstractions.ISupportCultures" />
+    /// <seealso cref="IStringLocalizerFactory" />
+    /// <seealso cref="ISupportCultures" />
     public class StringLocalizerFactory : IStringLocalizerFactory, ISupportCultures
     {
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly IAdminStore<Culture> _cultureStore;
+        private readonly ILogger<StringLocalizer> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizerFactory"/> class.
@@ -28,10 +30,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// or
         /// cultureStore
         /// </exception>
-        public StringLocalizerFactory(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore)
+        public StringLocalizerFactory(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore, ILogger<StringLocalizer> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _cultureStore = cultureStore ?? throw new ArgumentNullException(nameof(cultureStore));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -63,10 +66,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
             if (resourceSource != null)
             {
                 var type = typeof(StringLocalizer<>).MakeGenericType(new Type[] { resourceSource });
-                return Activator.CreateInstance(type, _store) as IStringLocalizer;
+                return Activator.CreateInstance(type, _store, _logger) as IStringLocalizer;
             }
 
-            return new StringLocalizer(_store, null, null);
+            return new StringLocalizer(_store, null, null, _logger);
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </returns>
         public IStringLocalizer Create(string baseName, string location)
         {
-            return new StringLocalizer(_store, baseName, location);
+            return new StringLocalizer(_store, baseName, location, _logger);
         }
     }
 }

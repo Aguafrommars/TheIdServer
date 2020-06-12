@@ -19,6 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             term = term ?? string.Empty;
             _filterValues = _cultureInfos
                 .Where(c => c.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || c.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(c => c.Name)
                 .Take(5);
 
             return Task.FromResult(_filterValues.Select(c => c.Name));

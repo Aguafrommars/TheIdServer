@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Moq;
@@ -97,8 +98,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var httpMock = host.AddMockHttp();
             mockHttp = httpMock;
             var localizerMock = new Mock<ISharedStringLocalizerAsync>();
-            localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => key);
-            localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => string.Format(key, p));
+            localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => new LocalizedString(key, key));
+            localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => new LocalizedString(key, string.Format(key, p)));
 
             host.ConfigureServices(services =>
             {
