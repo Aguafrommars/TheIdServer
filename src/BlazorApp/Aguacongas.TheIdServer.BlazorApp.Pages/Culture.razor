@@ -17,7 +17,7 @@ else
                     {
                         <AuthorizeView Policy="Is4-Writer">
                             <Authorized Context="culture">
-                                <CultureInfos @bind-Value="@Model.Id" />
+                                <CultureInfos @bind-Value="@Model.Id" Entity="_cultureInfo" EntityChanged="CultureSelected" />
                             </Authorized>
                         </AuthorizeView>                        
                     }

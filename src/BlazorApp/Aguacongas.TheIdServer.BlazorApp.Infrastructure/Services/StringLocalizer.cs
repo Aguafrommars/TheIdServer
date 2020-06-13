@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,47 +17,48 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     {
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly IAdminStore<Culture> _cultureStore;
-        private Dictionary<string, string> _keyValuePairs = new Dictionary<string, string>();
+        private readonly ILogger<StringLocalizer> _logger;
+        private Dictionary<string, LocalizedString> _keyValuePairs = new Dictionary<string, LocalizedString>();
         private IEnumerable<LocalizedResource> _resources;
         public event Action ResourceReady;
 
         public StringLocalizer(HttpClient client,
             ILogger<AdminStore<LocalizedResource>> resourceLogger,
-            ILogger<AdminStore<Culture>> cultureLogger)
+            ILogger<AdminStore<Culture>> cultureLogger,
+            ILogger<StringLocalizer> logger)
         {
             _store = new AdminStore<LocalizedResource>(Task.FromResult(client), resourceLogger);
             _cultureStore = new AdminStore<Culture>(Task.FromResult(client), cultureLogger);
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public string this[string name]
+        private StringLocalizer(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore, ILogger<StringLocalizer> logger)
+        {
+            _store = store;
+            _cultureStore = cultureStore;
+            _logger = logger;
+        }
+
+
+        public LocalizedString this[string name]
         {
             get
             {
-                if (!_keyValuePairs.TryAdd(name, null))
-                {
-                    return _keyValuePairs[name] ?? name;
-                }
-                GetStringAsync(name).ContinueWith(t => SetResource(name, t));
-                return name;
+                return GetLocalizedString(name);
             }
         }
 
-        public string this[string name, params object[] arguments]
+        public LocalizedString this[string name, params object[] arguments]
         {
             get
             {
-                if (!_keyValuePairs.TryAdd(name, null))
-                {
-                    return string.Format(_keyValuePairs[name] ?? name, arguments);
-                }
-                GetStringAsync(name).ContinueWith(t => SetResource(name, t));
-                return string.Format(name, arguments);
+                return GetLocalizedString(name, arguments);
             }
         }
 
         public Task Reset()
         {
-            _keyValuePairs = new Dictionary<string, string>();
+            _keyValuePairs = new Dictionary<string, LocalizedString>();
             _resources = null;
             return GetAllResourcesAsync();
         }
@@ -77,37 +79,78 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             return cultureList.Distinct();
         }
 
-        private async Task<string> GetStringAsync(string key)
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             if (_resources != null)
             {
-                return _resources.FirstOrDefault(r => r.Key == key)?.Value;
+                return _keyValuePairs.Values;
+            }
+
+            GetAllResourcesAsync().GetAwaiter().GetResult();
+            return _keyValuePairs.Values;
+        }
+
+        public IStringLocalizer WithCulture(CultureInfo culture)
+        {
+            CultureInfo.CurrentCulture = culture;
+            return new StringLocalizer(_store, _cultureStore, _logger);
+        }
+
+        private LocalizedString GetLocalizedString(string name, params object[] arguments)
+        {
+            if (!_keyValuePairs.TryAdd(name, null))
+            {
+                var localizedString = new LocalizedString(name, string.Format(_keyValuePairs[name] ?? name, arguments), _keyValuePairs[name] == null);
+                if (localizedString.ResourceNotFound)
+                {
+                    _logger.LogWarning($"Localized value for key '{name}' not found for culture '{CultureInfo.CurrentCulture.Name}'");
+                }
+                return localizedString;
+            }
+            GetStringAsync(name).ContinueWith(t => SetResource(name, t));
+            return new LocalizedString(name, string.Format(name, arguments), true);
+        }
+
+        private async Task<LocalizedString> GetStringAsync(string key)
+        {
+            if (_resources != null)
+            {
+                var loaded = _resources.FirstOrDefault(r => r.Key == key)?.Value;
+                return new LocalizedString(key, loaded, loaded == null);
             }
             await GetAllResourcesAsync().ConfigureAwait(false);
-            return _resources.FirstOrDefault(r => r.Key == key)?.Value;
+            var value = _resources.FirstOrDefault(r => r.Key == key)?.Value;
+            return new LocalizedString(key, value, value == null);
         }
 
         private async Task GetAllResourcesAsync()
         {
-            var cultureName = CultureInfo.CurrentCulture.Name;
-
             _resources = new LocalizedResource[0];
+
+            var culture = CultureInfo.CurrentCulture;
+            var parent = culture.Parent;
+            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{culture.Name}'";
+            if (parent != null)
+            {
+                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{culture.Parent.Name}'";
+            }
 
             var page = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(LocalizedResource.CultureId)} eq '{cultureName}'"
+                Filter = filter,
+                OrderBy = nameof(LocalizedResource.CultureId)
             }).ConfigureAwait(false);
 
             _resources = page.Items;
             foreach (var resource in _resources)
             {
-                _keyValuePairs[resource.Key] = resource.Value;
+                _keyValuePairs[resource.Key] = new LocalizedString(resource.Key, resource.Value ?? resource.Key, resource.Value == null);
             }
 
             ResourceReady();
         }
 
-        private void SetResource(string name, Task<string> task)
+        private void SetResource(string name, Task<LocalizedString> task)
         {
             if (task.Exception != null)
             {
@@ -129,11 +172,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             _sharedStringLocalizer.ResourceReady += _sharedStringLocalizer_ResourceReady;
         }
 
-        public string this[string name] => _sharedStringLocalizer[name];
+        public LocalizedString this[string name] => _sharedStringLocalizer[name];
 
-        public string this[string name, params object[] arguments] => _sharedStringLocalizer[name, arguments];
+        public LocalizedString this[string name, params object[] arguments] => _sharedStringLocalizer[name, arguments];
 
         public Action OnResourceReady { get; set; }
+
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
+            => _sharedStringLocalizer.GetAllStrings(includeParentCultures);
+
+        public IStringLocalizer WithCulture(CultureInfo culture)
+        {
+            CultureInfo.CurrentCulture = culture;
+            return new StringLocalizer<T>(_sharedStringLocalizer);
+        }
+
 
         private void _sharedStringLocalizer_ResourceReady()
         {
@@ -162,8 +215,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Create an instance by T")]
     public class SharedStringLocalizer<T> : StringLocalizer
     {
-        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> logger, ILogger<AdminStore<Culture>> cultureLogger)
-            : base(factory.CreateClient("localizer"), logger, cultureLogger)
+        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> resourceLogger, 
+            ILogger<AdminStore<Culture>> cultureLogger, 
+            ILogger<SharedStringLocalizer<T>> logger)
+            : base(factory.CreateClient("localizer"), resourceLogger, cultureLogger, logger)
         {
         }
     }

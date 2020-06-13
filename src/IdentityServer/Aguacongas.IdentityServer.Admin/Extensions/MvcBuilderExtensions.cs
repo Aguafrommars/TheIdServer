@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -48,10 +49,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<ExternalClaimsTransformer<TUser>>()
                 .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
-                .AddTransient(p =>
+                .AddSingleton(p =>
                 {
-                    return new StringLocalizerFactory(p.GetRequiredService<IAdminStore<LocalizedResource>>(),
-                        p.GetRequiredService<IAdminStore<Culture>>());
+                    var scope = p.CreateScope();
+                    return new StringLocalizerFactory(scope.ServiceProvider.GetRequiredService<IAdminStore<LocalizedResource>>(),
+                        scope.ServiceProvider.GetRequiredService<IAdminStore<Culture>>(),
+                        scope.ServiceProvider.GetRequiredService<ILogger<StringLocalizer>>());
                 })
                 .AddTransient<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())

@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Culture
     {
-
+        private CultureInfo _cultureInfo = CultureInfo.InvariantCulture;
         private CultureInfo Info => CultureInfo.GetCultureInfo(Id);
 
 
@@ -81,5 +81,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private Entity.LocalizedResource CreateResource()
             => new Entity.LocalizedResource();
+
+        private void CultureSelected(CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo;
+            Model.Id = cultureInfo.Name;
+        }
     }
 }

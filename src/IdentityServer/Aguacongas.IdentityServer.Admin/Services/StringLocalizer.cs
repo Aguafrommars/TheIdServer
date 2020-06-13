@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,6 +19,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly string _baseName;
         private readonly string _location;
+        private readonly ILogger<StringLocalizer> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizer"/> class.
@@ -25,12 +27,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="store">The store.</param>
         /// <param name="baseName">Name of the base.</param>
         /// <param name="location">The location.</param>
+        /// <param name="logger">The logger</param>
         /// <exception cref="ArgumentNullException">store</exception>
-        public StringLocalizer(IAdminStore<LocalizedResource> store, string baseName, string location)
+        public StringLocalizer(IAdminStore<LocalizedResource> store, string baseName, string location, ILogger<StringLocalizer> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _baseName = baseName;
             _location = location;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new StringLocalizer(_store, _baseName, _location);
+            return new StringLocalizer(_store, _baseName, _location, _logger);
         }
 
         /// <summary>
@@ -101,22 +105,28 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private async Task<string> GetStringAsync(string name)
         {
-            var select = $"{nameof(LocalizedResource.CultureId)} eq '{CultureInfo.CurrentCulture.Name}' and {nameof(LocalizedResource.Key)} eq '{name.Replace("'", "''")}'";
+            var currentCulture = CultureInfo.CurrentCulture;
+            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{currentCulture.Name}' and {nameof(LocalizedResource.Key)} eq '{name.Replace("'", "''")}'";
             if (!string.IsNullOrEmpty(_baseName))
             {
-                select += $" and ({nameof(LocalizedResource.BaseName)} eq null or {nameof(LocalizedResource.BaseName)} eq '{_baseName}')";
+                filter += $" and ({nameof(LocalizedResource.BaseName)} eq null or {nameof(LocalizedResource.BaseName)} eq '{_baseName}')";
             }
             if (!string.IsNullOrEmpty(_location))
             {
-                select += $" and ({nameof(LocalizedResource.Location)} eq null or {nameof(LocalizedResource.Location)} eq '{_location}')";
+                filter += $" and ({nameof(LocalizedResource.Location)} eq null or {nameof(LocalizedResource.Location)} eq '{_location}')";
             }
 
             var response = await _store.GetAsync(new PageRequest
             {
                 Take = 1,
-                Select = select
+                Filter = filter,
+                OrderBy = $"{nameof(LocalizedResource.BaseName)} desc,{nameof(LocalizedResource.Location)} desc"
             }).ConfigureAwait(false);
 
+            if (response.Count == 0)
+            {
+                _logger.LogWarning("Key {Key} not found for Culture {Culture}", name, currentCulture);
+            }
             return response.Items.Select(i => new LocalizedString(i.Key, i.Value)).FirstOrDefault();
         }
 
@@ -148,7 +158,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Initializes a new instance of the <see cref="StringLocalizer{T}"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        public StringLocalizer(IAdminStore<LocalizedResource> store) : base(store, typeof(T).FullName, typeof(T).Namespace)
+        /// <param name="logger">The logger</param>
+        public StringLocalizer(IAdminStore<LocalizedResource> store, ILogger<StringLocalizer> logger) : base(store, typeof(T).FullName, typeof(T).Namespace, logger)
         {
         }
     }
