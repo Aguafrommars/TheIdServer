@@ -101,7 +101,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             if (!_keyValuePairs.TryAdd(name, null))
             {
                 var localizedString = new LocalizedString(name, string.Format(_keyValuePairs[name] ?? name, arguments), _keyValuePairs[name] == null);
-                if (localizedString.ResourceNotFound)
+                if (localizedString.ResourceNotFound && CultureInfo.CurrentCulture.Name != "en")
                 {
                     _logger.LogWarning($"Localized value for key '{name}' not found for culture '{CultureInfo.CurrentCulture.Name}'");
                 }

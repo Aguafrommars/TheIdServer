@@ -3,8 +3,6 @@ using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
-using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -14,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -49,13 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<ExternalClaimsTransformer<TUser>>()
                 .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
-                .AddSingleton(p =>
-                {
-                    var scope = p.CreateScope();
-                    return new StringLocalizerFactory(scope.ServiceProvider.GetRequiredService<IAdminStore<LocalizedResource>>(),
-                        scope.ServiceProvider.GetRequiredService<IAdminStore<Culture>>(),
-                        scope.ServiceProvider.GetRequiredService<ILogger<StringLocalizer>>());
-                })
+                .AddTransient<StringLocalizerFactory>()
                 .AddTransient<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddSwaggerDocument(config =>
