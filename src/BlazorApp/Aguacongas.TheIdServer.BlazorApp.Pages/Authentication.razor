@@ -1,7 +1,63 @@
 @page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action"  />
 
-@code{
-    [Parameter] public string Action { get; set; }
-}
+@inherits RemoteAuthenticatorView
+@inject IStringLocalizerAsync<Authentication> Localizer
+
+    <RemoteAuthenticatorView Action="@Action">
+        <LoggingIn>
+            <PageLoading Information="Checking login state..." />
+        </LoggingIn>
+        <CompletingLoggingIn>
+            <PageLoading Information="Completing login..." />
+        </CompletingLoggingIn>
+        <LogInFailed>
+            @if (context != null)
+            {
+                @Localizer["There was an error trying to log you in: '{0}'", context]
+            }
+            else
+            {
+                <PageLoading Information="Checking login state..." />
+            }
+        </LogInFailed>
+        <LogOut>
+            <PageLoading Information="Processing logout..." />
+        </LogOut>
+        <CompletingLogOut>
+            <PageLoading Information="Processing logout callback..." />
+        </CompletingLogOut>
+        <LogOutFailed>
+            @if (context != null)
+            {
+                @Localizer["There was an error trying to log you out: '{0}'", context]
+            }
+            else
+            {
+                <PageLoading Information="Processing logout..." />
+            }
+        </LogOutFailed>
+        <LogOutSucceeded>
+            @Localizer["You are logged out."]
+        </LogOutSucceeded>
+        <Registering>
+            @if (ApplicationPaths.RemoteRegisterPath == null)
+            {
+                @Localizer["Registration is not supported."]
+            }
+            else
+            {
+                <PageLoading Information="Checking login state..." />
+            }
+        </Registering>
+        <UserProfile>
+            @if (ApplicationPaths.RemoteProfilePath == null)
+            {
+                @Localizer["Editing the profile is not supported."]
+            }
+            else
+            {
+                <PageLoading Information="Checking login state..." />
+            }
+        </UserProfile>
+    </RemoteAuthenticatorView>

@@ -1,11 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
 {
@@ -16,25 +17,21 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="ISupportCultures" />
     public class StringLocalizerFactory : IStringLocalizerFactory, ISupportCultures
     {
-        private readonly IAdminStore<LocalizedResource> _store;
-        private readonly IAdminStore<Culture> _cultureStore;
-        private readonly ILogger<StringLocalizer> _logger;
+        private readonly IServiceProvider _provider;
 
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizerFactory"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="cultureStore">The culture store.</param>
+        /// <param name="provider">The provider.</param>
         /// <exception cref="ArgumentNullException">
         /// store
         /// or
         /// cultureStore
         /// </exception>
-        public StringLocalizerFactory(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore, ILogger<StringLocalizer> logger)
+        public StringLocalizerFactory(IServiceProvider provider)
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
-            _cultureStore = cultureStore ?? throw new ArgumentNullException(nameof(cultureStore));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
         /// <summary>
@@ -43,15 +40,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <value>
         /// The cultures names.
         /// </value>
-        public IEnumerable<string> CulturesNames
-            => _cultureStore.GetAsync(new PageRequest
-            {
-                Select = nameof(Culture.Id)
-            }).ConfigureAwait(false)
-            .GetAwaiter()
-            .GetResult()
-            .Items
-            .Select(c => c.Id);
+        public IEnumerable<string> CulturesNames => GetCultureNamesAsync().GetAwaiter().GetResult();
 
         /// <summary>
         /// Creates an <see cref="T:Microsoft.Extensions.Localization.IStringLocalizer" /> using the <see cref="T:System.Reflection.Assembly" /> and
@@ -66,10 +55,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
             if (resourceSource != null)
             {
                 var type = typeof(StringLocalizer<>).MakeGenericType(new Type[] { resourceSource });
-                return Activator.CreateInstance(type, _store, _logger) as IStringLocalizer;
+                return Activator.CreateInstance(type, _provider) as IStringLocalizer;
             }
 
-            return new StringLocalizer(_store, null, null, _logger);
+            return new StringLocalizer(_provider, null, null);
         }
 
         /// <summary>
@@ -82,7 +71,22 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </returns>
         public IStringLocalizer Create(string baseName, string location)
         {
-            return new StringLocalizer(_store, baseName, location, _logger);
+            return new StringLocalizer(_provider, baseName, location);
+        }
+
+
+        private async Task<IEnumerable<string>> GetCultureNamesAsync()
+        {
+            var cultureStore = _provider.GetRequiredService<IAdminStore<Culture>>();
+
+            var page = await cultureStore.GetAsync(new PageRequest
+            {
+                Select = nameof(Culture.Id)
+            }).ConfigureAwait(false);
+
+            return page
+                .Items
+                .Select(c => c.Id);
         }
     }
 }

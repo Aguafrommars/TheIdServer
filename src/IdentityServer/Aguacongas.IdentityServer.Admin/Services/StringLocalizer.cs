@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,27 +15,32 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// 
     /// </summary>
     /// <seealso cref="IStringLocalizer" />
-    public class StringLocalizer : IStringLocalizer
+    public class StringLocalizer : IStringLocalizer, IDisposable
     {
+        private readonly IServiceProvider _provider;
+        private readonly IServiceScope _scope;
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly string _baseName;
         private readonly string _location;
         private readonly ILogger<StringLocalizer> _logger;
+        private bool disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizer"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
+        /// <param name="provider">The provider.</param>
         /// <param name="baseName">Name of the base.</param>
         /// <param name="location">The location.</param>
-        /// <param name="logger">The logger</param>
         /// <exception cref="ArgumentNullException">store</exception>
-        public StringLocalizer(IAdminStore<LocalizedResource> store, string baseName, string location, ILogger<StringLocalizer> logger)
+        public StringLocalizer(IServiceProvider provider, string baseName, string location)
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _scope = provider.CreateScope();
+            var p = _scope.ServiceProvider;
+            _store = p.GetRequiredService<IAdminStore<LocalizedResource>>();
             _baseName = baseName;
             _location = location;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = p.GetRequiredService<ILogger<StringLocalizer>>();
         }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new StringLocalizer(_store, _baseName, _location, _logger);
+            return new StringLocalizer(_provider, _baseName, _location);
         }
 
         /// <summary>
@@ -123,7 +129,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 OrderBy = $"{nameof(LocalizedResource.BaseName)} desc,{nameof(LocalizedResource.Location)} desc"
             }).ConfigureAwait(false);
 
-            if (response.Count == 0)
+            if (response.Count == 0 && currentCulture.Name != "en")
             {
                 _logger.LogWarning("Key {Key} not found for Culture {Culture}", name, currentCulture);
             }
@@ -145,6 +151,32 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             return response.Items.Select(i => new LocalizedString(i.Key, i.Value));
         }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _scope.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 
     /// <summary>
@@ -157,9 +189,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizer{T}"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="logger">The logger</param>
-        public StringLocalizer(IAdminStore<LocalizedResource> store, ILogger<StringLocalizer> logger) : base(store, typeof(T).FullName, typeof(T).Namespace, logger)
+        /// <param name="provider">The provider.</param>
+        public StringLocalizer(IServiceProvider provider) : base(provider, typeof(T).FullName, typeof(T).Namespace)
         {
         }
     }
