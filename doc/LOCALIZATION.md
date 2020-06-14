@@ -28,7 +28,7 @@ To localized consents and grants screen, you can define localized strings for na
 
 ![api scope localization sample](assets/api-scope-localization.png)  
 
-And this strings will be localized in contents
+And this strings will be localized in consents
 
 ![localized constents](assets/localized-consents.png)  
 
@@ -48,3 +48,11 @@ The api'll look for a file named *{EnvironmentName}-welcome-fragment.{CultureNam
 and fallback to *{EnvironmentName}-welcome-fragment.html*  
 then to *welcome-fragment.{CultureName}.html*  
 then to *welcome-fragment.html*
+
+## Culture cookie
+
+Any request to the server containing the query string *culture={CultureName}* set the culture cookie to the desired culture.
+
+![culture cookie](assets/culture-cookie.png)  
+
+This allow you to get the culture cookie in your apps.
