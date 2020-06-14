@@ -17,9 +17,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             _supportedCultures = await _shareLocalizer.GetSupportedCulturesAsync().ConfigureAwait(false);
-            _selectedCulture = _supportedCultures.FirstOrDefault(c => c == CultureInfo.CurrentCulture.Name) ?? "en";
+            var currentCulture = CultureInfo.CurrentCulture;
+            _selectedCulture = _supportedCultures.FirstOrDefault(c => c == currentCulture.Name ||
+                (currentCulture.Parent != null && c == currentCulture.Parent.Name)) ?? "en";
+            SetPathsCulture();
             await base.OnInitializedAsync().ConfigureAwait(false);
         }
+
+        private void SetPathsCulture()
+        {
+            var settings = _options.Value;
+            settings.RemoteRegisterPath = SetCultureInPath(settings.RemoteProfilePath);
+            settings.RemoteProfilePath = SetCultureInPath(settings.RemoteProfilePath);
+            var oidcSettings = _oidcOptions.Value;
+            oidcSettings.Authority = SetCultureInPath(oidcSettings.Authority);
+
+        }
+
         private async Task BeginSignOut(MouseEventArgs args)
         {
             await _signOutManager.SetSignOutState();
@@ -36,6 +50,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                 .FirstOrDefault(c => c.Name == culture) ?? CultureInfo.CurrentCulture;
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "culture", _selectedCulture).ConfigureAwait(false);
             await _shareLocalizer.Reset().ConfigureAwait(false);
+
+            var settings = _options.Value;
+            settings.RemoteRegisterPath = ResetCultureInPath(settings.RemoteProfilePath);
+            settings.RemoteProfilePath = ResetCultureInPath(settings.RemoteProfilePath);
+            var oidcSettings = _oidcOptions.Value;
+            oidcSettings.Authority = ResetCultureInPath(oidcSettings.Authority);
+
+            SetPathsCulture();
         }
+
+        private string ResetCultureInPath(string path)
+            => path != null ? path.Split('?')[0] : null;
+
+        private string SetCultureInPath(string path)
+            => path != null ? $"{path}?culture={_selectedCulture}" : null;
     }
 }
