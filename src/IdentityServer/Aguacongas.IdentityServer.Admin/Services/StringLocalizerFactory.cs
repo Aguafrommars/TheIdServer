@@ -84,9 +84,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 Select = nameof(Culture.Id)
             }).ConfigureAwait(false);
 
-            return page
+            var culturesList = new List<string> { "en" };
+            culturesList.AddRange(page
                 .Items
-                .Select(c => c.Id);
+                .Select(c => c.Id));
+            return culturesList.Distinct();
         }
     }
 }

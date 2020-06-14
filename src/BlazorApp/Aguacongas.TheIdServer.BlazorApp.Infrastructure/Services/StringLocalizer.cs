@@ -20,6 +20,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         private readonly ILogger<StringLocalizer> _logger;
         private Dictionary<string, LocalizedString> _keyValuePairs = new Dictionary<string, LocalizedString>();
         private IEnumerable<LocalizedResource> _resources;
+        private CultureInfo _currentCulture = new CultureInfo("en");
+
         public event Action ResourceReady;
 
         public StringLocalizer(HttpClient client,
@@ -101,9 +103,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             if (!_keyValuePairs.TryAdd(name, null))
             {
                 var localizedString = new LocalizedString(name, string.Format(_keyValuePairs[name] ?? name, arguments), _keyValuePairs[name] == null);
-                if (localizedString.ResourceNotFound && CultureInfo.CurrentCulture.Name != "en")
+                if (localizedString.ResourceNotFound && _currentCulture.Name != "en")
                 {
-                    _logger.LogWarning($"Localized value for key '{name}' not found for culture '{CultureInfo.CurrentCulture.Name}'");
+                    _logger.LogWarning($"Localized value for key '{name}' not found for culture '{_currentCulture.Name}'");
                 }
                 return localizedString;
             }
@@ -127,12 +129,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         {
             _resources = new LocalizedResource[0];
 
-            var culture = CultureInfo.CurrentCulture;
-            var parent = culture.Parent;
-            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{culture.Name}'";
+            _currentCulture = CultureInfo.CurrentCulture;
+            var parent = _currentCulture.Parent;
+            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{_currentCulture.Name}'";
             if (parent != null)
             {
-                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{culture.Parent.Name}'";
+                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{_currentCulture.Parent.Name}'";
             }
 
             var page = await _store.GetAsync(new PageRequest
@@ -169,7 +171,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         public StringLocalizer(ISharedStringLocalizerAsync sharedStringLocalizer) 
         {
             _sharedStringLocalizer = sharedStringLocalizer ?? throw new ArgumentNullException(nameof(sharedStringLocalizer));
-            _sharedStringLocalizer.ResourceReady += _sharedStringLocalizer_ResourceReady;
+            _sharedStringLocalizer.ResourceReady += SharedStringLocalizer_ResourceReady;
         }
 
         public LocalizedString this[string name] => _sharedStringLocalizer[name];
@@ -188,7 +190,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         }
 
 
-        private void _sharedStringLocalizer_ResourceReady()
+        private void SharedStringLocalizer_ResourceReady()
         {
             OnResourceReady?.Invoke();
         }
@@ -199,7 +201,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             {
                 if (disposing)
                 {
-                    _sharedStringLocalizer.ResourceReady -= _sharedStringLocalizer_ResourceReady;
+                    _sharedStringLocalizer.ResourceReady -= SharedStringLocalizer_ResourceReady;
                 }
                 disposedValue = true;
             }
