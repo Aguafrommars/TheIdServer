@@ -376,7 +376,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScpopeId == scope.Id));
+                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScopeId == scope.Id));
             });
         }
 
@@ -389,7 +389,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
             });
 
             CreateTestHost("Alice Smith",
@@ -417,7 +417,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScpopeId == scope.Id);
+                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
                 Assert.True(expected <= count);
             });
         }
@@ -425,6 +425,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();
+            var apiScopeId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Apis.Add(new ProtectResource
@@ -449,19 +450,42 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                            ApiScopeClaims = new List<ApiScopeClaim>
                            {
                                new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
-                           }
+                           },
+                           Resources = new List<ApiScopeLocalizedResource>()
                        },
                        new ApiScope
                        {
-                           Id = GenerateId(),
+                           Id = apiScopeId,
                            Scope = "filtered",
                            DisplayName = "filtered",
-                           ApiScopeClaims = new List<ApiScopeClaim>()
+                           ApiScopeClaims = new List<ApiScopeClaim>(),
+                           Resources = new List<ApiScopeLocalizedResource>
+                           {
+                               new ApiScopeLocalizedResource
+                               {
+                                   Id = GenerateId(),
+                                   ApiScopeId = apiScopeId,
+                                   CultureId = "en",
+                                   ResourceKind = EntityResourceKind.Description,
+                                   Value = GenerateId()
+                               }
+                           }
                        }
                     },
                     Secrets = new List<ApiSecret>
                     {
                         new ApiSecret { Id = GenerateId(), Type="SHA256", Value = "filtered" }
+                    },
+                    Resources = new List<ApiLocalizedResource>
+                    {
+                        new ApiLocalizedResource
+                        {
+                            Id = GenerateId(),
+                            ApiId = apiId,
+                            ResourceKind = EntityResourceKind.DisplayName,
+                            CultureId = "en",
+                            Value = GenerateId()
+                        }
                     }
                 });
                 if (!context.IdentityClaims.Any(c => c.Type == "name"))

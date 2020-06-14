@@ -30,6 +30,8 @@ using System.Linq;
 using System.Net.Http;
 using Auth = Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Quickstart.UI;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace Aguacongas.TheIdServer
 {
@@ -132,8 +134,11 @@ namespace Aguacongas.TheIdServer
 
 
             var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
+                .AddLocalization()
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;
@@ -178,7 +183,19 @@ namespace Aguacongas.TheIdServer
                 }
             }
 
-            app.UseSerilogRequestLogging();
+            var scope = app.ApplicationServices.CreateScope();
+            var scopedProvider = scope.ServiceProvider;
+            var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
+
+            app.UseRequestLocalization(options =>
+                {
+                    options.DefaultRequestCulture = new RequestCulture("en");
+                    options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
+                    options.SupportedUICultures = options.SupportedCultures;
+                    options.FallBackToParentCultures = true;
+                    options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
+                })
+                .UseSerilogRequestLogging();
 
             if (!disableHttps)
             {
@@ -242,8 +259,7 @@ namespace Aguacongas.TheIdServer
             }
 
 
-            var scope = app.ApplicationServices.CreateScope();
-            scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
+            scopedProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
         }
 
         private void AddDefaultServices(IServiceCollection services)
@@ -309,6 +325,7 @@ namespace Aguacongas.TheIdServer
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedConfiguration(scope);
                 SeedData.SeedUsers(scope);
+                SeedData.SeedLocalizedResources(scope);
             }
 
             if (Configuration.GetValue<bool>("SeedProvider"))

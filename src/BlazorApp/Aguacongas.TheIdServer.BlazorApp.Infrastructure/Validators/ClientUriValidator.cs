@@ -1,10 +1,9 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
-using FluentValidation;
+﻿using FluentValidation;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
-    public class ClientUriValidator : AbstractValidator<ClientUri>
+    public class ClientUriValidator : AbstractValidator<Entity.ClientUri>
     {
         public ClientUriValidator(Entity.Client _)
         {

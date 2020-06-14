@@ -1,8 +1,10 @@
 ﻿using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -39,7 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddIdentityServer4AdminHttpStores(getHttpClient)
                 .AddTransient<IClientStore, ClientStore>()
                 .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<ICorsPolicyService, CorsPolicyService>();
+                .AddTransient<ICorsPolicyService, CorsPolicyService>()
+                .AddTransient<IStringLocalizerFactory, StringLocalizerFactory>()
+                .AddTransient<ISupportCultures, StringLocalizerFactory>();
         }
 
         /// <summary>

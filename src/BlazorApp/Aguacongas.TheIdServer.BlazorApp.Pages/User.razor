@@ -1,5 +1,4 @@
 ﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.UserComponents
-@using System.Security.Claims
  
 @page "/user"
 @page "/user/{id}"
@@ -7,7 +6,7 @@
 
 @if (Model == null)
 {
-    <p class="col"><em>Loading...</em></p>
+    <PageLoading />
 }
 else
 {
@@ -18,18 +17,14 @@ else
                 <h3>@Model.UserName</h3>
             </div>
             <div>
-                <AuthorizeButton Type="submit" CssSubClass="btn-primary">
-                    <span class="oi oi-data-transfer-download"></span>
-                    Save
-                </AuthorizeButton>
+                <SaveButton />
                 @if (!IsNew)
                 {
                     <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                 }
             </div>
-
             <div class="col">
-                <Filter CssClass="mt-1" TermChanged="OnFilterChanged" />
+                <Filter CssClass="mt-1" />
             </div>
             <div class="w-100"></div>
             <div class="col">
@@ -57,7 +52,7 @@ else
                     </li>
                 </ul>
             </div>
-
+            <div class="w-100"></div>
             <FluentValidationValidator />
             <ValidationSummary class="col" />
         </div>
@@ -138,58 +133,7 @@ else
                     <EntitySubGridTitle Text="Claims" Collection="@Model.Claims" CreateModel="CreateClaim" />
                 </div>
                 <div class="card-body">
-                    <EntitiesGrid Items="@Model.Claims" TableClass="table table-hover" Context="claim">
-                        <TableHeader>
-                            <th scope="col">
-                                <SortableHeader Property="Type"
-                                                Text="type"
-                                                GridState="_gridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Value"
-                                                Text="value"
-                                                GridState="_gridState" />
-                            </th>
-                            <th scope="col">
-                                <SortableHeader Property="Issuer"
-                                                Text="issuer"
-                                                GridState="_gridState" />
-                            </th>
-                            <th></th>
-                        </TableHeader>
-                        <RowTemplate>
-                            @if (string.IsNullOrEmpty(claim.Issuer) || claim.Issuer == ClaimsIdentity.DefaultIssuer)
-                            {
-                                <td>
-                                    <AuthorizeText @bind-Value="@claim.ClaimType" MaxLength="250" />
-                                </td>
-                                <td>
-                                    <AuthorizeText @bind-Value="@claim.ClaimValue" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <div>@claim.ClaimType</div>
-                                    @if (claim.OriginalType != null)
-                                    {
-                                        <em class="small text-secondary">from: @claim.OriginalType</em>
-                                    }
-                                </td>
-                                <td>
-                                    @claim.ClaimValue
-                                </td>
-                            }
-                            <td>
-                                @claim.Issuer
-                            </td>
-                            <td>
-                                <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteClaimClicked(claim)">
-                                    <span class="oi oi-trash"></span>
-                                </AuthorizeButton>
-                            </td>
-                        </RowTemplate>
-                    </EntitiesGrid>
+                    <UserClaims Collection="Model.Claims" />
                 </div>
             </div>
             <div id="roles" class="card mb-3">
@@ -199,7 +143,7 @@ else
                     </div>
                 </div>
                 <div class="card-body">
-                    <UserRoles Model="@Model.Roles" DeleteRoleClicked="OnDeleteRoleClicked" RoleValueChanged="OnRoleValueChanged" />
+                    <UserRoles Model="@Model.Roles"  />
                 </div>
             </div>
             <div id="consents" class="card mb-3">

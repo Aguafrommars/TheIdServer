@@ -1,13 +1,15 @@
 ﻿@page
+@inject IViewLocalizer Localizer
+@inject IUrlHelper UrlHelper
 @model LoginWith2faModel
 @{
-    ViewData["Title"] = "Two-factor authentication";
+    ViewData["Title"] = Localizer["Two-factor authentication"];
 }
 
 @if (Model.RedirectToReturnUrl)
 {
-    <h1>You are now being returned to the application.</h1>
-    <p>Once complete, you may close this tab</p>
+    <h1>@Localizer["You are now being returned to the application."]</h1>
+    <p>@Localizer["Once complete, you may close this tab"]</p>
 
     <meta http-equiv="refresh" content="0;url=@Model.ReturnUrl" data-url="@Model.ReturnUrl">
     <script src="~/js/signin-redirect.js"></script>
@@ -16,7 +18,7 @@ else
 {
     <h2>@ViewData["Title"]</h2>
     <hr />
-    <p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
+    <p>@Localizer["Your login is protected with an authenticator app. Enter your authenticator code below."]</p>
     <div class="row">
         <div class="col-md-4">
             <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
@@ -36,14 +38,13 @@ else
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">Log in</button>
+                    <button type="submit" class="btn btn-default">@Localizer["Log in"]</button>
                 </div>
             </form>
         </div>
     </div>
     <p>
-        Don't have access to your authenticator device? You can
-        <a asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">log in with a recovery code</a>.
+        @Localizer["Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.", UrlHelper.Page("./LoginWithRecoveryCode", new { returnUrl = Model.ReturnUrl })]
     </p>
 
     @section Scripts {

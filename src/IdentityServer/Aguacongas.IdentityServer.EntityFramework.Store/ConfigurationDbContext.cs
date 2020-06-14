@@ -45,7 +45,19 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<SchemeDefinition> Providers { get; set; }
 
-        public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformation { get; set; }
+        public virtual DbSet<ExternalClaimTransformation> ExternalClaimTransformations { get; set; }
+
+        public virtual DbSet<Culture> Cultures { get; set; }
+
+        public virtual DbSet<LocalizedResource> LocalizedResources { get; set; }
+
+        public virtual DbSet<ApiLocalizedResource> ApiLocalizedResources { get; set; }
+
+        public virtual DbSet<ApiScopeLocalizedResource> ApiScopeLocalizedResources { get; set; }
+
+        public virtual DbSet<ClientLocalizedResource> ClientLocalizedResources { get; set; }
+
+        public virtual DbSet<IdentityLocalizedResource> IdentityLocalizedResources { get; set; }
 
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
@@ -76,7 +88,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .HasIndex(e => new { e.ApiId, e.Key })
                 .IsUnique(true);
             modelBuilder.Entity<ApiScopeClaim>()
-                .HasIndex(e => new { e.ApiScpopeId, e.Type })
+                .HasIndex(e => new { e.ApiScopeId, e.Type })
                 .IsUnique(true);
             modelBuilder.Entity<IdentityProperty>()
                 .HasIndex(e => new { e.IdentityId, e.Key })
@@ -91,6 +103,30 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             modelBuilder.Entity<ExternalClaimTransformation>()
                 .HasIndex(e => new { e.Scheme, e.FromClaimType })
                 .IsUnique(true);
+            modelBuilder.Entity<ApiLocalizedResource>()
+                .HasOne(e => e.Api)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ApiId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ApiScopeLocalizedResource>()
+                .HasOne(e => e.ApiScope)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ApiScopeId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ClientLocalizedResource>()
+                .HasOne(e => e.Client)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.ClientId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<IdentityLocalizedResource>()
+                .HasOne(e => e.Identity)
+                .WithMany(a => a.Resources)
+                .HasForeignKey(e => e.IdentityId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SchemeDefinition>(b =>
             {
@@ -100,6 +136,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                   .HasKey(p => p.Scheme);
                 b.Property(p => p.ConcurrencyStamp).IsConcurrencyToken();
             });
+
+            var defaultCulture = new Culture
+            {
+                Id = "en",
+                CreatedAt = DateTime.UtcNow
+            };
+            modelBuilder.Entity<Culture>().HasData(defaultCulture);
 
             base.OnModelCreating(modelBuilder);
         }

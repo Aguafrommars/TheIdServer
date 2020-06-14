@@ -1,17 +1,19 @@
-﻿@inject Notifier _notifier
-
-<div class="row">
+﻿<div class="row">
     <div class="col">
         <ul class="list-inline">
-            @foreach (var grantType in Model.AllowedGrantTypes)
+            @foreach (var grantType in GrantTypes)
             {
                 <li class="list-inline-item">
-                    <GrantType Entity="@grantType"
+                    <GrantType @bind-Value="@grantType.GrantType" Entity="@grantType"
                                Model="@Model"
-                               DeleteClicked="() => OnGrantTypeDeletedClicked(grantType)"
-                               ValueChanged="() => OnGrantTypeValueChanged(grantType)" />
+                               DeleteClicked="() => OnGrantTypeDeletedClicked(grantType)" />
                 </li>
             }
+            <li class="list-inline-item">
+                <GrantType @bind-Value="@_grantType.GrantType" Entity="@_grantType"
+                           Model="@Model"
+                           EntityChanged="() => OnGrantTypeValueChanged(_grantType)" />
+            </li>
         </ul>
     </div>
 </div>

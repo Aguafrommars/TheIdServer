@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets the number of items to take. Default value is 1000.
         /// </summary>
-        public int Take { get; set; } = 1000;
+        public int? Take { get; set; } = 1000;
 
         /// <summary>
         /// Gets or sets the number of items to skip

@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-using IdentityEntityFrameworkCore = Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

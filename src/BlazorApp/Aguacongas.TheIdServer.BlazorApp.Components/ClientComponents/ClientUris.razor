@@ -1,65 +1,39 @@
 ﻿@inherits EntitesGridModel<Entity.ClientUri>
 
-<EntitiesGrid Items="@GetClientUrls()" TableClass="table table-hover" Context="url">
+<EntitiesGrid Items="@Uris" TableClass="table table-hover" Context="url" SetKey="false">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Uri"
-                            Text="uri"
+                            Text="@Localizer["uri"]"
                             GridState="GridState" />
         </th>
         @if (Model.IsSpaClient())
         {
             <th scope="col" class="text-center">
                 <SortableHeader Property="Cors"
-                                Text="cors"
+                                Text="@Localizer["cors"]"
                                 GridState="GridState" />
             </th>
         }
         <th scope="col" class="text-center">
             <SortableHeader Property="Redirect"
-                            Text="redirect"
+                            Text="@Localizer["redirect"]"
                             GridState="GridState" />
         </th>
         @if (Model.CanHandlePostLogout())
         {
             <th scope="col" class="text-center">
                 <SortableHeader Property="PostLogout"
-                                Text="post logout"
+                                Text="@Localizer["post logout"]"
                                 GridState="GridState" />
             </th>
         }
         <th></th>
     </TableHeader>
     <RowTemplate>
-        @if (url.Id != null)
-        {
-            <td>
-                @url.Uri
-            </td>
-        }
-        else
-        {
-            <td>
-                <AuthorizeText Id="uri" @bind-Value="@url.Uri" MaxLength="2000" />
-            </td>
-        }
-        @if (Model.IsSpaClient())
-        {
-            <td class="text-center">
-                <AuthorizeCheckbox Name="cors" @bind-Value="@url.Cors" />
-            </td>
-        }
-        <td class="text-center">
-            <AuthorizeCheckbox Name="redirect" @bind-Value="@url.Redirect" />
-        </td>
-        @if (Model.CanHandlePostLogout())
-        {
-            <td class="text-center">
-                <AuthorizeCheckbox Name="postlogout" @bind-Value="@url.PostLogout" />
-            </td>
-        }
+        <ClientUri Model="url" CanHandlePostLogout="Model.CanHandlePostLogout()" IsSpaClient="Model.IsSpaClient()" />
         <td>
-            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url.Parent)">
+            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url)">
                 <span class="oi oi-trash"></span>
             </AuthorizeButton>
         </td>

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
-using Aguacongas.IdentityServer.Http.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -117,7 +117,7 @@ namespace Aguacongas.TheIdServer
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerAdmin();
+                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 

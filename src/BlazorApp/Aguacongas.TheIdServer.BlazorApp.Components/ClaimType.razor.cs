@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _isReadOnly = Entity.Type != null;
+            _isReadOnly = Entity.Id != null;
         }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)

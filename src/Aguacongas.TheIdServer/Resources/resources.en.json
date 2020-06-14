@@ -1,0 +1,638 @@
+[
+  {
+    "key": "Login",
+    "value": "Login"
+  },
+  {
+    "key": "Local Login",
+    "value": "Local Login"
+  },
+  {
+    "key": "Login form",
+    "value": "Login form"
+  },
+  {
+    "key": "Username",
+    "value": "Username"
+  },
+  {
+    "key": "Password",
+    "value": "Password"
+  },
+  {
+    "key": "Remember My Login",
+    "value": "Remember My Login"
+  },
+  {
+    "key": "Cancel",
+    "value": "Cancel"
+  },
+  {
+    "key": "Invalid login request",
+    "value": "Invalid login request"
+  },
+  {
+    "key": "There are no login schemes configured for this client.",
+    "value": "There are no login schemes configured for this client."
+  },
+  {
+    "key": "Logout",
+    "value": "Logout"
+  },
+  {
+    "key": "Would you like to logout of IdentityServer?",
+    "value": "Would you like to logout of IdentityServer?"
+  },
+  {
+    "key": "Logout form",
+    "value": "Logout form"
+  },
+  {
+    "key": "Yes",
+    "value": "Yes"
+  },
+  {
+    "key": "You are now logged out",
+    "value": "You are now logged out"
+  },
+  {
+    "key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
+    "value": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application."
+  },
+  {
+    "key": "{0} <small>is requesting your permission</small>",
+    "value": "{0} <small>is requesting your permission</small>"
+  },
+  {
+    "key": "Uncheck the permissions you do not wish to grant.",
+    "value": "Uncheck the permissions you do not wish to grant."
+  },
+  {
+    "key": "Personal Information",
+    "value": "Personal Information"
+  },
+  {
+    "key": "Application Access",
+    "value": "Application Access"
+  },
+  {
+    "key": "Remember My Decision",
+    "value": "Remember My Decision"
+  },
+  {
+    "key": "Yes, Allow",
+    "value": "Yes, Allow"
+  },
+  {
+    "key": "No, Do Not Allow",
+    "value": "No, Do Not Allow"
+  },
+  {
+    "key": "Success",
+    "value": "Success"
+  },
+  {
+    "key": "You have successfully authorized the device",
+    "value": "You have successfully authorized the device"
+  },
+  {
+    "key": "User Code",
+    "value": "User Code"
+  },
+  {
+    "key": "Please enter the code displayed on your device",
+    "value": "Please enter the code displayed on your device"
+  },
+  {
+    "key": "Submit",
+    "value": "Submit"
+  },
+  {
+    "key": "Hello {0}!",
+    "value": "Hello {0}!"
+  },
+  {
+    "key": "Register",
+    "value": "Register"
+  },
+  {
+    "key": "(required)",
+    "value": "(required)"
+  },
+  {
+    "key": "Error",
+    "value": "Error"
+  },
+  {
+    "key": "Sorry, there was an error",
+    "value": "Sorry, there was an error"
+  },
+  {
+    "key": "You are now being returned to the application.",
+    "value": "You are now being returned to the application."
+  },
+  {
+    "key": "Once complete, you may close this tab",
+    "value": "Once complete, you may close this tab"
+  },
+  {
+    "key": "Manage your account",
+    "value": "Manage your account"
+  },
+  {
+    "key": "Change your account settings",
+    "value": "Change your account settings"
+  },
+  {
+    "key": "Profile",
+    "value": "Profile"
+  },
+  {
+    "key": "External logins",
+    "value": "External logins"
+  },
+  {
+    "key": "External Login",
+    "value": "External Login"
+  },
+  {
+    "key": "Two-factor authentication",
+    "value": "Two-factor authentication"
+  },
+  {
+    "key": "Personal data",
+    "value": "Personal data"
+  },
+  {
+    "key": "Grants",
+    "value": "Grants"
+  },
+  {
+    "key": "Change password",
+    "value": "Change password"
+  },
+  {
+    "key": "Update password",
+    "value": "Update password"
+  },
+  {
+    "key": "Current password",
+    "value": "Current password"
+  },
+  {
+    "key": "New password",
+    "value": "New password"
+  },
+  {
+    "key": "The {0} must be at least {2} and at max {1} characters long.",
+    "value": "The {0} must be at least {2} and at max {1} characters long."
+  },
+  {
+    "key": "Confirm new password",
+    "value": "Confirm new password"
+  },
+  {
+    "key": "The new password and confirmation password do not match.",
+    "value": "The new password and confirmation password do not match."
+  },
+  {
+    "key": "Your password has been changed.",
+    "value": "Your password has been changed."
+  },
+  {
+    "key": "Delete Personal Data",
+    "value": "Delete Personal Data"
+  },
+  {
+    "key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+    "value": "Deleting this data will permanently remove your account, and this cannot be recovered."
+  },
+  {
+    "key": "Delete data and close my account",
+    "value": "Delete data and close my account"
+  },
+  {
+    "key": "Incorrect password.",
+    "value": "Incorrect password."
+  },
+  {
+    "key": "Disable two-factor authentication (2FA)",
+    "value": "Disable two-factor authentication (2FA)"
+  },
+  {
+    "key": "This action only disables 2FA.",
+    "value": "This action only disables 2FA."
+  },
+  {
+    "key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+    "value": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>"
+  },
+  {
+    "key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+    "value": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app"
+  },
+  {
+    "key": "Download Your Data",
+    "value": "Download Your Data"
+  },
+  {
+    "key": "Manage Email",
+    "value": "Manage Email"
+  },
+  {
+    "key": "Send verification email",
+    "value": "Send verification email"
+  },
+  {
+    "key": "Change email",
+    "value": "Change email"
+  },
+  {
+    "key": "New email",
+    "value": "New email"
+  },
+  {
+    "key": "Confirm your email",
+    "value": "Confirm your email"
+  },
+  {
+    "key": "Please confirm your account by <a href='{0}'>clicking here</a>.",
+    "value": "Please confirm your account by <a href='{0}'>clicking here</a>."
+  },
+  {
+    "key": "Confirmation link to change email sent. Please check your email.",
+    "value": "Confirmation link to change email sent. Please check your email."
+  },
+  {
+    "key": "Your email is unchanged.",
+    "value": "Your email is unchanged."
+  },
+  {
+    "key": "Verification email sent. Please check your email.",
+    "value": "Verification email sent. Please check your email."
+  },
+  {
+    "key": "Configure authenticator app",
+    "value": "Configure authenticator app"
+  },
+  {
+    "key": "To use an authenticator app go through the following steps:",
+    "value": "To use an authenticator app go through the following steps:"
+  },
+  {
+    "key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>.",
+    "value": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>."
+  },
+  {
+    "key": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.",
+    "value": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter."
+  },
+  {
+    "key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
+    "value": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below."
+  },
+  {
+    "key": "Verification Code",
+    "value": "Verification Code"
+  },
+  {
+    "key": "Verify",
+    "value": "Verify"
+  },
+  {
+    "key": "Your authenticator app has been verified.",
+    "value": "Your authenticator app has been verified."
+  },
+  {
+    "key": "Verification code is invalid.",
+    "value": "Verification code is invalid."
+  },
+  {
+    "key": "Manage your external logins",
+    "value": "Manage your external logins"
+  },
+  {
+    "key": "Registered Logins",
+    "value": "Registered Logins"
+  },
+  {
+    "key": "Remove this {0} login from your account",
+    "value": "Remove this {0} login from your account"
+  },
+  {
+    "key": "Remove",
+    "value": "Remove"
+  },
+  {
+    "key": "Log in using your {0} account",
+    "value": "Log in using your {0} account"
+  },
+  {
+    "key": "The external login was added.",
+    "value": "The external login was added."
+  },
+  {
+    "key": "The external login was not added. External logins can only be associated with one account.",
+    "value": "The external login was not added. External logins can only be associated with one account."
+  },
+  {
+    "key": "The external login was removed.",
+    "value": "The external login was removed."
+  },
+  {
+    "key": "The external login was not removed.",
+    "value": "The external login was not removed."
+  },
+  {
+    "key": "Generate two-factor authentication (2FA) recovery codes",
+    "value": "Generate two-factor authentication (2FA) recovery codes"
+  },
+  {
+    "key": "Put these codes in a safe place.",
+    "value": "Put these codes in a safe place."
+  },
+  {
+    "key": "If you lose your device and don't have the recovery codes you will lose access to your account.",
+    "value": "If you lose your device and don't have the recovery codes you will lose access to your account."
+  },
+  {
+    "key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+    "value": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>"
+  },
+  {
+    "key": "Generate Recovery Codes",
+    "value": "Generate Recovery Codes"
+  },
+  {
+    "key": "You have generated new recovery codes.",
+    "value": "You have generated new recovery codes."
+  },
+  {
+    "key": "Client Application Access",
+    "value": "Client Application Access"
+  },
+  {
+    "key": "Below is the list of applications you have given access to and the names of the resources they have access to.",
+    "value": "Below is the list of applications you have given access to and the names of the resources they have access to."
+  },
+  {
+    "key": "You have not given access to any applications",
+    "value": "You have not given access to any applications"
+  },
+  {
+    "key": "Created:",
+    "value": "Created:"
+  },
+  {
+    "key": "Expires:",
+    "value": "Expires:"
+  },
+  {
+    "key": "API Grants",
+    "value": "API Grants"
+  },
+  {
+    "key": "Revoke Access",
+    "value": "Revoke Access"
+  },
+  {
+    "key": "Phone number",
+    "value": "Phone number"
+  },
+  {
+    "key": "Unexpected error when trying to set phone number.",
+    "value": "Unexpected error when trying to set phone number."
+  },
+  {
+    "key": "Your profile has been updated",
+    "value": "Your profile has been updated"
+  },
+  {
+    "key": "Personal Data",
+    "value": "Personal Data"
+  },
+  {
+    "key": "Your account contains personal data that you have given us. This page allows you to download or delete that data.",
+    "value": "Your account contains personal data that you have given us. This page allows you to download or delete that data."
+  },
+  {
+    "key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+    "value": "Deleting this data will permanently remove your account, and this cannot be recovered."
+  },
+  {
+    "key": "Download",
+    "value": "Download"
+  },
+  {
+    "key": "Delete",
+    "value": "Delete"
+  },
+  {
+    "key": "Reset authenticator key",
+    "value": "Reset authenticator key"
+  },
+  {
+    "key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
+    "value": "If you reset your authenticator key your authenticator app will not work until you reconfigure it."
+  },
+  {
+    "key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
+    "value": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account."
+  },
+  {
+    "key": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+    "value": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key."
+  },
+  {
+    "key": "Set password",
+    "value": "Set password"
+  },
+  {
+    "key": "Set your password",
+    "value": "Set your password"
+  },
+  {
+    "key": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+    "value": "You do not have a local username/password for this site. Add a local account so you can log in without an external login."
+  },
+  {
+    "key": "Your password has been set.",
+    "value": "Your password has been set."
+  },
+  {
+    "key": "Two-factor authentication (2FA)",
+    "value": "Two-factor authentication (2FA)"
+  },
+  {
+    "key": "You have no recovery codes left.",
+    "value": "You have no recovery codes left."
+  },
+  {
+    "key": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+    "value": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code."
+  },
+  {
+    "key": "You have 1 recovery code left.",
+    "value": "You have 1 recovery code left."
+  },
+  {
+    "key": "You can <a href=\"{0}\">generate a new set of recovery codes</a>.",
+    "value": "You can <a href=\"{0}\">generate a new set of recovery codes</a>."
+  },
+  {
+    "key": "You should <a href=\"{0}\">generate a new set of recovery codes</a>.",
+    "value": "You should <a href=\"{0}\">generate a new set of recovery codes</a>."
+  },
+  {
+    "key": "Forget this browser",
+    "value": "Forget this browser"
+  },
+  {
+    "key": "Reset recovery codes",
+    "value": "Reset recovery codes"
+  },
+  {
+    "key": "Authenticator app",
+    "value": "Authenticator app"
+  },
+  {
+    "key": "Add authenticator app",
+    "value": "Add authenticator app"
+  },
+  {
+    "key": "Setup authenticator app",
+    "value": "Setup authenticator app"
+  },
+  {
+    "key": "Reset authenticator app",
+    "value": "Reset authenticator app"
+  },
+  {
+    "key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
+    "value": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code."
+  },
+  {
+    "key": "Confirm email",
+    "value": "Confirm email"
+  },
+  {
+    "key": "Thank you for confirming your email.",
+    "value": "Thank you for confirming your email."
+  },
+  {
+    "key": "Error confirming your email.",
+    "value": "Error confirming your email."
+  },
+  {
+    "key": "Confirm email change",
+    "value": "Confirm email change"
+  },
+  {
+    "key": "Error changing user name.",
+    "value": "Error changing user name."
+  },
+  {
+    "key": "Thank you for confirming your email change.",
+    "value": "Thank you for confirming your email change."
+  },
+  {
+    "key": "Associate your {0} account.",
+    "value": "Associate your {0} account."
+  },
+  {
+    "key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
+    "value": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in."
+  },
+  {
+    "key": "Error loading external login information during confirmation.",
+    "value": "Error loading external login information during confirmation."
+  },
+  {
+    "key": "Error loading external login information.",
+    "value": "Error loading external login information."
+  },
+  {
+    "key": "Error from external provider: {0}",
+    "value": "Error from external provider: {0}"
+  },
+  {
+    "key": "Forgot your password?",
+    "value": "Forgot your password?"
+  },
+  {
+    "key": "Enter your email.",
+    "value": "Enter your email."
+  },
+  {
+    "key": "Reset Password",
+    "value": "Reset Password"
+  },
+  {
+    "key": "Please reset your password by <a href='{0}'>clicking here</a>.",
+    "value": "Please reset your password by <a href='{0}'>clicking here</a>."
+  },
+  {
+    "key": "Forgot password confirmation",
+    "value": "Forgot password confirmation"
+  },
+  {
+    "key": "Please check your email to reset your password.",
+    "value": "Please check your email to reset your password."
+  },
+  {
+    "key": "Your login is protected with an authenticator app. Enter your authenticator code below.",
+    "value": "Your login is protected with an authenticator app. Enter your authenticator code below."
+  },
+  {
+    "key": "Log in",
+    "value": "Log in"
+  },
+  {
+    "key": "Don't have access to your authenticator device? You can <a href=\"0}\">log in with a recovery code</a>.",
+    "value": "Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>."
+  },
+  {
+    "key": "Remember this machine",
+    "value": "Remember this machine"
+  },
+  {
+    "key": "Authenticator code",
+    "value": "Authenticator code"
+  },
+  {
+    "key": "Invalid authenticator code.",
+    "value": "Invalid authenticator code."
+  },
+  {
+    "key": "Recovery code verification",
+    "value": "Recovery code verification"
+  },
+  {
+    "key": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.",
+    "value": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again."
+  },
+  {
+    "key": "Recovery Code",
+    "value": "Recovery Code"
+  },
+  {
+    "key": "Invalid recovery code entered.",
+    "value": "Invalid recovery code entered."
+  },
+  {
+    "key": "Create a new account.",
+    "value": "Create a new account."
+  },
+  {
+    "key": "Use another service to register.",
+    "value": "Use another service to register."
+  },
+  {
+    "key": "Register confirmation",
+    "value": "Register confirmation"
+  },
+  {
+    "key": "Please check your email to confirm your account.",
+    "value": "Please check your email to confirm your account."
+  }
+]

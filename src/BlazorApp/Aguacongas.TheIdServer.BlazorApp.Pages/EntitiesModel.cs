@@ -1,11 +1,14 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,18 +26,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
+        [Inject]
+        protected IStringLocalizerAsync<EntitiesModel<T>> Localizer { get; set; }
+
         protected IEnumerable<T> EntityList { get; private set; }
 
         public GridState GridState { get; } = new GridState();
 
         protected abstract string SelectProperties { get; }
 
+        protected virtual string Expand { get; }
+
         protected override async Task OnInitializedAsync()
         {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             await base.OnInitializedAsync().ConfigureAwait(false);
             _pageRequest = new PageRequest
             {
                 Select = SelectProperties,
+                Expand = Expand,
                 Take = 10
             };
             await GetEntityList(_pageRequest)
@@ -68,7 +78,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     var expressionArray = new string[propertyArray.Length];
                     for (int i = 0; i < propertyArray.Length; i++)
                     {
-                        expressionArray[i] = $"contains({propertyArray[i]},'{filter}')";
+                        expressionArray[i] = $"contains({propertyArray[i]},'{filter.Replace("'", "''")}')";
                     }
                     _pageRequest.Filter = string.Join(" or ", expressionArray);
 
@@ -91,6 +101,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 throw new InvalidOperationException($"The identity type {typeof(T).Name} is not a 'IEntityId', override this method to navigate to the identity page.");
             }
             NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entityWithId.Id}");
+        }
+
+
+        protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource: IEntityResource
+        {
+            return entity.Resources.FirstOrDefault(r => r.ResourceKind == kind && r.CultureId == CultureInfo.CurrentCulture.Name)?.Value ?? value;
         }
 
         private async Task GetEntityList(PageRequest pageRequest)

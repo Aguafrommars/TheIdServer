@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Shared;
+﻿using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Aguacongas.TheIdServer.BlazorApp.Shared;
+using Castle.DynamicProxy.Generators.Emitters;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Testing;
@@ -26,11 +28,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
         public async Task ToggleNavMenu_should_update_nav_menu_class()
         {
             var navigationInterceptionMock = new Mock<INavigationInterception>();
-
+            var localizerMock = new Mock<IStringLocalizerAsync<NavMenu>>();
             using var host = new TestHost();
             host.ConfigureServices(services =>
             {
                 services.AddSingleton<NavigationManager, TestNavigationManager>()
+                    .AddTransient(p => localizerMock.Object)
                     .AddSingleton(p => navigationInterceptionMock.Object);
             });
 

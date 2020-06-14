@@ -30,6 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override void OnInitialized()
         {
+            Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             if (Value != null)
             {
                 var timeSpan = TimeSpan.FromSeconds(Convert.ToInt32(Value));

@@ -1,6 +1,7 @@
 ﻿using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 
@@ -27,7 +28,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 return null;
             }
-
+            var cultureId = CultureInfo.CurrentCulture.Name;
+            var resources = client.Resources;
             return new Client
             {
                 AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
@@ -52,11 +54,13 @@ namespace Aguacongas.IdentityServer.Store
                 Claims = client.ClientClaims.Select(c => new Claim(c.Type, c.Value)).ToList(),
                 ClientClaimsPrefix = client.ClientClaimsPrefix,
                 ClientId = client.Id,
-                ClientName = client.ClientName,
+                ClientName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                    && r.CultureId == cultureId)?.Value ?? client.ClientName,
                 ClientSecrets = client.ClientSecrets.Select(s => new Secret(s.Value, s.Expiration)).ToList(),
                 ClientUri = client.ClientUri,
                 ConsentLifetime = client.ConsentLifetime,
-                Description = client.Description,
+                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
+                    && r.CultureId == cultureId)?.Value ?? client.Description,
                 DeviceCodeLifetime = client.DeviceCodeLifetime,
                 Enabled = client.Enabled,
                 EnableLocalLogin = client.EnableLocalLogin,
@@ -93,25 +97,31 @@ namespace Aguacongas.IdentityServer.Store
             {
                 return null;
             }
+            var cultureId = CultureInfo.CurrentCulture.Name;
+            var resources = api.Resources;
 
             return new ApiResource
             {
                 ApiSecrets = api.Secrets.Select(s => new Secret { Value = s.Value, Expiration = s.Expiration }).ToList(),
-                Description = api.Description,
-                DisplayName = api.DisplayName,
+                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
+                    && r.CultureId == cultureId)?.Value ?? api.Description,
+                DisplayName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                    && r.CultureId == cultureId)?.Value ?? api.DisplayName,
                 Enabled = api.Enabled,
                 Name = api.Id,
                 Properties = api.Properties.ToDictionary(p => p.Key, p => p.Value),
                 Scopes = api.Scopes.Select(s => new Scope
                 {
-                    Description = s.Description,
-                    DisplayName = s.DisplayName,
+                    Description = s.Resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
+                        && r.CultureId == cultureId)?.Value ?? s.Description,
+                    DisplayName = s.Resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                    && r.CultureId == cultureId)?.Value ?? s.DisplayName,
                     Emphasize = s.Emphasize,
                     Name = s.Scope,
                     Required = s.Required,
                     ShowInDiscoveryDocument = s.ShowInDiscoveryDocument,
                     UserClaims = api.ApiScopeClaims
-                        .Where(s => s.ApiScpopeId == s.Id)
+                        .Where(s => s.ApiScopeId == s.Id)
                         .Select(c => c.Type).ToList()
                 }).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()
@@ -124,11 +134,15 @@ namespace Aguacongas.IdentityServer.Store
             {
                 return null;
             }
+            var cultureId = CultureInfo.CurrentCulture.Name;
+            var resources = identity.Resources;
 
             return new IdentityResource
             {
-                Description = identity.Description,
-                DisplayName = identity.DisplayName,
+                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
+                    && r.CultureId == cultureId)?.Value ?? identity.Description,
+                DisplayName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                    && r.CultureId == cultureId)?.Value ?? identity.DisplayName,
                 Emphasize = identity.Emphasize,
                 Enabled = identity.Enabled,
                 Name = identity.Id,

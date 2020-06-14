@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a protected resources
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ProtectResource : IAuditable, ICloneable<ProtectResource>
+    public class ProtectResource : IAuditable, ICloneable<ProtectResource>, ILocalizable<ApiLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -93,6 +93,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The properties.
         /// </value>
         public virtual ICollection<ApiProperty> Properties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ApiLocalizedResource> Resources { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.

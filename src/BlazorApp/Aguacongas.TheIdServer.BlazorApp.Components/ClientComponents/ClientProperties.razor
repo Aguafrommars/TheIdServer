@@ -1,15 +1,15 @@
 ﻿@inherits EntitesGridModel<Entity.ClientProperty>
 
-<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="property">
+<EntitiesGrid Items="@Properties" TableClass="table table-hover" Context="property">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="Key"
-                            Text="key"
+                            Text="@Localizer["key"]"
                             GridState="GridState" />
         </th>
         <th scope="col">
             <SortableHeader Property="Value"
-                            Text="value"
+                            Text="@Localizer["value"]"
                             GridState="GridState" />
         </th>
         <th></th>
@@ -24,11 +24,11 @@
         else
         {
             <td>
-                <AuthorizeText Id="key" @bind-Value="@property.Key" MaxLength="250" />
+                <AuthorizeText @bind-Value="@property.Key" MaxLength="250" />
             </td>
         }
         <td>
-            <AuthorizeText Id="value" @bind-Value="@property.Value" MaxLength="2000" />
+            <AuthorizeText @bind-Value="@property.Value" MaxLength="2000" />
         </td>
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(property)">

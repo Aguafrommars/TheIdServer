@@ -1,7 +1,8 @@
-﻿<div class="input-group input-group-sm @CssClass">
+﻿@inject IStringLocalizerAsync<Filter> Localizer
+<div class="input-group input-group-sm @CssClass">
     <div class="input-group-prepend">
         <span class="input-group-text oi oi-magnifying-glass" id="addon"></span>
     </div>
-    <input class="form-control" type="text" placeholder="filter" aria-label="filter" aria-describedby="addon" value="@Term"
+    <input class="form-control" type="text" placeholder="@Localizer["filter"]" aria-label="@Localizer["filter"]" aria-describedby="addon" value="@Term"
            @oninput="OnTermChanged" @onfocusout="() => FocusChanged.InvokeAsync(false)" @onfocus="() => FocusChanged.InvokeAsync(true)" />
 </div>

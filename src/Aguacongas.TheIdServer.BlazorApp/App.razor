@@ -1,4 +1,4 @@
-﻿ <Router AppAssembly="@typeof(Program).Assembly"
+﻿<Router AppAssembly="@typeof(Program).Assembly"
         AdditionalAssemblies="new[] { typeof(Pages.Index).Assembly }">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
@@ -6,14 +6,14 @@
                 <RedirectToLogin />
             </NotAuthorized>
             <Authorizing>
-                <h3>Authentication in progress</h3>
+                <PageLoading Information="Authentication in progress" />
             </Authorizing>
         </AuthorizeRouteView>
     </Found>
     <NotFound>
         <CascadingAuthenticationState>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
+                <PageNotFound />
             </LayoutView>
         </CascadingAuthenticationState>
     </NotFound>

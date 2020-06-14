@@ -1,10 +1,14 @@
 ﻿
 using Aguacongas.IdentityServer.Admin;
+using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Builder
@@ -72,7 +76,8 @@ namespace Microsoft.AspNetCore.Builder
 
         private static void AuthenticateUserMiddleware(IApplicationBuilder child, string basePath, string authicationScheme)
         {
-            child.UseRouting()
+            child
+                .UseRouting()
                 .UseIdentityServerAdminAuthentication(basePath, authicationScheme)
                 .UseAuthorization()
                 .UseEndpoints(enpoints =>
@@ -83,30 +88,52 @@ namespace Microsoft.AspNetCore.Builder
 
         private static async Task Authenticate(HttpContext context, Func<Task> next, string basePath, string authicationScheme)
         {
-            var resquest = context.Request;
+            var request = context.Request;
+            var path = request.Path;
 
-            if ((resquest.PathBase.StartsWithSegments(basePath) || resquest.Path.StartsWithSegments(basePath)) && 
-                !resquest.Method.Equals("option", StringComparison.OrdinalIgnoreCase) &&
-                !context.User.Identity.IsAuthenticated)
+            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
+                !request.PathBase.StartsWithSegments(basePath) && !path.StartsWithSegments(basePath))
             {
-                var result = await context.AuthenticateAsync(authicationScheme)
+                await next().ConfigureAwait(false);
+                return;
+            }
+
+            if ((path.StartsWithSegments($"/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
+                path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
+                path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) && 
+                request.Method == HttpMethods.Get &&
+                !context.User.IsInRole(SharedConstants.READER))
+            {
+                // by-pass security for localized resource read
+                context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                            new Claim(JwtClaimTypes.Name, "AnonymousReader"),
+                            new Claim("role", SharedConstants.READER)
+                }, "by-pass", JwtClaimTypes.Name, "role"));
+            }
+
+
+            if (context.User.Identity.IsAuthenticated)
+            {
+                await next().ConfigureAwait(false);
+                return;
+            }
+
+            var result = await context.AuthenticateAsync(authicationScheme)
                     .ConfigureAwait(false);
 
-                if (result.Succeeded)
-                {
-                    context.User = result.Principal;
-                }
-                else
-                {
-                    var response = context.Response;
-                    response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    await response.CompleteAsync()
-                        .ConfigureAwait(false);
-                    return;
-                }
+            if (!result.Succeeded)
+            {
+                var response = context.Response;
+                response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await response.CompleteAsync()
+                    .ConfigureAwait(false);
+                return;
             }
-            await next()
-                .ConfigureAwait(false);
+
+            context.User = result.Principal;
+
+            await next().ConfigureAwait(false);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// <summary>
     /// Identity resource
     /// </summary>
-    public class IdentityResource : IAuditable, ICloneable<IdentityResource>
+    public class IdentityResource : IAuditable, ICloneable<IdentityResource>, ILocalizable<IdentityLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -90,6 +90,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The properties.
         /// </value>
         public virtual ICollection<IdentityProperty> Properties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<IdentityLocalizedResource> Resources { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.

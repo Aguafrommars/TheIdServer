@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -13,8 +14,32 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
 
     public class HandleModificationState
     {
-        public Action OnStateChange { get; set; }
+        private readonly ILogger _logger;
+        private string _filterTerm = string.Empty;
+
+        public event Action<ModificationKind, object> OnStateChange;
+
+        public event Action<string> OnFilterChange;
+
         public Dictionary<Type, Dictionary<object, ModificationKind>> Changes { get; } = new Dictionary<Type, Dictionary<object, ModificationKind>>();
+
+        public string FilterTerm 
+        {
+            get => _filterTerm;
+            set
+            {
+                if (value != _filterTerm)
+                {
+                    _filterTerm = value ?? string.Empty;
+                    OnFilterChange?.Invoke(value);
+                }                
+            }
+        }
+
+        public HandleModificationState(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public Dictionary<object, ModificationKind> GetModifications(Type entityType)
         {
@@ -35,13 +60,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             if (!modifications.TryAdd(entity, ModificationKind.Add))
             {
                 var modification = modifications[entity];
-                Console.WriteLine($"Replace change for entity {entityType.Name} {modification} with {ModificationKind.Add}");
+                var identifiable = entity as IEntityId;
+                _logger.LogDebug($"Replace change for entity {entityType.Name} {identifiable?.Id} {modification} with {ModificationKind.Add}");
                 modifications[entity] = ModificationKind.Add;
-                OnStateChange?.Invoke();
+                OnStateChange?.Invoke(ModificationKind.Add, entity);
                 return;
             }
-            OnStateChange?.Invoke();
-            Console.WriteLine($"Add created change for entity {entityType.Name}");
+            OnStateChange?.Invoke(ModificationKind.Add, entity);
+            _logger.LogDebug($"Add created change for entity {entityType.Name}");
         }
 
         public void EntityDeleted<TEntity>(TEntity entity) where TEntity: IEntityId
@@ -49,16 +75,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var entityType = typeof(TEntity);
             var modifications = GetModifications(entityType);
-            if (entity.Id == null)
+            if (!modifications.TryAdd(entity, ModificationKind.Delete))
             {
-                Console.WriteLine($"Remove change for entity {entityType.Name} {entity.Id}");
+                _logger.LogDebug($"Remove change for entity {entityType.Name} {entity.Id}");
                 modifications.Remove(entity);
-                OnStateChange?.Invoke();
+                OnStateChange?.Invoke(ModificationKind.Delete, entity);
                 return;
             }
-            Console.WriteLine($"Add delete change for entity {entityType.Name} {entity.Id}");
-            modifications.Add(entity, ModificationKind.Delete);
-            OnStateChange?.Invoke();
+            _logger.LogDebug($"Add delete change for entity {entityType.Name} {entity.Id}");
+            OnStateChange?.Invoke(ModificationKind.Delete, entity);
         }
 
         public void EntityUpdated<TEntity>(TEntity entity) where TEntity: IEntityId
@@ -73,7 +98,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
 
             if (!string.IsNullOrEmpty(entity?.Id) && !modifications.ContainsKey(entity))
             {
-                Console.WriteLine($"Add update modification for entity {entityType}");
+                _logger.LogDebug($"Add update modification for entity {entityType.Name} {entity.Id}");
                 modifications.Add(entity, ModificationKind.Update);
             }
         }

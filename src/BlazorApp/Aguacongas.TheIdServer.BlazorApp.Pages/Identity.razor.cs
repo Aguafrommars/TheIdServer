@@ -1,14 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Identity
     {
-        protected override string Expand => "IdentityClaims,Properties";
+        protected override string Expand => $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -17,23 +15,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-            AddEmpyClaimsTypes();
         }
 
-        protected override IdentityResource Create()
+        protected override Task<IdentityResource> Create()
         {
-            return new IdentityResource
+            return Task.FromResult(new IdentityResource
             {
                 IdentityClaims = new List<IdentityClaim>(),
-                Properties = new List<IdentityProperty>()
-            };
+                Properties = new List<IdentityProperty>(),
+                Resources = new List<IdentityLocalizedResource>()
+            });
         }
 
-        protected override void SetNavigationProperty<TEntity>(TEntity entity)
+        protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is IIdentitySubEntity subEntity)
+            if (entity is IdentityResource identity)
             {
-                subEntity.IdentityId = Model.Id;
+                identity.IdentityClaims = null;
+                identity.Properties = null;
+                identity.Resources = null;
             }
         }
 
@@ -41,29 +41,26 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             if (entity is IdentityResource identity)
             {
-                identity.IdentityClaims = null;
-                identity.Properties = null;
+                Model.Id = identity.Id;
             }
-        }
-
-        private void AddEmpyClaimsTypes()
-        {
-            Model.IdentityClaims.Add(new IdentityClaim());
-        }
-
-        private void OnFilterChanged(string term)
-        {
-            Model.IdentityClaims = State.IdentityClaims
-                .Where(c => c.Type != null && c.Type.Contains(term))
-                .ToList();
-            Model.Properties = State.Properties
-                .Where(p => (p.Key != null && p.Key.Contains(term)) || (p.Value != null && p.Value.Contains(term)))
-                .ToList();
-
-            AddEmpyClaimsTypes();
+            if (entity is IIdentitySubEntity subEntity)
+            {
+                subEntity.IdentityId = Model.Id;
+            }
         }
 
         private IdentityProperty CreateProperty()
             => new IdentityProperty();
+
+        private Task AddResource(EntityResourceKind kind)
+        {
+            var entity = new IdentityLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
+        }
     }
 }

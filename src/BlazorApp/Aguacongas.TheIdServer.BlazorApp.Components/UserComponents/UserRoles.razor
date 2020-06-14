@@ -1,16 +1,17 @@
-﻿@inject Notifier _notifier
-
-<div class="row">
+﻿<div class="row">
     <div class="col">
         <ul class="list-inline">
-            @foreach (var role in Model)
+            @foreach (var role in Collection)
             {
                 <li class="list-inline-item">
-                    <UserRole Entity="@role"
-                               DeleteClicked="() => DeleteRoleClicked.InvokeAsync(role)"
-                               ValueChanged="() => RoleValueChanged.InvokeAsync(role)" />
+                    <UserRole @bind-Value="@role.Name" Entity="@role"
+                              DeleteClicked="() => OnDeleteRoleClicked(role)" />
                 </li>
             }
+            <li class="list-inline-item">
+                <UserRole @bind-Value="@_role.Name" Entity="@_role"
+                          EntityChanged="() => OnRoleValueChanged(_role)" />
+            </li>
         </ul>
     </div>
 </div>

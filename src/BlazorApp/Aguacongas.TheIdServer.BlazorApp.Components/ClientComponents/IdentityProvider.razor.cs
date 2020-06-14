@@ -45,7 +45,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override void SetValue(string inputValue)
         {
-            Entity.Provider = inputValue;
             _providerName = _filteredProviders?.FirstOrDefault(p => p.Id == inputValue)?.DisplayName ?? inputValue;
         }
 

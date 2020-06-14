@@ -3,21 +3,21 @@
 @inject IJSRuntime _jsRuntime
 @inject NavigationManager _navigationManager
 
-<EntitiesGrid Items="@Collection" TableClass="table table-hover" Context="token">
+<EntitiesGrid Items="@Tokens" TableClass="table table-hover" Context="token">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="ClientId"
-                            Text="client id"
+                            Text="@Localizer["client id"]"
                             GridState="GridState" />
         </th>
         <th scope="col">
             <SortableHeader Property="Data"
-                            Text="data"
+                            Text="@Localizer["data"]"
                             GridState="GridState" />
         </th>
         <th>
             <SortableHeader Property="Expiration"
-                            Text="expire at"
+                            Text="@Localizer["expire at"]"
                             GridState="GridState" />
         </th>
         <th></th>

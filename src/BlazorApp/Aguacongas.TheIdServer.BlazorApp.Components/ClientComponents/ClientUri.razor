@@ -1,0 +1,27 @@
+﻿@if (Model.Id != null)
+{
+    <td>
+        @Model.Uri
+    </td>
+}
+else
+{
+    <td>
+        <AuthorizeText @bind-Value="@Model.Uri" MaxLength="2000" />
+    </td>
+}
+@if (IsSpaClient)
+{
+    <td class="text-center">
+        <AuthorizeCheckbox Name="cors" @bind-Value="@Cors" />
+    </td>
+}
+<td class="text-center">
+    <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
+</td>
+@if (CanHandlePostLogout)
+{
+    <td class="text-center">
+        <AuthorizeCheckbox Name="postlogout" @bind-Value="@PostLogout" />
+    </td>
+}

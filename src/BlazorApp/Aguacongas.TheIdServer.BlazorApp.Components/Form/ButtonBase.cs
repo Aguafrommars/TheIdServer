@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
 {
-    public partial class AuthorizeButton
+    public class ButtonBase : ComponentBase
     {
         [Parameter]
         public string CssSubClass { get; set; }

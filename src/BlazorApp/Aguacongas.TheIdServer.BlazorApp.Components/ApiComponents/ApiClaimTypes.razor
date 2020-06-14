@@ -3,14 +3,17 @@
 <div class="row">
     <div class="col">
         <ul class="list-inline">
-            @foreach (var claim in Model.ApiClaims)
+            @foreach (var claim in Claims)
             {
-                <li class="list-inline-item">
-                    <ClaimType Entity="@claim"
-                               DeleteClicked="() => OnDeleteClaimClicked(claim)"
-                               ValueChanged="() => OnClaimValueChanged(claim)" />
+                <li @key="claim" class="list-inline-item">
+                    <ClaimType @bind-Value="@claim.Type" Entity="@claim"
+                               DeleteClicked="() => OnDeleteClaimClicked(claim)" />
                 </li>
             }
+            <li class="list-inline-item">
+                <ClaimType @bind-Value="@_claim.Type" Entity="@_claim"
+                           EntityChanged="() => OnClaimValueChanged(_claim)" />
+            </li>
         </ul>
     </div>
 </div>

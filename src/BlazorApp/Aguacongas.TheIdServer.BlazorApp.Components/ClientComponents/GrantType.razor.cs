@@ -7,10 +7,9 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 {
-    public partial class GrantType : AutoCompleteModel<Entity.ClientGrantType>
+    public partial class GrantType
     {
         private bool _isReadOnly;
-        private List<Entity.ClientGrantType> _allowedGrantTypes;
 
         [Parameter]
         public Entity.Client Model { get; set; }
@@ -19,38 +18,29 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
 
         protected override string PropertyName => "GrantType";
 
-        protected override Task OnParametersSetAsync()
-        {
-            _allowedGrantTypes = Model.AllowedGrantTypes
-                .Where(g => !string.IsNullOrEmpty(g.GrantType))
-                .ToList();
-            return base.OnParametersSetAsync();
-        }
 
         protected override Task<IEnumerable<string>> GetFilteredValues(string term)
         {
             term ??= string.Empty;
             var grantTypes = GrantTypes.Instance;
-            var result = grantTypes.Where(kv => !_allowedGrantTypes.Any(g => g.Id == null && g.GrantType == kv.Key) &&
-                !(_allowedGrantTypes.Any(g => g.GrantType == "implicit") &&
-                    (kv.Key == "authorization_code" || kv.Key == "hybrid")) &&
-                !(_allowedGrantTypes.Any(g => g.GrantType == "authorization_code") &&
-                    (kv.Key == "hybrid" || kv.Key == "implicit")) &&
-                !(_allowedGrantTypes.Any(g => g.GrantType == "hybrid") &&
-                    (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
-                (kv.Value.Contains(term) || kv.Key.Contains(term)))
-            .Select(kv => kv.Key);
+            var allowedGrantTypes = Model.AllowedGrantTypes;
+
+            var result = grantTypes.Where(kv => !allowedGrantTypes.Any(g => g.GrantType == kv.Key) &&
+                    !(allowedGrantTypes.Any(g => g.GrantType == "implicit") &&
+                        (kv.Key == "authorization_code" || kv.Key == "hybrid")) &&
+                    !(allowedGrantTypes.Any(g => g.GrantType == "authorization_code") &&
+                        (kv.Key == "hybrid" || kv.Key == "implicit")) &&
+                    !(allowedGrantTypes.Any(g => g.GrantType == "hybrid") &&
+                        (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
+                    (kv.Value.Contains(term) || kv.Key.Contains(term)))
+                .Select(kv => kv.Key);
             return Task.FromResult(result);
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _isReadOnly = Entity.GrantType != null;
-        }
-        protected override void SetValue(string inputValue)
-        {
-            Entity.GrantType = inputValue;
+            _isReadOnly = Entity.Id != null;
         }
 
         private string GetGrantTypeName()
@@ -61,6 +51,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         private string GetGrantTypeName(string key)
         {
             return GrantTypes.GetGrantTypeName(key);
+        }
+
+        protected override void SetValue(string inputValue)
+        {
+            Entity.GrantType = inputValue;
         }
     }
 }

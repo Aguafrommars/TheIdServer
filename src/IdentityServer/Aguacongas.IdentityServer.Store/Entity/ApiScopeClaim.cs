@@ -24,7 +24,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The API scpope.
         /// </value>
         [Required]
-        public string ApiScpopeId { get; set; }
+        public string ApiScopeId { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
@@ -58,7 +58,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The API scpope.
         /// </value>
-        public virtual ApiScope ApiScpope { get; set; }
+        public virtual ApiScope ApiScope { get; set; }
 
     }
 }

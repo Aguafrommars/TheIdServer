@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientGrantTypeValidator"/> class.
         /// </summary>
-        public ClientGrantTypeValidator(Client client)
+        public ClientGrantTypeValidator(IdentityServer.Store.Entity.Client client)
         {
             RuleFor(m => m.GrantType).Must(g => g == null || !_regex.IsMatch(g)).WithMessage("The grant type cannot contains space.");
             RuleFor(m => m.GrantType).IsUnique(client.AllowedGrantTypes).WithMessage("The grant type must be unique.");

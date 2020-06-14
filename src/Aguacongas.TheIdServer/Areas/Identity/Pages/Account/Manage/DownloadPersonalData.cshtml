@@ -1,7 +1,8 @@
 ﻿@page
+@inject IViewLocalizer Localizer
 @model DownloadPersonalDataModel
 @{
-    ViewData["Title"] = "Download Your Data";
+    ViewData["Title"] = Localizer["Download Your Data"];
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 

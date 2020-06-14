@@ -1,5 +1,7 @@
 ﻿using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
+
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
@@ -69,6 +73,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddSingleton<ISharedStringLocalizerAsync>(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"),
+                    p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>(),
+                    p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>(),
+                    p.GetRequiredService<ILogger<StringLocalizer>>()))
+                .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddHttpClient("oidc")
                 .ConfigureHttpClient(httpClient =>
                 {
@@ -76,6 +85,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     httpClient.BaseAddress = apiUri;
                 })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            services.AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
+            {
+                var apiUri = new Uri(settings.ApiBaseUrl);
+                httpClient.BaseAddress = apiUri;
+            });
         }
 
         private static HttpClient CreateApiHttpClient(IServiceProvider p)

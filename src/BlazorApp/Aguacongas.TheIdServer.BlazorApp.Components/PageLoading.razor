@@ -1,0 +1,14 @@
+﻿@inject IStringLocalizerAsync<PageLoading> Localizer
+<div class="row">
+    <div class="col text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">@Localizer["Loading..."]</span>
+        </div>
+        @if (Information != null)
+        {
+            <div>
+                <em class="text-secondary">@Localizer[Information]</em>
+            </div>
+        }
+    </div>
+</div>

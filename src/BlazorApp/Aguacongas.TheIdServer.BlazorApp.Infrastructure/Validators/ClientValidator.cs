@@ -48,7 +48,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.AllowedScopes)
                 .Where(m => m.Scope != null)
                 .SetValidator(new ClientScopeValidator(client));
-
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.DisplayName)
+                .SetValidator(new EntityResourceValidator<ClientLocalizedResource>(client, EntityResourceKind.DisplayName));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.Description)
+                .SetValidator(new EntityResourceValidator<ClientLocalizedResource>(client, EntityResourceKind.Description));
         }
     }
 }

@@ -7,7 +7,7 @@
 @if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@Entity.Scope</div>
+        <div class="form-control @FieldClass" disabled>@Entity.Scope</div>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
@@ -15,11 +15,10 @@
 }
 else
 {
-    <div id="@Id" class="input-group input-group-sm mb-3" data-toggle="dropdown">
-        <input type="text" class="form-control new-claim" placeholder="scope" value="@SelectedValue"
-               @oninput="OnInputChanged"
-               @onfocus='() => OnInputChanged(new ChangeEventArgs { Value = "" })'/>
-        <div class="input-group-append">
+    <div id="@Id" @key="@Entity" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="@Localizer["scope"]" value="@CurrentValue"
+               @oninput="OnInputChanged" @onfocus="Filter" />
+        <div class="input-group-append" @onclick="() => SetSelectedValue(CurrentValue)">
             <span class="input-group-text oi oi-plus" />
         </div>
     </div>
@@ -29,14 +28,16 @@ else
             foreach (var scope in _filterScopes)
             {
                 <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(scope.Value)">
-                    <small>@scope.Value</small> 
+                    <small>@scope.Value</small>
                     @if (scope.IsIdentity)
                     {
-                        <small class="text-muted">identity</small>
+                        <small class="text-muted">@Localizer["identity"]</small>
                     }
                     else
                     {
-                        <small class="text-muted">api</small>
+                        <small class="text-muted">
+                            @Localizer["api"]
+                        </small>
                     }
                     <div class="text-muted font-italic">
                         <small>@scope.Description</small>
