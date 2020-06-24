@@ -61,12 +61,18 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var user = await FindUserAsync(context.Subject.GetSubjectId()).ConfigureAwait(false);
             var principal = user != null ? await GetClaimsPrincipalAsync(user).ConfigureAwait(false) : context.Subject;
 
-            foreach (var resource in context.RequestedResources.IdentityResources)
+            var requestedResources = context.RequestedResources.Resources;
+            foreach (var resource in requestedResources.IdentityResources)
             {
                 var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
                 context.AddRequestedClaims(claims);
             }
-            foreach (var resource in context.RequestedResources.ApiResources)
+            foreach (var resource in requestedResources.ApiResources)
+            {
+                var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
+                context.AddRequestedClaims(claims);
+            }
+            foreach (var resource in requestedResources.ApiScopes)
             {
                 var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
                 context.AddRequestedClaims(claims);

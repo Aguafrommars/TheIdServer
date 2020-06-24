@@ -8,7 +8,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define an API scope
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class ApiScope : IAuditable, IApiSubEntity, ICloneable<ApiScope>, ILocalizable<ApiScopeLocalizedResource>
+    public class ApiScope : IAuditable, ICloneable<ApiScope>, ILocalizable<ApiScopeLocalizedResource>
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -19,22 +19,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the API identifier.
+        /// Gets or sets a value indicating whether this <see cref="ApiScope"/> is enabled.
         /// </summary>
         /// <value>
-        /// The API.
+        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
         /// </value>
-        [Required]
-        public string ApiId { get; set; }
+        public bool Enabled { get; set; } = true;
 
-        /// <summary>
-        /// Gets or sets the scope.
-        /// </summary>
-        /// <value>
-        /// The API.
-        /// </value>
-        [Required]
-        public string Scope { get; set; }
 
         /// <summary>
         /// Gets or sets the display name.
@@ -78,14 +69,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         ///   <c>true</c> if [show in discovery document]; otherwise, <c>false</c>.
         /// </value>
         public bool ShowInDiscoveryDocument { get; set; }
-
-        /// <summary>
-        /// Gets or sets the resources.
-        /// </summary>
-        /// <value>
-        /// The resources.
-        /// </value>
-        public virtual ICollection<ApiScopeLocalizedResource> Resources { get; set; }
+        
 
         /// <summary>
         /// Gets or sets the created at.
@@ -112,12 +96,20 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ApiScopeClaim> ApiScopeClaims { get; set; }
 
         /// <summary>
-        /// Gets or sets the API.
+        /// Gets or sets the API scope properties.
         /// </summary>
         /// <value>
-        /// The API.
+        /// The API scope properties.
         /// </value>
-        public virtual ProtectResource Api { get; set; }
+        public virtual ICollection<ApiScopeProperty> ApiScopeProperties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resources.
+        /// </summary>
+        /// <value>
+        /// The resources.
+        /// </value>
+        public virtual ICollection<ApiScopeLocalizedResource> Resources { get; set; }
 
         /// <summary>
         /// Clones this instance.

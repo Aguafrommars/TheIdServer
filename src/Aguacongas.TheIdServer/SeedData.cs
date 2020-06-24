@@ -95,6 +95,15 @@ namespace Aguacongas.TheIdServer
                 }
             }
 
+            if (!context.ApiScopes.Any())
+            {
+                foreach (var resource in Config.GetApiScopes())
+                {
+                    context.ApiScopes.Add(resource.ToEntity());
+                    Console.WriteLine($"Add api scope resource {resource.DisplayName}");
+                }
+            }
+
             context.SaveChanges();
         }
 

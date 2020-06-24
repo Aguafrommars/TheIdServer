@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
-    /// Define a reference token
+    /// Define an API property
     /// </summary>
-    /// <seealso cref="IGrant" />
-    public class ReferenceToken : IGrant, IUserSubEntity
+    /// <seealso cref="IAuditable" />
+    public class ApiScopeProperty : IAuditable, IApiScopeSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -18,46 +18,33 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the client identifier.
+        /// Gets or sets the API identifier.
         /// </summary>
         /// <value>
-        /// The client.
+        /// The API.
         /// </value>
         [Required]
-        public string ClientId { get; set; }
+        public string ApiScopeId { get; set; }
 
         /// <summary>
-        /// Gets or sets the subject identifier.
+        /// Gets or sets the key.
         /// </summary>
         /// <value>
-        /// The subject identifier.
+        /// The key.
         /// </value>
-        [MaxLength(200)]
-        public string UserId { get; set; }
+        [Required]
+        [MaxLength(250)]
+        public string Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the data.
+        /// Gets or sets the value.
         /// </summary>
         /// <value>
-        /// The data.
+        /// The value.
         /// </value>
-        public string Data { get; set; }
+        [MaxLength(2000)]
+        public string Value { get; set; }
 
-        /// <summary>
-        /// Gets or sets the session identifier.
-        /// </summary>
-        /// <value>
-        /// The session identifier.
-        /// </value>
-        public string SessionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the expiration.
-        /// </summary>
-        /// <value>
-        /// The expiration.
-        /// </value>
-        public DateTime? Expiration { get; set; }
         /// <summary>
         /// Gets or sets the created at.
         /// </summary>
@@ -73,5 +60,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API scope.
+        /// </summary>
+        /// <value>
+        /// The API.
+        /// </value>
+        public virtual ApiScope ApiScope { get; set; }
     }
 }

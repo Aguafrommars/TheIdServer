@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
         {
             _idPageRequest.Filter = $"contains({nameof(entity.IdentityResource.Id)},'{term}') or contains({nameof(entity.IdentityResource.DisplayName)},'{term}')";
-            _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Scope)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
+            _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Id)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
             var identityResponse = _identityStore.GetAsync(_idPageRequest);
             var apiResponse = _apiStore.GetAsync(_idPageRequest);
             var apiScopeResponse = _apiScopeStore.GetAsync(_scopeRequest);
@@ -63,7 +63,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
                 }))
                 .Union(apiScopeResponse.Result.Items.Select(s => new Scope
                 {
-                    Value = s.Scope,
+                    Value = s.Id,
                     Description = s.DisplayName
                 }))
                 .Distinct(_comparer)

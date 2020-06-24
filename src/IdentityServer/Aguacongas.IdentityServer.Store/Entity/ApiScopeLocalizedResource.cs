@@ -5,7 +5,7 @@
     /// </summary>
     /// <seealso cref="LocalizedResourceBase" />
     /// <seealso cref="IEntityResource" />
-    public class ApiScopeLocalizedResource : LocalizedResourceBase, IEntityResource
+    public class ApiScopeLocalizedResource : LocalizedResourceBase, IEntityResource, IApiScopeSubEntity
     {
         /// <summary>
         /// Gets or sets the API identifier.

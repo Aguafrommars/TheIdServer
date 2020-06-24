@@ -164,21 +164,6 @@ namespace Aguacongas.IdentityServer.Store
                     Key = p.Key,
                     Value = p.Value
                 }).ToList(),
-                Scopes = api.Scopes.Select(s => new Entity.ApiScope
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Scope = s.Name,
-                    ApiScopeClaims = s.UserClaims.Select(c => new Entity.ApiScopeClaim
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Type = c
-                    }).ToList(),
-                    Description = s.Description,
-                    DisplayName = s.DisplayName,
-                    Emphasize = s.Emphasize,
-                    Required = s.Required,
-                    ShowInDiscoveryDocument = s.ShowInDiscoveryDocument
-                }).ToList(),
                 Secrets = api.ApiSecrets.Select(s => new Entity.ApiSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -187,6 +172,29 @@ namespace Aguacongas.IdentityServer.Store
                     Type = s.Type,
                     Value = s.Value
                 }).ToList()                
+            };
+        }
+
+        public static Entity.ApiScope ToEntity(this ApiScope scope)
+        {
+            if (scope == null)
+            {
+                return null;
+            }
+
+            return new Entity.ApiScope
+            {
+                ApiScopeClaims = scope.UserClaims.Select(c => new Entity.ApiScopeClaim
+                {
+                    Type = c
+                }).ToList(),
+                Description = scope.Description,
+                DisplayName = scope.DisplayName,
+                Emphasize = scope.Emphasize,
+                Enabled = scope.Enabled,
+                Required = scope.Required,
+                Id = scope.Name,
+                ShowInDiscoveryDocument = scope.ShowInDiscoveryDocument
             };
         }
 

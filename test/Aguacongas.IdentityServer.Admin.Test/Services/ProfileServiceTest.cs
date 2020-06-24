@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityModel;
 using IdentityServer4.Models;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -40,18 +41,21 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 new Client(), "test", 
                 new string[] { "test" })
             {
-                RequestedResources = new Resources
+                RequestedResources = new ResourceValidationResult
                 {
-                    IdentityResources = new List<IdentityResource>
+                    Resources = new Resources
                     {
-                        new IdentityResource
+                        IdentityResources = new List<IdentityResource>
                         {
-                            Properties = new Dictionary<string, string>
+                            new IdentityResource
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName
+                                Properties = new Dictionary<string, string>
+                                {
+                                    [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName
+                                }
                             }
                         }
-                    },                    
+                    }
                 }
             };
 
@@ -88,19 +92,22 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 new Client(), "test",
                 new string[] { "test" })
             {
-                RequestedResources = new Resources
+                RequestedResources = new ResourceValidationResult
                 {
-                    ApiResources = new List<ApiResource>
+                    Resources = new Resources
                     {
-                        new ApiResource
+                        ApiResources = new List<ApiResource>
                         {
-                            Properties = new Dictionary<string, string>
+                            new ApiResource
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
-                                [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                Properties = new Dictionary<string, string>
+                                {
+                                    [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
+                                    [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                }
                             }
                         }
-                    },
+                    }
                 }
             };
 
@@ -137,19 +144,22 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 new Client(), "test",
                 new string[] { "test" })
             {
-                RequestedResources = new Resources
+                RequestedResources = new ResourceValidationResult
                 {
-                    ApiResources = new List<ApiResource>
+                    Resources = new Resources
                     {
-                        new ApiResource
+                        ApiResources = new List<ApiResource>
                         {
-                            Properties = new Dictionary<string, string>
+                            new ApiResource
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
-                                [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                Properties = new Dictionary<string, string>
+                                {
+                                    [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
+                                    [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                }
                             }
                         }
-                    },
+                    }
                 }
             };
 

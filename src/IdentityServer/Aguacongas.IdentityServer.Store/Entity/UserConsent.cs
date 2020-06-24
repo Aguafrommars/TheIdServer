@@ -38,6 +38,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string UserId { get; set; }
 
         /// <summary>
+        /// Gets or sets the session identifier.
+        /// </summary>
+        /// <value>
+        /// The session identifier.
+        /// </value>
+        public string SessionId { get; set; }
+
+        /// <summary>
         /// Gets or sets the data.
         /// </summary>
         /// <value>

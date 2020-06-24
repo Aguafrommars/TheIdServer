@@ -4,11 +4,11 @@
     <div class="card-header">
         @if (Scope.Id == null)
         {
-            <AuthorizeText Id="scope" Placeholder="@Localizer["scope"]" @bind-Value="@Scope.Scope" />
+            <AuthorizeText Id="scope" Placeholder="@Localizer["scope"]" @bind-Value="@Scope.Id" />
         }
         else
         {
-            @Scope.Scope
+            @Scope.Id
         }
     </div>
     <div class="card-body">
@@ -20,7 +20,7 @@
                 <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Scope.DisplayName" MaxLength="200" />
             </div>
             <div class="col-1">
-                <button id="@($"btnAddDisplayName{Scope.Scope}")" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                <button id="@($"btnAddDisplayName{Scope.Id}")" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
                     <span class="oi oi-plus"></span>
                 </button>
             </div>
@@ -34,7 +34,7 @@
                 <AuthorizeTextArea Id="description" Placeholder="@Localizer["description"]" @bind-Value="@Scope.Description" MaxLength="1000" />
             </div>
             <div class="col-1">
-                <button id="@($"btnAddDescription{Scope.Scope}")" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                <button id="@($"btnAddDescription{Scope.Id}")" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
                     <span class="oi oi-plus"></span>
                 </button>
             </div>

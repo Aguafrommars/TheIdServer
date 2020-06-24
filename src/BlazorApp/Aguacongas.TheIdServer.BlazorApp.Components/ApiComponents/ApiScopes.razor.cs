@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
     {
         private IEnumerable<Entity.ApiScope> Scopes => Collection.Where(s => s.Id == null || (s.Description != null && s.Description.Contains(HandleModificationState.FilterTerm)) ||
            (s.DisplayName != null && s.DisplayName.Contains(HandleModificationState.FilterTerm)) ||
-           (s.Scope != null && s.Scope.Contains(HandleModificationState.FilterTerm)));
+           (s.Id != null && s.Id.Contains(HandleModificationState.FilterTerm)));
 
         [Parameter]
         public ICollection<Entity.ApiScope> Collection { get; set; }

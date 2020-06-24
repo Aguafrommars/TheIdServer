@@ -18,41 +18,29 @@ namespace Aguacongas.IdentityServer.Http.Store
     {
         private readonly IAdminStore<ProtectResource> _apiStore;
         private readonly IAdminStore<IdentityResource> _identityStore;
+        private readonly IAdminStore<ApiScope> _apiScopeStore;
 
-        public ResourceStore(IAdminStore<ProtectResource> apiStore, IAdminStore<IdentityResource> identityStore)
+        public ResourceStore(IAdminStore<ProtectResource> apiStore, IAdminStore<IdentityResource> identityStore, IAdminStore<ApiScope> apiScopeStore)
         {
             _apiStore = apiStore ?? throw new ArgumentNullException(nameof(apiStore));
             _identityStore = identityStore ?? throw new ArgumentNullException(nameof(identityStore));
+            _apiScopeStore = apiScopeStore ?? throw new ArgumentNullException(nameof(apiScopeStore));
         }
 
         /// <summary>
         /// Finds the API resource by name.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="apiResourceNames">The name.</param>
         /// <returns></returns>
-        public async Task<Models.ApiResource> FindApiResourceAsync(string name)
+        public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
-            var entity = await _apiStore.GetAsync(name, new GetRequest
-            {
-                Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
-            }).ConfigureAwait(false);
-            return entity.ToApi();
-        }
-
-        /// <summary>
-        /// Gets API resources by scope name.
-        /// </summary>
-        /// <param name="scopeNames"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
-        {
-            var taskList = new List<Task<PageResponse<ProtectResource>>>(scopeNames.Count());
-            foreach(var name in scopeNames)
+            var taskList = new List<Task<PageResponse<ProtectResource>>>(apiResourceNames.Count());
+            foreach (var name in apiResourceNames)
             {
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Filter = $"{nameof(ProtectResource.Scopes)}/any(s:s/{nameof(ApiScope.Scope)} eq '{name}')",
+                    Filter = $"{nameof(ProtectResource.Id)} eq '{name}')",
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
                 }));
             }
@@ -64,11 +52,57 @@ namespace Aguacongas.IdentityServer.Http.Store
         }
 
         /// <summary>
+        /// Gets API resources by scope name.
+        /// </summary>
+        /// <param name="scopeNames"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        {
+            var taskList = new List<Task<PageResponse<ProtectResource>>>(scopeNames.Count());
+            foreach(var name in scopeNames)
+            {
+                taskList.Add(_apiStore.GetAsync(new PageRequest
+                {
+                    Take = null,
+                    Filter = $"{nameof(ProtectResource.Scopes)}/any(s:s/{nameof(ApiScope.Id)} eq '{name}')",
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
+                }));
+            }
+            await Task.WhenAll(taskList)
+                .ConfigureAwait(false);
+
+            return taskList
+                .SelectMany(t => t.Result.Items.Select(a => a.ToApi()));
+        }
+
+        /// <summary>
+        /// Gets API scopes by scope name.
+        /// </summary>
+        /// <param name="scopeNames"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
+        {
+            var taskList = new List<Task<PageResponse<ApiScope>>>(scopeNames.Count());
+            foreach (var name in scopeNames)
+            {
+                taskList.Add(_apiScopeStore.GetAsync(new PageRequest
+                {
+                    Take = null,
+                    Filter = $"{nameof(ApiScope.Id)} eq '{name}')",
+                    Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Resources)}"
+                }));
+            }
+            await Task.WhenAll(taskList)
+                .ConfigureAwait(false);
+            return taskList.SelectMany(t => t.Result.Items.Select(s => s.ToApiScope()));
+        }
+
+        /// <summary>
         /// Gets identity resources by scope name.
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Models.IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var taskList = new List<Task<PageResponse<IdentityResource>>>(scopeNames.Count());
             foreach (var name in scopeNames)
@@ -77,7 +111,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 {
                     Take = null,
                     Filter = $"{nameof(IdentityResource.Id)} eq '{name}'",
-                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)}"
+                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -98,12 +132,12 @@ namespace Aguacongas.IdentityServer.Http.Store
                 ApiResources = (await _apiStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }).ConfigureAwait(false)).Items.Select(a => a.ToApi()).ToList(),
                 IdentityResources = (await _identityStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)}"
+                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
                 }).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList()
             };
         }

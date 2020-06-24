@@ -81,14 +81,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             modelBuilder.Entity<ApiClaim>()
                 .HasIndex(e => new { e.ApiId, e.Type })
                 .IsUnique(true);
-            modelBuilder.Entity<ApiScope>()
-                .HasIndex(e => new { e.ApiId, e.Scope })
-                .IsUnique(true);
             modelBuilder.Entity<ApiProperty>()
                 .HasIndex(e => new { e.ApiId, e.Key })
                 .IsUnique(true);
             modelBuilder.Entity<ApiScopeClaim>()
                 .HasIndex(e => new { e.ApiScopeId, e.Type })
+                .IsUnique(true);
+            modelBuilder.Entity<ApiScopeProperty>()
+                .HasIndex(e => new { e.ApiScopeId, e.Key })
                 .IsUnique(true);
             modelBuilder.Entity<IdentityProperty>()
                 .HasIndex(e => new { e.IdentityId, e.Key })

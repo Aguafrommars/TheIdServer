@@ -1,68 +1,56 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityModel;
+using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class AuthorizationCodeStore : AdminStore<Entity.AuthorizationCode,  OperationalDbContext>, IAuthorizationCodeStore
+    public class AuthorizationCodeStore : GrantStore<Entity.AuthorizationCode, AuthorizationCode>, IAuthorizationCodeStore
     {
-        private readonly OperationalDbContext _context;
-        private readonly IPersistentGrantSerializer _serializer;
 
         public AuthorizationCodeStore(OperationalDbContext context, 
             IPersistentGrantSerializer serializer,
             ILogger<AuthorizationCodeStore> logger)
-            : base(context, logger)
+            : base(context, serializer, logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
+        public Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
+            => GetAsync(code);
+
+        public Task RemoveAuthorizationCodeAsync(string code)
+            => RemoveAsync(code);
+
+        public Task<string> StoreAuthorizationCodeAsync(AuthorizationCode code)
+            => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
+
+        protected override string GetClientId(AuthorizationCode dto)
+            => dto?.ClientId;
+
+        protected override string GetSubjectId(AuthorizationCode dto)
         {
-            var entity = await _context.AuthorizationCodes.FindAsync(code);
-            if (entity != null)
+            var subject = dto?.Subject;
+            if (subject == null)
             {
-                return _serializer.Deserialize<AuthorizationCode>(entity.Data);
+                throw new InvalidOperationException("No subject");
             }
-            return null;
+
+            var idClaim =  subject.FindFirst(JwtClaimTypes.Subject) ??
+                          subject.FindFirst(ClaimTypes.NameIdentifier) ??
+                          subject.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]) ??
+                          throw new Exception("Unknown userid");
+
+            return idClaim.Value;
         }
+            
 
-        public async Task RemoveAuthorizationCodeAsync(string code)
-        {
-            var entity = await _context.AuthorizationCodes.FindAsync(code);
-            if (entity != null)
-            {
-                try
-                {
-                    _context.AuthorizationCodes.Remove(entity);
-                    await _context.SaveChangesAsync().ConfigureAwait(false);
-                }
-                catch (DbUpdateConcurrencyException)
-                { }
-            }
-        }
-
-        public async Task<string> StoreAuthorizationCodeAsync(AuthorizationCode code)
-        {
-            code = code ?? throw new ArgumentNullException(nameof(code));
-
-            var newEntity = new Entity.AuthorizationCode
-            {
-                Id = Guid.NewGuid().ToString(),
-                ClientId = code.ClientId,
-                Data = _serializer.Serialize(code),
-                Expiration = code.CreationTime.AddSeconds(code.Lifetime)
-            };
-            await _context.AuthorizationCodes.AddAsync(newEntity);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-
-            return newEntity.Id;
-        }
+        protected override DateTime? GetExpiration(AuthorizationCode dto)
+            => dto.CreationTime.AddSeconds(dto.Lifetime);
     }
 }

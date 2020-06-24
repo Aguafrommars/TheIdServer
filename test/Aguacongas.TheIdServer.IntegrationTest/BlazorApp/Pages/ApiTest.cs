@@ -375,7 +375,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
+                var scope = await context.ApiScopes.FirstAsync(s => s.Id == apiId);
                 Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScopeId == scope.Id));
             });
         }
@@ -388,7 +388,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             int expected = 0;
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
+                scope = await context.ApiScopes.FirstAsync(s => s.Id == apiId);
                 expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
             });
 
@@ -445,7 +445,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                        new ApiScope
                        {
                            Id = GenerateId(),
-                           Scope = apiId,
                            DisplayName = "test",
                            ApiScopeClaims = new List<ApiScopeClaim>
                            {
@@ -456,7 +455,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                        new ApiScope
                        {
                            Id = apiScopeId,
-                           Scope = "filtered",
                            DisplayName = "filtered",
                            ApiScopeClaims = new List<ApiScopeClaim>(),
                            Resources = new List<ApiScopeLocalizedResource>

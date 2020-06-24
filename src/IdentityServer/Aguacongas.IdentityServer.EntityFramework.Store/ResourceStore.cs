@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public async Task<ApiResource> FindApiResourceAsync(string name)
+        public async Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
             var query = from api in _context.Apis
                             .Include(a => a.ApiClaims)
@@ -37,13 +37,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .Include(a => a.Resources)
                             .Include(a => a.Properties)
                             .Include(a => a.Scopes)
-                            .ThenInclude(s => s.Resources)
-                            .Include(a => a.Scopes)
-                            .ThenInclude(s => s.ApiScopeClaims)
+                        where apiResourceNames.Contains(api.Id)
                         select api;
-            var entity = await query.FirstOrDefaultAsync(api => api.Id == name).ConfigureAwait(false);
-
-            return entity.ToApi();
+            return await query
+                .AsNoTracking()
+                .Select(a => a.ToApi())
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var query = from api in _context.Apis
                             .Include(a => a.ApiClaims)
@@ -60,12 +60,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .Include(a => a.Resources)
                             .Include(a => a.Properties)
                             .Include(a => a.Scopes)
-                            .ThenInclude(s => s.Resources)
-                            .Include(a => a.Scopes)
-                            .ThenInclude(s => s.ApiScopeClaims)
                         join scope in _context.ApiScopes
-                        on api.Id equals scope.ApiId
-                        where scopeNames.Contains(scope.Scope)
+                        on api.Id equals scope.Id
+                        where scopeNames.Contains(scope.Id)
                         select api;
 
             return await query
@@ -76,11 +73,34 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         }
 
         /// <summary>
+        /// Gets API scopes by scope name.
+        /// </summary>
+        /// <param name="scopeNames"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
+        {
+            var query = from api in _context.ApiScopes
+                            .Include(a => a.ApiScopeClaims)
+                            .Include(a => a.Resources)                            
+                        join scope in _context.ApiScopes
+                        on api.Id equals scope.Id
+                        where scopeNames.Contains(scope.Id)
+                        select api;
+
+            return await query
+                .AsNoTracking()
+                .Select(s => s.ToApiScope())
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Gets identity resources by scope name.
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var query = from identity in _context.Identities
                             .Include(i => i.IdentityClaims)

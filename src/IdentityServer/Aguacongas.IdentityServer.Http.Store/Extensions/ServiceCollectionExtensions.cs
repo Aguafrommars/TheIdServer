@@ -62,7 +62,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
         }
 

@@ -124,9 +124,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var scope = Model.Scopes.FirstOrDefault();
             if (IsNew && scope != null)
             {
-                if (scope.Scope == null && e.FieldIdentifier.FieldName == "Id")
+                if (scope.Id == null && e.FieldIdentifier.FieldName == "Id")
                 {
-                    scope.Scope = Model.Id;
+                    scope.Id = Model.Id;
                 }
                 if (scope.DisplayName == null && e.FieldIdentifier.FieldName == "DisplayName")
                 {

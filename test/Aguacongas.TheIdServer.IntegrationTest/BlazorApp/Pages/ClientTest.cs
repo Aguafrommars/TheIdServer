@@ -160,7 +160,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                         new ApiScope
                         {
                             Id = firstId,
-                            Scope = firstId,
                             DisplayName = firstId
                         }
                     }
