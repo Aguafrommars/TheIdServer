@@ -257,9 +257,6 @@ namespace Aguacongas.TheIdServer
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
             }
-
-
-            scopedProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
         }
 
         private void AddDefaultServices(IServiceCollection services)

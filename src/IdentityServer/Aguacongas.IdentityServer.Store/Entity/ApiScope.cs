@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The API scope properties.
         /// </value>
-        public virtual ICollection<ApiScopeProperty> ApiScopeProperties { get; set; }
+        public virtual ICollection<ApiScopeProperty> Properties { get; set; }
 
         /// <summary>
         /// Gets or sets the resources.
@@ -110,6 +110,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The resources.
         /// </value>
         public virtual ICollection<ApiScopeLocalizedResource> Resources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API scopes.
+        /// </summary>
+        /// <value>
+        /// The API scopes.
+        /// </value>
+        public virtual ICollection<ApiApiScope> Apis { get; set; }
 
         /// <summary>
         /// Clones this instance.

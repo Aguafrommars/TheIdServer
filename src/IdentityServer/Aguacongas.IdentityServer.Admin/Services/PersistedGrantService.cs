@@ -65,14 +65,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 Take = null,
                 Filter = $"{nameof(Entity.IGrant.UserId)} eq '{subjectId}'"
             };
-            var consentListTask = _userConsentStore.GetAsync(request);
-            var codeListTask = _authorizationCodeStore.GetAsync(request);
-            var refreshTokenListTask = _refreshTokenStore.GetAsync(request);
-            var referenceTokenListTask = _referenceTokenStore.GetAsync(request);
 
-            await Task.WhenAll(consentListTask, codeListTask, refreshTokenListTask, referenceTokenListTask).ConfigureAwait(false);
-
-            var consentList = consentListTask.Result.Items
+            var consentList = (await _userConsentStore.GetAsync(request).ConfigureAwait(false)).Items
                 .Select(c => _serializer.Deserialize<Consent>(c.Data))
                 .Select(c => new Grant
                 {
@@ -83,7 +77,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     SubjectId = subjectId
                 });
 
-            var codeList = codeListTask.Result.Items
+            var codeList = (await _authorizationCodeStore.GetAsync(request).ConfigureAwait(false)).Items
                 .Select(c => _serializer.Deserialize<AuthorizationCode>(c.Data))
                 .Select(c => new Grant
                 {
@@ -95,7 +89,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     SubjectId = subjectId
                 });
 
-            var refreshTokenList = refreshTokenListTask.Result.Items
+            var refreshTokenList = (await _refreshTokenStore.GetAsync(request).ConfigureAwait(false)).Items
                .Select(t => _serializer.Deserialize<RefreshToken>(t.Data))
                .Select(t => new Grant
                {
@@ -107,7 +101,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                    SubjectId = subjectId
                });
 
-            var referenceTokenList = referenceTokenListTask.Result.Items
+            var referenceTokenList = (await _referenceTokenStore.GetAsync(request).ConfigureAwait(false)).Items
                .Select(t => _serializer.Deserialize<Token>(t.Data))
                .Select(t => new Grant
                {
@@ -150,33 +144,27 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 Take = null,
                 Filter = filter
             };
-            var consentListTask = _userConsentStore.GetAsync(request);
-            var codeListTask = _authorizationCodeStore.GetAsync(request);
-            var refreshTokenListTask = _refreshTokenStore.GetAsync(request);
-            var referenceTokenListTask = _referenceTokenStore.GetAsync(request);
+            var consentListResponse = await _userConsentStore.GetAsync(request).ConfigureAwait(false);
+            var codeListResponse = await _authorizationCodeStore.GetAsync(request).ConfigureAwait(false);
+            var refreshTokenListResponse = await _refreshTokenStore.GetAsync(request).ConfigureAwait(false);
+            var referenceTokenListResponse = await _referenceTokenStore.GetAsync(request).ConfigureAwait(false);
 
-            await Task.WhenAll(consentListTask, codeListTask, refreshTokenListTask, referenceTokenListTask).ConfigureAwait(false);
-
-            var taskList = new List<Task>();
-
-            foreach(var consent in consentListTask.Result.Items)
+            foreach(var consent in consentListResponse.Items)
             {
-                taskList.Add(_userConsentStore.DeleteAsync(consent.Id));
+                await _userConsentStore.DeleteAsync(consent.Id).ConfigureAwait(false);
             }
-            foreach (var code in codeListTask.Result.Items)
+            foreach (var code in codeListResponse.Items)
             {
-                taskList.Add(_authorizationCodeStore.DeleteAsync(code.Id));
+                await _authorizationCodeStore.DeleteAsync(code.Id).ConfigureAwait(false);
             }
-            foreach (var token in refreshTokenListTask.Result.Items)
+            foreach (var token in refreshTokenListResponse.Items)
             {
-                taskList.Add(_refreshTokenStore.DeleteAsync(token.Id));
+                await _refreshTokenStore.DeleteAsync(token.Id).ConfigureAwait(false);
             }
-            foreach (var token in refreshTokenListTask.Result.Items)
+            foreach (var token in referenceTokenListResponse.Items)
             {
-                taskList.Add(_referenceTokenStore.DeleteAsync(token.Id));
+                await _referenceTokenStore.DeleteAsync(token.Id).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
         }
             
 

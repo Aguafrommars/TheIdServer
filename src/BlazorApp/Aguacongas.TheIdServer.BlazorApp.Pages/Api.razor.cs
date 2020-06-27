@@ -1,16 +1,14 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    public partial class Api : IDisposable
+    public partial class Api
     {
-        protected override string Expand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Scopes)}/{nameof(ProtectResource.Resources)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
+        protected override string Expand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
 
         protected override bool NonEditable => Model.NonEditable;
 
@@ -32,24 +30,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
-            EditContext.OnFieldChanged += OnFieldChanged;
         }
 
         protected override Task<ProtectResource> Create()
         {
-            var scope = new ApiScope
-            {
-                ApiScopeClaims = new List<ApiScopeClaim>(),
-                Resources = new List<ApiScopeLocalizedResource>()
-            };
-            EntityCreated(scope);
             return Task.FromResult(new ProtectResource
             {
                 Secrets = new List<ApiSecret>(),
-                Scopes = new List<ApiScope>()
-                {
-                    scope
-                },
+                ApiScopes = new List<ApiApiScope>(),
                 ApiClaims = new List<ApiClaim>(),
                 Properties = new List<ApiProperty>(),
                 Resources = new List<ApiLocalizedResource>()
@@ -62,14 +50,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 api.ApiClaims = null;
                 api.Properties = null;
-                api.Scopes = null;
+                api.ApiScopes = null;
                 api.Secrets = null;
                 api.Resources = null;
-            }
-            if (entity is ApiScope scope)
-            {
-                scope.ApiScopeClaims = null;
-                scope.Resources = null;
             }
         }
 
@@ -119,37 +102,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        private void OnFieldChanged(object sender, FieldChangedEventArgs e)
-        {
-            var scope = Model.Scopes.FirstOrDefault();
-            if (IsNew && scope != null)
-            {
-                if (scope.Id == null && e.FieldIdentifier.FieldName == "Id")
-                {
-                    scope.Id = Model.Id;
-                }
-                if (scope.DisplayName == null && e.FieldIdentifier.FieldName == "DisplayName")
-                {
-                    scope.DisplayName = Model.DisplayName;
-                }
-            }
-        }        
-
         private ApiSecret CreateSecret()
             =>  new ApiSecret
                 {
                     Type = "SharedSecret"
                 };
-
-        private ApiScope CreateApiScope()
-        {
-            var scope = new ApiScope
-            {
-                ApiScopeClaims = new List<ApiScopeClaim>(),
-                Resources = new List<ApiScopeLocalizedResource>()
-            };
-            return scope;
-        }
 
         private ApiProperty CreateProperty()
             => new ApiProperty();
@@ -164,26 +121,5 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             HandleModificationState.EntityCreated(entity);
             return Task.CompletedTask;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    EditContext.OnFieldChanged -= OnFieldChanged;
-                }
-                disposedValue = true;
-            }
-        }
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

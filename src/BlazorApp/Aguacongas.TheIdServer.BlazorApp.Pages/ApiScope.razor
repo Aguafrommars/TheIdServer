@@ -1,8 +1,10 @@
-﻿@using  Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
+﻿@using Aguacongas.TheIdServer.BlazorApp.Components.ApiScopeComponents
 
-@page "/protectresource"
-@page "/protectresource/{id}"
-@inherits EntityModel<Entity.ProtectResource>
+@page "/apiscope"
+@page "/apiscope/{id}"
+
+@inherits EntityModel<Entity.ApiScope>
+
 
 @if (Model == null)
 {
@@ -16,7 +18,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="name" Placeholder="@Localizer["api id"]" @bind-Value="@Model.Id" />
+                        <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
                     }
                     else
                     {
@@ -40,13 +42,7 @@ else
                 <div class="col">
                     <ul class="list-inline text-lowercase">
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
-                        </li>
-                        <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
                         </li>
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
@@ -68,6 +64,13 @@ else
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="required" Label="@Localizer["required"]" @bind-Value="@Model.Required" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>
@@ -80,13 +83,13 @@ else
                                 </button>
                             </div>
                         </div>
-                        <ApiResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName"></ApiResources>
+                        <ApiScopeResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName" />
                         <div class="form-group row">
-                            <label class="col col-form-label" for="description">
-                                @Localizer["description"]
+                            <label class="col col-form-label" for="descriptiom">
+                                @Localizer["decription"]
                             </label>
                             <div class="col-lg-9 col-sm-12">
-                                <AuthorizeTextArea Id="description" Placeholder="@Localizer["decription"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["descriptiom"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
                             <div class="col-1">
                                 <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
@@ -94,15 +97,7 @@ else
                                 </button>
                             </div>
                         </div>
-                        <ApiResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description"></ApiResources>
-                    </div>
-                </div>
-                <div id="secrets" class="card mb-3">
-                    <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="Model.Secrets" CreateModel="CreateSecret" />
-                    </div>
-                    <div class="card-body">
-                        <ApiSecrets Collection="@Model.Secrets" />
+                        <ApiScopeResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
                     </div>
                 </div>
                 <div id="claims" class="card mb-3">
@@ -112,25 +107,15 @@ else
                         </div>
                     </div>
                     <div class="card-body">
-                        <ApiClaimTypes Model="@Model" />
-                    </div>
-                </div>
-                <div id="scopes" class="card mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["Scopes"]</h5>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ApiApiScopes Model="@Model" />
+                        <ApiScopeClaimTypes Model="@Model" />
                     </div>
                 </div>
                 <div id="properties" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="Model.Properties" CreateModel="CreateProperty" />
+                        <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="@Model.Properties" CreateModel="CreateProperty" />
                     </div>
                     <div class="card-body">
-                        <ApiProperties Collection="@Model.Properties" />
+                        <ApiScopeProperties Collection="@Model.Properties" />
                     </div>
                 </div>
             </div>

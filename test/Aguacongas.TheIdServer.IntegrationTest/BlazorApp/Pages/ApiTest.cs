@@ -440,34 +440,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ApiProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
                     },
-                    Scopes = new List<ApiScope>
+                    ApiScopes = new List<ApiApiScope>
                     {
-                       new ApiScope
+                       new ApiApiScope
                        {
                            Id = GenerateId(),
-                           DisplayName = "test",
-                           ApiScopeClaims = new List<ApiScopeClaim>
-                           {
-                               new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
-                           },
-                           Resources = new List<ApiScopeLocalizedResource>()
-                       },
-                       new ApiScope
-                       {
-                           Id = apiScopeId,
-                           DisplayName = "filtered",
-                           ApiScopeClaims = new List<ApiScopeClaim>(),
-                           Resources = new List<ApiScopeLocalizedResource>
-                           {
-                               new ApiScopeLocalizedResource
-                               {
-                                   Id = GenerateId(),
-                                   ApiScopeId = apiScopeId,
-                                   CultureId = "en",
-                                   ResourceKind = EntityResourceKind.Description,
-                                   Value = GenerateId()
-                               }
-                           }
+                           ApiId = apiId,
+                           ApiScopeId = "filtered"
                        }
                     },
                     Secrets = new List<ApiSecret>

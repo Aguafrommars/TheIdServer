@@ -109,7 +109,7 @@ namespace Aguacongas.IdentityServer.Store
                 Enabled = api.Enabled,
                 Name = api.Id,
                 Properties = api.Properties.ToDictionary(p => p.Key, p => p.Value),
-                Scopes = api.Scopes.Select(s => s.Id).ToList(),
+                Scopes = api.ApiScopes.Select(s => s.ApiScopeId).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()
             };
         }

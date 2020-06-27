@@ -63,28 +63,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ApiSecret> Secrets { get; set; }
 
         /// <summary>
-        /// Gets or sets the scopes.
-        /// </summary>
-        /// <value>
-        /// The scopes.
-        /// </value>
-        public virtual ICollection<ApiScope> Scopes { get; set; }
-
-        /// <summary>
         /// Gets or sets the user claims.
         /// </summary>
         /// <value>
         /// The user claims.
         /// </value>
         public virtual ICollection<ApiClaim> ApiClaims { get; set; }
-
-        /// <summary>
-        /// Gets or sets the API scope claims.
-        /// </summary>
-        /// <value>
-        /// The API scope claims.
-        /// </value>
-        public virtual ICollection<ApiScopeClaim> ApiScopeClaims { get; set; }
 
         /// <summary>
         /// Gets or sets the properties.
@@ -101,6 +85,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The resources.
         /// </value>
         public virtual ICollection<ApiLocalizedResource> Resources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API scopes.
+        /// </summary>
+        /// <value>
+        /// The API scopes.
+        /// </value>
+        public virtual ICollection<ApiApiScope> ApiScopes { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.
@@ -125,16 +117,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public ProtectResource Clone()
         {
             var clone = MemberwiseClone() as ProtectResource;
-            if (clone.Scopes != null)
-            {
-                var scopes = clone.Scopes;
-                clone.Scopes = new List<ApiScope>(scopes.Count);
-                foreach(var scope in scopes)
-                {
-                    clone.Scopes.Add(scope.Clone());
-                }
-            }
-
             return clone;
         }
     }

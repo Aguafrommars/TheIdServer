@@ -164,6 +164,12 @@ namespace Aguacongas.IdentityServer.Store
                     Key = p.Key,
                     Value = p.Value
                 }).ToList(),
+                ApiScopes = api.Scopes.Select(s => new Entity.ApiApiScope
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ApiId = api.Name,
+                    ApiScopeId = s
+                }).ToList(),
                 Secrets = api.ApiSecrets.Select(s => new Entity.ApiSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -186,6 +192,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 ApiScopeClaims = scope.UserClaims.Select(c => new Entity.ApiScopeClaim
                 {
+                    Id = Guid.NewGuid().ToString(),
+                    ApiScopeId = scope.Name,
                     Type = c
                 }).ToList(),
                 Description = scope.Description,

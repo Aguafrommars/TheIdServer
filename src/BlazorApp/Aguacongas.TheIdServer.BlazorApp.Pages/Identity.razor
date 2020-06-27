@@ -42,13 +42,7 @@ else
                 <div class="col">
                     <ul class="list-inline text-lowercase">
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
-                        </li>
-                        <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
                         </li>
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>

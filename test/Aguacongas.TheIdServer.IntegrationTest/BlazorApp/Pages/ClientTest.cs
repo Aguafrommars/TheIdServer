@@ -155,12 +155,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 {
                     Id = firstId,
                     DisplayName = firstId,
-                    Scopes = new List<ApiScope>
+                    ApiScopes = new List<ApiApiScope>
                     {
-                        new ApiScope
+                        new ApiApiScope
                         {
-                            Id = firstId,
-                            DisplayName = firstId
+                            ApiId = firstId,
+                            ApiScopeId = firstId
                         }
                     }
                 });

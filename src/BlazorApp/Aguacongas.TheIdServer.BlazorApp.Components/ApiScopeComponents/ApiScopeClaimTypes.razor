@@ -3,9 +3,9 @@
         <ul class="list-inline">
             @foreach (var claim in Claims)
             {
-                <li @key="claim" class="list-inline-item">
+                <li class="list-inline-item">
                     <ClaimType @bind-Value="@claim.Type" Entity="@claim"
-                               DeleteClicked="() => OnDeleteClaimClicked(claim)" />
+                               DeleteClicked="() => OnClaimDeletedClicked(claim)" />
                 </li>
             }
             <li class="list-inline-item">

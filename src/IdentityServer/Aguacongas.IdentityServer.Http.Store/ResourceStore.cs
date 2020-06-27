@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 {
                     Take = null,
                     Filter = $"{nameof(ProtectResource.Id)} eq '{name}')",
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.ApiScopeClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)}"
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -64,8 +64,8 @@ namespace Aguacongas.IdentityServer.Http.Store
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Filter = $"{nameof(ProtectResource.Scopes)}/any(s:s/{nameof(ApiScope.Id)} eq '{name}')",
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
+                    Filter = $"{nameof(ProtectResource.ApiScopes)}/any(s:s/{nameof(ApiScope.Id)} eq '{name}')",
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -132,7 +132,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 ApiResources = (await _apiStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.Scopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }).ConfigureAwait(false)).Items.Select(a => a.ToApi()).ToList(),
                 IdentityResources = (await _identityStore.GetAsync(new PageRequest
                 {

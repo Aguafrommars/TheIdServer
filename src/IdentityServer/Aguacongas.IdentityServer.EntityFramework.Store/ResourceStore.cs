@@ -32,11 +32,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = from api in _context.Apis
                             .Include(a => a.ApiClaims)
-                            .Include(a => a.ApiScopeClaims)
                             .Include(a => a.Secrets)
                             .Include(a => a.Resources)
                             .Include(a => a.Properties)
-                            .Include(a => a.Scopes)
+                            .Include(a => a.ApiScopes)
                         where apiResourceNames.Contains(api.Id)
                         select api;
             return await query
@@ -55,14 +54,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = from api in _context.Apis
                             .Include(a => a.ApiClaims)
-                            .Include(a => a.ApiScopeClaims)
                             .Include(a => a.Secrets)
                             .Include(a => a.Resources)
                             .Include(a => a.Properties)
-                            .Include(a => a.Scopes)
-                        join scope in _context.ApiScopes
-                        on api.Id equals scope.Id
-                        where scopeNames.Contains(scope.Id)
+                            .Include(a => a.ApiScopes)
+                        where api.ApiScopes.Any(s => scopeNames.Contains(s.ApiScopeId))
                         select api;
 
             return await query
@@ -126,14 +122,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             {
                 ApiResources = await _context.Apis
                     .Include(a => a.ApiClaims)
-                    .Include(a => a.ApiScopeClaims)
                     .Include(a => a.Secrets)
                     .Include(a => a.Properties)
                     .Include(a => a.Resources)
-                    .Include(a => a.Scopes)
-                    .ThenInclude(s => s.ApiScopeClaims)
-                    .Include(a => a.Scopes)
-                    .ThenInclude(s => s.Resources)
+                    .Include(a => a.ApiScopes)
                     .AsNoTracking()
                     .Select(a => a.ToApi())
                     .ToListAsync()
@@ -144,6 +136,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                     .Include(i => i.Resources)
                     .AsNoTracking()
                     .Select(i => i.ToIdentity())
+                    .ToListAsync()
+                    .ConfigureAwait(false),
+                ApiScopes = await _context.ApiScopes
+                    .Include(s => s.ApiScopeClaims)
+                    .Include(s => s.Properties)
+                    .Include(i => i.Resources)
+                    .AsNoTracking()
+                    .Select(s => s.ToApiScope())
                     .ToListAsync()
                     .ConfigureAwait(false)
             };
