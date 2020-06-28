@@ -25,6 +25,25 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApiScopes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(nullable: false),
+                    Emphasize = table.Column<bool>(nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -148,6 +167,29 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApiLocalizedResources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    CultureId = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiId = table.Column<string>(nullable: false),
+                    ResourceKind = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiLocalizedResources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiLocalizedResources_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ApiProperty",
                 columns: table => new
                 {
@@ -163,32 +205,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     table.PrimaryKey("PK_ApiProperty", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ApiProperty_Apis_ApiId",
-                        column: x => x.ApiId,
-                        principalTable: "Apis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiScopes",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ApiId = table.Column<string>(nullable: false),
-                    Scope = table.Column<string>(nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 200, nullable: false),
-                    Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    Required = table.Column<bool>(nullable: false),
-                    Emphasize = table.Column<bool>(nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiScopes_Apis_ApiId",
                         column: x => x.ApiId,
                         principalTable: "Apis",
                         principalColumn: "Id",
@@ -215,6 +231,106 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         name: "FK_ApiSecrets_Apis_ApiId",
                         column: x => x.ApiId,
                         principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiApiScope",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApiId = table.Column<string>(nullable: false),
+                    ApiScopeId = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiApiScope", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiApiScope_Apis_ApiId",
+                        column: x => x.ApiId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApiApiScope_ApiScopes_ApiScopeId",
+                        column: x => x.ApiScopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiScopeClaims",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApiScopeId = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ProtectResourceId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
+                        column: x => x.ApiScopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeClaims_Apis_ProtectResourceId",
+                        column: x => x.ProtectResourceId,
+                        principalTable: "Apis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiScopeLocalizedResources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    CultureId = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ApiScopeId = table.Column<string>(nullable: false),
+                    ResourceKind = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopeLocalizedResources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeLocalizedResources_ApiScopes_ApiScopeId",
+                        column: x => x.ApiScopeId,
+                        principalTable: "ApiScopes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiScopeProperty",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApiScopeId = table.Column<string>(nullable: false),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiScopeProperty", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiScopeProperty_ApiScopes_ApiScopeId",
+                        column: x => x.ApiScopeId,
+                        principalTable: "ApiScopes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -277,6 +393,29 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                     table.PrimaryKey("PK_ClientIdpRestriction", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ClientIdpRestriction_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClientLocalizedResources",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    CultureId = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: true),
+                    ClientId = table.Column<string>(nullable: false),
+                    ResourceKind = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientLocalizedResources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClientLocalizedResources_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -374,64 +513,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiLocalizedResources",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    CultureId = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiId = table.Column<string>(nullable: false),
-                    ResourceKind = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiLocalizedResources", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiLocalizedResources_Apis_ApiId",
-                        column: x => x.ApiId,
-                        principalTable: "Apis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiLocalizedResources_Cultures_CultureId",
-                        column: x => x.CultureId,
-                        principalTable: "Cultures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientLocalizedResources",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    CultureId = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ClientId = table.Column<string>(nullable: false),
-                    ResourceKind = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientLocalizedResources", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClientLocalizedResources_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClientLocalizedResources_Cultures_CultureId",
-                        column: x => x.CultureId,
-                        principalTable: "Cultures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LocalizedResources",
                 columns: table => new
                 {
@@ -492,12 +573,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 {
                     table.PrimaryKey("PK_IdentityLocalizedResources", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IdentityLocalizedResources_Cultures_CultureId",
-                        column: x => x.CultureId,
-                        principalTable: "Cultures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_IdentityLocalizedResources_Identities_IdentityId",
                         column: x => x.IdentityId,
                         principalTable: "Identities",
@@ -550,67 +625,20 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ApiScopeClaims",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    ApiScopeId = table.Column<string>(nullable: false),
-                    Type = table.Column<string>(maxLength: 250, nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ProtectResourceId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalTable: "ApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeClaims_Apis_ProtectResourceId",
-                        column: x => x.ProtectResourceId,
-                        principalTable: "Apis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiScopeLocalizedResources",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    CultureId = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ModifiedAt = table.Column<DateTime>(nullable: true),
-                    ApiScopeId = table.Column<string>(nullable: false),
-                    ResourceKind = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopeLocalizedResources", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeLocalizedResources_ApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalTable: "ApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeLocalizedResources_Cultures_CultureId",
-                        column: x => x.CultureId,
-                        principalTable: "Cultures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Cultures",
                 columns: new[] { "Id", "CreatedAt", "ModifiedAt" },
-                values: new object[] { "en", new DateTime(2020, 6, 1, 17, 59, 12, 769, DateTimeKind.Utc).AddTicks(9339), null });
+                values: new object[] { "en", new DateTime(2020, 6, 25, 17, 8, 6, 149, DateTimeKind.Utc).AddTicks(9590), null });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiApiScope_ApiId",
+                table: "ApiApiScope",
+                column: "ApiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiApiScope_ApiScopeId",
+                table: "ApiApiScope",
+                column: "ApiScopeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApiClaims_ApiId_Type",
@@ -622,11 +650,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 name: "IX_ApiLocalizedResources_ApiId",
                 table: "ApiLocalizedResources",
                 column: "ApiId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiLocalizedResources_CultureId",
-                table: "ApiLocalizedResources",
-                column: "CultureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApiProperty_ApiId_Key",
@@ -651,14 +674,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 column: "ApiScopeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeLocalizedResources_CultureId",
-                table: "ApiScopeLocalizedResources",
-                column: "CultureId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiScopes_ApiId_Scope",
-                table: "ApiScopes",
-                columns: new[] { "ApiId", "Scope" },
+                name: "IX_ApiScopeProperty_ApiScopeId_Key",
+                table: "ApiScopeProperty",
+                columns: new[] { "ApiScopeId", "Key" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -687,11 +705,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 name: "IX_ClientLocalizedResources_ClientId",
                 table: "ClientLocalizedResources",
                 column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientLocalizedResources_CultureId",
-                table: "ClientLocalizedResources",
-                column: "CultureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientProperties_ClientId_Key",
@@ -730,11 +743,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 filter: "[Type] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentityLocalizedResources_CultureId",
-                table: "IdentityLocalizedResources",
-                column: "CultureId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_IdentityLocalizedResources_IdentityId",
                 table: "IdentityLocalizedResources",
                 column: "IdentityId");
@@ -754,6 +762,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApiApiScope");
+
+            migrationBuilder.DropTable(
                 name: "ApiClaims");
 
             migrationBuilder.DropTable(
@@ -767,6 +778,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
 
             migrationBuilder.DropTable(
                 name: "ApiScopeLocalizedResources");
+
+            migrationBuilder.DropTable(
+                name: "ApiScopeProperty");
 
             migrationBuilder.DropTable(
                 name: "ApiSecrets");
@@ -814,6 +828,9 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
                 name: "ApiScopes");
 
             migrationBuilder.DropTable(
+                name: "Apis");
+
+            migrationBuilder.DropTable(
                 name: "Clients");
 
             migrationBuilder.DropTable(
@@ -824,9 +841,6 @@ namespace Aguacongas.TheIdServer.Migrations.ConfigurationDb
 
             migrationBuilder.DropTable(
                 name: "Cultures");
-
-            migrationBuilder.DropTable(
-                name: "Apis");
         }
     }
 }

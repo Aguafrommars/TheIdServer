@@ -13,10 +13,12 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                 {
                     Id = table.Column<string>(nullable: false),
                     ClientId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(maxLength: 200, nullable: true),
                     Data = table.Column<string>(nullable: true),
+                    SessionId = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true),
-                    Expiration = table.Column<DateTime>(nullable: false)
+                    Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,6 +52,7 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                     ClientId = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(maxLength: 200, nullable: true),
                     Data = table.Column<string>(nullable: true),
+                    SessionId = table.Column<string>(nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedAt = table.Column<DateTime>(nullable: true)
@@ -66,6 +69,7 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                     Id = table.Column<string>(nullable: false),
                     ClientId = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(maxLength: 200, nullable: true),
+                    SessionId = table.Column<string>(nullable: true),
                     Data = table.Column<string>(nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
@@ -83,6 +87,7 @@ namespace Aguacongas.TheIdServer.Migrations.OperationalDb
                     Id = table.Column<string>(nullable: false),
                     ClientId = table.Column<string>(nullable: false),
                     UserId = table.Column<string>(maxLength: 200, nullable: false),
+                    SessionId = table.Column<string>(nullable: true),
                     Data = table.Column<string>(nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),

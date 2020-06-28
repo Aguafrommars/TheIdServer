@@ -117,18 +117,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
 
-            input = component.Find("#scopes #scope");
-
-            Assert.NotNull(input);
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
-
-            input = component.Find("#scopes #displayName");
-
-            Assert.NotNull(input);
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
-
             var form = component.Find("form");
 
             Assert.NotNull(form);
@@ -250,39 +238,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public async Task ClickScopesButtons_should_not_throw()
-        {
-            var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            var buttons = WaitForAllNodes(host, component, "#scopes button");
-
-            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            var expected = buttons.Count;
-            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
-
-            buttons = component.FindAll("#scopes button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            Assert.NotEqual(expected, buttons.Count);
-
-            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
-
-            buttons = component.FindAll("#scopes button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            Assert.Equal(expected, buttons.Count);
-        }
-
-        [Fact]
         public async Task ClickPropertiesButtons_should_not_throw()
         {
             var apiId = await CreateApi();
@@ -350,82 +305,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await host.WaitForNextRenderAsync(() => divs.Last().ClickAsync());
         }
 
-        [Fact]
-        public async Task DeleteScopeClaimsClick_should_delete_scope_claim()
-        {
-            var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            var div = WaitForNode(host, component, "#scopes div.select");
-
-            await host.WaitForNextRenderAsync(() => div.ClickAsync());
-
-            var form = component.Find("form");
-
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
-
-            await DbActionAsync<ConfigurationDbContext>(async context =>
-            {
-                var scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                Assert.False(await context.ApiScopeClaims.AnyAsync(c => c.ApiScopeId == scope.Id));
-            });
-        }
-
-        [Fact]
-        public async Task AddScopeClaims_should_validate_claim()
-        {
-            var apiId = await CreateApi();
-            ApiScope scope = null;
-            int expected = 0;
-            await DbActionAsync<ConfigurationDbContext>(async context =>
-            {
-                scope = await context.ApiScopes.FirstAsync(s => s.ApiId == apiId);
-                expected = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
-            });
-
-            CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            var input = WaitForNode(host, component, "#scopes input.new-claim");
-
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
-
-            var button = host.WaitForNode(component, "#scopes button.dropdown-item");
-
-            await host.WaitForNextRenderAsync(() => button.ClickAsync());
-
-            var form = component.Find("form");
-
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
-
-            await DbActionAsync<ConfigurationDbContext>(async context =>
-            {
-                var count = await context.ApiScopeClaims.CountAsync(c => c.ApiScopeId == scope.Id);
-                Assert.True(expected <= count);
-            });
-        }
-
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();
-            var apiScopeId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
             {
                 context.Apis.Add(new ProtectResource
@@ -440,36 +322,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ApiProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
                     },
-                    Scopes = new List<ApiScope>
+                    ApiScopes = new List<ApiApiScope>
                     {
-                       new ApiScope
+                       new ApiApiScope
                        {
                            Id = GenerateId(),
-                           Scope = apiId,
-                           DisplayName = "test",
-                           ApiScopeClaims = new List<ApiScopeClaim>
-                           {
-                               new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
-                           },
-                           Resources = new List<ApiScopeLocalizedResource>()
-                       },
-                       new ApiScope
-                       {
-                           Id = apiScopeId,
-                           Scope = "filtered",
-                           DisplayName = "filtered",
-                           ApiScopeClaims = new List<ApiScopeClaim>(),
-                           Resources = new List<ApiScopeLocalizedResource>
-                           {
-                               new ApiScopeLocalizedResource
-                               {
-                                   Id = GenerateId(),
-                                   ApiScopeId = apiScopeId,
-                                   CultureId = "en",
-                                   ResourceKind = EntityResourceKind.Description,
-                                   Value = GenerateId()
-                               }
-                           }
+                           ApiId = apiId,
+                           ApiScopeId = "filtered"
                        }
                     },
                     Secrets = new List<ApiSecret>

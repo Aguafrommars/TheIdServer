@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using IdentityServer4.Models;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -49,20 +50,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Services
                 new Client(), "test",
                 new string[] { "test" })
             {
-                RequestedResources = new Resources
+                RequestedResources = new ResourceValidationResult
                 {
-                    IdentityResources = new List<IdentityResource>
+                    Resources = new Resources
                     {
-                        new IdentityResource
+                        IdentityResources = new List<IdentityResource>
                         {
-                            Name= "test",
-                            Properties = new Dictionary<string, string>
+                            new IdentityResource
                             {
-                                [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ProxyProfilServiceTest).FullName
+                                Name= "test",
+                                Properties = new Dictionary<string, string>
+                                {
+                                    [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ProxyProfilServiceTest).FullName
+                                }
                             }
-
                         }
-                    },
+                    }
                 }
             };
 

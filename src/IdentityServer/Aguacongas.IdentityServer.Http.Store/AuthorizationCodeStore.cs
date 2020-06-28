@@ -1,71 +1,49 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Models;
+using Aguacongas.IdentityServer.Store.Entity;
+using IdentityModel;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using System;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using Models = IdentityServer4.Models;
 
 namespace Aguacongas.IdentityServer.Http.Store
 {
-    public class AuthorizationCodeStore : IAuthorizationCodeStore
+    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, Models.AuthorizationCode>, IAuthorizationCodeStore
     {
-        private readonly IAdminStore<Entity.AuthorizationCode> _store;
-        private readonly IPersistentGrantSerializer _serializer;
-
-        public AuthorizationCodeStore(IAdminStore<Entity.AuthorizationCode> store, 
-            IPersistentGrantSerializer serializer)
+        public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store, 
+            IPersistentGrantSerializer serializer) : base(store, serializer)
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
-        public async Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
-        {
-            code = code ?? throw new ArgumentNullException(nameof(code));
+        public Task<Models.AuthorizationCode> GetAuthorizationCodeAsync(string code)
+            => GetAsync(code);
 
-            var response = await _store.GetAsync(new PageRequest
+        public Task RemoveAuthorizationCodeAsync(string code)
+            => RemoveAsync(code);
+
+        public Task<string> StoreAuthorizationCodeAsync(Models.AuthorizationCode code)
+            => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
+
+        protected override string GetClientId(Models.AuthorizationCode dto)
+            => dto?.ClientId;
+
+        protected override string GetSubjectId(Models.AuthorizationCode dto)
+        {
+            var subject = dto?.Subject;
+            if (subject == null)
             {
-                Filter = $"{nameof(Entity.AuthorizationCode.Id)} eq '{code}'",
-                Select = nameof(Entity.AuthorizationCode.Data)
-            }).ConfigureAwait(false);
-            if (response.Count == 1)
-            {
-                return _serializer.Deserialize<AuthorizationCode>(response.Items.First().Data);
+                throw new InvalidOperationException("No subject");
             }
-            return null;
-        }
 
-        public async Task RemoveAuthorizationCodeAsync(string code)
-        {
-            code = code ?? throw new ArgumentNullException(nameof(code));
+            var idClaim = subject.FindFirst(JwtClaimTypes.Subject) ??
+                          subject.FindFirst(ClaimTypes.NameIdentifier) ??
+                          subject.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]) ??
+                          throw new Exception("Unknown userid");
 
-            var response = await _store.GetAsync(new PageRequest
-            {
-                Filter = $"{nameof(Entity.AuthorizationCode.Id)} eq '{code}'",
-                Select = nameof(Entity.AuthorizationCode.Id)
-            }).ConfigureAwait(false);
-            foreach(var item in response.Items)
-            {
-                await _store.DeleteAsync(item.Id).ConfigureAwait(false);
-            }
-        }
-
-        public async Task<string> StoreAuthorizationCodeAsync(AuthorizationCode code)
-        {
-            code = code ?? throw new ArgumentNullException(nameof(code));
-
-            var newEntity = new Entity.AuthorizationCode
-            {
-                Id = Guid.NewGuid().ToString(),
-                ClientId = code.ClientId,
-                Data = _serializer.Serialize(code),
-                Expiration = code.CreationTime.AddSeconds(code.Lifetime)
-            };
-
-            var entity = await _store.CreateAsync(newEntity).ConfigureAwait(false);
-            return entity.Id;
+            return idClaim.Value;
         }
     }
 }

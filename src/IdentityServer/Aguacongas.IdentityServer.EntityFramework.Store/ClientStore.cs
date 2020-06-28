@@ -27,7 +27,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .Include(c => c.RedirectUris)
                 .Include(c => c.Resources)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == clientId).ConfigureAwait(false);
+                .FirstOrDefaultAsync(c => c.Id == clientId)
+                .ConfigureAwait(false);
             return entity.ToClient();
         }
     }

@@ -23,9 +23,9 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             var clientStoreMock = new Mock<IClientStore>();
             clientStoreMock.Setup(m => m.FindClientByIdAsync("test")).ReturnsAsync(new Client());
             var resourceStoreMock = new Mock<IResourceStore>();
-            resourceStoreMock.Setup(m => m.FindApiResourceAsync("test"))
-                .ReturnsAsync(new ApiResource());
-            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeAsync(It.IsAny<IEnumerable<string>>()))
+            resourceStoreMock.Setup(m => m.FindApiResourcesByNameAsync(It.IsAny<IEnumerable<string>>()))
+                .ReturnsAsync(new[] { new ApiResource() });
+            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeNameAsync(It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(Array.Empty<IdentityResource>());
 
             var services = new ServiceCollection()
@@ -64,15 +64,15 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             var clientStoreMock = new Mock<IClientStore>();
             clientStoreMock.Setup(m => m.FindClientByIdAsync("test")).ReturnsAsync(new Client());
             var resourceStoreMock = new Mock<IResourceStore>();
-            resourceStoreMock.Setup(m => m.FindApiResourceAsync("test"))
-                .ReturnsAsync(new ApiResource
+            resourceStoreMock.Setup(m => m.FindApiResourcesByNameAsync(It.IsAny<IEnumerable<string>>()))
+                .ReturnsAsync(new[] {new ApiResource
                         {
                             Properties = new Dictionary<string, string>
                             {
                                 [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
                             }
-                        });
-            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeAsync(It.IsAny<IEnumerable<string>>()))
+                        }});
+            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeNameAsync(It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(Array.Empty<IdentityResource>());
 
             var services = new ServiceCollection()
@@ -111,9 +111,9 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             var clientStoreMock = new Mock<IClientStore>();
             clientStoreMock.Setup(m => m.FindClientByIdAsync("test")).ReturnsAsync(new Client());
             var resourceStoreMock = new Mock<IResourceStore>();
-            resourceStoreMock.Setup(m => m.FindApiResourceAsync("test"))
-                .ReturnsAsync(null as ApiResource);
-            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeAsync(It.IsAny<IEnumerable<string>>()))
+            resourceStoreMock.Setup(m => m.FindApiResourcesByNameAsync(It.IsAny<IEnumerable<string>>()))
+                .ReturnsAsync(Array.Empty<ApiResource>());
+            resourceStoreMock.Setup(m => m.FindIdentityResourcesByScopeNameAsync(It.IsAny<IEnumerable<string>>()))
                 .ReturnsAsync(new IdentityResource[]
                     {
                         new IdentityResource()

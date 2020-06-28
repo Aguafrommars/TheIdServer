@@ -257,9 +257,6 @@ namespace Aguacongas.TheIdServer
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
             }
-
-
-            scopedProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
         }
 
         private void AddDefaultServices(IServiceCollection services)
@@ -325,7 +322,6 @@ namespace Aguacongas.TheIdServer
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedConfiguration(scope);
                 SeedData.SeedUsers(scope);
-                SeedData.SeedLocalizedResources(scope);
             }
 
             if (Configuration.GetValue<bool>("SeedProvider"))

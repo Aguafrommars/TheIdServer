@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -42,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IPersistedGrantService, PersistedGrantService>()
                 .AddTransient<SendGridEmailSender>()
                 .AddTransient<IProviderClient, ProviderClient>()
+                .AddSingleton<IHostedService, SchemeChangeHost>()
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<ExternalClaimsTransformer<TUser>>()

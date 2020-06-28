@@ -129,7 +129,15 @@ namespace IdentityServer4.Quickstart.UI
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
             additionalLocalClaims.AddRange(principal.Claims);
             var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id;
-            await HttpContext.SignInAsync(user.Id, name, provider, localSignInProps, additionalLocalClaims.ToArray());
+
+            // issue authentication cookie for user
+            var isuser = new IdentityServerUser(providerUserId)
+            {
+                DisplayName = user.UserName,
+                IdentityProvider = provider,
+                AdditionalClaims = additionalLocalClaims
+            };
+            await HttpContext.SignInAsync(isuser, localSignInProps);
 
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -139,13 +147,11 @@ namespace IdentityServer4.Quickstart.UI
 
             // check if external login is in the context of an OIDC request
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.ClientId));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.Client.ClientId));
 
-            if (context != null && await _clientStore.IsPkceClientAsync(context.ClientId))
+            if (context != null && context.IsNativeClient())
             {
-                // if the client is PKCE then we assume it's native, so this change in how to
-                // return the response is for better UX for the end user.
-                return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
+                return this.LoadingPage("Redirect", returnUrl);
             }
 
             return Redirect(returnUrl);

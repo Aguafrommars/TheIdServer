@@ -5,7 +5,6 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
@@ -14,12 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer
@@ -61,7 +57,6 @@ namespace Aguacongas.TheIdServer
 
             SeedUsers(scope);
             SeedConfiguration(scope);
-            SeedLocalizedResources(scope);
         }
 
         public static void SeedConfiguration(IServiceScope scope)
@@ -83,6 +78,15 @@ namespace Aguacongas.TheIdServer
                 {
                     context.Identities.Add(resource.ToEntity());
                     Console.WriteLine($"Add identity resource {resource.DisplayName}");
+                }
+            }
+
+            if (!context.ApiScopes.Any())
+            {
+                foreach (var resource in Config.GetApiScopes())
+                {
+                    context.ApiScopes.Add(resource.ToEntity());
+                    Console.WriteLine($"Add api scope resource {resource.DisplayName}");
                 }
             }
 
@@ -214,27 +218,6 @@ namespace Aguacongas.TheIdServer
                     HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
                     Options = options
                 }).ConfigureAwait(false);
-            }
-        }
-
-        internal static void SeedLocalizedResources(IServiceScope scope)
-        {
-            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            var defaultCulture = context.Cultures.FirstOrDefault(c => c.Id == "en");
-            if (defaultCulture != null && !context.LocalizedResources.Any() && File.Exists("Resources/resources.en.json"))
-            {
-                using var reader = File.OpenText("Resources/resources.en.json");
-                var localizedResources = JsonSerializer.Deserialize<IEnumerable<LocalizedResource>>(reader.ReadToEnd(), new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                foreach(var resource in localizedResources)
-                {
-                    resource.Id = Guid.NewGuid().ToString();
-                    resource.Culture = defaultCulture;
-                    context.LocalizedResources.Add(resource);
-                }
-                context.SaveChanges();
             }
         }
     }

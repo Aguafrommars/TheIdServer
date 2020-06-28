@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 
 namespace Aguacongas.IdentityServer.Store
 {
@@ -51,7 +50,7 @@ namespace Aguacongas.IdentityServer.Store
                 AuthorizationCodeLifetime = client.AuthorizationCodeLifetime,
                 BackChannelLogoutSessionRequired = client.BackChannelLogoutSessionRequired,
                 BackChannelLogoutUri = client.BackChannelLogoutUri,
-                Claims = client.ClientClaims.Select(c => new Claim(c.Type, c.Value)).ToList(),
+                Claims = client.ClientClaims.Select(c => new ClientClaim(c.Type, c.Value)).ToList(),
                 ClientClaimsPrefix = client.ClientClaimsPrefix,
                 ClientId = client.Id,
                 ClientName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
@@ -110,20 +109,7 @@ namespace Aguacongas.IdentityServer.Store
                 Enabled = api.Enabled,
                 Name = api.Id,
                 Properties = api.Properties.ToDictionary(p => p.Key, p => p.Value),
-                Scopes = api.Scopes.Select(s => new Scope
-                {
-                    Description = s.Resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
-                        && r.CultureId == cultureId)?.Value ?? s.Description,
-                    DisplayName = s.Resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
-                    && r.CultureId == cultureId)?.Value ?? s.DisplayName,
-                    Emphasize = s.Emphasize,
-                    Name = s.Scope,
-                    Required = s.Required,
-                    ShowInDiscoveryDocument = s.ShowInDiscoveryDocument,
-                    UserClaims = api.ApiScopeClaims
-                        .Where(s => s.ApiScopeId == s.Id)
-                        .Select(c => c.Type).ToList()
-                }).ToList(),
+                Scopes = api.ApiScopes.Select(s => s.ApiScopeId).ToList(),
                 UserClaims = api.ApiClaims.Select(c => c.Type).ToList()
             };
         }
@@ -150,6 +136,31 @@ namespace Aguacongas.IdentityServer.Store
                 Required = identity.Required,
                 ShowInDiscoveryDocument = identity.ShowInDiscoveryDocument,
                 UserClaims = identity.IdentityClaims.Select(c => c.Type).ToList()
+            };
+        }
+
+        public static ApiScope ToApiScope(this Entity.ApiScope apiScope)
+        {
+            if (apiScope == null)
+            {
+                return null;
+            }
+            var cultureId = CultureInfo.CurrentCulture.Name;
+            var resources = apiScope.Resources;
+            return new ApiScope
+            {
+                Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
+                    && r.CultureId == cultureId)?.Value ?? apiScope.Description,
+                DisplayName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
+                && r.CultureId == cultureId)?.Value ?? apiScope.DisplayName,
+                Emphasize = apiScope.Emphasize,
+                Name = apiScope.Id,
+                Required = apiScope.Required,
+                ShowInDiscoveryDocument = apiScope.ShowInDiscoveryDocument,
+                UserClaims = apiScope.ApiScopeClaims
+                        .Select(c => c.Type).ToList(),
+                Properties = apiScope.Properties
+                        .ToDictionary(p => p.Key, p => p.Value)
             };
         }
 

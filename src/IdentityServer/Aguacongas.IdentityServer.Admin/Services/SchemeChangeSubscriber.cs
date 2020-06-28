@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -40,11 +41,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Subscribes this instance.
         /// </summary>
-        public void Subscribe()
+        public Task SubscribeAsync(CancellationToken cancellationToken)
         {
-            Task.Delay(100).ContinueWith(t =>
+            Task.Delay(500, cancellationToken).ContinueWith(t =>
             {
-                var connection = _factory.GetConnection();
+                var connection = _factory.GetConnection(cancellationToken);
                 if (connection == null)
                 {
                     return;
@@ -67,8 +68,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     await _manager.UpdateAsync(definition).ConfigureAwait(false);
                 });
 
-                _factory.StartConnectionAsync().ContinueWith(t => { });
+                _factory.StartConnectionAsync(cancellationToken).ContinueWith(t => { });
             });
+
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Uns the subscribe asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public Task UnSubscribeAsync(CancellationToken cancellationToken)
+        {
+            return _factory.StopConnectionAsync(cancellationToken);
         }
     }
 }
