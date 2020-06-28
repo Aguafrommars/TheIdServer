@@ -71,15 +71,6 @@ namespace Microsoft.AspNetCore.Components.Forms
 
         private static IValidator GetValidatorForModel(object entity, object model)
         {
-            if (model is ApiScopeClaim claim)
-            {
-                return new ApiScopeClaimValidator(claim.ApiScope);
-            }
-            if (model is ApiScopeLocalizedResource scopResource)
-            {
-                var entityValidatorType = typeof(EntityResourceValidator<>).MakeGenericType(model.GetType());
-                return (IValidator)Activator.CreateInstance(entityValidatorType, scopResource.ApiScope, scopResource.ResourceKind);
-            }
             if (model is IEntityResource resource)
             {
                 var entityValidatorType = typeof(EntityResourceValidator<>).MakeGenericType(model.GetType());              

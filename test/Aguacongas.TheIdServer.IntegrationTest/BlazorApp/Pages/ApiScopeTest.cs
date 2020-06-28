@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     [Collection("api collection")]
     public class ApiScopeTest : EntityPageTestBase
     {
-        public override string Entity => "identityresource";
+        public override string Entity => "apiscope";
         public ApiScopeTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
         {
         }
@@ -26,11 +25,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task OnAddTranslation_should_validate_resource()
         {
-            string identityId = await CreateEntity();
+            string apiScopeId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITER,
-                identityId,
+                apiScopeId,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -103,11 +102,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task OnFilterChanged_should_filter_properties_and_claims()
         {
-            string identityId = await CreateEntity();
+            string apiScopeId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITER,
-                identityId,
+                apiScopeId,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -122,7 +121,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
-                Value = identityId
+                Value = apiScopeId
             }));
 
             string markup = component.GetMarkup();
@@ -165,31 +164,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var identity = await context.Identities.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, identity.DisplayName);
+                var apiScope = await context.ApiScopes.FirstOrDefaultAsync(a => a.Id == identityId);
+                Assert.Equal(expected, apiScope.DisplayName);
             });
         }
 
         private async Task<string> CreateEntity()
         {
-            var identityId = GenerateId();
+            var apiScopeId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
             {
-                context.Identities.Add(new IdentityResource
+                context.ApiScopes.Add(new ApiScope
                 {
-                    Id = identityId,
-                    DisplayName = identityId,
-                    IdentityClaims = new List<IdentityClaim>
+                    Id = apiScopeId,
+                    DisplayName = apiScopeId,
+                    ApiScopeClaims = new List<ApiScopeClaim>
                     {
-                        new IdentityClaim { Id = GenerateId(), Type = "filtered" }
+                        new ApiScopeClaim { Id = GenerateId(), Type = "filtered" }
                     },
-                    Properties = new List<IdentityProperty>
+                    Properties = new List<ApiScopeProperty>
                     {
-                        new IdentityProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
+                        new ApiScopeProperty { Id = GenerateId(), Key = "filtered", Value = "filtered" }
                     },
-                    Resources = new List<IdentityLocalizedResource>
+                    Resources = new List<ApiScopeLocalizedResource>
                     {
-                        new IdentityLocalizedResource
+                        new ApiScopeLocalizedResource
                         {
                             Id = GenerateId(),
                             ResourceKind = EntityResourceKind.DisplayName,
@@ -201,7 +200,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
                 return context.SaveChangesAsync();
             });
-            return identityId;
+            return apiScopeId;
         }
     }
 }
