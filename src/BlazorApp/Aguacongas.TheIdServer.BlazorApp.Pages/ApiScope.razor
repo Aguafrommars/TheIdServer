@@ -25,16 +25,13 @@ else
                         <h3>@Id</h3>
                     }
                 </div>
-                @if (!NonEditable)
-                {
-                    <div>
-                        <SaveButton />
-                        @if (!IsNew)
-                        {
-                            <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
-                        }
-                    </div>
-                }
+                <div>
+                    <SaveButton />
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
+                </div>
                 <div class="col">
                     <Filter CssClass="mt-1" />
                 </div>
@@ -95,6 +92,20 @@ else
                                 <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
                                     <span class="oi oi-plus"></span>
                                 </button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="emphasize" Label="@Localizer["emphasize"]" @bind-Value="@Model.Emphasize" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="showInDiscoveryDocument" Label="@Localizer["show in discovery document"]" @bind-Value="@Model.ShowInDiscoveryDocument" />
                             </div>
                         </div>
                         <ApiScopeResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />

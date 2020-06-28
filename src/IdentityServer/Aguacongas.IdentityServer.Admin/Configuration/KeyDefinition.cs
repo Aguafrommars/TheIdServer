@@ -2,7 +2,7 @@
 {
     internal class KeyDefinition
     {
-        public KeyKinds? Kind { get; set; }
+        public KeyKinds? Type { get; set; }
         public bool? Persisted { get; set; }
         public string FilePath { get; set; }
         public string Password { get; set; }

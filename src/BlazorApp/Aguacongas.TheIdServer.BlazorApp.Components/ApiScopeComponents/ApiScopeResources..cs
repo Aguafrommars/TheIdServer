@@ -2,7 +2,7 @@
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiScopeComponents
 {
-    public class IdentityResources : EntityResources<ApiScopeLocalizedResource>
+    public class ApiScopeResources : EntityResources<ApiScopeLocalizedResource>
     {
     }
 }

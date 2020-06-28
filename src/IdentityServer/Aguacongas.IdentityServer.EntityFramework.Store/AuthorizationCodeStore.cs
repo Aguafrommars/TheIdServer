@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 throw new InvalidOperationException("No subject");
             }
 
-            var idClaim =  subject.FindFirst(JwtClaimTypes.Subject) ??
+            var idClaim = subject.FindFirst(JwtClaimTypes.Subject) ??
                           subject.FindFirst(ClaimTypes.NameIdentifier) ??
                           subject.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]) ??
                           throw new Exception("Unknown userid");

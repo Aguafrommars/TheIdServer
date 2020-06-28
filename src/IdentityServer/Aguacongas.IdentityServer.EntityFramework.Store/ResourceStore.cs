@@ -77,7 +77,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = from api in _context.ApiScopes
                             .Include(a => a.ApiScopeClaims)
-                            .Include(a => a.Resources)                            
+                            .Include(a => a.Properties)
+                            .Include(a => a.Resources)
                         join scope in _context.ApiScopes
                         on api.Id equals scope.Id
                         where scopeNames.Contains(scope.Id)

@@ -151,18 +151,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var secondId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(async c =>
             {
-                await c.Apis.AddAsync(new ProtectResource
+                await c.ApiScopes.AddAsync(new ApiScope
                 {
                     Id = firstId,
                     DisplayName = firstId,
-                    ApiScopes = new List<ApiApiScope>
-                    {
-                        new ApiApiScope
-                        {
-                            ApiId = firstId,
-                            ApiScopeId = firstId
-                        }
-                    }
                 });
 
                 await c.Identities.AddAsync(new IdentityResource

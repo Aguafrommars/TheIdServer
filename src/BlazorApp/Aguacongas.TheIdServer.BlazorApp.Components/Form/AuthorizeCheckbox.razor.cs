@@ -13,6 +13,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         private void Togle()
         {
             Value = !Value;
+            EditContext.NotifyFieldChanged(FieldIdentifier);
         }
     }
 }

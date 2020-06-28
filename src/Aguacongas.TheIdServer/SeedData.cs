@@ -61,7 +61,6 @@ namespace Aguacongas.TheIdServer
 
             SeedUsers(scope);
             SeedConfiguration(scope);
-            SeedLocalizedResources(scope);
         }
 
         public static void SeedConfiguration(IServiceScope scope)
@@ -223,27 +222,6 @@ namespace Aguacongas.TheIdServer
                     HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
                     Options = options
                 }).ConfigureAwait(false);
-            }
-        }
-
-        internal static void SeedLocalizedResources(IServiceScope scope)
-        {
-            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            var defaultCulture = context.Cultures.FirstOrDefault(c => c.Id == "en");
-            if (defaultCulture != null && !context.LocalizedResources.Any() && File.Exists("Resources/resources.en.json"))
-            {
-                using var reader = File.OpenText("Resources/resources.en.json");
-                var localizedResources = JsonSerializer.Deserialize<IEnumerable<LocalizedResource>>(reader.ReadToEnd(), new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                foreach(var resource in localizedResources)
-                {
-                    resource.Id = Guid.NewGuid().ToString();
-                    resource.Culture = defaultCulture;
-                    context.LocalizedResources.Add(resource);
-                }
-                context.SaveChanges();
             }
         }
     }

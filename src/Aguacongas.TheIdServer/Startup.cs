@@ -322,7 +322,6 @@ namespace Aguacongas.TheIdServer
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedConfiguration(scope);
                 SeedData.SeedUsers(scope);
-                SeedData.SeedLocalizedResources(scope);
             }
 
             if (Configuration.GetValue<bool>("SeedProvider"))

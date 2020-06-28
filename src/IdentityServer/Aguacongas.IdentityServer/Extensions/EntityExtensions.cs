@@ -158,8 +158,9 @@ namespace Aguacongas.IdentityServer.Store
                 Required = apiScope.Required,
                 ShowInDiscoveryDocument = apiScope.ShowInDiscoveryDocument,
                 UserClaims = apiScope.ApiScopeClaims
-                        .Where(s => s.ApiScopeId == s.Id)
-                        .Select(c => c.Type).ToList()
+                        .Select(c => c.Type).ToList(),
+                Properties = apiScope.Properties
+                        .ToDictionary(p => p.Key, p => p.Value)
             };
         }
 

@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 {
                     Take = null,
                     Filter = $"{nameof(ProtectResource.Id)} eq '{name}')",
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)}"
+                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 {
                     Take = null,
                     Filter = $"{nameof(ApiScope.Id)} eq '{name}')",
-                    Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Resources)}"
+                    Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
                 }));
             }
             await Task.WhenAll(taskList)
@@ -138,7 +138,12 @@ namespace Aguacongas.IdentityServer.Http.Store
                 {
                     Take = null,
                     Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
-                }).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList()
+                }).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList(),
+                ApiScopes = (await _apiScopeStore.GetAsync(new PageRequest
+                {
+                    Take = null,
+                    Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
+                }).ConfigureAwait(false)).Items.Select(s => s.ToApiScope()).ToList()
             };
         }
     }

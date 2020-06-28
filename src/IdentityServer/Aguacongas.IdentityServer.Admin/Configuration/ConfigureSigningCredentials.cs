@@ -63,7 +63,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
         {
             var key = _configuration.Get<KeyDefinition>();
             
-            switch (key.Kind)
+            switch (key.Type)
             {
                 case KeyKinds.Development:
                     var developmentKeyPath = Path.Combine(Directory.GetCurrentDirectory(), key.FilePath ?? DefaultTempKeyRelativePath);
@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
                 case null:
                     throw new InvalidOperationException($"Key type not specified.");
                 default:
-                    throw new InvalidOperationException($"Invalid key type '{key.Kind?.ToString() ?? "(null)"}'.");
+                    throw new InvalidOperationException($"Invalid key type '{key.Type?.ToString() ?? "(null)"}'.");
             }
         }
 
