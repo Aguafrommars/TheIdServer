@@ -80,12 +80,12 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
                     _logger.LogInformation($"Loading certificate file at '{pfxPath}' with storage flags '{key.StorageFlags}'.");
                     return new SigningCredentials(new X509SecurityKey(SigningKeysLoader.LoadFromFile(pfxPath, key.Password, storageFlags)), "RS256");
                 case KeyKinds.Store:
-                    if (!Enum.TryParse<StoreLocation>(key.StoreLocation, out var storeLocation))
+                    if (!key.StoreLocation.HasValue)
                     {
                         throw new InvalidOperationException($"Invalid certificate store location '{key.StoreLocation}'.");
                     }
                     _logger.LogInformation($"Loading certificate with subject '{key.Name}' in '{key.StoreLocation}\\{key.StoreName}'.");
-                    return new SigningCredentials(new X509SecurityKey(SigningKeysLoader.LoadFromStoreCert(key.Name, key.StoreName, storeLocation, GetCurrentTime())), "RS256");
+                    return new SigningCredentials(new X509SecurityKey(SigningKeysLoader.LoadFromStoreCert(key.Name, key.StoreName, key.StoreLocation.Value, GetCurrentTime())), "RS256");
                 case null:
                     throw new InvalidOperationException($"Key type not specified.");
                 default:
