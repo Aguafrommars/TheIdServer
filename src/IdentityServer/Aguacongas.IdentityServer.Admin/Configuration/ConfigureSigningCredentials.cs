@@ -39,7 +39,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
         }
 
         /// <summary>
-        /// Invoked to configure a <typeparamref name="TOptions" /> instance.
+        /// Invoked to configure a <see name="CredentialsOptions" /> instance.
         /// </summary>
         /// <param name="options">The options instance to configure.</param>
         public void Configure(CredentialsOptions options)

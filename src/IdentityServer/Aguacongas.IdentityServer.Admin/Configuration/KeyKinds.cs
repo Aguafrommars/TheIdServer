@@ -1,6 +1,6 @@
 ﻿namespace Aguacongas.IdentityServer.Admin.Configuration
 {
-    public enum KeyKinds
+    internal enum KeyKinds
     {
         File,
         Development,

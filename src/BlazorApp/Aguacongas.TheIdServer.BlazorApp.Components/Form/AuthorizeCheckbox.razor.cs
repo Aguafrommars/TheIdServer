@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
 {
@@ -10,10 +11,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         [Parameter]
         public string Label { get; set; }
 
-        private void Togle()
+        private Task Togle()
         {
             Value = !Value;
             EditContext.NotifyFieldChanged(FieldIdentifier);
+            return ValueChanged.InvokeAsync(Value);
         }
     }
 }

@@ -97,22 +97,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
         }
 
         /// <summary>
-        /// Loads the user by the subject id.
-        /// </summary>
-        /// <param name="subjectId"></param>
-        /// <returns></returns>
-        protected virtual async Task<TUser> FindUserAsync(string subjectId)
-        {
-            var user = await UserManager.FindByIdAsync(subjectId).ConfigureAwait(false);
-            if (user == null)
-            {
-                Logger?.LogWarning("No user found matching subject Id: {subjectId}", subjectId);
-            }
-
-            return user;
-        }
-
-        /// <summary>
         /// Gets the claims from resource.
         /// </summary>
         /// <param name="resource">The resource.</param>
