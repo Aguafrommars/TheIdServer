@@ -1,8 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,7 +45,6 @@ namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
             Assert.NotNull(provider.GetService<IRefreshTokenStore>());
             Assert.NotNull(provider.GetService<IReferenceTokenStore>());
             Assert.NotNull(provider.GetService<IUserConsentStore>());
-            Assert.NotNull(provider.GetService<IGetAllUserConsentStore>());
             Assert.NotNull(provider.GetService<IDeviceFlowStore>());
         }
     }

@@ -1,0 +1,17 @@
+﻿<div class="row">
+    <div class="col">
+        <ul class="list-inline">
+            @foreach (var scope in Scopes)
+            {
+                <li @key="scope" class="list-inline-item">
+                    <ApiApiScope @bind-Value="@scope.ApiScopeId" Entity="@scope"
+                              DeleteClicked="() => OnDeleteScopeClicked(scope)" />
+                </li>
+            }
+            <li class="list-inline-item">
+                <ApiApiScope @bind-Value="@_scope.ApiScopeId" Entity="@_scope"
+                          EntityChanged="() => OnScopeValueChanged(_scope)" />
+            </li>
+        </ul>
+    </div>
+</div>

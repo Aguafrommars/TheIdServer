@@ -1,18 +1,19 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
 {
-    public partial class ApiScope
+    public partial class ApiApiScopes
     {
-        [Parameter]
-        public ICollection<Entity.ApiScope> Collection { get; set; }
+        private IEnumerable<Entity.ApiApiScope> Scopes => Model.ApiScopes.Where(s => s.ApiScopeId == null || s.ApiScopeId.Contains(HandleModificationState.FilterTerm));
+        private Entity.ApiApiScope _scope = new Entity.ApiApiScope();
 
         [Parameter]
-        public Entity.ApiScope Scope { get; set; }
+        public Entity.ProtectResource Model { get; set; }
 
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
@@ -26,7 +27,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
 
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
         {
-            if (entity is Entity.ApiScope)
+            if (entity is Entity.ApiApiScope)
             {
                 StateHasChanged();
             }
@@ -37,22 +38,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
             StateHasChanged();
         }
 
-        private void OnDeleteScopeClicked()
+        private void OnDeleteScopeClicked(Entity.ApiApiScope scope)
         {
-            Collection.Remove(Scope);
-            HandleModificationState.EntityDeleted(Scope);
+            Model.ApiScopes.Remove(scope);
+            HandleModificationState.EntityDeleted(scope);
         }
 
-        private Task AddResource(Entity.EntityResourceKind kind)
+        private void OnScopeValueChanged(Entity.ApiApiScope scope)
         {
-            var entity = new Entity.ApiScopeLocalizedResource
-            {
-                ResourceKind = kind,
-                ApiScope = Scope
-            };
-            Scope.Resources.Add(entity);
-            HandleModificationState.EntityCreated(entity);
-            return Task.CompletedTask;
+            Model.ApiScopes.Add(scope);
+            _scope = new Entity.ApiApiScope { Api = Model };
+            scope.Id = Guid.NewGuid().ToString();
+            HandleModificationState.EntityCreated(scope);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy().SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
         }
 
-        private IClientProxy GetClientProxy()
+        private IClientProxy GetClientProxy(CancellationToken cancellationToken)
         {
-            var connection = _hubConnectionFactory.GetConnection();
+            var connection = _hubConnectionFactory.GetConnection(cancellationToken);
             return _context.Clients.AllExcept(connection?.ConnectionId);
         }
     }

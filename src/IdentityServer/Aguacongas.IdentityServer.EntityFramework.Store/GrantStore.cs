@@ -60,7 +60,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var entity = await GetEntityByHandle(handle)
                 .ConfigureAwait(false);
-
+            if (entity == null)
+            {
+                return;
+            }
             _context.Remove(entity);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }

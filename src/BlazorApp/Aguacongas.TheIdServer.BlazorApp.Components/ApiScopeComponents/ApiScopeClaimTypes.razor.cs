@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
+namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiScopeComponents
 {
     public partial class ApiScopeClaimTypes
     {
         private IEnumerable<Entity.ApiScopeClaim> Claims => Model.ApiScopeClaims.Where(c => c.Type != null && c.Type.Contains(HandleModificationState.FilterTerm));
-
         private Entity.ApiScopeClaim _claim = new Entity.ApiScopeClaim();
 
         [Parameter]
@@ -21,7 +20,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
 
         protected override void OnInitialized()
         {
-            _claim.ApiScope = Model;
             HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
             HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
             base.OnInitialized();
@@ -40,7 +38,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
             StateHasChanged();
         }
 
-        private void OnDeleteClaimClicked(Entity.ApiScopeClaim claim)
+        private void OnClaimDeletedClicked(Entity.ApiScopeClaim claim)
         {
             Model.ApiScopeClaims.Remove(claim);
             HandleModificationState.EntityDeleted(claim);
@@ -49,7 +47,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
         private void OnClaimValueChanged(Entity.ApiScopeClaim claim)
         {
             Model.ApiScopeClaims.Add(claim);
-            _claim = new Entity.ApiScopeClaim { ApiScope = Model };
+            _claim = new Entity.ApiScopeClaim();
             claim.Id = Guid.NewGuid().ToString();
             HandleModificationState.EntityCreated(claim);
         }

@@ -12,6 +12,7 @@
 		<Description>TheIdServer administration application.</Description>
 		<DebugType>Full</DebugType>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,5 +39,9 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 </Project>

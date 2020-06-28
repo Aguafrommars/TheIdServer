@@ -1,8 +1,10 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using IdentityModel;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -77,6 +79,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
             var authorizationCode = new IdentityServer4.Models.AuthorizationCode
             {                
                 ClientId = GenerateId(),
+                Subject = new ClaimsPrincipal(new ClaimsIdentity(new [] { new Claim(JwtClaimTypes.Subject, "test") }))
             };
             await sut.StoreAuthorizationCodeAsync(authorizationCode);
 

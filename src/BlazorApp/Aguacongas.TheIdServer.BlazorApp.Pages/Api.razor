@@ -117,10 +117,12 @@ else
                 </div>
                 <div id="scopes" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Scopes"]" Collection="Model.Scopes" CreateModel="CreateApiScope" />
+                        <div class="row">
+                            <h5 class="col">@Localizer["Scopes"]</h5>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <ApiScopes Collection="@Model.Scopes" />
+                        <ApiApiScopes Model="@Model" />
                     </div>
                 </div>
                 <div id="properties" class="card mb-3">

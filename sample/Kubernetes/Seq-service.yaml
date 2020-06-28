@@ -1,0 +1,14 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: seq
+  labels:
+    run: seq
+spec:
+  selector:
+    app: seq
+  ports:
+  - port: 5341
+    targetPort: 80
+  type: LoadBalancer

@@ -1,0 +1,17 @@
+﻿<div class="row">
+    <div class="col">
+        <ul class="list-inline">
+            @foreach (var claim in Claims)
+            {
+                <li class="list-inline-item">
+                    <ClaimType @bind-Value="@claim.Type" Entity="@claim"
+                               DeleteClicked="() => OnClaimDeletedClicked(claim)" />
+                </li>
+            }
+            <li class="list-inline-item">
+                <ClaimType @bind-Value="@_claim.Type" Entity="@_claim"
+                           EntityChanged="() => OnClaimValueChanged(_claim)" />
+            </li>
+        </ul>
+    </div>
+</div>

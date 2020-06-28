@@ -71,7 +71,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             var identityResourceList = await _resourceStore.FindEnabledIdentityResourcesByScopeAsync(new string[] { resourceName })
                 .ConfigureAwait(false);
-            var apiResource = await _resourceStore.FindApiResourceAsync(resourceName).ConfigureAwait(false);
+            var apiResourceList = await _resourceStore.FindApiResourcesByNameAsync(new[] { resourceName }).ConfigureAwait(false);
+            var apiResource = apiResourceList.FirstOrDefault();
             var client = await _clientStore.FindClientByIdAsync(clientId).ConfigureAwait(false);
             var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 

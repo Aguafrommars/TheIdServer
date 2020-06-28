@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Http.Store;
-using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Localization;
@@ -62,7 +61,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IGetAllUserConsentStore, GetAllUserConsentStore>()
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
         }
 

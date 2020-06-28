@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: theidserver-private
+  labels:
+    run: theidserver-private
+spec:
+  selector:
+    app: theidserver-private
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
+  sessionAffinity: ClientIP

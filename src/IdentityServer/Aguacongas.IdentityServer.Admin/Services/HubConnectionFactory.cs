@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -40,7 +41,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Gets the connection.
         /// </summary>
         /// <returns></returns>
-        public HubConnection GetConnection()
+        public HubConnection GetConnection(CancellationToken cancellationToken)
         {
             var hubUrl = _configuration.GetValue<string>("SignalR:HubUrl");
 
@@ -83,7 +84,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
                 _hubConnection.Closed += (error) =>
                 {
-                    return StartConnectionAsync();
+                    return StartConnectionAsync(cancellationToken);
                 };
 
                 return _hubConnection;
@@ -94,7 +95,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Starts the connection asynchronous.
         /// </summary>
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "infinite auto reconnection")]
-        public async Task StartConnectionAsync()
+        public async Task StartConnectionAsync(CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -105,7 +106,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
                 try
                 {
-                    await _hubConnection.StartAsync().ConfigureAwait(false);
+                    await _hubConnection.StartAsync(cancellationToken).ConfigureAwait(false);
                     Debug.Assert(_hubConnection.State == HubConnectionState.Connected);
                     return;
                 }
@@ -120,6 +121,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     await Task.Delay(5000).ConfigureAwait(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Stops the connection asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public Task StopConnectionAsync(CancellationToken cancellationToken)
+        {
+            if (_hubConnection != null)
+            {
+                return _hubConnection.StopAsync(cancellationToken);
+            }
+            return Task.CompletedTask;
         }
 
         /// <summary>

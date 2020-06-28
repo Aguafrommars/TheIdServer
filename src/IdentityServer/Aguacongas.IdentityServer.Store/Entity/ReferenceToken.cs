@@ -44,6 +44,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Data { get; set; }
 
         /// <summary>
+        /// Gets or sets the session identifier.
+        /// </summary>
+        /// <value>
+        /// The session identifier.
+        /// </value>
+        public string SessionId { get; set; }
+
+        /// <summary>
         /// Gets or sets the expiration.
         /// </summary>
         /// <value>

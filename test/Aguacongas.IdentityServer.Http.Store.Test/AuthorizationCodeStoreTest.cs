@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores.Serialization;
 using Moq;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,28 +17,13 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             CreateSut(out Mock<IAdminStore<AuthorizationCode>> storeMock,
                 out AuthorizationCodeStore sut);
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<AuthorizationCode>())
+            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), null, default))
+                .ReturnsAsync(new AuthorizationCode())
                 .Verifiable();
 
             await sut.GetAuthorizationCodeAsync("test");
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Id eq 'test'"), default));
-
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<AuthorizationCode>
-                {
-                    Count = 1,
-                    Items = new List<AuthorizationCode>
-                    {
-                        new AuthorizationCode()
-                    }
-                })
-                .Verifiable();
-
-            await sut.GetAuthorizationCodeAsync("test");
-
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Id eq 'test'"), default));
+            storeMock.Verify(m => m.GetAsync("test", null, default));
         }
 
         [Fact]
@@ -46,24 +32,17 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             CreateSut(out Mock<IAdminStore<AuthorizationCode>> storeMock,
                 out AuthorizationCodeStore sut);
 
-            storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();            
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<AuthorizationCode>
-                {
-                    Count = 1,
-                    Items = new List<AuthorizationCode>
-                    {
-                        new AuthorizationCode
+            storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
+            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
+                .ReturnsAsync(new AuthorizationCode
                         {
                             Id = "id"
-                        }
-                    }
-                })
+                        })
                 .Verifiable();
 
             await sut.RemoveAuthorizationCodeAsync("test");
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Id eq 'test'"), default));
+            storeMock.Verify(m => m.GetAsync("test", null, default)); 
             storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
         }
 
@@ -76,8 +55,18 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             storeMock.Setup(m => m.CreateAsync(It.IsAny<AuthorizationCode>(), default))
                 .ReturnsAsync(new AuthorizationCode())
                 .Verifiable();
-
-            await sut.StoreAuthorizationCodeAsync(new IdentityServer4.Models.AuthorizationCode());
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+                .ReturnsAsync(new PageResponse<AuthorizationCode>
+                {
+                    Count = 0,
+                    Items = new List<AuthorizationCode>(0)
+                })
+                .Verifiable();
+            await sut.StoreAuthorizationCodeAsync(new IdentityServer4.Models.AuthorizationCode
+            {
+                ClientId = "test",
+                Subject = new ClaimsPrincipal(new ClaimsIdentity(new [] { new Claim(ClaimTypes.NameIdentifier, "test") }))
+            });
 
             storeMock.Verify(m => m.CreateAsync(It.IsAny<AuthorizationCode>(), default));
         }

@@ -47,7 +47,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
         private async Task BuildViewModelAsync()
         {
-            var grants = await _interaction.GetAllUserConsentsAsync();
+            var grants = await _interaction.GetAllUserGrantsAsync();
 
             var list = new List<GrantViewModel>();
             foreach (var grant in grants)
