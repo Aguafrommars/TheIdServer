@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: seq
+  namespace: theidserver
   labels:
     run: seq
 spec:
