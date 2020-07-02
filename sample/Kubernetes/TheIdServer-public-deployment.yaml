@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: theidserver-public
+  namespace: theidserver
+spec:
+  selector:
+    matchLabels:
+      app: theidserver-public
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: theidserver-public
+        role: backend
+    spec:
+      containers:
+      - image: aguacongas/aguacongastheidserver:preview-1.0.0
+        name: theidserver-public
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        envFrom: 
+        - configMapRef:
+            name: public-config
+        env:
+        - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+          valueFrom:
+            secretKeyRef:
+              name: theidserver-public-secrets
+              key: tls.pwd
+        - name: IdentityServer__Key__Password
+          valueFrom:
+            secretKeyRef:
+              name: theidserver-public-secrets
+              key: sign-key
+        volumeMounts:
+        - name: certificates-volume
+          mountPath: /usr/local/share/ca-certificates
+        - name: config
+          mountPath: /usr/local/share/config
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "cp /usr/local/share/config/appsettings.Public.json /app/wwwroot/appsettings.json"]
+      volumes:
+      - name: certificates-volume
+        persistentVolumeClaim:
+          claimName: certificates
+      - name: config
+        persistentVolumeClaim:
+          claimName: config

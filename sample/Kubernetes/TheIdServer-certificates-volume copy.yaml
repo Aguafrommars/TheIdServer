@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: seq
+  name: certificates
   namespace: theidserver
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadOnlyMany
+  volumeMode: Filesystem
   resources:
    requests:
-    storage: 10Gi
+    storage: 10Mi

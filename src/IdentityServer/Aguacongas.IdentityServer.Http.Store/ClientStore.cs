@@ -19,7 +19,7 @@ namespace Aguacongas.IdentityServer.Http.Store
         {
             var entity = await _store.GetAsync(clientId, new GetRequest
             {
-                Expand = "IdentityProviderRestrictions,ClientClaims,ClientSecrets,AllowedGrantTypes,RedirectUris,AllowedScopes,Properties"
+                Expand = $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)}"
             }).ConfigureAwait(false);
             return entity.ToClient();
         }

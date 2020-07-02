@@ -83,6 +83,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Blaz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.CustomClaimsProviders", "sample\Aguacongas.TheIdServer.CustomClaimsProvider\Aguacongas.TheIdServer.CustomClaimsProviders.csproj", "{3FA22BFB-DB6B-4734-84E8-E92C43E3C3C8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{15A95C47-72BA-4D1D-A5B9-5D2D04B7AD16}"
+	ProjectSection(SolutionItems) = preProject
+		sample\Kubernetes\Network-policies.yaml = sample\Kubernetes\Network-policies.yaml
+		sample\Kubernetes\Redis-pod.yaml = sample\Kubernetes\Redis-pod.yaml
+		sample\Kubernetes\Redis-service.yaml = sample\Kubernetes\Redis-service.yaml
+		sample\Kubernetes\Seq-pod.yaml = sample\Kubernetes\Seq-pod.yaml
+		sample\Kubernetes\Seq-service.yaml = sample\Kubernetes\Seq-service.yaml
+		sample\Kubernetes\Seq-volume.yaml = sample\Kubernetes\Seq-volume.yaml
+		sample\Kubernetes\SqlServer-pod.yaml = sample\Kubernetes\SqlServer-pod.yaml
+		sample\Kubernetes\SqlServer-service.yaml = sample\Kubernetes\SqlServer-service.yaml
+		sample\Kubernetes\SqlServer-volume.yaml = sample\Kubernetes\SqlServer-volume.yaml
+		sample\Kubernetes\TheIdServer-private-config-volume.yaml = sample\Kubernetes\TheIdServer-private-config-volume.yaml
+		sample\Kubernetes\TheIdServer-private-configmap.yaml = sample\Kubernetes\TheIdServer-private-configmap.yaml
+		sample\Kubernetes\TheIdServer-private-pod.yaml = sample\Kubernetes\TheIdServer-private-pod.yaml
+		sample\Kubernetes\TheIdServer-private-service.yaml = sample\Kubernetes\TheIdServer-private-service.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -543,6 +560,7 @@ Global
 		{54A378B8-9BA4-4082-A044-2A8DEA7DEAEA} = {8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}
 		{665F5796-7F54-44D7-8976-9ADA169353F1} = {8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}
 		{3FA22BFB-DB6B-4734-84E8-E92C43E3C3C8} = {98BBB159-779B-497B-927B-723592E84860}
+		{15A95C47-72BA-4D1D-A5B9-5D2D04B7AD16} = {98BBB159-779B-497B-927B-723592E84860}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 taskList.Add(_apiStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Filter = $"{nameof(ProtectResource.Id)} eq '{name}')",
+                    Filter = $"{nameof(ProtectResource.Id)} eq '{name}'",
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }));
             }
@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.Http.Store
                 taskList.Add(_apiScopeStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Filter = $"{nameof(ApiScope.Id)} eq '{name}')",
+                    Filter = $"{nameof(ApiScope.Id)} eq '{name}'",
                     Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
                 }));
             }
