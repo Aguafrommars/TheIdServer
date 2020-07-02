@@ -31,7 +31,7 @@ Don't forget to save password
 Create the persitent volume claim to store certificates
 
 ```bash
-kubectl -f TheIdServer-private-certificates-volume.yaml
+kubectl apply -f TheIdServer-certificates-volume.yaml
 ```
 
 3. Certificates files
@@ -77,7 +77,8 @@ Source:
 Events:            <none>
 ```
 
-> If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.
+> If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.  
+From windows you can access to the wsl filesystem througth *\\\\wsl$"
 
 
 ### Database
@@ -204,7 +205,7 @@ Create a secret to store certificates files passwords.
 kind: Secret
 apiVersion: v1
 metadata:
-  name: theidserver-secrets
+  name: theidserver-private-secrets
   namespace: theidserver
 data:
   sign-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
@@ -217,5 +218,52 @@ data:
 kubectl apply -f TheIdServer-private-secrets.yaml
 ```
 
-3. Deploy the farm
+3. Configure the admin app
+
+Create a persistent volume claim to store admin app configurations files.
+
+```
+kubectl apply -f TheIdServer-config-volume.yaml
+```
+
+Copy [admin-appsettings.Private.json](admin-appsettings.Private.json) file in the volume like you did for certificates.  
+At startup this file is copied in *wwwroot/appsetting.json* to replace the default admin app's configuration file.
+
+
+4. Deploy the farm
+
+* Create the config map  
+The config map store enrinement variables configuration.
+
+```bash
+kubectl apply -f TheIdServer-private-configmap.yaml
+```
+
+* Create the deployment
+
+```bash
+kubectl apply -f TheIdServer-private-deployment.yaml
+```
+
+* Create the network service
+
+```bash
+kubectl apply -f TheIdServer-private-service.yaml
+```
+
+5. Test the deployment
+
+In a browser, navigate to https://localhost:5443.  
+
+![test-private.png](../../doc/assets/test-private.png)  
+
+Click Advanced button.  
+
+![test-private-proceed.png](../../doc/assets/test-private-proceed.png)  
+
+Click *Proceed to localhost (unsafe)*.  
+
+![test-private-home.png](../../doc/assets/test-private-home.png)  
+
+You should be able to log with *alice* or *bob* (pwd: Pass123$).    
 
