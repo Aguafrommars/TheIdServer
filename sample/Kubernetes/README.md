@@ -256,7 +256,7 @@ kubectl apply -f TheIdServer-private-service.yaml
 In a browser, navigate to https://localhost:5443.  
 You should be able to log with *alice* or *bob* (pwd: Pass123$).    
 
-### Publci farm
+### Public farm
 
 1. Certificates passwords
 
