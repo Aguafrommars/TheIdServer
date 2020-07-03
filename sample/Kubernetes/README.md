@@ -254,16 +254,97 @@ kubectl apply -f TheIdServer-private-service.yaml
 5. Test the deployment
 
 In a browser, navigate to https://localhost:5443.  
-
-![test-private.png](../../doc/assets/test-private.png)  
-
-Click Advanced button.  
-
-![test-private-proceed.png](../../doc/assets/test-private-proceed.png)  
-
-Click *Proceed to localhost (unsafe)*.  
-
-![test-private-home.png](../../doc/assets/test-private-home.png)  
-
 You should be able to log with *alice* or *bob* (pwd: Pass123$).    
 
+### Public farm
+
+1. Certificates passwords
+
+Create a secret to store certificates files passwords.  
+
+* Update *TheIdServer-public-secrets.yaml* with your base64 encoded passwords
+
+```yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: theidserver-public-secrets
+  namespace: theidserver
+data:
+  sign-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
+  tls.pwd: d1YS0xTcx # replace by your base64 encoded password for tls-private.pfx
+```
+
+* Apply the file
+
+```
+kubectl apply -f TheIdServer-public-secrets.yaml
+```
+
+2. Configure the admin app
+
+Copy [admin-appsettings.Public.json](admin-appsettings.Public.json) file in the config volume like you did for the private farm.  
+At startup this file is copied in *wwwroot/appsetting.json* to replace the default admin app's configuration file.
+
+3. Deploy the farm
+
+* Create the config map  
+The config map store enrinement variables configuration.
+
+```bash
+kubectl apply -f TheIdServer-public-configmap.yaml
+```
+
+* Create the deployment
+
+```bash
+kubectl apply -f TheIdServer-public-deployment.yaml
+```
+
+* Create the network service
+
+```bash
+kubectl apply -f TheIdServer-public-service.yaml
+```
+
+* Create the ingress
+
+```bash
+kubectl apply -f TheIdServer-ingress-service.yaml
+```
+
+4. Test the deployment
+
+* Configure your host to route *theidserver.aguafrommars.com* to your local host.
+
+```
+127.0.0.1 theidserver.aguafrommars.com
+```
+
+* Add login and logoug URL's to the client *theidserveradmin* using the private farm.
+
+![k8s-client-urls](../../doc/assets/k8s-client-urls.png)
+
+In a browser, navigate to https://theidserver.aguafrommars.com.  
+You should be able to log with *alice* or *bob* (pwd: Pass123$).    
+
+### Security
+
+[Network-policies.yaml](Network-policies.yaml) contains following rules:
+
+* db role accept requests from backend only
+* log role accept requests from backend and frontend
+* backend accept request from frontend only
+
+The SqlServer is in db role.  
+The Seq server is in log role.  
+The private farm is in backend role.  
+The public farm is in frontend role.
+
+So the public farm cannot access to the SqlServer db but to the Seq server.
+
+To apply those policies launch:
+
+```bash
+kubectl apply -f Network-policies.yaml
+```

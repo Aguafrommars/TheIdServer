@@ -15,7 +15,7 @@ spec:
         role: backend
     spec:
       containers:
-      - image: aguacongas/aguacongastheidserver:preview-1.0.0
+      - image: aguacongas/aguacongastheidserver:unstable
         name: theidserver-public
         ports:
         - containerPort: 443
@@ -42,7 +42,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "cp /usr/local/share/config/appsettings.Public.json /app/wwwroot/appsettings.json"]
+              command: ["/bin/sh", "-c", "cp /usr/local/share/config/admin-appsettings.Public.json /app/wwwroot/appsettings.json"]
       volumes:
       - name: certificates-volume
         persistentVolumeClaim:
