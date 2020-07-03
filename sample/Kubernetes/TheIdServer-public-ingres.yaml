@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: theidserver-ingress
+  namespace: theidserver
+spec:
+  rules:
+  - host: theidserver.aguafrommars.com
+    http:
+      paths:
+      - backend:
+          serviceName: theidserver-public
+          servicePort: 80
+      - backend:
+         serviceName: theidserver-public
+         servicePort: 443
