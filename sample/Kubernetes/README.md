@@ -327,3 +327,24 @@ kubectl apply -f TheIdServer-ingress-service.yaml
 
 In a browser, navigate to https://theidserver.aguafrommars.com.  
 You should be able to log with *alice* or *bob* (pwd: Pass123$).    
+
+### Security
+
+[Network-policies.yaml](Network-policies.yaml) contains following rules:
+
+* db role accept requests from backend only
+* log role accept requests from backend and frontend
+* backend accept request from frontend only
+
+The SqlServer is in db role.  
+The Seq server is in log role.  
+The private farm is in backend role.  
+The public farm is in frontend role.
+
+So the public farm cannot access to the SqlServer db but to the Seq server.
+
+To apply those policies launch:
+
+```bash
+kubectl apply -f Network-policies.yaml
+```
