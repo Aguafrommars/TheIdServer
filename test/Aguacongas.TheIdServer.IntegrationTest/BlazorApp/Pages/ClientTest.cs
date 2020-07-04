@@ -56,6 +56,57 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
+        public async Task UrlsHeaderClick_should_sort_urls()
+        {
+            string clientId = await CreateClient();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                clientId,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            host.WaitForContains(component, "filtered");
+
+            var header = component.Find("#urls th div");
+
+            Assert.NotNull(header);
+
+            await host.WaitForNextRenderAsync(() => header.ClickAsync()).ConfigureAwait(false);
+
+            var urls = component.FindAll("#urls tr");
+
+            var firstUrl = urls.ToArray()[1];
+
+            header = component.Find("#urls th div");
+
+            await host.WaitForNextRenderAsync(() => header.ClickAsync()).ConfigureAwait(false);
+
+            urls = component.FindAll("#urls tr");
+
+            Assert.NotEqual(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+
+            var headers = component.FindAll("#urls th div");
+
+            await host.WaitForNextRenderAsync(() => headers.ToArray()[1].ClickAsync()).ConfigureAwait(false);
+
+            urls = component.FindAll("#urls tr");
+
+            Assert.Equal(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+
+            headers = component.FindAll("#urls th div");
+
+            await host.WaitForNextRenderAsync(() => headers.ToArray()[1].ClickAsync()).ConfigureAwait(false);
+
+            urls = component.FindAll("#urls tr");
+
+            Assert.NotEqual(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+        }
+
+        [Fact]
         public async Task AddGrantType_should_validate_grant_type_rules()
         {
             string clientId = await CreateClient();
@@ -584,7 +635,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     },
                     RedirectUris = new List<ClientUri>
                     {
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect }
+                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Cors | UriKinds.Redirect },
+                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered/filtered", Kind = UriKinds.PostLogout }
                     },
                     ClientClaims = new List<ClientClaim>
                     {
