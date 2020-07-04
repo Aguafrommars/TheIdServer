@@ -635,8 +635,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     },
                     RedirectUris = new List<ClientUri>
                     {
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Cors | UriKinds.Redirect },
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered/filtered", Kind = UriKinds.PostLogout }
+                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },
+                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered/filtered", Kind = UriKinds.Cors | UriKinds.PostLogout }
                     },
                     ClientClaims = new List<ClientClaim>
                     {
