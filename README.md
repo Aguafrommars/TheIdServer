@@ -21,6 +21,7 @@
 * [Roles management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/ROLE.md)
 * [Clients management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CLIENT.md)
 * [Apis management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/API.md)
+* [Scopes management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SCOPE.md)
 * [Identities management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/IDENTITY.md)
 * [External providers management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PROVIDER.md)
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
