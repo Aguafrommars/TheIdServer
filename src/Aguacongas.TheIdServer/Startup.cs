@@ -32,6 +32,7 @@ using Auth = Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Newtonsoft.Json.Serialization;
 
 namespace Aguacongas.TheIdServer
 {
@@ -144,6 +145,8 @@ namespace Aguacongas.TheIdServer
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    settings.Converters.Add(new MetadataJsonConverter(settings));
                 });
             
             if (isProxy)
