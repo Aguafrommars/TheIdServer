@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Buffers;
@@ -15,7 +18,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// The supported content type
         /// </summary>
-        public const string SupportedContentType = "application/export-json";
+        public const string SupportedContentType = "application/json";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonFileOutputFormatter"/> class.
@@ -41,7 +44,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <inheritdoc />
         public override bool CanWriteResult(OutputFormatterCanWriteContext context)
         {
-            return context.HttpContext.Request.Query.ContainsKey("format");
+            return context.HttpContext.Request.Query.TryGetValue("format", out StringValues value) && value == "export";
         }
         /// <summary>
         /// Sets the headers on <see cref="T:Microsoft.AspNetCore.Http.HttpResponse" /> object.
@@ -49,8 +52,18 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="context">The formatter context associated with the call.</param>
         public override void WriteResponseHeaders(OutputFormatterWriteContext context)
         {
+            var type = context.ObjectType;
+            var fileName = type.Name;
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(PageResponse<>))
+            {
+                fileName = $"{type.GetGenericArguments()[0].Name}s";
+            }
+            if (context.Object is IEntityId entity)
+            {
+                fileName = $"{fileName}-{entity.Id}";
+            }
+            context.HttpContext.Response.Headers["Content-Disposition"] = $"attachment; filename=\"{fileName}.json\"";
             base.WriteResponseHeaders(context);
-            context.HttpContext.Response.Headers["Content-Disposition"] = "attachment; filename=\"export.json\"";
         }
     }
 }

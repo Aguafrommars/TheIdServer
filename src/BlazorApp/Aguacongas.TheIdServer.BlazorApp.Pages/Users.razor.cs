@@ -2,6 +2,8 @@
 {
     public partial class Users
     {
-        protected override string SelectProperties => "Id,UserName";
+        protected override string SelectProperties => $"{nameof(Models.User.Id)},{nameof(Models.User.UserName)}";
+
+        protected override string ExportExpand => null;
     }
 }

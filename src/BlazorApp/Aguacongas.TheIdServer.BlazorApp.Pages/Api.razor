@@ -23,16 +23,17 @@ else
                         <h3>@Id</h3>
                     }
                 </div>
-                @if (!NonEditable)
-                {
-                    <div>
+                <div>
+                    @if (!NonEditable)
+                    {
                         <SaveButton />
                         @if (!IsNew)
                         {
                             <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                         }
-                    </div>
-                }
+                    }
+                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                </div>
                 <div class="col">
                     <Filter CssClass="mt-1" />
                 </div>

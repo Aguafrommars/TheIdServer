@@ -3,7 +3,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Providers"]" Url="externalprovider"></PageListHeader>
+        <PageListHeader Name="@Localizer["Providers"]" Url="externalprovider" ExportRequest="@ExportRequest" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />

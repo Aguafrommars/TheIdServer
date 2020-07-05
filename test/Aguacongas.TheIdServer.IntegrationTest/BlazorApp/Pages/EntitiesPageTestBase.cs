@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
+using Moq;
 using RichardSzalay.MockHttp;
 using System;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
@@ -36,7 +39,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            var markup = WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             host.WaitForContains(component, "filtered");
 
@@ -59,6 +62,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
 
+            string markup;
 #pragma warning disable S1121 // Assignments should not be made from within sub-expressions
             while ((markup = component.GetMarkup()).Contains("filtered"))
 #pragma warning restore S1121 // Assignments should not be made from within sub-expressions
@@ -68,6 +72,42 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             Assert.DoesNotContain("filtered", markup);
+        }
+
+        [Fact]
+        public async Task Download_click_should_download_entities()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var button = component.Find("button.btn-secondary");
+
+            Assert.NotNull(button);
+
+            var provider = host.ServiceProvider;
+            var runtime = provider.GetRequiredService<Mock<IJSRuntime>>();
+            string calledUrl = null;
+            Task<HttpResponseMessage> calledTask = null;
+            runtime.Setup(m => m.InvokeAsync<object>("open", It.IsAny<object[]>()))
+                .Callback<string, object[]>((m, p) => {
+                    calledUrl = p[0].ToString();
+                    calledTask = provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
+                    })
+                .Returns(new ValueTask<object>(calledTask));
+            
+            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+
+            Assert.NotNull(calledUrl);
+
+            var response = await calledTask.ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact]
@@ -160,7 +200,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 new Claim[]
                 {
                     new Claim("role", SharedConstants.READER),
-                    new Claim("role", role)
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
                 },
                 $"http://exemple.com/{Entities}",
                 _fixture.Sut,

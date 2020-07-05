@@ -131,10 +131,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     })
                     .AddSingleton(p => new TestNavigationManager(uri: url))
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
-                    .AddSingleton(p => navigationInterceptionMock.Object)
-                    .AddSingleton(p => jsRuntimeMock.Object)
-                    .AddSingleton<Settings>()
+                    .AddSingleton(navigationInterceptionMock.Object)
+                    .AddSingleton(navigationInterceptionMock)
+                    .AddSingleton(jsRuntimeMock.Object)
+                    .AddSingleton(jsRuntimeMock)
+                    .AddSingleton(p => new Settings
+                    {
+                        ApiBaseUrl = appConfiguration["ApiBaseUrl"]
+                    })
                     .AddSingleton(localizerMock.Object)
+                    .AddSingleton(localizerMock)
+                    .AddTransient(p => new HttpClient(sut.CreateHandler()))
                     .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
                     .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
                     .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
