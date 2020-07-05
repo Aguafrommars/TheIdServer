@@ -1,0 +1,13 @@
+﻿using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.Logging;
+
+namespace Aguacongas.IdentityServer.EntityFramework.Store
+{
+    public class OneTimeTokenStore : AdminStore<OneTimeToken, OperationalDbContext>
+    {
+        public OneTimeTokenStore(OperationalDbContext context, ILogger<AdminStore<OneTimeToken, OperationalDbContext>> logger)
+            : base(context, logger)
+        {
+        }
+    }
+}

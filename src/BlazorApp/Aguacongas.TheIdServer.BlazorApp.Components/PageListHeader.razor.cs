@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Aguacongas.IdentityServer.Store;
+using Microsoft.AspNetCore.Components;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
@@ -9,6 +10,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         [Parameter]
         public string Name { get; set; }
+
+        [Parameter]
+        public PageRequest ExportRequest { get; set; }
 
         protected override void OnInitialized()
         {

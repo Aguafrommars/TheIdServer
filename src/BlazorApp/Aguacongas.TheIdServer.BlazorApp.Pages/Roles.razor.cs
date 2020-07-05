@@ -2,6 +2,8 @@
 {
     public partial class Roles
     {
-        protected override string SelectProperties => "Id,Name";
+        protected override string SelectProperties => $"{nameof(Models.Role.Id)},{nameof(Models.Role.Name)}";
+
+        protected override string ExportExpand => null;
     }
 }

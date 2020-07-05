@@ -29,13 +29,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected IStringLocalizerAsync<EntitiesModel<T>> Localizer { get; set; }
 
+        [Inject]
+        protected IAdminStore<OneTimeToken> OneTimeTokenAdminStore { get; set; }
         protected IEnumerable<T> EntityList { get; private set; }
 
         public GridState GridState { get; } = new GridState();
 
         protected abstract string SelectProperties { get; }
 
+        protected abstract string ExportExpand { get; }
         protected virtual string Expand { get; }
+
+        protected PageRequest ExportRequest => new PageRequest
+        {
+            Filter = _pageRequest.Filter,
+            Expand = ExportExpand
+        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -114,7 +123,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var page = await AdminStore.GetAsync(pageRequest)
                             .ConfigureAwait(false);
             EntityList = page.Items;
-        }
+        }        
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

@@ -13,5 +13,12 @@
         /// </value>
         public string Expand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the format.
+        /// </summary>
+        /// <value>
+        /// The format. (json | export)
+        /// </value>
+        public string Format { get; set; }
     }
 }

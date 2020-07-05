@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// </summary>
     /// <typeparam name="T">Type of entity</typeparam>
     /// <seealso cref="Controller" />
-    [Produces("application/json")]
+    [Produces(JsonFileOutputFormatter.SupportedContentType, "application/json")]
     [Route("[controller]")]
     [GenericApiControllerNameConvention]
     public class GenericApiController<T> : Controller where T : class

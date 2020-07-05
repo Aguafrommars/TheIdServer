@@ -32,6 +32,7 @@ using Auth = Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Newtonsoft.Json.Serialization;
 
 namespace Aguacongas.TheIdServer
 {
@@ -119,12 +120,19 @@ namespace Aguacongas.TheIdServer
 
                     static string tokenRetriever(HttpRequest request)
                     {
-                        var accessToken = TokenRetrieval.FromQueryString()(request);
-
                         var path = request.Path;
+                        var accessToken = TokenRetrieval.FromQueryString()(request);
                         if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
                         {
                             return accessToken;
+                        }
+                        var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                        if (!string.IsNullOrEmpty(oneTimeToken))
+                        {
+                            return request.HttpContext
+                                .RequestServices
+                                .GetRequiredService<IRetrieveOneTimeTokem>()
+                                .GetOneTimeToken(oneTimeToken);
                         }
                         return TokenRetrieval.FromAuthorizationHeader()(request);
                     }

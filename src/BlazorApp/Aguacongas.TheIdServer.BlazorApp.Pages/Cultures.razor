@@ -5,7 +5,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Supported cultures"]" Url="culture"></PageListHeader>
+        <PageListHeader Name="@Localizer["Supported cultures"]" Url="culture" ExportRequest="@ExportRequest" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />

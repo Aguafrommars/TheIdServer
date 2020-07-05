@@ -3,7 +3,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Identities"]" Url="identityresource"></PageListHeader>
+        <PageListHeader Name="@Localizer["Identities"]" Url="identityresource" ExportRequest="@ExportRequest" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />

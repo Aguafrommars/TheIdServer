@@ -57,12 +57,12 @@ namespace Microsoft.Extensions.DependencyInjection
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
                 !t.IsAbstract &&
                 !t.IsGenericType &&
-                t.GetInterface("IEntityId") != null &&
-                t.GetInterface("IGrant") == null &&
+                t.GetInterface(nameof(Entity.IEntityId)) != null &&
+                t.GetInterface(nameof(Entity.IGrant)) == null &&
                 t.Name != nameof(Entity.AuthorizationCode) &&
                 t.Name != nameof(Entity.DeviceCode) &&
-                t.GetInterface("IRoleSubEntity") == null &&
-                t.GetInterface("IUserSubEntity") == null);
+                t.GetInterface(nameof(Entity.IRoleSubEntity)) == null &&
+                t.GetInterface(nameof(Entity.IUserSubEntity)) == null);
 
             foreach (var entityType in entityTypeList)
             {
@@ -103,6 +103,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ReferenceTokenStore>()
                 .AddTransient<UserConsentStore>()
                 .AddTransient<DeviceFlowStore>()
+                .AddTransient<IAdminStore<Entity.OneTimeToken>, OneTimeTokenStore>()
                 .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
                 .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
                 .AddTransient<IAdminStore<Entity.AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())

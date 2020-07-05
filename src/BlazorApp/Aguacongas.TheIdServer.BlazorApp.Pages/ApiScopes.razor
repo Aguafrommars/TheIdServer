@@ -3,7 +3,7 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Scopes"]" Url="apiscope"></PageListHeader>
+        <PageListHeader Name="@Localizer["Scopes"]" Url="apiscope" ExportRequest="@ExportRequest" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />

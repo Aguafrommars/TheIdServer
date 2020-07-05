@@ -7,5 +7,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected override string SelectProperties => $"{nameof(ProtectResource.Id)},{nameof(ProtectResource.DisplayName)},{nameof(ProtectResource.Description)}";
 
         protected override string Expand => nameof(ProtectResource.Resources);
+
+        protected override string ExportExpand => $"{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}";
     }
 }
