@@ -105,9 +105,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await host.WaitForNextRenderAsync(() => button.ClickAsync());
 
             Assert.NotNull(calledUrl);
-
             var response = await calledTask.ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
+
+            var testUserService = _fixture.Sut.Services.GetRequiredService<TestUserService>();
+            testUserService.User = null;
+            response = await provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
+            Assert.False(response.IsSuccessStatusCode);
         }
 
         [Fact]
