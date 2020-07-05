@@ -120,12 +120,19 @@ namespace Aguacongas.TheIdServer
 
                     static string tokenRetriever(HttpRequest request)
                     {
-                        var accessToken = TokenRetrieval.FromQueryString()(request);
-
                         var path = request.Path;
+                        var accessToken = TokenRetrieval.FromQueryString()(request);
                         if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
                         {
                             return accessToken;
+                        }
+                        var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                        if (!string.IsNullOrEmpty(oneTimeToken))
+                        {
+                            return request.HttpContext
+                                .RequestServices
+                                .GetRequiredService<IRetrieveOneTimeTokem>()
+                                .GetOneTimeToken(oneTimeToken);
                         }
                         return TokenRetrieval.FromAuthorizationHeader()(request);
                     }
@@ -145,8 +152,6 @@ namespace Aguacongas.TheIdServer
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    settings.Converters.Add(new MetadataJsonConverter(settings));
                 });
             
             if (isProxy)
