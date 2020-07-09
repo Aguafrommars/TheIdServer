@@ -9,6 +9,7 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,23 +17,21 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using IdentityServer4.Quickstart.UI;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using Newtonsoft.Json.Serialization;
 
 namespace Aguacongas.TheIdServer
 {

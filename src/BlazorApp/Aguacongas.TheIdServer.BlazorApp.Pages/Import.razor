@@ -1,0 +1,50 @@
+﻿@inject IHttpClientFactory _httpClientFactory
+@inject IStringLocalizerAsync<PageListHeader> Localizer
+
+@page "/import"
+
+
+<h3>@Localizer["Import"]</h3>
+<div>
+    <AuthorizeView Policy="Is4-Writer">
+        <Authorized>
+            <InputFile multiple OnChange="HandleFileSelected" />
+        </Authorized>
+        <NotAuthorized>
+            @Localizer["You are not authorize to import data."]
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+<span class="text-danger">@_error</span>
+@if (_result != null)
+{
+    <span class="text-success">@Localizer["Success"]</span><br/>
+    @foreach (var fileResult in _result.Results)
+    {
+        <strong>@fileResult.FileName</strong>
+        @if (fileResult.Created.Any())
+        {
+            <div>
+                <h5>@Localizer["Entities created"]</h5>
+                <ul>
+                    @foreach (var created in fileResult.Created)
+                    {
+                        <li>@created</li>
+                    }
+                </ul>
+            </div>
+        }
+        @if (fileResult.Updated.Any())
+        {
+            <div>
+                <h5>@Localizer["Entities updated"]</h5>
+                <ul>
+                    @foreach (var updated in fileResult.Updated)
+                    {
+                        <li>@updated</li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+}
