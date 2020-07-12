@@ -1,0 +1,38 @@
+{
+  "_metadata": {
+    "typeName": "Aguacongas.IdentityServer.Store.Entity.ApiScope, Aguacongas.IdentityServer.Store, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "items": [
+    {
+      "id": "api1",
+      "enabled": true,
+      "displayName": "My API #1",
+      "required": false,
+      "emphasize": false,
+      "showInDiscoveryDocument": true,
+      "createdAt": "2020-06-26T15:33:31.8527954",
+      "apiScopeClaims": [
+      ],
+      "properties": [
+      ],
+      "resources": [
+      ]
+    },
+    {
+      "id": "api2",
+      "enabled": true,
+      "displayName": "My API #2",
+      "required": false,
+      "emphasize": false,
+      "showInDiscoveryDocument": true,
+      "createdAt": "2020-06-26T15:33:31.8527954",
+      "apiScopeClaims": [
+      ],
+      "properties": [
+      ],
+      "resources": [
+      ]
+    }
+  ],
+  "count": 2
+}

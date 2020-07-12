@@ -1,11 +1,9 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
@@ -17,24 +15,26 @@ namespace Aguacongas.IdentityServer.Admin
     [Route("[controller]")]
     public class ImportController : Controller
     {
-        private readonly IAdminStore<OneTimeToken> _store;
+        private readonly IImportService _service;
 
-        public ImportController(IAdminStore<OneTimeToken> store)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImportController"/> class.
+        /// </summary>
+        /// <param name="serice">The serice.</param>
+        /// <exception cref="ArgumentNullException">serice</exception>
+        public ImportController(IImportService serice)
         {
-            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _service = serice ?? throw new ArgumentNullException(nameof(serice));
         }
 
         /// <summary>
-        /// Creates the specified token.
+        /// Imports files.
         /// </summary>
-        /// <param name="token">The token.</param>
         /// <returns></returns>
         [HttpPost()]
         [Authorize(Policy = "Is4-Writer")]
-        public async Task<IActionResult> Import([FromBody] IFormFile file)
-        {
-            return Ok();
-        }
+        public Task<ImportResult> ImportAsync()
+            => _service.ImportAsync(HttpContext.Request.Form.Files);
             
     }
 }

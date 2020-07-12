@@ -96,7 +96,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     type = type.GetGenericArguments()[0];
                 }
 
-                o.AddFirst(new JProperty("metadata", JObject.FromObject(new { typeName = type.FullName }, _internaleSerializer)));
+                o.AddFirst(new JProperty("_metadata", JObject.FromObject(new { typeName = type.AssemblyQualifiedName }, _internaleSerializer)));
 
                 o.WriteTo(writer);
             }
