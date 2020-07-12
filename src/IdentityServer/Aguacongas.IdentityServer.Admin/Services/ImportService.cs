@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -62,6 +63,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             private readonly IAdminStore<T> _store;
 
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Called by reflexion")]
             public Importer(IAdminStore<T> store)
             {
                 _store = store;
