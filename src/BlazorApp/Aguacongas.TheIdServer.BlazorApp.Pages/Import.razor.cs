@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
 using BlazorInputFile;
+using Microsoft.AspNetCore.Components;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class Import
     {
-        private string _error;
+        private MarkupString _error;
         private ImportResult _result;
         async Task HandleFileSelected(IFileListEntry[] files)
         {
@@ -23,7 +24,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                _error = $"{response.StatusCode}\n{responseContent}";
+                _error = new MarkupString($"{response.StatusCode}<br/>{responseContent.Replace("\n","<br/>")}");
             }
             else
             {
@@ -32,6 +33,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
             }
+
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
     }
 }

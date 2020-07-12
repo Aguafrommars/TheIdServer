@@ -1,6 +1,5 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
-using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using Microsoft.JSInterop.Infrastructure;
 using Moq;
 using RichardSzalay.MockHttp;
 using Serilog;
@@ -24,11 +24,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 using blazorApp = Aguacongas.TheIdServer.BlazorApp;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -85,16 +86,23 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             ITestOutputHelper testOutputHelper,
             out TestHost host,
             out RenderedComponent<blazorApp.App> component,
-            out MockHttpMessageHandler mockHttp)
+            out MockHttpMessageHandler mockHttp,
+            bool useJsRuntime = false)
         {
-            CreateTestHost(userName, claims, url, sut, testOutputHelper, out host, out mockHttp);
+            CreateTestHost(userName, claims, url, sut, testOutputHelper, out host, out mockHttp, useJsRuntime);
             component = host.AddComponent<blazorApp.App>();
         }
 
-        public static void CreateTestHost(string userName, IEnumerable<Claim> claims, string url, TestServer sut, ITestOutputHelper testOutputHelper, out TestHost host, out MockHttpMessageHandler mockHttp)
+        public static void CreateTestHost(string userName,
+            IEnumerable<Claim> claims,
+            string url,
+            TestServer sut,
+            ITestOutputHelper testOutputHelper,
+            out TestHost host,
+            out MockHttpMessageHandler mockHttp,
+            bool useJsRuntime = false)
         {
             var navigationInterceptionMock = new Mock<INavigationInterception>();
-            var jsRuntimeMock = new Mock<IJSRuntime>();
             host = new TestHost();
             var httpMock = host.AddMockHttp();
             mockHttp = httpMock;
@@ -111,7 +119,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
                 sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
-                
+
                 services
                     .AddLogging(configure =>
                     {
@@ -134,8 +142,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
                     .AddSingleton(navigationInterceptionMock.Object)
                     .AddSingleton(navigationInterceptionMock)
-                    .AddSingleton(jsRuntimeMock.Object)
-                    .AddSingleton(jsRuntimeMock)
                     .AddSingleton(p => new Settings
                     {
                         ApiBaseUrl = appConfiguration["ApiBaseUrl"]
@@ -147,9 +153,28 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
                     .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
                     .AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
-                    .AddSingleton(p => new FakeAuthenticationStateProvider(p.GetRequiredService<NavigationManager>(),
+                    .AddSingleton(p => new FakeAuthenticationStateProvider(
                         userName,
-                        claims));
+                        claims))
+                    .AddHttpClient("oidc")
+                    .ConfigureHttpClient(httpClient =>
+                    {
+                        var apiUri = new Uri(httpClient.BaseAddress, "api");
+                        httpClient.BaseAddress = apiUri;
+                    })
+                    .AddHttpMessageHandler(() => new FakeDelegatingHandler(sut.CreateHandler()));
+
+                if (useJsRuntime)
+                {
+                    services.AddSingleton(new JSRuntimeImpl())
+                        .AddSingleton<IJSRuntime>(p => p.GetRequiredService<JSRuntimeImpl>());
+                }
+                else
+                {
+                    var jsRuntimeMock = new Mock<IJSRuntime>();
+                    services.AddSingleton(jsRuntimeMock)
+                        .AddSingleton(jsRuntimeMock.Object);
+                }
             });
         }
 
@@ -176,9 +201,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         public class FakeAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
         {
             private readonly AuthenticationState _state;
-            private readonly NavigationManager _navigationManager;
 
-            public FakeAuthenticationStateProvider(NavigationManager navigationManager, string userName, IEnumerable<Claim> claims)
+            public FakeAuthenticationStateProvider(string userName, IEnumerable<Claim> claims)
             {
                 if (claims != null && !claims.Any(c => c.Type == "name"))
                 {
@@ -186,7 +210,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     list.Add(new Claim("name", userName));
                     claims = list;
                 }
-                _navigationManager = navigationManager;
                 _state = new AuthenticationState(new FakeClaimsPrincipal(new FakeIdendity(userName, claims)));
             }
 
@@ -271,6 +294,45 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 return Task.FromResult(true);
             }
+        }
+
+        class FakeDelegatingHandler : DelegatingHandler
+        {
+            private readonly HttpMessageHandler _handler;
+
+            public FakeDelegatingHandler(HttpMessageHandler handler)
+            {
+                _handler = handler;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                var method = typeof(HttpMessageHandler).GetMethod("SendAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                if (request.Content is MultipartFormDataContent dataContent)
+                {
+                    var content = new MultipartFormDataContent();
+                    var fileContent = dataContent.First() as StreamContent;
+                    var contentDisposition = fileContent.Headers.GetValues("Content-Disposition");
+                    var fileName = contentDisposition.First().Split("; ").First(s => s.StartsWith("filename")).Split("=")[1];
+                    var file = File.OpenRead(fileName);
+                    content.Add(new StreamContent(file), "files", file.Name);
+                    request.Content = content;
+
+                }
+                return method.Invoke(_handler, new object[] { request, cancellationToken }) as Task<HttpResponseMessage>;
+            }
+        }
+    }
+
+    class JSRuntimeImpl : JSRuntime
+    {
+        protected override void BeginInvokeJS(long taskId, string identifier, string argsJson)
+        {
+        }
+
+        protected override void EndInvokeDotNet(DotNetInvocationInfo invocationInfo, in DotNetInvocationResult invocationResult)
+        {
         }
     }
 
