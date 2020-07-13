@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Store.Entity
+﻿using System.Collections.Generic;
+
+namespace Aguacongas.IdentityServer.Store.Entity
 {
     /// <summary>
     /// Role entity
@@ -36,6 +38,14 @@
         /// The name of the normalized.
         /// </value>
         public string NormalizedName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the role claims.
+        /// </summary>
+        /// <value>
+        /// The role claims.
+        /// </value>
+        public ICollection<RoleClaim> RoleClaims { get; set; }
 
         /// <summary>
         /// Clones this instance.

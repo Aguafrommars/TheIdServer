@@ -55,6 +55,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
+            if (claim == null)
+            {
+                throw new DbUpdateException($"Entity type {typeof(RoleClaim).Name} at id {id} is not found");
+            }
+
             var role = await GetRoleAsync(claim.RoleId)
                 .ConfigureAwait(false);
             var result = await _roleManager.RemoveClaimAsync(role, claim.ToClaim())
@@ -72,6 +77,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<RoleClaim> UpdateAsync(RoleClaim entity, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            if (claim == null)
+            {
+                throw new DbUpdateException($"Entity type {typeof(RoleClaim).Name} at id {entity.Id} is not found");
+            }
+
             var role = await GetRoleAsync(claim.RoleId)
                 .ConfigureAwait(false);
             var result = await _roleManager.RemoveClaimAsync(role, claim.ToClaim())
@@ -133,11 +143,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var claim = await _context.RoleClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
                             .ConfigureAwait(false);
-            if (claim == null)
-            {
-                throw new DbUpdateException($"Entity type {typeof(RoleClaim).Name} at id {id} is not found");
-            }
-
             return claim;
         }
 

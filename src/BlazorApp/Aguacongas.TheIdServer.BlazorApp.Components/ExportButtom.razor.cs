@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private async Task Download()
         {
-            var token = await _service.GetOneTimeToken();
+            var token = await _service.GetOneTimeToken().ConfigureAwait(false);
             var builder = new StringBuilder(_settings.ApiBaseUrl);
             if (!_settings.ApiBaseUrl.EndsWith('/'))
             {

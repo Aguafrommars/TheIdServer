@@ -1,16 +1,17 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class IdentityUserStore<TUser> : IAdminStore<User>
+    public class IdentityUserStore<TUser> : IAdminStore<Entity.User>
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
@@ -26,7 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<User> CreateAsync(User entity, CancellationToken cancellationToken = default)
+        public async Task<Entity.User> CreateAsync(Entity.User entity, CancellationToken cancellationToken = default)
         {
             var user = entity.ToUser<TUser>();
             user.Id = Guid.NewGuid().ToString();
@@ -49,7 +50,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as User, cancellationToken)
+            return await CreateAsync(entity as Entity.User, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -70,16 +71,41 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             };
         }
 
-        public async Task<User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+        public async Task<Entity.User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
-            return user.ToUserEntity();
+            var expandClaims = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            ICollection<Entity.UserClaim> claims = null;
+            if (expandClaims.HasValue && expandClaims.Value)
+            {
+                claims = await _context.UserClaims
+                    .Where(c => c.UserId == user.Id)
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            var expandRoles = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            ICollection<Entity.UserRole> roles = null;
+            if (expandRoles.HasValue && expandRoles.Value)
+            {
+                roles = await _context.UserRoles
+                    .Where(c => c.UserId == user.Id)
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
+            return user.ToUserEntity(claims, roles);
         }
 
-        public async Task<PageResponse<User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+        public async Task<PageResponse<Entity.User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             var odataQuery = _context.Users.AsNoTracking().GetODataQuery(request);
+
+            var expandClaims = request?.Expand.Contains(nameof(Entity.User.UserClaims));            
+            var expandRoles = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            request.Expand = null;
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -87,14 +113,33 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            return new PageResponse<User>
+            ICollection<Entity.UserClaim> claims = null;
+            if (expandClaims.HasValue && expandClaims.Value)
+            {
+                claims = await _context.UserClaims
+                    .Where(c => page.Select(u => u.Id).Contains(c.UserId))
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            ICollection<Entity.UserRole> roles = null;
+            if (expandRoles.HasValue && expandRoles.Value)
+            {
+                roles = await _context.UserRoles
+                    .Where(c => page.Select(u => u.Id).Contains(c.UserId))
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
+            return new PageResponse<Entity.User>
             {
                 Count = count,
-                Items = items.Select(u => u.ToUserEntity())
+                Items = items.Select(u => u.ToUserEntity(claims, roles))
             };
         }
 
-        public async Task<User> UpdateAsync(User entity, CancellationToken cancellationToken = default)
+        public async Task<Entity.User> UpdateAsync(Entity.User entity, CancellationToken cancellationToken = default)
         {
             var user = await GetUserAsync(entity.Id)
                 .ConfigureAwait(false);
@@ -135,7 +180,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as User, cancellationToken)
+            return await UpdateAsync(entity as Entity.User, cancellationToken)
                 .ConfigureAwait(false);
         }
 
