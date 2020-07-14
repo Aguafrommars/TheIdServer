@@ -57,6 +57,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
+            if (claim == null)
+            {
+                return;
+            }
+
+
             var user = await GetUserAsync(claim.UserId)
                 .ConfigureAwait(false);
             var result = await _userManager.RemoveClaimAsync(user, claim.ToClaim())
@@ -74,6 +80,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<Entity.UserClaim> UpdateAsync(Entity.UserClaim entity, CancellationToken cancellationToken = default)
         {
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            if (claim == null)
+            {
+                throw new DbUpdateException($"Entity type {typeof(UserClaim).Name} at id {entity.Id} is not found");
+            }
+
             var user = await GetUserAsync(entity.UserId)
                 .ConfigureAwait(false);
             var result = await _userManager.RemoveClaimAsync(user, claim.ToClaim())
@@ -134,14 +145,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         private async Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
-            var claim = await _context.UserClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
+            return await _context.UserClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
                             .ConfigureAwait(false);
-            if (claim == null)
-            {
-                throw new DbUpdateException($"Entity type {typeof(UserClaim).Name} at id {id} is not found");
-            }
-
-            return claim;
         }
 
         private void ChechResult(IdentityResult result)

@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<Entity.User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
-            var expandClaims = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            var expandClaims = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
             ICollection<Entity.UserClaim> claims = null;
             if (expandClaims.HasValue && expandClaims.Value)
             {
@@ -84,7 +84,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                     .ToListAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            var expandRoles = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            var expandRoles = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
             ICollection<Entity.UserRole> roles = null;
             if (expandRoles.HasValue && expandRoles.Value)
             {
@@ -101,11 +101,12 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<Entity.User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.Users.AsNoTracking().GetODataQuery(request);
-
-            var expandClaims = request?.Expand.Contains(nameof(Entity.User.UserClaims));            
-            var expandRoles = request?.Expand.Contains(nameof(Entity.User.UserClaims));
+            
+            var expandClaims = request?.Expand?.Contains(nameof(Entity.User.UserClaims));            
+            var expandRoles = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
             request.Expand = null;
+            
+            var odataQuery = _context.Users.AsNoTracking().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -135,7 +136,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return new PageResponse<Entity.User>
             {
                 Count = count,
-                Items = items.Select(u => u.ToUserEntity(claims, roles))
+                Items = items.Select(u => u.ToUserEntity(claims?.Where(c => c.UserId == u.Id).ToList(), roles?.Where(r => r.UserId == u.Id).ToList()))
             };
         }
 

@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -90,22 +91,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
             }
 
-            public override async Task RemoveEntitiesNotInListAsync(IEnumerable subEntityList, IEnumerable entities, ImportFileResult result)
-            {
+            public override async Task RemoveEntitiesAsync(IEnumerable entities, ImportFileResult result)
+            {                
                 var store = _provider.GetRequiredService<IAdminStore<T>>();
-                foreach (var entity in subEntityList)
+                foreach (var entity in entities)
                 {
-                    await RemoveEntityAsync(entity as T, entities as IEnumerable<T>, store, result).ConfigureAwait(false);
+                    await RemoveEntityAsync(entity as T, store, result).ConfigureAwait(false);
                 }
             }
 
-            private async Task RemoveEntityAsync(T entity, IEnumerable<T> entities, IAdminStore<T> store, ImportFileResult result)
+            private async Task RemoveEntityAsync(T entity, IAdminStore<T> store, ImportFileResult result)
             {
-                if (!entities.Any(e => e.Id == entity.Id))
-                {
-                    await store.DeleteAsync(entity.Id).ConfigureAwait(false);
-                    result.Deleted.Add(entity.Id);
-                }
+                await store.DeleteAsync(entity.Id).ConfigureAwait(false);
+                result.Deleted.Add(entity.Id);
             }
 
             private async Task AddOrUpdateEntityAsync(T entity, IAdminStore<T> store, ImportFileResult result)
@@ -129,7 +127,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
 
             private async Task ImportSubEntitiesAsync(T entity, Dictionary<string, IEnumerable> subEntities, IAdminStore<T> store, ImportFileResult result)
-            {
+            {                
                 if (!subEntities.Any())
                 {
                     return;
@@ -140,12 +138,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
                 foreach (var key in subEntities.Keys)
                 {
+                    if (subEntities[key] == null)
+                    {
+                        continue;
+                    }
+
                     var property = typeof(T).GetProperty(key);
                     var subEntityList = property.GetValue(entity) as IEnumerable;
                     var entityType = property.PropertyType.GetGenericArguments()[0];
                     var importerType = typeof(Importer<>).MakeGenericType(entityType);
                     var importer = Activator.CreateInstance(importerType, _provider) as Importer;
-                    await importer.RemoveEntitiesNotInListAsync(subEntityList, subEntities[key], result).ConfigureAwait(false);
+                    await importer.RemoveEntitiesAsync(subEntityList, result).ConfigureAwait(false);
                 }
 
                 foreach (var entityList in subEntities)
@@ -159,6 +162,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     var entityType = enumerator.Current.GetType();
                     var importerType = typeof(Importer<>).MakeGenericType(entityType);
                     var importer = Activator.CreateInstance(importerType, _provider) as Importer;
+
                     await importer.AddOrUpdateSubEntitiesAsync(entityList.Value, result).ConfigureAwait(false);
                 }
             }
@@ -187,7 +191,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             public abstract Task AddOrUpdateSubEntitiesAsync(IEnumerable entities, ImportFileResult result);
 
-            public abstract Task RemoveEntitiesNotInListAsync(IEnumerable subEntityList, IEnumerable entities, ImportFileResult result);
+            public abstract Task RemoveEntitiesAsync(IEnumerable entities, ImportFileResult result);
         }
     }
 }
