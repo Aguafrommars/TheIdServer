@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Store.Entity
@@ -138,6 +139,22 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The security stamp.
         /// </value>
         public string SecurityStamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user claims.
+        /// </summary>
+        /// <value>
+        /// The user claims.
+        /// </value>
+        public virtual ICollection<UserClaim> UserClaims { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user roles.
+        /// </summary>
+        /// <value>
+        /// The user roles.
+        /// </value>
+        public virtual ICollection<UserRole> UserRoles { get; set; }
 
         /// <summary>
         /// Clones this instance.

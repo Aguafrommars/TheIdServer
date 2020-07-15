@@ -46,5 +46,21 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The created.
         /// </value>
         public IList<string> Created { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the deleted list.
+        /// </summary>
+        /// <value>
+        /// The created.
+        /// </value>
+        public IList<string> Deleted { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the sub entities results.
+        /// </summary>
+        /// <value>
+        /// The sub entities results.
+        /// </value>
+        public Dictionary<string, ImportFileResult> SubEntitiesResults { get; set; } = new Dictionary<string, ImportFileResult>();
     }
 }

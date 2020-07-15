@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,12 +91,28 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var role = await _context.Roles.FindAsync(new object[] { id }, cancellationToken)
                 .ConfigureAwait(false);
-            return role.ToEntity();
+
+            var expandClaims = request?.Expand == nameof(Role.RoleClaims);
+            ICollection<RoleClaim> claims = null;
+            if (expandClaims)
+            {
+                claims = await _context.RoleClaims
+                    .Where(c => c.RoleId == role.Id)
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
+            return role.ToEntity(claims);
         }
 
         public async Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
+
+            var expandClaims = request.Expand == nameof(Role.RoleClaims);
+            request.Expand = null;
+
             var odataQuery = _context.Roles.AsNoTracking().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -104,10 +121,20 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
+            ICollection<RoleClaim> claims = null;
+            if (expandClaims)
+            {
+                claims = await _context.RoleClaims
+                    .Where(c => page.Select(r => r.Id).Contains(c.RoleId))
+                    .Select(c => c.ToEntity())
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
             return new PageResponse<Role>
             {
                 Count = count,
-                Items = items.Select(r => r.ToEntity())
+                Items = items.Select(r => r.ToEntity(claims?.Where(c => c.RoleId == r.Id).ToList()))
             };
         }
 

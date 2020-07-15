@@ -41,5 +41,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The value.
         /// </value>
         public string ClaimValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the role.
+        /// </summary>
+        /// <value>
+        /// The role.
+        /// </value>
+        public virtual Role Role { get; set; }
     }
 }

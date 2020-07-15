@@ -136,10 +136,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
             return base.DeleteAsync(entityType, entity);
         }
-        private void AddEmptyRole()
-        {
-            Model.Roles.Add(new entity.Role());
-        }
 
         private entity.UserClaim CreateClaim()
             => new entity.UserClaim
