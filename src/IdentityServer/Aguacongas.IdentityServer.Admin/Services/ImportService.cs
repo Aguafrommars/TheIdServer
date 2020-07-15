@@ -3,7 +3,6 @@ using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -173,8 +172,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var dictionary = new Dictionary<string, IEnumerable>(collectionPropertyList.Count());
                 foreach(var property in collectionPropertyList)
                 {
-                    var values = property.GetValue(entity) as IEnumerable;
-                    if (values == null)
+                    if (!(property.GetValue(entity) is IEnumerable values))
                     {
                         continue;
                     }
