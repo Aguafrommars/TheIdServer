@@ -1,6 +1,6 @@
 ﻿namespace Aguacongas.IdentityServer.Abstractions
 {
-    public interface IRetrieveOneTimeTokem
+    public interface IRetrieveOneTimeToken
     {
         string GetOneTimeToken(string id);
     }

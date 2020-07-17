@@ -118,7 +118,7 @@ namespace IdentityServer4.Quickstart.UI
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())
                 {
                     var scopes = model.ScopesConsented;
-                    if (ConsentOptions.EnableOfflineAccess == false)
+                    if (!ConsentOptions.EnableOfflineAccess)
                     {
                         scopes = scopes.Where(x => x != IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess);
                     }
