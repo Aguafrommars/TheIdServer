@@ -1,0 +1,64 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@master
+    
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Create ACR
+      id: create-acr
+      run: |
+        az acr create -n Aguafrommars -g Aguafrommars80af-rg --location "Switzerland North" --sku Standard --admin-enabled
+        echo "::set-output name=acr_username::`az acr credential show -n Aguafrommars --query username | xargs`"
+        echo "::set-output name=acr_password::`az acr credential show -n Aguafrommars --query passwords[0].value | xargs`"
+        echo "::add-mask::`az acr credential show -n Aguafrommars --query passwords[0].value | xargs`"
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: aguafrommars.azurecr.io
+        username: ${{ steps.create-acr.outputs.acr_username }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
+
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/src/Aguacongas.TheIdServer" -f  "src/Aguacongas.TheIdServer/Dockerfile" -t aguafrommars.azurecr.io/theidserver:${{ github.sha }}
+        docker push aguafrommars.azurecr.io/theidserver:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      id: login
+      with:
+         kubeconfig: ${{ secrets.aks_theidserver_kubeConfig }}
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep theidserverc91f | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace theidserverc91f`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: theidserverc91f
+        container-registry-url: aguafrommars.azurecr.io
+        container-registry-username: ${{ steps.create-acr.outputs.acr_username }}
+        container-registry-password: ${{ steps.create-acr.outputs.acr_password }}
+        secret-name: theidserverdockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: theidserverc91f
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+          manifests/ingress.yml
+        images: |
+          aguafrommars.azurecr.io/theidserver:${{ github.sha }}
+        imagepullsecrets: |
+          theidserverdockerauth
