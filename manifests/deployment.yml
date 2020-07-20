@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "theidserver-82b0"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "theidserver-82b0"
+    spec:
+      containers:
+        - name: "theidserver-82b0"
+          image: "aguafrommars.azurecr.io/theidserver"
+          ports:
+          - containerPort: 80
