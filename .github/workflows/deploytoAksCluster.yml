@@ -27,7 +27,7 @@ jobs:
     - name: Build and push image to ACR
       id: build-image
       run: |
-        docker build "$GITHUB_WORKSPACE/src/Aguacongas.TheIdServer" -f  "src/Aguacongas.TheIdServer/Dockerfile" -t aguafrommars.azurecr.io/theidserver:${{ github.sha }}
+        docker build "$GITHUB_WORKSPACE" -f  "src/Aguacongas.TheIdServer/Dockerfile" -t aguafrommars.azurecr.io/theidserver:${{ github.sha }}
         docker push aguafrommars.azurecr.io/theidserver:${{ github.sha }}
     
     - uses: azure/k8s-set-context@v1
