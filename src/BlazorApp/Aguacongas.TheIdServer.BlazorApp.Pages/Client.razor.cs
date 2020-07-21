@@ -1,4 +1,5 @@
 ﻿using Aguacongas.TheIdServer.BlazorApp.Extensions;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     return;
                 }
                 clientUri.SanetizedCorsUri = null;
+            }
+            if (entity is Entity.ClientSecret secret && secret.Id == null && secret.Type == SecretTypes.SharedSecret)
+            {
+                secret.Value = secret.Value.Sha256();
             }
         }
 

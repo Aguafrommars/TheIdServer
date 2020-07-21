@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 subEntity.ApiId = Model.Id;
             }
-            if (entity is ApiSecret secret && secret.Id == null && secret.Type == "ShareSecret")
+            if (entity is ApiSecret secret && secret.Id == null && secret.Type == SecretTypes.SharedSecret)
             {
                 secret.Value = secret.Value.Sha256();
             }
