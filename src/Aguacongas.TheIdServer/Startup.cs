@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer
                     {
                         return request.HttpContext
                             .RequestServices
-                            .GetRequiredService<IRetrieveOneTimeTokem>()
+                            .GetRequiredService<IRetrieveOneTimeToken>()
                             .GetOneTimeToken(oneTimeToken);
                     }
                     return TokenRetrieval.FromAuthorizationHeader()(request);

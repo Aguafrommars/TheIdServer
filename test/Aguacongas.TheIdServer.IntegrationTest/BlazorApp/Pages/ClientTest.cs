@@ -545,6 +545,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(nameInput);
             await host.WaitForNextRenderAsync(() => nameInput.ChangeAsync(clientId));
 
+            button = WaitForNode(host, component, "#secrets button.btn-sm");
+
+            host.WaitForNextRender(() => button.ClickAsync());
+
+            var valueInput = component.Find("#secrets input[placeholder=value]");
+
+            await host.WaitForNextRenderAsync(() => valueInput.ChangeAsync(clientId));
+
             var form = component.Find("form");
             Assert.NotNull(form);
 

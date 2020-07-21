@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<StringLocalizerFactory>()
                 .AddTransient<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
-                .AddTransient<IRetrieveOneTimeTokem, OneTimeTokenService>()
+                .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
                 .AddTransient<IImportService, ImportService>()
                 .AddSwaggerDocument(config =>
                 {

@@ -8,8 +8,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <summary>
     /// Gets a one time token and burn it
     /// </summary>
-    /// <seealso cref="IRetrieveOneTimeTokem" />
-    public class OneTimeTokenService : IRetrieveOneTimeTokem
+    /// <seealso cref="IRetrieveOneTimeToken" />
+    public class OneTimeTokenService : IRetrieveOneTimeToken
     {
         private readonly IAdminStore<OneTimeToken> _store;
 
