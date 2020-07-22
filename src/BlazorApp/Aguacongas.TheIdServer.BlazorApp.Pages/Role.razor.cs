@@ -1,9 +1,9 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
@@ -11,9 +11,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     {
         private readonly GridState _gridState = new GridState();
 
-        private IEnumerable<RoleClaim> Claims => Model.Claims.Where(c => c.Id == null || (c.ClaimType != null && c.ClaimType.Contains(HandleModificationState.FilterTerm)) || (c.ClaimValue != null && c.ClaimValue.Contains(HandleModificationState.FilterTerm)));
+        private IEnumerable<Entity.RoleClaim> Claims => Model.Claims.Where(c => c.Id == null || (c.ClaimType != null && c.ClaimType.Contains(HandleModificationState.FilterTerm)) || (c.ClaimValue != null && c.ClaimValue.Contains(HandleModificationState.FilterTerm)));
 
-        protected override string Expand => null;
+        protected override string Expand => nameof(Entity.Role.RoleClaims);
 
         protected override bool NonEditable => false;
 
@@ -40,7 +40,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             return Task.FromResult(new Models.Role
             {
-                Claims =new List<RoleClaim>()
+                Claims =new List<Entity.RoleClaim>()
             });
         }
 
@@ -51,30 +51,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is RoleClaim claim)
+            if (entity is Entity.RoleClaim claim)
             {
                 claim.RoleId = Model.Id;
             }
         }
 
-        protected override async Task<Models.Role> GetModelAsync()
-        {
-            var role = await base.GetModelAsync().ConfigureAwait(false);
+        private Entity.RoleClaim CreateClaim()
+            => new Entity.RoleClaim();
 
-            var claimsResponse = await _roleClaimStore.GetAsync(new PageRequest
-            {
-                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
-            }).ConfigureAwait(false);
-
-            role.Claims = claimsResponse.Items.ToList();
-            
-            return role;
-        }
-
-        private RoleClaim CreateClaim()
-            => new RoleClaim();
-
-        private void OnDeleteClaimClicked(RoleClaim claim)
+        private void OnDeleteClaimClicked(Entity.RoleClaim claim)
         {
             Model.Claims.Remove(claim);
             EntityDeleted(claim);

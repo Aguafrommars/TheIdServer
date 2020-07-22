@@ -19,6 +19,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public string CssClass { get; set; }
 
+        [Parameter]
+        public bool Disabled { get; set; }
+
         private async Task Download()
         {
             var token = await _service.GetOneTimeToken().ConfigureAwait(false);

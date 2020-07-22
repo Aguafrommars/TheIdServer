@@ -19,6 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     {
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly List<string> _selectedIdList = new List<string>();
 
         [Inject]
         protected IAdminStore<T> AdminStore { get; set; }
@@ -33,7 +34,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected IAdminStore<OneTimeToken> OneTimeTokenAdminStore { get; set; }
         protected IEnumerable<T> EntityList { get; private set; }
 
-        public GridState GridState { get; } = new GridState();
+        protected GridState GridState { get; } = new GridState();
+
+        protected bool ExportDisabled => _selectedIdList.Count == 0;
 
         protected abstract string SelectProperties { get; }
 
@@ -42,7 +45,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected PageRequest ExportRequest => new PageRequest
         {
-            Filter = _pageRequest.Filter,
+            Filter = string.Join(" or ", _selectedIdList.Select(id => $"Id eq '{id}'")),
             Expand = ExportExpand
         };
 
@@ -99,6 +102,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     await InvokeAsync(() => StateHasChanged())
                         .ConfigureAwait(false);
                 }, TaskScheduler.Default);
+        }
+
+        protected void OnItemSelected(string id, bool isSelected)
+        {
+            if (isSelected)
+            {
+                _selectedIdList.Add(id);
+                return;
+            }
+            var selectId = _selectedIdList.First(i => i == id);
+            _selectedIdList.Remove(selectId);
         }
 
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]

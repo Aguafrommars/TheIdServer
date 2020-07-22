@@ -3,13 +3,14 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Providers"]" Url="externalprovider" ExportRequest="@ExportRequest" />
+        <PageListHeader Name="@Localizer["Providers"]" Url="externalprovider" ExportRequest="@ExportRequest" ExportDisabled="@ExportDisabled" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
     <EntitiesGrid Items="EntityList" TableClass="table mb-0">
         <TableHeader>
+            <th><SelectAll GridState="GridState" /></th>
             <th class="w-25" scope="col">
                 <SortableHeader Property="Id"
                                 Text="@Localizer["id"]"
@@ -38,9 +39,11 @@ else
         <EntitiesGrid Items="EntityList" TableClass="table table-hover"
                       RowClicked="(Entity.ExternalProvider item) => OnRowClicked(item)">
             <RowTemplate>
-                <td class="w-25">@context.Id</td>
-                <td class="w-50">@context.DisplayName</td>
-                <td class="w-25">@context.KindName</td>
+                <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
+                    <td class="w-25">@item.Id</td>
+                    <td class="w-50">@item.DisplayName</td>
+                    <td class="w-25">@item.KindName</td>
+                </SelectableItem>
             </RowTemplate>
         </EntitiesGrid>
     </div>

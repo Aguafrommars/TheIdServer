@@ -14,6 +14,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public PageRequest ExportRequest { get; set; }
 
+        [Parameter]
+        public bool ExportDisabled { get; set; }
+
         protected override void OnInitialized()
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);

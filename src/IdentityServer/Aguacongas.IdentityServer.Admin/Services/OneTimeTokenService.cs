@@ -31,6 +31,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public string GetOneTimeToken(string id)
         {
             var token = _store.GetAsync(id, new GetRequest()).GetAwaiter().GetResult();
+            if (token == null)
+            {
+                return null;
+            }
             _store.DeleteAsync(id).GetAwaiter().GetResult();
             return token.Data;
         }

@@ -18,7 +18,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             return new Role
             {
                 Id = role.Id,
-                Name = role.Name
+                Name = role.Name,
+                Claims = role.RoleClaims
             };
         }
     }
