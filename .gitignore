@@ -336,3 +336,6 @@ ASALocalRun/
 /src/Aguacongas.TheIdServer/db.sql
 /sample/MultiTiers/theidserver.env
 /sample/MultiTiers/.db/sql.db
+/src/Aguacongas.TheIdServer/Properties/ServiceDependencies/TheIdServer - Web Deploy/profile.arm.json
+/src/Aguacongas.TheIdServer/appsettings.Azure.json
+/src/Aguacongas.TheIdServer.BlazorApp/wwwroot/appsettings.Azure.json

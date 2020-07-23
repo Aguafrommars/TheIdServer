@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     public partial class User
     {
-        protected override string Expand => null;
+        protected override string Expand => $"{nameof(entity.User.UserClaims)},{nameof(entity.User.UserRoles)}";
 
         protected override bool NonEditable => false;
 
@@ -52,14 +52,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var getModelTask = base.GetModelAsync();
 
-            var userClaimStore = GetStore<entity.UserClaim>();
-            var getClaimsTask = userClaimStore.GetAsync(pageRequest);
-
             var userLoginStore = GetStore<entity.UserLogin>();
             var getLoginsTask = userLoginStore.GetAsync(pageRequest);
-
-            var userRoleStore = GetStore<entity.UserRole>();
-            var getUserRolesTask = userRoleStore.GetAsync(pageRequest);
 
             var userConsentStore = GetStore<entity.UserConsent>();
             var getUserConsentsTask = userConsentStore.GetAsync(pageRequest);
@@ -74,14 +68,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var getRefreshTokenTask = refreshTokenStore.GetAsync(pageRequest);
 
             var model = await getModelTask.ConfigureAwait(false);
-            model.Claims = (await getClaimsTask.ConfigureAwait(false)).Items.ToList();
             model.Logins = (await getLoginsTask.ConfigureAwait(false)).Items.ToList();
             model.Consents = (await getUserConsentsTask.ConfigureAwait(false)).Items.ToList();
             model.Tokens = (await getUserTokensTask.ConfigureAwait(false)).Items.ToList();
             model.ReferenceTokens = (await getReferenceTokenTask.ConfigureAwait(false)).Items.ToList();
             model.RefreshTokens = (await getRefreshTokenTask.ConfigureAwait(false)).Items.ToList();
 
-            var userRoles = (await getUserRolesTask.ConfigureAwait(false)).Items;
+            var userRoles = model.UserRoles;
             if (userRoles.Any())
             {
                 var roleStore = GetStore<entity.Role>();

@@ -151,7 +151,8 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443/authentication/login-callback",
                         "https://localhost:443/authentication/login-callback",
                         "http://exemple.com/authentication/login-callback",
-                        "https://theidserver.herokuapp.com/authentication/login-callback"
+                        "https://theidserver.herokuapp.com/authentication/login-callback",
+                        "https://theidserver.azurewebsites.net/authentication/login-callback"
                     },
 
                     PostLogoutRedirectUris = 
@@ -160,7 +161,8 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443/authentication/logout-callback",
                         "https://localhost:443/authentication/logout-callback",
                         "http://exemple.com/authentication/logout-callback",
-                        "https://theidserver.herokuapp.com/authentication/logout-callback"
+                        "https://theidserver.herokuapp.com/authentication/logout-callback",
+                        "https://theidserver.azurewebsites.net/authentication/logout-callback"
                     },
                     AllowedCorsOrigins = 
                     {
@@ -168,7 +170,8 @@ namespace Aguacongas.TheIdServer
                         "https://localhost:5443",
                         "https://localhost:443",
                         "http://exemple.com/",
-                        "https://theidserver.herokuapp.com"
+                        "https://theidserver.herokuapp.com",
+                        "https://theidserver.azurewebsites.net"
                     },
                     AllowedScopes = { "openid", "profile", "theidserveradminapi" },
                     AccessTokenType = AccessTokenType.Reference

@@ -75,7 +75,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public async Task Download_click_should_download_entities()
+        public async Task Export_click_should_download_entities()
         {
             await PopulateList();
 
@@ -88,6 +88,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             WaitForLoaded(host, component);
 
             var button = component.Find("button.btn-secondary");
+            Assert.Contains(button.Attributes, a => a.Name == "disabled");
+
+            var selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+
+            button = component.Find("button.btn-secondary");
+            Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
 
             Assert.NotNull(button);
 
@@ -190,6 +200,57 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             arrow = component.Find(".oi-arrow-");
 
             Assert.NotNull(arrow);
+        }
+
+        [Fact]
+        public async Task OnSelectAllClicked_should_select_all_items()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            var markup = WaitForLoaded(host, component);
+
+            Assert.Contains("filtered", markup);
+
+            var selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+
+            var selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Attributes, a => a.Name == "checked");
+
+            selectAll = selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(false));
+
+            selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.DoesNotContain(selected.Attributes, a => a.Name == "checked");
+
+            var button = component.Find("button.btn-secondary");
+            Assert.Contains(button.Attributes, a => a.Name == "disabled");
+
+            await host.WaitForNextRenderAsync(() => selected.ChangeAsync(true));
+
+            selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Attributes, a => a.Name == "checked");
+
+            button = component.Find("button.btn-secondary");
+            Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
         }
 
         protected abstract Task PopulateList();
