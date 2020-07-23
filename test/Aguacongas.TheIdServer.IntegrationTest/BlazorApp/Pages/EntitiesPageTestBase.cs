@@ -238,6 +238,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selected);
             Assert.DoesNotContain(selected.Attributes, a => a.Name == "checked");
+
+            var button = component.Find("button.btn-secondary");
+            Assert.Contains(button.Attributes, a => a.Name == "disabled");
+
+            await host.WaitForNextRenderAsync(() => selected.ChangeAsync(true));
+
+            selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Attributes, a => a.Name == "checked");
+
+            button = component.Find("button.btn-secondary");
+            Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
         }
 
         protected abstract Task PopulateList();
