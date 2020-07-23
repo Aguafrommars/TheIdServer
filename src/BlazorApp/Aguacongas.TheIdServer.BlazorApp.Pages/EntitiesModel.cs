@@ -111,8 +111,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 _selectedIdList.Add(id);
                 return;
             }
-            var selectId = _selectedIdList.First(i => i == id);
-            _selectedIdList.Remove(selectId);
+            var selectId = _selectedIdList.FirstOrDefault(i => i == id);
+            if (selectId != null)
+            {
+                _selectedIdList.Remove(selectId);
+            }
         }
 
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]
