@@ -28,11 +28,10 @@
 else
 {
     <div class="row">
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.Culture item) => OnRowClicked(item)">
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
             <RowTemplate>
                 <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
-                    <td class="w-100">
+                    <td class="w-100" @onclick="() => OnRowClicked(item)">
                         @item.Id
                         <div>
                             <em>@CultureInfo.GetCultureInfo(item.Id).DisplayName</em>
