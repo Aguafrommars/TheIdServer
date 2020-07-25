@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.Oracle
                 {
                     var cn = hostContext.Configuration.GetConnectionString("db");
 
-                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseOracle(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Oracle"));
+                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseOracle(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.Oracle"));
                     services.AddDbContext<ApplicationDbContext>(optionsAction)
                         .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                         .AddConfigurationEntityFrameworkStores(optionsAction)

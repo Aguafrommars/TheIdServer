@@ -318,7 +318,9 @@ namespace Aguacongas.TheIdServer
 
         private void ConfigureInitialData(IApplicationBuilder app)
         {
-            if (Configuration.GetValue<bool>("Migrate") && Configuration.GetValue<DbTypes>("DbType") != DbTypes.InMemory)
+            var dbType = Configuration.GetValue<DbTypes>("DbType");
+            if (Configuration.GetValue<bool>("Migrate") &&
+                dbType != DbTypes.InMemory)
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();

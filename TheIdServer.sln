@@ -113,24 +113,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{65CF4376-522A-4042-89A7-328686BEBA44}"
+	ProjectSection(SolutionItems) = preProject
+		src\IdentityServer\Migrations\generate-migrations.ps1 = src\IdentityServer\Migrations\generate-migrations.ps1
+		src\IdentityServer\Migrations\README.md = src\IdentityServer\Migrations\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.SqlServer.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.SqlServer.Startup\Aguacongas.TheIdServer.SqlServer.Startup.csproj", "{0D42C50F-2421-42BB-9851-FA056FC9C288}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.SqlServer", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.SqlServer\Aguacongas.TheIdServer.SqlServer.csproj", "{30AF9223-FA5D-4F6C-B2C0-E17FC1B776C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migrations.SqlServer", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.SqlServer\Aguacongas.TheIdServer.Migrations.SqlServer.csproj", "{30AF9223-FA5D-4F6C-B2C0-E17FC1B776C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Sqlite", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Sqlite\Aguacongas.TheIdServer.Sqlite.csproj", "{23268E6D-CF47-4AAE-A4BC-49B850BB5441}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migrations.Sqlite", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Sqlite\Aguacongas.TheIdServer.Migrations.Sqlite.csproj", "{23268E6D-CF47-4AAE-A4BC-49B850BB5441}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Sqlite.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Sqlite.Startup\Aguacongas.TheIdServer.Sqlite.Startup.csproj", "{C28ECD43-0823-4183-A153-E741DBC07E84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Postgres", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Postgres\Aguacongas.TheIdServer.Postgres.csproj", "{8B0E63B6-ED80-49F5-B2D1-C954D0A8116D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migrations.PostgreSQL", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.PostgreSQL\Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj", "{8B0E63B6-ED80-49F5-B2D1-C954D0A8116D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Postgres.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Postgres.Startup\Aguacongas.TheIdServer.Postgres.Startup.csproj", "{4B1F9C35-6D24-4E11-B33D-4FC4814848E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.PostgreSQL.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.PostgreSQL.Startup\Aguacongas.TheIdServer.PostgreSQL.Startup.csproj", "{4B1F9C35-6D24-4E11-B33D-4FC4814848E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.MySql", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.MySql\Aguacongas.TheIdServer.MySql.csproj", "{498391B8-4AEF-49B6-ADA9-AAD874ABC9B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migrations.MySql", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj", "{498391B8-4AEF-49B6-ADA9-AAD874ABC9B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.MySql.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.MySql.Startup\Aguacongas.TheIdServer.MySql.Startup.csproj", "{A873000E-1270-4783-9E76-23A8BB0DBCCF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Oracle", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Oracle\Aguacongas.TheIdServer.Oracle.csproj", "{820B340B-95B1-400B-ABEB-385608E3B521}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migrations.Oracle", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Oracle\Aguacongas.TheIdServer.Migrations.Oracle.csproj", "{820B340B-95B1-400B-ABEB-385608E3B521}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Oracle.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Oracle.Startup\Aguacongas.TheIdServer.Oracle.Startup.csproj", "{F3472861-DFB1-43FB-BE9C-C509548BACF8}"
 EndProject

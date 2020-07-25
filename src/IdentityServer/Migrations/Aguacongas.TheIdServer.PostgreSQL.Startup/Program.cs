@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Aguacongas.TheIdServer.Sqlite
+namespace Aguacongas.TheIdServer.PostgreSQL
 {
     [SuppressMessage("Major Code Smell", "S1118:Utility classes should not have public constructors", Justification = "<Pending>")]
     public class Program
@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.Sqlite
                 {
                     var cn = hostContext.Configuration.GetConnectionString("db");
 
-                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseSqlite(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.Sqlite"));
+                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseNpgsql(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.PostgreSQL"));
                     services.AddDbContext<ApplicationDbContext>(optionsAction)
                         .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                         .AddConfigurationEntityFrameworkStores(optionsAction)

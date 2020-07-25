@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.SqlServer
                 {
                     var cn = hostContext.Configuration.GetConnectionString("db");
 
-                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseSqlServer(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.SqlServer"));
+                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseSqlServer(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.SqlServer"));
                     services.AddDbContext<ApplicationDbContext>(optionsAction)
                         .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                         .AddConfigurationEntityFrameworkStores(optionsAction)

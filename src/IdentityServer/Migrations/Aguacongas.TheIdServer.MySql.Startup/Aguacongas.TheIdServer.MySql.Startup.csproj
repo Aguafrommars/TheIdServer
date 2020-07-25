@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Aguacongas.TheIdServer.MySql\Aguacongas.TheIdServer.MySql.csproj" />
+		<ProjectReference Include="..\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj" />
 	</ItemGroup>
 
 </Project>
