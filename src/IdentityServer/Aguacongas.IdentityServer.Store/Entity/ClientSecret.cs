@@ -42,7 +42,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The value.
         /// </value>
         [Required]
-        [MaxLength(4000)]
         public string Value { get; set; }
 
         /// <summary>

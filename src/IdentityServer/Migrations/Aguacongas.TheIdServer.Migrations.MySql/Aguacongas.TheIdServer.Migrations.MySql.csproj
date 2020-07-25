@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace>Aguacongas.TheIdServer.MySql</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+	</ItemGroup>
+
+</Project>

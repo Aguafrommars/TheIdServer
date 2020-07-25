@@ -48,7 +48,7 @@ So you can set any IdentityServer4 options you want from configuration
 
 ### Using EF core
 
-The server supports *SqlServer*, *Sqlite* and *InMemory* databases.  
+The server supports *SqlServer*, *Sqlite*, *MySql*, *PostgreSQL*, *Oracle* and *InMemory* databases.  
 Use **DbType** to the define the dabase engine.
 
 ```json
@@ -62,6 +62,8 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
   "DefaultConnection": "Data Source=(LocalDb)\\MSSQLLocalDB;database=TheIdServer;trusted_connection=yes;"
 }
 ```
+
+> For Oracle database, you need a [devart dotConnect for Oracle](https://www.devart.com/dotconnect/oracle/) license.
 
 ### Using the API
 

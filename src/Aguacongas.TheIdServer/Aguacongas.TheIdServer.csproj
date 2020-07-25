@@ -47,9 +47,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.1.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -72,5 +71,10 @@
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
+		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj" />
+		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Oracle\Aguacongas.TheIdServer.Migrations.Oracle.csproj" />
+		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.PostgreSQL\Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj" />
+		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Sqlite\Aguacongas.TheIdServer.Migrations.Sqlite.csproj" />
+		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.SqlServer\Aguacongas.TheIdServer.Migrations.SqlServer.csproj" />
 	</ItemGroup>
 </Project>
