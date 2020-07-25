@@ -32,12 +32,11 @@
 else
 {
     <div class="row">
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.User item) => OnRowClicked(item)">
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
             <RowTemplate>
                 <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
-                    <td class="w-50">@item.Id</td>
-                    <td class="w-50">
+                    <td class="w-50" @onclick="() => OnRowClicked(item)">@item.Id</td>
+                    <td class="w-50" @onclick="() => OnRowClicked(item)">
                         @item.UserName
                     </td>
                 </SelectableItem>

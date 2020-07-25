@@ -8,6 +8,7 @@ using Microsoft.JSInterop;
 using Moq;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -139,9 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.Contains("filtered", markup);
 
-            var tr = component.Find(".table-hover tr");
-
-            Assert.NotNull(tr);
+            var tdList = component.FindAll(".table-hover tr td").ToArray();
 
             var navigationManager = host.ServiceProvider.GetRequiredService<TestNavigationManager>();
             bool called = false;
@@ -151,7 +150,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.Contains(typeof(TEntity).Name.ToLower(), uri);
             };
 
-            await host.WaitForNextRenderAsync(() => tr.ClickAsync());
+            await host.WaitForNextRenderAsync(() => tdList[1].ClickAsync());
 
             Assert.True(called);
         }
