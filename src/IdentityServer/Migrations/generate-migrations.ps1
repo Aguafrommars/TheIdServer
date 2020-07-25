@@ -9,9 +9,8 @@ Get-ChildItem `
     $rdms = $segments[$segments.Length - 1]
     $startup = "../Aguacongas.TheIdServer.$rdms.Startup"
     Write-Host "generate migration for $rdms in $path using startup project $startup"
-    & dotnet build
-    & dotnet ef --startup-project $startup migrations add $migrationName --context ApplicationDbContext --no-build
-    & dotnet ef --startup-project $startup migrations add $migrationName --context ConfigurationDbContext --no-build
-    & dotnet ef --startup-project $startup migrations add $migrationName --context OperationalDbContext --no-build
+    & dotnet ef --startup-project $startup migrations add $migrationName --context ApplicationDbContext
+    & dotnet ef --startup-project $startup migrations add $migrationName --context ConfigurationDbContext
+    & dotnet ef --startup-project $startup migrations add $migrationName --context OperationalDbContext
 }
 Set-Location $PSScriptRoot
