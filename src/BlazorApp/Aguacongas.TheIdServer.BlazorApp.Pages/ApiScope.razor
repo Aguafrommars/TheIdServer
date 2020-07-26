@@ -98,6 +98,7 @@ else
                                 </button>
                             </div>
                         </div>
+                        <ApiScopeResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
                         <div class="form-group row">
                             <label class="col col-form-label">
                             </label>
@@ -112,7 +113,6 @@ else
                                 <AuthorizeCheckbox Name="showInDiscoveryDocument" Label="@Localizer["show in discovery document"]" @bind-Value="@Model.ShowInDiscoveryDocument" />
                             </div>
                         </div>
-                        <ApiScopeResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
                     </div>
                 </div>
                 <div id="claims" class="card mb-3">
