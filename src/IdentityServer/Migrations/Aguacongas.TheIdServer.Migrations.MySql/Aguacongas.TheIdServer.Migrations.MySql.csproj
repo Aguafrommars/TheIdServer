@@ -3,7 +3,25 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.MySql</RootNamespace>
+		<Authors>Olivier Lefebvre</Authors>
+		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>theidserver;mysql</PackageTags>
+		<Description>Contains db contexts migrations code for MySql.</Description>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="THIRD-PARTY-NOTICES" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="THIRD-PARTY-NOTICES">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
