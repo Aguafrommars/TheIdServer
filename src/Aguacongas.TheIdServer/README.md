@@ -16,6 +16,10 @@ A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserv
 
 Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
 
+#### Kubernetes sample
+
+[/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to setup a solution with Kubernetes.
+
 ### From Github Release
 
 Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
