@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
@@ -51,6 +52,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<StringLocalizerFactory>()
                 .AddTransient<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
+                .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
+                .AddTransient<IImportService, ImportService>()
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
@@ -198,9 +201,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddIdentityServerAdminFilters(this MvcOptions options)
         {
             var filters = options.Filters;
+            filters.Add<FormatFilter>();
             filters.Add<SelectFilter>();
             filters.Add<ExceptionFilter>();
             filters.Add<ActionsFilter>();
+
+            options.FormatterMappings.SetMediaTypeMappingForFormat("export", JsonFileOutputFormatter.SupportedContentType);
+            options.OutputFormatters.Add(new JsonFileOutputFormatter(options));
         }
 
         private static Func<TicketReceivedContext, Task> OnTicketReceived<TUser>()

@@ -3,13 +3,14 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Apis"]" Url="protectresource"></PageListHeader>
+        <PageListHeader Name="@Localizer["Apis"]" Url="protectresource" ExportRequest="@ExportRequest" ExportDisabled="@ExportDisabled" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
     <EntitiesGrid Items="EntityList" TableClass="table mb-0">
         <TableHeader>
+            <th><SelectAll GridState="GridState" /></th>
             <th class="w-25" scope="col">
                 <SortableHeader Property="Id"
                                 Text="@Localizer["id"]"
@@ -30,14 +31,15 @@
 else
 {
     <div class="row">
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.ProtectResource item) => OnRowClicked(item)">
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
             <RowTemplate>
-                <td class="w-25">@context.Id</td>
-                <td class="w-75">
-                    @LocalizeEntityProperty(context, context.DisplayName, Entity.EntityResourceKind.DisplayName)
-                    <div><em>@LocalizeEntityProperty(context, context.Description, Entity.EntityResourceKind.Description)</em></div>
-                </td>
+                <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
+                    <td class="w-25" @onclick="() => OnRowClicked(item)">@item.Id</td>
+                    <td class="w-75" @onclick="() => OnRowClicked(item)">
+                        @LocalizeEntityProperty(item, item.DisplayName, Entity.EntityResourceKind.DisplayName)
+                        <div><em>@LocalizeEntityProperty(item, item.Description, Entity.EntityResourceKind.Description)</em></div>
+                    </td>
+                </SelectableItem>
             </RowTemplate>
         </EntitiesGrid>
     </div>

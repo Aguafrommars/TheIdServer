@@ -47,7 +47,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             services
                 .AddOptions()
                 .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
-                .AddOidcAuthentication<RemoteAuthenticationState, RemoteUserAccount>(options =>
+                .AddOidcAuthentication(options =>
                 {
                     configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
                     configuration.GetSection("UserOptions").Bind(options.UserOptions);
@@ -70,14 +70,15 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddSingleton(p => settings)
                 .AddSingleton<Notifier>()
                 .AddSingleton<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
-                .AddTransient<IAdminStore<User>, UserAdminStore>()
-                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
-                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddSingleton<ISharedStringLocalizerAsync>(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"),
                     p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>(),
                     p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>(),
                     p.GetRequiredService<ILogger<StringLocalizer>>()))
+                .AddTransient<IAdminStore<User>, UserAdminStore>()
+                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
+                .AddTransient<OneTimeTokenService>()
                 .AddHttpClient("oidc")
                 .ConfigureHttpClient(httpClient =>
                 {
@@ -85,6 +86,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     httpClient.BaseAddress = apiUri;
                 })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
             services.AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
             {
                 var apiUri = new Uri(settings.ApiBaseUrl);

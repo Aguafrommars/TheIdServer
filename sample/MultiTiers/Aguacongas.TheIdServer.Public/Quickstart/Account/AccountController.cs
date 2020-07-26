@@ -11,11 +11,12 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace IdentityServer4.Quickstart.UI
@@ -30,6 +31,8 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private readonly UrlEncoder _urlEncoder;
+        private readonly IStringLocalizer _localizer;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -37,7 +40,9 @@ namespace IdentityServer4.Quickstart.UI
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events)
+            IEventService events,
+            UrlEncoder urlEncoder,
+            IStringLocalizer<AccountController> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,6 +50,8 @@ namespace IdentityServer4.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _urlEncoder = urlEncoder;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -78,28 +85,7 @@ namespace IdentityServer4.Quickstart.UI
             // the user clicked the "cancel" button
             if (button != "login")
             {
-                if (context != null)
-                {
-                    // if the user cancels, send a result back into IdentityServer as if they 
-                    // denied the consent (even if this client does not require consent).
-                    // this will send back an access denied OIDC error response to the client.
-                    await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
-
-                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                    {
-                        // if the client is PKCE then we assume it's native, so this change in how to
-                        // return the response is for better UX for the end user.
-                        return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
-                    }
-
-                    return Redirect(model.ReturnUrl);
-                }
-                else
-                {
-                    // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
-                }
+                return await OnCancel(model, context);
             }
 
             if (ModelState.IsValid)
@@ -107,40 +93,16 @@ namespace IdentityServer4.Quickstart.UI
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.ClientId));
-
-                    if (context != null)
-                    {
-                        if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                        {
-                            // if the client is PKCE then we assume it's native, so this change in how to
-                            // return the response is for better UX for the end user.
-                            return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
-                        }
-
-                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                        return Redirect(model.ReturnUrl);
-                    }
-
-                    // request for a local page
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return Redirect("~/");
-                    }
-                    else
-                    {
-                        // user might have clicked on a malicious link - should be logged
-                        throw new InvalidReturnUrlException();
-                    }
+                    return await OnSiginSuccesss(model, context);
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.ClientId));
-                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                if (result.RequiresTwoFactor)
+                {
+                    return Redirect($"/Identity/Account/LoginWith2fa?rememberMe={model.RememberLogin}&returnUrl={_urlEncoder.Encode(model.ReturnUrl)}");
+                }
+
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
+                ModelState.AddModelError(string.Empty, _localizer.GetString(AccountOptions.InvalidCredentialsErrorMessage));
             }
 
             // something went wrong, show form with error
@@ -148,7 +110,65 @@ namespace IdentityServer4.Quickstart.UI
             return View(vm);
         }
 
-        
+        private async Task<IActionResult> OnSiginSuccesss(LoginInputModel model, AuthorizationRequest context)
+        {
+            var user = await _userManager.FindByNameAsync(model.Username);
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+
+            if (context != null)
+            {
+                if (context.IsNativeClient())
+                {
+                    // if the client is PKCE then we assume it's native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
+                }
+
+                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                return Redirect(model.ReturnUrl);
+            }
+
+            // request for a local page
+            if (Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            else if (string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect("~/");
+            }
+
+            // user might have clicked on a malicious link - should be logged
+            throw new InvalidReturnUrlException();
+        }
+
+        private async Task<IActionResult> OnCancel(LoginInputModel model, AuthorizationRequest context)
+        {
+            if (context != null)
+            {
+                // if the user cancels, send a result back into IdentityServer as if they 
+                // denied the consent (even if this client does not require consent).
+                // this will send back an access denied OIDC error response to the client.
+                await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+
+                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                if (context.IsNativeClient())
+                {
+                    // The client is native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return this.LoadingPage("Redirect", model.ReturnUrl);
+                }
+
+                return Redirect(model.ReturnUrl);
+            }
+            else
+            {
+                // since we don't have a valid context, then we just go back to the home page
+                return Redirect("~/");
+            }
+        }
+
+
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -217,7 +237,7 @@ namespace IdentityServer4.Quickstart.UI
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
             {
-                var local = context.IdP == IdentityServer4.IdentityServerConstants.LocalIdentityProvider;
+                var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
                 // this is meant to short circuit the UI and only trigger the one external IdP
                 var vm = new LoginViewModel
@@ -236,7 +256,7 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             var schemes = await _schemeProvider.GetAllSchemesAsync();
-
+            
             var providers = schemes
                 .Where(x => x.DisplayName != null ||
                             (x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
@@ -248,9 +268,10 @@ namespace IdentityServer4.Quickstart.UI
                 }).ToList();
 
             var allowLocal = true;
-            if (context?.ClientId != null)
+            var clientId = context?.Client?.ClientId;
+            if (clientId != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await _clientStore.FindEnabledClientByIdAsync(clientId);
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
@@ -321,7 +342,7 @@ namespace IdentityServer4.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
-                if (idp != null && idp != IdentityServer4.IdentityServerConstants.LocalIdentityProvider)
+                if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
                 {
                     var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
                     if (providerSupportsSignout)

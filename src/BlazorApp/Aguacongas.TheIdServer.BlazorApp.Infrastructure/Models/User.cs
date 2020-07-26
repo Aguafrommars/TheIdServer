@@ -41,7 +41,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
                 ConcurrencyStamp = user.ConcurrencyStamp,
                 NormalizedEmail = user.NormalizedEmail,
                 NormalizedUserName = user.NormalizedUserName,
-                SecurityStamp = user.SecurityStamp
+                SecurityStamp = user.SecurityStamp,
+                Claims = user.UserClaims,
+                UserRoles = user.UserRoles
             };
         }
     }

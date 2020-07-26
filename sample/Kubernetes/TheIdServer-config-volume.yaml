@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config
+  namespace: theidserver
+spec:
+  accessModes:
+  - ReadOnlyMany
+  volumeMode: Filesystem
+  resources:
+   requests:
+    storage: 10Mi

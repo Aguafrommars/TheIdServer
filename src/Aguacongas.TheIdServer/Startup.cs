@@ -9,6 +9,8 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
+using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,22 +18,22 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using IdentityServer4.Quickstart.UI;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
 
 namespace Aguacongas.TheIdServer
 {
@@ -87,16 +89,16 @@ namespace Aguacongas.TheIdServer
             }
 
             services.AddTransient(p =>
+            {
+                var handler = new HttpClientHandler();
+                if (Configuration.GetValue<bool>("DisableStrictSsl"))
                 {
-                    var handler = new HttpClientHandler();
-                    if (Configuration.GetValue<bool>("DisableStrictSsl"))
-                    {
 #pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-                        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
+                    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
-                    }
-                    return handler;
-                })
+                }
+                return handler;
+            })
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
@@ -104,33 +106,7 @@ namespace Aguacongas.TheIdServer
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
-                .AddIdentityServerAuthentication(JwtBearerDefaults.AuthenticationScheme, options =>
-                {
-                    Configuration.GetSection("ApiAuthentication").Bind(options);
-                    if (Configuration.GetValue<bool>("DisableStrictSsl"))
-                    {
-                        options.JwtBackChannelHandler = new HttpClientHandler
-                        {
-#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-                            ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
-#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
-                        };
-                    }
-
-                    static string tokenRetriever(HttpRequest request)
-                    {
-                        var accessToken = TokenRetrieval.FromQueryString()(request);
-
-                        var path = request.Path;
-                        if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
-                        {
-                            return accessToken;
-                        }
-                        return TokenRetrieval.FromAuthorizationHeader()(request);
-                    }
-
-                    options.TokenRetriever = tokenRetriever;
-                });
+                .AddIdentityServerAuthentication(JwtBearerDefaults.AuthenticationScheme, ConfigureIdentityServerAuthenticationOptions());
 
 
             var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
@@ -145,7 +121,7 @@ namespace Aguacongas.TheIdServer
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
-            
+
             if (isProxy)
             {
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
@@ -157,6 +133,44 @@ namespace Aguacongas.TheIdServer
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+        }
+
+        private Action<IdentityServerAuthenticationOptions> ConfigureIdentityServerAuthenticationOptions()
+        {
+            return options =>
+            {
+                Configuration.GetSection("ApiAuthentication").Bind(options);
+                if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                {
+                    options.JwtBackChannelHandler = new HttpClientHandler
+                    {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
+                        ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+                    };
+                }
+
+                static string tokenRetriever(HttpRequest request)
+                {
+                    var path = request.Path;
+                    var accessToken = TokenRetrieval.FromQueryString()(request);
+                    if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                    {
+                        return accessToken;
+                    }
+                    var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                    if (!string.IsNullOrEmpty(oneTimeToken))
+                    {
+                        return request.HttpContext
+                            .RequestServices
+                            .GetRequiredService<IRetrieveOneTimeToken>()
+                            .GetOneTimeToken(oneTimeToken);
+                    }
+                    return TokenRetrieval.FromAuthorizationHeader()(request);
+                }
+
+                options.TokenRetriever = tokenRetriever;
+            };
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -304,7 +318,9 @@ namespace Aguacongas.TheIdServer
 
         private void ConfigureInitialData(IApplicationBuilder app)
         {
-            if (Configuration.GetValue<bool>("Migrate") && Configuration.GetValue<DbTypes>("DbType") != DbTypes.InMemory)
+            var dbType = Configuration.GetValue<DbTypes>("DbType");
+            if (Configuration.GetValue<bool>("Migrate") &&
+                dbType != DbTypes.InMemory)
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();

@@ -50,7 +50,7 @@
                     </div>
                 }
 
-                @if (Model.ResourceScopes.Any())
+                @if (Model.ApiScopes.Any())
                 {
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -58,7 +58,7 @@
                             Application Access
                         </div>
                         <ul class="list-group">
-                            @foreach (var scope in Model.ResourceScopes)
+                            @foreach (var scope in Model.ApiScopes)
                             {
                                 <partial name="_ScopeListItem" model="scope" />
                             }

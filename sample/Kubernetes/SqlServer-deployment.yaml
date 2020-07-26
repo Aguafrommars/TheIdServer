@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql-server
+  namespace: theidserver
+spec:
+  selector:
+    matchLabels:
+      app: sql-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sql-server
+        role: db
+    spec:
+      containers:
+      - image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+        name: sql-server
+        ports:
+        - containerPort: 1433
+        env: 
+        - name: ACCEPT_EULA
+          value: 'Y'
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sql-server
+              key: sa-password
+        volumeMounts:
+        - mountPath: /var/opt/mssql
+          name: sql-server-volume
+      volumes:
+      - name: sql-server-volume
+        persistentVolumeClaim:
+          claimName: sql-server
+      

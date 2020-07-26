@@ -4,6 +4,9 @@
     {
         InMemory,
         SqlServer,
-        Sqlite
+        Sqlite,
+        MySql,
+        Oracle,
+        PostgreSQL,
     }
 }

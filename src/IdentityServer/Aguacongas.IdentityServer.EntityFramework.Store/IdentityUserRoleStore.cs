@@ -37,6 +37,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .ConfigureAwait(false);
             var role = await GetRoleAsync(entity.RoleId, cancellationToken)
                 .ConfigureAwait(false);
+
+
             var result = await _userManager.AddToRoleAsync(user, role.Name)
                 .ConfigureAwait(false);                
             if (result.Succeeded)
@@ -75,14 +77,15 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             _logger.LogInformation("Entity {EntityId} deleted", id, role);
         }
 
-        public Task<UserRole> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
+        public async Task<UserRole> UpdateAsync(UserRole entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await DeleteAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            return await CreateAsync(entity, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity as UserRole, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<UserRole> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)

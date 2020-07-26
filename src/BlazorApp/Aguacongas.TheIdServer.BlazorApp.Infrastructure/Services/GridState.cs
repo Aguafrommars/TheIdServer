@@ -9,6 +9,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         private string _sortedProperty;
         private string _sortedDirection;
         public event Func<SortEventArgs, Task> OnHeaderClicked;
+        public event Func<bool, Task> OnSelectAllClicked;
+
+        public bool AllSelected { get; set; }
 
         public string GetHeaderArrowClassSuffix(string propertyName)
         {
@@ -45,6 +48,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             {
                 OrderBy = orderBy
             });
+        }
+
+        public void SelectAllClicked(bool value)
+        {
+            OnSelectAllClicked?.Invoke(value);
         }
     }
 }

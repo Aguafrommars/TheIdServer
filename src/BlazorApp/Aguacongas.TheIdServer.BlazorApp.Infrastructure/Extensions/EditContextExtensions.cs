@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore.Components.Forms
         {
             var validator = GetValidatorForModel(editContext.Model, editContext.Model);
 
-            var validationResults = validator.Validate(editContext.Model);
+            var validationResults = validator.Validate(CreateValidationContext(editContext.Model));
 
             messages.Clear();
             foreach (var validationResult in validationResults.Errors.Distinct(CompareError.Instance))
@@ -47,12 +47,9 @@ namespace Microsoft.AspNetCore.Components.Forms
 
         private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier)
         {
-            var properties = new[] { fieldIdentifier.FieldName };
-            var model = fieldIdentifier.Model;
-            var context = new ValidationContext(model, new PropertyChain(),
-                new MemberNameValidatorSelector(properties));
+            var context = CreateValidationContext(fieldIdentifier);
 
-            var validator = GetValidatorForModel(editContext.Model, model);
+            var validator = GetValidatorForModel(editContext.Model, fieldIdentifier.Model);
             if (validator == null)
             {
                 return;
@@ -86,6 +83,20 @@ namespace Microsoft.AspNetCore.Components.Forms
 
             var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity);
             return modelValidatorInstance;
+        }
+
+        private static IValidationContext CreateValidationContext(object model)
+        {
+            var validationContextType = typeof(ValidationContext<>).MakeGenericType(model.GetType());
+            return Activator.CreateInstance(validationContextType, model) as IValidationContext;
+        }
+
+        private static IValidationContext CreateValidationContext(FieldIdentifier fieldIdentifier)
+        {
+            var properties = new[] { fieldIdentifier.FieldName };
+            var model = fieldIdentifier.Model;
+            var validationContextType = typeof(ValidationContext<>).MakeGenericType(model.GetType());
+            return Activator.CreateInstance(validationContextType, model, new PropertyChain(), new MemberNameValidatorSelector(properties)) as IValidationContext;
         }
 
         class CompareError : IEqualityComparer<ValidationFailure>

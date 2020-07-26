@@ -5,14 +5,15 @@
 
 <div class="row sticky-top bg-light">
     <div class="col">
-        <PageListHeader Name="@Localizer["Supported cultures"]" Url="culture"></PageListHeader>
+        <PageListHeader Name="@Localizer["Supported cultures"]" Url="culture" ExportRequest="@ExportRequest" ExportDisabled="@ExportDisabled" />
     </div>
     <div class="col">
         <Filter TermChanged="OnFilterChanged" />
     </div>
     <EntitiesGrid Items="EntityList" TableClass="table mb-0">
         <TableHeader>
-            <th scope="col">
+            <th><SelectAll GridState="GridState" /></th>
+            <th class="w-100" scope="col">
                 <SortableHeader Property="Id"
                                 Text="@Localizer["name"]"
                                 GridState="GridState" />
@@ -27,15 +28,16 @@
 else
 {
     <div class="row">
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover"
-                      RowClicked="(Entity.Culture item) => OnRowClicked(item)">
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
             <RowTemplate>
-                <td>
-                    @context.Id
-                    <div>
-                        <em>@CultureInfo.GetCultureInfo(context.Id).DisplayName</em>
-                    </div>
-                </td>
+                <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
+                    <td class="w-100" @onclick="() => OnRowClicked(item)">
+                        @item.Id
+                        <div>
+                            <em>@CultureInfo.GetCultureInfo(item.Id).DisplayName</em>
+                        </div>
+                    </td>
+                </SelectableItem>
             </RowTemplate>
         </EntitiesGrid>
     </div>

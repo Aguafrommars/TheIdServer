@@ -61,5 +61,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public string OriginalType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user claim.
+        /// </summary>
+        /// <value>
+        /// The user claim.
+        /// </value>
+        public virtual User User { get; set; }
     }
 }

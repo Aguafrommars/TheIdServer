@@ -7,6 +7,7 @@
                 <a href="@Url" class="btn btn-sm btn-primary">
                     <span class="oi oi-plus"></span> @Localizer["Add"]
                 </a>
+                <ExportButtom EntityPath="@Url" Request="@ExportRequest" CssClass="btn-sm" Disabled="@ExportDisabled" />
             </Authorized>
         </AuthorizeView>
     </div>

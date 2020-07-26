@@ -2,6 +2,7 @@
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Aguacongas.IdentityServer.Store
@@ -294,7 +295,7 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.Role ToEntity<TRole>(this TRole role) where TRole : IdentityRole
+        public static Entity.Role ToEntity<TRole>(this TRole role, ICollection<Entity.RoleClaim> claims = null) where TRole : IdentityRole
         {
             if (role == null)
             {
@@ -305,7 +306,8 @@ namespace Aguacongas.IdentityServer.Store
                 Id = role.Id,
                 Name = role.Name,
                 ConcurrencyStamp = role.ConcurrencyStamp,
-                NormalizedName = role.NormalizedName
+                NormalizedName = role.NormalizedName,
+                RoleClaims = claims
             };
         }
 
@@ -370,7 +372,7 @@ namespace Aguacongas.IdentityServer.Store
             return new UserLoginInfo(login.LoginProvider, login.ProviderKey, login.ProviderDisplayName);
         }
 
-        public static Entity.User ToUserEntity<TUser>(this TUser user) where TUser : IdentityUser
+        public static Entity.User ToUserEntity<TUser>(this TUser user, ICollection<Entity.UserClaim> claims, ICollection<Entity.UserRole> roles) where TUser : IdentityUser
         {
             if (user == null)
             {
@@ -392,7 +394,9 @@ namespace Aguacongas.IdentityServer.Store
                 NormalizedUserName = user.NormalizedUserName,
                 PasswordHash = user.PasswordHash,
                 SecurityStamp = user.SecurityStamp,
-                LockoutEnd = user.LockoutEnd.HasValue ? user.LockoutEnd.Value.DateTime : (DateTime?)null
+                LockoutEnd = user.LockoutEnd.HasValue ? user.LockoutEnd.Value.DateTime : (DateTime?)null,
+                UserClaims = claims,
+                UserRoles = roles
             };
         }
     }

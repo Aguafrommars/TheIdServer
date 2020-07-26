@@ -6,6 +6,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
@@ -17,7 +18,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Xunit;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
@@ -163,6 +163,44 @@ namespace Aguacongas.TheIdServer.Test
             host.Start();
 
             storeMock.Verify();
+        }
+
+        [Theory]
+        [InlineData(DbTypes.InMemory)]
+        [InlineData(DbTypes.MySql)]
+        [InlineData(DbTypes.Oracle)]
+        [InlineData(DbTypes.PostgreSQL)]
+        [InlineData(DbTypes.Sqlite)]
+        [InlineData(DbTypes.SqlServer)]
+        public void UseDatabaseFromConfiguration_should_configure_context_per_db_type(DbTypes dbTypes)
+        {
+            var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["ConnectionStrings:DefaultConnection"] = "invalid",
+                ["DbType"] = dbTypes.ToString(),
+                ["Migrate"] = "true",
+            }).Build();
+            var environementMock = new Mock<IWebHostEnvironment>();
+            var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
+            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
+
+            var sut = new Startup(configuration, environementMock.Object);
+
+            using var host = WebHost.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    sut.ConfigureServices(services);
+                    services.AddTransient(p => storeMock.Object);
+                })
+                .Configure(builder => sut.Configure(builder))
+                .UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
+                .Build();
+
+            if (dbTypes != DbTypes.InMemory)
+            {
+                Assert.ThrowsAny<Exception>(() => host.Start());
+            }            
         }
     }
 }

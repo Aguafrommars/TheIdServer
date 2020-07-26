@@ -19,6 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     {
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly List<string> _selectedIdList = new List<string>();
 
         [Inject]
         protected IAdminStore<T> AdminStore { get; set; }
@@ -29,13 +30,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Inject]
         protected IStringLocalizerAsync<EntitiesModel<T>> Localizer { get; set; }
 
+        [Inject]
+        protected IAdminStore<OneTimeToken> OneTimeTokenAdminStore { get; set; }
         protected IEnumerable<T> EntityList { get; private set; }
 
-        public GridState GridState { get; } = new GridState();
+        protected GridState GridState { get; } = new GridState();
+
+        protected bool ExportDisabled => _selectedIdList.Count == 0;
 
         protected abstract string SelectProperties { get; }
 
+        protected abstract string ExportExpand { get; }
         protected virtual string Expand { get; }
+
+        protected PageRequest ExportRequest => new PageRequest
+        {
+            Filter = string.Join(" or ", _selectedIdList.Select(id => $"Id eq '{id}'")),
+            Expand = ExportExpand
+        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -92,6 +104,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 }, TaskScheduler.Default);
         }
 
+        protected void OnItemSelected(string id, bool isSelected)
+        {
+            if (isSelected)
+            {
+                _selectedIdList.Add(id);
+                return;
+            }
+            var selectId = _selectedIdList.FirstOrDefault(i => i == id);
+            if (selectId != null)
+            {
+                _selectedIdList.Remove(selectId);
+            }
+        }
+
         [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Never null")]
         protected virtual void OnRowClicked(T entity)
@@ -114,7 +140,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var page = await AdminStore.GetAsync(pageRequest)
                             .ConfigureAwait(false);
             EntityList = page.Items;
-        }
+        }        
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

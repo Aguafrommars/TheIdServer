@@ -4,8 +4,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
+using Moq;
 using RichardSzalay.MockHttp;
 using System;
+using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
@@ -36,7 +40,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
 
-            var markup = WaitForLoaded(host, component);
+            WaitForLoaded(host, component);
 
             host.WaitForContains(component, "filtered");
 
@@ -59,6 +63,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
 
+            string markup;
 #pragma warning disable S1121 // Assignments should not be made from within sub-expressions
             while ((markup = component.GetMarkup()).Contains("filtered"))
 #pragma warning restore S1121 // Assignments should not be made from within sub-expressions
@@ -68,6 +73,56 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             Assert.DoesNotContain("filtered", markup);
+        }
+
+        [Fact]
+        public async Task Export_click_should_download_entities()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var button = component.Find("button.btn-secondary");
+            Assert.Contains(button.Attributes, a => a.Name == "disabled");
+
+            var selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+
+            button = component.Find("button.btn-secondary");
+            Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
+
+            Assert.NotNull(button);
+
+            var provider = host.ServiceProvider;
+            var runtime = provider.GetRequiredService<Mock<IJSRuntime>>();
+            string calledUrl = null;
+            Task<HttpResponseMessage> calledTask = null;
+            runtime.Setup(m => m.InvokeAsync<object>("open", It.IsAny<object[]>()))
+                .Callback<string, object[]>((m, p) => {
+                    calledUrl = p[0].ToString();
+                    calledTask = provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
+                    })
+                .Returns(new ValueTask<object>(calledTask));
+            
+            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+
+            Assert.NotNull(calledUrl);
+            var response = await calledTask.ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            var testUserService = _fixture.Sut.Services.GetRequiredService<TestUserService>();
+            testUserService.User = null;
+            response = await provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
+            Assert.False(response.IsSuccessStatusCode);
         }
 
         [Fact]
@@ -85,9 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.Contains("filtered", markup);
 
-            var tr = component.Find(".table-hover tr");
-
-            Assert.NotNull(tr);
+            var tdList = component.FindAll(".table-hover tr td").ToArray();
 
             var navigationManager = host.ServiceProvider.GetRequiredService<TestNavigationManager>();
             bool called = false;
@@ -97,7 +150,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.Contains(typeof(TEntity).Name.ToLower(), uri);
             };
 
-            await host.WaitForNextRenderAsync(() => tr.ClickAsync());
+            await host.WaitForNextRenderAsync(() => tdList[1].ClickAsync());
 
             Assert.True(called);
         }
@@ -148,6 +201,57 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(arrow);
         }
 
+        [Fact]
+        public async Task OnSelectAllClicked_should_select_all_items()
+        {
+            await PopulateList();
+
+            CreateTestHost("Alice Smith",
+                SharedConstants.WRITER,
+                out TestHost host,
+                out RenderedComponent<App> component,
+                out MockHttpMessageHandler mockHttp);
+
+            var markup = WaitForLoaded(host, component);
+
+            Assert.Contains("filtered", markup);
+
+            var selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+
+            var selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Attributes, a => a.Name == "checked");
+
+            selectAll = selectAll = component.Find(".table.mb-0 th input");
+
+            Assert.NotNull(selectAll);
+
+            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(false));
+
+            selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.DoesNotContain(selected.Attributes, a => a.Name == "checked");
+
+            var button = component.Find("button.btn-secondary");
+            Assert.Contains(button.Attributes, a => a.Name == "disabled");
+
+            await host.WaitForNextRenderAsync(() => selected.ChangeAsync(true));
+
+            selected = component.Find(".table.table-hover td input");
+
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Attributes, a => a.Name == "checked");
+
+            button = component.Find("button.btn-secondary");
+            Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
+        }
+
         protected abstract Task PopulateList();
 
         protected void CreateTestHost(string userName,
@@ -160,7 +264,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 new Claim[]
                 {
                     new Claim("role", SharedConstants.READER),
-                    new Claim("role", role)
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
                 },
                 $"http://exemple.com/{Entities}",
                 _fixture.Sut,

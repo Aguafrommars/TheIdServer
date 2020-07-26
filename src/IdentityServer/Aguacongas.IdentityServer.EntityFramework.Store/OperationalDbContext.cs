@@ -22,6 +22,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         
         public virtual DbSet<DeviceCode> DeviceCodes { get; set; }
 
+        public virtual DbSet<OneTimeToken> OneTimeTokens { get; set; }
+
         public override int SaveChanges()
         {
             SetAuditFields();

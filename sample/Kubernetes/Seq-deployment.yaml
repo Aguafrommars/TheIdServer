@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seq
+  namespace: theidserver
+spec:
+  selector:
+    matchLabels:
+      app: seq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: seq
+        role: log
+    spec:
+      containers:
+      - image: datalust/seq
+        name: seq
+        ports:
+          - containerPort: 80
+        env: 
+        - name: ACCEPT_EULA
+          value: "Y"
+        volumeMounts:
+        - mountPath: /data
+          name: seq-volume
+      volumes:
+      - name: seq-volume
+        persistentVolumeClaim:
+          claimName: seq
+      

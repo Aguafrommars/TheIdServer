@@ -61,6 +61,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected HandleModificationState HandleModificationState { get; private set; }
 
+        protected string EntityPath => typeof(T).Name;
+
+        protected PageRequest ExportRequest => new PageRequest
+        {
+            Filter = $"{nameof(IEntityId.Id)} eq '{Id}'",
+            Expand = Expand
+        };
+
         public virtual int Compare(Type x, Type y)
         {
             if (x == typeof(T))
