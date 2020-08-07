@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
+using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Configuration;
@@ -50,6 +51,23 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             });
 
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds the dynamic client registration.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns></returns>
+        public static IIdentityServerBuilder AddDynamicClientRegistration(this IIdentityServerBuilder builder)
+        {
+            var services = builder.Services;
+            services.Configure<IdentityServerOptions>(option =>
+            {
+                var discovery = option.Discovery;
+                discovery.ExpandRelativePathsInCustomEntries = true;
+                discovery.CustomEntries.Add("registration_endpoint", "~/api/register");
+            });
             return builder;
         }
     }
