@@ -68,7 +68,8 @@ namespace Aguacongas.TheIdServer
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(options => Configuration.GetSection(nameof(IdentityServerOptions)).Bind(options))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddSigningCredentials();
+                .AddSigningCredentials()
+                .AddDynamicClientRegistration();
 
             if (isProxy)
             {
