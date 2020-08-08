@@ -169,7 +169,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             await _store.CreateAsync(client).ConfigureAwait(false);
 
-            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri);
+            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
             registration.JwksUri = discovery["jwks_uri"].ToString();
             return registration;
         }

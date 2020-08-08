@@ -21,25 +21,102 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
 
             var client = sut.CreateClient();
-            var content = JsonConvert.SerializeObject(new ClientRegisteration
+
+            var registration = new ClientRegisteration
             {
                 ClientNames = new List<LocalizableProperty>
                 {
                     new LocalizableProperty
                     {
                         Value = "test"
-                    }
+                    },
                 },
                 GrantTypes = new List<string>
                 {
                     "code"
                 }
-            });
-            var request = new StringContent(content, Encoding.UTF8, "application/json");
+            };
 
-            var response = await client.PostAsync("/api/register", request);
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                var response = await client.PostAsync("/api/register", request);
 
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            }
+
+            registration.RedirectUris = new List<string>
+            {
+                "https://redirect"
+            };
+            registration.ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "test"
+                    },
+                };
+
+            registration.ClientUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.LogoUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.PolicyUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.TosUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.JwksUri = "https://jwk";
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            }
         }
     }
 }
