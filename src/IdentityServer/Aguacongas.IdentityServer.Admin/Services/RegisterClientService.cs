@@ -56,11 +56,18 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 AccessTokenType = (int)_defaultValues.AccessTokenType,
                 AllowOfflineAccess = registration.ApplicationType == "web" && registration.GrantTypes.Contains("refresh_token"),
                 AllowAccessTokensViaBrowser = registration.ApplicationType == "web",
-                AllowedScopes = _defaultValues.AllowedScopes.Select(s => new ClientScope
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Scope = s
-                }).ToList(),
+                AllowedScopes = new List<ClientScope>{
+                    new ClientScope
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Scope = "openid"
+                    },
+                    new ClientScope
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Scope = "profile"
+                    }
+                },
                 AllowRememberConsent = _defaultValues.AllowRememberConsent,
                 AllowPlainTextPkce = _defaultValues.AllowPlainTextPkce,
                 AlwaysIncludeUserClaimsInIdToken = _defaultValues.AlwaysIncludeUserClaimsInIdToken,
@@ -68,12 +75,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 AuthorizationCodeLifetime = _defaultValues.AuthorizationCodeLifetime,
                 BackChannelLogoutSessionRequired = _defaultValues.BackChannelLogoutSessionRequired,
                 BackChannelLogoutUri = _defaultValues.BackChannelLogoutUri,
-                ClientClaims = _defaultValues.Claims.Select(c => new ClientClaim
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Type = c.Type,
-                    Value = c.Value
-                }).ToList(),
                 ClientClaimsPrefix = _defaultValues.ClientClaimsPrefix,
                 ClientName = clientName,
                 ClientSecrets = registration.ApplicationType == "native" ? new List<ClientSecret>
@@ -94,10 +95,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 FrontChannelLogoutSessionRequired = _defaultValues.FrontChannelLogoutSessionRequired,
                 FrontChannelLogoutUri = _defaultValues.FrontChannelLogoutUri,
                 Id = registration.Id,
-                IdentityProviderRestrictions = _defaultValues.IdentityProviderRestrictions.Select(r => new ClientIdpRestriction
-                {
-                    Provider = r
-                }).ToList(),
                 IdentityTokenLifetime = _defaultValues.IdentityTokenLifetime,
                 IncludeJwtId = _defaultValues.IncludeJwtId,
                 LogoUri = registration.LogoUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.LogoUris?.FirstOrDefault()?.Value,
