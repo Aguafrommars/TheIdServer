@@ -11,8 +11,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Registers the asynchronous.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="registration">The client registration.</param>
+        /// <param name="uri">Base uri.</param>
         /// <returns></returns>
-        Task<ClientRegisteration> RegisterAsync(ClientRegisteration client);
+        Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, string uri);
     }
 }

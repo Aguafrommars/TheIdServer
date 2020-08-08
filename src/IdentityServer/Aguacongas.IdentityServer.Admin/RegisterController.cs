@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// </summary>
     [Produces("application/json")]
     [Route("[controller]")]
-    public class RegisterController
+    public class RegisterController : Controller
     {
         private readonly IRegisterClientService _registerClientService;
 
@@ -33,7 +33,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = "Is4-Writer")]
-        public Task<ClientRegisteration> CreateAsync(ClientRegisteration client)
-            => _registerClientService.RegisterAsync(client);
+        public Task<ClientRegisteration> CreateAsync([FromBody] ClientRegisteration client)
+            => _registerClientService.RegisterAsync(client, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -22,7 +21,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
 
             var client = sut.CreateClient();
-            var request = new StringContent(JsonConvert.SerializeObject(new ClientRegisteration
+            var content = JsonConvert.SerializeObject(new ClientRegisteration
             {
                 ClientNames = new List<LocalizableProperty>
                 {
@@ -35,7 +34,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 {
                     "code"
                 }
-            }), Encoding.UTF8, "application/json");
+            });
+            var request = new StringContent(content, Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync("/api/register", request);
 

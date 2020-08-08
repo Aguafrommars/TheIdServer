@@ -12,6 +12,10 @@
         /// <summary>
         /// The description
         /// </summary>
-        Description
+        Description,
+        ClientUri,
+        LogoUri,
+        PolicyUri,
+        TosUri
     }
 }
