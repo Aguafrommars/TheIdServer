@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Admin.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Aguacongas.IdentityServer.Admin.Models
 {
@@ -36,7 +35,6 @@ namespace Aguacongas.IdentityServer.Admin.Models
         /// The redirect uris.
         /// </value>
         [JsonProperty("redirect_uris")]
-        [Required]
         public IEnumerable<string> RedirectUris { get; set; }
 
         /// <summary>
