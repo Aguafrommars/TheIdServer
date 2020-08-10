@@ -50,7 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
             registration.RedirectUris = new List<string>
             {
-                "https://redirect"
+                "https://localhost"
             };
             registration.ClientNames = new List<LocalizableProperty>
                 {
