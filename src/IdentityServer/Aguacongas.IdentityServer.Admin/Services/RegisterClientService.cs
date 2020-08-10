@@ -15,6 +15,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="IRegisterClientService" />
     public class RegisterClientService : IRegisterClientService
     {
+        private readonly IdentityServer4.Configuration.IdentityServerOptions _options;
         private readonly IAdminStore<Client> _store;
         private readonly IDiscoveryResponseGenerator _discoveryResponseGenerator;
         private readonly IdentityServer4.Models.Client _defaultValues = new IdentityServer4.Models.Client();
@@ -24,9 +25,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
+        /// <param name="options">The identity server options.</param>
         /// <exception cref="ArgumentNullException">store</exception>
-        public RegisterClientService(IAdminStore<Client> store, IDiscoveryResponseGenerator discoveryResponseGenerator)
+        public RegisterClientService(IAdminStore<Client> store, IDiscoveryResponseGenerator discoveryResponseGenerator, IdentityServer4.Configuration.IdentityServerOptions options)
         {
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
         }
@@ -39,10 +42,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public async Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, string uri)
         {
+            Validate(registration);
+
             var secret = registration.ApplicationType == "native" ? Guid.NewGuid().ToString() : null;
-            var clientName = registration.ClientNames.FirstOrDefault(n => n.Culture == null)?.Value ?? registration.ClientNames.First().Value;
+            var clientName = registration.ClientNames?.FirstOrDefault(n => n.Culture == null)?.Value ?? 
+                    registration.ClientNames?.FirstOrDefault()?.Value ?? Guid.NewGuid().ToString();
             var existing = await _store.GetAsync(clientName, null).ConfigureAwait(false);
-            registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
+            registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;           
 
             var client = new Client
             {
@@ -101,12 +107,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 NonEditable = false,
                 PairWiseSubjectSalt = _defaultValues.PairWiseSubjectSalt,
                 ProtocolType = _defaultValues.ProtocolType,
-                RedirectUris = registration.RedirectUris != null ? registration.RedirectUris.Select(u => new ClientUri
+                RedirectUris = registration.RedirectUris.Select(u => new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
                     Kind = UriKinds.Cors | UriKinds.Redirect,
                     Uri = u
-                }).ToList() : new List<ClientUri>(0),
+                }).ToList(),
                 RefreshTokenExpiration = (int)_defaultValues.RefreshTokenExpiration,
                 RefreshTokenUsage = (int)_defaultValues.RefreshTokenUsage,
                 RequireClientSecret = secret != null,
@@ -169,6 +175,57 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
             registration.JwksUri = discovery["jwks_uri"].ToString();
             return registration;
+        }
+
+        private void Validate(ClientRegisteration registration)
+        {
+            registration.GrantTypes ??= new List<string>
+            {
+                "authorization_code"
+            };
+
+            if (registration.RedirectUris == null || !registration.RedirectUris.Any())
+            {
+                throw new RegistrationException("invalid_redirect_uri", "RedirectUri is required.");
+            }
+
+            var validationOptions = _options.Validation;
+            var redirectUriList = new List<Uri>(registration.RedirectUris.Count());
+            foreach(var uri in registration.RedirectUris)
+            {
+                if (validationOptions.InvalidRedirectUriPrefixes
+                           .Any(scheme => uri?.StartsWith(scheme, StringComparison.OrdinalIgnoreCase) == true))
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"RedirectUri '{uri}' uses invalid scheme. If this scheme should be allowed, then configure it via ValidationOptions.");
+                }
+                if (!Uri.TryCreate(uri, UriKind.Absolute, out var redirectUri))
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"RedirectUri '{uri}' is not valid.");
+                }
+                redirectUriList.Add(redirectUri);
+            }
+
+            ValidateUris(redirectUriList, registration.LogoUris, "invalid_logo_uri", "LogoUri");
+
+            ValidateUris(redirectUriList, registration.PolicyUris, "invalid_policy_uri", "PolicyUri");
+        }
+
+        private void ValidateUris(IEnumerable<Uri> redirectUriList, IEnumerable<LocalizableProperty> localizableProperties, string errorCode, string uriName)
+        {
+            if (localizableProperties != null && localizableProperties.Any())
+            {
+                foreach (var uri in localizableProperties)
+                {
+                    if (!Uri.TryCreate(uri.Value, UriKind.Absolute, out var policyUri))
+                    {
+                        throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' is not valid.");
+                    }
+                    if (!redirectUriList.Any(u => u.Host == policyUri.Host))
+                    {
+                        throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' host doesn't match a redirect uri host.");
+                    }
+                }
+            }
         }
     }
 }

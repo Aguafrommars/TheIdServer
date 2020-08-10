@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aguacongas.IdentityServer.Admin.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,16 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                     });
                 }
             }
+
+            if (exception is RegistrationException registrationException)
+            {
+                context.Result = new BadRequestObjectResult(new RegistrationProblemDetail
+                {
+                    Error = registrationException.ErrorCode,
+                    Error_description = registrationException.Message
+                });
+            }
+
         }
     }
 }
