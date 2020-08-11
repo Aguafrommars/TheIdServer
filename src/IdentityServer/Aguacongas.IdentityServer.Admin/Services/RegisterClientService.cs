@@ -42,13 +42,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public async Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, string uri)
         {
-            Validate(registration);
+            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
+            Validate(registration, discovery);
 
             var secret = registration.ApplicationType == "native" ? Guid.NewGuid().ToString() : null;
-            var clientName = registration.ClientNames?.FirstOrDefault(n => n.Culture == null)?.Value ?? 
+            var clientName = registration.ClientNames?.FirstOrDefault(n => n.Culture == null)?.Value ??
                     registration.ClientNames?.FirstOrDefault()?.Value ?? Guid.NewGuid().ToString();
             var existing = await _store.GetAsync(clientName, null).ConfigureAwait(false);
-            registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;           
+            registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
 
             var client = new Client
             {
@@ -167,17 +168,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 SlidingRefreshTokenLifetime = _defaultValues.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = _defaultValues.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = _defaultValues.UserCodeType,
-                UserSsoLifetime = _defaultValues.UserSsoLifetime                
+                UserSsoLifetime = _defaultValues.UserSsoLifetime
             };
 
             await _store.CreateAsync(client).ConfigureAwait(false);
 
-            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
             registration.JwksUri = discovery["jwks_uri"].ToString();
             return registration;
         }
 
-        private void Validate(ClientRegisteration registration)
+        private void Validate(ClientRegisteration registration, Dictionary<string, object> discovery)
         {
             registration.GrantTypes ??= new List<string>
             {
@@ -189,9 +189,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 throw new RegistrationException("invalid_redirect_uri", "RedirectUri is required.");
             }
 
+            if (registration.ApplicationType != "web" && registration.ApplicationType != "native")
+            {
+                throw new RegistrationException("invalid_application_type", $"ApplicationType '{registration.ApplicationType}' is invalid. It must be 'web' or 'native'.");
+            }
+
             var validationOptions = _options.Validation;
             var redirectUriList = new List<Uri>(registration.RedirectUris.Count());
-            foreach(var uri in registration.RedirectUris)
+            foreach (var uri in registration.RedirectUris)
             {
                 if (validationOptions.InvalidRedirectUriPrefixes
                            .Any(scheme => uri?.StartsWith(scheme, StringComparison.OrdinalIgnoreCase) == true))
@@ -202,28 +207,118 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 {
                     throw new RegistrationException("invalid_redirect_uri", $"RedirectUri '{uri}' is not valid.");
                 }
+
+                ValidateRedirectUri(registration, uri, redirectUri);
+
                 redirectUriList.Add(redirectUri);
             }
 
             ValidateUris(redirectUriList, registration.LogoUris, "invalid_logo_uri", "LogoUri");
 
             ValidateUris(redirectUriList, registration.PolicyUris, "invalid_policy_uri", "PolicyUri");
+
+            if (registration.GrantTypes == null || !registration.GrantTypes.Any())
+            {
+                registration.GrantTypes = new[] { "authorization_code" };
+            }
+            ValidateGrantType(registration.GrantTypes, discovery["grant_types_supported"] as IEnumerable<string>);
+
+            if (registration.ResponseTypes == null || !registration.ResponseTypes.Any())
+            {
+                registration.ResponseTypes = new[] { "code" };
+            }
+
+            ValidateResponseType(registration.GrantTypes, registration.ResponseTypes, discovery["response_types_supported"] as IEnumerable<string>);
+        }
+
+        private static void ValidateRedirectUri(ClientRegisteration registration, string uri, Uri redirectUri)
+        {
+            if (registration.ApplicationType == "web" &&
+                                registration.GrantTypes.Contains("implicit"))
+            {
+                if (redirectUri.Scheme != "https")
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'. Implicit client must use 'https' scheme only.");
+                }
+                if (redirectUri.Host.ToUpperInvariant() == "LOCALHOST")
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'. Implicit client cannot use 'localhost' host.");
+                }
+            }
+            if (registration.ApplicationType == "native")
+            {
+                if (redirectUri.Scheme == Uri.UriSchemeGopher ||
+                    redirectUri.Scheme == Uri.UriSchemeHttps ||
+                    redirectUri.Scheme == Uri.UriSchemeNews ||
+                    redirectUri.Scheme == Uri.UriSchemeNntp)
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'.Native client cannot use standard '{redirectUri.Scheme}' scheme, you must use a custom scheme such as 'net.pipe' or 'net.tcp', or 'http' scheme with 'localhost' host.");
+                }
+                if (redirectUri.Scheme == Uri.UriSchemeHttp && redirectUri.Host.ToUpperInvariant() != "LOCALHOST")
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'.Only 'localhost' host is allowed for 'http' scheme and 'native' client.");
+                }
+            }
+        }
+
+        private void ValidateResponseType(IEnumerable<string> grantTypes, IEnumerable<string> responseTypes, IEnumerable<string> responseTypesSupported)
+        {
+            foreach (var responseType in responseTypes)
+            {
+                var responseTypeSegmentList = responseType.Split(' ');
+                foreach (var type in responseTypeSegmentList)
+                {
+                    if (!responseTypesSupported.Any(t => t.Split(' ').Length == responseTypeSegmentList.Length && t.Contains(type)))
+                    {
+                        throw new RegistrationException("invalid_response_type", $"ResponseType '{responseType}' is not supported.");
+                    }
+                    switch (type)
+                    {
+                        case "code":
+                            if (!grantTypes.Any(g => g == "authorization_code"))
+                            {
+                                throw new RegistrationException("invalid_response_type", $"No GrantType 'authorization_code' for ResponseType '{responseType}' found in grant_types.");
+                            }
+                            break;
+                        case "token":
+                        case "id_token":
+                            if (!grantTypes.Any(g => g == "implicit"))
+                            {
+                                throw new RegistrationException("invalid_response_type", $"No GrantType 'implicit' for ResponseType '{responseType}' found in grant_types.");
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void ValidateGrantType(IEnumerable<string> grantTypes, IEnumerable<string> grantTypesSupported)
+        {
+            foreach (var grantType in grantTypes)
+            {
+                if (!grantTypesSupported.Contains(grantType))
+                {
+                    throw new RegistrationException("invalid_grant_type", $"GrantType '{grantType}' is not supported.");
+                }
+            }
         }
 
         private void ValidateUris(IEnumerable<Uri> redirectUriList, IEnumerable<LocalizableProperty> localizableProperties, string errorCode, string uriName)
         {
-            if (localizableProperties != null && localizableProperties.Any())
+            if (localizableProperties == null)
             {
-                foreach (var uri in localizableProperties)
+                return;
+            }
+
+            foreach (var uri in localizableProperties)
+            {
+                if (!Uri.TryCreate(uri.Value, UriKind.Absolute, out var policyUri))
                 {
-                    if (!Uri.TryCreate(uri.Value, UriKind.Absolute, out var policyUri))
-                    {
-                        throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' is not valid.");
-                    }
-                    if (!redirectUriList.Any(u => u.Host == policyUri.Host))
-                    {
-                        throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' host doesn't match a redirect uri host.");
-                    }
+                    throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' is not valid.");
+                }
+                if (!redirectUriList.Any(u => u.Host == policyUri.Host))
+                {
+                    throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' host doesn't match a redirect uri host.");
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -30,10 +31,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     {
                         Value = "test"
                     },
-                },
-                GrantTypes = new List<string>
-                {
-                    "code"
                 },
                 RedirectUris = new List<string>
                 {
@@ -309,6 +306,259 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 Assert.Equal("invalid_policy_uri", error.Error);
                 Assert.Equal("PolicyUri 'http://test' host doesn't match a redirect uri host.", error.Error_description);
             }
+
+            registration.PolicyUris = null;
+            registration.GrantTypes = new[] { "invalid" };
+
+            // invalid grant type
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_grant_type", error.Error);
+                Assert.Equal("GrantType 'invalid' is not supported.", error.Error_description);
+            }
+
+            registration.GrantTypes = null;
+            registration.ResponseTypes = new[] { "invalid" };
+
+            // invalid reponse type
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_response_type", error.Error);
+                Assert.Equal("ResponseType 'invalid' is not supported.", error.Error_description);
+            }
+
+            registration.GrantTypes = new[] { "implicit" };
+            registration.RedirectUris = new[]
+            {
+                "https://test"
+            };
+            registration.ResponseTypes = new[] { "code" };
+
+            // invalid reponse type
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_response_type", error.Error);
+                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code' found in grant_types.", error.Error_description);
+            }
+
+            registration.GrantTypes = null;
+            registration.ResponseTypes = new[] { "id_token" };
+
+            // reponse / grant type doesn't match
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_response_type", error.Error);
+                Assert.Equal("No GrantType 'implicit' for ResponseType 'id_token' found in grant_types.", error.Error_description);
+            }
+
+            registration.ResponseTypes = new[] { "token id_token" };
+
+            // reponse / grant type doesn't match
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_response_type", error.Error);
+                Assert.Equal("No GrantType 'implicit' for ResponseType 'token id_token' found in grant_types.", error.Error_description);
+            }
+
+            registration.ResponseTypes = new[] { "code token id_token" };
+            registration.GrantTypes = new[] { "implicit" };
+
+            // reponse / grant type doesn't match
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_response_type", error.Error);
+                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code token id_token' found in grant_types.", error.Error_description);
+            }
+
+            registration.ResponseTypes = new[] { "token" };
+            registration.RedirectUris = new[]
+            {
+                "http://test"
+            };
+            // invalid scheme for grant type implicit
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_redirect_uri", error.Error);
+                Assert.Equal("Invalid RedirectUri 'http://test'. Implicit client must use 'https' scheme only.", error.Error_description);
+            }
+
+            registration.RedirectUris = new[]
+            {
+                "https://localhost"
+            };
+            // invalid host for grant type implicit
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_redirect_uri", error.Error);
+                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error.Error_description);
+            }
+
+            registration.RedirectUris = new[]
+            {
+                "https://localhost"
+            };
+            // invalid host for grant type implicit
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_redirect_uri", error.Error);
+                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error.Error_description);
+            }
+
+            registration.ResponseTypes = null;
+            registration.GrantTypes = null;
+
+            registration.ApplicationType = "native";
+            registration.RedirectUris = new[]
+            {
+                "http://test"
+            };
+
+            // invalid host for native client
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_redirect_uri", error.Error);
+                Assert.Equal("Invalid RedirectUri 'http://test'.Only 'localhost' host is allowed for 'http' scheme and 'native' client.", error.Error_description);
+            }
+
+            registration.ApplicationType = "invalid";
+
+            // invalid application type
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+                Assert.Equal("invalid_application_type", error.Error);
+                Assert.Equal("ApplicationType 'invalid' is invalid. It must be 'web' or 'native'.", error.Error_description);
+            }
+        }
+
+        [Theory]
+        [InlineData("gopher://test")]
+        [InlineData("https://test")]
+        [InlineData("news:test@test.com")]
+        [InlineData("nntp://test@test.com")]
+        public async Task CreateAsync_should_validate_native_redirect_uri_scheme(string redirectUri)
+        {
+            var sut = TestUtils.CreateTestServer();
+            sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+
+            var client = sut.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                RedirectUris = new[]
+                {
+                    redirectUri
+                },
+                ApplicationType = "native"
+            };
+
+            // not redirect uri
+            using var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json");
+            using var response = await client.PostAsync("/api/register", request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
+
+            Assert.Equal("invalid_redirect_uri", error.Error);
+
+            var uri = new Uri(redirectUri);
+
+            Assert.Equal($"Invalid RedirectUri '{redirectUri}'.Native client cannot use standard '{uri.Scheme}' scheme, you must use a custom scheme such as 'net.pipe' or 'net.tcp', or 'http' scheme with 'localhost' host.", error.Error_description);
         }
     }
 }
