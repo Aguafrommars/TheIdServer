@@ -44,7 +44,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(ProblemDetails), 404)]
-        [Authorize(Policy = "Is4-Reader")]
+        [Authorize(Policy = SharedConstants.READER)]
         public Task<T> GetAsync(string id, GetRequest request) 
             => _store.GetAsync(id, request);
 
@@ -56,7 +56,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="200">Returns a page of entites.</response>
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $)")]
-        [Authorize(Policy = "Is4-Reader")]
+        [Authorize(Policy = SharedConstants.READER)]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         public Task<PageResponse<T>> FindAsync(PageRequest request) 
@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Creates an entity")]
         [ProducesResponseType(201)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task<T> CreateAsync([FromBody] T entity)
             => _store.CreateAsync(entity);
 
@@ -91,7 +91,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(ProblemDetails), 409)]
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITER)]
 #pragma warning disable IDE0060 // Remove unused parameter. The id is used in ActionsFilter, id and entity.Id MUST match. 
         public Task<T> UpdateAsync(string id, [FromBody] T entity)
 #pragma warning restore IDE0060 // Remove unused parameter
@@ -107,7 +107,7 @@ namespace Aguacongas.IdentityServer.Admin
         [HttpDelete("{id}")]
         [Description("Deletes an entity")]
         [ProducesResponseType(200)]
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task DeleteAsync(string id)
             => _store.DeleteAsync(id);
     }

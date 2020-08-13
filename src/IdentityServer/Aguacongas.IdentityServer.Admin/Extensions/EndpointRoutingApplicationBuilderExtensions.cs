@@ -5,6 +5,9 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Linq;
 using System.Net;
@@ -98,20 +101,12 @@ namespace Microsoft.AspNetCore.Builder
                 return;
             }
 
-            if ((path.StartsWithSegments($"/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
-                path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
-                path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) && 
-                request.Method == HttpMethods.Get &&
-                !context.User.IsInRole(SharedConstants.READER))
-            {
-                // by-pass security for localized resource read
-                context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                {
-                            new Claim(JwtClaimTypes.Name, "AnonymousReader"),
-                            new Claim("role", SharedConstants.READER)
-                }, "by-pass", JwtClaimTypes.Name, "role"));
-            }
+            ByBassAuthentication(context, request, path);
 
+            if (!await GetRegistrationTokenAsync(context, request, path).ConfigureAwait(false))
+            {
+                return;
+            }
 
             if (context.User.Identity.IsAuthenticated)
             {
@@ -124,16 +119,76 @@ namespace Microsoft.AspNetCore.Builder
 
             if (!result.Succeeded)
             {
-                var response = context.Response;
-                response.StatusCode = (int)HttpStatusCode.Forbidden;
-                await response.CompleteAsync()
-                    .ConfigureAwait(false);
+                await SetForbiddenResponse(context).ConfigureAwait(false);
                 return;
             }
 
             context.User = result.Principal;
 
             await next().ConfigureAwait(false);
+
+
+        }
+
+        private static async Task SetForbiddenResponse(HttpContext context)
+        {
+            var response = context.Response;
+            response.StatusCode = (int)HttpStatusCode.Forbidden;
+            await response.CompleteAsync()
+                .ConfigureAwait(false);
+        }
+
+        private static void ByBassAuthentication(HttpContext context, HttpRequest request, PathString path)
+        {
+            if ((path.StartsWithSegments("/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
+                            path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
+                            path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) &&
+                            request.Method == HttpMethods.Get &&
+                            !context.User.IsInRole(SharedConstants.READER))
+            {
+                // by-pass security for localized resource read
+                context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                            new Claim(JwtClaimTypes.Name, "AnonymousReader"),
+                            new Claim("role", SharedConstants.READER)
+                }, "by-pass", JwtClaimTypes.Name, "role"));
+            }
+        }
+
+        private static async Task<bool> GetRegistrationTokenAsync(HttpContext context, HttpRequest request, PathString path)
+        {
+            if (path.StartsWithSegments("/register", StringComparison.OrdinalIgnoreCase) &&
+                request.Method != HttpMethods.Post)
+            {
+                if (!request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues authorizationHeaderValue))
+                {
+                    await SetForbiddenResponse(context).ConfigureAwait(false);
+                    return false;
+                }
+
+                // get token for registration end point
+                var token = authorizationHeaderValue.First().Split(' ')[1];
+                var store = context.RequestServices.GetRequiredService<IAdminStore<Client>>();
+                var clientResponse = await store.GetAsync(new PageRequest
+                {
+                    Filter = $"{nameof(Client.RegistrationToken)} eq {token}",
+                    Select = nameof(Client.Id),
+                    Take = 1
+                }).ConfigureAwait(false);
+                var client = clientResponse.Items.FirstOrDefault();
+                if (client == null || path.Value.EndsWith(client.Id))
+                {
+                    context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                                new Claim(JwtClaimTypes.Name, client?.Id ?? "not found"),
+                                new Claim("role", SharedConstants.REGISTRATION)
+                    }, "registration", JwtClaimTypes.Name, "role"));
+                    return true;
+                }
+                await SetForbiddenResponse(context).ConfigureAwait(false);
+                return false;
+            }
+            return true;
         }
     }
 }

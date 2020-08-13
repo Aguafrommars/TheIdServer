@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Linq;
 
@@ -90,6 +91,10 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 });
             }
 
+            if (exception is NotFoundException notFoundException)
+            {
+                context.Result = new NotFoundObjectResult(notFoundException);
+            }
         }
     }
 }
