@@ -48,7 +48,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
                 Assert.NotNull(result.RegistrationToken);
-                Assert.Equal("http://localhost/api/register/test", result.RegistrationUri);
+                Assert.NotNull(result.RegistrationUri);
             }
 
             registration.RedirectUris = new List<string>
@@ -600,7 +600,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
                 Assert.NotNull(registration.RegistrationToken);
-                Assert.Equal("http://localhost/api/register/test", registration.RegistrationUri);
             }
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -775,7 +774,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
                 Assert.NotNull(registration.RegistrationToken);
-                Assert.Equal("http://localhost/api/register/test", registration.RegistrationUri);
             }
 
             using (var message = new HttpRequestMessage
@@ -831,7 +829,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
                 Assert.NotNull(registration.RegistrationToken);
-                Assert.Equal("http://localhost/api/register/test", registration.RegistrationUri);
             }
 
             using (var message = new HttpRequestMessage
