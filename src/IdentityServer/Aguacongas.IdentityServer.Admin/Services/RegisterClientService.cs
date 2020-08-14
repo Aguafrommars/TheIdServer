@@ -249,10 +249,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var resourceResponse = await _clientResourceStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
-            });
+            }).ConfigureAwait(false);
 
             var items = resourceResponse.Items;
-            var clientNameList = registration.ClientNames.Where(n => n.Culture != null);
+            var clientNameList = registration.ClientNames?.Where(n => n.Culture != null) ?? Array.Empty<LocalizableProperty>();
             var clientUriList = registration.ClientUris?.Where(u => u.Culture != null) ?? Array.Empty<LocalizableProperty>();
             var logoUriList = registration.LogoUris?.Where(u => u.Culture != null) ?? Array.Empty<LocalizableProperty>();
             var policyUriList = registration.PolicyUris?.Where(u => u.Culture != null) ?? Array.Empty<LocalizableProperty>();
@@ -260,26 +260,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             foreach (var item in items)
             {
-                if (item.ResourceKind == EntityResourceKind.DisplayName && !clientNameList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
-                {
-                    await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
-                if (item.ResourceKind == EntityResourceKind.ClientUri && !clientUriList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
-                {
-                    await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
-                if (item.ResourceKind == EntityResourceKind.LogoUri && !logoUriList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
-                {
-                    await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
-                if (item.ResourceKind == EntityResourceKind.PolicyUri && !policyUriList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
-                {
-                    await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
-                if (item.ResourceKind == EntityResourceKind.TosUri && !tosUriList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
-                {
-                    await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
+                await DeleteItemAsync(clientNameList, clientUriList, logoUriList, policyUriList, tosUriList, item).ConfigureAwait(false);
             }
 
             await AddResourceAsync(clientId, items, clientNameList).ConfigureAwait(false);
@@ -359,6 +340,35 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public Task DeleteRegistrationAsync(string clientId)
             => _clientStore.DeleteAsync(clientId);
 
+        private async Task DeleteItemAsync(IEnumerable<LocalizableProperty> clientNameList, IEnumerable<LocalizableProperty> clientUriList, IEnumerable<LocalizableProperty> logoUriList, IEnumerable<LocalizableProperty> policyUriList, IEnumerable<LocalizableProperty> tosUriList, ClientLocalizedResource item)
+        {
+            if (item.ResourceKind == EntityResourceKind.DisplayName && !clientNameList.Any(IsDeleted(item)))
+            {
+                await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
+            }
+            if (item.ResourceKind == EntityResourceKind.ClientUri && !clientUriList.Any(IsDeleted(item)))
+            {
+                await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
+            }
+            if (item.ResourceKind == EntityResourceKind.LogoUri && !logoUriList.Any(IsDeleted(item)))
+            {
+                await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
+            }
+            if (item.ResourceKind == EntityResourceKind.PolicyUri && !policyUriList.Any(IsDeleted(item)))
+            {
+                await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
+            }
+            if (item.ResourceKind == EntityResourceKind.TosUri && !tosUriList.Any(n => n.Culture == item.CultureId && n.Value == item.Value))
+            {
+                await _clientResourceStore.DeleteAsync(item.Id).ConfigureAwait(false);
+            }
+        }
+
+        private static Func<LocalizableProperty, bool> IsDeleted(ClientLocalizedResource item)
+        {
+            return n => n.Culture == item.CultureId && n.Value == item.Value;
+        }
+
         private async Task<Client> GetClientAsync(string clientId)
         {
             var client = await _clientStore.GetAsync(clientId, new GetRequest
@@ -378,7 +388,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var propertiesResponse = await _clientPropertyStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ClientProperty.ClientId)} eq '{clientId}' and ({nameof(ClientProperty.Key)} eq 'contacts' or {nameof(ClientProperty.Key)} eq 'responseTypes')"
-            });
+            }).ConfigureAwait(false);
             await UpdatePropertyAsync(clientId, registration, propertiesResponse, registration.Contacts != null ? string.Join("; ", registration.Contacts) : null, "contacts").ConfigureAwait(false);
             await UpdatePropertyAsync(clientId, registration, propertiesResponse, registration.ResponseTypes != null ? string.Join("; ", registration.ResponseTypes) : null, "responseType").ConfigureAwait(false);
         }
@@ -434,7 +444,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var grantTypeResponse = await _clientGrantTypeStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
-            });
+            }).ConfigureAwait(false);
 
             foreach (var item in grantTypeResponse.Items)
             {
@@ -463,7 +473,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var redirectUriResponse = await _clientUriStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ClientUri.ClientId)} eq '{clientId}'"
-            });
+            }).ConfigureAwait(false);
 
             foreach (var item in redirectUriResponse.Items)
             {

@@ -739,6 +739,33 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 Assert.Null(result.RegistrationToken);
                 Assert.Null(result.RegistrationUri);
             }
+
+            registration.ClientNames = null;
+            registration.ClientUris = null;
+            registration.LogoUris = null;
+            registration.PolicyUris = null;
+            registration.TosUris = null;
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
         }
 
         [Fact]
