@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Aguacongas.TheIdServer.BlazorApp.Services;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
@@ -18,10 +20,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
         [Parameter]
         public Entity.Client Model { get; set; }
 
+        [CascadingParameter]
+        public HandleModificationState HandleModificationState { get; set; }
+
         protected override void OnInitialized()
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             base.OnInitialized();
+        }
+
+        private Task AddResource(Entity.EntityResourceKind kind)
+        {
+            var entity = new Entity.ClientLocalizedResource
+            {
+                ResourceKind = kind
+            };
+            Model.Resources.Add(entity);
+            HandleModificationState.EntityCreated(entity);
+            return Task.CompletedTask;
         }
     }
 }

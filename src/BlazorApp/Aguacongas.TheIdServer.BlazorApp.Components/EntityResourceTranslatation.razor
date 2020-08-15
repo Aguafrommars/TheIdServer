@@ -12,7 +12,7 @@
     }        
 </div>
 <div class="col-lg-9 col-sm-12">
-    @if (Resource.ResourceKind == Entity.EntityResourceKind.DisplayName)
+    @if (Resource.ResourceKind != Entity.EntityResourceKind.Description)
     {
         <AuthorizeText Placeholder="@Localizer["localized display name"]" @bind-Value="@Resource.Value" MaxLength="200" />
     }

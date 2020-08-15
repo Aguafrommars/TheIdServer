@@ -25,6 +25,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.ClientUri).Uri().WithMessage("The url is not valid.");
             RuleFor(m => m.LogoUri).MaximumLength(2000).WithMessage("The logo url cannot exceed 2000 char.");
             RuleFor(m => m.LogoUri).Uri().WithMessage("The logo url is not valid.");
+            RuleFor(m => m.PolicyUri).MaximumLength(2000).WithMessage("The policy url cannot exceed 2000 char.");
+            RuleFor(m => m.PolicyUri).Uri().WithMessage("The policy url is not valid.");
+            RuleFor(m => m.TosUri).MaximumLength(2000).WithMessage("The terms of service url cannot exceed 2000 char.");
+            RuleFor(m => m.TosUri).Uri().WithMessage("The terms of service url is not valid.");
             RuleFor(m => m.FrontChannelLogoutUri).MaximumLength(2000).WithMessage("The front channel logout url cannot exceed 2000 char.");
             RuleFor(m => m.FrontChannelLogoutUri).Uri().WithMessage("The front channel logout url is not valid.");
             RuleFor(m => m.FrontChannelLogoutUri).Must(u => !client.FrontChannelLogoutSessionRequired || !string.IsNullOrEmpty(u))
@@ -54,6 +58,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.Resources)
                 .Where(m => m.ResourceKind == EntityResourceKind.Description)
                 .SetValidator(new EntityResourceValidator<ClientLocalizedResource>(client, EntityResourceKind.Description));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.LogoUri)
+                .SetValidator(new ClientResourceUriValidator(client, EntityResourceKind.Description));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.ClientUri)
+                .SetValidator(new ClientResourceUriValidator(client, EntityResourceKind.Description));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.PolicyUri)
+                .SetValidator(new ClientResourceUriValidator(client, EntityResourceKind.Description));
+            RuleForEach(m => m.Resources)
+                .Where(m => m.ResourceKind == EntityResourceKind.TosUri)
+                .SetValidator(new ClientResourceUriValidator(client, EntityResourceKind.Description));
         }
     }
 }
