@@ -88,6 +88,22 @@
                         </a>
                     }
                 </div>
+                <div class="consent-buttons">
+                    @if (Model.PolicyUrl != null)
+                    {
+                        <div>
+                            <a target="_blank" href="@Model.PolicyUrl" rel="noreferrer">
+                                @Localizer["Policy"]
+                            </a>
+                        </div>
+                    }
+                    @if (Model.TosUrl != null)
+                    {
+                        <a target="_blank" href="@Model.TosUrl" rel="noreferrer">
+                            @Localizer["Terms of service"]
+                        </a>
+                    }
+                </div>
             </form>
         </div>
     </div>
