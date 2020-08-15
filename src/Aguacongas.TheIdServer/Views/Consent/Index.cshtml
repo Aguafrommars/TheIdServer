@@ -71,7 +71,7 @@
                     <button name="button" value="no" class="btn">@Localizer["No, Do Not Allow"]</button>
                     @if (Model.ClientUrl != null)
                     {
-                        <a class="pull-right btn btn-default" target="_blank" href="@Model.ClientUrl" rel="noreferrer">
+                        <a class="pull-right btn btn-default" target="_blank" href="@Model.ClientUrl" rel="noopener noreferrer">
                             <span class="glyphicon glyphicon-info-sign"></span>
                             <strong>@Model.ClientName</strong>
                         </a>
@@ -81,14 +81,14 @@
                     @if (Model.PolicyUrl != null)
                     {
                         <div>
-                            <a target="_blank" href="@Model.PolicyUrl" rel="noreferrer">
+                            <a target="_blank" href="@Model.PolicyUrl" rel="noopener noreferrer">
                                 @Localizer["Policy"]
                             </a>
                         </div>
                     }
                     @if (Model.TosUrl != null)
                     {
-                        <a target="_blank" href="@Model.TosUrl" rel="noreferrer">
+                        <a target="_blank" href="@Model.TosUrl" rel="noopener noreferrer">
                             @Localizer["Terms of service"]
                         </a>
                     }
