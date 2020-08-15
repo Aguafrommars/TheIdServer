@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -49,7 +48,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Request parameters should be to lower")]
         public async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? new PageRequest();

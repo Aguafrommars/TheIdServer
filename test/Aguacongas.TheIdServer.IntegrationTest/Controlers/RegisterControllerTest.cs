@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 using var response = await client.PostAsync("/api/register", request);
 
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(result.RegistrationToken);
+                Assert.NotNull(result.RegistrationUri);
             }
 
             registration.RedirectUris = new List<string>
@@ -559,6 +565,376 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             var uri = new Uri(redirectUri);
 
             Assert.Equal($"Invalid RedirectUri '{redirectUri}'.Native client cannot use standard '{uri.Scheme}' scheme, you must use a custom scheme such as 'net.pipe' or 'net.tcp', or 'http' scheme with 'localhost' host.", error.Error_description);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_should_update_client()
+        {
+            var sut = TestUtils.CreateTestServer();
+            sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+
+            var client = sut.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "http://locahost"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration.RegistrationToken);
+            }
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
+
+            registration.RedirectUris = new List<string>
+            {
+                "https://localhost"
+            };
+            registration.ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "test"
+                    },
+                };
+
+            registration.ClientUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.LogoUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.PolicyUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.TosUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                };
+
+            registration.JwksUri = "https://jwk";
+            registration.Contacts = new[]
+            {
+                "test@test.com"
+            };
+            registration.ResponseTypes = new[]
+            {
+                "code"
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
+
+            registration.ClientNames = null;
+            registration.ClientUris = null;
+            registration.LogoUris = null;
+            registration.PolicyUris = null;
+            registration.TosUris = null;
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
+        }
+
+        [Fact]
+        public async Task GetAsync_should_return_registration()
+        {
+            var sut = TestUtils.CreateTestServer();
+            sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+
+            var client = sut.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "https://localhost"
+                },
+                ClientUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                LogoUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                PolicyUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                TosUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                ResponseTypes = new[]
+                {
+                    "code"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration.RegistrationToken);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(registration.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                Assert.Null(result.RegistrationToken);
+                Assert.Null(result.RegistrationUri);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_should_delete_client()
+        {
+            var sut = TestUtils.CreateTestServer();
+            sut.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+
+            var client = sut.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "http://locahost"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration.RegistrationToken);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(registration.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(registration.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            }
         }
     }
 }

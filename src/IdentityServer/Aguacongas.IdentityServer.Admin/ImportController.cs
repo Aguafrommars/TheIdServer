@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +33,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPost()]
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task<ImportResult> ImportAsync()
             => _service.ImportAsync(HttpContext.Request.Form.Files);
             

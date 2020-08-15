@@ -128,13 +128,31 @@ namespace Aguacongas.IdentityServer.Admin.Models
         public string JwksUri { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the subject.
+        /// Gets or sets the registration token.
         /// </summary>
         /// <value>
-        /// The type of the subject.
+        /// The registration token.
         /// </value>
-        [JsonProperty("subject_type")]
-        public string SubjectType { get; set; }
+        [JsonProperty("registration_access_token")]
+        public string RegistrationToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the registration URI.
+        /// </summary>
+        /// <value>
+        /// The registration URI.
+        /// </value>
+        [JsonProperty("registration_client_uri")]
+        public string RegistrationUri { get; set; }
+
+        /// <summary>
+        /// Gets the client secret expire at.
+        /// </summary>
+        /// <value>
+        /// The client secret expire at.
+        /// </value>
+        [JsonProperty("client_secret_expires_at")]
+        public int? ClientSecretExpireAt { get; internal set; }
     }
 
     /// <summary>

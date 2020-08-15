@@ -12,6 +12,9 @@ namespace Microsoft.AspNetCore.Authorization
             options.AddPolicy(SharedConstants.READER, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
                     context.User.IsInRole(SharedConstants.READER)));
+            options.AddPolicy(SharedConstants.REGISTRATION, policy =>
+                   policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
+                    context.User.IsInRole(SharedConstants.REGISTRATION)));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,13 +28,44 @@ namespace Aguacongas.IdentityServer.Admin
         }
 
         /// <summary>
-        /// Creates the asynchronous.
+        /// Creates the registration asynchronous.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="registeration">The registeration.</param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = "Is4-Writer")]
-        public Task<ClientRegisteration> CreateAsync([FromBody] ClientRegisteration client)
-            => _registerClientService.RegisterAsync(client, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+        [Authorize(Policy = SharedConstants.WRITER)]
+        public Task<ClientRegisteration> CreateAsync([FromBody] ClientRegisteration registeration)
+            => _registerClientService.RegisterAsync(registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+
+        /// <summary>
+        /// Gets registration the asynchronous.
+        /// </summary>
+        /// <param name="clientId">The client id</param>
+        /// <returns></returns>
+        [HttpGet("{clientId}")]
+        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        public Task<ClientRegisteration> GetAsync(string clientId)
+            => _registerClientService.GetRegistrationAsync(clientId, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+
+        /// <summary>
+        /// Updates registration the asynchronous.
+        /// </summary>
+        /// <param name="clientId">The client id</param>
+        /// <param name="registeration">The registeration.</param>
+        /// <returns></returns>
+        [HttpPut("{clientId}")]
+        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        public Task<ClientRegisteration> UpdateAsync(string clientId, [FromBody] ClientRegisteration registeration)
+            => _registerClientService.UpdateRegistrationAsync(clientId, registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+
+        /// <summary>
+        /// Updates registration the asynchronous.
+        /// </summary>
+        /// <param name="clientId">The client id</param>
+        /// <returns></returns>
+        [HttpDelete("{clientId}")]
+        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        public Task DeleteAsync(string clientId)
+            => _registerClientService.DeleteRegistrationAsync(clientId);
     }
 }

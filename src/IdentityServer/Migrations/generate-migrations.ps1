@@ -1,4 +1,5 @@
 $migrationName = $args[0]
+$context = $args[1]
 Write-Host "generate migrations $migrationName"
 
 Get-ChildItem `
@@ -8,9 +9,7 @@ Get-ChildItem `
     $segments = $_.Name.Split(".")
     $rdms = $segments[$segments.Length - 1]
     $startup = "../Aguacongas.TheIdServer.$rdms.Startup"
-    Write-Host "generate migration for $rdms in $path using startup project $startup"
-    & dotnet ef --startup-project $startup migrations add $migrationName --context ApplicationDbContext
-    & dotnet ef --startup-project $startup migrations add $migrationName --context ConfigurationDbContext
-    & dotnet ef --startup-project $startup migrations add $migrationName --context OperationalDbContext
+    Write-Host "generate migration for $rdms in $path using startup project $startup for context $context"
+    & dotnet ef --startup-project $startup migrations add $migrationName --context $context
 }
 Set-Location $PSScriptRoot

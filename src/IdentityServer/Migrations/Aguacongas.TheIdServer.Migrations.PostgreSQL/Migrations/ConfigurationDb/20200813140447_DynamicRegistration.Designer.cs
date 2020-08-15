@@ -3,48 +3,53 @@ using System;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
+namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    partial class ConfigurationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200813140447_DynamicRegistration")]
+    partial class DynamicRegistration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.EntityFramework.Store.SchemeDefinition", b =>
                 {
                     b.Property<string>("Scheme")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<bool>("MapDefaultOutboundClaimType")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SerializedHandlerType")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<string>("SerializedOptions")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<bool>("StoreClaims")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Scheme");
 
@@ -54,21 +59,21 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiScopeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -82,21 +87,21 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiClaim", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -110,27 +115,27 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiLocalizedResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ResourceKind")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -142,25 +147,25 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -174,34 +179,34 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("Required")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -211,21 +216,21 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeClaim", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiScopeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -239,27 +244,27 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeLocalizedResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiScopeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ResourceKind")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -271,25 +276,25 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeProperty", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiScopeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -303,33 +308,33 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiSecret", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ApiId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -341,144 +346,144 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AbsoluteRefreshTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("AccessTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("AccessTokenType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("AllowAccessTokensViaBrowser")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowOfflineAccess")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowPlainTextPkce")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowRememberConsent")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AlwaysSendClientClaims")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("AuthorizationCodeLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("BackChannelLogoutSessionRequired")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("ClientClaimsPrefix")
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("ClientName")
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<int?>("ConsentLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<int>("DeviceCodeLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("EnableLocalLogin")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("FrontChannelLogoutSessionRequired")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<int>("IdentityTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IncludeJwtId")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LogoUri")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("NonEditable")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PairWiseSubjectSalt")
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("PolicyUri")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<int>("RefreshTokenExpiration")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("RefreshTokenUsage")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("RegistrationToken")
-                        .HasColumnType("guid");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("RequireClientSecret")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequireConsent")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequirePkce")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TosUri")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserCodeType")
-                        .HasColumnType("nvarchar2(100)")
+                        .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
                     b.Property<int?>("UserSsoLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -488,25 +493,25 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -518,22 +523,22 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientGrantType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("GrantType")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -546,21 +551,21 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientIdpRestriction", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Provider")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -574,27 +579,27 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientLocalizedResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ResourceKind")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -606,25 +611,25 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientProperty", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -638,21 +643,21 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientScope", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -666,33 +671,33 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientSecret", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -704,28 +709,28 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientUri", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Kind")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("SanetizedCorsUri")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("Uri")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -739,13 +744,13 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Culture", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -755,35 +760,35 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 41, 437, DateTimeKind.Utc).AddTicks(7595)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 47, 168, DateTimeKind.Utc).AddTicks(4499)
                         });
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ExternalClaimTransformation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("AsMultipleValues")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FromClaimType")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Scheme")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ToClaimType")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -796,20 +801,20 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -823,27 +828,27 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityLocalizedResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("ResourceKind")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -855,25 +860,25 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(250)")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar2(2000)")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -887,36 +892,36 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("NonEditable")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Required")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -926,30 +931,30 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.LocalizedResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("BaseName")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nclob");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -961,28 +966,28 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ProtectResource", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar2(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar2(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(200)")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("NonEditable")
-                        .HasColumnType("bool");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

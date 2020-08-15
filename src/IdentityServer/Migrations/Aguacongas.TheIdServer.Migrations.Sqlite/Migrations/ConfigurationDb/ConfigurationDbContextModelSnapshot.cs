@@ -438,6 +438,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
+                    b.Property<string>("PolicyUri")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ProtocolType")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -448,6 +451,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
                     b.Property<int>("RefreshTokenUsage")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("RegistrationToken")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("INTEGER");
@@ -460,6 +466,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TosUri")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("INTEGER");
@@ -746,7 +755,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 7, 25, 17, 45, 38, 649, DateTimeKind.Utc).AddTicks(7013)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 53, 252, DateTimeKind.Utc).AddTicks(6770)
                         });
                 });
 
