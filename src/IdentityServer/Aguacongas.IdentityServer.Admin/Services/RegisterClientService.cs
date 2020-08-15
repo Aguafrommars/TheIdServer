@@ -167,21 +167,21 @@ namespace Aguacongas.IdentityServer.Admin.Services
                         ResourceKind = EntityResourceKind.ClientUri,
                         Value = u.Value
                     }) : new List<ClientLocalizedResource>(0))
-                    .Union(registration.LogoUris != null ? registration.LogoUris?.Where(u => u.Culture != null).Select(u => new ClientLocalizedResource
+                    .Union(registration.LogoUris != null ? registration.LogoUris.Where(u => u.Culture != null).Select(u => new ClientLocalizedResource
                     {
                         Id = Guid.NewGuid().ToString(),
                         CultureId = u.Culture,
                         ResourceKind = EntityResourceKind.LogoUri,
                         Value = u.Value
                     }) : new List<ClientLocalizedResource>(0))
-                    .Union(registration.PolicyUris != null ? registration.PolicyUris.Select(u => new ClientLocalizedResource
+                    .Union(registration.PolicyUris != null ? registration.PolicyUris.Where(u => u.Culture != null).Select(u => new ClientLocalizedResource
                     {
                         Id = Guid.NewGuid().ToString(),
                         CultureId = u.Culture,
                         ResourceKind = EntityResourceKind.PolicyUri,
                         Value = u.Value
                     }) : new List<ClientLocalizedResource>(0))
-                    .Union(registration.TosUris != null ? registration.TosUris.Select(u => new ClientLocalizedResource
+                    .Union(registration.TosUris != null ? registration.TosUris.Where(u => u.Culture != null).Select(u => new ClientLocalizedResource
                     {
                         Id = Guid.NewGuid().ToString(),
                         CultureId = u.Culture,
@@ -645,15 +645,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 return;
             }
 
-            foreach (var uri in localizableProperties)
+            foreach (var localizable in localizableProperties)
             {
-                if (!Uri.TryCreate(uri.Value, UriKind.Absolute, out var policyUri))
+                if (!Uri.TryCreate(localizable.Value, UriKind.Absolute, out var uri))
                 {
-                    throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' is not valid.");
+                    throw new RegistrationException(errorCode, $"{uriName} '{localizable.Value}' is not valid.");
                 }
-                if (!redirectUriList.Any(u => u.Host == policyUri.Host))
+                if (!redirectUriList.Any(u => u.Host == uri.Host))
                 {
-                    throw new RegistrationException(errorCode, $"{uriName} '{uri.Value}' host doesn't match a redirect uri host.");
+                    throw new RegistrationException(errorCode, $"{uriName} '{localizable.Value}' host doesn't match a redirect uri host.");
                 }
             }
         }

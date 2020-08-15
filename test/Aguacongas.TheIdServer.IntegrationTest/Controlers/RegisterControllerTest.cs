@@ -788,7 +788,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://locahost"
+                    "https://localhost"
                 },
                 ClientUris = new List<LocalizableProperty>
                 {
@@ -839,10 +839,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     },
                 },
                 ResponseTypes = new[]
-            {
-                "code"
-            }
-
+                {
+                    "code"
+                }
             };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
