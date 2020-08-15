@@ -789,7 +789,60 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RedirectUris = new List<string>
                 {
                     "http://locahost"
-                }
+                },
+                ClientUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                LogoUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                PolicyUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                TosUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                ResponseTypes = new[]
+            {
+                "code"
+            }
+
             };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
