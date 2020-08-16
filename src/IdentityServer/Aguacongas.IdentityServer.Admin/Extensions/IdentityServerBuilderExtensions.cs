@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -70,6 +71,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 discovery.ExpandRelativePathsInCustomEntries = true;
                 discovery.CustomEntries.Add("registration_endpoint", $"~{apiPath}/register");
             }).AddTransient<IRegisterClientService, RegisterClientService>();
+            return builder;
+        }
+
+        public static IIdentityServerBuilder AddTokenCleaner(this IIdentityServerBuilder builder, TimeSpan interval)
+        {
+            builder.Services.AddHostedService(p => new TokenCleanerHost(p, interval));
             return builder;
         }
     }
