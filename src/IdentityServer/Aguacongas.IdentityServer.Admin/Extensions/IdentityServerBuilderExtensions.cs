@@ -74,9 +74,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        /// <summary>
+        /// Adds the token cleaner.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="interval">The interval.</param>
+        /// <returns></returns>
         public static IIdentityServerBuilder AddTokenCleaner(this IIdentityServerBuilder builder, TimeSpan interval)
         {
-            builder.Services.AddHostedService(p => new TokenCleanerHost(p, interval));
+            builder.Services.AddHostedService(p => new TokenCleanerHost(p, interval, p.GetRequiredService<ILogger<TokenCleanerHost>>()));
             return builder;
         }
     }

@@ -14,12 +14,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// Clean tokens.
     /// </summary>
     /// <seealso cref="IHostedService" />
-    public class TokenCleanerHost : IHostedService
+    public class TokenCleanerHost : IHostedService, IDisposable
     {
         private readonly IServiceProvider _provider;
         private readonly TimeSpan _interval;
         private readonly ILogger<TokenCleanerHost> _logger;
         private CancellationTokenSource _source;
+        private bool disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenCleanerHost" /> class.
@@ -42,13 +43,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (_source != null)
-            {
-                throw new InvalidOperationException("Already started. Call Stop first.");
-            }
-
             _logger.LogInformation("Starting tokens removal");
 
+            Cancel();
             _source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             return Task.Factory.StartNew(() => CleanupAsync(_source.Token));
@@ -61,29 +58,23 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (_source == null)
-            {
-                throw new InvalidOperationException("Not started. Call Start first.");
-            }
-
             _logger.LogInformation("Stopping tokens removal");
 
-            _source.Cancel();
-            _source = null;
+            Cancel();
 
             return Task.CompletedTask;
+        }
+
+        private void Cancel()
+        {
+            _source?.Cancel();
+            _source = null;
         }
 
         private async Task CleanupAsync(CancellationToken cancellationToken)
         {
             while (true)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    _logger.LogDebug("CancellationRequested. Exiting.");
-                    break;
-                }
-
                 try
                 {
                     await Task.Delay(_interval, cancellationToken);
@@ -99,42 +90,38 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     break;
                 }
 
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    _logger.LogDebug("CancellationRequested. Exiting.");
-                    break;
-                }
-
-                await RemoveExpiredTokensAsync();
+                await RemoveExpiredTokensAsync(cancellationToken).ConfigureAwait(false);
             }
         }
 
-        private async Task RemoveExpiredTokensAsync()
+        private async Task RemoveExpiredTokensAsync(CancellationToken cancellationToken)
         {
             try
             {
                 using var scope = _provider.CreateScope();
                 var service = scope.ServiceProvider;
-                var oneTimeTokenStore = service.GetRequiredService<IAdminStore<OneTimeToken>>();
-                var oneTimeTokenResponse = await oneTimeTokenStore.GetAsync(new PageRequest
-                {
-                    Filter = $"{nameof(IAuditable.CreatedAt)} gt {DateTime.UtcNow.AddMinutes(1)}",
-                    OrderBy = nameof(IAuditable.CreatedAt)
-                }).ConfigureAwait(false);
-                await RemoveExpiredTokensAsync(oneTimeTokenStore, oneTimeTokenResponse.Items).ConfigureAwait(false);
-
                 var pageRequest = new PageRequest
                 {
-                    Filter = $"{nameof(IGrant.Expiration)} gt {DateTime.UtcNow}",
+                    // Community OData transform date from UTC so we substract the UTC diff
+                    Filter = $"{nameof(IGrant.Expiration)} lt {DateTime.UtcNow.AddHours(DateTime.UtcNow.Hour - DateTime.Now.Hour):o}",
                     OrderBy = nameof(IAuditable.CreatedAt)
                 };
+
+                var oneTimeTokenStore = service.GetRequiredService<IAdminStore<OneTimeToken>>();
+                var oneTimeTokenResponse = await oneTimeTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(oneTimeTokenStore, oneTimeTokenResponse.Items, cancellationToken).ConfigureAwait(false);
+
                 var refreshTokenStore = service.GetRequiredService<IAdminStore<ReferenceToken>>();
-                var refreshTokenResponse = await refreshTokenStore.GetAsync(pageRequest).ConfigureAwait(false);
-                await RemoveExpiredTokensAsync(refreshTokenStore, refreshTokenResponse.Items).ConfigureAwait(false);
+                var refreshTokenResponse = await refreshTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(refreshTokenStore, refreshTokenResponse.Items, cancellationToken).ConfigureAwait(false);
 
                 var referenceTokenStore = service.GetRequiredService<IAdminStore<ReferenceToken>>();
-                var referenceTokenResponse = await referenceTokenStore.GetAsync(pageRequest).ConfigureAwait(false);
-                await RemoveExpiredTokensAsync(referenceTokenStore, referenceTokenResponse.Items).ConfigureAwait(false);
+                var referenceTokenResponse = await referenceTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(referenceTokenStore, referenceTokenResponse.Items, cancellationToken).ConfigureAwait(false);
+            }
+            catch (TaskCanceledException)
+            {
+                _logger.LogDebug("TaskCanceledException. Exiting.");
             }
             catch (Exception e)
             {
@@ -143,12 +130,38 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items)
+        private async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
         {
             foreach (var token in items)
             {
-                await store.DeleteAsync(token.Id).ConfigureAwait(false);
+                await store.DeleteAsync(token.Id, cancellationToken).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _source?.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

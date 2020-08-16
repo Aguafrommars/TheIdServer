@@ -87,7 +87,7 @@ namespace Aguacongas.TheIdServer
             else
             {
                 identityBuilder.AddProfileService<ProfileService<ApplicationUser>>()
-                    .AddTokenCleaner(TimeSpan.FromMinutes(1));
+                    .AddTokenCleaner(Configuration.GetValue<TimeSpan?>("TokenCleanupInterval") ?? TimeSpan.FromMinutes(1));
             }
 
             services.AddTransient(p =>
