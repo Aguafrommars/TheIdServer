@@ -36,7 +36,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             {
                 ClientId = _options.Value.ProviderOptions.ClientId,
                 UserId = state.User.Claims.First(c => c.Type == "sub").Value,
-                Data = token.Value
+                Data = token.Value,
+                Expiration = DateTime.UtcNow.AddMinutes(1)
             }).ConfigureAwait(false);
 
             return oneTimeToken.Id;
