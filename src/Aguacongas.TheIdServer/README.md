@@ -374,6 +374,22 @@ For more informations read [Serilog.Settings.Configuration](https://github.com/s
 
 The claims providers configuration is described in [Claims provider](../../doc/CLAIMS_PROVIDER.md)
 
+## Configure token cleaner
+
+A task remove expired tokens periodicaly, to configure the interval use **TokenCleanupInterval**.
+
+```json
+"TokenCleanupInterval": "00:05:00"
+```
+
+To disable the task, use **DisableTokenCleanup**.
+
+```json
+"DisableTokenCleanup":  true
+```
+
+> The task is not enabled on proxy server.
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1)
