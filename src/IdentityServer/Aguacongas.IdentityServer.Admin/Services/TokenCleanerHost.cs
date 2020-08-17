@@ -111,7 +111,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var oneTimeTokenResponse = await oneTimeTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
                 await RemoveExpiredTokensAsync(oneTimeTokenStore, oneTimeTokenResponse.Items, cancellationToken).ConfigureAwait(false);
 
-                var refreshTokenStore = service.GetRequiredService<IAdminStore<ReferenceToken>>();
+                var refreshTokenStore = service.GetRequiredService<IAdminStore<RefreshToken>>();
                 var refreshTokenResponse = await refreshTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
                 await RemoveExpiredTokensAsync(refreshTokenStore, refreshTokenResponse.Items, cancellationToken).ConfigureAwait(false);
 
