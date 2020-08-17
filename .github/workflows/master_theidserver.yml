@@ -30,6 +30,5 @@ jobs:
       uses: azure/webapps-deploy@v1
       with:
         app-name: 'theidserver'
-        slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_08968172a7ae42099177ff31626f7e9a }}
         package: ${{env.DOTNET_ROOT}}/myapp 
