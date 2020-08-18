@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -12,9 +13,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Registers the asynchronous.
         /// </summary>
         /// <param name="registration">The client registration.</param>
-        /// <param name="uri">Base uri.</param>
+        /// <param name="httpContext">The HTTP context.</param>
         /// <returns></returns>
-        Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, string uri);
+        Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, HttpContext httpContext);
         /// <summary>
         /// Updates the registration asynchronous.
         /// </summary>

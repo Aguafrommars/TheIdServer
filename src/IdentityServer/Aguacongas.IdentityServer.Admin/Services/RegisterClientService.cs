@@ -1,7 +1,10 @@
 ﻿using Aguacongas.IdentityServer.Admin.Models;
+using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.ResponseHandling;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Collections.Generic;
@@ -16,7 +19,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="IRegisterClientService" />
     public class RegisterClientService : IRegisterClientService
     {
-        private readonly IdentityServer4.Configuration.IdentityServerOptions _options;
+        private readonly IdentityServer4.Configuration.IdentityServerOptions _identityServerOptions1;
+        private readonly DynamicClientRegistrationOptions _dymamicClientRegistrationOptions;
         private readonly IAdminStore<Client> _clientStore;
         private readonly IAdminStore<ClientUri> _clientUriStore;
         private readonly IAdminStore<ClientLocalizedResource> _clientResourceStore;
@@ -26,7 +30,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IdentityServer4.Models.Client _defaultValues = new IdentityServer4.Models.Client();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterClientService"/> class.
+        /// Initializes a new instance of the <see cref="RegisterClientService" /> class.
         /// </summary>
         /// <param name="clientStore">The client store.</param>
         /// <param name="clientUriStore">The client URI store.</param>
@@ -34,9 +38,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="clientGrantTypeStore">The client grant type store.</param>
         /// <param name="clientPropertyStore">The client property store.</param>
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
-        /// <param name="options">The options.</param>
-        /// <exception cref="ArgumentNullException">
-        /// options
+        /// <param name="identityServerOptions">The options.</param>
+        /// <param name="dymamicClientRegistrationOptions">The dymamic client registration options.</param>
+        /// <exception cref="ArgumentNullException">options
         /// or
         /// clientStore
         /// or
@@ -48,17 +52,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// or
         /// clientGrantTypeStore
         /// or
-        /// discoveryResponseGenerator
-        /// </exception>
+        /// discoveryResponseGenerator</exception>
         public RegisterClientService(IAdminStore<Client> clientStore,
             IAdminStore<ClientUri> clientUriStore,
             IAdminStore<ClientLocalizedResource> clientResourceStore,
             IAdminStore<ClientGrantType> clientGrantTypeStore,
             IAdminStore<ClientProperty> clientPropertyStore,
             IDiscoveryResponseGenerator discoveryResponseGenerator, 
-            IdentityServer4.Configuration.IdentityServerOptions options)
+            IdentityServer4.Configuration.IdentityServerOptions identityServerOptions,
+            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions)
+
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
+            _dymamicClientRegistrationOptions = dymamicClientRegistrationOptions?.Value ?? throw new ArgumentNullException(nameof(dymamicClientRegistrationOptions));
             _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
             _clientUriStore = clientUriStore ?? throw new ArgumentNullException(nameof(clientUriStore));
             _clientResourceStore = clientResourceStore ?? throw new ArgumentNullException(nameof(clientResourceStore));
@@ -71,11 +77,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Registers the asynchronous.
         /// </summary>
         /// <param name="registration">The client registration.</param>
-        /// <param name="uri">Base uri.</param>
+        /// <param name="httpContext">The HTTP context.</param>
         /// <returns></returns>
-        public async Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, string uri)
+        public async Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, HttpContext httpContext)
         {
+            var uri = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/";
             var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
+            ValidateCaller(registration, httpContext);
             Validate(registration, discovery);
 
             var secret = registration.ApplicationType == "native" ? Guid.NewGuid().ToString() : null;
@@ -340,6 +348,22 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public Task DeleteRegistrationAsync(string clientId)
             => _clientStore.DeleteAsync(clientId);
 
+        private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
+        {
+            if (!(httpContext.User?.IsInRole(SharedConstants.REGISTRATION) ?? false))
+            {
+                var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
+                if (allowedContact == null)
+                {
+                    throw new ForbiddenException();
+                }
+                if (!allowedContact.AllowedHosts.Any(h => registration.RedirectUris.Select(u => new Uri(u)).Any(u => u.Host == h)))
+                {
+                    throw new ForbiddenException();
+                }
+            }
+        }
+
         private async Task DeleteItemAsync(IEnumerable<LocalizableProperty> clientNameList, IEnumerable<LocalizableProperty> clientUriList, IEnumerable<LocalizableProperty> logoUriList, IEnumerable<LocalizableProperty> policyUriList, IEnumerable<LocalizableProperty> tosUriList, ClientLocalizedResource item)
         {
             if (item.ResourceKind == EntityResourceKind.DisplayName && !clientNameList.Any(IsDeleted(item)))
@@ -529,8 +553,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 throw new RegistrationException("invalid_application_type", $"ApplicationType '{registration.ApplicationType}' is invalid. It must be 'web' or 'native'.");
             }
 
-            var validationOptions = _options.Validation;
+            var validationOptions = _identityServerOptions1.Validation;
             var redirectUriList = new List<Uri>(registration.RedirectUris.Count());
+
             foreach (var uri in registration.RedirectUris)
             {
                 if (validationOptions.InvalidRedirectUriPrefixes

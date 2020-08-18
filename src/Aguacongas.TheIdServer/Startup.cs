@@ -3,6 +3,7 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
@@ -62,11 +63,12 @@ namespace Aguacongas.TheIdServer
             }
 
             var identityBuilder = services.AddClaimsProviders(Configuration)
-                .Configure<ForwardedHeadersOptions>(options => Configuration.GetSection(nameof(ForwardedHeadersOptions)).Bind(options))
-                .Configure<AccountOptions>(options => Configuration.GetSection(nameof(AccountOptions)).Bind(options))
+                .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
+                .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
+                .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
-                .AddIdentityServer(options => Configuration.GetSection(nameof(IdentityServerOptions)).Bind(options))
+                .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddSigningCredentials()
                 .AddDynamicClientRegistration();

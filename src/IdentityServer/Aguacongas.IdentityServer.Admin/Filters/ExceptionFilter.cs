@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
@@ -100,6 +101,12 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 context.Result = new NotFoundObjectResult(notFoundException);
             }
 
+            if (exception is ForbiddenException forbiddenException)
+            {
+                var response = context.HttpContext.Response;
+                response.StatusCode = (int)HttpStatusCode.Forbidden;
+                context.Exception = null;
+            }
         }
     }
 }
