@@ -350,7 +350,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
-            if (!(httpContext.User?.IsInRole(SharedConstants.REGISTRATION) ?? false))
+            if (!(httpContext.User?.IsInRole(SharedConstants.WRITER) ?? false))
             {
                 var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
                 if (allowedContact == null)
