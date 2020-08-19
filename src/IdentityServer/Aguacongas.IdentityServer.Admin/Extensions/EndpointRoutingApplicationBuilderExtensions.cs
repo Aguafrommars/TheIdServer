@@ -117,7 +117,9 @@ namespace Microsoft.AspNetCore.Builder
             var result = await context.AuthenticateAsync(authicationScheme)
                     .ConfigureAwait(false);
 
-            if (!result.Succeeded)
+            if (!result.Succeeded && 
+                path.StartsWithSegments("/register", StringComparison.OrdinalIgnoreCase) &&
+                request.Method != HttpMethods.Post)
             {
                 await SetForbiddenResponse(context).ConfigureAwait(false);
                 return;
