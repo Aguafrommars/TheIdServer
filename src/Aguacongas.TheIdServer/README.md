@@ -390,6 +390,47 @@ To disable the task, use **DisableTokenCleanup**.
 
 > The task is not enabled on proxy server.
 
+## Configure Dynamic client registration allowed contacts an host
+
+The server supports [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html).  
+
+New client registration is alloed to users with **Is4-Writter** role by sending the user access token or to contacts defined in *DynamicClientRegistrationOptions* section.
+
+```json
+"DynamicClientRegistrationOptions": {
+  "AllowedContacts": [
+    {
+      "Contact": "certification@oidf.org",
+      "AllowedHosts": [
+        "www.certification.openid.net"
+      ]
+    }
+  ]
+}
+```
+
+It this case the client registration request must contains the *contacts* array.
+
+**request sample**
+
+```json
+{
+    "client_name": "oidc_cert_client gUPPBlHIEAqNOYR",
+    "grant_types": [
+        "authorization_code"
+    ],
+    "response_types": [
+        "code"
+    ],
+    "redirect_uris": [
+        "https://www.certification.openid.net/test/a/theidserver/callback"
+    ],
+    "contacts": [
+        "certification@oidf.org"
+    ]
+}
+```
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1)
