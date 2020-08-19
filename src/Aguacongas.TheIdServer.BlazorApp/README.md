@@ -2,17 +2,17 @@
 
 This project contains the code of the [Blazor wasm](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
-## Instalation
+## Installations
 
 ### From Docker
 
-The application is embeded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
+The application is embedded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
 If you prefer, you can install the [standalone application'sLinux image](https://hub.docker.com/r/aguacongas/aguacongastheidserverblazorapp).  
 This image uses an [nginx](http://nginx.org/) server to host the application.
 
 ### From Github Release
 
-The application is embeded in the [server's Github release](../Aguacongas.TheIdServer/README.md#from-github-release).  
+The application is embedded in the [server's Github release](../Aguacongas.TheIdServer/README.md#from-github-release).  
 You can choose to install the standalone application by selecting *Aguacongas.TheIdServer.BlazorApp{version}.zip* in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases).   
 Unzip in the destination of your choice, and use the server of your choice.
 
@@ -72,7 +72,7 @@ The application reads its configuration from *appsettings.json* and environment 
 }
 ```
 
-For more informations read [ASP.NET Core Blazor hosting model configuration / Blazor WebAssembly / Configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration).
+For more information read [ASP.NET Core Blazor hosting model configuration / Blazor WebAssembly / Configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration).
 
 ### apiBaseUrl
 
@@ -80,7 +80,7 @@ Defines the URL to the API.
 
 ### administratorEmail
 
-Defines the adminitrator eMail address.
+Defines the administrator eMail address.
 
 ### authenticationPaths
 
@@ -114,9 +114,9 @@ The role claims type is defined by **userOptions:roleClaim**.
 ### providerOptions
 
 The section **providerOptions** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.OidcProviderOptions`.  
-This configuration section defines how the application is authentified.  
+This configuration section defines how the application is authenticated.  
 
-For more informations read [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library / Authentication service support](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support).
+For more information read [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library / Authentication service support](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support).
 
 ### welcomeContenUrl
 
@@ -138,7 +138,7 @@ This endpoint should return an html fragment code.
     Visit the <a href="https://github.com/aguacongas/TheIdServer">github site</a> for doc, source code and issue tracking.
 </p>
 <p>
-    If you have trouble to login disable chromuim cookies-without-same-site-must-be-secure flag.<br />
+    If you have trouble with login, disable Chromium cookies-without-same-site-must-be-secure flag.<br />
     <code>
         chrome://flags/#cookies-without-same-site-must-be-secure
     </code><br/>
@@ -146,7 +146,7 @@ This endpoint should return an html fragment code.
 </p>
 <p>
     You can sign-in with <b>alice</b> to have reader/writer access, or <b>bob</b> for a read only access.<br />
-    The passord is <i>Pass123$</i>
+    The password is <i>Pass123$</i>
 </p>
 ```
 
@@ -155,7 +155,7 @@ This endpoint should return an html fragment code.
 The application doesn't generate secrets. 
 
 * If you want to store a SharedSecret the application convert the value to a SHA256 value.
-* If you want to store a Base64 X509 certificat you need to convert the value as Base64 string by yourself.
+* If you want to store a Base64 X509 certificate you need to convert the value as Base64 string by yourself.
 
 ## Additional resources
 

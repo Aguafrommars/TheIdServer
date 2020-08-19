@@ -1,7 +1,7 @@
 # Manage clients
 
-![clients](/doc/assets/clients.png)
+![clients](assets/clients.png)
 
 ## Client details
 
-![client-details](/doc/assets/client-details.png)
+![client-details](assets/client-details.png)
