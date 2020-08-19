@@ -33,9 +33,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="registeration">The registeration.</param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = SharedConstants.WRITER)]
         public Task<ClientRegisteration> CreateAsync([FromBody] ClientRegisteration registeration)
-            => _registerClientService.RegisterAsync(registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+            => _registerClientService.RegisterAsync(registeration, HttpContext);
 
         /// <summary>
         /// Gets registration the asynchronous.

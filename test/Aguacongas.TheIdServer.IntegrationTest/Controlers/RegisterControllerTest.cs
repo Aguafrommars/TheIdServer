@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://locahost"
+                    "http://localhost"
                 }
             };
 
@@ -568,6 +568,77 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         }
 
         [Fact]
+        public async Task CreateAsync_should_validate_caller()
+        {
+            var sut = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
+            {
+                ["DynamicClientRegistrationOptions:AllowedContacts:0:Contact"] = "test",
+                ["DynamicClientRegistrationOptions:AllowedContacts:0:AllowedHosts:0"] = "localhost",
+            });
+
+            var client = sut.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "http://localhost"
+                },
+                Contacts = new[]
+                {
+                    "test"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(result.RegistrationToken);
+                Assert.NotNull(result.RegistrationUri);
+            }
+
+            registration.RedirectUris = new[]
+            {
+                "http://forbidenn"
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            }
+
+
+            registration.Contacts = new[]
+            {
+                "forbidenn"
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            }
+        }
+
+
+        [Fact]
         public async Task UpdateAsync_should_update_client()
         {
             var sut = TestUtils.CreateTestServer();
@@ -587,7 +658,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://locahost"
+                    "http://localhost"
                 }
             };
 
@@ -895,7 +966,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://locahost"
+                    "http://localhost"
                 }
             };
 
