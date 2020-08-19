@@ -86,11 +86,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
             ValidateCaller(registration, httpContext);
             Validate(registration, discovery);
 
-            var secret = registration.ApplicationType == "native" ? Guid.NewGuid().ToString() : null;
+            var secret = Guid.NewGuid().ToString();
             var clientName = registration.ClientNames?.FirstOrDefault(n => n.Culture == null)?.Value ??
                     registration.ClientNames?.FirstOrDefault()?.Value ?? Guid.NewGuid().ToString();
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
+            registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
 
             var client = new Client
             {
@@ -121,11 +122,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 AlwaysIncludeUserClaimsInIdToken = _defaultValues.AlwaysIncludeUserClaimsInIdToken,
                 AlwaysSendClientClaims = _defaultValues.AlwaysSendClientClaims,
                 AuthorizationCodeLifetime = _defaultValues.AuthorizationCodeLifetime,
-                BackChannelLogoutSessionRequired = _defaultValues.BackChannelLogoutSessionRequired,
+                BackChannelLogoutSessionRequired = !string.IsNullOrEmpty(_defaultValues.BackChannelLogoutUri),
                 BackChannelLogoutUri = _defaultValues.BackChannelLogoutUri,
                 ClientClaimsPrefix = _defaultValues.ClientClaimsPrefix,
                 ClientName = clientName,
-                ClientSecrets = secret != null ? new List<ClientSecret>
+                ClientSecrets = new List<ClientSecret>
                 {
                     new ClientSecret
                     {
@@ -133,14 +134,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                         Type = "SharedSecret",
                         Value = IdentityServer4.Models.HashExtensions.Sha256(secret)
                     }
-                } : new List<ClientSecret>(0),
+                },
                 ClientUri = registration.ClientUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.ClientUris?.FirstOrDefault()?.Value,
                 ConsentLifetime = _defaultValues.ConsentLifetime,
                 Description = _defaultValues.Description,
                 DeviceCodeLifetime = _defaultValues.DeviceCodeLifetime,
                 Enabled = true,
                 EnableLocalLogin = _defaultValues.EnableLocalLogin,
-                FrontChannelLogoutSessionRequired = _defaultValues.FrontChannelLogoutSessionRequired,
+                FrontChannelLogoutSessionRequired = !string.IsNullOrEmpty(_defaultValues.FrontChannelLogoutUri),
                 FrontChannelLogoutUri = _defaultValues.FrontChannelLogoutUri,
                 Id = registration.Id,
                 IdentityTokenLifetime = _defaultValues.IdentityTokenLifetime,
@@ -159,7 +160,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 RefreshTokenUsage = (int)_defaultValues.RefreshTokenUsage,
                 RequireClientSecret = secret != null,
                 RequireConsent = _defaultValues.RequireConsent,
-                RequirePkce = _defaultValues.RequirePkce,
+                RequirePkce = false,
                 Resources = registration.ClientNames.Where(n => n.Culture != null)
                     .Select(n => new ClientLocalizedResource
                     {
