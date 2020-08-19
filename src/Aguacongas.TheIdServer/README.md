@@ -1,14 +1,14 @@
 # TheIdServer Web Server project
 
-The configuration can be read from *appsettings.json*, *appsettings.{Environment}.json*, command line arguments or environement variables.
+The configuration can be read from *appsettings.json*, *appsettings.{Environment}.json*, command line arguments or environment variables.
 
 Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1) for more information.
 
-## Instalation
+## Installation
 
 ### From Docker
 
-A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Docker hub.
 
 [*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
 
@@ -23,7 +23,7 @@ Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft
 ### From Github Release
 
 Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
-Unzip in the destination of your choice, as any ASP.Net Core web site it can run in IIS or as a stand alone server using the plateform of your choice.
+Unzip in the destination of your choice, as any ASP.Net Core web site it can run in IIS or as a stand alone server using the platform of your choice.
 
 Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1) for more information.
 
@@ -53,7 +53,7 @@ So you can set any IdentityServer4 options you want from configuration
 ### Using EF core
 
 The server supports *SqlServer*, *Sqlite*, *MySql*, *PostgreSQL*, *Oracle* and *InMemory* databases.  
-Use **DbType** to the define the dabase engine.
+Use **DbType** to the define the database engine.
 
 ```json
 "DbType": "SqlServer"
@@ -105,11 +105,11 @@ Defines how to authenticate the public server on private server API.
 Defines the [SignalR client](https://docs.microsoft.com/en-us/aspnet/core/signalr/dotnet-client?view=aspnetcore-3.1&tabs=visual-studio) configuration.  
 This client is used to update the external provider configuration of a running instance. When an external provider configuration changes, the API send a SignalR notification to inform other running instances.  
 
-For more informations read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
+For more information read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
 
 The SignalR hub accept request at */providerhub* and support [MessagePack](https://msgpack.org/index.html) protocol.
 
-For more informations read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
+For more information read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
 
 ### Database migration and data seeding
 
@@ -279,13 +279,13 @@ The section *CorsAllowedOrigin* define allowed CORS origins
 
 ## Configure HTTPS
 
-If you want to diseable HTTPS set **DisableHttps** to `false`
+If you want to disable HTTPS set **DisableHttps** to `false`
 
 ```json
 "DisableHttps": true
 ```
 
-If you use a self signed certificat you can disable strict SSL by settings **DisableStrictSsl** to `true`.
+If you use a self signed certificate you can disable strict SSL by settings **DisableStrictSsl** to `true`.
 
 ```json
 "DisableStrictSsl": true
@@ -303,7 +303,7 @@ The section **ForwardedHeadersOptions** is binded to the class [`Microsoft.AspNe
 
 ## Configure the provider hub
 
-External providers are dynamicaly configured with [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders).  
+External providers are dynamically configured with [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders).  
 In a [load balanced](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario) configuration, the provider hub is used to inform other running instances that an external provider configuration changes.  
 The **SignalR** section defines the configuration for both SignalR hub and client.
 
@@ -326,7 +326,7 @@ The **SignalR** section defines the configuration for both SignalR hub and clien
 If needed, the hub can use [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1) can be used. **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configure the backplane.  
 **SignalR:RedisOptions** is binded to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
 
-## Configre logs
+## Configure logs
 
 The section **Serilog** define the [Serilog](https://serilog.net/) configuration.
 
@@ -368,7 +368,7 @@ The section **Serilog** define the [Serilog](https://serilog.net/) configuration
   ]
 }
 ```
-For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
+For more details, read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
 
 ## Configure claims providers
 
@@ -376,7 +376,7 @@ The claims providers configuration is described in [Claims provider](../../doc/C
 
 ## Configure token cleaner
 
-A task remove expired tokens periodicaly, to configure the interval use **TokenCleanupInterval**.
+A task remove expired tokens periodically, to configure the interval use **TokenCleanupInterval**.
 
 ```json
 "TokenCleanupInterval": "00:05:00"

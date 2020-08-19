@@ -34,7 +34,7 @@ public class MapClaimsProvider: IProvideClaims
 }
 ```
 
-If your provider has dependencies, you can register it in the depencies injection container by implementing the `ISetupClaimsProvider` interface.
+If your provider has dependencies, you can register it in the dependencies injection container by implementing the `ISetupClaimsProvider` interface.
 
 **sample**
 
@@ -53,7 +53,7 @@ public class ClaimsProvidersSetup : ISetupClaimsProvider
 }
 ```
 
-## Configruation
+## Configuration
 
 To register your claims providers in the DI container, add setups classes declarations in the **ClaimsProviderOptions** configuration section.
 
@@ -88,7 +88,7 @@ If you do not register your providers in the DI container, add the path to the a
 When the server acts as a proxy, the profile service is a [`ProxyProfileService`](../src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ProxyProfileService.cs) instance. This class forward each request to claims providers to the webservice endpoint */claimsprovider*.  
 This way you don't have to expose your claims providers to internet and don't have to open custom networks rules to access private resources (such as DB, private service, etc...) on public side.
 
-Read [Using the API](src/Aguacongas.TheIdServer/README.md#using-the-api) for informations to configure a Public / private cluster.
+Read [Using the API](src/Aguacongas.TheIdServer/README.md#using-the-api) for information on how to configure a public / private cluster.
 
 ## Additional resources
 

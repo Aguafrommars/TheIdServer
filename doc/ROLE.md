@@ -1,7 +1,7 @@
 # Manage roles
 
-![roles](/doc/assets/roles.png)
+![roles](assets/roles.png)
 
 ## Role details
 
-![role-details](/doc/assets/role.png)
+![role-details](assets/role.png)

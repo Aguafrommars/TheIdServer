@@ -1,7 +1,7 @@
 # Manage scopes
 
-![scopes](/doc/assets/scopes.png)
+![scopes](assets/scopes.png)
 
 ## Scope details
 
-![scope-details](/doc/assets/scope-details.png)
+![scope-details](assets/scope-details.png)
