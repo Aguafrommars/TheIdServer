@@ -30,13 +30,13 @@ To localized consents and grants screen, you can define localized strings for na
 
 And this strings will be localized in consents
 
-![localized constents](assets/localized-consents.png)  
+![localized consents](assets/localized-consents.png)  
 
 and grants screens.
 
 ![localized grants screen](assets/localized-grants.png)  
 
-## Application Welcom screen
+## Application Welcome screen
 
 When the application setting `welcomeContenUrl` = */api/welcomefragment*
 
@@ -44,7 +44,7 @@ When the application setting `welcomeContenUrl` = */api/welcomefragment*
 "welcomeContenUrl": "/api/welcomefragment"
 ```
 
-The api'll look for a file named *{EnvironmentName}-welcome-fragment.{CultureName}.html* in the *wwwroot* folder  
+The API will look for a file named *{EnvironmentName}-welcome-fragment.{CultureName}.html* in the *wwwroot* folder  
 and fallback to *{EnvironmentName}-welcome-fragment.html*  
 then to *welcome-fragment.{CultureName}.html*  
 then to *welcome-fragment.html*

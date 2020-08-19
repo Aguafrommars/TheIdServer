@@ -1,7 +1,7 @@
 # Manage identities
 
-![identities](/doc/assets/identities.png)
+![identities](assets/identities.png)
 
 ## Identity details
 
-![identity-details](/doc/assets/identity-details.png)
+![identity-details](assets/identity-details.png)
