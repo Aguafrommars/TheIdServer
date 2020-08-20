@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
@@ -33,6 +34,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="registeration">The registeration.</param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public Task<ClientRegisteration> CreateAsync([FromBody] ClientRegisteration registeration)
             => _registerClientService.RegisterAsync(registeration, HttpContext);
 
@@ -43,6 +46,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpGet("{clientId}")]
         [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public Task<ClientRegisteration> GetAsync(string clientId)
             => _registerClientService.GetRegistrationAsync(clientId, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
 
@@ -54,6 +59,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpPut("{clientId}")]
         [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public Task<ClientRegisteration> UpdateAsync(string clientId, [FromBody] ClientRegisteration registeration)
             => _registerClientService.UpdateRegistrationAsync(clientId, registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
 
@@ -64,6 +71,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpDelete("{clientId}")]
         [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public Task DeleteAsync(string clientId)
             => _registerClientService.DeleteRegistrationAsync(clientId);
     }

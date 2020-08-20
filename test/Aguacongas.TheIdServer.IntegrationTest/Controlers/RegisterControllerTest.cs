@@ -991,7 +991,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 using var response = await client.SendAsync(message);
 
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             }
 
             using (var message = new HttpRequestMessage
