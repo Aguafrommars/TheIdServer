@@ -133,6 +133,8 @@ namespace Aguacongas.TheIdServer
                     UserName = "alice",
                     Email = "alice@theidserver.com",
                     EmailConfirmed = true,
+                    PhoneNumber = "+41766403736",
+                    PhoneNumberConfirmed = true
                 };
                 ExcuteAndCheckResult(() => userMgr.CreateAsync(alice, "Pass123$"))
                     .GetAwaiter().GetResult();
@@ -141,10 +143,17 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Name, "Alice Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Alice"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "alice@theidserver.com"),
-                        new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                        new Claim(JwtClaimTypes.Address, "{ \"street_address\": \"One Hacker Way\", \"locality\": \"Heidelberg\", \"postal_code\": \"69118\", \"country\": \"Germany\" }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                        new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64),
+                        new Claim(JwtClaimTypes.BirthDate, DateTime.Now.ToString()),
+                        new Claim(JwtClaimTypes.ZoneInfo, "ch"),
+                        new Claim(JwtClaimTypes.Gender, "female"),
+                        new Claim(JwtClaimTypes.Profile, "http://alice.com/profile"),
+                        new Claim(JwtClaimTypes.MiddleName, "Alice Smith"),
+                        new Claim(JwtClaimTypes.Locale, "fr"),
+                        new Claim(JwtClaimTypes.Picture, "http://alice.com/picture"),
+                        new Claim(JwtClaimTypes.NickName, "alice"),
                     })).GetAwaiter().GetResult();
 
                 ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(alice, roles))
@@ -173,10 +182,8 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Name, "Bob Smith"),
                         new Claim(JwtClaimTypes.GivenName, "Bob"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "bob@theidserver.com"),
-                        new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                        new Claim(JwtClaimTypes.Address, "{ \"street_address\": \"One Hacker Way\", \"locality\": \"Heidelberg\", \"postal_code\": \"69118\", \"country\": \"Germany\" }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
                         new Claim("location", "somewhere")
                     })).GetAwaiter().GetResult();
                 ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, SharedConstants.READER))

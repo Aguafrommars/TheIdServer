@@ -20,7 +20,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
 
         protected override void OnInitialized()
         {
-            _claim.Api = Model;
             HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
             HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
             base.OnInitialized();
@@ -48,7 +47,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ApiComponents
         private void OnClaimValueChanged(ApiClaim claim)
         {
             Model.ApiClaims.Add(claim);
-            _claim = new ApiClaim { Api = Model };
+            _claim = new ApiClaim();
             claim.Id = Guid.NewGuid().ToString();
             HandleModificationState.EntityCreated(claim);
         }
