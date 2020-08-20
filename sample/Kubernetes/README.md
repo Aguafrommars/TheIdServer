@@ -1,7 +1,7 @@
 # Kubernetes sample
 
-This folder contains a YAML file that demonstrates how to set up a complete solution in Kubernetes.
-It installs the following components:
+This folder contains a series of YAML file that demonstrates how to set up a complete solution in Kubernetes.
+It deploys the following components:
 
 * a Redis server
 * a Microsoft SQL Server server
@@ -330,7 +330,7 @@ You should be able to log with *alice* or *bob* (password: Pass123$).
 
 ### Security
 
-[Network-policies.yaml](Network-policies.yaml) contains following rules:
+[Network-policies.yaml](Network-policies.yaml) contains the following rules:
 
 * db role accepts requests from backend only
 * log role accepts requests from backend and frontend
