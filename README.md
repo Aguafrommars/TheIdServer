@@ -40,7 +40,7 @@
 
 ### Preview 
 
-An in memory db version is deployed on [heroku](https://www.heroku.com/) at [https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
+An in-memory database version is available on [Heroku](https://www.heroku.com/) at [https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/).
 
 ## Setup
 
@@ -53,7 +53,7 @@ You can build the solution with Visual Studio or use the `dotnet build` command.
 
 ## Contribute
 
-Contributions are warmly welcomed. You can contribute by opening an issue, suggest new a feature or submit a pull request.
+We warmly welcome contributions. You can contribute by opening an issue, suggest new a feature, or submit a pull request.
 
 Read [How to contribute](https://github.com/Aguafrommars/TheIdServer/tree/master/CONTRIBUTING.md) and [Contributor Covenant Code of Conduct](https://github.com/Aguafrommars/TheIdServer/tree/master/CODE_OF_CONDUCT.md) for more information.
 
