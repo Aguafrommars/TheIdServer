@@ -1,15 +1,15 @@
 # Kubernetes sample
 
-This folder contains yaml file to setup a complete solution in kubernetes.
-It installs:
+This folder contains YAML file to set up a complete solution in Kubernetes.
+It installs the following components:
 
-* a redis server
-* a SqlServer server
+* a Redis server
+* a Microsoft SQL Server server
 * a Seq server
 * a TheIdServer private servers farm
 * a TheIdServer public servers farm
 
-By default all files create entities in **theidserver** namespace.
+By default, all files create entities in **theidserver** namespace.
 
 ## Setup
 
@@ -23,12 +23,12 @@ You need first to generate certificates
 * *tls-public.pfx* to setup HTTPS on Kestrel for the public farm.
 * *theidserver.pfx* to sign JWT tokens
 
-[You can generate pfx using openssl](https://www.ssl.com/how-to/create-a-pfx-p12-certificate-file-using-openssl/).  
-Don't forget to save password
+[You can generate pfx using OpenSSL](https://www.ssl.com/how-to/create-a-pfx-p12-certificate-file-using-openssl/).  
+Don't forget to save your password.
 
-2. Certificates persitent volume claim
+2. Certificates persistent volume claim
 
-Create the persitent volume claim to store certificates
+Create a persistent volume claim to store certificates.
 
 ```bash
 kubectl apply -f TheIdServer-certificates-volume.yaml
@@ -36,7 +36,7 @@ kubectl apply -f TheIdServer-certificates-volume.yaml
 
 3. Certificates files
 
-Copy *.pfx* generated at step 1 in the volume create at step 2.
+Copy the *.pfx* generated at step 1 in the volume created at step 2.
 
 To get the volume path run:
 
@@ -78,18 +78,18 @@ Events:            <none>
 ```
 
 > If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.  
-From windows you can access to the wsl filesystem througth *\\\\wsl$"
+From Windows, you can access to the WSL filesystem througth *\\\\wsl$".
 
 
 ### Database
 
-You need to create the SqlServer database.
+You need to create the  SQL Server database.
 
 1. SA password
 
-Create a secret to store the SqlServer SA password.  
+Create a secret to store the SQL Server SA password.  
 
-* Update *SqlServer-secret.yaml* with your base64 SA password
+* Update *SqlServer-secret.yaml* with your base64 SA password.
 
 ```yaml
 apiVersion: v1
@@ -110,7 +110,7 @@ kubectl apply -f SqlServer-secret.yaml
 
 2. Deploy the server
 
-* Create the persitent volume claim for SqlServer
+* Create a persistent volume claim for SQL Server
 
 ```bash
 kubectl -f SqlServer-volume.yaml
@@ -128,11 +128,11 @@ kubectl -f SqlServer-deployment.yaml
 kubectl -f SqlServer-service.yaml
 ```
 
-3. Create the database
+3. Create a database
 
-Using Microsoft SQL Server Management Studio or the tool of your choice.
+Use Microsoft SQL Server Management Studio or the tool of your choice to create the database.
 
-* Create a dabase named *TheIdServer*
+* Create a database named *TheIdServer*
 * Create a login named *TheIdServer* and map it to *TheIdServer* database db_owner  
 ![db_user.png](../../doc/assets/db_user.png)
 
@@ -152,7 +152,7 @@ kubectl -f Redis-service.yaml
 
 ### Seq
 
-* Create the persitent volume claim for Seq
+* Create a persistent volume claim for Seq
 
 ```bash
 kubectl -f Seq-volume.yaml
@@ -176,7 +176,7 @@ kubectl -f Seq-service.yaml
 
 Create a secret to store the SqlServer connection string.  
 
-* Update *TheIdServer-private-connectionstring.yaml* with your base64 connection string. The connection string should be like *Data Source=sql-server;Initial Catalog=TheIdServer;User Id=TheIdServer;Password={your pwd}*
+* Update *TheIdServer-private-connectionstring.yaml* with your base64 connection string. The connection string should resemble *Data Source=sql-server;Initial Catalog=TheIdServer;User Id=TheIdServer;Password={your pwd}*
 
 ```yaml
 apiVersion: v1
@@ -199,7 +199,7 @@ kubectl apply -f TheIdServer-private-connectionstring.yaml
 
 Create a secret to store certificates files passwords.  
 
-* Update *TheIdServer-private-secrets.yaml* with your base64 encoded passwords
+* Update *TheIdServer-private-secrets.yaml* with your base64 encoded passwords.
 
 ```yaml
 kind: Secret
@@ -220,20 +220,20 @@ kubectl apply -f TheIdServer-private-secrets.yaml
 
 3. Configure the admin app
 
-Create a persistent volume claim to store admin app configurations files.
+Create a persistent volume claim to store the configuration files for the admin application.
 
 ```
 kubectl apply -f TheIdServer-config-volume.yaml
 ```
 
 Copy [admin-appsettings.Private.json](admin-appsettings.Private.json) file in the volume like you did for certificates.  
-At startup this file is copied in *wwwroot/appsetting.json* to replace the default admin app's configuration file.
+At startup, this file is copied in *wwwroot/appsetting.json* to replace the default admin application's configuration file.
 
 
 4. Deploy the farm
 
 * Create the config map  
-The config map store enrinement variables configuration.
+The config map stores the environment variables configuration.
 
 ```bash
 kubectl apply -f TheIdServer-private-configmap.yaml
@@ -254,15 +254,15 @@ kubectl apply -f TheIdServer-private-service.yaml
 5. Test the deployment
 
 In a browser, navigate to https://localhost:5443.  
-You should be able to log with *alice* or *bob* (pwd: Pass123$).    
+You should be able to log with *alice* or *bob* (password: Pass123$).    
 
 ### Public farm
 
 1. Certificates passwords
 
-Create a secret to store certificates files passwords.  
+Create a secret to store the passwords for the certificates.  
 
-* Update *TheIdServer-public-secrets.yaml* with your base64 encoded passwords
+* Update *TheIdServer-public-secrets.yaml* with your base64 encoded passwords.
 
 ```yaml
 kind: Secret
@@ -281,15 +281,15 @@ data:
 kubectl apply -f TheIdServer-public-secrets.yaml
 ```
 
-2. Configure the admin app
+2. Configure the admin application
 
 Copy [admin-appsettings.Public.json](admin-appsettings.Public.json) file in the config volume like you did for the private farm.  
-At startup this file is copied in *wwwroot/appsetting.json* to replace the default admin app's configuration file.
+At startup, this file is copied in *wwwroot/appsetting.json* to replace the default admin application's configuration file.
 
 3. Deploy the farm
 
 * Create the config map  
-The config map store enrinement variables configuration.
+The config map stores the environment variables configuration.
 
 ```bash
 kubectl apply -f TheIdServer-public-configmap.yaml
@@ -315,31 +315,31 @@ kubectl apply -f TheIdServer-ingress-service.yaml
 
 4. Test the deployment
 
-* Configure your host to route *theidserver.aguafrommars.com* to your local host.
+* Configure your host to route *theidserver.aguafrommars.com* to your localhost.
 
 ```
 127.0.0.1 theidserver.aguafrommars.com
 ```
 
-* Add login and logoug URL's to the client *theidserveradmin* using the private farm.
+* Add the login and logout URLs to the client *theidserveradmin* using the private farm.
 
 ![k8s-client-urls](../../doc/assets/k8s-client-urls.png)
 
 In a browser, navigate to https://theidserver.aguafrommars.com.  
-You should be able to log with *alice* or *bob* (pwd: Pass123$).    
+You should be able to log with *alice* or *bob* (password: Pass123$).    
 
 ### Security
 
 [Network-policies.yaml](Network-policies.yaml) contains following rules:
 
-* db role accept requests from backend only
-* log role accept requests from backend and frontend
-* backend accept request from frontend only
+* db role accepts requests from backend only
+* log role accepts requests from backend and frontend
+* backend accepts requests from frontend only
 
-The SqlServer is in db role.  
-The Seq server is in log role.  
-The private farm is in backend role.  
-The public farm is in frontend role.
+The SqlServer is in the db role.  
+The Seq server is in the log role.  
+The private farm is in the backend role.  
+The public farm is in the frontend role.
 
 So the public farm cannot access to the SqlServer db but to the Seq server.
 
