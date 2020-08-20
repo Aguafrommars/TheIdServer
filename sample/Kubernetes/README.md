@@ -1,6 +1,6 @@
 # Kubernetes sample
 
-This folder contains YAML file to set up a complete solution in Kubernetes.
+This folder contains a YAML file that demonstrates how to set up a complete solution in Kubernetes.
 It installs the following components:
 
 * a Redis server
@@ -17,7 +17,7 @@ By default, all files create entities in **theidserver** namespace.
 
 1. Generate files
 
-You need first to generate certificates
+First, you will need to generate the required certificates.
 
 * *tls-private.pfx* to setup HTTPS on Kestrel for the private farm.
 * *tls-public.pfx* to setup HTTPS on Kestrel for the public farm.
@@ -78,7 +78,7 @@ Events:            <none>
 ```
 
 > If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.  
-From Windows, you can access to the WSL filesystem througth *\\\\wsl$".
+From Windows, you can access to the WSL filesystem through *\\\\wsl$".
 
 
 ### Database
