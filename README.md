@@ -56,3 +56,7 @@ You can build the solution with Visual Studio or use the `dotnet build` command.
 Contributions are warmly welcomed. You can contribute by opening an issue, suggest new a feature or submit a pull request.
 
 Read [How to contribute](https://github.com/Aguafrommars/TheIdServer/tree/master/CONTRIBUTING.md) and [Contributor Covenant Code of Conduct](https://github.com/Aguafrommars/TheIdServer/tree/master/CODE_OF_CONDUCT.md) for more information.
+
+## OIDC Certification test result
+
+https://www.certification.openid.net/plan-detail.html?plan=ZKco5LJhicIlT
