@@ -115,6 +115,21 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     {
                         Id = Guid.NewGuid().ToString(),
                         Scope = "profile"
+                    },
+                    new ClientScope
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Scope = "address"
+                    },
+                    new ClientScope
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Scope = "email"
+                    },
+                    new ClientScope
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Scope = "phone"
                     }
                 },
                 AllowRememberConsent = _defaultValues.AllowRememberConsent,

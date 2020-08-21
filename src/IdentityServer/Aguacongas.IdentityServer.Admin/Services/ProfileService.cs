@@ -1,4 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
+using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -9,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -62,23 +65,30 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var principal = user != null ? await GetClaimsPrincipalAsync(user).ConfigureAwait(false) : context.Subject;
 
             var requestedResources = context.RequestedResources.Resources;
+            
             foreach (var resource in requestedResources.IdentityResources)
             {
                 var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
                 context.AddRequestedClaims(claims);
             }
+            
             foreach (var resource in requestedResources.ApiResources)
             {
                 var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
                 context.AddRequestedClaims(claims);
             }
+            
             foreach (var resource in requestedResources.ApiScopes)
             {
                 var claims = await GetClaimsFromResource(resource, principal, context.Client, context.Caller).ConfigureAwait(false);
                 context.AddRequestedClaims(claims);
             }
+
             await base.GetProfileDataAsync(context).ConfigureAwait(false);
+
+            context.IssuedClaims = SanetizeIssuedClaims(context.IssuedClaims);
         }
+
 
         /// <summary>
         /// Gets the claims for a user.
@@ -132,5 +142,37 @@ namespace Aguacongas.IdentityServer.Admin.Services
             return GetClaimsFromResource(resource, subject, client, caller, providerTypeName);
         }
 
+        private List<Claim> SanetizeIssuedClaims(List<Claim> issuedClaims)
+        {
+            var claimList = new List<Claim>(issuedClaims.Count);
+
+            foreach (var claim in issuedClaims)
+            {
+                var value = claim.Value;
+                if (claim.Type == JwtClaimTypes.UpdatedAt)
+                {
+                    claimList.Add(new Claim(claim.Type, value, ClaimValueTypes.Integer64));
+                    continue;
+                }
+
+                if (claim.Type == JwtClaimTypes.Address)
+                {
+                    try
+                    {
+                        JsonSerializer.Deserialize<JsonElement>(value);
+                        claimList.Add(new Claim(claim.Type, value, IdentityServerConstants.ClaimValueTypes.Json));
+                        continue;
+                    }
+                    catch
+                    {
+                        // silent
+                    }
+                }
+
+                claimList.Add(claim);
+            }
+
+            return claimList;
+        }
     }
 }
