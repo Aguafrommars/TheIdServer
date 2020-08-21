@@ -1,6 +1,6 @@
 # Export/Import configuration
 
-On each pages of the application the export button ![export button](assets/export-button.png) allow you to export the configuration in a json file.
+On each page of the application, the export button ![export button](assets/export-button.png) allows you to export the configuration in a json file.
 
 ![export](assets/export.png)
 
