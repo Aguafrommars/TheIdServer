@@ -59,4 +59,5 @@ Read [How to contribute](https://github.com/Aguafrommars/TheIdServer/tree/master
 
 ## OIDC Certification test result
 
-https://www.certification.openid.net/plan-detail.html?plan=ZKco5LJhicIlT
+The server pass the [oidcc-basic-certification-test-plan](
+https://www.certification.openid.net/plan-detail.html?plan=ZKco5LJhicIlT&public=true) with some warnings. It's not yet certified and we need your help to pay the certification fees, please sponsor this project.

@@ -44,6 +44,9 @@ So you can set any IdentityServer4 options you want from configuration
     "RaiseInformationEvents": true,
     "RaiseFailureEvents": true,
     "RaiseSuccessEvents": true
+  },
+  "Endpoints": {
+    "EnableJwtRequestUri": true
   }
 }
 ```
@@ -430,6 +433,31 @@ It this case the client registration request must contains the *contacts* array.
     ]
 }
 ```
+
+## Configure Jwt request validator
+
+Tokens returned by request_uri parameter are validated using the rules defined in *TokenValidationParameters* section. By default all this following rule are true.
+
+```json
+"TokenValidationParameters": {
+  "ValidateIssuer": false,
+  "ValidateAudience": false,
+  "ValidateIssuerSigningKey": false,
+  "ValidateLifetime": false,
+  "RequireAudience": false,
+  "RequireExpirationTime": false,
+  "RequireSignedTokens": false
+}
+```
+
+> To enable JWT request uri, set *EnableJwtRequestUri* to true in *IdentityServerOptions:Endpoints*
+> ```json
+> "IdentityServerOptions": {
+>   "Endpoints": {
+>     "EnableJwtRequestUri": true
+>   }
+> },
+> ```
 
 ## Additional resources
 
