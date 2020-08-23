@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
+using IdentityServer4.Validation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -66,12 +67,13 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var services = builder.Services;
             services.Configure<IdentityServerOptions>(option =>
-            {
-                var discovery = option.Discovery;
-                discovery.ExpandRelativePathsInCustomEntries = true;
-                discovery.CustomEntries.Add("registration_endpoint", $"~{apiPath}/register");
-            })
-                .AddTransient<IRegisterClientService, RegisterClientService>();
+                {
+                    var discovery = option.Discovery;
+                    discovery.ExpandRelativePathsInCustomEntries = true;
+                    discovery.CustomEntries.Add("registration_endpoint", $"~{apiPath}/register");
+                })
+                .AddTransient<IRegisterClientService, RegisterClientService>()
+                .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>();
             return builder;
         }
 

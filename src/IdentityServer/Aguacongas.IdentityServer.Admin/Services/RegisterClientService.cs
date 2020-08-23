@@ -5,6 +5,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.ResponseHandling;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Collections.Generic;
@@ -86,12 +87,30 @@ namespace Aguacongas.IdentityServer.Admin.Services
             ValidateCaller(registration, httpContext);
             Validate(registration, discovery);
 
-            var secret = Guid.NewGuid().ToString();
             var clientName = registration.ClientNames?.FirstOrDefault(n => n.Culture == null)?.Value ??
                     registration.ClientNames?.FirstOrDefault()?.Value ?? Guid.NewGuid().ToString();
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
             registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
+            var secret = Guid.NewGuid().ToString();
+            
+            var serializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var jwkKeys = registration.Jwks?.Keys;
+            var sercretList = jwkKeys != null ? jwkKeys.Select(k => new ClientSecret
+            {
+                Id = Guid.NewGuid().ToString(),
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.JsonWebKey,
+                Value = JsonConvert.SerializeObject(k, serializerSettings)
+            }).ToList() : new List<ClientSecret>();
+            sercretList.Add(new ClientSecret
+            {
+                Id = Guid.NewGuid().ToString(),
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
+                Value = secret
+            });
 
             var client = new Client
             {
@@ -141,15 +160,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 BackChannelLogoutUri = _defaultValues.BackChannelLogoutUri,
                 ClientClaimsPrefix = _defaultValues.ClientClaimsPrefix,
                 ClientName = clientName,
-                ClientSecrets = new List<ClientSecret>
-                {
-                    new ClientSecret
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Type = "SharedSecret",
-                        Value = IdentityServer4.Models.HashExtensions.Sha256(secret)
-                    }
-                },
+                ClientSecrets = sercretList,
                 ClientUri = registration.ClientUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.ClientUris?.FirstOrDefault()?.Value,
                 ConsentLifetime = _defaultValues.ConsentLifetime,
                 Description = _defaultValues.Description,
@@ -173,7 +184,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }).ToList(),
                 RefreshTokenExpiration = (int)_defaultValues.RefreshTokenExpiration,
                 RefreshTokenUsage = (int)_defaultValues.RefreshTokenUsage,
-                RequireClientSecret = secret != null,
+                RequireClientSecret = false,
                 RequireConsent = _defaultValues.RequireConsent,
                 RequirePkce = false,
                 Resources = registration.ClientNames.Where(n => n.Culture != null)
@@ -247,7 +258,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationUri = $"{discovery["registration_endpoint"]}/{client.Id}";
             registration.JwksUri = discovery["jwks_uri"].ToString();
             registration.ClientSecret = secret;
-            registration.ClientSecretExpireAt = secret != null ? (int?)0 : null;
+            registration.ClientSecretExpireAt = 0 ;
 
             return registration;
         }
