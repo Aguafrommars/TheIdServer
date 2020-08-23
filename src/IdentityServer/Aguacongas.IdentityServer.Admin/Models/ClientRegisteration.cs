@@ -135,7 +135,7 @@ namespace Aguacongas.IdentityServer.Admin.Models
         /// The JWKS.
         /// </value>
         [JsonProperty("jwks")]
-        public IEnumerable<JsonWebKey> Jwks { get; set; }
+        public JsonWebKeys Jwks { get; set; }
 
         /// <summary>
         /// Gets or sets the registration token.
@@ -178,5 +178,20 @@ namespace Aguacongas.IdentityServer.Admin.Models
         /// The web
         /// </summary>
         Web
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class JsonWebKeys
+    {
+        /// <summary>
+        /// Gets or sets the keys.
+        /// </summary>
+        /// <value>
+        /// The keys.
+        /// </value>
+        [JsonProperty("keys")]
+        public IEnumerable<JsonWebKey> Keys { get; set; }
     }
 }

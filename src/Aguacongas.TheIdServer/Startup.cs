@@ -26,6 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -66,12 +67,15 @@ namespace Aguacongas.TheIdServer
                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
                 .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
+                .Configure<TokenValidationParameters>(Configuration.GetSection(nameof(TokenValidationParameters)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddSigningCredentials()
                 .AddDynamicClientRegistration();
+
+            identityBuilder.AddJwtRequestUriHttpClient();
 
             if (isProxy)
             {
@@ -142,44 +146,7 @@ namespace Aguacongas.TheIdServer
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
-        private Action<IdentityServerAuthenticationOptions> ConfigureIdentityServerAuthenticationOptions()
-        {
-            return options =>
-            {
-                Configuration.GetSection("ApiAuthentication").Bind(options);
-                if (Configuration.GetValue<bool>("DisableStrictSsl"))
-                {
-                    options.JwtBackChannelHandler = new HttpClientHandler
-                    {
-#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-                        ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
-#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
-                    };
-                }
-
-                static string tokenRetriever(HttpRequest request)
-                {
-                    var path = request.Path;
-                    var accessToken = TokenRetrieval.FromQueryString()(request);
-                    if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
-                    {
-                        return accessToken;
-                    }
-                    var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
-                    if (!string.IsNullOrEmpty(oneTimeToken))
-                    {
-                        return request.HttpContext
-                            .RequestServices
-                            .GetRequiredService<IRetrieveOneTimeToken>()
-                            .GetOneTimeToken(oneTimeToken);
-                    }
-                    return TokenRetrieval.FromAuthorizationHeader()(request);
-                }
-
-                options.TokenRetriever = tokenRetriever;
-            };
-        }
-
+ 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
@@ -278,6 +245,44 @@ namespace Aguacongas.TheIdServer
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
             }
+        }
+
+        private Action<IdentityServerAuthenticationOptions> ConfigureIdentityServerAuthenticationOptions()
+        {
+            return options =>
+            {
+                Configuration.GetSection("ApiAuthentication").Bind(options);
+                if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                {
+                    options.JwtBackChannelHandler = new HttpClientHandler
+                    {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
+                        ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+                    };
+                }
+
+                static string tokenRetriever(HttpRequest request)
+                {
+                    var path = request.Path;
+                    var accessToken = TokenRetrieval.FromQueryString()(request);
+                    if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                    {
+                        return accessToken;
+                    }
+                    var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                    if (!string.IsNullOrEmpty(oneTimeToken))
+                    {
+                        return request.HttpContext
+                            .RequestServices
+                            .GetRequiredService<IRetrieveOneTimeToken>()
+                            .GetOneTimeToken(oneTimeToken);
+                    }
+                    return TokenRetrieval.FromAuthorizationHeader()(request);
+                }
+
+                options.TokenRetriever = tokenRetriever;
+            };
         }
 
         private void AddDefaultServices(IServiceCollection services)

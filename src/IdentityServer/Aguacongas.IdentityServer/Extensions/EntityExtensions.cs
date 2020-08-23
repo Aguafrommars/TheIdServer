@@ -75,7 +75,13 @@ namespace Aguacongas.IdentityServer.Store
                 ClientId = client.Id,
                 ClientName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
                     && r.CultureId == cultureId)?.Value ?? client.ClientName,
-                ClientSecrets = client.ClientSecrets.Select(s => new Secret(s.Value, s.Expiration)).ToList(),
+                ClientSecrets = client.ClientSecrets.Select(s => new Secret
+                {
+                    Value = s.Value,
+                    Expiration = s.Expiration,
+                    Description = s.Description,
+                    Type = s.Type
+                }).ToList(),
                 ClientUri = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.ClientUri
                     && r.CultureId == cultureId)?.Value ?? client.ClientUri,
                 ConsentLifetime = client.ConsentLifetime,
