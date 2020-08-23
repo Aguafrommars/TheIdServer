@@ -655,27 +655,32 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var responseTypeSegmentList = responseType.Split(' ');
                 foreach (var type in responseTypeSegmentList)
                 {
-                    if (!responseTypesSupported.Any(t => t.Split(' ').Length == responseTypeSegmentList.Length && t.Contains(type)))
-                    {
-                        throw new RegistrationException("invalid_response_type", $"ResponseType '{responseType}' is not supported.");
-                    }
-                    switch (type)
-                    {
-                        case "code":
-                            if (!grantTypes.Any(g => g == "authorization_code"))
-                            {
-                                throw new RegistrationException("invalid_response_type", $"No GrantType 'authorization_code' for ResponseType '{responseType}' found in grant_types.");
-                            }
-                            break;
-                        case "token":
-                        case "id_token":
-                            if (!grantTypes.Any(g => g == "implicit"))
-                            {
-                                throw new RegistrationException("invalid_response_type", $"No GrantType 'implicit' for ResponseType '{responseType}' found in grant_types.");
-                            }
-                            break;
-                    }
+                    ValideResponseType(grantTypes, responseTypesSupported, responseType, responseTypeSegmentList, type);
                 }
+            }
+        }
+
+        private static void ValideResponseType(IEnumerable<string> grantTypes, IEnumerable<string> responseTypesSupported, string responseType, string[] responseTypeSegmentList, string type)
+        {
+            if (!responseTypesSupported.Any(t => t.Split(' ').Length == responseTypeSegmentList.Length && t.Contains(type)))
+            {
+                throw new RegistrationException("invalid_response_type", $"ResponseType '{responseType}' is not supported.");
+            }
+            switch (type)
+            {
+                case "code":
+                    if (!grantTypes.Any(g => g == "authorization_code"))
+                    {
+                        throw new RegistrationException("invalid_response_type", $"No GrantType 'authorization_code' for ResponseType '{responseType}' found in grant_types.");
+                    }
+                    break;
+                case "token":
+                case "id_token":
+                    if (!grantTypes.Any(g => g == "implicit"))
+                    {
+                        throw new RegistrationException("invalid_response_type", $"No GrantType 'implicit' for ResponseType '{responseType}' found in grant_types.");
+                    }
+                    break;
             }
         }
 
