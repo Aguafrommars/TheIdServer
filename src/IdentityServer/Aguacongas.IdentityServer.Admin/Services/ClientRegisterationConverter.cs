@@ -45,17 +45,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
                 if (property.PropertyType == typeof(IEnumerable<LocalizableProperty>))
                 {
-                    var value = property.GetValue(existingValue) as List<LocalizableProperty>;
-                    if (value == null)
-                    {
-                        value = new List<LocalizableProperty>();
-                    }
-                    value.Add(new LocalizableProperty
-                    {
-                        Culture = propertyInfo.Length > 1 ? propertyInfo[1] : null,
-                        Value = reader.ReadAsString()
-                    });
-                    property.SetValue(existingValue, value);
+                    ReadLocalizableProperty(reader, existingValue, propertyInfo, property);
                     continue;
                 }
                 if (property.PropertyType == typeof(string))
@@ -65,13 +55,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
                 if (property.PropertyType == typeof(IEnumerable<string>))
                 {
-                    var value = new List<string>();
-                    reader.Read();
-                    while(reader.Read() && reader.TokenType != JsonToken.EndArray)
-                    {
-                        value.Add(reader.Value as string);
-                    }
-                    property.SetValue(existingValue, value);
+                    ReadEnumarableString(reader, existingValue, property);
                     continue;
                 }
                 if (property.PropertyType == typeof(JsonWebKeys))
@@ -83,6 +67,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             return existingValue;
         }
+
 
         /// <summary>
         /// 
@@ -101,6 +86,32 @@ namespace Aguacongas.IdentityServer.Admin.Services
             JObject jObject = SerializedProperties(value);
 
             jObject.WriteTo(writer);
+        }
+
+        private static void ReadEnumarableString(JsonReader reader, ClientRegisteration existingValue, PropertyInfo property)
+        {
+            var value = new List<string>();
+            reader.Read();
+            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+            {
+                value.Add(reader.Value as string);
+            }
+            property.SetValue(existingValue, value);
+        }
+
+        private static void ReadLocalizableProperty(JsonReader reader, ClientRegisteration existingValue, string[] propertyInfo, PropertyInfo property)
+        {
+            var value = property.GetValue(existingValue) as List<LocalizableProperty>;
+            if (value == null)
+            {
+                value = new List<LocalizableProperty>();
+            }
+            value.Add(new LocalizableProperty
+            {
+                Culture = propertyInfo.Length > 1 ? propertyInfo[1] : null,
+                Value = reader.ReadAsString()
+            });
+            property.SetValue(existingValue, value);
         }
 
         private static void DeserializeJwks(JsonReader reader, ClientRegisteration existingValue, System.Reflection.PropertyInfo property)

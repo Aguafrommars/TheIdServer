@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             {
                 try
                 {
-                    await Task.Delay(_interval, cancellationToken);
+                    await Task.Delay(_interval, cancellationToken).ConfigureAwait(false);
                 }
                 catch (TaskCanceledException)
                 {
