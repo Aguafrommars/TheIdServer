@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Aguacongas.IdentityServer.Admin.Models;
 using Newtonsoft.Json.Linq;
 using IdentityServer4.Models;
+using System.Reflection;
 
 namespace Aguacongas.IdentityServer.Admin.Services
 {
@@ -157,16 +158,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var propertyName = jsonPropertyAttribute?.PropertyName ?? property.Name;
                 if (property.PropertyType == typeof(IEnumerable<LocalizableProperty>))
                 {
-                    var propertyValues = property.GetValue(value) as IEnumerable<LocalizableProperty>;
-                    if (propertyValues == null)
-                    {
-                        continue;
-                    }
-                    foreach (var propertyValue in propertyValues)
-                    {
-                        var name = string.IsNullOrEmpty(propertyValue.Culture) ? propertyName : $"{propertyName}#{propertyValue.Culture}";
-                        jObject.Add(new JProperty(name, propertyValue.Value));
-                    }
+                    SerializeLocalizableProperty(property, value, propertyName, jObject);
                     continue;
                 }
                 var v = property.GetValue(value);
@@ -183,6 +175,20 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
 
             return jObject;
+        }
+
+        private void SerializeLocalizableProperty(PropertyInfo property, object value, string propertyName, JObject jObject)
+        {
+            var propertyValues = property.GetValue(value) as IEnumerable<LocalizableProperty>;
+            if (propertyValues == null)
+            {
+                return;
+            }
+            foreach (var propertyValue in propertyValues)
+            {
+                var name = string.IsNullOrEmpty(propertyValue.Culture) ? propertyName : $"{propertyName}#{propertyValue.Culture}";
+                jObject.Add(new JProperty(name, propertyValue.Value));
+            }
         }
 
         private void SerializeJwks(JObject jObject, string propertyName, JsonWebKeys jsonWebKeys)
