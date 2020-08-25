@@ -8,22 +8,62 @@
 </div>
 @if (Model.RequireConsent)
 {
-    <div class="form-group row">
-        <label class="col col-form-label" for="logoUri">
-            @Localizer["logo uri"]
-        </label>
-        <div class="col-lg-10 col-sm-12">
-            <AuthorizeText Id="logoUri" Placeholder="@Localizer["logo uri"]" @bind-Value="@Model.LogoUri" MaxLength="2000" />
-        </div>
+<div class="form-group row">
+    <label class="col col-form-label" for="logoUri">
+        @Localizer["logo uri"]
+    </label>
+    <div class="col-lg-9 col-sm-12">
+        <AuthorizeText Id="logoUri" Placeholder="@Localizer["logo uri"]" @bind-Value="@Model.LogoUri" MaxLength="2000" />
     </div>
+    <div class="col-1">
+        <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.LogoUri)">
+            <span class="oi oi-plus"></span>
+        </button>
+    </div>
+</div>
+    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.LogoUri" />
     <div class="form-group row">
         <label class="col col-form-label" for="clientUri">
             @Localizer["client uri"]
         </label>
-        <div class="col-lg-10 col-sm-12">
+        <div class="col-lg-9 col-sm-12">
             <AuthorizeText Id="clientUri" Placeholder="@Localizer["client uri"]" @bind-Value="@Model.ClientUri" MaxLength="2000" />
         </div>
+        <div class="col-1">
+            <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.ClientUri)">
+                <span class="oi oi-plus"></span>
+            </button>
+        </div>
     </div>
+    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.ClientUri" />
+    <div class="form-group row">
+        <label class="col col-form-label" for="policyUri">
+            @Localizer["policy uri"]
+        </label>
+        <div class="col-lg-9 col-sm-12">
+            <AuthorizeText Id="policyUri" Placeholder="@Localizer["policy uri"]" @bind-Value="@Model.PolicyUri" MaxLength="2000" />
+        </div>
+        <div class="col-1">
+            <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.PolicyUri)">
+                <span class="oi oi-plus"></span>
+            </button>
+        </div>
+    </div>
+    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.PolicyUri" />
+    <div class="form-group row">
+        <label class="col col-form-label" for="tostUri">
+            @Localizer["terms or service uri"]
+        </label>
+        <div class="col-lg-9 col-sm-12">
+            <AuthorizeText Id="tostUri" Placeholder="@Localizer["terms or service uri"]" @bind-Value="@Model.TosUri" MaxLength="2000" />
+        </div>
+        <div class="col-1">
+            <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.TosUri)">
+                <span class="oi oi-plus"></span>
+            </button>
+        </div>
+    </div>
+    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.TosUri" />
     <div class="form-group row">
         <label class="col col-form-label">
         </label>

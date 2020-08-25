@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aguacongas.IdentityServer.Admin.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
@@ -37,47 +40,72 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 actionDescriptor.ControllerTypeInfo
                     .FullName.StartsWith("Aguacongas.IdentityServer.Admin"))
             {
-                _logger.LogError(exception, exception.Message);
+                ProcessApiException(context, exception);
+            }
+        }
+        private void ProcessApiException(ExceptionContext context, Exception exception)
+        {
+            _logger.LogError(exception, exception.Message);
 
-                if (exception is InvalidOperationException)
+            if (exception is InvalidOperationException)
+            {
+                context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                {
+                    Detail = exception.Message
+                });
+                return;
+            }
+            if (exception is IdentityException identityException)
+            {
+                if (identityException.Errors != null)
                 {
                     context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                    (
+                        identityException.Errors.ToDictionary(e => e.Code, e => new string[] { e.Description })
+                    ));
+                    return;
+                }
+                context.Result = new BadRequestObjectResult(new ValidationProblemDetails
+                {
+                    Detail = exception.Message
+                });
+                return;
+            }
+            if (exception is DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException == null)
+                {
+                    context.Result = new ConflictObjectResult(new ProblemDetails
                     {
-                        Detail = exception.Message
+                        Detail = dbUpdateException.Message
                     });
                     return;
                 }
-                if (exception is IdentityException identityException)
+                context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState)
                 {
-                    if (identityException.Errors != null)
-                    {
-                        context.Result = new BadRequestObjectResult(new ValidationProblemDetails
-                        (
-                            identityException.Errors.ToDictionary(e => e.Code, e => new string[] { e.Description })
-                        ));
-                        return;
-                    }
-                    context.Result = new BadRequestObjectResult(new ValidationProblemDetails
-                    {
-                        Detail = exception.Message
-                    });
-                    return;
-                }
-                if (exception is DbUpdateException dbUpdateException)
+                    Detail = dbUpdateException.InnerException.Message ?? dbUpdateException.Message
+                });
+            }
+            if (exception is RegistrationException registrationException)
+            {
+                context.Result = new BadRequestObjectResult(new RegistrationProblemDetail
                 {
-                    if (dbUpdateException.InnerException == null)
-                    {
-                        context.Result = new ConflictObjectResult(new ProblemDetails
-                        {
-                            Detail = dbUpdateException.Message
-                        });
-                        return;
-                    }
-                    context.Result = new BadRequestObjectResult(new ValidationProblemDetails(context.ModelState)
-                    {
-                        Detail = dbUpdateException.InnerException.Message ?? dbUpdateException.Message
-                    });
-                }
+                    Error = registrationException.ErrorCode,
+                    Error_description = registrationException.Message
+                });
+                return;
+            }
+
+            if (exception is NotFoundException notFoundException)
+            {
+                context.Result = new NotFoundObjectResult(notFoundException);
+            }
+
+            if (exception is ForbiddenException forbiddenException)
+            {
+                var response = context.HttpContext.Response;
+                response.StatusCode = (int)HttpStatusCode.Forbidden;
+                context.Exception = null;
             }
         }
     }

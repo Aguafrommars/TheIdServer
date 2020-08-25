@@ -438,6 +438,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                         .HasColumnType("nvarchar2(200)")
                         .HasMaxLength(200);
 
+                    b.Property<string>("PolicyUri")
+                        .HasColumnType("nclob");
+
                     b.Property<string>("ProtocolType")
                         .IsRequired()
                         .HasColumnType("nvarchar2(200)")
@@ -448,6 +451,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 
                     b.Property<int>("RefreshTokenUsage")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("RegistrationToken")
+                        .HasColumnType("guid");
 
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("bool");
@@ -460,6 +466,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
+
+                    b.Property<string>("TosUri")
+                        .HasColumnType("nclob");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("bool");
@@ -746,7 +755,7 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 7, 25, 17, 44, 46, 768, DateTimeKind.Utc).AddTicks(1263)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 41, 437, DateTimeKind.Utc).AddTicks(7595)
                         });
                 });
 

@@ -1,7 +1,7 @@
-# Extenal claims mapping
+# External claims mapping
 
 The service [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) maps claims received from an external provider depending on the claims transformation configuration.  
-The service's method `TransformPrincipalAsync` is called on each [`OnTicketReceived`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.remoteauthenticationevents.onticketreceived) event.
+It calls the method `TransformPrincipalAsync` on each [`OnTicketReceived`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.remoteauthenticationevents.onticketreceived) event.
 
 ## Configuration
 
@@ -9,7 +9,7 @@ The service's method `TransformPrincipalAsync` is called on each [`OnTicketRecei
 
 #### map default outbound JWT claim types
 
-When checked, the check box *map default outbound JWT claim types* configures the [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) service to map each claim type defines in the dictionary [`JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap`](https://docs.microsoft.com/en-us/dotnet/api/system.identitymodel.tokens.jwt.jwtsecuritytokenhandler.defaultoutboundclaimtypemap) to their corresponding claim type.
+When checked, the checkbox *map default outbound JWT claim types* configures the [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) service to map each claim type defines in the dictionary [`JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap`](https://docs.microsoft.com/en-us/dotnet/api/system.identitymodel.tokens.jwt.jwtsecuritytokenhandler.defaultoutboundclaimtypemap) to their corresponding claim type.
 
 #### from claim type / to claim type
 
@@ -19,19 +19,19 @@ The table *from claim type / to claim type* configures the [`ExternalClaimsTrans
 
 #### store claims
 
-When checked, the check box *store claims* configures the [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) service to store claims in [Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio) user's data.  
+When checked, the checkbox *store claims* configures the [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) service to store claims in the [Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio) user's data.  
 
 > It must be check to allow the [UserInfo Endpoint](https://identityserver4.readthedocs.io/en/latest/endpoints/userinfo.html) and the admin application to read claims from external providers.
 
 ### Verification
 
-When claims are stored and mapped, the admin UI display a mapping information in the user's claims section.
+When claims are stored and mapped, the admin user interface displays mapping information in the user's claims section.
 
 ![user-claims-transformation.png](assets/user-claims-transformation.png)
 
 ## Using the service by code
 
-If you use Nuget packages, you can take advantage of the service  [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) by configuring the call to `TransformPrincipalAsync` on each [`OnTicketReceived`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.remoteauthenticationevents.onticketreceived) event.
+If you use NuGet packages, you can take advantage of the service  [`ExternalClaimsTransformer`](src/IdentityServer/Aguacongas.IdentityServer.Admin/Services/ExternalClaimsTransformer.cs) by configuring the call to `TransformPrincipalAsync` on each [`OnTicketReceived`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.remoteauthenticationevents.onticketreceived) event.
 
 
 ```cs

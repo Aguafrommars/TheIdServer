@@ -1,7 +1,7 @@
-# Manage apis
+# Manage APIs
 
-![apis](/doc/assets/apis.png)
+![apis](assets/apis.png)
 
-## Api details
+## API details
 
-![api-details](/doc/assets/api-details.png)
+![api-details](assets/api-details.png)

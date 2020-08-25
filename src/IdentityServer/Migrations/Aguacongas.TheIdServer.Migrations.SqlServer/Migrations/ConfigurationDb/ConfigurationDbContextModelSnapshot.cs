@@ -441,6 +441,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
+                    b.Property<string>("PolicyUri")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProtocolType")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
@@ -451,6 +454,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.Property<int>("RefreshTokenUsage")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("RegistrationToken")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("bit");
@@ -463,6 +469,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
+
+                    b.Property<string>("TosUri")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("bit");
@@ -749,7 +758,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 7, 25, 17, 46, 3, 962, DateTimeKind.Utc).AddTicks(2581)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 59, 203, DateTimeKind.Utc).AddTicks(2307)
                         });
                 });
 

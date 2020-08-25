@@ -180,6 +180,7 @@ namespace IdentityServer4.Quickstart.UI
             ConsentInputModel model, string returnUrl,
             AuthorizationRequest request)
         {
+            var client = request.Client;
             var vm = new ConsentViewModel
             {
                 RememberConsent = model?.RememberConsent ?? true,
@@ -188,11 +189,19 @@ namespace IdentityServer4.Quickstart.UI
 
                 ReturnUrl = returnUrl,
 
-                ClientName = request.Client.ClientName ?? request.Client.ClientId,
-                ClientUrl = request.Client.ClientUri,
-                ClientLogoUrl = request.Client.LogoUri,
-                AllowRememberConsent = request.Client.AllowRememberConsent
+                ClientName = client.ClientName ?? client.ClientId,
+                ClientUrl = client.ClientUri,
+                ClientLogoUrl = client.LogoUri,
+                AllowRememberConsent = client.AllowRememberConsent
             };
+            if (client.Properties.TryGetValue("PolicyUrl", out string policyUrl))
+            {
+                vm.PolicyUrl = policyUrl;
+            }
+            if (client.Properties.TryGetValue("TosUrl", out string tosUrl))
+            {
+                vm.TosUrl = tosUrl;
+            }            
 
             vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
 

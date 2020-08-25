@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
@@ -41,10 +42,10 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="204">No content.</response>
         [HttpGet("{id}")]
         [Description("Gets an entity")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [ProducesResponseType(typeof(ProblemDetails), 404)]
-        [Authorize(Policy = "Is4-Reader")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [Authorize(Policy = SharedConstants.READER)]
         public Task<T> GetAsync(string id, GetRequest request) 
             => _store.GetAsync(id, request);
 
@@ -56,9 +57,9 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="200">Returns a page of entites.</response>
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $)")]
-        [Authorize(Policy = "Is4-Reader")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [Authorize(Policy = SharedConstants.READER)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public Task<PageResponse<T>> FindAsync(PageRequest request) 
             => _store.GetAsync(request);
 
@@ -71,9 +72,9 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="400">Bad request.</response>
         [HttpPost]
         [Description("Creates an entity")]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [Authorize(Policy = "Is4-Writer")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task<T> CreateAsync([FromBody] T entity)
             => _store.CreateAsync(entity);
 
@@ -89,9 +90,9 @@ namespace Aguacongas.IdentityServer.Admin
         [HttpPut("{id}")]
         [Description("Updates an entity")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [ProducesResponseType(typeof(ProblemDetails), 409)]
-        [Authorize(Policy = "Is4-Writer")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.Conflict)]
+        [Authorize(Policy = SharedConstants.WRITER)]
 #pragma warning disable IDE0060 // Remove unused parameter. The id is used in ActionsFilter, id and entity.Id MUST match. 
         public Task<T> UpdateAsync(string id, [FromBody] T entity)
 #pragma warning restore IDE0060 // Remove unused parameter
@@ -106,8 +107,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="409">Conflict.</response>
         [HttpDelete("{id}")]
         [Description("Deletes an entity")]
-        [ProducesResponseType(200)]
-        [Authorize(Policy = "Is4-Writer")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task DeleteAsync(string id)
             => _store.DeleteAsync(id);
     }

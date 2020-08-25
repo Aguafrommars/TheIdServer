@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Net;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
@@ -11,9 +12,9 @@ namespace Aguacongas.IdentityServer.Admin.Filters
         public void OnActionExecuted(ActionExecutedContext context)
         {
             var controlerType = context.Controller.GetType();
+            var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
 
-            if (!(context.Result is ObjectResult objectResult) || 
-                context.Exception != null ||
+            if (context.Exception != null ||
                 context.Canceled ||
                 !controlerType.FullName
                     .StartsWith("Aguacongas.IdentityServer.Admin",
@@ -21,8 +22,18 @@ namespace Aguacongas.IdentityServer.Admin.Filters
             {
                 return;
             }
+            
+            if (actionDescriptor.ActionName == "Delete")
+            {
+                context.Result = new NoContentResult();
+                return;
+            }
 
-            var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
+            if (!(context.Result is ObjectResult objectResult))
+            {
+                return;
+            }
+
             if (actionDescriptor.ActionName == "Create")
             {
                 string id = null;
@@ -42,7 +53,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 context.Result = new NotFoundObjectResult(new ProblemDetails 
                 {
                     Title = "Entity not found",
-                    Status = 404
+                    Status = (int)HttpStatusCode.NotFound
                 });
             }
         }

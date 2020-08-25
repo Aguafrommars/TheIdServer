@@ -12,6 +12,22 @@
         /// <summary>
         /// The description
         /// </summary>
-        Description
+        Description,
+        /// <summary>
+        /// The client URI
+        /// </summary>
+        ClientUri,
+        /// <summary>
+        /// The logo URI
+        /// </summary>
+        LogoUri,
+        /// <summary>
+        /// The policy URI
+        /// </summary>
+        PolicyUri,
+        /// <summary>
+        /// The tos URI
+        /// </summary>
+        TosUri
     }
 }

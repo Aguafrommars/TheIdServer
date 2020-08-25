@@ -439,6 +439,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
+                    b.Property<string>("PolicyUri")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("ProtocolType")
                         .IsRequired()
                         .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
@@ -449,6 +452,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
 
                     b.Property<int>("RefreshTokenUsage")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("RegistrationToken")
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("tinyint(1)");
@@ -461,6 +467,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
+
+                    b.Property<string>("TosUri")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("tinyint(1)");
@@ -747,7 +756,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 7, 25, 17, 44, 19, 192, DateTimeKind.Utc).AddTicks(5978)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 35, 460, DateTimeKind.Utc).AddTicks(9133)
                         });
                 });
 

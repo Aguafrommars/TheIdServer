@@ -1,26 +1,25 @@
 # TheIdServer Admin Application
 
-This project contains the code of the [Blazor wasm](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
+This project is the [Blazor Web Assembly](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/) instance.
 
-## Instalation
-
+## Installation
 ### From Docker
 
-The application is embeded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
+The application is embedded in the [server's Linux image](../Aguacongas.TheIdServer/README.md#from-docker).  
 If you prefer, you can install the [standalone application'sLinux image](https://hub.docker.com/r/aguacongas/aguacongastheidserverblazorapp).  
 This image uses an [nginx](http://nginx.org/) server to host the application.
 
 ### From Github Release
 
-The application is embeded in the [server's Github release](../Aguacongas.TheIdServer/README.md#from-github-release).  
+The application is embedded in the [server's Github release](../Aguacongas.TheIdServer/README.md#from-github-release).  
 You can choose to install the standalone application by selecting *Aguacongas.TheIdServer.BlazorApp{version}.zip* in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases).   
 Unzip in the destination of your choice, and use the server of your choice.
 
 Read [Host and deploy ASP.NET Core Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/blazor/webassembly?view=aspnetcore-3.1) for more information.
 
-### From Nuget packages
+### From NuGet packages
 
-Nuget packages composing the application are available on [nuget.org](https://www.nuget.org/):
+NuGet packages composing the application are available on [nuget.org](https://www.nuget.org/):
 
 * **Aguacongas.TheIdServer.BlazorApp.Infrastructure** contains application models, services, validators and extensions
 * **Aguacongas.TheIdServer.BlazorApp.Components** contains application components
@@ -28,7 +27,7 @@ Nuget packages composing the application are available on [nuget.org](https://ww
 
 ## Configuration
 
-The application reads its configuration from *appsettings.json* and environment specific configuration data from *appsettings.{environment}.json*
+The application obtains its configuration from appsettings.json and the environment-specific settings from appsettings.{environment}.json.
 
 **appsettings.json**
 
@@ -72,7 +71,7 @@ The application reads its configuration from *appsettings.json* and environment 
 }
 ```
 
-For more informations read [ASP.NET Core Blazor hosting model configuration / Blazor WebAssembly / Configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration).
+For more details, read [ASP.NET Core Blazor hosting model configuration / Blazor WebAssembly / Configuration](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-model-configuration?view=aspnetcore-3.1#configuration).
 
 ### apiBaseUrl
 
@@ -80,14 +79,14 @@ Defines the URL to the API.
 
 ### administratorEmail
 
-Defines the adminitrator eMail address.
+Defines the administrator eMail address.
 
 ### authenticationPaths
 
 The section **authenticationPaths** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationApplicationPathsOptions`.  
-The application doesn't contain pages to register a new user or manage the current user, so we set the **authenticationPaths:remoteRegisterPath** and **authenticationPaths:remoteProfilePath** with their corresponding url on the identity server.
+The application doesn't contain pages to register a new user or manage the current user, so we set the **authenticationPaths:remoteRegisterPath** and **authenticationPaths:remoteProfilePath** with their corresponding URL on the identity server.
 
- For more informations read [ASP.NET Core Blazor WebAssembly additional security scenarios / Customize app routes](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes).
+ For more information, read [ASP.NET Core Blazor WebAssembly additional security scenarios / Customize app routes](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/additional-scenarios?view=aspnetcore-3.1#customize-app-routes).
 
 ### loggingOptions
 
@@ -99,24 +98,24 @@ Defines the [log minimum level](https://docs.microsoft.com/en-us/dotnet/api/micr
 
 #### filters
 
-Each item in this array add a log filter by category and [LogLevel](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loglevel?view=dotnet-plat-ext-3.1)
+Each item in this array adds a log filter by category and [LogLevel](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loglevel?view=dotnet-plat-ext-3.1).
 
 ### userOptions
 
-The section **userOptions** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationUserOptions`.  
-This configuration defines how users are authorized. The application and the API share the same authorization policy : 
+The section **userOptions** is bound to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationUserOptions`.  
+This configuration defines how users are authorized. The application and the API share the same authorization policy.
 
-* **Is4-Writer** authorize users in this role to write data
-* **Is4-Reader** authorize users in this role to read data
+* **Is4-Writer** authorizes users in this role to write data.
+* **Is4-Reader** permits users in this role to read data.
 
-The role claims type is defined by **userOptions:roleClaim**.
+**userOptions:roleClaim** define the role claims type.
 
 ### providerOptions
 
 The section **providerOptions** is binded to the class `Microsoft.AspNetCore.Components.WebAssembly.Authentication.OidcProviderOptions`.  
-This configuration section defines how the application is authentified.  
+This configuration section defines the application authentication.  
 
-For more informations read [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library / Authentication service support](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support).
+For more details, read [Secure an ASP.NET Core Blazor WebAssembly standalone app with the Authentication library / Authentication service support](https://docs.microsoft.com/en-us/aspnet/core/security/blazor/webassembly/standalone-with-authentication-library?view=aspnetcore-3.1#authentication-service-support).
 
 ### welcomeContenUrl
 
@@ -124,9 +123,9 @@ Defines the URL to the welcome page content.
 
 ## Welcome page customization
 
-Except its title, the home page displays contents read from `welcomeContenUrl` endpoint.
+Except for its title, the home page displays contents read from `welcomeContenUrl` endpoint.
 
-This endpoint should return an html fragment code.
+This endpoint should return an HTML fragment.
 
 [**sample**](../Aguacongas.TheIdServer/wwwroot/welcome-fragment.html)
 
@@ -138,24 +137,24 @@ This endpoint should return an html fragment code.
     Visit the <a href="https://github.com/aguacongas/TheIdServer">github site</a> for doc, source code and issue tracking.
 </p>
 <p>
-    If you have trouble to login disable chromuim cookies-without-same-site-must-be-secure flag.<br />
+    If you have trouble with login, disable Chromium cookies-without-same-site-must-be-secure flag.<br />
     <code>
         chrome://flags/#cookies-without-same-site-must-be-secure
     </code><br/>
     This site is running under a <a href="https://devcenter.heroku.com/articles/dyno-types">free heroku dyno</a> without end-to-end https.
 </p>
 <p>
-    You can sign-in with <b>alice</b> to have reader/writer access, or <b>bob</b> for a read only access.<br />
-    The passord is <i>Pass123$</i>
+    You can sign-in with <b>alice</b> to have reader/writer access, or <b>bob</b> for a read-only access.<br />
+    The password is <i>Pass123$</i>.
 </p>
 ```
 
 ## Client and API secrets
 
-The application doesn't generate secrets. 
+The application doesn't generate secrets. Shared Secrets or x509 certificates require conversion before storing. 
 
-* If you want to store a SharedSecret the application convert the value to a SHA256 value.
-* If you want to store a Base64 X509 certificat you need to convert the value as Base64 string by yourself.
+* Convert a SharedSecret to SHA256 value.
+* Convert an X509 certificate to Base64 string.
 
 ## Additional resources
 

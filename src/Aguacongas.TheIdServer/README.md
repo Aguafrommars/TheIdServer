@@ -1,36 +1,36 @@
 # TheIdServer Web Server project
 
-The configuration can be read from *appsettings.json*, *appsettings.{Environment}.json*, command line arguments or environement variables.
+The server obtains configuration from *appsettings.json*, *appsettings.{Environment}.json*, command-line arguments, or environment variables.
 
 Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1) for more information.
 
-## Instalation
+## Installation
 
 ### From Docker
 
-A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Doker hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Docker Hub.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) is a sample demonstrate how to create a image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
 
-Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to setup the HTTPS certificate.
+Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to set up the HTTPS certificate.
 
 #### Kubernetes sample
 
-[/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to setup a solution with Kubernetes.
+[/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to set up a solution with Kubernetes.
 
 ### From Github Release
 
 Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
-Unzip in the destination of your choice, as any ASP.Net Core web site it can run in IIS or as a stand alone server using the plateform of your choice.
+Unzip in the destination of your choice. Unzip in the destination of your choice. As with any ASP.NET Core web site, it can run in IIS or as a stand-alone server using your chosen platform.
 
 Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1) for more information.
 
-### From Nuget Packages
+### From NuGet Packages
 
-If you need more customization, you can use published Nuget packages.
-[sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from Nuget packages.
+If you need more customization, you can use published NuGet packages.
+[sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
 
 ## Configure IdentityServer4
 
@@ -44,16 +44,19 @@ So you can set any IdentityServer4 options you want from configuration
     "RaiseInformationEvents": true,
     "RaiseFailureEvents": true,
     "RaiseSuccessEvents": true
+  },
+  "Endpoints": {
+    "EnableJwtRequestUri": true
   }
 }
 ```
 
 ## Configure stores
 
-### Using EF core
+### Using Entity Framework Core
 
-The server supports *SqlServer*, *Sqlite*, *MySql*, *PostgreSQL*, *Oracle* and *InMemory* databases.  
-Use **DbType** to the define the dabase engine.
+The server supports *SqlServer*, *Sqlite*, *MySql*, *PostgreSQL*, *Oracle*, and *InMemory* databases.  
+Use **DbType** to the define the database engine.
 
 ```json
 "DbType": "SqlServer"
@@ -67,11 +70,11 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
 }
 ```
 
-> For Oracle database, you need a [devart dotConnect for Oracle](https://www.devart.com/dotconnect/oracle/) license.
+> A [devart dotConnect for Oracle](https://www.devart.com/dotconnect/oracle/) license is a requirement for Oracle.
 
 ### Using the API
 
-If you don't want to expose a database with your server, you can setup a second server on a private network accessing the db and use this private server api to access data.
+If you don't want to expose a database with your server, you can set up a second server on a private network accessing the database and use this private server API to access data.
 
 ```json
 "Proxy": true,
@@ -94,7 +97,7 @@ If you don't want to expose a database with your server, you can setup a second 
 
 #### Proxy
 
-Start the server with in proxy mode.
+Start the server with proxy mode enabled.
 
 #### PrivateServerAuthentication
 
@@ -103,44 +106,42 @@ Defines how to authenticate the public server on private server API.
 #### SignalR
 
 Defines the [SignalR client](https://docs.microsoft.com/en-us/aspnet/core/signalr/dotnet-client?view=aspnetcore-3.1&tabs=visual-studio) configuration.  
-This client is used to update the external provider configuration of a running instance. When an external provider configuration changes, the API send a SignalR notification to inform other running instances.  
+This client is used to update the external provider configuration of a running instance. When an external provider configuration changes, the API sends a SignalR notification to inform other running instances.  
 
-For more informations read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
+For more information, read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
 
-The SignalR hub accept request at */providerhub* and support [MessagePack](https://msgpack.org/index.html) protocol.
+The SignalR hub accepts requests at */providerhub* and supports the [MessagePack](https://msgpack.org/index.html) protocol.
 
-For more informations read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
+For more information, read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
 
 ### Database migration and data seeding
 
-You can start the server with **/seed** command line argument to create the initial DB with initial data. Or configure the server with :
+Starting the server with the **/seed** command-line argument creates the database with initial data. Alternatively, configure the server with the following to create a database with initial users, protected resources, identity resources, and clients.
 
 ```json
 "Migrate": true,
 "Seed": true
 ```
 
-This will create the database with initial users, protected resources, identity resources and clients.
-
 #### Roles
 
-* **Is4-Writer** authorize users in this role to write data
-* **Is4-Reader** authorize users in this role to read data
+* **Is4-Writer** authorizes users in this role to write data.
+* **Is4-Reader** permits users in this role to read data.
 
 #### Users
 
-* **alice** (pwd *Pass123$*) with roles **Is4-Writer** and **Is4-Reader**
-* **bob** (pwd *Pass123$*) with role **Is4-Reader**
+* **alice** (password *Pass123$*) is assigned to the roles **Is4-Writer** and **Is4-Reader**.
+* **bob** (password *Pass123$*) is assigned to the role **Is4-Reader**.
 
-#### Protected resouces (API)
+#### Protected resources (API)
 
 * **theidserveradminapi** the server API asking for claims **name** and **role**
-* **api1** a sample api 
+* **api1** a sample API 
 
 #### Identity resources
 
-* **profile** default profile resource with **role** claim.
-* **openid** default openid resource
+* **profile** default profile resource with **role** claim
+* **openid** default OpenID resource
 * **address** default address resource
 * **email** default email resource
 * **phone** default phone resource
@@ -175,7 +176,7 @@ Read [Example: Deploy to Azure Websites](https://docs.microsoft.com/en-us/aspnet
 
 ## Configure the Email service
 
-By default the server use [SendGrid](https://sendgrid.com/) to send Emails by calling the api at */api/email*
+By default, the server uses [SendGrid](https://sendgrid.com/) to send Emails by calling the API at */api/email*
 
 ```json
 "SendGridUser": "your user",
@@ -209,7 +210,7 @@ And update the *EmailApiAuthentication* configuration section:
 }
 ```
 
-> If you want to use the same authentication configuration and token for both *EmailApi* and *PrivateServer* you can simplify the configuration by sharing the same **HttpClientName**
+> If you want to use the same authentication configuration and token for both *EmailApi* and *PrivateServer*, you can simplify it by sharing the same **HttpClientName**.
 
 ```json
 "EmailApiAuthentication": {
@@ -220,8 +221,8 @@ And update the *EmailApiAuthentication* configuration section:
 
 ## Configure the 2fa authenticator issuer
 
-By default the issuer for 2fa authenticator is **Aguacongas.TheIdServer**.  
-To update this value set **AuthenticatorIssuer** with your issuer
+By default, the issuer for the 2fa authenticator is **Aguacongas.TheIdServer**.  
+To update this value, set **AuthenticatorIssuer** with your issuer.
 
 ```json
 "AuthenticatorIssuer": "TheIdServer"
@@ -231,7 +232,7 @@ To update this value set **AuthenticatorIssuer** with your issuer
 
 ### Authentication
 
-The section *ApiAuthentication* define the authentication configuration for the API.
+The *ApiAuthentication* section defines the authentication configuration for the API.
 
 ```json
 "ApiAuthentication": {
@@ -248,13 +249,13 @@ The section *ApiAuthentication* define the authentication configuration for the 
 
 ### Documentation endpoint
 
-To enable the API documentation, set **EnableOpenApiDoc** to `true`
+To enable the API documentation, set **EnableOpenApiDoc** to `true`.
 
 ```json
 "EnableOpenApiDoc": true
 ```
 
-Use the section *SwaggerUiSettings* to configure the swagger client authentication
+Use the section *SwaggerUiSettings* to configure the swagger client authentication.
 
 ```json
 "SwaggerUiSettings": {
@@ -269,7 +270,7 @@ Use the section *SwaggerUiSettings* to configure the swagger client authenticati
 
 ### CORS
 
-The section *CorsAllowedOrigin* define allowed CORS origins
+The section *CorsAllowedOrigin* defines allowed CORS origins.
 
 ```json
 "CorsAllowedOrigin": [
@@ -279,13 +280,13 @@ The section *CorsAllowedOrigin* define allowed CORS origins
 
 ## Configure HTTPS
 
-If you want to diseable HTTPS set **DisableHttps** to `false`
+To disable HTTPS, set **DisableHttps** to `false`.
 
 ```json
 "DisableHttps": true
 ```
 
-If you use a self signed certificat you can disable strict SSL by settings **DisableStrictSsl** to `true`.
+If you use a self-signed certificate, you can disable strict-SSL by settings **DisableStrictSsl** to `true`.
 
 ```json
 "DisableStrictSsl": true
@@ -293,7 +294,7 @@ If you use a self signed certificat you can disable strict SSL by settings **Dis
 
 ### Configure Forwarded Headers
 
-The section **ForwardedHeadersOptions** is binded to the class [`Microsoft.AspNetCore.Builder.ForwardedHeadersOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions?view=aspnetcore-3.1).  
+The section **ForwardedHeadersOptions** is bound to the class [`Microsoft.AspNetCore.Builder.ForwardedHeadersOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions?view=aspnetcore-3.1).  
 
 ```json
 "ForwardedHeadersOptions": {
@@ -303,9 +304,9 @@ The section **ForwardedHeadersOptions** is binded to the class [`Microsoft.AspNe
 
 ## Configure the provider hub
 
-External providers are dynamicaly configured with [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders).  
-In a [load balanced](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario) configuration, the provider hub is used to inform other running instances that an external provider configuration changes.  
-The **SignalR** section defines the configuration for both SignalR hub and client.
+The [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders) dynamically configures external providers.  
+In a [load-balanced](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario) configuration, the provider hub informs other running instances that an external provider configuration changes.  
+The **SignalR** section defines the configuration for both the SignalR hub and the client.
 
 ```json
 "SignalR": {
@@ -323,12 +324,12 @@ The **SignalR** section defines the configuration for both SignalR hub and clien
 }
 ```
 
-If needed, the hub can use [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1) can be used. **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configure the backplane.  
-**SignalR:RedisOptions** is binded to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
+If needed, the hub can use a [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1). **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configures the backplane.  
+**SignalR:RedisOptions** is bound to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
 
-## Configre logs
+## Configure logs
 
-The section **Serilog** define the [Serilog](https://serilog.net/) configuration.
+The **Serilog** section defines the [Serilog](https://serilog.net/) configuration.
 
 ```json
 "Serilog": {
@@ -368,11 +369,93 @@ The section **Serilog** define the [Serilog](https://serilog.net/) configuration
   ]
 }
 ```
-For more informations read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
+For more details, read [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md).
 
 ## Configure claims providers
 
-The claims providers configuration is described in [Claims provider](../../doc/CLAIMS_PROVIDER.md)
+[Claims provider](../../doc/CLAIMS_PROVIDER.md) provides details on claims proivder configuration.
+
+## Configure token cleaner
+
+The token cleaner task removes expired tokens periodically. To configure the interval, use **TokenCleanupInterval**.
+
+```json
+"TokenCleanupInterval": "00:05:00"
+```
+
+To disable the task, use **DisableTokenCleanup**.
+
+```json
+"DisableTokenCleanup":  true
+```
+
+> The task is not enabled on proxy server.
+
+## Configure Dynamic client registration allowed contacts a host
+
+The server supports [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html).  
+
+New client registration is allowed to users with the **Is4-Writer** role by sending the user access token or to contacts defined in *DynamicClientRegistrationOptions* section.
+
+```json
+"DynamicClientRegistrationOptions": {
+  "AllowedContacts": [
+    {
+      "Contact": "certification@oidf.org",
+      "AllowedHosts": [
+        "www.certification.openid.net"
+      ]
+    }
+  ]
+}
+```
+
+It this case, the client registration request must contain the *contacts* array.
+
+**request sample**
+
+```json
+{
+    "client_name": "oidc_cert_client gUPPBlHIEAqNOYR",
+    "grant_types": [
+        "authorization_code"
+    ],
+    "response_types": [
+        "code"
+    ],
+    "redirect_uris": [
+        "https://www.certification.openid.net/test/a/theidserver/callback"
+    ],
+    "contacts": [
+        "certification@oidf.org"
+    ]
+}
+```
+
+## Configure Jwt request validator
+
+Tokens returned by request_uri parameter are validated using the rules defined in *TokenValidationParameters* section. By default, the following rules are defined.
+
+```json
+"TokenValidationParameters": {
+  "ValidateIssuer": false,
+  "ValidateAudience": false,
+  "ValidateIssuerSigningKey": false,
+  "ValidateLifetime": false,
+  "RequireAudience": false,
+  "RequireExpirationTime": false,
+  "RequireSignedTokens": false
+}
+```
+
+> To enable JWT request uri, set *EnableJwtRequestUri* to true in *IdentityServerOptions:Endpoints*
+> ```json
+> "IdentityServerOptions": {
+>   "Endpoints": {
+>     "EnableJwtRequestUri": true
+>   }
+> },
+> ```
 
 ## Additional resources
 
@@ -382,4 +465,4 @@ The claims providers configuration is described in [Claims provider](../../doc/C
 * [Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
 * [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md)
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1)
-
+* [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)

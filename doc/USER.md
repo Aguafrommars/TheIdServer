@@ -1,7 +1,7 @@
 # Manage users
 
-![users](/doc/assets/users.png)
+![users](assets/users.png)
 
 ## User details
 
-![user-details](/doc/assets/user-details.png)
+![user-details](assets/user-details.png)

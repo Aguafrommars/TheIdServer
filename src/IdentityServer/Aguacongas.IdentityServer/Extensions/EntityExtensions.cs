@@ -29,6 +29,26 @@ namespace Aguacongas.IdentityServer.Store
             }
             var cultureId = CultureInfo.CurrentCulture.Name;
             var resources = client.Resources;
+            var policyUri = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.PolicyUri
+                    && r.CultureId == cultureId)?.Value ?? client.PolicyUri;
+            if (policyUri != null)
+            {
+                client.Properties.Add(new Entity.ClientProperty
+                {
+                    Key = "PolicyUrl",
+                    Value = policyUri
+                });
+            }
+            var tosUri = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.TosUri
+                    && r.CultureId == cultureId)?.Value ?? client.TosUri;
+            if (policyUri != null)
+            {
+                client.Properties.Add(new Entity.ClientProperty
+                {
+                    Key = "TosUrl",
+                    Value = tosUri
+                });
+            }
             return new Client
             {
                 AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
@@ -55,8 +75,15 @@ namespace Aguacongas.IdentityServer.Store
                 ClientId = client.Id,
                 ClientName = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.DisplayName
                     && r.CultureId == cultureId)?.Value ?? client.ClientName,
-                ClientSecrets = client.ClientSecrets.Select(s => new Secret(s.Value, s.Expiration)).ToList(),
-                ClientUri = client.ClientUri,
+                ClientSecrets = client.ClientSecrets.Select(s => new Secret
+                {
+                    Value = s.Value,
+                    Expiration = s.Expiration,
+                    Description = s.Description,
+                    Type = s.Type
+                }).ToList(),
+                ClientUri = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.ClientUri
+                    && r.CultureId == cultureId)?.Value ?? client.ClientUri,
                 ConsentLifetime = client.ConsentLifetime,
                 Description = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.Description
                     && r.CultureId == cultureId)?.Value ?? client.Description,
@@ -68,7 +95,8 @@ namespace Aguacongas.IdentityServer.Store
                 IdentityProviderRestrictions = client.IdentityProviderRestrictions.Select(r => r.Provider).ToList(),
                 IdentityTokenLifetime = client.IdentityTokenLifetime,
                 IncludeJwtId = client.IncludeJwtId,
-                LogoUri = client.LogoUri,
+                LogoUri = resources.FirstOrDefault(r => r.ResourceKind == Entity.EntityResourceKind.LogoUri
+                    && r.CultureId == cultureId)?.Value ?? client.LogoUri,
                 PairWiseSubjectSalt = client.PairWiseSubjectSalt,
                 PostLogoutRedirectUris = client.RedirectUris
                     .Where(u => (u.Kind & Entity.UriKinds.PostLogout) == Entity.UriKinds.PostLogout)
@@ -86,7 +114,7 @@ namespace Aguacongas.IdentityServer.Store
                 SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = client.UserCodeType,
-                UserSsoLifetime = client.UserSsoLifetime,
+                UserSsoLifetime = client.UserSsoLifetime
             };
         }
 

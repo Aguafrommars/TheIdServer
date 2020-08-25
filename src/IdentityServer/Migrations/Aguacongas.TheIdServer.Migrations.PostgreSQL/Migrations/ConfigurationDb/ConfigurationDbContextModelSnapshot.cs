@@ -441,6 +441,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
+                    b.Property<string>("PolicyUri")
+                        .HasColumnType("text");
+
                     b.Property<string>("ProtocolType")
                         .IsRequired()
                         .HasColumnType("character varying(200)")
@@ -451,6 +454,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
                     b.Property<int>("RefreshTokenUsage")
                         .HasColumnType("integer");
+
+                    b.Property<Guid?>("RegistrationToken")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("boolean");
@@ -463,6 +469,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("integer");
+
+                    b.Property<string>("TosUri")
+                        .HasColumnType("text");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("boolean");
@@ -749,7 +758,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2020, 7, 25, 17, 45, 13, 515, DateTimeKind.Utc).AddTicks(514)
+                            CreatedAt = new DateTime(2020, 8, 13, 14, 4, 47, 168, DateTimeKind.Utc).AddTicks(4499)
                         });
                 });
 
