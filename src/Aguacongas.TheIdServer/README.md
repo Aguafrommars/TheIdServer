@@ -436,7 +436,7 @@ It this case the client registration request must contains the *contacts* array.
 
 ## Configure Jwt request validator
 
-Tokens returned by request_uri parameter are validated using the rules defined in *TokenValidationParameters* section. By default all this following rule are true.
+Tokens returned by request_uri parameter are validated using the rules defined in *TokenValidationParameters* section. By default, the following rules are defined.
 
 ```json
 "TokenValidationParameters": {
