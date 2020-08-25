@@ -44,6 +44,9 @@ So you can set any IdentityServer4 options you want from configuration
     "RaiseInformationEvents": true,
     "RaiseFailureEvents": true,
     "RaiseSuccessEvents": true
+  },
+  "Endpoints": {
+    "EnableJwtRequestUri": true
   }
 }
 ```
@@ -429,6 +432,31 @@ It this case, the client registration request must contain the *contacts* array.
 }
 ```
 
+## Configure Jwt request validator
+
+Tokens returned by request_uri parameter are validated using the rules defined in *TokenValidationParameters* section. By default, the following rules are defined.
+
+```json
+"TokenValidationParameters": {
+  "ValidateIssuer": false,
+  "ValidateAudience": false,
+  "ValidateIssuerSigningKey": false,
+  "ValidateLifetime": false,
+  "RequireAudience": false,
+  "RequireExpirationTime": false,
+  "RequireSignedTokens": false
+}
+```
+
+> To enable JWT request uri, set *EnableJwtRequestUri* to true in *IdentityServerOptions:Endpoints*
+> ```json
+> "IdentityServerOptions": {
+>   "Endpoints": {
+>     "EnableJwtRequestUri": true
+>   }
+> },
+> ```
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1)
@@ -437,4 +465,4 @@ It this case, the client registration request must contain the *contacts* array.
 * [Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
 * [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md)
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1)
-
+* [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
