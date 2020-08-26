@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Abstractions;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Abstractions;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

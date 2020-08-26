@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Admin.Configuration;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityServer4.Configuration;

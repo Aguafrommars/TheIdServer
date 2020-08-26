@@ -1,4 +1,6 @@
-﻿using IdentityModel.Client;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityModel.Client;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http;

@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;

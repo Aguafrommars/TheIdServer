@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.TheIdServer.BlazorApp.Components
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class PageNotFound
     {

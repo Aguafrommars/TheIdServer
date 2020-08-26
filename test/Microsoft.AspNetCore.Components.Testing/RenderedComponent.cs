@@ -1,4 +1,6 @@
-﻿using Fizzler.Systems.HtmlAgilityPack;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Linq;

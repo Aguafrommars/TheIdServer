@@ -1,4 +1,6 @@
-﻿using HtmlAgilityPack;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
 using System;

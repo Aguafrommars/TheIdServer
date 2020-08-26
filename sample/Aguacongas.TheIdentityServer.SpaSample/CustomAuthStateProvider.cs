@@ -1,4 +1,6 @@
-﻿using IdentityModel;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

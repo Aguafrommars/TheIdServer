@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Aguacongas.TheIdServer.Models;

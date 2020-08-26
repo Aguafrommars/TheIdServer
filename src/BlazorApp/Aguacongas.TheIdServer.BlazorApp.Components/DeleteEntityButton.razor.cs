@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;

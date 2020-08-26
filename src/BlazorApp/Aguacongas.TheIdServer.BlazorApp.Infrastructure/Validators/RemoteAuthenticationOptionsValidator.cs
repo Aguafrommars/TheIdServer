@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Models;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using FluentValidation;
 using FluentValidation.Results;
 using System;

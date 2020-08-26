@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.Extensions.Options;
 using Moq;
 using RichardSzalay.MockHttp;
 using System.Net;

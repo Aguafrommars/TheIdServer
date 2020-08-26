@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;

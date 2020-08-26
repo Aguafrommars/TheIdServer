@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Blazor.Hosting;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;

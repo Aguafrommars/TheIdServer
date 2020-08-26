@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store;
 using Community.OData.Linq;
 using Microsoft.OData.Edm;
 using System.Linq;

@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

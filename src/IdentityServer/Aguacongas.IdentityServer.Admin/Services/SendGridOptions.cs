@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Admin.Services
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+namespace Aguacongas.IdentityServer.Admin.Services
 {
     /// <summary>
     /// SendGrid options

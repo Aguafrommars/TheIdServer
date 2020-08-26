@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Store
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+namespace Aguacongas.IdentityServer.Store
 {
     /// <summary>
     /// Cloneable interface

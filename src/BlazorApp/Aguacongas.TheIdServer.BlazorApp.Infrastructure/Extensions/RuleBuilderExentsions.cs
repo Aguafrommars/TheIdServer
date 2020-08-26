@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Validators;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Validators;
 using System.Collections.Generic;
 
 namespace FluentValidation

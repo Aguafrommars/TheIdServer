@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using IdentityServer4.Stores;
 using System.Threading.Tasks;
 

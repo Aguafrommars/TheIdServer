@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;

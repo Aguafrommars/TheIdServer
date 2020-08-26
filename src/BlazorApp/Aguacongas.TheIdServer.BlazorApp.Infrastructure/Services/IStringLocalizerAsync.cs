@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Localization;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

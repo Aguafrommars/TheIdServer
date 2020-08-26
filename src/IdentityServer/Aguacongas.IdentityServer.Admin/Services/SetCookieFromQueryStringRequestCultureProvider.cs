@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Primitives;
 using System.Threading.Tasks;

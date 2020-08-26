@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;

@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

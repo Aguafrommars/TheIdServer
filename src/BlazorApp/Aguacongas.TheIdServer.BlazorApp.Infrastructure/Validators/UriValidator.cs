@@ -1,4 +1,6 @@
-﻿using FluentValidation.Validators;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using FluentValidation.Validators;
 using System.Text.RegularExpressions;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators

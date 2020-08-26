@@ -1,4 +1,6 @@
-﻿using Aguacongas.AspNetCore.Authentication;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;

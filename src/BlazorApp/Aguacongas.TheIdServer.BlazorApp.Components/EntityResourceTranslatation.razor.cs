@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Globalization;
