@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 namespace Aguacongas.TheIdServer.MvcClient.Models
 {
     public class ErrorViewModel

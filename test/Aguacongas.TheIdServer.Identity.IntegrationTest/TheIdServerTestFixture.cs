@@ -1,4 +1,4 @@
-﻿// Project: aguacongas/Identity.Firebase
+﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;

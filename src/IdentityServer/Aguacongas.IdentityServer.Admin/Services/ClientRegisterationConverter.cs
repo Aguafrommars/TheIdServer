@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;

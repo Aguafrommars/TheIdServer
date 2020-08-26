@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer;
 using Aguacongas.TheIdServer.Areas.Identity.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;

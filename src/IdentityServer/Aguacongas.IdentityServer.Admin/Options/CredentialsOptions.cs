@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.IdentityModel.Tokens;
 
 namespace Aguacongas.IdentityServer.Admin.Options
 {

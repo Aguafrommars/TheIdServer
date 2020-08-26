@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
 namespace Aguacongas.TheIdServer.Migrations

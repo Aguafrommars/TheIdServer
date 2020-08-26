@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+namespace Aguacongas.IdentityServer
 {
     public class IdentityServerOptions
     {

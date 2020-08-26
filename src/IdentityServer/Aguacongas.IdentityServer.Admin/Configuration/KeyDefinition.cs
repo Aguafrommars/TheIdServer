@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Security.Cryptography.X509Certificates;
 
 namespace Aguacongas.IdentityServer.Admin.Configuration
 {

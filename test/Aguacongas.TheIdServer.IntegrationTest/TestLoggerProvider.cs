@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using Xunit.Abstractions;
 

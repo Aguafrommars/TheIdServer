@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Security.Claims;
 
 namespace Aguacongas.TheIdentityServer.SpaSample
 {

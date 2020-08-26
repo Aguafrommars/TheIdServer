@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Admin;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin;
 using Microsoft.AspNetCore.Routing;
 
 namespace Microsoft.AspNetCore.Builder
