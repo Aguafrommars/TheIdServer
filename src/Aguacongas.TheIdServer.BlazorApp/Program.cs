@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
-    [SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "entry point")]
     [SuppressMessage("Major Code Smell", "S1118:Utility classes should not have public constructors", Justification = "<Pending>")]
     public class Program
     {
