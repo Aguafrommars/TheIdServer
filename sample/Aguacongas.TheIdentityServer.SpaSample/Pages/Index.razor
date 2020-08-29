@@ -1,5 +1,10 @@
-﻿@page "/"
-@inject CustomAuthStateProvider _authStateProvider
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.Extensions.Options
+
+@page "/"
+
+@inject IOptions<RemoteAuthenticationApplicationPathsOptions> _options
+@inject AuthenticationStateProvider _authStateProvider
 @inject HttpClient _httpClient
 
 <h1>Hello, world!</h1>
@@ -10,9 +15,13 @@ Welcome to your new app.
 
 <AuthorizeView>
     <NotAuthorized>
-        <button @onclick="@LogUsername">Log username</button>
+        <a class="btn btn-primary" href="@_options.Value.LogInPath">Log in</a>
     </NotAuthorized>
     <Authorized>
+        <div>
+            <a class="btn btn-primary" href="@_options.Value.LogOutPath">Log out</a>
+
+        </div>
         <em>@_user.Identity.Name claims</em>
         @foreach (var claim in _user.Claims)
         {
@@ -41,7 +50,8 @@ Welcome to your new app.
 
     private async Task LogUsername()
     {
-        await _authStateProvider.LoginAsync();
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+        _user = state.User;
     }
 
     protected override async Task OnInitializedAsync()
@@ -54,7 +64,7 @@ Welcome to your new app.
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 _user.Claims.First(c => c.Type == "access_token").Value);
-            _forecastList = await _httpClient.GetJsonAsync<IEnumerable<WeatherForecast>>("https://localhost:5448/weatherforecast");
+            _forecastList = await _httpClient.GetFromJsonAsync<IEnumerable<WeatherForecast>>("https://localhost:5448/weatherforecast");
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Microsoft.AspNetCore.Blazor.Hosting;
-using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using System;
+using System.Net.Http;
 
 namespace Aguacongas.TheIdentityServer.SpaSample
 {
@@ -12,11 +15,27 @@ namespace Aguacongas.TheIdentityServer.SpaSample
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.Services.AddOptions()
-                .AddAuthorizationCore()
-                .AddScoped<CustomAuthStateProvider>()
-                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<CustomAuthStateProvider>())
-                .AddSingleton<UserStore>();
+
+            var configuration = builder.Configuration;
+            var services = builder.Services;
+            services.AddOptions()
+                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
+                .AddOidcAuthentication(options =>
+                {
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    configuration.Bind("ProviderOptions", options.ProviderOptions);
+                })
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+
+            services.AddAuthorizationCore();
+
+            services.AddHttpClient("ServerAPI", client => client.BaseAddress = new Uri("https://localhost:5448/"))
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+            services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("ServerAPI"));
+
 
             builder.RootComponents.Add<App>("app");
 
