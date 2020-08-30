@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
 
             services.AddAuthorizationCore();
 
-            services.AddHttpClient("ServerAPI", client => client.BaseAddress = new Uri("https://localhost:5448/"))
+            services.AddHttpClient("ServerAPI", client => client.BaseAddress = new Uri(configuration.GetValue<string>("apiUrl")))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
