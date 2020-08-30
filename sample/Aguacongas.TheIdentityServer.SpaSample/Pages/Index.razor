@@ -27,16 +27,6 @@ Welcome to your new app.
         {
             <div>@claim.Type @claim.Value</div>
         }
-        @if (_forecastList != null)
-        {
-            <p>
-                FORECAST
-                @foreach (var forecast in _forecastList)
-                {
-                    <div><em>@forecast.Date @forecast.Summary</em> @forecast.TemperatureC°</div>
-                }
-            </p>
-        }
     </Authorized>
 </AuthorizeView>
 
@@ -60,11 +50,5 @@ Welcome to your new app.
         var state = await authenticationStateTask;
 
         _user = state.User;
-        if (_user.Identity.IsAuthenticated)
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
-                _user.Claims.First(c => c.Type == "access_token").Value);
-            _forecastList = await _httpClient.GetFromJsonAsync<IEnumerable<WeatherForecast>>("https://localhost:5448/weatherforecast");
-        }
     }
 }
