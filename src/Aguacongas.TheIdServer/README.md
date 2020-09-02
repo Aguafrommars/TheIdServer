@@ -32,6 +32,22 @@ Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core
 If you need more customization, you can use published Nuget packages.
 [sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from Nuget packages.
 
+## Configure site
+
+The site name is defined by *SiteOptions:TheIdServer*.
+
+```json
+"SiteOptions": {
+  "Name": "TheIdServer"
+}
+```
+
+The site stylecheets are *wwwroot/lib/bootstrap/css/bootstrap.css* and *wwwroot/css/site.min.css*.  
+The site logo is *wwwroot/logo.png*.  
+And the favicon is *wwwroot/favicon.ico*.
+
+By replacing those files you can redefined the site style by yours.
+
 ## Configure IdentityServer4
 
 The section **IdentityServerOptions** is binded to the class [`IdentityServer4.Configuration.IdentityServerOptions`](http://docs.identityserver.io/en/latest/reference/options.html).  
