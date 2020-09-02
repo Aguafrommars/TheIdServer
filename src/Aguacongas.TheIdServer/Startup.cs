@@ -68,6 +68,7 @@ namespace Aguacongas.TheIdServer
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
                 .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
                 .Configure<TokenValidationParameters>(Configuration.GetSection(nameof(TokenValidationParameters)))
+                .Configure<SiteOptions>(Configuration.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))

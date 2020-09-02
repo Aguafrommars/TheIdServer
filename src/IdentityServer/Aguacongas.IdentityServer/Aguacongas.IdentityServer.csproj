@@ -11,6 +11,7 @@
 		<PackageTags>theidserver;identityserver4</PackageTags>
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
 		<DebugType>Full</DebugType>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

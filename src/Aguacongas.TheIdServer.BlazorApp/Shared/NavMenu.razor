@@ -1,7 +1,10 @@
 ﻿@inject IStringLocalizerAsync<NavMenu> Localizer
 
 <div class="top-row pl-4 navbar navbar-light">
-    <a class="navbar-brand" href="">TheIdServer Admin</a>
+    <a class="navbar-brand" href="">
+        <img class="logo" src="/logo.png" />
+        <span>TheIdServer Admin</span>
+    </a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>

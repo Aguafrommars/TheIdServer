@@ -12,6 +12,7 @@
 		<Description>TheIdServer administration application components.</Description>
 		<DebugType>Full</DebugType>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

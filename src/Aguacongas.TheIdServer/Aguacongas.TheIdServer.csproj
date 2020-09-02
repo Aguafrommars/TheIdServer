@@ -77,4 +77,10 @@
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Sqlite\Aguacongas.TheIdServer.Migrations.Sqlite.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.SqlServer\Aguacongas.TheIdServer.Migrations.SqlServer.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="wwwroot\favicon.ico">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
 </Project>
