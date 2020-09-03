@@ -146,6 +146,11 @@ span.input-group-text.oi {
     z-index: 2000;
 }
 
+.logo {
+    height: 32px;
+    margin-top: -5px
+}
+
 
 #blazor-error-ui {
     background: lightyellow;

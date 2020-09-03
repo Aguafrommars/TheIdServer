@@ -11,6 +11,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;mysql</PackageTags>
 		<Description>Contains db contexts migrations code for MySql.</Description>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
