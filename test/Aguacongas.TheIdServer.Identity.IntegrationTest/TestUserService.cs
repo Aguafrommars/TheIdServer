@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;

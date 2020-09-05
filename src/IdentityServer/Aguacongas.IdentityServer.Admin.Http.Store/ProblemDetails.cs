@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Text.Json.Serialization;
 
 namespace Aguacongas.IdentityServer.Admin.Http.Store
 {

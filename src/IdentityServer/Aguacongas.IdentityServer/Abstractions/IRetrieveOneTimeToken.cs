@@ -1,4 +1,6 @@
-﻿namespace Aguacongas.IdentityServer.Abstractions
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+namespace Aguacongas.IdentityServer.Abstractions
 {
     public interface IRetrieveOneTimeToken
     {

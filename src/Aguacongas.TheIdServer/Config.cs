@@ -1,7 +1,5 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
 using System.Collections.Generic;
@@ -104,20 +102,21 @@ namespace Aguacongas.TheIdServer
                     ClientId = "spa",
                     ClientName = "SPA Client",
                     ClientUri = "http://localhost:5002",
-
+                    FrontChannelLogoutSessionRequired = false,
+                    BackChannelLogoutSessionRequired = false,
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
 
                     RedirectUris =
                     {
-                        "http://localhost:5002"
+                        "https://localhost:5002/authentication/login-callback"
                     },
 
-                    PostLogoutRedirectUris = { "http://localhost:5002" },
+                    PostLogoutRedirectUris = { "https://localhost:5002/authentication/logout-callback" },
                     AllowedCorsOrigins = { "http://localhost:5002" },
 
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    AllowedScopes = { "openid", "profile", "api1", "email", "phone", "address" }
                 },
 
                 // Device flow

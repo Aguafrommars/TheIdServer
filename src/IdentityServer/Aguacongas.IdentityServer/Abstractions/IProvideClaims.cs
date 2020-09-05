@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Models;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityServer4.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;

@@ -1,27 +1,33 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Quickstart.UI;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
 
 namespace Aguacongas.TheIdServer
 {
@@ -51,77 +57,67 @@ namespace Aguacongas.TheIdServer
                 .AddTheIdServerStores(configureOptions)
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                })
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddDefaultSecretParsers()
-                .AddDefaultSecretValidators()
-                .AddSigningCredentials();
+            var identityBuilder = services.AddClaimsProviders(Configuration)
+                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
+                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
+                 .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
+                 .Configure<TokenValidationParameters>(Configuration.GetSection(nameof(TokenValidationParameters)))
+                 .ConfigureNonBreakingSameSiteCookies()
+                 .AddOidcStateDataFormatterCache()
+                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
+                 .AddAspNetIdentity<ApplicationUser>()
+                 .AddSigningCredentials()
+                 .AddDynamicClientRegistration();
 
-            var authBuilder = services.AddAuthorization(options =>
+            identityBuilder.Services.AddTransient<IProfileService>(p =>
+            {
+                var options = p.GetRequiredService<IOptions<IdentityServerOptions>>().Value;
+                var httpClient = p.GetRequiredService<IHttpClientFactory>().CreateClient(options.HttpClientName);
+                return new ProxyProfilService<ApplicationUser>(httpClient,
+                    p.GetRequiredService<UserManager<ApplicationUser>>(),
+                    p.GetRequiredService<IUserClaimsPrincipalFactory<ApplicationUser>>(),
+                    p.GetRequiredService<IEnumerable<IProvideClaims>>(),
+                    p.GetRequiredService<ILogger<ProxyProfilService<ApplicationUser>>>());
+            });
+
+            services.AddTransient(p =>
+            {
+                var handler = new HttpClientHandler();
+                if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
+                    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+                }
+                return handler;
+            })
+                .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
+
+            services.AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
-                .AddIdentityServerAuthentication("Bearer", options =>
-                {
-                    Configuration.GetSection("ApiAuthentication").Bind(options);
-                });
+                .AddIdentityServerAuthentication(JwtBearerDefaults.AuthenticationScheme, ConfigureIdentityServerAuthenticationOptions());
 
-
-            authBuilder.AddDynamic<SchemeDefinition>()
-                .AddTheIdServerHttpStore()
-                .AddGoogle()
-                .AddFacebook()
-                .AddOpenIdConnect()
-                .AddTwitter()
-                .AddMicrosoftAccount()
-                .AddOAuth("OAuth", options =>
-                {
-                    options.ClaimActions.MapAll();
-                    options.Events = new OAuthEvents
-                    {
-                        OnCreatingTicket = async context =>
-                        {
-                            var contextOption = context.Options;
-                            if (string.IsNullOrEmpty(contextOption.UserInformationEndpoint))
-                            {
-                                return;
-                            }
-
-                            var request = new HttpRequestMessage(HttpMethod.Get, contextOption.UserInformationEndpoint);
-                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DynamicAuthProviders-sample", "1.0.0"));
-
-                            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
-                            var content = await response.Content.ReadAsStringAsync();
-                            response.EnsureSuccessStatusCode();
-
-                            using var doc = JsonDocument.Parse(content);
-
-                            context.RunClaimActions(doc.RootElement);
-                        }
-                    };
-                });
-
-            services.Configure<SendGridOptions>(Configuration)
+            var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
+                .AddLocalization()
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
                 .AddNewtonsoftJson(options =>
                 {
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
+                });
+
+            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                    .AddTheIdServerHttpStore();
+
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
-        [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())
@@ -173,9 +169,44 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToFile("index.html");
                 })
                 .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+        }
 
-            var scope = app.ApplicationServices.CreateScope();
-            scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>().Subscribe();
+        private Action<IdentityServerAuthenticationOptions> ConfigureIdentityServerAuthenticationOptions()
+        {
+            return options =>
+            {
+                Configuration.GetSection("ApiAuthentication").Bind(options);
+                if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                {
+                    options.JwtBackChannelHandler = new HttpClientHandler
+                    {
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
+                        ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+                    };
+                }
+
+                static string tokenRetriever(HttpRequest request)
+                {
+                    var path = request.Path;
+                    var accessToken = TokenRetrieval.FromQueryString()(request);
+                    if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                    {
+                        return accessToken;
+                    }
+                    var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                    if (!string.IsNullOrEmpty(oneTimeToken))
+                    {
+                        return request.HttpContext
+                            .RequestServices
+                            .GetRequiredService<IRetrieveOneTimeToken>()
+                            .GetOneTimeToken(oneTimeToken);
+                    }
+                    return TokenRetrieval.FromAuthorizationHeader()(request);
+                }
+
+                options.TokenRetriever = tokenRetriever;
+            };
         }
     }
 }

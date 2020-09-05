@@ -10,6 +10,7 @@
 	  <RepositoryType>git</RepositoryType>
 	  <PackageTags>theidserver;aspnetcore;identity;security</PackageTags>
 	  <Description>TheIdServer management application.</Description>
+	  <PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,7 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.7" />
   </ItemGroup>
 
   <ItemGroup>

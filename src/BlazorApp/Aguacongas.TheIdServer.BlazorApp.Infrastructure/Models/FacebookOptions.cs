@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {

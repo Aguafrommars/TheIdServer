@@ -10,6 +10,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;administration</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -21,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="9.0.1" />
+		<PackageReference Include="FluentValidation" Version="9.2.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 	</ItemGroup>
 

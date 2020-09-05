@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
@@ -8,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
-    [SuppressMessage("Design", "CA1052:Static holder types should be Static or NotInheritable", Justification = "entry point")]
     [SuppressMessage("Major Code Smell", "S1118:Utility classes should not have public constructors", Justification = "<Pending>")]
     public class Program
     {

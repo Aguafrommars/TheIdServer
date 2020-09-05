@@ -1,4 +1,6 @@
-﻿using Aguacongas.AspNetCore.Authentication;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.AspNetCore.Authentication.TestBase;
 using Aguacongas.IdentityServer.Store;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,5 +1,5 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
@@ -68,6 +68,7 @@ namespace Aguacongas.TheIdServer
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
                 .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
                 .Configure<TokenValidationParameters>(Configuration.GetSection(nameof(TokenValidationParameters)))
+                .Configure<SiteOptions>(Configuration.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))

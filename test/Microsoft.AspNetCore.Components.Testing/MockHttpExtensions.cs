@@ -1,4 +1,6 @@
-﻿using RichardSzalay.MockHttp;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using RichardSzalay.MockHttp;
 using System;
 using System.Net;
 using System.Net.Http;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System;
 using System.Runtime.Serialization;
 
 namespace IdentityServer4.Quickstart.UI

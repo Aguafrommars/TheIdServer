@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;

@@ -11,10 +11,11 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;oracle</PackageTags>
 		<Description>Contains db contexts migrations code for Oracle.</Description>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.12.1054" />
+		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.12.1064" />
 	</ItemGroup>
 
 	<ItemGroup>

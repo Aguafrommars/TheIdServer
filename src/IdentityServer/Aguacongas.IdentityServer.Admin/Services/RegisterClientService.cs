@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Admin.Models;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;

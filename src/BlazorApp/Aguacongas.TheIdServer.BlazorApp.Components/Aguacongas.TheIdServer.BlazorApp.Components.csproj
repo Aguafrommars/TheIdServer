@@ -12,11 +12,12 @@
 		<Description>TheIdServer administration application components.</Description>
 		<DebugType>Full</DebugType>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.6" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.7" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -11,10 +11,11 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;sqlserver</PackageTags>
 		<Description>Contains db contexts migrations code for SqlServer.</Description>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
 	</ItemGroup>
 
 	<ItemGroup>

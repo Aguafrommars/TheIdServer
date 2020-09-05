@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using System.Security.Cryptography;
 using System.Text;
 
 namespace System

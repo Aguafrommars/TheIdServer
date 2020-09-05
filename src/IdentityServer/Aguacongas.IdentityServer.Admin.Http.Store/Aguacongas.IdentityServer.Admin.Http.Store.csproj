@@ -10,6 +10,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;administration</PackageTags>
 		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,9 +23,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.6" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.6" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.7" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.7" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.7" />
 		<PackageReference Include="System.Text.Json" Version="4.7.2" />
 	</ItemGroup>
 

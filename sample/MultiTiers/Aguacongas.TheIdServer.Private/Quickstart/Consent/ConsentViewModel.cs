@@ -1,7 +1,5 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
 using System.Collections.Generic;
 
 namespace IdentityServer4.Quickstart.UI
@@ -11,9 +9,14 @@ namespace IdentityServer4.Quickstart.UI
         public string ClientName { get; set; }
         public string ClientUrl { get; set; }
         public string ClientLogoUrl { get; set; }
+
+        public string PolicyUrl { get; set; }
+
+        public string TosUrl { get; set; }
+
         public bool AllowRememberConsent { get; set; }
 
         public IEnumerable<ScopeViewModel> IdentityScopes { get; set; }
-        public IEnumerable<ScopeViewModel> ResourceScopes { get; set; }
+        public IEnumerable<ScopeViewModel> ApiScopes { get; set; }
     }
 }

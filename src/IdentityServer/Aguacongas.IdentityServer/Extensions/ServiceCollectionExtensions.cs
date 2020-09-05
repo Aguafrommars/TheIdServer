@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
 using Microsoft.Extensions.Options;
 using System.Net.Http;

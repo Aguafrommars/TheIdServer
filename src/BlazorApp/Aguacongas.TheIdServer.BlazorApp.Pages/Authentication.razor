@@ -6,10 +6,10 @@
 
     <RemoteAuthenticatorView Action="@Action">
         <LoggingIn>
-            <PageLoading Information="Checking login state..." />
+            <PageLoading Information="@Localizer["Checking login state..."]" />
         </LoggingIn>
         <CompletingLoggingIn>
-            <PageLoading Information="Completing login..." />
+            <PageLoading Information="@Localizer["Completing login..."]" />
         </CompletingLoggingIn>
         <LogInFailed>
             @if (context != null)
@@ -18,14 +18,14 @@
             }
             else
             {
-                <PageLoading Information="Checking login state..." />
+                <PageLoading Information="@Localizer["Checking login state..."]" />
             }
         </LogInFailed>
         <LogOut>
-            <PageLoading Information="Processing logout..." />
+            <PageLoading Information="@Localizer["Processing logout..."]" />
         </LogOut>
         <CompletingLogOut>
-            <PageLoading Information="Processing logout callback..." />
+            <PageLoading Information="@Localizer["Processing logout callback..."]" />
         </CompletingLogOut>
         <LogOutFailed>
             @if (context != null)
@@ -34,7 +34,7 @@
             }
             else
             {
-                <PageLoading Information="Processing logout..." />
+                <PageLoading Information="@Localizer["Processing logout..."]" />
             }
         </LogOutFailed>
         <LogOutSucceeded>
@@ -47,7 +47,7 @@
             }
             else
             {
-                <PageLoading Information="Checking login state..." />
+                <PageLoading Information="@Localizer["Checking login state..."]" />
             }
         </Registering>
         <UserProfile>
@@ -57,7 +57,7 @@
             }
             else
             {
-                <PageLoading Information="Checking login state..." />
+                <PageLoading Information="@Localizer["Checking login state..."]" />
             }
         </UserProfile>
     </RemoteAuthenticatorView>

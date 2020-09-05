@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.Models;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Models;
 using IdentityServer4.Events;
 using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
