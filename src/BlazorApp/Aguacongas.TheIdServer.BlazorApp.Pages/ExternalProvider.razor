@@ -58,7 +58,7 @@ else
                                     @Localizer["type"]
                                 </label>
                                 <div class="col-lg-10 col-sm-12">
-                                    <ProviderSelect Id="type" @bind-Value="@Model.KindName" Kinds="@Model.Kinds" />
+                                    <ProviderSelect Id="type" Value="@Model.KindName" ValueChanged="KindChanded" ValueExpression="() => Model.KindName" Kinds="@Model.Kinds" />
                                 </div>
                             </div>
                         }
