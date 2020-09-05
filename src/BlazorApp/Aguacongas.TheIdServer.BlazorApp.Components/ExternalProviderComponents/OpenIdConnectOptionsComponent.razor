@@ -2,23 +2,23 @@
 
 <div class="form-group row">
     <label class="col col-form-label" for="clientId">
-        client id
+        @Localizer["client id"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="clientId" Placeholder="client id" @bind-Value="@Model.Options.ClientId" />
+        <AuthorizeText Id="clientId" Placeholder="@Localizer["client id"]" @bind-Value="@Model.Options.ClientId" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="clientSecret">
-        client secret
+        @Localizer["client secret"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="clientSecret" Placeholder="client secret" @bind-Value="@Model.Options.ClientSecret" />
+        <AuthorizeText Id="clientSecret" Placeholder="@Localizer["client secret"]" @bind-Value="@Model.Options.ClientSecret" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="authority">
-        authority
+        @Localizer["authority"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="authority" Placeholder="https://acme.com" @bind-Value="@Model.Options.Authority" />
@@ -26,39 +26,39 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="responseMode">
-        response mode
+        @Localizer["response mode"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="responseMode" Placeholder="responseMode" @bind-Value="@Model.Options.ResponseMode" />
+        <AuthorizeText Id="responseMode" Placeholder="@Localizer["responseMode"]" @bind-Value="@Model.Options.ResponseMode" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="responseType">
-        response type
+        @Localizer["response type"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="responseType" Placeholder="responseType" @bind-Value="@Model.Options.ResponseType" />
+        <AuthorizeText Id="responseType" Placeholder="@Localizer["responseType"]" @bind-Value="@Model.Options.ResponseType" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="prompt">
-        prompt
+        @Localizer["prompt"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="prompt" Placeholder="prompt" @bind-Value="@Model.Options.Prompt" />
+        <AuthorizeText Id="prompt" Placeholder="@Localizer["prompt"]" @bind-Value="@Model.Options.Prompt" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="resource">
-        resource
+        @Localizer["resource"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="resource" Placeholder="resource" @bind-Value="@Model.Options.Resource" />
+        <AuthorizeText Id="resource" Placeholder="@Localizer["resource"]" @bind-Value="@Model.Options.Resource" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="signOutScheme">
-        sign-out scheme
+        @Localizer["sign-out scheme"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="signOutScheme" Placeholder="sign-out scheme" @bind-Value="@Model.Options.SignOutScheme" />
@@ -66,7 +66,7 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="remoteSignOutPath">
-        remote sign-out path
+        @Localizer["remote sign-out path"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="remoteSignOutPath" Placeholder="/sign-out" @bind-Value="@Model.Options.RemoteSignOutPath" />
@@ -74,7 +74,7 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="scope">
-        scopes
+        @Localizer["scopes"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <ScopeCollection Id="scope" Collection="@Model.Options.Scope" />
@@ -84,41 +84,41 @@
     <label class="col col-form-label" for="requireHttpsMetadata">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="requireHttpsMetadata" Label="require https metadata" @bind-Value="@Model.Options.RequireHttpsMetadata" />
+        <AuthorizeCheckbox Name="requireHttpsMetadata" Label="@Localizer["require https metadata"]" @bind-Value="@Model.Options.RequireHttpsMetadata" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="usePKCE">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Model.Options.UsePkce" />
+        <AuthorizeCheckbox Name="usePKCE" Label="@Localizer["use PKCE"]" @bind-Value="@Model.Options.UsePkce" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="saveTokens">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="saveTokens" Label="save tokens" @bind-Value="@Model.Options.SaveTokens" />
+        <AuthorizeCheckbox Name="saveTokens" Label="@Localizer["save tokens"]" @bind-Value="@Model.Options.SaveTokens" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="useTokenLifetime">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="use token lifetime" @bind-Value="@Model.Options.UseTokenLifetime" />
+        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="@Localizer["use token lifetime"]" @bind-Value="@Model.Options.UseTokenLifetime" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="skipUnrecognizedRequests">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="skip unrecognized requests" @bind-Value="@Model.Options.SkipUnrecognizedRequests" />
+        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="@Localizer["skip unrecognized requests"]" @bind-Value="@Model.Options.SkipUnrecognizedRequests" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="disableTelemetry">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="disableTelemetry" Label="disable telemetry" @bind-Value="@Model.Options.DisableTelemetry" />
+        <AuthorizeCheckbox Name="disableTelemetry" Label="@Localizer["disable telemetry"]" @bind-Value="@Model.Options.DisableTelemetry" />
     </div>
 </div>

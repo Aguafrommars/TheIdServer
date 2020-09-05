@@ -1,4 +1,5 @@
 ﻿@inject IExternalProviderKindStore _store
+@inject IStringLocalizerAsync<ProviderSelect> Localizer
 @inherits InputSelect<string>
 
 <AuthorizeView Policy="Is4-Writer">
@@ -10,7 +11,7 @@
             }
             else
             {
-                <option value="">Select a kind of provider ...</option>
+                <option value="">@Localizer["Select a kind of provider ..."]</option>
                 @foreach (var provider in Kinds)
                 {
                     <option value="@provider.KindName">@provider.KindName</option>
@@ -21,6 +22,6 @@
     <NotAuthorized>
         <div id="@Id" class="col-form-label">
             @Value
-        </div>        
+        </div>
     </NotAuthorized>
 </AuthorizeView>
