@@ -1,6 +1,8 @@
-﻿<div class="form-group row">
+﻿@inject IStringLocalizerAsync<OAuthOptionsProperties> Localizer
+
+<div class="form-group row">
     <label class="col col-form-label" for="authorizationEndpoint">
-        authorization endpoint
+        @Localizer["authorization endpoint"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="authorizationEndpoint" Placeholder="https://acme.com/authorize" @bind-Value="@Model.Options.AuthorizationEndpoint" />
@@ -8,7 +10,7 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="tokenEndpoint">
-        token enpoint
+        @Localizer["token enpoint"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="tokenEndpoint" Placeholder="https://acme.com/token" @bind-Value="@Model.Options.TokenEndpoint" />
@@ -16,7 +18,7 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="userEndpoint">
-        user enpoint
+        @Localizer["user enpoint"]
     </label>
     <div class="col-lg-10 col-sm-12">
         <AuthorizeText Id="userEndpoint" Placeholder="https://acme.com/user" @bind-Value="@Model.Options.UserInformationEndpoint" />
@@ -24,23 +26,23 @@
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="scope">
-        scopes
+        @Localizer["scopes"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <ScopeCollection Id="scope" Placeholder="scope" Collection="@Model.Options.Scope" />
+        <ScopeCollection Id="scope" Placeholder="@Localizer["scope"]" Collection="@Model.Options.Scope" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="usePKCE">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="usePKCE" Label="use PKCE" @bind-Value="@Model.Options.UsePkce" />
+        <AuthorizeCheckbox Name="usePKCE" Label="@Localizer["use PKCE"]" @bind-Value="@Model.Options.UsePkce" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="saveTokens">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="saveTokens" Label="save tokens" @bind-Value="@Model.Options.SaveTokens" />
+        <AuthorizeCheckbox Name="saveTokens" Label="@Localizer["save tokens"]" @bind-Value="@Model.Options.SaveTokens" />
     </div>
 </div>

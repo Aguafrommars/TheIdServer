@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System.Text.Json;
@@ -18,6 +19,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
 
         [CascadingParameter]
         public ExternalProvider ModelBase { get; set; }
+
+        [Inject]
+        protected IStringLocalizerAsync<ProviderOptionsBase<T>> Localizer { get; set; }
 
         protected override void OnInitialized()
         {
