@@ -1,5 +1,8 @@
-﻿@inject IViewLocalizer Localizer
+﻿@using Microsoft.Extensions.Options
+@using Aguacongas.TheIdServer.Models
 
+@inject IViewLocalizer Localizer
+@inject IOptions<SiteOptions> Options
 @model LogoutViewModel
 
 <div class="logout-page">
@@ -9,7 +12,7 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <p>@Localizer["Would you like to logout of IdentityServer?"]</p>
+            <p>@Localizer["Would you like to logout of {0}?", Options.Value.Name]</p>
             <form asp-action="Logout">
                 <input type="hidden" name="logoutId" value="@Model.LogoutId" />
                 <fieldset>
