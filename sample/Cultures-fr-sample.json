@@ -1,0 +1,2437 @@
+{
+  "_metadata": {
+    "typeName": "Aguacongas.IdentityServer.Store.Entity.Culture, Aguacongas.IdentityServer.Store, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "items": [
+    {
+      "id": "fr",
+      "resources": [
+        {
+          "key": "export",
+          "id": "010ad8c6-7a81-4a77-a5f5-d4cd9e47d6bb",
+          "value": "exporter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:42:42.6809773"
+        },
+        {
+          "key": "Please confirm that the authorization request quotes the code: \"{0}\".",
+          "id": "0165935f-8fa6-4ee6-b558-ab3fda36c2df",
+          "value": "Veuillez confirmer que la demande d'autorisation contient le code: \"{0}\".",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:04:03.3556917"
+        },
+        {
+          "key": "remote sign-out path",
+          "id": "0190cb00-651b-47eb-94c8-0c1116d9d61b",
+          "value": "chemin de déconnexion à distance",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:18:36.4658932"
+        },
+        {
+          "key": "Application Access",
+          "id": "0194e398-8a2a-4d7b-92d3-4d30a0c463ba",
+          "value": "Accès aux Applications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:32:33.1092373"
+        },
+        {
+          "key": "app id",
+          "id": "040c3fb2-60d7-4734-8f36-73dc106f996c",
+          "value": "id de l'app",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:52:33.0818513"
+        },
+        {
+          "key": "response type",
+          "id": "044a9454-5a93-443f-bc02-98cf53bd011e",
+          "value": "type de réponse",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:16:40.9730599"
+        },
+        {
+          "key": "Your email is unchanged.",
+          "id": "056b41e0-7165-41b3-bc17-a3d8828f4a05",
+          "value": "Votre e-mail est inchangé.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:49:21.1260574",
+          "modifiedAt": "2020-09-06T19:41:37.5021348"
+        },
+        {
+          "key": "sso lifetime",
+          "id": "05885f2d-65e8-4dc9-92cc-2f0b91dac1a5",
+          "value": "durée de vie sso",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:37:00.0335239"
+        },
+        {
+          "key": "from claim type",
+          "id": "05a8fc2e-3ae7-46b7-b8e2-c66bf35edbe0",
+          "value": "du type de revendication",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T21:57:43.9463208",
+          "modifiedAt": "2020-09-05T22:01:06.8356187"
+        },
+        {
+          "key": "Error loading external login information during confirmation.",
+          "id": "078c73a0-0901-4bc8-9ad1-23c5c47d3996",
+          "value": "Erreur lors du chargement des informations de connexion externes lors de la confirmation.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:58:04.4106277"
+        },
+        {
+          "key": "roles",
+          "id": "08ae178d-1786-41a9-9cbf-aaa920886f63",
+          "value": "rôles",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:51:11.7447844"
+        },
+        {
+          "key": "Create a new account.",
+          "id": "08b4b970-c825-4331-a9d9-152736d37747",
+          "value": "Créer un nouveau compte.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:00:26.9018379"
+        },
+        {
+          "key": "secrets",
+          "id": "0989f589-4ad0-4439-825c-c536f9c5ea60",
+          "value": "secrets",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:40:14.361527"
+        },
+        {
+          "key": "Login form",
+          "id": "0a04d93c-a7f6-49e6-a159-b9b73d65bb7c",
+          "value": "Formulaire de connexion",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:19:55.166968"
+        },
+        {
+          "key": "Personal Information",
+          "id": "0a33b2ce-a498-4f42-ab27-05faf1de6ad0",
+          "value": "Renseignements Personnels",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:33:07.5498234"
+        },
+        {
+          "key": "Update password",
+          "id": "0d5ac2ff-c367-4aad-ac6a-b028b4aef4e5",
+          "value": "Mettre à jour le mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:33:11.9690911"
+        },
+        {
+          "key": "field",
+          "id": "0d7cf955-a363-4d5e-a24a-eda5331ad89e",
+          "value": "champ",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:54:12.1898702"
+        },
+        {
+          "key": "require https metadata",
+          "id": "0db0ff29-dc66-4000-bbf6-43a9f083dcf1",
+          "value": "nécessitent des métadonnées https",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:01:52.5146737"
+        },
+        {
+          "key": "User Code",
+          "id": "0dc16a83-363a-4117-b6c3-24b43cacfaef",
+          "value": "Code Utilisateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:02:06.1135246"
+        },
+        {
+          "key": "Associate your {0} account.",
+          "id": "0e750087-6058-4c1f-9b80-e58f580fdce1",
+          "value": "Associez votre compte {0}.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:53:32.631035"
+        },
+        {
+          "key": "Reset authenticator key",
+          "id": "0f860caf-b901-4abd-a8c2-a2706791f447",
+          "value": "Réinitialiser la clé d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:23:15.8871142"
+        },
+        {
+          "key": "Confirm your email",
+          "id": "1111cd8b-d6f3-4f3b-9eb6-d73005e22efd",
+          "value": "Confirmer votre e-mail",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:02:30.8739666",
+          "modifiedAt": "2020-09-06T19:41:37.4163328"
+        },
+        {
+          "key": "data",
+          "id": "123e0f47-9502-493c-add2-4b22971e0896",
+          "value": "données",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:28:37.1134338"
+        },
+        {
+          "key": "Please enter the code displayed on your device",
+          "id": "14bbce88-671d-4ec5-aee0-cd77cda8d7d5",
+          "value": "Veuillez saisir le code affiché sur votre appareil",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:37:50.5157302"
+        },
+        {
+          "key": "absolute refresh token lifetime",
+          "id": "170d2fab-1ece-4965-8423-7cbe06300cb3",
+          "value": "durée de vie absolue du jeton d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:28:52.8146229"
+        },
+        {
+          "key": "Setup authenticator app",
+          "id": "186edaf7-6f15-4004-9794-ed498d900436",
+          "value": "Configurer l'application d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:34:52.1757278"
+        },
+        {
+          "key": "Users",
+          "id": "1870db72-b0ef-43dc-97dd-71b2f578f827",
+          "value": "Utilisateurs",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:31:16.3910245"
+        },
+        {
+          "key": "Add",
+          "id": "18d17f4f-20ec-4919-9a33-ec8640e50f13",
+          "value": "Ajouter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:54:03.8192299"
+        },
+        {
+          "key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\\\"{0}\\\">Windows Phone</a>, <a href=\\\"{1}\\\">Android</a> and <a href=\\\"{2}\\\">iOS</a> or Google Authenticator for <a href=\\\"{3}\\\">Android</a> and <a href=\\\"{4}\\\">iOS</a>.",
+          "id": "1958a2f3-6e3f-4375-b83e-199a428dc04a",
+          "value": "Téléchargez une application d'authentification à deux facteurs telle que Microsoft Authenticator pour <a href=\\\"{0}\\\"> Windows Phone </a>, <a href=\\\"{1}\\\"> Android </a> et <a href = \\ \"{2} \\\"> iOS </a> ou Google Authenticator pour <a href=\\\"{3}\\\"> Android </a> et <a href=\\\"{4}\\\"> iOS </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:58:56.3057515"
+        },
+        {
+          "key": "no change",
+          "id": "1b81f4fa-538d-4bbd-a085-3ed5b6dd0d5b",
+          "value": "pas de changement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:07:09.0969883"
+        },
+        {
+          "key": "Delete",
+          "id": "1bf89d37-43b9-4f97-bcaf-3d16963f75bc",
+          "value": "Supprimer",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:00:30.5944894"
+        },
+        {
+          "key": "access type",
+          "id": "1c0cd56d-c6ac-4529-a3e3-786834042fb4",
+          "value": "type d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:17:28.4183772",
+          "modifiedAt": "2020-09-05T22:18:20.0195759"
+        },
+        {
+          "key": "Register",
+          "id": "1c79b2e9-cb93-4813-8997-b0d17eea7866",
+          "value": "S'inscrire",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:27:50.5884916"
+        },
+        {
+          "key": "policy uri",
+          "id": "1d15eaf4-f59c-4bbd-8974-b06abd2f7c17",
+          "value": "uri de la politique",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:16:15.9196807",
+          "modifiedAt": "2020-09-06T15:16:21.0058524"
+        },
+        {
+          "key": "You are now being returned to the application.",
+          "id": "1e7395a4-8f47-4fd9-8c12-dec1706fd8f0",
+          "value": "Vous êtes maintenant renvoyé vers l'application.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:36:51.4142315"
+        },
+        {
+          "key": "id token lifetime",
+          "id": "1f17f7ec-7752-47cb-963d-f532cd1bfde9",
+          "value": "durée de vie du jeton d'identité (id token)",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:32:32.7402641",
+          "modifiedAt": "2020-09-06T15:33:00.4869059"
+        },
+        {
+          "key": "email confirmed",
+          "id": "1fc9aef0-1ce1-469f-88c5-7a5f5a3a920e",
+          "value": "e-mail confirmé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:42:28.0430018"
+        },
+        {
+          "key": "consumer key",
+          "id": "1fe488dc-f545-4423-9aa9-a2d6374cd66c",
+          "value": "clé du consommateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:22:00.1391769"
+        },
+        {
+          "key": "Log in",
+          "id": "201b28cb-cd86-40ee-85a4-23afaaf3fb21",
+          "value": "Se connecter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:28:12.9977169",
+          "modifiedAt": "2020-09-06T16:26:15.7710547"
+        },
+        {
+          "key": "refresh tokens",
+          "id": "205acf69-f8f8-407d-8c63-e1639399b45f",
+          "value": "jetons d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:38:30.2337295"
+        },
+        {
+          "key": "sliding refresh token lifetime",
+          "id": "20cc8c85-fef2-464d-ba27-46edea143649",
+          "value": "durée de vie glissante du jeton d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:36:29.9127965"
+        },
+        {
+          "key": "Grant types",
+          "id": "20ef15c5-fb93-442b-ac50-ad0a4c6700ba",
+          "value": "Types d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:29:11.0973467"
+        },
+        {
+          "key": "claim type",
+          "id": "20ef6020-59ed-4291-8310-21601e012fd1",
+          "value": "type de revendication",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:11:01.167631"
+        },
+        {
+          "key": "scope",
+          "id": "222efc9d-de44-40f3-9871-3b9c34a052cd",
+          "value": "scope",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:08:53.1798473"
+        },
+        {
+          "key": "disable telemetry",
+          "id": "22f984a3-1f7b-4216-ab53-b78d37147b70",
+          "value": "désactiver la télémétrie",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:01:13.2866458"
+        },
+        {
+          "key": "Logout",
+          "id": "2361fbc3-3296-411d-b18f-f77074e91f2c",
+          "value": "Se déconnecter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:14:00.2604288"
+        },
+        {
+          "key": "Add authenticator app",
+          "id": "252e8fca-3c6c-4826-8193-c90221579198",
+          "value": "Ajouter une application d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:34:20.2353677"
+        },
+        {
+          "key": "Download Your Data",
+          "id": "25a3574f-d935-4d0e-beed-6683820b75df",
+          "value": "Téléchargez vos données",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:45:25.8194193"
+        },
+        {
+          "key": "uri",
+          "id": "25d0def2-2a1a-4893-846b-86b28fbf545f",
+          "value": "uri",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:40:00.7985938"
+        },
+        {
+          "key": "Consent",
+          "id": "263bca90-98fe-4211-88f0-3522d2c14610",
+          "value": "Consentement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:27:33.2186704"
+        },
+        {
+          "key": "Email",
+          "id": "2680bfcd-5616-4a3f-93e5-c38d4f4c0660",
+          "value": "Email",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:51:20.5498399"
+        },
+        {
+          "key": "cors",
+          "id": "26ba8b25-8213-4633-9c52-d8e5c15670ff",
+          "value": "cors",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:40:49.3064529"
+        },
+        {
+          "key": "always send claims",
+          "id": "27bf910d-e11d-48c9-b12b-be1c9e0c9233",
+          "value": "toujours envoyer les revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:34:10.7556812"
+        },
+        {
+          "key": "Completing login...",
+          "id": "281c3ea1-0336-4d99-a85e-60d2912b08ca",
+          "value": "Terminer la connexion...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:27:50.5884915"
+        },
+        {
+          "key": "Resources",
+          "id": "2842a925-350b-48bc-ab70-ddd932d350b2",
+          "value": "Resources",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T11:04:27.2489624"
+        },
+        {
+          "key": "consent lifetime",
+          "id": "2b261f1a-eae6-43f3-bf21-ffe912c01d1c",
+          "value": "durée de vie du consentement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:17:16.1553994"
+        },
+        {
+          "key": "send app secret proof",
+          "id": "2b94ae04-316c-4630-8d98-c1e9ff6e2ef9",
+          "value": "envoyer une preuve secrète de l'app",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:50:47.192206",
+          "modifiedAt": "2020-09-06T15:53:24.9367276"
+        },
+        {
+          "key": "redirect",
+          "id": "2bc7b0d7-44a3-4abc-8cf7-7a1ecc314f6f",
+          "value": "redirection",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:43:54.6031789"
+        },
+        {
+          "key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\\\"{0}\\\">reset your authenticator keys.</a>",
+          "id": "2ff25601-275c-4270-b61f-68dfa6984a0f",
+          "value": "La désactivation de 2FA ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\\\"{0}\\\"> réinitialiser vos clés d'authentification. </a>",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:41:58.3476769"
+        },
+        {
+          "key": "Reset Password",
+          "id": "3047c65d-cf89-4486-bb5b-f5fe37d483c3",
+          "value": "Réinitialiser le mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:05:51.0340103"
+        },
+        {
+          "key": "Configure authenticator app",
+          "id": "30a9c7b3-3f22-4277-b00f-435f568d5169",
+          "value": "Configurer l'application d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:04:09.4922487"
+        },
+        {
+          "key": "two factor enabled",
+          "id": "30c5adb3-92b1-4cdd-a21f-1551879efec7",
+          "value": "deux facteurs activés",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:44:56.7052316"
+        },
+        {
+          "key": "Absolute",
+          "id": "318b5485-98e9-47ce-885e-72b3cbcbe1f8",
+          "value": "Absolu",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:27:38.9971627"
+        },
+        {
+          "key": "require secret",
+          "id": "32298788-8933-4c60-a252-ef73359236c0",
+          "value": "exiger un secret",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:23:08.2502274"
+        },
+        {
+          "key": "Error loading external login information.",
+          "id": "32d68d5f-077f-45f5-a05e-1e0dcebc4e0e",
+          "value": "Erreur lors du chargement des informations de connexion externes.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:56:48.0832471"
+        },
+        {
+          "key": "(required)",
+          "id": "336aee24-7fbf-407f-8a55-6de6df9bd586",
+          "value": "(requis)",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:06:35.8866771"
+        },
+        {
+          "key": "External logins",
+          "id": "35b98333-18ca-48b8-8d7d-c08166504ba7",
+          "value": "Connexions externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:51:51.2813454"
+        },
+        {
+          "key": "Registered Logins",
+          "id": "36100093-31d6-4133-a1b8-05fed7d2f7b3",
+          "value": "Connexions enregistrées",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:13:37.7330714"
+        },
+        {
+          "key": "Confirm email change",
+          "id": "3632c913-8105-47c5-b764-a019d23328d7",
+          "value": "Confirmer le changement d'e-mail",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:48:40.9873459"
+        },
+        {
+          "key": "Created:",
+          "id": "3639f46a-53c6-4422-8d63-7d2cd713fb11",
+          "value": "Créé le:",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:13:43.1154006",
+          "modifiedAt": "2020-09-06T09:14:32.2366702"
+        },
+        {
+          "key": "enabled",
+          "id": "36be0a3a-2cc7-4fdc-9b4a-7c66d703b1f6",
+          "value": "activé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:35:00.523756"
+        },
+        {
+          "key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
+          "id": "3767126a-6b8a-40f7-8542-23d6e7be2b98",
+          "value": "Le navigateur actuel a été oublié. Lorsque vous vous connectez à nouveau à partir de ce navigateur, vous serez invité à entrer votre code 2fa.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:45:36.6299262"
+        },
+        {
+          "key": "map default outbound JWT claim types",
+          "id": "398d4240-2b80-4a58-a792-7ef3ef84ec7f",
+          "value": "mapper les types de revendication JWT sortants par défaut",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:01:06.5266997"
+        },
+        {
+          "key": "To use an authenticator app go through the following steps:",
+          "id": "3af33334-99ac-4e22-a94d-26d55ce3ba4d",
+          "value": "Pour utiliser une application d'authentification, suivez les étapes suivantes:",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:55:07.8535366"
+        },
+        {
+          "key": "authorization endpoint",
+          "id": "3b6998e7-9108-4d3a-8fe4-6ff7e01f927d",
+          "value": "point de terminaison d'autorisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:58:37.9953333"
+        },
+        {
+          "key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+          "id": "3be5d5aa-0d28-4374-a7dd-022d36640830",
+          "value": "La suppression de ces données supprimera définitivement votre compte et cela ne pourra pas être récupéré.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:37:20.1044636"
+        },
+        {
+          "key": "Manage Email",
+          "id": "3c096694-a37a-415f-82af-4ac641b49846",
+          "value": "Gérer les e-mails",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:47:36.3024818"
+        },
+        {
+          "key": "Processing logout callback...",
+          "id": "3e6267f1-c45c-45f3-a0c6-9789cc2f6dd6",
+          "value": "Traitement du rappel de déconnexion ...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:11:20.4726234"
+        },
+        {
+          "key": "Home",
+          "id": "3e79c8ad-44df-4330-a2ae-1933a694a5b3",
+          "value": "Accueil",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:30:15.8639339"
+        },
+        {
+          "key": "password",
+          "id": "3ed744f0-4ea9-4ed2-94ea-6f2d1a9f78fc",
+          "value": "mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:39:43.4401674"
+        },
+        {
+          "key": "show in discovery document",
+          "id": "407b799d-709a-4b4c-b940-a0ea64acfe97",
+          "value": "afficher dans le document de découverte",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:46:31.8922039"
+        },
+        {
+          "key": "You must <a href=\\\"{0}\\\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+          "id": "4105182b-2d46-4eca-bd29-a5aaf39df969",
+          "value": "Vous devez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a> avant de pouvoir vous connecter avec un code de récupération.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:38:23.5708429"
+        },
+        {
+          "key": "Error changing user name.",
+          "id": "424ecd5c-d191-4801-af5f-f948ff6af390",
+          "value": "Erreur lors de la modification du nom d'utilisateur.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:51:01.9361956"
+        },
+        {
+          "key": "You do not have access to that resource.",
+          "id": "42656664-ba72-48ab-a9cd-32be3df035ba",
+          "value": "Vous n'avez pas accès à cette ressource.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:10:44.4870962"
+        },
+        {
+          "key": "Remember My Login",
+          "id": "42ec3b18-246a-4792-a4f3-612bad980476",
+          "value": "Se Souvenir de Mon Identifiant",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:20:43.8803205",
+          "modifiedAt": "2020-09-06T10:21:27.4532667"
+        },
+        {
+          "key": "The external login was not added. External logins can only be associated with one account.",
+          "id": "4346b59e-2518-4325-8c22-d9af9a24ad17",
+          "value": "La connexion externe n'a pas été ajoutée. Les connexions externes ne peuvent être associées qu'à un seul compte.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:23:36.8460828"
+        },
+        {
+          "key": "Import",
+          "id": "457048c1-af75-40ef-96f7-f23e235de137",
+          "value": "Importer",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T15:55:23.9016374"
+        },
+        {
+          "key": "prefix",
+          "id": "457110cf-6f56-4c96-be1b-aa0ba4b0f98d",
+          "value": "préfixe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:32:59.3943278"
+        },
+        {
+          "key": "Your profile has been updated",
+          "id": "47a15f6b-27dc-4e39-89b3-c31404b13389",
+          "value": "Votre profil a été mis a jour",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:20:31.3784658"
+        },
+        {
+          "key": "save tokens",
+          "id": "4809503b-e230-4b67-8fe8-16c4e0528053",
+          "value": "enregistrer les jetons",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:56:57.3135193"
+        },
+        {
+          "key": "You have 1 recovery code left.",
+          "id": "48b366dd-13d9-46ac-82bc-9a917109aae0",
+          "value": "Il vous reste 1 code de récupération.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:40:00.7142561"
+        },
+        {
+          "key": "Deleted",
+          "id": "49057b56-1dfd-4dbc-a451-3a8af1522dac",
+          "value": "Supprimé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:54:49.4561971"
+        },
+        {
+          "key": "You have generated new recovery codes.",
+          "id": "4952f3d2-7c8c-4150-bc42-eede67205690",
+          "value": "Vous avez généré de nouveaux codes de récupération.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:00:27.0768475"
+        },
+        {
+          "key": "external logins",
+          "id": "4a2f599e-bdfa-43e2-81ea-bc370ecec087",
+          "value": "connexions externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:36:22.7415346"
+        },
+        {
+          "key": "Retype the \"{0}\" if you are sure to delete it.",
+          "id": "4b21ea4a-68b9-4d08-86c4-ba6224edae65",
+          "value": "Retapez le \"{0}\" si vous êtes sûr de le supprimer.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:04:10.2526837"
+        },
+        {
+          "key": "Personal data",
+          "id": "4b5711da-5ea3-4f78-ad42-ad265fb28403",
+          "value": "Données personnelles",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:59:26.1949534"
+        },
+        {
+          "key": "Welcome",
+          "id": "4c2be760-ed84-4bb7-9e5e-99e0fc31c9db",
+          "value": "Bienvenu",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:35:32.7351431"
+        },
+        {
+          "key": "Registration is not supported.",
+          "id": "4c38eada-4af0-413c-b0f2-cdaba78b30db",
+          "value": "L'enregistrement n'est pas pris en charge.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:18:46.5227806"
+        },
+        {
+          "key": "Supported cultures",
+          "id": "4d747f53-4abd-4b27-b436-681bb077d246",
+          "value": "Cultures supportées",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:48:05.107839"
+        },
+        {
+          "key": "Your account contains personal data that you have given us. This page allows you to download or delete that data.",
+          "id": "4dcc1c74-4fcf-4c6f-9b78-719f893a542f",
+          "value": "Votre compte contient des données personnelles que vous nous avez fournies. Cette page vous permet de télécharger ou de supprimer ces données.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:21:50.9814669"
+        },
+        {
+          "key": "The external login was added.",
+          "id": "4ebdfeec-6cfe-40f9-be42-9ecd6de3a11c",
+          "value": "La connexion externe a été ajoutée.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:17:32.6895723"
+        },
+        {
+          "key": "There are no login schemes configured for this client.",
+          "id": "4f0b37b7-99dc-4359-9479-12ee2ca38a9f",
+          "value": "Aucun schéma de connexion n'est configuré pour ce client.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:23:24.518185"
+        },
+        {
+          "key": "Set your password",
+          "id": "4fcb8605-e605-4cd7-aac7-86cf5fe7d144",
+          "value": "Définir votre mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:31:18.4344385"
+        },
+        {
+          "key": "Yes",
+          "id": "4ff1cc4c-e6ec-4798-9e61-ff6e9c355e8c",
+          "value": "Oui",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:23:59.733846"
+        },
+        {
+          "key": "remenber consent",
+          "id": "4ffb934e-0cb5-4040-8d6d-f0d452ab34c1",
+          "value": "se souvenir du consentement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:12:33.269659"
+        },
+        {
+          "key": "Would you like to logout of {0}?",
+          "id": "504948a6-b619-478f-aeb0-8d112cdf0917",
+          "value": "Souhaitez-vous vous déconnecter de {0} ?",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:27:07.7728781"
+        },
+        {
+          "key": "Nothing here.",
+          "id": "5214897e-8ae7-4276-8efa-7d77c815d4db",
+          "value": "Rien ici.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T11:03:49.0083013"
+        },
+        {
+          "key": "Revoke Access",
+          "id": "53000e8d-477d-4ff1-94ef-5546f7ce61a2",
+          "value": "Révoquer les Accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:01:52.0450327"
+        },
+        {
+          "key": "Tokens",
+          "id": "538d9bd2-9feb-48e9-aa6a-2de83955fe12",
+          "value": "Jetons",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:29:33.6135942"
+        },
+        {
+          "key": "allow plain text PKCE",
+          "id": "546af477-0d06-4e92-9c01-bbddaf2e7cf6",
+          "value": "autoriser PKCE en texte brut",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:21:52.8543517"
+        },
+        {
+          "key": "enable local login",
+          "id": "54fd2103-daf4-4884-b1be-484cb2808507",
+          "value": "activer la connexion locale",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:17:48.7403759"
+        },
+        {
+          "key": "Don't have access to your authenticator device? You can <a href=\\\"{0}\\\">log in with a recovery code</a>.",
+          "id": "55a27555-7a47-4b28-a852-32d857bf870d",
+          "value": "Vous n'avez pas accès à votre appareil d'authentification? Vous pouvez <a href=\\\"{0}\\\"> vous connecter avec un code de récupération </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:39:52.045779"
+        },
+        {
+          "key": "Providers",
+          "id": "55dd591e-80f8-4e98-a0c8-9b125199b754",
+          "value": "Fournisseurs",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:32:50.8621492"
+        },
+        {
+          "key": "Select a kind of provider...",
+          "id": "56326f92-d01f-41a7-921c-5e53e502904b",
+          "value": "Sélectionnez un type de fournisseur ...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:14:41.8311156"
+        },
+        {
+          "key": "front channel logout uri required",
+          "id": "5721c33b-3914-4fa2-900b-aafcd8d62b64",
+          "value": "uri de déconnexion du canal frontal requise",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:22:22.8424969",
+          "modifiedAt": "2020-09-06T17:32:40.3794762"
+        },
+        {
+          "key": "Unexpected error when trying to set phone number.",
+          "id": "5764e9b9-eda9-4054-80c0-796e6fb08fdb",
+          "value": "Erreur inattendue lors de la tentative de définition du numéro de téléphone.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:19:45.2526344"
+        },
+        {
+          "key": "phone number confirmed",
+          "id": "5779984a-941f-4c5e-9c55-df237f53623e",
+          "value": "numéro de téléphone confirmé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:43:29.7761908"
+        },
+        {
+          "key": "Claims",
+          "id": "577c9f2b-b7ea-429e-b72d-3eb8449775b4",
+          "value": "Revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:41:24.922593"
+        },
+        {
+          "key": "External Login",
+          "id": "5794c8c5-4ded-4c18-b22c-ba062bb173f3",
+          "value": "Connexion Externe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:15:48.7461164"
+        },
+        {
+          "key": "Cultures",
+          "id": "5899c1b8-467c-43b9-85d8-298776cb691c",
+          "value": "Cultures",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:33:09.7696883"
+        },
+        {
+          "key": "You have successfully authorized the device",
+          "id": "58f813ec-422c-4351-b7c2-aeb30a17d0ef",
+          "value": "Vous avez autorisé l'appareil avec succès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:36:41.4225172"
+        },
+        {
+          "key": "Manage your external logins",
+          "id": "59878b0a-4dc1-42d4-b6fc-f56d70f32608",
+          "value": "Gérez vos connexions externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:14:41.4657449"
+        },
+        {
+          "key": "Verification email sent. Please check your email.",
+          "id": "59edf62d-fcf2-4c46-83a8-e8ff13c344d1",
+          "value": "L'email de vérification a été envoyé. Merci de consulter vos e-mails.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:48:48.8806641",
+          "modifiedAt": "2020-09-06T19:41:37.4996801"
+        },
+        {
+          "key": "Entities updated",
+          "id": "5a1b38c2-9975-42ff-a869-2910b0c50be8",
+          "value": "Entités mises à jour",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:36:15.8322521"
+        },
+        {
+          "key": "Please reset your password by <a href='{0}'>clicking here</a>.",
+          "id": "5aed6c7e-2f68-4e1a-b370-a4e51f52ecdf",
+          "value": "Veuillez réinitialiser votre mot de passe en <a href='{0}'> cliquant ici </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:04:51.4977981"
+        },
+        {
+          "key": "reference tokens",
+          "id": "5b198e83-ef56-4b13-9157-48e6f24a941b",
+          "value": "jetons de référence",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:37:39.8926341"
+        },
+        {
+          "key": "Your password has been set.",
+          "id": "5b53b8b4-39b8-40d6-8436-a3a01bb6d9b6",
+          "value": "Votre mot de passe a été défini.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:33:03.1498654"
+        },
+        {
+          "key": "update access token on refresh",
+          "id": "5bc4e80b-76cc-4305-8411-3d1dbf12f40d",
+          "value": "mettre à jour le jeton d'accès lors de l'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:25:01.0402469"
+        },
+        {
+          "key": "claims prefix",
+          "id": "5c454eb0-82b1-47a5-804b-8d69536f3e17",
+          "value": "préfixe des revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:32:30.5726384"
+        },
+        {
+          "key": "sign-out scheme",
+          "id": "5c6d86f9-8d83-4eac-8980-31416b5f9986",
+          "value": "schéma de déconnexion",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:19:28.8810719"
+        },
+        {
+          "key": "Terms of service",
+          "id": "5c78107e-2aba-42b9-8205-91286cff308c",
+          "value": "Conditions d'utilisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:35:24.0713609"
+        },
+        {
+          "key": "Two-factor authentication",
+          "id": "5f893ea8-fe78-4cdc-b463-957838fb5672",
+          "value": "Authentification à deux facteurs",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:37:43.3941119"
+        },
+        {
+          "key": "Your login is protected with an authenticator app. Enter your authenticator code below.",
+          "id": "60cfe2ab-a87c-472a-81d4-3c20d68b7808",
+          "value": "Votre connexion est protégée par une application d'authentification. Entrez votre code d'authentification ci-dessous.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:38:57.7225674"
+        },
+        {
+          "key": "Thank you for confirming your email change.",
+          "id": "60fc3944-22e2-41ed-b503-a3255ac7eb8f",
+          "value": "Merci d'avoir confirmé votre changement d'e-mail.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:52:03.6429447"
+        },
+        {
+          "key": "skip unrecognized requests",
+          "id": "62e5d842-d146-45d0-b67c-b0524baaf999",
+          "value": "ignorer les demandes non reconnues",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:03:35.7886986"
+        },
+        {
+          "key": "Re use",
+          "id": "631372aa-0a9c-4f69-a393-e07124b99a97",
+          "value": "Réutiliser",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:26:26.1216994"
+        },
+        {
+          "key": "grant types",
+          "id": "66ef2861-92eb-42ed-9071-0fdd54c331b1",
+          "value": "type d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:25:29.1063973"
+        },
+        {
+          "key": "post logout",
+          "id": "6737c910-ae54-4e18-9f85-9a383b048617",
+          "value": "après déconnexion",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:41:19.6531062"
+        },
+        {
+          "key": "show all options",
+          "id": "679e3bfb-d44d-40da-b21e-ee8444beba45",
+          "value": "afficher toutes les options",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:24:33.9319377"
+        },
+        {
+          "key": "Disable 2FA",
+          "id": "6803ad71-dd71-4e13-8158-62b854fbbcf1",
+          "value": "Désactiver 2FA",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:40:20.9723112"
+        },
+        {
+          "key": "Expires:",
+          "id": "6931febf-2490-4564-b070-f2da81b59e01",
+          "value": "Expire le:",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:14:01.1966571"
+        },
+        {
+          "key": "Confirm email",
+          "id": "6aba5eea-be70-4f11-a408-9f05e013bd83",
+          "value": "Confirmez votre e-mail",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:44:12.5775418"
+        },
+        {
+          "key": "resource",
+          "id": "6af2da56-f6fb-4ecd-8f5d-0b567d1dff21",
+          "value": "ressource",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:13:03.7086011"
+        },
+        {
+          "key": "Yes, Allow",
+          "id": "6b5d6ad5-8251-431a-bc5b-37ce21bbe7e0",
+          "value": "Oui, autoriser",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:29:38.7829968"
+        },
+        {
+          "key": "Unable to load user with ID '{0}'.",
+          "id": "6b943cfb-0d46-426b-a3fc-5682dc933099",
+          "value": "Impossible de charger l'utilisateur avec l'ID '{0}'.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:47:35.6318655"
+        },
+        {
+          "key": "properties",
+          "id": "6cc3927b-4e00-4bf7-80c6-ed55b98400e0",
+          "value": "propriétés",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:38:43.3047338"
+        },
+        {
+          "key": "Grants",
+          "id": "6dae0a9c-fb6b-446e-8d10-73954d923d09",
+          "value": "Autorisations",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:55:13.8785471"
+        },
+        {
+          "key": "Once complete, you may close this tab",
+          "id": "6de87167-7973-49be-ab2f-1aaca551e817",
+          "value": "Une fois terminé, vous pouvez fermer cet onglet",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:38:16.3179237"
+        },
+        {
+          "key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\\\"{0}\\\">reset your authenticator keys.</a>",
+          "id": "6e193b6e-03e5-4a83-a303-adac6636f504",
+          "value": "La génération de nouveaux codes de récupération ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\\\"{0}\\\"> réinitialiser vos clés d'authentification. </a>",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:32:44.408206"
+        },
+        {
+          "key": "You are logged out.",
+          "id": "6ec638da-010a-4c4f-8ba4-6a95fa2d8ac3",
+          "value": "Vous êtes déconnecté.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:21:07.5959732"
+        },
+        {
+          "key": "Log in using your {0} account",
+          "id": "70fa2aca-b1ce-4591-8ae7-bcf26d255bc0",
+          "value": "Connectez-vous à l'aide de votre compte {0}",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:31:59.8593038",
+          "modifiedAt": "2020-09-06T08:08:15.1739342"
+        },
+        {
+          "key": "issuer",
+          "id": "71c94e1a-b839-497a-b121-0e9247a59b04",
+          "value": "émetteur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:31:43.7509761"
+        },
+        {
+          "key": "{0} <small>is requesting your permission</small>",
+          "id": "732ba545-0756-46d7-94c4-8e73b91f5b8d",
+          "value": "{0} <small>demande votre autorisation</small>",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:36:01.5021309",
+          "modifiedAt": "2020-09-06T10:36:09.4020074"
+        },
+        {
+          "key": "Processing logout...",
+          "id": "732fecfb-0dc3-4abd-867e-d1fb52d8171d",
+          "value": "Traitement de la déconnexion ...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:16:03.3267922"
+        },
+        {
+          "key": "Properties",
+          "id": "74792922-bd80-4b40-b838-872d0faa9713",
+          "value": "Propriétés",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:36:40.9166506"
+        },
+        {
+          "key": "filter",
+          "id": "75fefd57-2037-4063-af2e-c397578f0669",
+          "value": "filtre",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:41:44.0241897"
+        },
+        {
+          "key": "Incorrect password.",
+          "id": "7652c830-cf91-4b5b-9644-180d3c0c4bea",
+          "value": "Mot de passe incorrect.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:39:05.9777447"
+        },
+        {
+          "key": "emphasize",
+          "id": "7845d6cc-4d0c-496c-82e9-c398f41fc8b9",
+          "value": "souligner",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:42:59.2595309"
+        },
+        {
+          "key": "Verify",
+          "id": "79418c62-6767-4feb-a58f-88f54456c0f4",
+          "value": "Vérifier",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:54:00.4683024"
+        },
+        {
+          "key": "Please check your email to confirm your account.",
+          "id": "79bbba28-3b14-4e94-b879-c9188f5b3dac",
+          "value": "Veuillez vérifier votre e-mail pour confirmer votre compte.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:02:21.1831074",
+          "modifiedAt": "2020-09-06T19:41:37.480761"
+        },
+        {
+          "key": "scopes",
+          "id": "7aca7818-91b6-44c2-ac2d-d1ef8779036f",
+          "value": "scopes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:58:54.2779354"
+        },
+        {
+          "key": "decription",
+          "id": "7adeb8c7-759f-486d-8f31-8c3375f686a9",
+          "value": "decription",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:49:24.8455752"
+        },
+        {
+          "key": "Your authenticator app has been verified.",
+          "id": "7b23aabb-203b-4a7d-ace2-076f6aa3b0e6",
+          "value": "Votre application d'authentification a été vérifiée.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:06:13.1541161"
+        },
+        {
+          "key": "If you lose your device and don't have the recovery codes you will lose access to your account.",
+          "id": "7b370145-2d58-4556-8374-35232b3b16a8",
+          "value": "Si vous perdez votre appareil et ne disposez pas des codes de récupération, vous perdrez l'accès à votre compte.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:37:31.5731293"
+        },
+        {
+          "key": "expiration",
+          "id": "7cf1a633-53db-4e3d-96c3-aaa9abb75d87",
+          "value": "expiration",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:10:01.1129552"
+        },
+        {
+          "key": "tokens",
+          "id": "7d3109d4-015c-4ced-974c-60a237e9255e",
+          "value": "jetons",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:29:51.2234858"
+        },
+        {
+          "key": "Forgot password confirmation",
+          "id": "7edef364-2fb5-4479-a71d-b788d7fbc43b",
+          "value": "Confirmation du mot de passe oublié",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:07:03.5958614"
+        },
+        {
+          "key": "key",
+          "id": "8017d91e-9f1b-440f-bb49-2539e9856b07",
+          "value": "clé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T11:00:47.0669549",
+          "modifiedAt": "2020-09-06T06:36:05.157247"
+        },
+        {
+          "key": "Error changing email.",
+          "id": "81b2c117-e191-4e63-8b17-95f1adae23ac",
+          "value": "Erreur lors de la modification de l'adresse e-mail.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:49:32.7410533"
+        },
+        {
+          "key": "No, Do Not Allow",
+          "id": "83918dd0-3a9d-4e28-a1cc-bb7ea85c28f1",
+          "value": "Non, ne pas permettre",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:27:55.5054525"
+        },
+        {
+          "key": "Please confirm your account by <a href='{0}'>clicking here</a>.",
+          "id": "83ab0243-5c07-44ef-8ad7-b39e7db5a1aa",
+          "value": "Veuillez confirmer votre compte en <a href='{0}'> cliquant ici </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:59:42.8046677"
+        },
+        {
+          "key": "description",
+          "id": "84f46ce3-00ca-44fc-8fc9-6fb3643335d7",
+          "value": "description",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:09:39.9043954"
+        },
+        {
+          "key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
+          "id": "855ab302-758c-4e94-8b3b-4359b346cf4b",
+          "value": "Si vous réinitialisez votre clé d'authentification, votre application d'authentification ne fonctionnera pas tant que vous ne l'aurez pas reconfigurée.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:23:42.8891901"
+        },
+        {
+          "key": "One time only",
+          "id": "87c18cb9-a696-4ec0-93dc-c24e010bc592",
+          "value": "Une fois seulement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:28:23.1234361"
+        },
+        {
+          "key": "Change email",
+          "id": "88b39c66-481e-4a70-93ff-f53daabb2501",
+          "value": "Changer l'e-mail",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:45:57.6650195"
+        },
+        {
+          "key": "You have no recovery codes left.",
+          "id": "89683ef4-d10c-4c03-b63a-cf95a4ab3163",
+          "value": "Vous n'avez plus de code de récupération.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:40:33.0910851"
+        },
+        {
+          "key": "phone number",
+          "id": "89acc2b2-02bf-4e85-940b-5e88598798c4",
+          "value": "numéro de téléphone",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:42:55.4081748"
+        },
+        {
+          "key": "No changes",
+          "id": "8a046eca-2da3-45c7-8acf-499f92a59b39",
+          "value": "Aucun changement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:51:40.5366138"
+        },
+        {
+          "key": "Error from external provider: {0}",
+          "id": "8a881baf-a022-4e81-94ad-346c7e28898c",
+          "value": "Erreur du fournisseur externe: {0}",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:55:14.1368921"
+        },
+        {
+          "key": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.",
+          "id": "8b11625e-77f0-40d9-995a-f4cc0d67786c",
+          "value": "Vous avez demandé à vous connecter avec un code de récupération. Cette connexion ne sera pas mémorisée tant que vous n'aurez pas fourni un code d'application d'authentification lors de la connexion ou désactivez 2FA et reconnectez-vous.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:09:51.9215123"
+        },
+        {
+          "key": "require consent",
+          "id": "8b4f7d96-53dc-45ee-9a30-b61bf3396555",
+          "value": "exiger le consentement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:13:07.8382923"
+        },
+        {
+          "key": "Generate Recovery Codes",
+          "id": "8b88824e-dc7a-407d-99dc-d3f1d32eb3c0",
+          "value": "Générer Codes de Récupération",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:31:00.6262172"
+        },
+        {
+          "key": "Authenticator app",
+          "id": "8bb00ec5-9c6c-41c2-9016-a92a894f037c",
+          "value": "App d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:36:56.7508175"
+        },
+        {
+          "key": "Clients",
+          "id": "8ca38816-fe35-401d-809f-9d7c8ccfe0f8",
+          "value": "Clients",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:31:31.9738375"
+        },
+        {
+          "key": "Verification code is invalid.",
+          "id": "8d52ba8a-af52-471d-b9b3-9c0af3695433",
+          "value": "Le code de vérification n'est pas valide.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:05:13.6085871"
+        },
+        {
+          "key": "Sorry, there's nothing at this address.",
+          "id": "8dd05c95-9116-4751-b35c-3b97334b8518",
+          "value": "Désolé, il n'y a rien à cette adresse.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:27:49.8876395"
+        },
+        {
+          "key": "Access Denied",
+          "id": "8e4534d9-af53-4a8f-8123-e0cadd0d2c10",
+          "value": "Accès refusé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:05:18.8063033"
+        },
+        {
+          "key": "Send verification email",
+          "id": "8ea93c08-9bee-4b9e-9598-47f72c450262",
+          "value": "Envoyer email de vérification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:46:26.6149234"
+        },
+        {
+          "key": "store claims",
+          "id": "8f5cf0ab-ea79-4455-82b6-d66d126aaea9",
+          "value": "stocker les revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:05:18.8928572",
+          "modifiedAt": "2020-09-05T22:05:33.9600981"
+        },
+        {
+          "key": "External provider restrictions",
+          "id": "8fc11f69-de78-4237-960d-6534c6116ff5",
+          "value": "Restrictions des fournisseurs externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:28:29.9749986"
+        },
+        {
+          "key": "external logins tokens",
+          "id": "8fdb30f3-4b10-45fb-95f9-2250ab7f88a0",
+          "value": "jetons de connexion externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:37:13.8743663"
+        },
+        {
+          "key": "Delete data and close my account",
+          "id": "900cbf6e-a7ef-4b20-a772-b57a979f5dec",
+          "value": "Supprimer les données et fermer mon compte",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:36:13.0678503"
+        },
+        {
+          "key": "Login",
+          "id": "92727c45-8b7c-4cbd-8c05-994aaa575808",
+          "value": "Se connecter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:03:59.8958398",
+          "modifiedAt": "2020-09-06T10:14:16.7671525"
+        },
+        {
+          "key": "Saved",
+          "id": "93476769-13f7-43b7-9b05-02891827dc8a",
+          "value": "Enregistré",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:54:25.5092425"
+        },
+        {
+          "key": "Authentication in progress",
+          "id": "93477e4e-fd6e-4e08-af3c-d93a265f56f9",
+          "value": "Authentification en cours",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:02:17.3567293"
+        },
+        {
+          "key": "refresh token expiration",
+          "id": "93f6cd1d-5408-43a0-b65f-7fd4ae042962",
+          "value": "expiration du jeton d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:34:24.269942"
+        },
+        {
+          "key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
+          "id": "94cd18bc-2be4-477f-9d58-7ba0cc168c7f",
+          "value": "Une fois que vous avez scanné le code QR ou saisi la clé ci-dessus, votre application d'authentification à deux facteurs vous fournira un code unique.Entrez le code dans la boîte de confirmation ci-dessous.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:00:32.7838482"
+        },
+        {
+          "key": "Loading...",
+          "id": "966989b7-4f2f-4da5-8585-599b4a53a9f3",
+          "value": "Chargement...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:27:50.5884915"
+        },
+        {
+          "key": "Disable two-factor authentication (2FA)",
+          "id": "966fb25b-5db7-4d22-af11-56df64c73f26",
+          "value": "Désactiver l'authentification à deux facteurs (2FA)",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:43:21.8501608"
+        },
+        {
+          "key": "fields",
+          "id": "96eb4334-f95b-4d28-89a6-ea4cfb55cdaf",
+          "value": "champs",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:55:32.2943338"
+        },
+        {
+          "key": "Entities created",
+          "id": "97b2f5cb-1085-446e-8f59-54f2aadf3110",
+          "value": "Entités mises à jour",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:35:32.3295509",
+          "modifiedAt": "2020-09-06T17:36:15.8967538"
+        },
+        {
+          "key": "claims",
+          "id": "9a637c85-333f-44bc-8e4a-11684130c503",
+          "value": "revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:39:20.3273487"
+        },
+        {
+          "key": "Below is the list of applications you have given access to and the names of the resources they have access to.",
+          "id": "9abf20c2-c55f-4a82-92b9-f8dee6f9e3e8",
+          "value": "Vous trouverez ci-dessous la liste des applications auxquelles vous avez donné accès et les noms des ressources auxquelles elles ont accès.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:08:30.7983887"
+        },
+        {
+          "key": "culture",
+          "id": "9b47b72e-6d15-4281-8e38-9fe35d47e382",
+          "value": "culture",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T11:04:05.6637682"
+        },
+        {
+          "key": "Recovery codes",
+          "id": "9b946655-7ce7-4928-a5ac-28b4ae46ec63",
+          "value": "Codes de récupération",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:33:53.9077246"
+        },
+        {
+          "key": "claims transformations",
+          "id": "9c12a6f4-4f50-4412-9a89-b311de399241",
+          "value": "transformations des revendications",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:08:59.4830014"
+        },
+        {
+          "key": "client secret",
+          "id": "9d81abcb-a831-4582-9e54-bda27e65ded4",
+          "value": "secret du client",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:20:46.6935307"
+        },
+        {
+          "key": "External login tokens",
+          "id": "9d8a78e4-c296-4a80-9cee-361b644c18d5",
+          "value": "Jetons de connexion externes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:47:05.8425649"
+        },
+        {
+          "key": "Forgot your password?",
+          "id": "9dd1ca02-6fea-453e-b455-8f79a1bbd93a",
+          "value": "Mot de passe oublié ?",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:04:19.3483699"
+        },
+        {
+          "key": "Refresh tokens",
+          "id": "9e127ca5-ea2c-4ecd-afb4-13c342f18f7e",
+          "value": "Jetons d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:47:59.8608647"
+        },
+        {
+          "key": "consumer secret",
+          "id": "9f6b41dc-ef1d-4d13-952e-a9801193a945",
+          "value": "secret du consommateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:25:07.5313492"
+        },
+        {
+          "key": "client id",
+          "id": "9f912323-c567-4d3e-b1b2-236725c367dc",
+          "value": "id du client",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:21:24.8907874"
+        },
+        {
+          "key": "Identities",
+          "id": "9fcd1657-aad7-472b-84d9-5702c770a98d",
+          "value": "Identités",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:32:27.6044413"
+        },
+        {
+          "key": "Put these codes in a safe place.",
+          "id": "a047443f-df3a-47b0-a5a1-4b5cf1593533",
+          "value": "Mettez ces codes en lieu sûr.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:32:03.6525604"
+        },
+        {
+          "key": "Manage",
+          "id": "a1db4dad-6ce1-493b-be92-cd1e88e0a421",
+          "value": "Gérer",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:04:33.8745979"
+        },
+        {
+          "key": "You can <a href=\\\"{0}\\\">generate a new set of recovery codes</a>.",
+          "id": "a30b78d1-59f8-4059-a9bf-51afac9346b1",
+          "value": "Vous pouvez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:37:34.4079263"
+        },
+        {
+          "key": "app secret",
+          "id": "a40fafa9-bfde-4907-8b41-337c96e7ab89",
+          "value": "secret de l'app",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:53:24.8822733"
+        },
+        {
+          "key": "Change your account settings",
+          "id": "a41ab182-ab55-4ca6-b2ae-83d36402ef57",
+          "value": "Modifier les paramètres de votre compte",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:48:54.0995128"
+        },
+        {
+          "key": "back channel logout uri",
+          "id": "a4388089-ff0e-4810-be11-90a1ac0e4f46",
+          "value": "uri de déconnexion du canal arrière",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:31:08.0227243"
+        },
+        {
+          "key": "Submit",
+          "id": "a482b944-ea11-4a4f-98d6-05181ff00431",
+          "value": "Soumettre",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:36:05.0504429"
+        },
+        {
+          "key": "access token type",
+          "id": "a910dceb-da71-4232-9efe-d97ee892750a",
+          "value": "type de jeton d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:30:17.2369752"
+        },
+        {
+          "key": "create at",
+          "id": "aa2a0055-b920-48a0-8790-46a7395c5c75",
+          "value": "créer à",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:32:15.5458351"
+        },
+        {
+          "key": "Set password",
+          "id": "aa49512d-c8fd-42c9-ad20-e0554b46507c",
+          "value": "Définir le mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:30:36.7233877"
+        },
+        {
+          "key": "Scopes",
+          "id": "ab9619d1-c9a2-4eb1-946f-a930bc2e6607",
+          "value": "Scopes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:32:01.0876058"
+        },
+        {
+          "key": "Sliding",
+          "id": "abdfc578-0395-41c2-ace9-7e09d79c3fa9",
+          "value": "Glissant",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:27:08.0716731"
+        },
+        {
+          "key": "Two-factor authentication (2FA)",
+          "id": "aca7b8ad-234c-4981-8d5c-4645ded4626d",
+          "value": "Authentification à deux facteurs (2FA)",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:44:51.6853318"
+        },
+        {
+          "key": "back channel logout uri required",
+          "id": "ace2ad92-d50b-43fb-a57a-d9ae77de7226",
+          "value": "uri de déconnexion du canal arrière requise",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:21:51.2102033",
+          "modifiedAt": "2020-09-06T17:31:08.0812016"
+        },
+        {
+          "key": "One or more validation errors occurred.",
+          "id": "ad14a8ff-5bec-4882-87f6-5d0301a59c86",
+          "value": "Une ou plusieurs erreurs de validation se sont produites.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:06:34.1127734"
+        },
+        {
+          "key": "consent",
+          "id": "ad23747f-05ea-4672-94ee-6c1b7206bdc4",
+          "value": "consentement",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:24:44.2352824"
+        },
+        {
+          "key": "Identity Grants",
+          "id": "ae24e50f-874d-4ee7-a609-2259a67190c2",
+          "value": "Autorisations d'Identité",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:10:41.2519738",
+          "modifiedAt": "2020-09-06T09:55:13.9508263"
+        },
+        {
+          "key": "client uri",
+          "id": "ae64af9e-856b-492e-8d4f-430db308d0c6",
+          "value": "uri du client",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:13:49.9431502",
+          "modifiedAt": "2020-09-06T15:13:56.7914169"
+        },
+        {
+          "key": "display name",
+          "id": "b37fe9c1-947f-4e41-8a67-f866370934d0",
+          "value": "nom d'affichage",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:08:12.8831968"
+        },
+        {
+          "key": "lockout end",
+          "id": "b3c68c52-5d35-4941-b85f-98c3bba62335",
+          "value": "fin de verrouillage",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:43:52.9510955"
+        },
+        {
+          "key": "allow access tokens via browser",
+          "id": "b4cf2f35-de0b-4e79-8314-6d4c379cdd8e",
+          "value": "autoriser les jetons d'accès via le navigateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:20:59.3017416"
+        },
+        {
+          "key": "The external login was removed.",
+          "id": "b4fae858-ed5e-4c40-aed7-9cf8122292f2",
+          "value": "La connexion externe a été supprimée.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:29:00.7104247"
+        },
+        {
+          "key": "role",
+          "id": "b555db94-d854-44e8-a68e-ac1e4e738fa3",
+          "value": "rôle",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T20:04:46.0391195"
+        },
+        {
+          "key": "Forget this browser",
+          "id": "b7b36e1b-2987-4834-bf5e-5e9778560baf",
+          "value": "Oubliez ce navigateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:36:15.1551229"
+        },
+        {
+          "key": "identity",
+          "id": "b9b1b98d-774b-4e5a-8154-2a7704d44cad",
+          "value": "identité",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:18:50.1518906"
+        },
+        {
+          "key": "Invalid authenticator code.",
+          "id": "b9be837a-f808-4ea6-ab0d-0c6672d3935c",
+          "value": "Code d'authentification non valide.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:09:04.4743202"
+        },
+        {
+          "key": "Sorry, there was an error",
+          "id": "bbe8e49e-1852-4f95-a943-d2ba8e559ea0",
+          "value": "Désolé, il y a eu une erreur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:05:10.5451972"
+        },
+        {
+          "key": "Reset authenticator app",
+          "id": "bd179a6b-89f7-4935-a580-40ae0f4c71c1",
+          "value": "Réinitialiser l'application d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:35:18.7919712"
+        },
+        {
+          "key": "to claim type",
+          "id": "bd88fff2-329a-4304-8952-adf0f2e91550",
+          "value": "vers le type de revendication",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T21:59:00.4225613",
+          "modifiedAt": "2020-09-05T22:01:06.8443061"
+        },
+        {
+          "key": "You have not given access to any applications",
+          "id": "bda3b7cc-3b2c-44a9-a67e-11e086bec35b",
+          "value": "Vous n'avez donné accès à aucune application",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:15:11.9201825"
+        },
+        {
+          "key": "Verification Code",
+          "id": "bda8dcdb-8b17-4455-8d55-25be4d0c6f11",
+          "value": "Code de vérification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:03:53.3970607"
+        },
+        {
+          "key": "Username",
+          "id": "be1f4c3c-c5e2-4cec-be28-124dbca08085",
+          "value": "Nom d'utilisateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:18:08.2434245"
+        },
+        {
+          "key": "localized description",
+          "id": "c12558c4-a514-435a-b0de-5b72f1404b40",
+          "value": "description localisée",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:49:11.8077439"
+        },
+        {
+          "key": "Enter your email.",
+          "id": "c2540c75-5b81-4ee9-8ab3-8ab452d00c6b",
+          "value": "Entrer votre e-mail.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:03:31.5341092",
+          "modifiedAt": "2020-09-06T19:41:37.4427619"
+        },
+        {
+          "key": "Error",
+          "id": "c292dd4a-4432-4bd9-b51d-6199c3c195c0",
+          "value": "Erreur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:04:55.3627627"
+        },
+        {
+          "key": "There was an error trying to log you out: '{0}'",
+          "id": "c2da12b0-d206-4055-8e7e-06d2a63a0e78",
+          "value": "Une erreur s'est produite lors de la tentative de déconnexion: \"{0}\"",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:20:27.9814533"
+        },
+        {
+          "key": "Use another service to register.",
+          "id": "c5948163-65b6-4634-8661-2df907ffd47b",
+          "value": "Utilisez un autre service pour vous inscrire.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:31:35.3200918"
+        },
+        {
+          "key": "Invalid login request",
+          "id": "c5d24b5b-66ed-4a1a-a379-76bedceeff3e",
+          "value": "Demande de connexion non valide",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:22:53.1539702"
+        },
+        {
+          "key": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+          "id": "c7ba428e-5cb6-4177-925c-c9ceb10580ba",
+          "value": "Votre clé d'application d'authentification a été réinitialisée, vous devrez configurer votre application d'authentification à l'aide de la nouvelle clé.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:25:16.3144568"
+        },
+        {
+          "key": "Logout form",
+          "id": "c80a04f4-3209-47fb-8c12-0be8e101863a",
+          "value": "Formulaire de déconnexion",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:24:29.7761721"
+        },
+        {
+          "key": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+          "id": "c8d3d953-53ca-4ec5-8175-4242942dfdb7",
+          "value": "Vous n'avez pas de nom d' 'utilisateur/mot de passe' local pour ce site. Ajoutez un compte local pour pouvoir vous connecter sans connexion externe.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:32:23.08635"
+        },
+        {
+          "key": "Generate two-factor authentication (2FA) recovery codes",
+          "id": "c9305c0f-32bc-459c-94af-63ce05de409c",
+          "value": "Générer des codes de récupération d'authentification à deux facteurs (2FA)",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:40:32.4180226"
+        },
+        {
+          "key": "expire at",
+          "id": "c935f650-8a85-4176-892f-0f0c9e9050bc",
+          "value": "expire à",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:29:56.2971768"
+        },
+        {
+          "key": "value",
+          "id": "c953a94b-db59-4a2c-9407-3e1a8529ba2b",
+          "value": "valeur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T15:52:37.3229998"
+        },
+        {
+          "key": "Please check your email to reset your password.",
+          "id": "c9758da1-c8a4-4c43-b6e6-413091fb8db0",
+          "value": "Veuillez vérifier votre messagerie pour réinitialiser votre mot de passe.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:06:21.4928401"
+        },
+        {
+          "key": "scheme",
+          "id": "ca6208cb-c339-4feb-ab0f-78cddbd8f7cb",
+          "value": "schéma",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T22:11:16.560133"
+        },
+        {
+          "key": "front channel logout uri",
+          "id": "cb0fd5bf-63b7-437f-90cf-a80831010252",
+          "value": "uri de déconnexion du canal frontal",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:32:40.2994364"
+        },
+        {
+          "key": "always include user claims in id token",
+          "id": "cb3d7fe3-4dcd-4eac-8858-b614942e8f55",
+          "value": "toujours inclure les revendications des utilisateurs dans le jeton d'identification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:22:43.1358831"
+        },
+        {
+          "key": "include JWT id",
+          "id": "cbc882d8-ffd3-4789-bb1c-3b1a6ce4b34c",
+          "value": "inclure l'id JWT",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:23:14.9858917"
+        },
+        {
+          "key": "Apis",
+          "id": "cc85e7e5-2a8a-49e8-9549-1122838f7f87",
+          "value": "Apis",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:31:45.1769503"
+        },
+        {
+          "key": "user enpoint",
+          "id": "ccb338db-8a7f-4180-80c6-b5b4d4a44703",
+          "value": "point de terminaison utilisateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:00:18.2815504"
+        },
+        {
+          "key": "id",
+          "id": "d074eabd-1819-4010-8309-bb64cf0ce71d",
+          "value": "id",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:07:03.4100581"
+        },
+        {
+          "key": "Password",
+          "id": "d148182a-a8ff-4562-8374-eb1ca1668ee7",
+          "value": "Mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:50:46.514694"
+        },
+        {
+          "key": "required",
+          "id": "d2103a45-7725-4f36-aab2-e384ad0f5949",
+          "value": "requis",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:45:49.1176843"
+        },
+        {
+          "key": "terms or service uri",
+          "id": "d3418f19-f28f-4099-b972-ff2ece554a2a",
+          "value": "uri des conditions de service",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:15:32.9725692"
+        },
+        {
+          "key": "consents",
+          "id": "d37a3d7a-a029-488a-8797-ebcd437ff97f",
+          "value": "consentements",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:35:22.5750295"
+        },
+        {
+          "key": "Delete Personal Data",
+          "id": "d3c7294c-c923-4a46-b635-7f027350cc40",
+          "value": "Supprimer les données personnelles",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:38:11.9701005"
+        },
+        {
+          "key": "Register confirmation",
+          "id": "d4353002-4e6d-477e-b527-d02569a9cb5b",
+          "value": "Confirmation d'inscription",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:03:24.6108839"
+        },
+        {
+          "key": "Thank you for confirming your email.",
+          "id": "d70cc8da-9ddf-4876-a92f-5a41f3e48fa4",
+          "value": "Merci d'avoir confirmé votre e-mail.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:46:19.1438853",
+          "modifiedAt": "2020-09-06T19:41:37.4444654"
+        },
+        {
+          "key": "Secrets",
+          "id": "d72b7de4-4dbd-4e13-8d19-5bd686a8aeed",
+          "value": "Secrets",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:38:08.0624062"
+        },
+        {
+          "key": "allow offline access",
+          "id": "d827d407-de28-46d7-920c-70a657b6021c",
+          "value": "autoriser l'accès offline",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:19:58.4327668"
+        },
+        {
+          "key": "Save",
+          "id": "d83ae963-db37-4321-a198-bec6ddce28f0",
+          "value": "Sauvegarder",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:58:15.2065595"
+        },
+        {
+          "key": "idp restrictions",
+          "id": "d85bc563-583d-416b-8f51-4a8a2182b02f",
+          "value": "restrictions idp",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:26:23.5016357"
+        },
+        {
+          "key": "Editing the profile is not supported.",
+          "id": "d8e10d22-ae6c-4d71-ae16-53c43cd43f88",
+          "value": "La modification du profil n'est pas prise en charge.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:18:13.5361877"
+        },
+        {
+          "key": "use token lifetime",
+          "id": "d9cf5b5c-60bd-42b9-a9aa-18e6c44ad371",
+          "value": "utiliser la durée de vie du jeton",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:05:43.0020523"
+        },
+        {
+          "key": "retrieve user details",
+          "id": "dad2c020-c28b-4228-8bf7-8d8c36c7ba2f",
+          "value": "récupérer les détails de l'utilisateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:21:17.1749718"
+        },
+        {
+          "key": "You should <a href=\\\"{0}\\\">generate a new set of recovery codes</a>.",
+          "id": "daf29607-f2e8-4444-8c08-1ab637552fbd",
+          "value": "Vous devez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:39:18.2079596"
+        },
+        {
+          "key": "The external login was not removed.",
+          "id": "daf301f0-6dc2-485e-92b1-8bb0dace5534",
+          "value": "La connexion externe n'a pas été supprimée.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:26:28.3702074"
+        },
+        {
+          "key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
+          "id": "dc12edfc-943c-44d1-8450-61238db723d3",
+          "value": "Vous vous êtes authentifié avec <strong>{0}</strong>. Veuillez saisir une adresse e-mail pour ce site ci-dessous et cliquez sur le bouton S'inscrire pour terminer la connexion.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T06:42:58.3741004",
+          "modifiedAt": "2020-09-06T19:41:37.4710482"
+        },
+        {
+          "key": "email",
+          "id": "dd231b62-c3da-4218-b31f-36b61ff19ea7",
+          "value": "e-mail",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:41:54.5061873"
+        },
+        {
+          "key": "prompt",
+          "id": "dd739bce-ea15-4178-be85-2171e41b5ad2",
+          "value": "prompt",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:07:26.0625263"
+        },
+        {
+          "key": "Change password",
+          "id": "de249681-b19f-4244-8253-979273c7627a",
+          "value": "Changer le mot de passe",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:34:22.6957338"
+        },
+        {
+          "key": "refresh token usage",
+          "id": "e01b5a31-1061-4917-a005-e5fac4b35795",
+          "value": "utilisation du jeton d'actualisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:35:23.2187968"
+        },
+        {
+          "key": "provider",
+          "id": "e09bab70-f4c4-4af4-a425-4315e3bf10d1",
+          "value": "fournisseur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:45:22.2338616"
+        },
+        {
+          "key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
+          "id": "e0f7d820-b97f-4437-b324-03dde3bebc98",
+          "value": "Ce processus désactive 2FA jusqu'à ce que vous vérifiiez votre application d'authentification. Si vous ne terminez pas la configuration de votre application d'authentification, vous risquez de perdre l'accès à votre compte.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:24:23.194564"
+        },
+        {
+          "key": "Remove",
+          "id": "e2011ce8-deb5-4f19-90be-710bcd61ab4f",
+          "value": "Supprimer",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:02:53.5690751"
+        },
+        {
+          "key": "api id",
+          "id": "e238b94c-0be3-4439-bab2-3811a98211f1",
+          "value": "id de l'api",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:35:44.7734901"
+        },
+        {
+          "key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+          "id": "e2a993aa-4bdc-4936-98da-41b83a328d91",
+          "value": "2fa a été désactivé. Vous pouvez activer 2fa lorsque vous configurez une application d'authentification",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:44:30.5783767"
+        },
+        {
+          "key": "user name",
+          "id": "e2ba7445-769d-49e4-b87e-1c57134128f6",
+          "value": "nom d'utilisateur",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:39:03.6148953"
+        },
+        {
+          "key": "client name",
+          "id": "e37d92fd-3084-4023-93f3-e94d58fac735",
+          "value": "nom du client",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:23:55.7328002"
+        },
+        {
+          "key": "Hello, {0}!",
+          "id": "e4a8cffb-fee0-401b-9c76-922eb223c348",
+          "value": "Bonjour {0} !",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:38:00.6229704"
+        },
+        {
+          "key": "name",
+          "id": "e4c9e66d-c20c-4b12-b46b-47a57d9b53f4",
+          "value": "nom",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:53:35.2308173",
+          "modifiedAt": "2020-09-05T16:06:24.0562364"
+        },
+        {
+          "key": "authority",
+          "id": "e4fc004a-8145-4cec-8400-15770009432a",
+          "value": "autorité",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:17:59.3029146"
+        },
+        {
+          "key": "type",
+          "id": "e50bd7cb-0a23-40d8-aed4-b5b7bbf00586",
+          "value": "type",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:06:40.418957"
+        },
+        {
+          "key": "Your password has been changed.",
+          "id": "e59cf375-7cc5-40ae-a85d-c8d071ccde0a",
+          "value": "Votre mot de passe a été changé.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:34:54.8466787"
+        },
+        {
+          "key": "logo uri",
+          "id": "e5b1658d-4607-4587-ad29-245b57dfd620",
+          "value": "uri du logo",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:14:25.9678128"
+        },
+        {
+          "key": "Cancel",
+          "id": "e62bddea-a9f7-45a0-9352-4f5830010bad",
+          "value": "Annuler",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:15:09.0264963"
+        },
+        {
+          "key": "Local Login",
+          "id": "e6d65bee-2758-4053-a7f2-3f8dac96f6e4",
+          "value": "Connexion locale",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:17:27.1472821"
+        },
+        {
+          "key": "Click <a class=\\\"PostLogoutRedirectUri\\\" href=\\\"{0}\\\">here</a> to return to the <span>{1}</span> application.",
+          "id": "e6f3d350-353b-4a96-a52f-70c54efa2056",
+          "value": "Cliquez <a class=\\\"PostLogoutRedirectUri\\\" href=\\\"{0}\\\"> ici </a> pour revenir à l'application <span> {1} </span>.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:13:22.5873409"
+        },
+        {
+          "key": "Invalid recovery code entered.",
+          "id": "e72c2319-58b3-4542-b27b-1e3caced10cb",
+          "value": "Code de récupération non valide saisi.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:30:10.966769"
+        },
+        {
+          "key": "response mode",
+          "id": "e7bcee4d-d649-44ae-bdbe-9905b48ac19c",
+          "value": "mode de réponse",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T16:14:30.8251223"
+        },
+        {
+          "key": "Roles",
+          "id": "e88d54e4-c7ec-4198-a5fa-12f66084c7b9",
+          "value": "Rôles",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:01:35.9891903",
+          "modifiedAt": "2020-09-06T19:51:22.1946168"
+        },
+        {
+          "key": "Remove this {0} login from your account",
+          "id": "e8b7553b-ae60-49e4-aaf0-443c1f980511",
+          "value": "Supprimer cette {0} connexion de votre compte",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:07:49.5727261"
+        },
+        {
+          "key": "Consents",
+          "id": "e9273a3d-271a-44a0-8a75-18f2e0392e11",
+          "value": "Consentements",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:46:02.9993168"
+        },
+        {
+          "key": "Policy",
+          "id": "e94223ad-6026-41aa-ba64-5e47699bc366",
+          "value": "Politique",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:34:41.5954132"
+        },
+        {
+          "key": "Download",
+          "id": "e979a02e-c5cf-47aa-b315-c7b9f6a116f7",
+          "value": "Télécharger",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:21:13.7849955"
+        },
+        {
+          "key": "Checking login state...",
+          "id": "e9f81321-c637-4e37-870d-7bbdd022780d",
+          "value": "Vérification de l'état de connexion ...",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:29:35.5661572"
+        },
+        {
+          "key": "access failed count",
+          "id": "ebf5b4a0-796e-48e3-a802-0524b70ec14f",
+          "value": "nombre d'échecs d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:45:22.8013093"
+        },
+        {
+          "key": "You are not authorize to import data.",
+          "id": "eccea8ff-97b9-4266-a688-f3489f9646b6",
+          "value": "Vous n'êtes pas autorisé à importer des données.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:37:17.6520867"
+        },
+        {
+          "key": "Session lifetime",
+          "id": "ed3be78b-42b9-4e68-8ea7-124f870ea4ff",
+          "value": "Durée de vie de la session",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:51:33.2368286"
+        },
+        {
+          "key": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.",
+          "id": "ee2ff201-ad8f-4b1a-86c3-e98b98cad348",
+          "value": "Scannez le code QR ou saisissez cette clé <kbd> {0} </kbd> dans votre application d'authentification à deux facteurs. Les espaces et le boîtier n'ont pas d'importance.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:01:27.8228908"
+        },
+        {
+          "key": "There was an error trying to log you in: '{0}'",
+          "id": "ef7f47b6-c146-45af-8efb-e574b12c8adc",
+          "value": "Une erreur s'est produite lors de la tentative de connexion: '{0}'",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:19:47.7314276"
+        },
+        {
+          "key": "lockout enabled",
+          "id": "f0c82e64-d1ec-450b-8d15-84de4ae7aa52",
+          "value": "verrouillage activé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:44:27.2024621"
+        },
+        {
+          "key": "API Grants",
+          "id": "f0e1c536-be6e-425c-96b2-48150b30e16d",
+          "value": "Autorisations API",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:09:39.8748241",
+          "modifiedAt": "2020-09-06T09:55:13.9638102"
+        },
+        {
+          "key": "device flow request lifetime",
+          "id": "f0f9c78d-ac5a-4990-81bd-bf723eac14e2",
+          "value": "durée de vie de la demande de flux de périphérique",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:31:37.4278289"
+        },
+        {
+          "key": "Add another service to log in.",
+          "id": "f1218546-6bea-4c20-b803-2e47bccfda93",
+          "value": "Ajoutez un autre service pour vous connecter.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T08:08:55.7185581"
+        },
+        {
+          "key": "Reference tokens",
+          "id": "f13d76c8-3ffa-41f0-902a-628c072f0ff8",
+          "value": "Jetons de référence",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T19:47:34.2599176"
+        },
+        {
+          "key": "grant type",
+          "id": "f1e4e7dc-cc24-4d72-acb1-44656df07ef1",
+          "value": "type d'autorisation",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:44:50.7683907"
+        },
+        {
+          "key": "token enpoint",
+          "id": "f22448ff-5c45-453b-a83a-427e77a652ec",
+          "value": "point de terminaison de jeton",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:59:34.5242733"
+        },
+        {
+          "key": "Remember My Decision",
+          "id": "f277592d-83a9-425a-9a84-a783dc53c746",
+          "value": "Se Souvenir de Ma Décision",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:31:48.9866907"
+        },
+        {
+          "key": "Client Application Access",
+          "id": "f31fafde-64e2-427c-abd0-660e5bd07157",
+          "value": "Accès aux Applications Clientes",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:16:09.3188366"
+        },
+        {
+          "key": "Confirmation link to change email sent. Please check your email.",
+          "id": "f39f853b-db61-41ea-bf3f-bf0da326f62d",
+          "value": "Lien de confirmation pour modifier l'e-mail envoyé. Merci de consulter vos emails.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:48:07.5122532"
+        },
+        {
+          "key": "Log out",
+          "id": "f3bd383f-f814-49e9-9a17-9b95e20cb474",
+          "value": "Se déconnecter",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T10:41:13.7071185"
+        },
+        {
+          "key": "Uncheck the permissions you do not wish to grant.",
+          "id": "f3dc6f5b-e4fb-44fc-bb15-033e40f17505",
+          "value": "Décochez les autorisations que vous ne souhaitez pas accorder.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:30:34.5028924"
+        },
+        {
+          "key": "require PKCE",
+          "id": "f402c97f-b559-41c1-b740-402142cbfd82",
+          "value": "nécessite PKCE",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:23:43.8226488"
+        },
+        {
+          "key": "Profile",
+          "id": "f4a85cf0-a057-4d7a-9121-6057f5d5c832",
+          "value": "Profil",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:17:30.4248113"
+        },
+        {
+          "key": "Reset recovery codes",
+          "id": "f4cc7063-2bd6-4c69-9061-166b854dd7ea",
+          "value": "Réinitialiser les codes de récupération",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:39:33.6507747"
+        },
+        {
+          "key": "use PKCE",
+          "id": "f69d1fc5-944c-4602-88ae-6327c490712d",
+          "value": "utiliser PKCE",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:57:25.5103814"
+        },
+        {
+          "key": "api",
+          "id": "f6c0882f-f526-45f5-a8c8-c3574dd4ec42",
+          "value": "api",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:19:08.7753103"
+        },
+        {
+          "key": "access token lifetime",
+          "id": "f74c6591-ffbb-4630-a210-5f9df4c5200b",
+          "value": "durée de vie du jeton d'accès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:29:41.7783955"
+        },
+        {
+          "key": "This action only disables 2FA.",
+          "id": "f81afda8-2a0b-4b2c-b7c7-4315945644c3",
+          "value": "Cette action désactive uniquement 2FA.",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:40:51.4275629"
+        },
+        {
+          "key": "Recovery code verification",
+          "id": "f8de377b-c9d2-4658-bd19-e1083a9c39da",
+          "value": "Vérification du code de récupération",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T07:29:06.5839521"
+        },
+        {
+          "key": "localized display name",
+          "id": "f911af3b-50a5-436f-8926-0c57d72f719f",
+          "value": "nom d'affichage localisé",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:48:45.5982755"
+        },
+        {
+          "key": "Success",
+          "id": "f960bec9-f00c-4b4f-8b02-53de4ee29251",
+          "value": "Succès",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:37:06.2887779"
+        },
+        {
+          "key": "urls",
+          "id": "f9b4c185-a064-4a48-b5a6-0429972be613",
+          "value": "urls",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T17:26:54.5696398"
+        },
+        {
+          "key": "Manage your account",
+          "id": "faa5c8e6-0193-425f-82e9-634dc038d374",
+          "value": "Gérer votre compte",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T09:46:11.8867534"
+        },
+        {
+          "key": "You are now logged out",
+          "id": "fd1522c4-a23c-46f2-8a07-f5e9ec958c76",
+          "value": "Vous êtes maintenant déconnecté",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T10:12:38.6336577"
+        },
+        {
+          "key": "pairwise subject salt",
+          "id": "fe42be3d-6334-470d-af08-1140b09f5a20",
+          "value": "sel sujet par paire",
+          "cultureId": "fr",
+          "createdAt": "2020-09-06T15:33:40.0290853"
+        },
+        {
+          "key": "Close",
+          "id": "fe69b85b-ca01-407f-8e17-2b86af3ac00c",
+          "value": "Fermer",
+          "cultureId": "fr",
+          "createdAt": "2020-09-05T16:03:15.509038"
+        }
+      ],
+      "createdAt": "2020-09-05T10:27:50.328657"
+    }
+  ],
+  "count": 1
+}

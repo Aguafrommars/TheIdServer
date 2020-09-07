@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound(_localizer["Unable to load user with ID '{0}'.", userId]);
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
