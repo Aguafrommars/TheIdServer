@@ -5,6 +5,7 @@ using Aguacongas.TheIdServer.BlazorApp.Validators;
 using FluentValidation;
 using FluentValidation.Internal;
 using FluentValidation.Results;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Microsoft.AspNetCore.Components.Forms
 {
     public static class EditContextExtensions
     {
-        public static EditContext AddFluentValidation(this EditContext editContext)
+        public static EditContext AddFluentValidation(this EditContext editContext, IStringLocalizer localizer)
         {
             if (editContext == null)
             {
@@ -24,18 +25,17 @@ namespace Microsoft.AspNetCore.Components.Forms
             var messages = new ValidationMessageStore(editContext);
 
             editContext.OnValidationRequested +=
-                (sender, eventArgs) => ValidateModel((EditContext)sender, messages);
+                (sender, eventArgs) => ValidateModel((EditContext)sender, messages, localizer);
 
             editContext.OnFieldChanged +=
-                (sender, eventArgs) => ValidateField(editContext, messages, eventArgs.FieldIdentifier);
+                (sender, eventArgs) => ValidateField(editContext, messages, eventArgs.FieldIdentifier, localizer);
 
             return editContext;
         }
 
-        private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
+        private static void ValidateModel(EditContext editContext, ValidationMessageStore messages, IStringLocalizer localizer)
         {
-            var validator = GetValidatorForModel(editContext.Model, editContext.Model);
-
+            var validator = GetValidatorForModel(editContext.Model, editContext.Model, localizer);
             var validationResults = validator.Validate(CreateValidationContext(editContext.Model));
 
             messages.Clear();
@@ -47,11 +47,11 @@ namespace Microsoft.AspNetCore.Components.Forms
             editContext.NotifyValidationStateChanged();
         }
 
-        private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier)
+        private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier, IStringLocalizer localizer)
         {
             var context = CreateValidationContext(fieldIdentifier);
 
-            var validator = GetValidatorForModel(editContext.Model, fieldIdentifier.Model);
+            var validator = GetValidatorForModel(editContext.Model, fieldIdentifier.Model, localizer);
             if (validator == null)
             {
                 return;
@@ -68,12 +68,12 @@ namespace Microsoft.AspNetCore.Components.Forms
             editContext.NotifyValidationStateChanged();
         }
 
-        private static IValidator GetValidatorForModel(object entity, object model)
+        private static IValidator GetValidatorForModel(object entity, object model, IStringLocalizer localizer)
         {
             if (model is IEntityResource resource)
             {
                 var entityValidatorType = typeof(EntityResourceValidator<>).MakeGenericType(model.GetType());              
-                return (IValidator)Activator.CreateInstance(entityValidatorType, entity, resource.ResourceKind);
+                return (IValidator)Activator.CreateInstance(entityValidatorType, entity, resource.ResourceKind, localizer);
             }
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
             var modelValidatorType = Assembly.GetExecutingAssembly()
@@ -83,7 +83,7 @@ namespace Microsoft.AspNetCore.Components.Forms
                 return null;
             }
 
-            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity);
+            var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity, localizer);
             return modelValidatorInstance;
         }
 

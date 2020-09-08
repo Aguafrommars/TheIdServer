@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -10,6 +11,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
     {
         [CascadingParameter] EditContext CurrentEditContext { get; set; }
 
+        [Inject]
+        public IStringLocalizerAsync<FluentValidationValidator> Localizer { get; set; }
+
         protected override void OnInitialized()
         {
             if (CurrentEditContext == null)
@@ -19,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
                     $"inside an {nameof(EditForm)}.");
             }
 
-            CurrentEditContext.AddFluentValidation();
+            CurrentEditContext.AddFluentValidation(Localizer);
         }
     }
 }
