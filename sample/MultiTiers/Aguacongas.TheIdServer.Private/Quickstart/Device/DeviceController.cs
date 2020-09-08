@@ -1,5 +1,7 @@
-// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace IdentityServer4.Quickstart.UI.Device
+namespace IdentityServerHost.Quickstart.UI
 {
     [Authorize]
     [SecurityHeaders]
@@ -98,7 +100,7 @@ namespace IdentityServer4.Quickstart.UI.Device
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())
                 {
                     var scopes = model.ScopesConsented;
-                    if (!ConsentOptions.EnableOfflineAccess)
+                    if (ConsentOptions.EnableOfflineAccess == false)
                     {
                         scopes = scopes.Where(x => x != IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess);
                     }
@@ -154,7 +156,6 @@ namespace IdentityServer4.Quickstart.UI.Device
 
         private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel model, DeviceFlowAuthorizationRequest request)
         {
-            var client = request.Client;
             var vm = new DeviceAuthorizationViewModel
             {
                 UserCode = userCode,
@@ -163,19 +164,11 @@ namespace IdentityServer4.Quickstart.UI.Device
                 RememberConsent = model?.RememberConsent ?? true,
                 ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
 
-                ClientName = client.ClientName ?? client.ClientId,
-                ClientUrl = client.ClientUri,
-                ClientLogoUrl = client.LogoUri,
-                AllowRememberConsent = client.AllowRememberConsent
+                ClientName = request.Client.ClientName ?? request.Client.ClientId,
+                ClientUrl = request.Client.ClientUri,
+                ClientLogoUrl = request.Client.LogoUri,
+                AllowRememberConsent = request.Client.AllowRememberConsent
             };
-            if (client.Properties.TryGetValue("PolicyUrl", out string policyUrl))
-            {
-                vm.PolicyUrl = policyUrl;
-            }
-            if (client.Properties.TryGetValue("TosUrl", out string tosUrl))
-            {
-                vm.TosUrl = tosUrl;
-            }
 
             vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
 
