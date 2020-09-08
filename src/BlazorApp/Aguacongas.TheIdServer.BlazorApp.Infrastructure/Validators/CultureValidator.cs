@@ -2,6 +2,7 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
@@ -14,11 +15,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientValidator"/> class.
         /// </summary>
-        public CutlureValidator(Culture culture)
+        public CutlureValidator(Culture culture, IStringLocalizer localizer)
         {
-            RuleFor(m => m.Id).NotEmpty().WithMessage("The name is required.");
+            RuleFor(m => m.Id).NotEmpty().WithMessage(localizer["The name is required."]);
             RuleForEach(m => m.Resources)
-                .SetValidator(new LocalizedResourceValidator(culture));
+                .SetValidator(new LocalizedResourceValidator(culture, localizer));
 
         }
     }

@@ -15,10 +15,10 @@
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Public.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="1.0.0-preview6-0067" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="1.0.0-preview6-0067" />
-		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.0-preview6-0067" />
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="1.0.0-preview6-0067" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="1.0.0-preview7-0018" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="1.0.0-preview7-0018" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.0-preview7-0018" />
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="1.0.0-preview7-0018" />
 		
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.0.4" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
@@ -46,8 +46,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Data\" />
 	</ItemGroup>
 </Project>

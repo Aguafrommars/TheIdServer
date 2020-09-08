@@ -206,9 +206,9 @@
           "createdAt": "2020-09-05T10:54:03.8192299"
         },
         {
-          "key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\\\"{0}\\\">Windows Phone</a>, <a href=\\\"{1}\\\">Android</a> and <a href=\\\"{2}\\\">iOS</a> or Google Authenticator for <a href=\\\"{3}\\\">Android</a> and <a href=\\\"{4}\\\">iOS</a>.",
+          "key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>.",
           "id": "1958a2f3-6e3f-4375-b83e-199a428dc04a",
-          "value": "Téléchargez une application d'authentification à deux facteurs telle que Microsoft Authenticator pour <a href=\\\"{0}\\\"> Windows Phone </a>, <a href=\\\"{1}\\\"> Android </a> et <a href = \\ \"{2} \\\"> iOS </a> ou Google Authenticator pour <a href=\\\"{3}\\\"> Android </a> et <a href=\\\"{4}\\\"> iOS </a>.",
+          "value": "Téléchargez une application d'authentification à deux facteurs telle que Microsoft Authenticator pour <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> et <a href=\"{2}\">iOS</a> ou Google Authenticator pour <a href=\"{3}\">Android</a> et <a href=\"{4}\">iOS</a>.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T07:58:56.3057515"
         },
@@ -421,9 +421,9 @@
           "createdAt": "2020-09-06T15:43:54.6031789"
         },
         {
-          "key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\\\"{0}\\\">reset your authenticator keys.</a>",
+          "key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
           "id": "2ff25601-275c-4270-b61f-68dfa6984a0f",
-          "value": "La désactivation de 2FA ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\\\"{0}\\\"> réinitialiser vos clés d'authentification. </a>",
+          "value": "La désactivation de 2FA ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\"{0}\">réinitialiser vos clés d'authentification.</a>",
           "cultureId": "fr",
           "createdAt": "2020-09-06T07:41:58.3476769"
         },
@@ -583,9 +583,9 @@
           "createdAt": "2020-09-06T16:46:31.8922039"
         },
         {
-          "key": "You must <a href=\\\"{0}\\\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+          "key": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
           "id": "4105182b-2d46-4eca-bd29-a5aaf39df969",
-          "value": "Vous devez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a> avant de pouvoir vous connecter avec un code de récupération.",
+          "value": "Vous devez <a href=\"{0}\">générer un nouvel ensemble de codes de récupération </a> avant de pouvoir vous connecter avec un code de récupération.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T09:38:23.5708429"
         },
@@ -794,9 +794,9 @@
           "createdAt": "2020-09-06T15:17:48.7403759"
         },
         {
-          "key": "Don't have access to your authenticator device? You can <a href=\\\"{0}\\\">log in with a recovery code</a>.",
+          "key": "Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.",
           "id": "55a27555-7a47-4b28-a852-32d857bf870d",
-          "value": "Vous n'avez pas accès à votre appareil d'authentification? Vous pouvez <a href=\\\"{0}\\\"> vous connecter avec un code de récupération </a>.",
+          "value": "Vous n'avez pas accès à votre appareil d'authentification? Vous pouvez <a href=\"{0}\">vous connecter avec un code de récupération</a>.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T06:39:52.045779"
         },
@@ -1055,9 +1055,9 @@
           "createdAt": "2020-09-06T06:38:16.3179237"
         },
         {
-          "key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\\\"{0}\\\">reset your authenticator keys.</a>",
+          "key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
           "id": "6e193b6e-03e5-4a83-a303-adac6636f504",
-          "value": "La génération de nouveaux codes de récupération ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\\\"{0}\\\"> réinitialiser vos clés d'authentification. </a>",
+          "value": "La génération de nouveaux codes de récupération ne modifie pas les clés utilisées dans les applications d'authentification. Si vous souhaitez modifier la clé utilisée dans une application d'authentification, vous devez <a href=\"{0}\">réinitialiser vos clés d'authentification.</a>",
           "cultureId": "fr",
           "createdAt": "2020-09-06T08:32:44.408206"
         },
@@ -1531,9 +1531,9 @@
           "createdAt": "2020-09-06T10:04:33.8745979"
         },
         {
-          "key": "You can <a href=\\\"{0}\\\">generate a new set of recovery codes</a>.",
+          "key": "You can <a href=\"{0}\">generate a new set of recovery codes</a>.",
           "id": "a30b78d1-59f8-4059-a9bf-51afac9346b1",
-          "value": "Vous pouvez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a>.",
+          "value": "Vous pouvez <a href=\"{0}\">générer un nouvel ensemble de codes de récupération </a>.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T09:37:34.4079263"
         },
@@ -1985,9 +1985,9 @@
           "createdAt": "2020-09-06T16:21:17.1749718"
         },
         {
-          "key": "You should <a href=\\\"{0}\\\">generate a new set of recovery codes</a>.",
+          "key": "You should <a href=\"{0}\">generate a new set of recovery codes</a>.",
           "id": "daf29607-f2e8-4444-8c08-1ab637552fbd",
-          "value": "Vous devez <a href=\\\"{0}\\\"> générer un nouvel ensemble de codes de récupération </a>.",
+          "value": "Vous devez <a href=\"{0}\">générer un nouvel ensemble de codes de récupération </a>.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T09:39:18.2079596"
         },
@@ -2141,9 +2141,9 @@
           "createdAt": "2020-09-06T10:17:27.1472821"
         },
         {
-          "key": "Click <a class=\\\"PostLogoutRedirectUri\\\" href=\\\"{0}\\\">here</a> to return to the <span>{1}</span> application.",
+          "key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
           "id": "e6f3d350-353b-4a96-a52f-70c54efa2056",
-          "value": "Cliquez <a class=\\\"PostLogoutRedirectUri\\\" href=\\\"{0}\\\"> ici </a> pour revenir à l'application <span> {1} </span>.",
+          "value": "Cliquez <a class=\"PostLogoutRedirectUri\" href=\"{0}\">ici</a> pour revenir à l'application <span>{1}</span>.",
           "cultureId": "fr",
           "createdAt": "2020-09-06T10:13:22.5873409"
         },
