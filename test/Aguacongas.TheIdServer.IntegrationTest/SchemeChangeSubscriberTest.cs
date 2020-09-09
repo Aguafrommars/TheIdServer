@@ -29,7 +29,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 ["ApiAuthentication:Authority"] = "http://localhost",
                 ["SignalR:HubUrl"] = "http://localhost/providerhub",
-                ["SignalR:UseMessagePack"] = "false"
+                ["SignalR:UseMessagePack"] = "false",
+                ["Seed"] = "false"
             };
             
             TestServer server = null;
@@ -44,8 +45,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             }, configuration);
             
             server.CreateWebSocketClient();
-
-            Assert.True(waitHandle.WaitOne(5000));
 
             var provider = server.Host.Services;
             var store = provider.GetRequiredService<IAdminStore<ExternalProvider>>();
