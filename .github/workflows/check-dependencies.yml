@@ -6,6 +6,7 @@ name: Check Dependencies
 on:
   schedule:
     - cron: '0 2 * * *'
+  workflow_dispatch:  
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
