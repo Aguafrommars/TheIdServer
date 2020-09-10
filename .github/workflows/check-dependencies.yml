@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-dotnet@v1.6.0
       # Run update depencies script
       - name: Update dependencies
-        run: update-dependencies.cmd
+        run: ./update-dependencies.ps1
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
