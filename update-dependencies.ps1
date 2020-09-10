@@ -26,7 +26,8 @@
     return $return
 }
 
-$projectList = &dotnet sln list
+dotnet restore
+$projectList = dotnet sln list
 $updated = $false
 
 foreach($path in $projectList) {
