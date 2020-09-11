@@ -60,8 +60,8 @@ Write-Host "git branch $branchName"
 git branch $branchName
 Write-Host "git checkout $branchName"
 git checkout $branchName
-git push
-Write-Host "git push"
+Write-Host "git push --set-upstream origin $branchName"
+git push --set-upstream origin $branchName
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
