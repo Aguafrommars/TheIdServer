@@ -31,8 +31,6 @@ Write-Host "git config user.name github-actions"
 git config user.name github-actions
 Write-Host "git config user.email github-actions@github.com"
 git config user.email github-actions@github.com
-Write-Host "git fetch"
-git fetch
 Write-Host "git merge origin/master"
 git merge origin/master
 
