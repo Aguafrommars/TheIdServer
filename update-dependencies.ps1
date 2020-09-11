@@ -51,27 +51,14 @@ if (!$updated) {
     exit 0
 }
 
-$branchName = "fix/dependencies-$env:GITHUB_RUN_ID"
-
-if (Test-Path env:GITHUB_ACTOR) {
-    Write-Host "git config --local user.email ""aguacongas@gmail.com"""
-    git config --local user.email "aguacongas@gmail.com"
-    Write-Host "git config --local user.name $env:GITHUB_ACTOR"
-    git config --local user.name $env:GITHUB_ACTOR
-    Write-Host "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
-    git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY
-}
+$branchName = "fix/dependencies"
 
 Write-Host "git add ."
 git add .
 Write-Host "git commit -m ""fix: update packages"""
 git commit -m "fix: update packages"
-Write-Host "git branch $branchName"
-git branch $branchName
-Write-Host "git switch $branchName"
-git switch $branchName
-Write-Host "git push -u origin $branchName"
-git push -u origin $branchName
+Write-Host "git push"
+git push
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
