@@ -14,11 +14,11 @@ jobs:
     runs-on: unbuntu-latest
     steps:
       - name: Merge branch
-        uses: devmasx/merge-branch@v1.3.0
+        uses: everlytic/branch-merge@1.1.0
         with:
-          target_branch: fix/dependencies 
-          from_branch: master
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          target_branch: 'fix/dependencies' 
+          source_ref: 'master'
+          github_token: ${{ github.token }}
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
