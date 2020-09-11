@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: fix/dependencies
+          token: ${{ secrets.PAT }}
       - run: git merge origin/master
         continue-on-error: true
       # Setup .NET Core SDK
@@ -30,6 +31,6 @@ jobs:
       - name: Update dependencies
         run: ./update-dependencies.ps1
         env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
           ACTIONS_STEP_DEBUG : ${{ secrets.ACTIONS_STEP_DEBUG }}
 
