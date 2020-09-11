@@ -10,15 +10,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  merge:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merge branch
-        uses: everlytic/branch-merge@1.1.0
-        with:
-          target_branch: 'fix/dependencies' 
-          source_ref: 'master'
-          github_token: ${{ github.token }}
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -30,6 +21,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: fix/dependencies
+      - uses: everlytic/branch-merge@1.1.0
+        with:
+          github_token: ${{ github.token }}
+          source_ref: 'master'
+          target_branch: 'fix/dependencies'
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.6.0
