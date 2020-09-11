@@ -27,6 +27,14 @@ function UpdatePackages {
     return $return
 }
 
+Write-Host "git config user.name github-actions"
+git config user.name github-actions
+Write-Host "git config user.email github-actions@github.com"
+git config user.email github-actions@github.com
+Write-Host "git fetch"
+git fetch
+Write-Host "git merge origin/master"
+git merge origin/master
 
 dotnet restore
 $projectList = dotnet sln list
@@ -52,11 +60,6 @@ if (!$updated) {
 }
 
 $branchName = "fix/dependencies"
-
-Write-Host "git config user.name github-actions"
-git config user.name github-actions
-Write-Host "git config user.email github-actions@github.com"
-git config user.email github-actions@github.com
 
 Write-Host "git add ."
 git add .
