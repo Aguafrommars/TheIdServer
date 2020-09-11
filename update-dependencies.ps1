@@ -72,7 +72,7 @@ ExecuteCommand -cmd "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHU
 ExecuteCommand -cmd 'git add .'
 ExecuteCommand -cmd 'git commit -m "fix: update packages"'
 ExecuteCommand -cmd "git checkout -b $branchName"
-ExecuteCommand -cmd 'git push -u origin HEAD'
+ExecuteCommand -cmd 'git push -u origin $branchName'
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
