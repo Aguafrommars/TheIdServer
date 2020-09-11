@@ -58,13 +58,13 @@ if (Test-Path env:GITHUB_ACTOR) {
 }
 
 Write-Host "git add ."
-git add .
+& git add .
 Write-Host "git commit -m ""fix: update packages"""
-git commit -m "fix: update packages"
+& git commit -m "fix: update packages"
 Write-Host "git checkout -b $branchName"
-git checkout -b $branchName
+& git checkout -b $branchName
 Write-Host "git push -u origin HEAD"
-git push -u origin HEAD
+& git push -u origin HEAD
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
