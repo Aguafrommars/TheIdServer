@@ -1,4 +1,4 @@
-﻿function UpdatePackages {
+function UpdatePackages {
     param (
         $project
     )
@@ -27,16 +27,6 @@
     return $return
 }
 
-function ExecuteCommand {
-    param (
-        $cmd
-    )
-    Write-Host $cmd
-    try {
-        & $cmd
-    } catch {
-    }
-}
 
 dotnet restore
 $projectList = dotnet sln list
@@ -61,18 +51,25 @@ if (!$updated) {
     exit 0
 }
 
-$branchName = "fix/update-dependencies"
+$branchName = "fix/dependencies-$env:GITHUB_RUN_ID"
 
 if (Test-Path env:GITHUB_ACTOR) {
-   ExecuteCommand -cmd "git config --local user.email ""aguacongas@gmail.com"""
-   ExecuteCommand -cmd "git config --local user.name $env:GITHUB_ACTOR"
+    Write-Host "git config --local user.email ""aguacongas@gmail.com"""
+    git config --local user.email "aguacongas@gmail.com"
+    Write-Host "git config --local user.name $env:GITHUB_ACTOR"
+    git config --local user.name $env:GITHUB_ACTOR
+    Write-Host "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
+    git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY
 }
 
-ExecuteCommand -cmd "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
-ExecuteCommand -cmd 'git add .'
-ExecuteCommand -cmd 'git commit -m "fix: update packages"'
-ExecuteCommand -cmd "git checkout -b $branchName"
-ExecuteCommand -cmd 'git push -u origin $branchName'
+Write-Host "git add ."
+git add .
+Write-Host "git commit -m ""fix: update packages"""
+git commit -m "fix: update packages"
+Write-Host "git checkout -b $branchName"
+git checkout -b $branchName
+Write-Host "git push -u origin $branchName"
+git push -u origin $branchName
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
