@@ -49,16 +49,6 @@ if (!$updated) {
     exit 0
 }
 
-dotnet build -c Release
-if ($LASTEXITCODE -ne 0) {    
-    exit $LASTEXITCODE
-}
-
-dotnet test -c Release --no-build
-if ($LASTEXITCODE -ne 0) {    
-    exit $LASTEXITCODE
-}
-
 $branchName = "fix/update-dependencies"
 
 git add .
