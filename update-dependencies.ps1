@@ -31,6 +31,8 @@ Write-Host "git config user.name github-actions"
 git config user.name github-actions
 Write-Host "git config user.email github-actions@github.com"
 git config user.email github-actions@github.com
+Write-Host "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
+git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY
 
 dotnet restore
 $projectList = dotnet sln list
