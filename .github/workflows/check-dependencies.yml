@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   merge:
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Merge branch
         uses: everlytic/branch-merge@1.1.0
