@@ -57,8 +57,11 @@ Write-Host "git add ."
 git add .
 Write-Host "git commit -m ""fix: update packages"""
 git commit -m "fix: update packages"
-Write-Host "git push"
-git push
+Write-Host "git branch $branchName"
+git brang $branchName
+Write-Host "git switch $branchName"
+git switch $branchName
+Write-Host "git push -u origin $branchName"
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
