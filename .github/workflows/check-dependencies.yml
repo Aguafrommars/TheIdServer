@@ -19,11 +19,11 @@ jobs:
     steps:
       # Merge master -> fix/dependencies
       - name: Merge branch
-        uses: devmasx/merge-branch@v1.3.0
+        uses: everlytic/branch-merge@1.1.0
         with:
           type: now
-          from_branch: master
-          target_branch: fix/dependencies
+          source_ref: master
+          target_branch: 'fix/dependencies'
           github_token: ${{ github.token }}
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
