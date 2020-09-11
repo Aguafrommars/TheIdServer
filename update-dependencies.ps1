@@ -27,12 +27,10 @@ function UpdatePackages {
     return $return
 }
 
-Write-Host "git config user.name github-actions"
-git config user.name github-actions
-Write-Host "git config user.email github-actions@github.com"
-git config user.email github-actions@github.com
-Write-Host "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
-git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY
+Write-Host "git config user.name aguacongas"
+git config user.name aguacongas
+Write-Host "git config user.email aguacongas@gmail.com"
+git config user.email aguacongas@gmail.com
 
 dotnet restore
 $projectList = dotnet sln list
