@@ -17,14 +17,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Merge master -> fix/dependencies
-      - name: Merge branch
-        uses: everlytic/branch-merge@1.1.0
-        with:
-          type: now
-          source_ref: master
-          target_branch: 'fix/dependencies'
-          github_token: ${{ github.token }}
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
