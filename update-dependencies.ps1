@@ -81,5 +81,5 @@ $headers = @{
     Accept = "application/vnd.github.v3+json"
 }
 $payload = "{ ""title"": ""update packages"", ""head"": ""$branchName"", ""base"": ""master"" }"
-Write-Host "Invoke-WebRequest -Uri $createPrUrl"
+Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
 Invoke-WebRequest -Uri $createPrUrl -Headers $headers -Method "POST" -Body $payload
