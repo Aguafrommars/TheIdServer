@@ -27,4 +27,5 @@ jobs:
         run: ./update-dependencies.ps1
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_STEP_DEBUG : ${{ secrets.ACTIONS_STEP_DEBUG }}
 
