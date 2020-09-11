@@ -64,10 +64,11 @@ if (!$updated) {
 $branchName = "fix/update-dependencies"
 
 if (Test-Path env:GITHUB_ACTOR) {
-   git config --local user.email "aguacongas@gmail.com"
-   git config --local user.name $env:GITHUB_ACTOR
+   ExecuteCommand -cmd "git config --local user.email ""aguacongas@gmail.com"""
+   ExecuteCommand -cmd "git config --local user.name $env:GITHUB_ACTOR"
 }
 
+ExecuteCommand -cmd "git remote set-url origin $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
 ExecuteCommand -cmd 'git add .'
 ExecuteCommand -cmd 'git commit -m "fix: update packages"'
 ExecuteCommand -cmd "git checkout -b $branchName"
