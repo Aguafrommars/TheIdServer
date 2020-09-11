@@ -53,6 +53,11 @@ if (!$updated) {
 
 $branchName = "fix/dependencies"
 
+if (Test-Path env:GITHUB_ACTOR) {
+   git config --local user.email "aguacongas@gmail.com"
+   git config --local user.name $env:GITHUB_ACTOR
+}
+
 Write-Host "git add ."
 git add .
 Write-Host "git commit -m ""fix: update packages"""
