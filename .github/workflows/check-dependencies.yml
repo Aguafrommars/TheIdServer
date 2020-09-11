@@ -17,8 +17,17 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Create a branch fix/dependencies
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.0.0
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: 'fix/dependencies'        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          ref: fix/dependencies
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.6.0
