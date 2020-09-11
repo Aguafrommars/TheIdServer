@@ -66,8 +66,10 @@ Write-Host "git add ."
 git add .
 Write-Host "git commit -m ""fix: update packages"""
 git commit -m "fix: update packages"
-Write-Host "git checkout -b $branchName"
-git checkout -b $branchName
+Write-Host "git brang $branchName"
+git brang $branchName
+Write-Host "git checkout $branchName"
+git checkout $branchName
 Write-Host "git push -u origin $branchName"
 git push -u origin $branchName
 
