@@ -29,9 +29,6 @@ jobs:
       # Run update depencies script
       - name: Update dependencies
         run: ./update-dependencies.ps1
-        env: 
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-          ACTIONS_STEP_DEBUG : ${{ secrets.ACTIONS_STEP_DEBUG }}
         continue-on-error: true
       - name: Commit changes
         if: success()
