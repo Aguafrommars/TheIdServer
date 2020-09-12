@@ -17,13 +17,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v1
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/$GITHUB_REPOSITORY
-          git checkout fix/dependencies
-        continue-on-error: true
+      - uses: actions/checkout@v2      
+        with:
+          ref: fix/dependencies
+          token: ${{ secrets.PAT }}
       - run: git merge origin/master
         continue-on-error: true
       # Setup .NET Core SDK
@@ -35,4 +32,16 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ secrets.PAT }}
           ACTIONS_STEP_DEBUG : ${{ secrets.ACTIONS_STEP_DEBUG }}
-
+        continue-on-error: true
+      - name: Commit changes
+        if: success()
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3.3.0
+        with:
+          branch: fix/dependencies
