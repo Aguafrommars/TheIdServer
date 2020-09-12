@@ -27,10 +27,16 @@ function UpdatePackages {
     return $return
 }
 
+$branchName = "fix/dependencies"
+
 Write-Host "git config user.name aguacongas"
 git config user.name aguacongas
 Write-Host "git config user.email aguacongas@gmail.com"
 git config user.email aguacongas@gmail.com
+Write-Host "git remote set-url origin https://x-access-token:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY"
+git remote set-url origin https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY
+Write-Host "git checkout $branchName"
+git checkout $branchName
 
 dotnet restore
 $projectList = dotnet sln list
@@ -54,8 +60,6 @@ if (!$updated) {
     Write-Host "nothing to update"
     exit 0
 }
-
-$branchName = "fix/dependencies"
 
 Write-Host "git add ."
 git add .
