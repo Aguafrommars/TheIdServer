@@ -27,10 +27,7 @@ function UpdatePackages {
     return $return
 }
 
-Write-Host "git config user.name aguacongas"
-git config user.name aguacongas
-Write-Host "git config user.email aguacongas@gmail.com"
-git config user.email aguacongas@gmail.com
+$branchName = "fix/dependencies"
 
 dotnet restore
 $projectList = dotnet sln list
@@ -55,12 +52,11 @@ if (!$updated) {
     exit 0
 }
 
-$branchName = "fix/dependencies"
+Write-Host "dotnet build -c Release"
+dotnet build -c Release
 
-Write-Host "git add ."
-git add .
 Write-Host "git commit -m ""fix: update packages"""
-git commit -m "fix: update packages"
+git commit -am "fix: update packages"
 Write-Host "git push"
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
