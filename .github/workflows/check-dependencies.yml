@@ -34,7 +34,8 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -am "fix: update dependencies"
+          git add .
+          git commit am "fix: update dependencies"
           git push
         continue-on-error: true
       - name: Create PR
