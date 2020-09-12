@@ -23,6 +23,7 @@ jobs:
           git config user.email github-actions@github.com
           git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/$GITHUB_REPOSITORY
           git checkout fix/dependencies
+        continue-on-error: true
       - run: git merge origin/master
         continue-on-error: true
       # Setup .NET Core SDK
