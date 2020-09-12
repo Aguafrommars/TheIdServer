@@ -30,7 +30,7 @@ jobs:
       - name: Update dependencies
         run: ./update-dependencies.ps1
       - name: Commit changes
-        if: contains($UPDATE, true)
+        if: contains(${{ env.UPDATE }}, true)
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -39,7 +39,7 @@ jobs:
           git push
         continue-on-error: true
       - name: Create PR
-        if: contains($UPDATE, true)
+        if: contains(${{ env.UPDATE }}, true)
         uses: peter-evans/create-pull-request@v3.3.0
         with:
           branch: fix/dependencies
