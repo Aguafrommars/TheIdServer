@@ -27,8 +27,6 @@ function UpdatePackages {
     return $return
 }
 
-$branchName = "fix/dependencies"
-
 dotnet restore
 $projectList = dotnet sln list
 $updated = $false
@@ -47,24 +45,8 @@ foreach($path in $projectList) {
     $updated = $updated -or $projectUpdated
 }
 
+$env:UPDATE = "true"
 if (!$updated) {
     Write-Host "nothing to update"
-    exit 0
+    $env:UPDATE = "false"
 }
-
-Write-Host "dotnet build -c Release"
-dotnet build -c Release
-
-Write-Host "git commit -m ""fix: update packages"""
-git commit -am "fix: update packages"
-Write-Host "git push"
-
-$authorization = "Bearer $env:GITHUB_TOKEN"
-$createPrUrl = 'https://api.github.com/repos/Aguafrommars/TheIdServer/pulls'
-$headers = @{
-    Authorization = $authorization
-    Accept = "application/vnd.github.v3+json"
-}
-$payload = "{ ""title"": ""update packages"", ""head"": ""$branchName"", ""base"": ""master"" }"
-Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
-Invoke-WebRequest -Uri $createPrUrl -Headers $headers -Method "POST" -Body $payload
