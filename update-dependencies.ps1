@@ -27,10 +27,10 @@ function UpdatePackages {
     return $return
 }
 
-Write-Host "git config user.name github-actions"
-git config user.name github-actions
-Write-Host "git config user.email github-actions@github.com"
-git config user.email github-actions@github.com
+Write-Host "git config user.name aguacongas"
+git config user.name aguacongas
+Write-Host "git config user.email aguacongas@gmail.com"
+git config user.email aguacongas@gmail.com
 
 dotnet restore
 $projectList = dotnet sln list
