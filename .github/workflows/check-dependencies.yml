@@ -17,10 +17,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v1
       - run: |
-          git clone https://x-access-token:${{ secrets.PAT }}@github.com/$GITHUB_REPOSITORY
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/$GITHUB_REPOSITORY
           git checkout fix/dependencies
         continue-on-error: true
       - run: git merge origin/master
