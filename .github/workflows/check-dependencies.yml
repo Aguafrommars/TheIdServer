@@ -29,21 +29,5 @@ jobs:
       # Run update depencies script
       - name: Update dependencies
         run: ./update-dependencies.ps1
-      - name: Commit changes
-        if: contains(${{ env.UPDATE }}, true)
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git remote set-url --push origin https://aguacongas:$GITHUB_TOKEN@github.com/Aguafrommars/TheIdServer
-          git add .
-          git commit -m "fix: update dependencies"
-          git push
-        env:
+        env: 	
           GITHUB_TOKEN: ${{ secrets.PAT }}
-        continue-on-error: true
-      - name: Create PR
-        if: contains(${{ env.UPDATE }}, true)
-        uses: peter-evans/create-pull-request@v3.3.0
-        with:
-          branch: fix/dependencies
-          base: master
