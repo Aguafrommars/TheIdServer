@@ -1,14 +1,15 @@
-# This is a basic workflow to help you get started with Actions
+# Update all depencies each days if needed
 
 name: Check Dependencies
 
-# Controls when the action will run. Triggers the workflow at 02:00 each days
+# Controls when the action will run.
 on:
+  # Triggers the workflow at 02:00 each days
   schedule:
     - cron: '0 2 * * *'
+  # allow to launch the job manually
   workflow_dispatch:  
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
@@ -17,10 +18,12 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checkout the branch fix/dependencies with the PAT 
       - uses: actions/checkout@v2      
         with:
           ref: fix/dependencies
           token: ${{ secrets.PAT }}
+      - name: Merge master
       - run: git merge origin/master
         continue-on-error: true
       # Setup .NET Core SDK
