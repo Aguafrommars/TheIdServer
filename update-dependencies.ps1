@@ -45,8 +45,9 @@ foreach($path in $projectList) {
     $updated = $updated -or $projectUpdated
 }
 
-$env:UPDATE = "true"
 if (!$updated) {
     Write-Host "nothing to update"
-    $env:UPDATE = "false"
+    exit 0
 }
+
+Write-Host "::set-env name=UPDATE::true"
