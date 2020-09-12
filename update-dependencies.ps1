@@ -52,10 +52,11 @@ if (!$updated) {
     exit 0
 }
 
-Write-Host "git add ."
-git add .
+Write-Host "dotnet build -c Release"
+dotnet build -c Release
+
 Write-Host "git commit -m ""fix: update packages"""
-git commit -m "fix: update packages"
+git commit -am "fix: update packages"
 Write-Host "git push"
 
 $authorization = "Bearer $env:GITHUB_TOKEN"
