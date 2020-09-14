@@ -26,8 +26,9 @@ jobs:
       - name: Merge master
         run: | 
           git fetch
-          git merge origin/master
-        continue-on-error: true
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git merge origin/master --allow-unrelated-histories
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.6.0

@@ -87,7 +87,7 @@ git push
 
 # Create a pull request
 $authorization = "Bearer $env:GITHUB_TOKEN"
-$createPrUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY"
+$createPrUrl = 'https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls'
 $headers = @{
     Authorization = $authorization
     Accept = "application/vnd.github.v3+json"
