@@ -24,7 +24,7 @@ jobs:
           ref: fix/dependencies
           token: ${{ secrets.PAT }}
       - name: Merge master
-      - run: git merge origin/master
+        run: git merge origin/master
         continue-on-error: true
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
