@@ -26,7 +26,7 @@ jobs:
       - name: Merge master
         run: | 
           git fetch
-          git merge origin/master
+          git merge origin/master --allow-unrelated-histories
         continue-on-error: true
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
