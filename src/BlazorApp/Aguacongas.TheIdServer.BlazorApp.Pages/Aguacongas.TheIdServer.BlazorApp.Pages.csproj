@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
@@ -16,9 +16,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BlazorInputFile" Version="0.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.0-rc.1.20451.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0-rc.1.20451.17" />
 	</ItemGroup>
 
 	<ItemGroup>

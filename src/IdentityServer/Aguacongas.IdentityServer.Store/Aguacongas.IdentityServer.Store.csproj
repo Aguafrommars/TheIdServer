@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FluentValidation" Version="9.2.0" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.1.20451.14" />
 	</ItemGroup>
 
 </Project>

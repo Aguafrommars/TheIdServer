@@ -1,8 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-using BlazorInputFile;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -13,12 +13,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     {
         private MarkupString _error;
         private ImportResult _result;
-        async Task HandleFileSelected(IFileListEntry[] files)
+        async Task HandleFileSelected(InputFileChangeEventArgs e)
         {
             using var content = new MultipartFormDataContent();
-            foreach(var file in files)
+            foreach(var file in e.GetMultipleFiles(e.FileCount))
             {
-                content.Add(new StreamContent(file.Data), "files", file.Name);
+                content.Add(new StreamContent(file.OpenReadStream()), "files", file.Name);
             }
 
             var httpClient = _httpClientFactory.CreateClient("oidc");

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
@@ -24,9 +24,9 @@
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="3.1.2" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0-rc.1.20451.17" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.1.20451.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0-rc.1.20451.13" />
 	</ItemGroup>
 
 	<ItemGroup>

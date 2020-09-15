@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>IdentityServer4 HTTP stores implementation for TheIdServer API.</Description>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="4.4.0" />
 		<PackageReference Include="IdentityServer4.Storage" Version="4.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.1.20451.14" />
 	</ItemGroup>
 
 	<ItemGroup>
