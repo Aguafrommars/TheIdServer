@@ -13,7 +13,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     public partial class ExternalProvider
     {
         [SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used in component")]
-        [SuppressMessage("Major", "CS0649:Fiel is never asign to", Justification = "Assign by jsScript.")]
         private ProviderOptionsBase _optionsComponent;
 
         protected override string Expand => $"{nameof(Models.ExternalProvider.ClaimTransformations)}";
@@ -68,6 +67,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 Scheme = Model.Id
             };
+        }
+
+        private void KindChanded(string value)
+        {
+            Model.KindName = value;
+            Model.Options = null;
+            InvokeAsync(StateHasChanged);
         }
     }
 }

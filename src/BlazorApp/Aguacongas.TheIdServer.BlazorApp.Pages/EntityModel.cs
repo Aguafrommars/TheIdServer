@@ -118,7 +118,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 {
                     Header = GetModelId(Model),
                     IsError = false,
-                    Message = "No changes"
+                    Message = Localizer["No changes"]
                 }).ConfigureAwait(false);
                 return;
             }
@@ -142,7 +142,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = GetModelId(Model),
-                    Message = "Saved"
+                    Message = Localizer["Saved"]
                 }).ConfigureAwait(false);
 
             }
@@ -191,7 +191,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 await Notifier.NotifyAsync(new Models.Notification
                 {
                     Header = GetModelId(Model),
-                    Message = "Deleted"
+                    Message = Localizer["Deleted"]
                 }).ConfigureAwait(false);
 
                 NavigationManager.NavigateTo(BackUrl);
@@ -371,18 +371,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 await Notifier.NotifyAsync(new Models.Notification
                 {
-                    Header = "Error",
+                    Header = Localizer["Error"],
                     IsError = true,
-                    Message = pe.Details.Title
+                    Message = Localizer[pe.Details.Title]
                 }).ConfigureAwait(false);
                 return;
             }
 
             await Notifier.NotifyAsync(new Models.Notification
             {
-                Header = "Error",
+                Header = Localizer["Error"],
                 IsError = true,
-                Message = exception.Message
+                Message = Localizer[exception.Message]
             }).ConfigureAwait(false);
         }
 

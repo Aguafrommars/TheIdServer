@@ -18,7 +18,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="name" Placeholder="scheme" @bind-Value="@Model.Id" />
+                        <AuthorizeText Id="name" Placeholder="@Localizer["scheme"]" @bind-Value="@Model.Id" />
                     }
                     else
                     {
@@ -28,7 +28,7 @@ else
                 <div class="col d-flex">
                     <AuthorizeButton Type="submit" CssSubClass="ml-auto mr-1 btn-primary">
                         <span class="oi oi-data-transfer-download"></span>
-                        Save
+                        @Localizer["Save"]
                     </AuthorizeButton>
                     @if (!IsNew)
                     {
@@ -41,7 +41,7 @@ else
                 <div class="col">
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#transformations" @onclick='() => ScrollTo("transformations")' @onclick:preventDefault>claims transformations</a>
+                            <a href="@(NavigationManager.Uri)#transformations" @onclick='() => ScrollTo("transformations")' @onclick:preventDefault>@Localizer["claims transformations"]</a>
                         </li>
                     </ul>
                 </div>
@@ -55,19 +55,19 @@ else
                         {
                             <div class="form-group row">
                                 <label class="col col-form-label" for="type">
-                                    type
+                                    @Localizer["type"]
                                 </label>
                                 <div class="col-lg-10 col-sm-12">
-                                    <ProviderSelect Id="type" @bind-Value="@Model.KindName" Kinds="@Model.Kinds" />
+                                    <ProviderSelect Id="type" Value="@Model.KindName" ValueChanged="KindChanded" ValueExpression="() => Model.KindName" Kinds="@Model.Kinds" />
                                 </div>
                             </div>
                         }
                         <div class="form-group row">
                             <label class="col col-form-label" for="displayName">
-                                display name
+                                @Localizer["display name"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="displayName" Placeholder="display name" @bind-Value="@Model.DisplayName" MaxLength="200" />
+                                <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Model.DisplayName" MaxLength="200" />
                             </div>
                         </div>
                         @switch (Model.KindName)
@@ -95,7 +95,7 @@ else
                             <label class="col col-form-label" for="storeClaims">
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeCheckbox Name="storeClaims" Label="store claims" @bind-Value="@Model.StoreClaims" />
+                                <AuthorizeCheckbox Name="storeClaims" Label="@Localizer["store claims"]" @bind-Value="@Model.StoreClaims" />
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ else
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col">
-                                <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="map default outbound JWT claim types" @bind-Value="@Model.MapDefaultOutboundClaimType" />
+                                <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="@Localizer["map default outbound JWT claim types"]" @bind-Value="@Model.MapDefaultOutboundClaimType" />
                             </div>
                         </div>
                         <ClaimTransformations Collection="Model.ClaimTransformations" />

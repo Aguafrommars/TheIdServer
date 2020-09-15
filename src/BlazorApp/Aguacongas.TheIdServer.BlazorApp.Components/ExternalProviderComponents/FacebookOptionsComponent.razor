@@ -2,33 +2,33 @@
 
 <div class="form-group row">
     <label class="col col-form-label" for="appId">
-        app id
+        @Localizer["app id"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="appId" Placeholder="app id" @bind-Value="@Model.Options.AppId" />
+        <AuthorizeText Id="appId" Placeholder="@Localizer["app id"]" @bind-Value="@Model.Options.AppId" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="appSecret">
-        app secret
+        @Localizer["app secret"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeText Id="appSecret" Placeholder="app secret" @bind-Value="@Model.Options.AppSecret" />
+        <AuthorizeText Id="appSecret" Placeholder="@Localizer["app secret"]" @bind-Value="@Model.Options.AppSecret" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="fields">
-        fields
+        @Localizer["fields"]
     </label>
     <div class="col-lg-10 col-sm-12">
-        <ScopeCollection Id="fields" Placeholder="field" Collection="@Model.Options.Fields" />
+        <ScopeCollection Id="fields" Placeholder="@Localizer["field"]" Collection="@Model.Options.Fields" />
     </div>
 </div>
 <div class="form-group row">
     <label class="col col-form-label" for="sendAppSecretProof">
     </label>
     <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="sendAppSecretProof" Label="send app secret proof" @bind-Value="@Model.Options.SendAppSecretProof" />
+        <AuthorizeCheckbox Name="sendAppSecretProof" Label="@Localizer["send app secret proof"]" @bind-Value="@Model.Options.SendAppSecretProof" />
     </div>
 </div>
 <OAuthOptionsProperties />

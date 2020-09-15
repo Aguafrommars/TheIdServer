@@ -90,7 +90,7 @@ else
                                 @Localizer["decription"]
                             </label>
                             <div class="col-lg-9 col-sm-12">
-                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["descriptiom"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["description"]" @bind-Value="@Model.Description" MaxLength="1000" />
                             </div>
                             <div class="col-1">
                                 <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">

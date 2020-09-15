@@ -2,14 +2,15 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
     public class ClientResourceUriValidator : EntityResourceValidator<ClientLocalizedResource>
     {
-        public ClientResourceUriValidator(ILocalizable<ClientLocalizedResource> model, EntityResourceKind kind) : base(model, kind)
+        public ClientResourceUriValidator(ILocalizable<ClientLocalizedResource> model, EntityResourceKind kind, IStringLocalizer localizer) : base(model, kind, localizer)
         {
-            RuleFor(m => m.Value).Uri().WithMessage(m => $"{m.Value} is not a valid uri.");
+            RuleFor(m => m.Value).Uri().WithMessage(m => localizer["{0} is not a valid uri.", m.Value]);
         }
     }
 }

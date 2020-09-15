@@ -52,10 +52,10 @@
     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.PolicyUri" />
     <div class="form-group row">
         <label class="col col-form-label" for="tostUri">
-            @Localizer["terms or service uri"]
+            @Localizer["terms of service uri"]
         </label>
         <div class="col-lg-9 col-sm-12">
-            <AuthorizeText Id="tostUri" Placeholder="@Localizer["terms or service uri"]" @bind-Value="@Model.TosUri" MaxLength="2000" />
+            <AuthorizeText Id="tostUri" Placeholder="@Localizer["terms of service uri"]" @bind-Value="@Model.TosUri" MaxLength="2000" />
         </div>
         <div class="col-1">
             <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.TosUri)">

@@ -21,7 +21,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task CreateAsync_should_register_a_new_client()
         {
-            var sut = TestUtils.CreateTestServer();
+            var configuration = new Dictionary<string, string>
+            {
+                ["Seed"] = "false"
+            };
+            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration);
+
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
 
