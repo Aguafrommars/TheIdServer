@@ -87,15 +87,20 @@ git push
 
 # Create a pull request
 $dest = "master"
-if (Test-Path $env:DEST_BRANCH) {
+if (Test-Path env:DEST_BRANCH) {
     $dest = $env:DEST_BRANCH
 }
+$src = "fix/dependencies"
+if (Test-Path env:SRC_BRANCH) {
+    $dest = $env:DEST_BRANCH
+}
+
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls"
 $headers = @{
     Authorization = $authorization
     Accept = "application/vnd.github.v3+json"
 }
-$payload = "{ ""title"": ""update packages"", ""head"": ""fix/dependencies"", ""base"": ""$dest"" }"
+$payload = "{ ""title"": ""update packages"", ""head"": ""$src"", ""base"": ""$dest"" }"
 Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
 Invoke-WebRequest -Uri $createPrUrl -Headers $headers -Method "POST" -Body $payload
