@@ -41,7 +41,7 @@ if (Test-Path env:DEST_BRANCH) {
 }
 $src = "fix/dependencies"
 if (Test-Path env:SRC_BRANCH) {
-    $dest = $env:DEST_BRANCH
+    $src = $env:SRC_BRANCH
 }
 
 Write-Host "src:$src dest: $dest"
