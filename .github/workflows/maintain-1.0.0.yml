@@ -24,7 +24,7 @@ jobs:
           ref: maintain/1.0.0
           token: ${{ secrets.PAT }}
           fetch-depth: 0
-      - name: Merge realease/1.0.0
+      - name: Merge release/1.0.0
         run: | 
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -36,5 +36,5 @@ jobs:
       - name: Update dependencies
         run: ./update-dependencies.ps1
         env:
-          DEST_BRANCH: realease/1.0.0
+          DEST_BRANCH: release/1.0.0
           GITHUB_TOKEN: ${{ secrets.PAT }}
