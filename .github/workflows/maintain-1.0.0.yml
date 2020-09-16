@@ -1,6 +1,6 @@
 # Update all depencies each days if needed
 
-name: Check Dependencies
+name: Release 1.0 Dependencies
 
 # Controls when the action will run.
 on:
