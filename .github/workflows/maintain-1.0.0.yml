@@ -37,5 +37,6 @@ jobs:
       - name: Update dependencies
         run: ./update-dependencies.ps1
         env:
+          SRC_BRANCH: maintain/1.0.0
           DEST_BRANCH: release/1.0.0
           GITHUB_TOKEN: ${{ secrets.PAT }}
