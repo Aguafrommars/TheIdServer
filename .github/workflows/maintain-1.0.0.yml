@@ -28,7 +28,7 @@ jobs:
         run: | 
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git merge realease/1.0.0 --allow-unrelated-histories
+          git merge release/1.0.0 --allow-unrelated-histories
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.6.0
