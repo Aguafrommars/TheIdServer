@@ -35,5 +35,6 @@ jobs:
       # Run update depencies script
       - name: Update dependencies
         run: ./update-dependencies.ps1
-        env: 	
+        env:
+          DEST_BRANCH: realease/1.0.0
           GITHUB_TOKEN: ${{ secrets.PAT }}
