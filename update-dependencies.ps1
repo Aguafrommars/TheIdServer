@@ -34,6 +34,18 @@ function UpdatePackages {
     return $return
 }
 
+# get branches names
+$dest = "master"
+if (Test-Path env:DEST_BRANCH) {
+    $dest = $env:DEST_BRANCH
+}
+$src = "fix/dependencies"
+if (Test-Path env:SRC_BRANCH) {
+    $dest = $env:DEST_BRANCH
+}
+
+Write-Host "src:$src dest: $dest"
+
 # Restore dependencies
 dotnet restore
 
@@ -86,15 +98,6 @@ git push
 }
 
 # Create a pull request
-$dest = "master"
-if (Test-Path env:DEST_BRANCH) {
-    $dest = $env:DEST_BRANCH
-}
-$src = "fix/dependencies"
-if (Test-Path env:SRC_BRANCH) {
-    $dest = $env:DEST_BRANCH
-}
-
 $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls"
 $headers = @{
