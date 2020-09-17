@@ -59,8 +59,8 @@ jobs:
 
       - name: Build image
         run: |
-          docker build . --file $DOCKER_FILE --tag $SERVER_IMAGE_NAME
-          docker build . --file $DOCKER_FILE --tag $APP_IMAGE_NAME
+          docker build . --file $SERVER_DOCKER_FILE --tag $SERVER_IMAGE_NAME
+          docker build . --file $APP_DOCKER_FILE --tag $APP_IMAGE_NAME
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login https://hub.docker.com -u aguacongas --password-stdin
