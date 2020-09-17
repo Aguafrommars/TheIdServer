@@ -68,28 +68,28 @@ jobs:
       - name: Push image to GitHub Container Registry
         env:
           LATEST_VESION: ${{ env.latest-verion }}
-          run: |
-            SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
-            APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
+        run: |
+          SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
+          APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
 
-            # Strip git ref prefix from version
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-            # Strip "v" prefix from tag name
-            [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-            # Use Docker `unstable` tag convention
-            [ "$VERSION" == "master" ] && VERSION=unstable                  
+          # Use Docker `unstable` tag convention
+          [ "$VERSION" == "master" ] && VERSION=unstable                  
 
-            echo SERVER_IMAGE_ID=$SERVER_IMAGE_ID
-            echo APP_IMAGE_ID=$APP_IMAGE_ID
-            echo VERSION=$VERSION
+          echo SERVER_IMAGE_ID=$SERVER_IMAGE_ID
+          echo APP_IMAGE_ID=$APP_IMAGE_ID
+          echo VERSION=$VERSION
 
-            docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
-            docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
-            [ "$VERSION" == "$LATEST_VESION" ] && docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
-            [ "$VERSION" == "$LATEST_VESION" ] && docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest                  
-            docker push $SERVER_IMAGE_ID:$VERSION
-            docker push $APP_IMAGE_ID:$VERSION
-            [ "$VERSION" == "$LATEST_VESION" ] && docker push $SERVER_IMAGE_ID:latest
-            [ "$VERSION" == "$LATEST_VESION" ] && docker push $APP_IMAGE_ID:latest                  
+          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
+          docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
+          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
+          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest                  
+          docker push $SERVER_IMAGE_ID:$VERSION
+          docker push $APP_IMAGE_ID:$VERSION
+          [ "$VERSION" == "$LATEST_VESION" ] && docker push $SERVER_IMAGE_ID:latest
+          [ "$VERSION" == "$LATEST_VESION" ] && docker push $APP_IMAGE_ID:latest                  
