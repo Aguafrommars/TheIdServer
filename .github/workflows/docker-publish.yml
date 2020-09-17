@@ -15,8 +15,10 @@ on:
     
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: theidserver
-  DOCKER_FILE: src/Aguacongas.TheIdServer/Dockerfile
+  SERVER_IMAGE_NAME: theidserver
+  SERVER_DOCKER_FILE: src/Aguacongas.TheIdServer/Dockerfile
+  APP_IMAGE_NAME: theidserverapp
+  APP_DOCKER_FILE: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
 
 jobs:
   # Run tests.
@@ -28,13 +30,26 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run tests
-        run: docker build . --file $DOCKER_FILE
+        run: |
+          docker build . --file $SERVER_DOCKER_FILE
+          docker build . --file $APP_DOCKER_FILE
+
+  latest-version:
+    needs: test
+    runs-on: windows-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Get latest version
+        run: |
+          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
+          $latest = $j.results[0].name
+          echo "::set-env name=latest-verion::$latest"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     # Ensure test job passes before pushing image.
-    needs: test
+    needs: latest-version
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -43,30 +58,38 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file $DOCKER_FILE --tag $IMAGE_NAME
+        run: |
+          docker build . --file $DOCKER_FILE --tag $SERVER_IMAGE_NAME
+          docker build . --file $DOCKER_FILE --tag $APP_IMAGE_NAME
 
       - name: Log into GitHub Container Registry
-      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
-        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login https://hub.docker.com -u aguacongas --password-stdin
 
       - name: Push image to GitHub Container Registry
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
+        env:
+          LATEST_VESION: ${{ env.latest-verion }}
+          run: |
+          SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
+          APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
+          
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+          # Use Docker `unstable` tag convention
+          [ "$VERSION" == "master" ] && VERSION=unstable                  
 
-          echo IMAGE_ID=$IMAGE_ID
+          echo SERVER_IMAGE_ID=$SERVER_IMAGE_ID
+          echo APP_IMAGE_ID=$APP_IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
+          docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
+          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
+          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest                  
+          docker push $SERVER_IMAGE_ID:$VERSION
+          docker push $APP_IMAGE_ID:$VERSION
+          [ "$VERSION" == "$LATEST_VESION" ] && docker push $SERVER_IMAGE_ID:latest
+          [ "$VERSION" == "$LATEST_VESION" ] && docker push $APP_IMAGE_ID:latest                  
