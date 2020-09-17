@@ -15,9 +15,9 @@ on:
     
 env:
   # TODO: Change variable to your image's name.
-  SERVER_IMAGE_NAME: theidserver
+  SERVER_IMAGE_NAME: aguacongastheidserver
   SERVER_DOCKER_FILE: src/Aguacongas.TheIdServer/Dockerfile
-  APP_IMAGE_NAME: theidserverapp
+  APP_IMAGE_NAME: aguacongastheidserverblazorapp
   APP_DOCKER_FILE: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
         run: |
           $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
           $latest = $j.results[0].name
-          echo "::set-env name=latest-verion::$latest"
+          echo "::set-env name=latest-version::$latest"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -67,7 +67,7 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         env:
-          LATEST_VESION: ${{ env.latest-verion }}
+          LATEST_VERSION: ${{ env.latest-version }}
         run: |
           SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
           APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
@@ -84,12 +84,21 @@ jobs:
           echo SERVER_IMAGE_ID=$SERVER_IMAGE_ID
           echo APP_IMAGE_ID=$APP_IMAGE_ID
           echo VERSION=$VERSION
-
+          echo LATEST_VERSION=$LATEST_VERSION
+          
+          versions=($(echo $VERSION $LATEST_VERSION | tr ' ' "\n" | sort --version-sort))
+          echo sorted versions 1st item=${versions[0]}
+ 
           docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
           docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
-          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
-          [ "$VERSION" == "$LATEST_VESION" ] && docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest                  
+          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest; fi
           docker push $SERVER_IMAGE_ID:$VERSION
           docker push $APP_IMAGE_ID:$VERSION
-          [ "$VERSION" == "$LATEST_VESION" ] && docker push $SERVER_IMAGE_ID:latest
-          [ "$VERSION" == "$LATEST_VESION" ] && docker push $APP_IMAGE_ID:latest                  
+
+          if [ "$VERSION" == "${versions[0]}" ]
+          then 
+            docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
+            docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest
+            docker push $SERVER_IMAGE_ID:latest
+            docker push $APP_IMAGE_ID:latest
+          fi
