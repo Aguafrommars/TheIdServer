@@ -16,6 +16,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: image
+  DOCKER_FILE: src/Aguacongas.TheIdServer/Dockerfile
 
 jobs:
   # Run tests.
@@ -27,13 +28,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run tests
-        run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
-          else
-            docker build . --file Dockerfile
-          fi
+        run: docker build . --file $DOCKER_FILE
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -48,7 +43,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file src/Aguacongas.TheIdServer/Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file $DOCKER_FILE --tag $IMAGE_NAME
 
       - name: Log into GitHub Container Registry
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
