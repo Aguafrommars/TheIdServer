@@ -29,13 +29,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get latest version
-        run: |
-          pwsh
-          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
-          $latest = $j.results[0].name
-          echo "::set-output name=latestVersion::$latest"
-
       - name: Run tests
         run: |
           docker build . --file $SERVER_DOCKER_FILE
@@ -55,9 +48,8 @@ jobs:
 
       - name: Get latest version
         run: |
-          pwsh
-          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
-          $latest = $j.results[0].name
+          curl -s "https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name" >> ./version.json
+          latest=($(jq ".results[0].name" versions.json -r))
           echo "::set-output name=latestVersion::$latest"
 
       - name: Build image
