@@ -102,3 +102,4 @@ jobs:
             docker push $SERVER_IMAGE_ID:latest
             docker push $APP_IMAGE_ID:latest
           fi
+          
