@@ -43,7 +43,7 @@ jobs:
         run: |
           $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
           $latest = $j.results[0].name
-          echo "::set-env name=latestVersion::$latest"
+          echo "::set-output name=latestVersion::$latest"
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -67,7 +67,7 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         env:
-          LATEST_VERSION: ${{ env.latestVersion }}
+          LATEST_VERSION: ${{ steps.latest-version.outputs.latestVersion }}
         run: |
           SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
           APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
