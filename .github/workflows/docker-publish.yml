@@ -49,7 +49,7 @@ jobs:
       - name: Get latest version
         run: |
           curl -s "https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name" >> ./version.json
-          latest=($(jq ".results[0].name" versions.json -r))
+          latest=($(jq ".results[0].name" version.json -r))
           echo "::set-output name=latestVersion::$latest"
 
       - name: Build image
@@ -90,7 +90,7 @@ jobs:
           docker push $SERVER_IMAGE_ID:$VERSION
           docker push $APP_IMAGE_ID:$VERSION
 
-          if [ "$VERSION" != "${versions[0]}" ]; then exit; fi
+          if [[ "$VERSION" != "${versions[0]}" || "$VERSION" == *"-preview"* ]]; then exit; fi
           
           docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
           docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest
