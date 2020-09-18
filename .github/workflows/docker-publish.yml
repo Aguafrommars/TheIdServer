@@ -46,12 +46,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get latest version
-        run: |
-          curl -s "https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name" >> ./version.json
-          latest=($(jq ".results[0].name" version.json -r))
-          echo "::set-output name=latestVersion::$latest"
-
       - name: Build image
         run: |
           docker build . --file $SERVER_DOCKER_FILE --tag $SERVER_IMAGE_NAME
@@ -61,8 +55,6 @@ jobs:
         run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u aguacongas --password-stdin
           
       - name: Push image to GitHub Container Registry
-        env:
-          LATEST_VERSION: ${{ steps.latest-version.outputs.latestVersion }}
         run: |
           SERVER_IMAGE_ID=aguacongas/$SERVER_IMAGE_NAME
           APP_IMAGE_ID=aguacongas/$APP_IMAGE_NAME
@@ -82,19 +74,11 @@ jobs:
           echo LATEST_VERSION=$LATEST_VERSION
           
           versions=($(echo $VERSION $LATEST_VERSION | tr ' ' "\n" | sort --version-sort))
-          echo sorted versions 1st item=${versions[0]}
+          echo sorted versions 1st item=${versions[1]}
  
           docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
           docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
-          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
           docker push $SERVER_IMAGE_ID:$VERSION
           docker push $APP_IMAGE_ID:$VERSION
-
-          if [[ "$VERSION" != "${versions[0]}" || "$VERSION" == *"-preview"* ]]; then exit; fi
-          
-          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
-          docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:latest
-          docker push $SERVER_IMAGE_ID:latest
-          docker push $APP_IMAGE_ID:latest
           
           
