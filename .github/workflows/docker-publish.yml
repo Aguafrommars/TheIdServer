@@ -15,9 +15,9 @@ on:
     
 env:
   # TODO: Change variable to your image's name.
-  SERVER_IMAGE_NAME: aguacongastheidserver
+  SERVER_IMAGE_NAME: theidserver
   SERVER_DOCKER_FILE: src/Aguacongas.TheIdServer/Dockerfile
-  APP_IMAGE_NAME: aguacongastheidserverblazorapp
+  APP_IMAGE_NAME: theidserverapp
   APP_DOCKER_FILE: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
 
 jobs:
