@@ -91,7 +91,7 @@ jobs:
  
           docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:$VERSION
           docker tag $APP_IMAGE_NAME $APP_IMAGE_ID:$VERSION
-          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest; fi
+          docker tag $SERVER_IMAGE_NAME $SERVER_IMAGE_ID:latest
           docker push $SERVER_IMAGE_ID:$VERSION
           docker push $APP_IMAGE_ID:$VERSION
 
