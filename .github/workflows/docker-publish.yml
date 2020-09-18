@@ -29,33 +29,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Get latest version
+        run: |
+          pwsh
+          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
+          $latest = $j.results[0].name
+          echo "::set-output name=latestVersion::$latest"
+
       - name: Run tests
         run: |
           docker build . --file $SERVER_DOCKER_FILE
           docker build . --file $APP_DOCKER_FILE
 
-  latest-version:
-    needs: test
-    runs-on: windows-latest
-    if: github.event_name == 'push'
-    steps:
-      - name: Get latest version
-        run: |
-          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
-          $latest = $j.results[0].name
-          echo "::set-output name=latestVersion::$latest"
-
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
     # Ensure test job passes before pushing image.
-    needs: latest-version
+    needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get latest version
+        run: |
+          pwsh
+          $j = Invoke-WebRequest 'https://registry.hub.docker.com/v2/repositories/aguacongas/aguacongastheidserver/tags?page_size=1&page=1&ordering=-name' | ConvertFrom-Json
+          $latest = $j.results[0].name
+          echo "::set-output name=latestVersion::$latest"
 
       - name: Build image
         run: |
@@ -64,7 +67,7 @@ jobs:
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u aguacongas --password-stdin
-
+          
       - name: Push image to GitHub Container Registry
         env:
           LATEST_VERSION: ${{ steps.latest-version.outputs.latestVersion }}
