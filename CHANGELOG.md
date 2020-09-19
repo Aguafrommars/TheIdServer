@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/Aguafrommars/TheIdServer/compare/1.0.0...1.0.1) (2020-09-19)
+
+
+### Bug Fixes
+
+* update packages ([d985a6f](https://github.com/Aguafrommars/TheIdServer/commit/d985a6fd25f914be122e7d3dff46555b1e105f86))
+* update packages ([e480e78](https://github.com/Aguafrommars/TheIdServer/commit/e480e78e3143ce4432e50419bed0122e984894f0))
+* update packages ([fd2e07b](https://github.com/Aguafrommars/TheIdServer/commit/fd2e07bc46443f564f129ca28747073d87a9937b))
+
 # 1.0.0 (2020-09-15)
 
 
