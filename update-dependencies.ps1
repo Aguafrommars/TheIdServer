@@ -34,6 +34,18 @@ function UpdatePackages {
     return $return
 }
 
+# get branches names
+$dest = "master"
+if (Test-Path env:DEST_BRANCH) {
+    $dest = $env:DEST_BRANCH
+}
+$src = "fix/dependencies"
+if (Test-Path env:SRC_BRANCH) {
+    $src = $env:SRC_BRANCH
+}
+
+Write-Host "src:$src dest: $dest"
+
 # Restore dependencies
 dotnet restore
 
@@ -92,6 +104,6 @@ $headers = @{
     Authorization = $authorization
     Accept = "application/vnd.github.v3+json"
 }
-$payload = "{ ""title"": ""update packages"", ""head"": ""fix/dependencies"", ""base"": ""master"" }"
+$payload = "{ ""title"": ""update packages"", ""head"": ""$src"", ""base"": ""$dest"" }"
 Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
 Invoke-WebRequest -Uri $createPrUrl -Headers $headers -Method "POST" -Body $payload
