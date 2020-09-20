@@ -15,7 +15,7 @@ spec:
         role: backend
     spec:
       containers:
-      - image: aguacongas/aguacongastheidserver:preview-1.0.0
+      - image: aguacongas/theidserver:1.0.0
         name: theidserver-private
         ports:
         - containerPort: 5443
