@@ -8,11 +8,11 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ### From Docker
 
-A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Docker Hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver) is available on Docker Hub.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a private Linux server container.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a public Linux server container.
 
 Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to set up the HTTPS certificate.
 
