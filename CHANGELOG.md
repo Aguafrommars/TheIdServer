@@ -1,0 +1,82 @@
+## [1.0.1](https://github.com/Aguafrommars/TheIdServer/compare/1.0.0...1.0.1) (2020-09-19)
+
+
+### Bug Fixes
+
+* update packages ([d985a6f](https://github.com/Aguafrommars/TheIdServer/commit/d985a6fd25f914be122e7d3dff46555b1e105f86))
+* update packages ([e480e78](https://github.com/Aguafrommars/TheIdServer/commit/e480e78e3143ce4432e50419bed0122e984894f0))
+* update packages ([fd2e07b](https://github.com/Aguafrommars/TheIdServer/commit/fd2e07bc46443f564f129ca28747073d87a9937b))
+
+# 1.0.0 (2020-09-15)
+
+
+### Bug Fixes
+
+* identity properties management ([4217fbf](https://github.com/Aguafrommars/TheIdServer/commit/4217fbf2ca3678faa493b4e510710a9e8a6ca24e))
+* update packages ([08af3bd](https://github.com/Aguafrommars/TheIdServer/commit/08af3bd4a82aaa7b1980aafbb53142dd56289c1b))
+* update packages ([100ec90](https://github.com/Aguafrommars/TheIdServer/commit/100ec9087ed90a5b8b07e948d207f4579c1967cb))
+* update packages ([e7cb25c](https://github.com/Aguafrommars/TheIdServer/commit/e7cb25c3c1567a575f85b2cb427df4144512250c))
+* update packages ([047b213](https://github.com/Aguafrommars/TheIdServer/commit/047b2135edbe4b1a80f62e444df1ef9a3be5df24))
+
+
+### Features
+
+* 2fa login ([a562544](https://github.com/Aguafrommars/TheIdServer/commit/a562544cea095576c4eac6d3f83a5cc3fe0b73db))
+* application pakages ([13395fb](https://github.com/Aguafrommars/TheIdServer/commit/13395fba677c94ecee7c9f5f262978d305c8e909))
+* auto remove expired tokens ([379fc8c](https://github.com/Aguafrommars/TheIdServer/commit/379fc8c65aaa3bbcf79bac8ee8eba8edf561e484)), closes [#145](https://github.com/Aguafrommars/TheIdServer/issues/145)
+* Change culture ([1afebe9](https://github.com/Aguafrommars/TheIdServer/commit/1afebe94cf71becc0947674b5d765c0b943429a4))
+* client configuration ([5862929](https://github.com/Aguafrommars/TheIdServer/commit/5862929d3b7986eedea6c15c666ad356f9634bea))
+* custom welcome screen ([a5b319a](https://github.com/Aguafrommars/TheIdServer/commit/a5b319ab9f61a16d297d76fbcfe47efff3cabc99))
+* disable strict SSL ([373050d](https://github.com/Aguafrommars/TheIdServer/commit/373050df0c9ce075f54dbfe05938e518d625aee6))
+* dynamic authentication http store ([5c60e5e](https://github.com/Aguafrommars/TheIdServer/commit/5c60e5ebf7a46f8a7631d327d374d732d8a368f8))
+* dynamic clien registration ([227fa93](https://github.com/Aguafrommars/TheIdServer/commit/227fa93f5bb71fb2cb3b8ee786a58f1439071b10))
+* dynamic welcome render fragment ([26979a8](https://github.com/Aguafrommars/TheIdServer/commit/26979a852a111c408bdbf734392c3061746703f0))
+* entities localized resources ([4ca9a10](https://github.com/Aguafrommars/TheIdServer/commit/4ca9a100b198c29fbab1f88c7bd34b3963b3a246))
+* export entities in json file ([dbb1262](https://github.com/Aguafrommars/TheIdServer/commit/dbb1262b7e09a9b1ae37291504307ad9bbf122ce))
+* external provider claim transfomation ([4600466](https://github.com/Aguafrommars/TheIdServer/commit/4600466a8d64be57b2c57c84c752ba2c101eba78)), closes [#85](https://github.com/Aguafrommars/TheIdServer/issues/85)
+* external providers configuration ([7546850](https://github.com/Aguafrommars/TheIdServer/commit/754685000502941612c37b713d57687d55cfb936))
+* get remote idp providers configuration ([0d0821a](https://github.com/Aguafrommars/TheIdServer/commit/0d0821ad5d0d7e6785a235655029a6cd60fb68d5))
+* http fallback stores ([532208a](https://github.com/Aguafrommars/TheIdServer/commit/532208a6af2abddf0f65b2b9e44ce5eafac6de8e))
+* identityserver4 stores ([4399e69](https://github.com/Aguafrommars/TheIdServer/commit/4399e69a423567abedec1dfe39977ffd2c68179f))
+* identiy resource configuration ([d4b2b54](https://github.com/Aguafrommars/TheIdServer/commit/d4b2b549b908fb37edac7fe0883070f3908d07f7))
+* import settings ([4770d7a](https://github.com/Aguafrommars/TheIdServer/commit/4770d7a1c34029085d00898ff42322bccbe28144))
+* Internationalization ([9af6eca](https://github.com/Aguafrommars/TheIdServer/commit/9af6eca368b79545be3850e89926afbe2103f6a1))
+* is4 config, fowarded headers config ([64e44c3](https://github.com/Aguafrommars/TheIdServer/commit/64e44c3aefa23a9d613df4b12dd3d06445b86d91))
+* is4 http stores ([38833f5](https://github.com/Aguafrommars/TheIdServer/commit/38833f566905ad34f50b684251e3b49f3b0cac5d))
+* k8s sample ([4e633ce](https://github.com/Aguafrommars/TheIdServer/commit/4e633ce5c2952227e49eef8affe129f56f2652f5)), closes [#124](https://github.com/Aguafrommars/TheIdServer/issues/124)
+* let's encrypt challenge ([4d7ef87](https://github.com/Aguafrommars/TheIdServer/commit/4d7ef8787099da8dcf3ca9508528741db38f5d93))
+* letsencrypt auto certificate ([1aee75d](https://github.com/Aguafrommars/TheIdServer/commit/1aee75da743bd1250b86572df5c08a6b18a1bd41))
+* localize authentication pages ([2bc9b0c](https://github.com/Aguafrommars/TheIdServer/commit/2bc9b0c12db57b99e1659bce21d97f145167186e))
+* manage users ([2a02c1d](https://github.com/Aguafrommars/TheIdServer/commit/2a02c1d9de66ca0ebe39f8cd43000d301574fcc6))
+* multi RDBMS migrations ([f32ceb0](https://github.com/Aguafrommars/TheIdServer/commit/f32ceb0995a8d9217b85fa030bfa483d64448e11))
+* multi type db config ([a8a0f59](https://github.com/Aguafrommars/TheIdServer/commit/a8a0f594a84e1308740a84fb46f41e284ebde3da))
+* non breaking same site cookies ([71207aa](https://github.com/Aguafrommars/TheIdServer/commit/71207aa7a856e4d19e56d5ac283514388717f94c))
+* odata style request ([3bcc68a](https://github.com/Aguafrommars/TheIdServer/commit/3bcc68a3b1e05a7857a666c967b9546499ca63ca))
+* openapi authorization ([fc545d1](https://github.com/Aguafrommars/TheIdServer/commit/fc545d14980adfb2ddb28cb2345aa82ede732c09))
+* plugable profile service ([9c26d5c](https://github.com/Aguafrommars/TheIdServer/commit/9c26d5cb8858b1b524da1052adeaae63d685aee4))
+* provider signalr client ([8cf5cd2](https://github.com/Aguafrommars/TheIdServer/commit/8cf5cd2845f7deedfddf1b033c246ab81c910c26))
+* proxing claims providers ([066668b](https://github.com/Aguafrommars/TheIdServer/commit/066668bbe254bbfd44bacd6ddbefc1f9d4c1fab9))
+* pwa ([dac7181](https://github.com/Aguafrommars/TheIdServer/commit/dac71813fe085c368099a78fc6925590ece075f9)), closes [#126](https://github.com/Aguafrommars/TheIdServer/issues/126)
+* secure provider hub ([0256316](https://github.com/Aguafrommars/TheIdServer/commit/0256316f0735526bce4ecb970e87b6e3dc3c20a9))
+* select resource from system ([5cac5ff](https://github.com/Aguafrommars/TheIdServer/commit/5cac5ff889ecc5482861ff495ea11d2dfaeb9401))
+* sortable lists ([4e3832c](https://github.com/Aguafrommars/TheIdServer/commit/4e3832c1cdb888cc822fac192edd7625162b71fb))
+* spa blazor sample ([5b9971e](https://github.com/Aguafrommars/TheIdServer/commit/5b9971e4f30fa43d239bfeb84cae3515a0e0d828))
+* support docker ([a388f96](https://github.com/Aguafrommars/TheIdServer/commit/a388f9669989b0aa99f3b732ef50d128e8a4f54e))
+* translation page ([75e0f27](https://github.com/Aguafrommars/TheIdServer/commit/75e0f2726ea4fc95fe898947de17f77f694adf86))
+* user management ([2fee786](https://github.com/Aguafrommars/TheIdServer/commit/2fee786b7586294f15f0589d67cc9b3895ffd936))
+* user management ([727640f](https://github.com/Aguafrommars/TheIdServer/commit/727640f4e03054e2a71a03243ea446ab13353a45))
+* user registration ([c942e67](https://github.com/Aguafrommars/TheIdServer/commit/c942e679e709d505f03f89a5f290ddb35a9c7893))
+* user tokens management ([7d0884d](https://github.com/Aguafrommars/TheIdServer/commit/7d0884d7e7ec626aea083511182f2cce2d36edf0))
+
+
+### Performance Improvements
+
+* improve admin store ([5ec5cf8](https://github.com/Aguafrommars/TheIdServer/commit/5ec5cf89db25c7ad6f1384647a21175cffafb2a7))
+* remove stupid state management code ([d681e88](https://github.com/Aguafrommars/TheIdServer/commit/d681e88d5900a086cd9bac3eb3ca0d00d910c01a))
+
+
+### Reverts
+
+* remove let's encrypt ([a393eba](https://github.com/Aguafrommars/TheIdServer/commit/a393ebae8d71f96174d6d6a6376e41e0be661402))
+* remove pwa ([f62cb1a](https://github.com/Aguafrommars/TheIdServer/commit/f62cb1a1aacbec65e515d717a4cfce8a0d6a9bda))
+* revert previous commit ([06b42e6](https://github.com/Aguafrommars/TheIdServer/commit/06b42e65516a2217993df4c39b4095f6938bee1e))
