@@ -2,11 +2,13 @@
 
 [OpenID/Connect](https://openid.net/connect/) server based on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver)
- [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=aguacongas_TheIdServer&metric=alert_status)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer) [![][Docker Cloud Build Status]][Docker url]
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
-[Docker Cloud Build Status]: https://img.shields.io/docker/cloud/build/aguacongas/aguacongastheidserver
-[Docker url]: https://hub.docker.com/repository/docker/aguacongas/aguacongastheidserver
+[![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver)
+ [![][Docker Cloud Build Status]][Docker url]
+
+[Docker Cloud Build Status]: https://img.shields.io/docker/cloud/build/aguacongas/theidserver?logo=docker
+[Docker url]: https://hub.docker.com/repository/docker/aguacongas/theidserver
 
 
 ## [Try it now at https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
