@@ -33,6 +33,8 @@
 	  <None Include="compilerconfig.json" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.0.1" />
+		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.0.2" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.0" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.8" />
@@ -43,13 +45,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="3.1.8" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.5.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.1.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
@@ -85,10 +86,5 @@
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	  </Content>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Update="theidserver.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 </Project>

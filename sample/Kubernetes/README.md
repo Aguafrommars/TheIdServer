@@ -78,7 +78,7 @@ Events:            <none>
 ```
 
 > If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.  
-From Windows, you can access to the WSL filesystem through *\\\\wsl$".
+From Windows, you can access to the WSL filesystem through *\\\\wsl$*.
 
 
 ### Database
