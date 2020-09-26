@@ -8,13 +8,29 @@
 [Docker Cloud Build Status]: https://img.shields.io/docker/cloud/build/aguacongas/aguacongastheidserver
 [Docker url]: https://hub.docker.com/repository/docker/aguacongas/aguacongastheidserver
 
-## Management application
 
-[*src/Aguacongas.TheIdServer.BlazorApp*](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp) contains the source code of the management application.
+## [Try it now](https://theidserver.herokuapp.com/)
 
-### Main features
+**login**: alice  
+**pwd**: Pass123$
 
-#### Application
+[An in-memory](https://theidserver.herokuapp.com/) database version is available on [Heroku](https://www.heroku.com/).
+
+## Give a Star! :star:
+
+If you like or are using this project to learn or start your solution, please give it a star. Thanks!
+
+Or if you're feeling really generous, we support sponsorships.
+
+Choose your favorite:
+
+* [issuehunts](https://issuehunt.io/r/Aguafrommars/TheIdServer/issues/170)
+* [github sponsor](https://github.com/sponsors/aguacongas),
+* [liberapay](https://liberapay.com/aguacongas)
+
+## Main features
+
+### Admin app
 ![home](https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/doc/assets/home.png)
 
 * [Users management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/USER.md)
@@ -27,7 +43,7 @@
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
 * [Export/import configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/EXPORT_IMPORT.md)
 
-#### Server
+### Server
 
 * [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
 * [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#using-the-api)
@@ -37,10 +53,6 @@
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 * [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-token-cleaner)
-
-### Preview 
-
-An in-memory database version is available on [Heroku](https://www.heroku.com/) at [https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/).
 
 ## Setup
 
