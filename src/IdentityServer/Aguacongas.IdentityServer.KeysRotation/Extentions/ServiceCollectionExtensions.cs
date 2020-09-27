@@ -31,13 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddTransient<IKeyRingStores>(p =>
                     {
                         var provider = p.GetRequiredService<ICacheableKeyRingProvider>();
-                        var keyRing = provider.GetCurrentKeyRing() as KeyRing;
-                        keyRing.GetAuthenticatedEncryptorByKeyId(keyRing.DefaultKeyId, out bool isRevoked);
-                        if (isRevoked)
-                        {
-                            keyRing = provider.RefreshCurrentKeyRing() as KeyRing;
-                        }
-                        return keyRing;
+                        return provider.GetCurrentKeyRing() as KeyRing;
                     })
                     .AddTransient(p => p.GetRequiredService<IKeyRingStores>() as IValidationKeysStore)
                     .AddTransient(p => p.GetRequiredService<IKeyRingStores>() as ISigningCredentialStore)

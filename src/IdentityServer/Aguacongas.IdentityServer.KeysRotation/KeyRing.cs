@@ -66,6 +66,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
         {
             var signingCredentialsList = _keyIdToKeyHolderMap.Values
+                .Where(h => h.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor && !isRevoked)
                 .Select(h => h.GetEncryptorInstance(out _) as RsaEncryptor)
                 .Where(e => e != null)
                 .Select((RsaEncryptor e) => e.GetSecurityKeyInfo(_configuration.RsaSigningAlgorithm));

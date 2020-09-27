@@ -9,8 +9,24 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Aguacongas.IdentityServer.Admin.Configuration
 {
-    internal static class SigningKeysLoader
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class SigningKeysLoader
     {
+        /// <summary>
+        /// Loads from file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="keyStorageFlags">The key storage flags.</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">
+        /// There was an error loading the certificate. The file '{path}' was not found.
+        /// or
+        /// There was an error loading the certificate. No password was provided.
+        /// or
+        /// </exception>
         public static X509Certificate2 LoadFromFile(string path, string password, X509KeyStorageFlags keyStorageFlags)
         {
             try
@@ -34,6 +50,16 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
             }
         }
 
+        /// <summary>
+        /// Loads from store cert.
+        /// </summary>
+        /// <param name="subject">The subject.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="storeLocation">The store location.</param>
+        /// <param name="currentTime">The current time.</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Couldn't find a valid certificate with " +
+        ///                         $"subject '{subject}' on the '{storeLocation}\\{storeName}'</exception>
         public static X509Certificate2 LoadFromStoreCert(
             string subject,
             string storeName,
@@ -71,6 +97,13 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
             }
         }
 
+        /// <summary>
+        /// Loads the development.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="createIfMissing">if set to <c>true</c> [create if missing].</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Couldn't find the file '{path}' and creation of a development key was not requested.</exception>
         public static RSA LoadDevelopment(string path, bool createIfMissing)
         {
             var fileExists = File.Exists(path);

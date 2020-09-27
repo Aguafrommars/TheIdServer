@@ -56,13 +56,15 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         internal DateTime AutoRefreshWindowEnd { get; set; }
 
+        public IKeyManager KeyManager => _keyManager;
+
         internal bool InAutoRefreshWindow() => DateTime.UtcNow < AutoRefreshWindowEnd;
 
         private CacheableKeyRing CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)
         {
             // Refresh the list of all keys
-            var cacheExpirationToken = _keyManager.GetCacheExpirationToken();
-            var allKeys = _keyManager.GetAllKeys();
+            var cacheExpirationToken = KeyManager.GetCacheExpirationToken();
+            var allKeys = KeyManager.GetAllKeys();
 
             // Fetch the current default key from the list of all keys
             var defaultKeyPolicy = _defaultKeyResolver.ResolveDefaultKeyPolicy(now, allKeys);
@@ -113,7 +115,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             {
                 // The case where there's no default key is the easiest scenario, since it
                 // means that we need to create a new key with immediate activation.
-                var newKey = _keyManager.CreateNewKey(activationDate: now, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
+                var newKey = KeyManager.CreateNewKey(activationDate: now, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
                 return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
             }
             else
@@ -121,7 +123,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 // If there is a default key, then the new key we generate should become active upon
                 // expiration of the default key. The new key lifetime is measured from the creation
                 // date (now), not the activation date.
-                var newKey = _keyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
+                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
                 return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
             }
         }
