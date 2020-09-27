@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using System;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    interface ICacheableKeyRingProvider
+    public interface ICacheableKeyRingProvider : IKeyRingProvider
     {
+
+        IKeyRing RefreshCurrentKeyRing();
         CacheableKeyRing GetCacheableKeyRing(DateTimeOffset now);
     }
 }

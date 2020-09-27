@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal sealed class KeyRingProvider : ICacheableKeyRingProvider, IKeyRingProvider
+    internal sealed class KeyRingProvider : ICacheableKeyRingProvider
     {
         private CacheableKeyRing _cacheableKeyRing;
         private readonly object _cacheableKeyRingLockObj = new object();
@@ -148,7 +148,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 expirationToken: cacheExpirationToken,
                 expirationTime: (defaultKey.ExpirationDate <= now) ? nextAutoRefreshTime : Min(defaultKey.ExpirationDate, nextAutoRefreshTime),
                 defaultKey: defaultKey,
-                allKeys: allKeys);
+                allKeys: allKeys,
+                configuration: _keyManagementOptions.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration);
         }
 
         public IKeyRing GetCurrentKeyRing()
@@ -280,6 +281,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
         {
             // the entry point allows one recursive call
             return CreateCacheableKeyRingCore(now, keyJustAdded: null);
+        }
+
+        IKeyRing ICacheableKeyRingProvider.RefreshCurrentKeyRing()
+        {
+            return RefreshCurrentKeyRing();
         }
     }
 }

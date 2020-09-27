@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+﻿using IdentityServer4.Models;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal sealed class KeyRing : IKeyRing
+    internal sealed class KeyRing : IKeyRingStores
     {
         private readonly KeyHolder _defaultKeyHolder;
+        private readonly RsaEncryptorConfiguration _configuration;
         private readonly Dictionary<Guid, KeyHolder> _keyIdToKeyHolderMap;
 
-        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys)
+        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys, RsaEncryptorConfiguration configuration)
         {
             _keyIdToKeyHolderMap = new Dictionary<Guid, KeyHolder>();
             foreach (IKey key in allKeys)
@@ -30,6 +34,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             DefaultKeyId = defaultKey.KeyId;
             _defaultKeyHolder = _keyIdToKeyHolderMap[DefaultKeyId];
+            _configuration = configuration;
         }
 
         public IAuthenticatedEncryptor DefaultAuthenticatedEncryptor
@@ -47,6 +52,24 @@ namespace Aguacongas.IdentityServer.KeysRotation
             isRevoked = false;
             _keyIdToKeyHolderMap.TryGetValue(keyId, out KeyHolder holder);
             return holder?.GetEncryptorInstance(out isRevoked);
+        }
+
+        public Task<SigningCredentials> GetSigningCredentialsAsync()
+        {
+            if (!(_defaultKeyHolder.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor encryptor))
+            {
+                throw new InvalidOperationException($"The default key is not an Rsa key. Revoked : {isRevoked}");
+            }
+            return Task.FromResult(encryptor.GetSigningCredentials(_configuration.RsaSigningAlgorithm));
+        }
+
+        public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
+        {
+            var signingCredentialsList = _keyIdToKeyHolderMap.Values
+                .Select(h => h.GetEncryptorInstance(out _) as RsaEncryptor)
+                .Where(e => e != null)
+                .Select((RsaEncryptor e) => e.GetSecurityKeyInfo(_configuration.RsaSigningAlgorithm));
+            return Task.FromResult(signingCredentialsList);
         }
 
         // used for providing lazy activation of the authenticated encryptor instance

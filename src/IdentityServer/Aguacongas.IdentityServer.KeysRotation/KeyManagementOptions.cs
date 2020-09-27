@@ -34,6 +34,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
             
         }
 
+        public TimeSpan KeyPropagationWindow { get; set; } = TimeSpan.FromDays(2);
+        public TimeSpan MaxServerClockSkew { get; set; } = TimeSpan.FromMinutes(5);
+
         /// <summary>
         /// Controls the auto-refresh period where the key ring provider will
         /// flush its collection of cached keys and reread the collection from
