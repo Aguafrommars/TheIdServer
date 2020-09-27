@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+﻿using Aguacongas.IdentityServer.Admin.Configuration;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
@@ -7,6 +8,7 @@ using Microsoft.Win32;
 using StackExchange.Redis;
 using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,6 +17,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IDataProtectionBuilder ConfigureDataProtection(this IDataProtectionBuilder builder, IConfiguration configuration)
         {
             var dataProtectionsOptions = configuration.Get<Aguacongas.TheIdServer.Models.DataProtectionOptions>();
+            if (dataProtectionsOptions == null)
+            {
+                return builder;
+            }
             switch (dataProtectionsOptions.StorageKind)
             {
                 case StorageKind.AzureStorage:
@@ -59,6 +65,12 @@ namespace Microsoft.Extensions.DependencyInjection
                         builder.ProtectKeysWithDpapiNG();
                         break;
                     case KeyProtectionKind.X509:
+                        if (!string.IsNullOrEmpty(protectOptions.X509CertificatePath))
+                        {
+                            var certificate = SigningKeysLoader.LoadFromFile(protectOptions.X509CertificatePath, protectOptions.X509CertificatePassword, X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
+                            builder.ProtectKeysWithCertificate(certificate);
+                            break;
+                        }
                         builder.ProtectKeysWithCertificate(protectOptions.X509CertificateThumbprint);
                         break;
                 }                
