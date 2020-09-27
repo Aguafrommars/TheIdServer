@@ -63,6 +63,8 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
+            services.AddDataProtection().ConfigureDataProtection(Configuration.GetSection(nameof(DataProtectionOptions)));
+
             var identityBuilder = services.AddClaimsProviders(Configuration)
                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
@@ -145,9 +147,8 @@ namespace Aguacongas.TheIdServer
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
-        }
+        }        
 
- 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
@@ -300,7 +301,7 @@ namespace Aguacongas.TheIdServer
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
@@ -310,7 +311,7 @@ namespace Aguacongas.TheIdServer
             var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
             if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));                
             }
         }
 
