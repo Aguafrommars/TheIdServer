@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    public class OperationalDbContext : DbContext, IDataProtectionKeyContext
+    public class OperationalDbContext : DbContext, IDataProtectionKeyContext, IKeyRotationContext
     {
         public OperationalDbContext(DbContextOptions<OperationalDbContext> options):base(options)
         {
@@ -28,6 +29,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public virtual DbSet<OneTimeToken> OneTimeTokens { get; set; }
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
+        public DbSet<DataProtectionKey> KeyRotationKeys { get; set; }
 
         public override int SaveChanges()
         {

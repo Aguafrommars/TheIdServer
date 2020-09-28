@@ -1,8 +1,10 @@
 using Aguacongas.IdentityServer.Admin.Configuration;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -25,10 +27,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         public async Task GetCurrentKeyRing_should_create_keys_and_cache()
         {
             var certificate = SigningKeysLoader.LoadFromFile("theidserver.pfx", "YourSecurePassword", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
-            var tempDirectory = Path.GetTempPath();
             var builder = new ServiceCollection()
+                .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
                 .AddKeysRotation()
-                .PersistKeysToFileSystem(new DirectoryInfo(tempDirectory))
+                .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
