@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             KeyPropagationWindow = other.KeyPropagationWindow;
             MaxServerClockSkew = other.MaxServerClockSkew;
-            KeyRingRefreshPeriod = other.MaxServerClockSkew;
+            KeyRingRefreshPeriod = other.KeyRingRefreshPeriod;
             AutoGenerateKeys = other.AutoGenerateKeys;
             NewKeyLifetime = other.NewKeyLifetime;
             XmlEncryptor = other.XmlEncryptor;

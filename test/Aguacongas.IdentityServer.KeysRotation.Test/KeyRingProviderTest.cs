@@ -683,7 +683,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             var mockEncryptorFactory = new Mock<IAuthenticatedEncryptorFactory>();
             mockEncryptorFactory.Setup(m => m.CreateEncryptorInstance(It.IsAny<IKey>())).Returns(new Mock<IAuthenticatedEncryptor>().Object);
-            var options = new KeyManagementOptions();
+            var options = new KeyManagementOptions
+            {
+                KeyPropagationWindow = TimeSpan.FromDays(2)
+            };
             options.AuthenticatedEncryptorFactories.Add(mockEncryptorFactory.Object);
 
             return new KeyRingProvider(
