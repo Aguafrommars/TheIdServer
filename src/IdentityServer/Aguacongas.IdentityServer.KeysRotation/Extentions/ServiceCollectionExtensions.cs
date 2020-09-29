@@ -2,6 +2,8 @@
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.DataProtection.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -25,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         var options = p.GetRequiredService<IOptions<KeyManagementOptions>>();
                         var keyManager = new AspNetCore.DataProtection.KeyManagement.XmlKeyManager(options, p.GetRequiredService<IActivator>());
-                        var resolver = p.GetRequiredService<AspNetCore.DataProtection.KeyManagement.Internal.IDefaultKeyResolver>();
+                        var resolver = new DefaultKeyResolver(options, p.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance);
                         return new KeyRingProvider(keyManager, options, resolver);
                     })
                     .AddTransient<IKeyRingStores>(p =>

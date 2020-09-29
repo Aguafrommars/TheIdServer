@@ -11,14 +11,14 @@
 [Docker url]: https://hub.docker.com/repository/docker/aguacongas/theidserver
 
 
-## [Try it now at https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
+### [Try it now at https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
 
 **login**: alice  
 **pwd**: Pass123$
 
 [An in-memory](https://theidserver.herokuapp.com/) database version is available on [Heroku](https://www.heroku.com/).
 
-## Give a Star! :star:
+### Give a Star! :star:
 
 If you like or are using this project to learn or start your solution, please give it a star. Thanks!
 

@@ -15,6 +15,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public int KeyIdSize { get; set; } = 128;
 
+        public TimeSpan KeyRetirement { get; set; } = TimeSpan.FromDays(180);
+
         public override IAuthenticatedEncryptorDescriptor CreateNewDescriptor()
         {
             return new RsaEncryptorDescriptor(this);

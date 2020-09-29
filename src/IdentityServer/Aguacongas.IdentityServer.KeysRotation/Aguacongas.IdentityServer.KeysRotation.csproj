@@ -9,6 +9,7 @@
     <PackageReference Include="IdentityModel" Version="4.4.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />

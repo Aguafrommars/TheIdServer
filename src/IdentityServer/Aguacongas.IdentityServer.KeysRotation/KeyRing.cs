@@ -66,7 +66,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
         {
             var signingCredentialsList = _keyIdToKeyHolderMap.Values
-                .Where(h => h.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor && !isRevoked)
+                .Where(h => h.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor && !isRevoked && h.Key.ExpirationDate <= DateTimeOffset.UtcNow + _configuration.KeyRetirement)
                 .Select(h => h.GetEncryptorInstance(out _) as RsaEncryptor)
                 .Where(e => e != null)
                 .Select((RsaEncryptor e) => e.GetSecurityKeyInfo(_configuration.RsaSigningAlgorithm));
@@ -85,6 +85,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 _key = key;
             }
 
+            public IKey Key => _key;
+
             internal IAuthenticatedEncryptor GetEncryptorInstance(out bool isRevoked)
             {
                 // simple double-check lock pattern
@@ -97,12 +99,12 @@ namespace Aguacongas.IdentityServer.KeysRotation
                         encryptor = Volatile.Read(ref _encryptor);
                         if (encryptor == null)
                         {
-                            encryptor = _key.CreateEncryptor();
+                            encryptor = Key.CreateEncryptor();
                             Volatile.Write(ref _encryptor, encryptor);
                         }
                     }
                 }
-                isRevoked = _key.IsRevoked;
+                isRevoked = Key.IsRevoked;
                 return encryptor;
             }
         }
