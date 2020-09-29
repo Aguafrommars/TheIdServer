@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+﻿using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
