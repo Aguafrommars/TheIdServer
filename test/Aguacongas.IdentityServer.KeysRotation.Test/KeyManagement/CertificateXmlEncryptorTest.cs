@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void Encrypt_retreive_cert_from_thumbrint()
         {
-            var cert = SigningKeysLoader.LoadFromFile("theidserver.pfx", "YourSecurePassword", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
+            var cert = SigningKeysLoader.LoadFromFile("TestCert1.pfx", "password", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
             var resolverMock = new Mock<Microsoft.AspNetCore.DataProtection.XmlEncryption.ICertificateResolver>();
             resolverMock.Setup(m => m.ResolveCertificate(It.IsAny<string>())).Returns(cert);
             var sut = new CertificateXmlEncryptor(cert.Thumbprint, resolverMock.Object, NullLoggerFactory.Instance);

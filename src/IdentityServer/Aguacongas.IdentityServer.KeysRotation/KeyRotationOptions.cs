@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// approximately 72 hours before expiration.
         /// </summary>
         /// <remarks>
-        /// The default value is currently fixed at 2 weeks.
+        /// The default value  2 weeks.
         /// </remarks>
         public TimeSpan KeyPropagationWindow { get; set; } = TimeSpan.FromDays(14);
 
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// if key activation and expiration times should be strictly honored by this server.
         /// </summary>
         /// <remarks>
-        /// The default value value is currently fixed at 5 minutes.
+        /// The default value  5 minutes.
         /// </remarks>
         public TimeSpan MaxServerClockSkew { get; set; } = TimeSpan.FromMinutes(5);
 
@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// backing storage.
         /// </summary>
         /// <remarks>
-        /// The default value is currently fixed at 24 hours.
+        /// The default value  24 hours.
         /// </remarks>
         public TimeSpan KeyRingRefreshPeriod { get; set; } = TimeSpan.FromHours(24);
     }

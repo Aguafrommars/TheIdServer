@@ -188,22 +188,5 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithCertificate(new KeyRotationBuilder(), thumbprint: null));
             Assert.Throws<InvalidOperationException>(() => KeyRotationBuilderExtensions.ProtectKeysWithCertificate(new KeyRotationBuilder(), thumbprint: "test"));
         }
-
-        [Fact]
-        public void ProtectKeysWithCertificate_should_add_CertificateXmlEncryptor()
-        {
-            using var store = new X509Store(StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-            var collection = store.Certificates.Find(X509FindType.FindByTimeValid, DateTime.Now, true);
-            
-            var builder = new ServiceCollection()
-                .AddKeysRotation()
-                .ProtectKeysWithCertificate(collection[0].Thumbprint);
-
-            var provider = builder.Services.BuildServiceProvider();
-            var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
-            Assert.IsType<CertificateXmlEncryptor>(options.Value.XmlEncryptor);
-        }
-
     }
 }

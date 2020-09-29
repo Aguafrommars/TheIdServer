@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
 {
     /// <summary>
-    /// Interface used to store instances of <see cref="DataProtectionKey"/> in a <see cref="DbContext"/>
+    /// Interface used to store instances of <see cref="KeyRotationKey"/> in a <see cref="DbContext"/>
     /// </summary>
     public interface IKeyRotationContext
     {
