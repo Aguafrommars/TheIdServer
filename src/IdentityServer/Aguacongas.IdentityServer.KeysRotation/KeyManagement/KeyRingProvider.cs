@@ -124,9 +124,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
             else
             {
                 // If there is a default key, then the new key we generate should become active upon
-                // expiration of the default key. The new key lifetime is measured from the creation
-                // date (now), not the activation date.
-                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
+                // expiration of the default key.
+                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime);
                 return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
             }
         }

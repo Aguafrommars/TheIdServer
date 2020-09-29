@@ -16,6 +16,23 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.8");
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore.KeyRotationKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("nclob");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("nclob");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KeyRotationKeys");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.AuthorizationCode", b =>
                 {
                     b.Property<string>("Id")

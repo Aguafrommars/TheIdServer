@@ -1,5 +1,5 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             using (var scope = provider.CreateScope())
             {
                 using var context = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
-                context.KeyRotationKeys.Add(new DataProtectionKey
+                context.KeyRotationKeys.Add(new KeyRotationKey
                 {
                     FriendlyName = "test",
                     Xml = "non desialiazable"

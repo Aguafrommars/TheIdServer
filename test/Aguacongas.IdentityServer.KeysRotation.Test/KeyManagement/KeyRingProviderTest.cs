@@ -79,7 +79,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
-                .AddKeysRotation(options =>
+                .AddKeysRotation()
+                .AddRsaEncryptorConfiguration(options =>
                 {
                     options.EncryptionAlgorithmType = typeof(RSACng);
                     options.RsaSigningAlgorithm = IdentityServer4.IdentityServerConstants.RsaSigningAlgorithm.PS512;
@@ -308,7 +309,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         }
 
         [Fact]
-        public void CreateCacheableKeyRing_GenerationRequired_WithDefaultKey_CreatesNewKeyWithDeferredActivationAndExpirationBasedOnCreationTime()
+        public void CreateCacheableKeyRing_GenerationRequired_WithDefaultKey_CreatesNewKeyWithDeferredActivationAndExpirationBasedOnActivationDate()
         {
             // Arrange
             var callSequence = new List<string>();
@@ -327,7 +328,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 getCacheExpirationTokenReturnValues: new[] { expirationCts1.Token, expirationCts2.Token },
                 getAllKeysReturnValues: new[] { allKeys1, allKeys2 },
                 createNewKeyCallbacks: new[] {
-                    Tuple.Create(key1.ExpirationDate, (DateTimeOffset)now + TimeSpan.FromDays(90), CreateKey())
+                    Tuple.Create(key1.ExpirationDate, key1.ExpirationDate + TimeSpan.FromDays(90), CreateKey())
                 },
                 resolveDefaultKeyPolicyReturnValues: new[]
                 {

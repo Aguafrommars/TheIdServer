@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
         {
             using var scope = _services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TContext>();
-            var newKey = new DataProtectionKey()
+            var newKey = new KeyRotationKey
             {
                 FriendlyName = friendlyName,
                 Xml = element.ToString(SaveOptions.DisableFormatting)

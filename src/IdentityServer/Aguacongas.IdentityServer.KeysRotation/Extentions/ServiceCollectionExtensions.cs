@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IKeyRotationBuilder AddKeysRotation(this IServiceCollection services, Action<RsaEncryptorConfiguration> configureRsa = null)
+        public static IKeyRotationBuilder AddKeysRotation(this IServiceCollection services, Action<KeyRotationOptions> configureKeysRotation = null)
         {
             services.AddDataProtection();
             services.TryAddEnumerable(
@@ -22,9 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 Services = services
                     .Configure<KeyRotationOptions>(options =>
                     {
-                        var configuration = new RsaEncryptorConfiguration();
-                        configureRsa?.Invoke(configuration);
-                        options.AuthenticatedEncryptorConfiguration = configuration;
+                        options.AuthenticatedEncryptorConfiguration = new RsaEncryptorConfiguration();
+                        configureKeysRotation?.Invoke(options);
                     })
                     .AddSingleton<ICacheableKeyRingProvider>(p =>
                     {
