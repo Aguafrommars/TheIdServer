@@ -4,21 +4,21 @@ using Microsoft.Extensions.Options;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal class KeyManagementOptionsSetup : IConfigureOptions<KeyManagementOptions>
+    internal class KeyRotationOptionsSetup : IConfigureOptions<KeyRotationOptions>
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public KeyManagementOptionsSetup()
+        public KeyRotationOptionsSetup()
             : this(NullLoggerFactory.Instance)
         {
         }
 
-        public KeyManagementOptionsSetup(ILoggerFactory loggerFactory)
+        public KeyRotationOptionsSetup(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
         }
 
-        public void Configure(KeyManagementOptions options)
+        public void Configure(KeyRotationOptions options)
         {
             options.AuthenticatedEncryptorFactories.Add(new RsaEncryptorFactory(_loggerFactory));
         }

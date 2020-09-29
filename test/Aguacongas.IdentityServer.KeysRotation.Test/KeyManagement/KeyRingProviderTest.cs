@@ -1,4 +1,3 @@
-using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -12,8 +11,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,9 +25,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [Fact]
         public async Task GetCurrentKeyRing_should_create_keys_and_cache()
         {
-            var certificate = SigningKeysLoader.LoadFromFile("theidserver.pfx", "YourSecurePassword", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
+            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
-                .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
+                .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
                 .AddKeysRotation()
                 .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
@@ -48,12 +48,12 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [Fact]
         public async Task GetCurrentKeyRing_should_not_return_revoked_keys()
         {
-            var certificate = SigningKeysLoader.LoadFromFile("theidserver.pfx", "YourSecurePassword", X509KeyStorageFlags.Exportable | X509KeyStorageFlags.UserKeySet);
-
-            var tempDirectory = Path.GetTempPath();
+            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
+                .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
                 .AddKeysRotation()
-                .PersistKeysToFileSystem(new DirectoryInfo(tempDirectory))
+                .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
@@ -70,6 +70,34 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var newKeys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
 
             Assert.DoesNotContain(keys, k => newKeys.Any(nk => nk.Key.KeyId == k.Key.KeyId));
+        }
+
+        [Fact]
+        public async Task GetCurrentKeyRing_should_create_keys_from_derived_RSA_algorythm()
+        {
+            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var dbName = Guid.NewGuid().ToString();
+            var builder = new ServiceCollection()
+                .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
+                .AddKeysRotation(options =>
+                {
+                    options.EncryptionAlgorithmType = typeof(RSACng);
+                    options.RsaSigningAlgorithm = IdentityServer4.IdentityServerConstants.RsaSigningAlgorithm.PS512;
+                    options.KeyIdSize = 256;
+                })
+                .PersistKeysToDbContext<OperationalDbContext>()
+                .ProtectKeysWithCertificate(certificate);
+
+            var provider = builder.Services.BuildServiceProvider();
+            var sut = provider.GetRequiredService<IKeyRingStores>();
+
+            var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+            Assert.NotNull(cred);
+
+            sut = provider.GetRequiredService<IKeyRingStores>();
+            var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+
+            Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
         }
 
         [Fact]
@@ -270,7 +298,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                             ShouldGenerateNewKey = true
                         })
                 },
-                keyManagementOptions: new KeyManagementOptions() { AutoGenerateKeys = false });
+                keyManagementOptions: new KeyRotationOptions() { AutoGenerateKeys = false });
 
             // Act
             Assert.Throws<InvalidOperationException>(() => keyRingProvider.GetCacheableKeyRing(now));
@@ -353,7 +381,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                             ShouldGenerateNewKey = true
                         })
                 },
-                keyManagementOptions: new KeyManagementOptions() { AutoGenerateKeys = false });
+                keyManagementOptions: new KeyRotationOptions() { AutoGenerateKeys = false });
 
             // Act
             var cacheableKeyRing = keyRingProvider.GetCacheableKeyRing(now);
@@ -391,7 +419,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                             ShouldGenerateNewKey = true
                         })
                 },
-                keyManagementOptions: new KeyManagementOptions() { AutoGenerateKeys = false });
+                keyManagementOptions: new KeyRotationOptions() { AutoGenerateKeys = false });
 
             // Act
             var cacheableKeyRing = keyRingProvider.GetCacheableKeyRing(now);
@@ -629,7 +657,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             IEnumerable<IReadOnlyCollection<IKey>> getAllKeysReturnValues,
             IEnumerable<Tuple<DateTimeOffset, DateTimeOffset, IKey>> createNewKeyCallbacks,
             IEnumerable<Tuple<DateTimeOffset, IEnumerable<IKey>, DefaultKeyResolution>> resolveDefaultKeyPolicyReturnValues,
-            KeyManagementOptions keyManagementOptions = null)
+            KeyRotationOptions keyManagementOptions = null)
         {
             var getCacheExpirationTokenReturnValuesEnumerator = getCacheExpirationTokenReturnValues.GetEnumerator();
             var mockKeyManager = new Mock<IKeyManager>(MockBehavior.Strict);
@@ -683,7 +711,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             var mockEncryptorFactory = new Mock<IAuthenticatedEncryptorFactory>();
             mockEncryptorFactory.Setup(m => m.CreateEncryptorInstance(It.IsAny<IKey>())).Returns(new Mock<IAuthenticatedEncryptor>().Object);
-            var options = new KeyManagementOptions
+            var options = new KeyRotationOptions
             {
                 KeyPropagationWindow = TimeSpan.FromDays(2)
             };
@@ -699,11 +727,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             };
         }
 
-        private static ICacheableKeyRingProvider CreateKeyRingProvider(IKeyManager keyManager, IDefaultKeyResolver defaultKeyResolver, KeyManagementOptions keyManagementOptions = null)
+        private static ICacheableKeyRingProvider CreateKeyRingProvider(IKeyManager keyManager, IDefaultKeyResolver defaultKeyResolver, KeyRotationOptions keyManagementOptions = null)
         {
             var mockEncryptorFactory = new Mock<IAuthenticatedEncryptorFactory>();
             mockEncryptorFactory.Setup(m => m.CreateEncryptorInstance(It.IsAny<IKey>())).Returns(new Mock<IAuthenticatedEncryptor>().Object);
-            keyManagementOptions = keyManagementOptions ?? new KeyManagementOptions();
+            keyManagementOptions = keyManagementOptions ?? new KeyRotationOptions();
             keyManagementOptions.AuthenticatedEncryptorFactories.Add(mockEncryptorFactory.Object);
 
             return new KeyRingProvider(

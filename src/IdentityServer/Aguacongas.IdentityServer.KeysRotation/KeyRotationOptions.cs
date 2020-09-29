@@ -5,19 +5,19 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// <summary>
     /// Options that control how an <see cref="Microsoft.AspNetCore.DataProtection.KeyManagement.IKeyManager"/> should behave.
     /// </summary>
-    public class KeyManagementOptions : Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions
+    public class KeyRotationOptions : Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyManagementOptions"/> class.
+        /// Initializes a new instance of the <see cref="KeyRotationOptions"/> class.
         /// </summary>
-        public KeyManagementOptions():base()
+        public KeyRotationOptions():base()
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyManagementOptions"/> class.
+        /// Initializes a new instance of the <see cref="KeyRotationOptions"/> class.
         /// </summary>
         /// <param name="other">The other.</param>
-        internal KeyManagementOptions(KeyManagementOptions other)
+        internal KeyRotationOptions(KeyRotationOptions other)
         {
             if (other == null)
             {

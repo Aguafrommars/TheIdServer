@@ -1,4 +1,6 @@
 ﻿using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
+using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Microsoft.AspNetCore.DataProtection.AzureStorage;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
@@ -176,10 +178,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlRepository = new EntityFrameworkCoreXmlRepository<TContext>(services, loggerFactory);
                 });
@@ -206,10 +208,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(directory));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlRepository = new FileSystemXmlRepository(directory, loggerFactory);
                 });
@@ -217,7 +219,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        private const string DataProtectionKeysName = "DataProtection-Keys";
+        private const string KeyRotationKeysName = "KeyRotation-Keys";
 
         /// <summary>
         /// Configures the key rotation system to persist keys to specified key in Redis database
@@ -247,7 +249,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder PersistKeysToStackExchangeRedis(this IKeyRotationBuilder builder, IConnectionMultiplexer connectionMultiplexer)
         {
-            return PersistKeysToStackExchangeRedis(builder, connectionMultiplexer, DataProtectionKeysName);
+            return PersistKeysToStackExchangeRedis(builder, connectionMultiplexer, KeyRotationKeysName);
         }
         /// <summary>
         /// Configures the key rotation system to persist keys to the specified key in Redis database
@@ -287,10 +289,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(certificate));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlEncryptor = new CertificateXmlEncryptor(certificate, loggerFactory);
                 });
@@ -328,11 +330,11 @@ namespace Microsoft.Extensions.DependencyInjection
             // if it doesn't already exist.
             builder.Services.TryAddSingleton<AspNetCore.DataProtection.XmlEncryption.ICertificateResolver, AspNetCore.DataProtection.XmlEncryption.CertificateResolver>();
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
                 var certificateResolver = services.GetRequiredService<AspNetCore.DataProtection.XmlEncryption.ICertificateResolver>();
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlEncryptor = new CertificateXmlEncryptor(thumbprint, certificateResolver, loggerFactory);
                 });
@@ -344,7 +346,7 @@ namespace Microsoft.Extensions.DependencyInjection
         // important: the Func passed into this method must return a new instance with each call
         private static IKeyRotationBuilder PersistKeystoAzureBlobStorageInternal(IKeyRotationBuilder builder, Func<CloudBlockBlob> blobRefFactory)
         {
-            builder.Services.Configure<KeyManagementOptions>(options =>
+            builder.Services.Configure<KeyRotationOptions>(options =>
             {
                 options.XmlRepository = new AzureBlobXmlRepository(blobRefFactory);
             });
@@ -353,7 +355,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IKeyRotationBuilder PersistKeysToStackExchangeRedisInternal(IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
         {
-            builder.Services.Configure<KeyManagementOptions>(options =>
+            builder.Services.Configure<KeyRotationOptions>(options =>
             {
                 options.XmlRepository = new RedisXmlRepository(databaseFactory, key);
             });

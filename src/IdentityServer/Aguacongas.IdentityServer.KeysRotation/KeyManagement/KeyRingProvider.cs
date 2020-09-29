@@ -1,6 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/KeyRingProvider.cs
+// but adapted for our needs
+
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Logging;
@@ -19,13 +22,13 @@ namespace Aguacongas.IdentityServer.KeysRotation
         private CacheableKeyRing _cacheableKeyRing;
         private readonly object _cacheableKeyRingLockObj = new object();
         private readonly IDefaultKeyResolver _defaultKeyResolver;
-        private readonly KeyManagementOptions _keyManagementOptions;
+        private readonly KeyRotationOptions _keyManagementOptions;
         private readonly IKeyManager _keyManager;
         private readonly ILogger _logger;
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyManagementOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions,
             IDefaultKeyResolver defaultKeyResolver)
             : this(
                   keyManager,
@@ -37,11 +40,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyManagementOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions,
             IDefaultKeyResolver defaultKeyResolver,
             ILoggerFactory loggerFactory)
         {
-            _keyManagementOptions = new KeyManagementOptions(keyManagementOptions.Value); // clone so new instance is immutable
+            _keyManagementOptions = new KeyRotationOptions(keyManagementOptions.Value); // clone so new instance is immutable
             _keyManager = keyManager;
             CacheableKeyRingProvider = this;
             _defaultKeyResolver = defaultKeyResolver;
