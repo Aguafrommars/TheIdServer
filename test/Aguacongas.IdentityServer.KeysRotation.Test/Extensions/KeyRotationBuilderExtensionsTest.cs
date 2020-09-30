@@ -1,6 +1,5 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
-using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Microsoft.AspNetCore.DataProtection.AzureStorage;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.Azure.Storage;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
-using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions

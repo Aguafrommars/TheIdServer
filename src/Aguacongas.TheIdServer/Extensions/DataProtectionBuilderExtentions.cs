@@ -57,17 +57,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         builder.ProtectKeysWithDpapi(protectOptions.WindowsDPAPILocalMachine);
                         break;
                     case KeyProtectionKind.WindowsDpApiNg:
-                        if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgCerticate))
-                        {
-                            builder.ProtectKeysWithDpapiNG($"CERTIFICATE=HashId:{protectOptions.WindowsDpApiNgCerticate}", flags: DpapiNGProtectionDescriptorFlags.None);
-                            break;
-                        }
-                        if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgSid))
-                        {
-                            builder.ProtectKeysWithDpapiNG($"SID={protectOptions.WindowsDpApiNgSid}", flags: DpapiNGProtectionDescriptorFlags.None);
-                            break;
-                        }
-                        builder.ProtectKeysWithDpapiNG();
+                        ConfigureWindowsDpApiNg(builder, protectOptions);
                         break;
                     case KeyProtectionKind.X509:
                         if (!string.IsNullOrEmpty(protectOptions.X509CertificatePath))
@@ -82,6 +72,21 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return builder;
+        }
+
+        private static void ConfigureWindowsDpApiNg(IDataProtectionBuilder builder, KeyProtectionOptions protectOptions)
+        {
+            if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgCerticate))
+            {
+                builder.ProtectKeysWithDpapiNG($"CERTIFICATE=HashId:{protectOptions.WindowsDpApiNgCerticate}", flags: DpapiNGProtectionDescriptorFlags.None);
+                return;
+            }
+            if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgSid))
+            {
+                builder.ProtectKeysWithDpapiNG($"SID={protectOptions.WindowsDpApiNgSid}", flags: DpapiNGProtectionDescriptorFlags.None);
+                return;
+            }
+            builder.ProtectKeysWithDpapiNG();
         }
     }
 }

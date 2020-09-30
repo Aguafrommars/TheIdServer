@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
 {
-    internal interface IKeyVaultWrappingClient
+    public interface IKeyVaultWrappingClient
     {
         Task<KeyOperationResult> UnwrapKeyAsync(string keyIdentifier, string algorithm, byte[] cipherText);
         Task<KeyOperationResult> WrapKeyAsync(string keyIdentifier, string algorithm, byte[] cipherText);

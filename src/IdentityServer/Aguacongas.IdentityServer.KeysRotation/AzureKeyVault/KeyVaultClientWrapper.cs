@@ -7,7 +7,7 @@ using Microsoft.Azure.KeyVault.Models;
 
 namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
 {
-    internal class KeyVaultClientWrapper : IKeyVaultWrappingClient
+    public class KeyVaultClientWrapper : IKeyVaultWrappingClient
     {
         private readonly KeyVaultClient _client;
 

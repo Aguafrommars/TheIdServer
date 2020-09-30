@@ -32,21 +32,17 @@ namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
 
             var encryptedValue = Convert.FromBase64String((string)encryptedElement.Element("value"));
 
-            var result = await _client.UnwrapKeyAsync(kid, AzureKeyVaultXmlEncryptor.DefaultKeyEncryption, symmetricKey);
+            var result = await _client.UnwrapKeyAsync(kid, AzureKeyVaultXmlEncryptor.DefaultKeyEncryption, symmetricKey).ConfigureAwait(false);
 
             byte[] decryptedValue;
             using (var symmetricAlgorithm = AzureKeyVaultXmlEncryptor.DefaultSymmetricAlgorithmFactory())
             {
-                using (var decryptor = symmetricAlgorithm.CreateDecryptor(result.Result, symmetricIV))
-                {
-                    decryptedValue = decryptor.TransformFinalBlock(encryptedValue, 0, encryptedValue.Length);
-                }
+                using var decryptor = symmetricAlgorithm.CreateDecryptor(result.Result, symmetricIV);
+                decryptedValue = decryptor.TransformFinalBlock(encryptedValue, 0, encryptedValue.Length);
             }
 
-            using (var memoryStream = new MemoryStream(decryptedValue))
-            {
-                return XElement.Load(memoryStream);
-            }
+            using var memoryStream = new MemoryStream(decryptedValue);
+            return XElement.Load(memoryStream);
         }
     }
 }
