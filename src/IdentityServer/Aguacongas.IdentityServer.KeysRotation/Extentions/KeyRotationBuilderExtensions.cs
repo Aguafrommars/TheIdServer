@@ -47,9 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
-                    var configuration = options.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration ?? new RsaEncryptorConfiguration();
-                    setupAction(configuration);
-                    options.AuthenticatedEncryptorConfiguration = configuration;
+                    setupAction(options.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration);
                 });
             });
             return builder;
@@ -396,7 +394,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(certificate));
             }
 
-            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientCertificate(authority, resource, clientId, certificate);
+            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientCertificateAsync(authority, resource, clientId, certificate);
 
             return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
         }
@@ -420,7 +418,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
-            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientSecret(authority, resource, clientId, clientSecret);
+            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientSecretAsync(authority, resource, clientId, clientSecret);
 
             return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
         }
@@ -457,18 +455,18 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder;
         }
-        private static async Task<string> GetTokenFromClientCertificate(string authority, string resource, string clientId, X509Certificate2 certificate)
+        private static async Task<string> GetTokenFromClientCertificateAsync(string authority, string resource, string clientId, X509Certificate2 certificate)
         {
             var authContext = new AuthenticationContext(authority);
-            var result = await authContext.AcquireTokenAsync(resource, new ClientAssertionCertificate(clientId, certificate));
+            var result = await authContext.AcquireTokenAsync(resource, new ClientAssertionCertificate(clientId, certificate)).ConfigureAwait(false);
             return result.AccessToken;
         }
 
-        private static async Task<string> GetTokenFromClientSecret(string authority, string resource, string clientId, string clientSecret)
+        private static async Task<string> GetTokenFromClientSecretAsync(string authority, string resource, string clientId, string clientSecret)
         {
             var authContext = new AuthenticationContext(authority);
             var clientCred = new ClientCredential(clientId, clientSecret);
-            var result = await authContext.AcquireTokenAsync(resource, clientCred);
+            var result = await authContext.AcquireTokenAsync(resource, clientCred).ConfigureAwait(false);
             return result.AccessToken;
         }
 

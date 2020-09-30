@@ -1,7 +1,10 @@
 ﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection.AzureStorage;
+using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
+using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
 using Microsoft.Azure.Storage.Blob;
@@ -9,12 +12,39 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
 {
     public class KeyRotationBuilderExtensionsTest
     {
+        [Fact]
+        public void AddRsaEncryptorConfiguration_should_throw_ArgumentNulException_on_builder_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(null, null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(new KeyRotationBuilder(), null));
+        }
+
+        [Fact]
+        public void AddRsaEncryptorConfiguration_should_configure_RsaEncryptorConfiguration()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddKeysRotation()
+                .AddRsaEncryptorConfiguration(options =>
+                {
+                    options.RsaSigningAlgorithm = IdentityServer4.IdentityServerConstants.RsaSigningAlgorithm.PS256;
+                });
+
+            var services = serviceCollection.BuildServiceProvider();
+            var options = services.GetRequiredService<IOptions<KeyRotationOptions>>();
+            Assert.IsType<RsaEncryptorConfiguration>(options.Value.AuthenticatedEncryptorConfiguration);
+            var configuration = options.Value.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration;
+            Assert.Equal(IdentityServer4.IdentityServerConstants.RsaSigningAlgorithm.PS256, configuration.RsaSigningAlgorithm);
+        }
+
         [Fact]
         public void PersistKeysToAzureBlobStorage_should_throw_ArgumentNulException_on_builder_null()
         {
@@ -129,6 +159,19 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         }
 
         [Fact]
+        public void PersistKeysToFileSystem_should_add_FileSystemXmlRepository()
+        {
+            var builder = new ServiceCollection()
+                .AddKeysRotation()
+                .PersistKeysToFileSystem(new DirectoryInfo(Path.GetTempPath()));
+            var provider = builder.Services.BuildServiceProvider();
+            var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
+
+            Assert.NotNull(options.Value.XmlRepository);
+            Assert.IsType<FileSystemXmlRepository>(options.Value.XmlRepository);
+        }
+
+        [Fact]
         public void PersistKeysToStackExchangeRedis_should_throw_ArgumentNulException_on_builder_null()
         {
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToStackExchangeRedis(null, null));
@@ -185,6 +228,44 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithCertificate(new KeyRotationBuilder(), certificate: null));
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithCertificate(new KeyRotationBuilder(), thumbprint: null));
             Assert.Throws<InvalidOperationException>(() => KeyRotationBuilderExtensions.ProtectKeysWithCertificate(new KeyRotationBuilder(), thumbprint: "test"));
+        }
+
+        [Fact]
+        public void ProtectKeysWithAzureKeyVault_should_throw_ArgumentNulException_on_builder_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null));
+            Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), new KeyVaultClient((a, r, s) => Task.FromResult("test")), null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null, certificate: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null, certificate: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null, clientSecret: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null, clientSecret: null));            
+        }
+
+        [Fact]
+        public void ProtectKeysWithAzureKeyVault_should_add_AzureKeyVaultXmlEncryptor_with_cert()
+        {
+            var builder = new ServiceCollection()
+                .AddKeysRotation()
+                .ProtectKeysWithAzureKeyVault("test", "test", new X509Certificate2());
+            var provider = builder.Services.BuildServiceProvider();
+            var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
+
+            Assert.NotNull(options.Value.XmlEncryptor);
+            Assert.IsType<AzureKeyVaultXmlEncryptor>(options.Value.XmlEncryptor);
+        }
+
+        [Fact]
+        public void ProtectKeysWithAzureKeyVault_should_add_AzureKeyVaultXmlEncryptor_with_secret()
+        {
+            var builder = new ServiceCollection()
+                .AddKeysRotation()
+                .ProtectKeysWithAzureKeyVault("test", "test", "test");
+            var provider = builder.Services.BuildServiceProvider();
+            var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
+
+            Assert.NotNull(options.Value.XmlEncryptor);
+            Assert.IsType<AzureKeyVaultXmlEncryptor>(options.Value.XmlEncryptor);
         }
     }
 }
