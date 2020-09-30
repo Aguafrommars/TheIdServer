@@ -1,3 +1,14 @@
+## [1.0.2](https://github.com/Aguafrommars/TheIdServer/compare/1.0.1...1.0.2) (2020-09-30)
+
+
+### Bug Fixes
+
+* external login ([d407da1](https://github.com/Aguafrommars/TheIdServer/commit/d407da11532145b2e10270c5526a0763b4ac9acc)), closes [#228](https://github.com/Aguafrommars/TheIdServer/issues/228) [#229](https://github.com/Aguafrommars/TheIdServer/issues/229)
+* update packages ([ff271e4](https://github.com/Aguafrommars/TheIdServer/commit/ff271e404cf6a820f7a12433486216e9422c794d))
+* update packages ([106a6cc](https://github.com/Aguafrommars/TheIdServer/commit/106a6cc64378cdeea34a38c680405da46cde5c75))
+* update packages ([a7d53ba](https://github.com/Aguafrommars/TheIdServer/commit/a7d53babe6c592fdf2e0e9ba7d4a39407dfcd5a0))
+* update packages ([dbd4438](https://github.com/Aguafrommars/TheIdServer/commit/dbd4438579e36157b31d9784ff88b01001367631))
+
 ## [1.0.1](https://github.com/Aguafrommars/TheIdServer/compare/1.0.0...1.0.1) (2020-09-19)
 
 

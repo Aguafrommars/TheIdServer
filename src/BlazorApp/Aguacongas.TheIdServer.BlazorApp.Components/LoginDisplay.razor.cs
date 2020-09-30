@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         private void SetPathsCulture()
         {
             var settings = _options.Value;
-            settings.RemoteRegisterPath = SetCultureInPath(settings.RemoteProfilePath);
+            settings.RemoteRegisterPath = SetCultureInPath(settings.RemoteRegisterPath);
             settings.RemoteProfilePath = SetCultureInPath(settings.RemoteProfilePath);
             var oidcSettings = _oidcOptions.Value;
             oidcSettings.Authority = SetCultureInPath(oidcSettings.Authority);

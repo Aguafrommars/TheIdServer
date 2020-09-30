@@ -128,12 +128,12 @@ namespace Microsoft.Extensions.DependencyInjection
                             .AddDynamic<TSchemeDefinition>();
 
             dynamicBuilder.AddGoogle(options =>
-            {
-                options.Events = new OAuthEvents
                 {
-                    OnTicketReceived = OnTicketReceived<TUser>()
-                };
-            })
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
                 .AddFacebook(options =>
                 {
                     options.Events = new OAuthEvents
