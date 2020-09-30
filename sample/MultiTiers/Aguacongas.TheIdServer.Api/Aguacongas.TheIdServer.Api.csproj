@@ -14,8 +14,8 @@
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Api.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.0" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="1.0.0" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.1" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="1.0.1" />
 
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
