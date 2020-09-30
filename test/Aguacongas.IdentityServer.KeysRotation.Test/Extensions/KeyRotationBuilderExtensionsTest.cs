@@ -236,8 +236,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null));
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null));
             Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), new KeyVaultClient((a, r, s) => Task.FromResult("test")), null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null, certificate: null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null, certificate: null));
+            Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null, certificate: null));
+            Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null, certificate: null));
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(null, null, null, clientSecret: null));
             Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.ProtectKeysWithAzureKeyVault(new KeyRotationBuilder(), null, null, clientSecret: null));            
         }
