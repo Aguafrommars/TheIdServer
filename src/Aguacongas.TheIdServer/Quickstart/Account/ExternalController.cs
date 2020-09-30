@@ -133,7 +133,7 @@ namespace IdentityServer4.Quickstart.UI
             var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id;
 
             // issue authentication cookie for user
-            var isuser = new IdentityServerUser(providerUserId)
+            var isuser = new IdentityServerUser(user.Id)
             {
                 DisplayName = user.UserName,
                 IdentityProvider = provider,
