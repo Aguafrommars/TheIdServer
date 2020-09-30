@@ -3,6 +3,7 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
@@ -75,8 +76,9 @@ namespace Aguacongas.TheIdServer
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddSigningCredentials()
                 .AddDynamicClientRegistration();
+
+            ConfigureSigningCredentials(identityBuilder);
 
             identityBuilder.AddJwtRequestUriHttpClient();
 
@@ -147,7 +149,19 @@ namespace Aguacongas.TheIdServer
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
-        }        
+        }
+
+        private void ConfigureSigningCredentials(IIdentityServerBuilder identityBuilder)
+        {
+            if (Configuration.GetSection("IdentityServer:Key")?.Get<KeyDefinition>()?.Type == KeyKinds.KeysRotation)
+            {
+                identityBuilder.ConfigureKeysRotation(Configuration.GetSection("IdentityServer:Key"));
+            }
+            else
+            {
+                identityBuilder.AddSigningCredentials();
+            }
+        }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)

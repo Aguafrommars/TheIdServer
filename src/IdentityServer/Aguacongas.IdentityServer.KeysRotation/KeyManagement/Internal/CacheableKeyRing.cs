@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/Internal/CacheableKeyRing.cs
+// but adapted for our needs
+
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using System;
 using System.Collections.Generic;
@@ -6,6 +12,9 @@ using System.Threading;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
+    /// <summary>
+    /// Wraps both a keyring and its expiration policy.
+    /// </summary>
     public sealed class CacheableKeyRing
     {
         private readonly CancellationToken _expirationToken;

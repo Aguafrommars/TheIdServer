@@ -1,10 +1,9 @@
 ﻿using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.KeysRotation.Extentions;
 using Aguacongas.TheIdServer.Models;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Win32;
 using StackExchange.Redis;
 using System;
 using System.IO;
@@ -12,15 +11,13 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DataProtectionBuilderExtentions
-    {       
-        public static IDataProtectionBuilder ConfigureDataProtection(this IDataProtectionBuilder builder, IConfiguration configuration)
+    public static class IdentityServerBuilderExtensions
+    {
+        public static IIdentityServerBuilder ConfigureKeysRotation(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
         {
-            var dataProtectionsOptions = configuration.Get<Aguacongas.TheIdServer.Models.DataProtectionOptions>();
-            if (dataProtectionsOptions == null)
-            {
-                return builder;
-            }
+            var builder = identityServerBuilder.AddKeysRotation(options => configuration.GetSection(nameof(KeyRotationOptions))?.Bind(options))
+                .AddRsaEncryptorConfiguration(options => configuration.GetSection(nameof(RsaEncryptorConfiguration))?.Bind(options));
+            var dataProtectionsOptions = configuration.Get<DataProtectionOptions>();
             switch (dataProtectionsOptions.StorageKind)
             {
                 case StorageKind.AzureStorage:
@@ -41,9 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                     builder.PersistKeysToStackExchangeRedis(redis, dataProtectionsOptions.RedisKey);
                     break;
-                case StorageKind.Registry:
-                    builder.PersistKeysToRegistry(Registry.CurrentUser.OpenSubKey(dataProtectionsOptions.StorageConnectionString));
-                    break;
             }
             var protectOptions = dataProtectionsOptions.KeyProtectionOptions;
             if (protectOptions != null)
@@ -52,12 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     case KeyProtectionKind.AzureKeyVault:
                         builder.ProtectKeysWithAzureKeyVault(protectOptions.AzureKeyVaultKeyId, protectOptions.AzureKeyVaultClientId, protectOptions.AzureKeyVaultClientSecret);
-                        break;
-                    case KeyProtectionKind.WindowsDpApi:
-                        builder.ProtectKeysWithDpapi(protectOptions.WindowsDPAPILocalMachine);
-                        break;
-                    case KeyProtectionKind.WindowsDpApiNg:
-                        ConfigureWindowsDpApiNg(builder, protectOptions);
                         break;
                     case KeyProtectionKind.X509:
                         if (!string.IsNullOrEmpty(protectOptions.X509CertificatePath))
@@ -68,25 +56,9 @@ namespace Microsoft.Extensions.DependencyInjection
                         }
                         builder.ProtectKeysWithCertificate(protectOptions.X509CertificateThumbprint);
                         break;
-                }                
+                }
             }
-
-            return builder;
-        }
-
-        private static void ConfigureWindowsDpApiNg(IDataProtectionBuilder builder, KeyProtectionOptions protectOptions)
-        {
-            if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgCerticate))
-            {
-                builder.ProtectKeysWithDpapiNG($"CERTIFICATE=HashId:{protectOptions.WindowsDpApiNgCerticate}", flags: DpapiNGProtectionDescriptorFlags.None);
-                return;
-            }
-            if (!string.IsNullOrEmpty(protectOptions.WindowsDpApiNgSid))
-            {
-                builder.ProtectKeysWithDpapiNG($"SID={protectOptions.WindowsDpApiNgSid}", flags: DpapiNGProtectionDescriptorFlags.None);
-                return;
-            }
-            builder.ProtectKeysWithDpapiNG();
+            return identityServerBuilder;
         }
     }
 }

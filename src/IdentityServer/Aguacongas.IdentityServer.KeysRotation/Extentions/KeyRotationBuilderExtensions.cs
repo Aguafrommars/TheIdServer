@@ -1,7 +1,11 @@
 ﻿using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
+using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
+using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Microsoft.AspNetCore.DataProtection.AzureStorage;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
+using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
 using Microsoft.Azure.Storage.Blob;
@@ -10,17 +14,47 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class KeyRotationBuilderExtensions
     {
         /// <summary>
-        /// Configures the data protection system to persist keys to the specified path
+        /// Configures the key management options for the key rotation system.
+        /// </summary>
+        /// <param name="builder">The <see cref="IKeyRotationBuilder"/>.</param>
+        /// <param name="setupAction">An <see cref="Action{RsaEncryptorConfiguration}"/> to configure the provided <see cref="RsaEncryptorConfiguration"/>.</param>
+        /// <returns>A reference to the <see cref="IKeyRotationBuilder" /> after this operation has completed.</returns>
+        public static IKeyRotationBuilder AddRsaEncryptorConfiguration(this IKeyRotationBuilder builder, Action<RsaEncryptorConfiguration> setupAction)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (setupAction == null)
+            {
+                throw new ArgumentNullException(nameof(setupAction));
+            }
+
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+            {
+                return new ConfigureOptions<KeyRotationOptions>(options =>
+                {
+                    setupAction(options.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration);
+                });
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
@@ -62,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures the data protection system to persist keys to the specified path
+        /// Configures the key rotation system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
@@ -102,7 +136,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures the data protection system to persist keys to the specified path
+        /// Configures the key rotation system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
@@ -135,7 +169,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures the data protection system to persist keys to the specified path
+        /// Configures the key rotation system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
@@ -176,10 +210,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlRepository = new EntityFrameworkCoreXmlRepository<TContext>(services, loggerFactory);
                 });
@@ -206,10 +240,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(directory));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlRepository = new FileSystemXmlRepository(directory, loggerFactory);
                 });
@@ -217,7 +251,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        private const string DataProtectionKeysName = "DataProtection-Keys";
+        private const string KeyRotationKeysName = "KeyRotation-Keys";
 
         /// <summary>
         /// Configures the key rotation system to persist keys to specified key in Redis database
@@ -247,7 +281,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder PersistKeysToStackExchangeRedis(this IKeyRotationBuilder builder, IConnectionMultiplexer connectionMultiplexer)
         {
-            return PersistKeysToStackExchangeRedis(builder, connectionMultiplexer, DataProtectionKeysName);
+            return PersistKeysToStackExchangeRedis(builder, connectionMultiplexer, KeyRotationKeysName);
         }
         /// <summary>
         /// Configures the key rotation system to persist keys to the specified key in Redis database
@@ -287,10 +321,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(certificate));
             }
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlEncryptor = new CertificateXmlEncryptor(certificate, loggerFactory);
                 });
@@ -328,11 +362,11 @@ namespace Microsoft.Extensions.DependencyInjection
             // if it doesn't already exist.
             builder.Services.TryAddSingleton<AspNetCore.DataProtection.XmlEncryption.ICertificateResolver, AspNetCore.DataProtection.XmlEncryption.CertificateResolver>();
 
-            builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
                 var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
                 var certificateResolver = services.GetRequiredService<AspNetCore.DataProtection.XmlEncryption.ICertificateResolver>();
-                return new ConfigureOptions<KeyManagementOptions>(options =>
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
                     options.XmlEncryptor = new CertificateXmlEncryptor(thumbprint, certificateResolver, loggerFactory);
                 });
@@ -341,10 +375,105 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyIdentifier">The Azure KeyVault key identifier used for key encryption.</param>
+        /// <param name="clientId">The application client id.</param>
+        /// <param name="certificate"></param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, string keyIdentifier, string clientId, X509Certificate2 certificate)
+        {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+            if (certificate == null)
+            {
+                throw new ArgumentNullException(nameof(certificate));
+            }
+
+            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientCertificateAsync(authority, resource, clientId, certificate);
+
+            return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyIdentifier">The Azure KeyVault key identifier used for key encryption.</param>
+        /// <param name="clientId">The application client id.</param>
+        /// <param name="clientSecret">The client secret to use for authentication.</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, string keyIdentifier, string clientId, string clientSecret)
+        {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+            if (string.IsNullOrEmpty(clientSecret))
+            {
+                throw new ArgumentNullException(nameof(clientSecret));
+            }
+
+            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientSecretAsync(authority, resource, clientId, clientSecret);
+
+            return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="client">The <see cref="KeyVaultClient"/> to use for KeyVault access.</param>
+        /// <param name="keyIdentifier">The Azure KeyVault key identifier used for key encryption.</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, KeyVaultClient client, string keyIdentifier)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+            if (string.IsNullOrEmpty(keyIdentifier))
+            {
+                throw new ArgumentNullException(nameof(keyIdentifier));
+            }
+
+            var vaultClientWrapper = new KeyVaultClientWrapper(client);
+
+            builder.Services.AddSingleton<IKeyVaultWrappingClient>(vaultClientWrapper);
+            builder.Services.Configure<KeyRotationOptions>(options =>
+            {
+                options.XmlEncryptor = new AzureKeyVaultXmlEncryptor(vaultClientWrapper, keyIdentifier);
+            });
+
+            return builder;
+        }
+        private static async Task<string> GetTokenFromClientCertificateAsync(string authority, string resource, string clientId, X509Certificate2 certificate)
+        {
+            var authContext = new AuthenticationContext(authority);
+            var result = await authContext.AcquireTokenAsync(resource, new ClientAssertionCertificate(clientId, certificate)).ConfigureAwait(false);
+            return result.AccessToken;
+        }
+
+        private static async Task<string> GetTokenFromClientSecretAsync(string authority, string resource, string clientId, string clientSecret)
+        {
+            var authContext = new AuthenticationContext(authority);
+            var clientCred = new ClientCredential(clientId, clientSecret);
+            var result = await authContext.AcquireTokenAsync(resource, clientCred).ConfigureAwait(false);
+            return result.AccessToken;
+        }
+
         // important: the Func passed into this method must return a new instance with each call
         private static IKeyRotationBuilder PersistKeystoAzureBlobStorageInternal(IKeyRotationBuilder builder, Func<CloudBlockBlob> blobRefFactory)
         {
-            builder.Services.Configure<KeyManagementOptions>(options =>
+            builder.Services.Configure<KeyRotationOptions>(options =>
             {
                 options.XmlRepository = new AzureBlobXmlRepository(blobRefFactory);
             });
@@ -353,7 +482,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IKeyRotationBuilder PersistKeysToStackExchangeRedisInternal(IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
         {
-            builder.Services.Configure<KeyManagementOptions>(options =>
+            builder.Services.Configure<KeyRotationOptions>(options =>
             {
                 options.XmlRepository = new RedisXmlRepository(databaseFactory, key);
             });

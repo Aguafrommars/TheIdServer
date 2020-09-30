@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.DataProtection.XmlEncryption;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/CertificateXmlEncryptor.cs
+// but adapted for our needs
+
+using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Aguacongas.IdentityServer.KeysRotation
+namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
     public sealed class CertificateXmlEncryptor : IInternalCertificateXmlEncryptor, IXmlEncryptor
     {
@@ -51,8 +56,12 @@ namespace Aguacongas.IdentityServer.KeysRotation
             _certFactory = () => certificate;
         }
 
-        internal CertificateXmlEncryptor(ILoggerFactory loggerFactory, IInternalCertificateXmlEncryptor encryptor)
+        private CertificateXmlEncryptor(ILoggerFactory loggerFactory, IInternalCertificateXmlEncryptor encryptor)
         {
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
             _encryptor = encryptor ?? this;
             _logger = loggerFactory.CreateLogger<CertificateXmlEncryptor>();
         }
@@ -123,8 +132,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         EncryptedData IInternalCertificateXmlEncryptor.PerformEncryption(EncryptedXml encryptedXml, XmlElement elementToEncrypt)
         {
-            var cert = _certFactory()
-                ?? throw new CryptographicException("Cert factory returned null.");
+            var cert = _certFactory();
 
             _logger.LogDebug("Encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint);
 

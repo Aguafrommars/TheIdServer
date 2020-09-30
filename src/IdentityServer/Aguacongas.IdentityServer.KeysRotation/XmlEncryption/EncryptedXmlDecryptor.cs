@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/EncryptedXmlDecryptor.cs
+// but adapted for our needs
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -9,7 +15,7 @@ using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Aguacongas.IdentityServer.KeysRotation
+namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
     public sealed class EncryptedXmlDecryptor : IInternalEncryptedXmlDecryptor, IXmlDecryptor
     {
@@ -142,13 +148,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
                             continue;
                         }
 
-                        using (RSA privateKey = keyDecryptionCert.GetRSAPrivateKey())
+                        using RSA privateKey = keyDecryptionCert.GetRSAPrivateKey();
+                        if (privateKey != null)
                         {
-                            if (privateKey != null)
-                            {
-                                var useOAEP = encryptedKey.EncryptionMethod?.KeyAlgorithm == XmlEncRSAOAEPUrl;
-                                return DecryptKey(encryptedKey.CipherData.CipherValue, privateKey, useOAEP);
-                            }
+                            var useOAEP = encryptedKey.EncryptionMethod?.KeyAlgorithm == XmlEncRSAOAEPUrl;
+                            return DecryptKey(encryptedKey.CipherData.CipherValue, privateKey, useOAEP);
                         }
                     }
                 }

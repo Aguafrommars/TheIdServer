@@ -5,19 +5,19 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// <summary>
     /// Options that control how an <see cref="Microsoft.AspNetCore.DataProtection.KeyManagement.IKeyManager"/> should behave.
     /// </summary>
-    public class KeyManagementOptions : Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions
+    public class KeyRotationOptions : Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyManagementOptions"/> class.
+        /// Initializes a new instance of the <see cref="KeyRotationOptions"/> class.
         /// </summary>
-        public KeyManagementOptions():base()
+        public KeyRotationOptions():base()
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyManagementOptions"/> class.
+        /// Initializes a new instance of the <see cref="KeyRotationOptions"/> class.
         /// </summary>
         /// <param name="other">The other.</param>
-        internal KeyManagementOptions(KeyManagementOptions other)
+        internal KeyRotationOptions(KeyRotationOptions other)
         {
             if (other == null)
             {
@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// approximately 72 hours before expiration.
         /// </summary>
         /// <remarks>
-        /// The default value is currently fixed at 2 weeks.
+        /// The default value  2 weeks.
         /// </remarks>
         public TimeSpan KeyPropagationWindow { get; set; } = TimeSpan.FromDays(14);
 
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// if key activation and expiration times should be strictly honored by this server.
         /// </summary>
         /// <remarks>
-        /// The default value value is currently fixed at 5 minutes.
+        /// The default value  5 minutes.
         /// </remarks>
         public TimeSpan MaxServerClockSkew { get; set; } = TimeSpan.FromMinutes(5);
 
@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// backing storage.
         /// </summary>
         /// <remarks>
-        /// The default value is currently fixed at 24 hours.
+        /// The default value  24 hours.
         /// </remarks>
         public TimeSpan KeyRingRefreshPeriod { get; set; } = TimeSpan.FromHours(24);
     }

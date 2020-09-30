@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/DefaultKeyResolver.cs
+// but adapted for our needs
+
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,7 +43,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// </remarks>
         private readonly TimeSpan _maxServerToServerClockSkew;
 
-        public DefaultKeyResolver(IOptions<KeyManagementOptions> keyManagementOptions, ILoggerFactory loggerFactory)
+        public DefaultKeyResolver(IOptions<KeyRotationOptions> keyManagementOptions, ILoggerFactory loggerFactory)
         {
             _keyPropagationWindow = keyManagementOptions.Value.KeyPropagationWindow;
             _maxServerToServerClockSkew = keyManagementOptions.Value.MaxServerClockSkew;

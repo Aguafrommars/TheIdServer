@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 
-namespace Aguacongas.IdentityServer.KeysRotation
+namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
 {
     /// <summary>
     /// An <see cref="IXmlRepository"/> backed by an EntityFrameworkCore datastore.
@@ -52,7 +54,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         {
             using var scope = _services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<TContext>();
-            var newKey = new DataProtectionKey()
+            var newKey = new KeyRotationKey
             {
                 FriendlyName = friendlyName,
                 Xml = element.ToString(SaveOptions.DisableFormatting)

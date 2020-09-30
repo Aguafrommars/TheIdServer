@@ -1,6 +1,9 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/KeyRingProvider.cs
+// but adapted for our needs
+
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Logging;
@@ -19,13 +22,13 @@ namespace Aguacongas.IdentityServer.KeysRotation
         private CacheableKeyRing _cacheableKeyRing;
         private readonly object _cacheableKeyRingLockObj = new object();
         private readonly IDefaultKeyResolver _defaultKeyResolver;
-        private readonly KeyManagementOptions _keyManagementOptions;
+        private readonly KeyRotationOptions _keyManagementOptions;
         private readonly IKeyManager _keyManager;
         private readonly ILogger _logger;
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyManagementOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions,
             IDefaultKeyResolver defaultKeyResolver)
             : this(
                   keyManager,
@@ -37,11 +40,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyManagementOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions,
             IDefaultKeyResolver defaultKeyResolver,
             ILoggerFactory loggerFactory)
         {
-            _keyManagementOptions = new KeyManagementOptions(keyManagementOptions.Value); // clone so new instance is immutable
+            _keyManagementOptions = new KeyRotationOptions(keyManagementOptions.Value); // clone so new instance is immutable
             _keyManager = keyManager;
             CacheableKeyRingProvider = this;
             _defaultKeyResolver = defaultKeyResolver;
@@ -121,9 +124,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
             else
             {
                 // If there is a default key, then the new key we generate should become active upon
-                // expiration of the default key. The new key lifetime is measured from the creation
-                // date (now), not the activation date.
-                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
+                // expiration of the default key.
+                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime);
                 return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
             }
         }

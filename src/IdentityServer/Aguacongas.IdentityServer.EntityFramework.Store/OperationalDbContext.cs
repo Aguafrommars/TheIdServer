@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
-        public DbSet<DataProtectionKey> KeyRotationKeys { get; set; }
+        public DbSet<KeyRotationKey> KeyRotationKeys { get; set; }
 
         public override int SaveChanges()
         {
