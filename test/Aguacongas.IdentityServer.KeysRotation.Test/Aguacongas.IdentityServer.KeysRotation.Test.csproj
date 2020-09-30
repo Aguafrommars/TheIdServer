@@ -29,10 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="XmlEncryption\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Update="TestCert1.pfx">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
