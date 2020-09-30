@@ -387,7 +387,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (string.IsNullOrEmpty(clientId))
             {
-                throw new ArgumentException(nameof(clientId));
+                throw new ArgumentNullException(nameof(clientId));
             }
             if (certificate == null)
             {
@@ -442,7 +442,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             if (string.IsNullOrEmpty(keyIdentifier))
             {
-                throw new ArgumentException(nameof(keyIdentifier));
+                throw new ArgumentNullException(nameof(keyIdentifier));
             }
 
             var vaultClientWrapper = new KeyVaultClientWrapper(client);
