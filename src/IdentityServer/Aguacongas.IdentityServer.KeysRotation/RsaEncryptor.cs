@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Models;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.IdentityModel.Tokens;
 using System;

@@ -1,9 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/EncryptedXmlDecryptor.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
 
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/XmlEncryption/EncryptedXmlDecryptor.cs
+// with:
+// namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
+// use discard instead of unused field
+// add warning suppression
+// use simple using
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
@@ -17,6 +22,7 @@ using Microsoft.Extensions.Options;
 
 namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
+    // namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
     public sealed class EncryptedXmlDecryptor : IInternalEncryptedXmlDecryptor, IXmlDecryptor
     {
         private readonly IInternalEncryptedXmlDecryptor _decryptor;
@@ -61,7 +67,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             // doesn't handle encrypting the root element all that well.
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(new XElement("root", encryptedElement).CreateReader());
-            _ = (XmlElement)xmlDocument.DocumentElement.FirstChild;
+            _ = (XmlElement)xmlDocument.DocumentElement.FirstChild; // use discard instead of unused field
 
             // Perform the decryption and update the document in-place.
             var encryptedXml = new EncryptedXmlWithCertificateKeys(_options, xmlDocument);
@@ -91,6 +97,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
                 _options = options;
             }
 
+            // add warning suppression
             [SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "Caller test null")]
             public override byte[] DecryptEncryptedKey(EncryptedKey encryptedKey)
             {
@@ -120,6 +127,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
                 return base.DecryptEncryptedKey(encryptedKey);
             }
 
+            // add warning suppression
             [SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "Caller test null")]
             private byte[] GetKeyFromCert(EncryptedKey encryptedKey, KeyInfoX509Data keyInfo)
             {
@@ -148,7 +156,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
                             continue;
                         }
 
-                        using RSA privateKey = keyDecryptionCert.GetRSAPrivateKey();
+                        using RSA privateKey = keyDecryptionCert.GetRSAPrivateKey(); // use simple using
                         if (privateKey != null)
                         {
                             var useOAEP = encryptedKey.EncryptionMethod?.KeyAlgorithm == XmlEncRSAOAEPUrl;

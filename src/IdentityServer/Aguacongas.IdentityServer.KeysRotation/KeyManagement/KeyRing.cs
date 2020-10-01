@@ -1,9 +1,16 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/KeyRing.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
 
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/KeyManagement/KeyRing.cs
+// with:
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
+// interface implementation chance from orignal IKeyRing
+// add RsaEncryptorConfiguration instance in constructor
+// use discard intead of unused instance
+// use inline declaration
+// use object locker instead of this
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
@@ -14,15 +21,19 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal sealed class KeyRing : IKeyRingStores
+    /// <summary>
+    /// A basic implementation of <see cref="IKeyRingStores"/>.
+    /// </summary>
+    internal sealed class KeyRing : IKeyRingStores // interface implementation chance from orignal IKeyRing
     {
         private readonly KeyHolder _defaultKeyHolder;
         private readonly RsaEncryptorConfiguration _configuration;
         private readonly Dictionary<Guid, KeyHolder> _keyIdToKeyHolderMap;
 
-        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys, RsaEncryptorConfiguration configuration)
+        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys, RsaEncryptorConfiguration configuration) // add RsaEncryptorConfiguration intance from orignal
         {
             _keyIdToKeyHolderMap = new Dictionary<Guid, KeyHolder>();
             foreach (IKey key in allKeys)
@@ -40,27 +51,27 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             DefaultKeyId = defaultKey.KeyId;
             _defaultKeyHolder = _keyIdToKeyHolderMap[DefaultKeyId];
-            _configuration = configuration;
+            _configuration = configuration; // add RsaEncryptorConfiguration instance from orignal
         }
 
         public IAuthenticatedEncryptor DefaultAuthenticatedEncryptor
         {
             get
             {
-                return _defaultKeyHolder.GetEncryptorInstance(out _);
+                return _defaultKeyHolder.GetEncryptorInstance(out _); // use discard of unused instance
             }
         }
 
         public Guid DefaultKeyId { get; }
 
-        public IAuthenticatedEncryptor GetAuthenticatedEncryptorByKeyId(Guid keyId, out bool isRevoked)
+        public IAuthenticatedEncryptor GetAuthenticatedEncryptorByKeyId(Guid keyId, out bool isRevoked) // interface implementation chance from orignal IKeyRing
         {
             isRevoked = false;
-            _keyIdToKeyHolderMap.TryGetValue(keyId, out KeyHolder holder);
+            _keyIdToKeyHolderMap.TryGetValue(keyId, out KeyHolder holder); // use inline declaration
             return holder?.GetEncryptorInstance(out isRevoked);
         }
 
-        public Task<SigningCredentials> GetSigningCredentialsAsync()
+        public Task<SigningCredentials> GetSigningCredentialsAsync() // interface implementation chance from orignal IKeyRing
         {
             if (!(_defaultKeyHolder.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor encryptor))
             {
@@ -82,7 +93,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         // used for providing lazy activation of the authenticated encryptor instance
         private sealed class KeyHolder
         {
-            private readonly object _locker = new object();
+            private readonly object _locker = new object(); // use object locker instead of this
             private readonly IKey _key;
             private IAuthenticatedEncryptor _encryptor;
 
@@ -91,7 +102,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 _key = key;
             }
 
-            public IKey Key => _key;
+            public IKey Key => _key; // change to implement IKeyRingStores
 
             internal IAuthenticatedEncryptor GetEncryptorInstance(out bool isRevoked)
             {
@@ -100,7 +111,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 IAuthenticatedEncryptor encryptor = Volatile.Read(ref _encryptor);
                 if (encryptor == null)
                 {
-                    lock (_locker)
+                    lock (_locker) // use object locker instead of this
                     {
                         encryptor = Volatile.Read(ref _encryptor);
                         if (encryptor == null)
@@ -110,7 +121,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                         }
                     }
                 }
-                isRevoked = Key.IsRevoked;
+                isRevoked = Key.IsRevoked; // change to implement IKeyRingStores
                 return encryptor;
             }
         }

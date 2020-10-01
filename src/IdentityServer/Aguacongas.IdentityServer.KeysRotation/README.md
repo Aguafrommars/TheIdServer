@@ -1,12 +1,12 @@
 ﻿# Aguacongas.IdentityServer.KeysRotation
 
-This library adapts [ASP.NET Core Data Protection](https://github.com/dotnet/aspnetcore/tree/master/src/DataProtection) key management system to a keys rotation provider for [IdentityServer4](https://github.com/identityServer/IdentityServer4).
+This library adapts [ASP.NET Core Data Protection](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-3.1) key management system to a signing keys rotation provider for [IdentityServer4](https://github.com/identityServer/IdentityServer4).
 
 ## Setup
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation();
+    .AddKeysRotation();
 ```
 
 This code adds a [`IValidationKeysStore`](https://github.com/IdentityServer/IdentityServer4/blob/main/src/IdentityServer4/src/Stores/IValidationKeysStore.cs) and [`ISigningCredentialStore`](https://github.com/IdentityServer/IdentityServer4/blob/main/src/IdentityServer4/src/Stores/ISigningCredentialStore.cs) with the default key rotation configuration.
@@ -15,11 +15,11 @@ This code adds a [`IValidationKeysStore`](https://github.com/IdentityServer/Iden
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation(options => 
-	{
-		options.NewKeyLifetime = TimeSpan.FromDays(30);
-		options.KeyPropagationWindow = TimeSpan.FromDays(7);
-	});
+    .AddKeysRotation(options => 
+    {
+        options.NewKeyLifetime = TimeSpan.FromDays(30);
+        options.KeyPropagationWindow = TimeSpan.FromDays(7);
+    });
 ```
 
 `AddKeysRotation` takes an `Action<KeyRotationOptions>` as optional parameter to configure the key management.  
@@ -35,12 +35,12 @@ services.AddIdentityServer()
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.AddRsaEncryptorConfiguration(options => 
-	{
-		options.KeyIdSize = 256;
-		options.KeyRetirement = TimeSpan.FromDays(120);
-	})
+    .AddKeysRotation()
+    .AddRsaEncryptorConfiguration(options => 
+    {
+        options.KeyIdSize = 256;
+        options.KeyRetirement = TimeSpan.FromDays(120);
+    })
 ```
 
 `AddRsaEncryptorConfiguration` takes an `Action<RsaEncryptorConfiguration>` to configure the Rsa key generation.  
@@ -60,8 +60,8 @@ To configure a file system-based key repository, call the `PersistKeysToFileSyst
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"));
+    .AddKeysRotation()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"));
 ```
 
 #### Azure Storage
@@ -70,8 +70,8 @@ To configure the Azure Blob Storage provider, call one of the `PersistKeysToAzur
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.PersistKeysToAzureBlobStorage(new Uri("<blob URI including SAS token>"));
+    .AddKeysRotation()
+    .PersistKeysToAzureBlobStorage(new Uri("<blob URI including SAS token>"));
 ```
 
 #### Redis
@@ -82,8 +82,8 @@ To configure on Redis, call one of the `PersistKeysToStackExchangeRedis` overloa
 var redis = ConnectionMultiplexer.Connect("<URI>");
 
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.PersistKeysToStackExchangeRedis(redis, "KeysRotation-Keys");
+    .AddKeysRotation()
+    .PersistKeysToStackExchangeRedis(redis, "KeysRotation-Keys");
 ```
 
 #### Entity Framework Core
@@ -96,8 +96,8 @@ services.AddDbContext<MyKeysContext>(options =>
             Configuration.GetConnectionString("MyKeysConnection")));
 
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.PersistKeysToDbContext<MyKeysContext>();
+    .AddKeysRotation()
+    .PersistKeysToDbContext<MyKeysContext>();
 ```
 
 The generic parameter, `TContext`, must inherit from `DbContext` and implement `IKeyRotationContext`:
@@ -129,9 +129,9 @@ To store keys in Azure Key Vault, configure the system with `ProtectKeysWithAzur
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.PersistKeysToAzureBlobStorage(new Uri("<blob URI including SAS token>"))
-	.ProtectKeysWithAzureKeyVault("<keyIdentifier>", "<clientId>", "<clientSecret>");
+    .AddKeysRotation()
+    .PersistKeysToAzureBlobStorage(new Uri("<blob URI including SAS token>"))
+    .ProtectKeysWithAzureKeyVault("<keyIdentifier>", "<clientId>", "<clientSecret>");
 ```
 
 #### X.509 certificate
@@ -142,19 +142,21 @@ If the IdentityServer4 is spread across multiple machines, it may be convenient 
 var certificate = new X509Certificate2("TestCert1.pfx", "password");
 
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.ProtectKeysWithCertificate(certificate);
+    .AddKeysRotation()
+    .ProtectKeysWithCertificate(certificate);
 ```
 
 or 
 
 ```cs
 services.AddIdentityServer()
-	.AddKeysRotation()
-	.ProtectKeysWithCertificate("3BCE558E2AD3E0E34A7743EAB5AEA2A9BD2575A0");
+    .AddKeysRotation()
+    .ProtectKeysWithCertificate("3BCE558E2AD3E0E34A7743EAB5AEA2A9BD2575A0");
 ```
 
 Due to .NET Framework limitations, only certificates with CAPI private keys are supported.
 
+## Additional resources
 
-
+* [IdentityServer and Signing Key Rotation](https://brockallen.com/2019/08/09/identityserver-and-signing-key-rotation/)
+* [ASP.NET Core Data Protection](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-3.1)

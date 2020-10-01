@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.KeysRotation;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.DataProtection.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;

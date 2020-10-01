@@ -1,15 +1,19 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/Internal/CacheableKeyRing.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
 
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/KeyManagement/Internal/CacheableKeyRing.cs
+// with :
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement.Internal
+// constructor change to add a RsaEncryptorConfiguration instance
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement.Internal
 namespace Aguacongas.IdentityServer.KeysRotation
 {
     /// <summary>
@@ -23,7 +27,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             DateTimeOffset expirationTime, 
             IKey defaultKey, 
             IEnumerable<IKey> allKeys,
-            RsaEncryptorConfiguration configuration)
+            RsaEncryptorConfiguration configuration) // constructor change to add a RsaEncryptorConfiguration instance
             : this(expirationToken, expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration))
         {
         }

@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.KeysRotation;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
