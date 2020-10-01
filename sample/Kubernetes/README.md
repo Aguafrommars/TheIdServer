@@ -21,7 +21,7 @@ First, you will need to generate the required certificates.
 
 * *tls-private.pfx* to setup HTTPS on Kestrel for the private farm.
 * *tls-public.pfx* to setup HTTPS on Kestrel for the public farm.
-* *theidserver.pfx* to sign JWT tokens
+* *theidserver.pfx* to sign protect generated keys
 
 [You can generate pfx using OpenSSL](https://www.ssl.com/how-to/create-a-pfx-p12-certificate-file-using-openssl/).  
 Don't forget to save your password.
@@ -79,7 +79,7 @@ Events:            <none>
 
 > If you use Kubernetes with Docker Desktop for Windows */var/lib/k8s-pvs* is mapped to */mnt/wsl/docker-desktop-data/data/k8s-pvs* of your WSL machine.  
 From Windows, you can access to the WSL filesystem through *\\\\wsl$*.
-
+> On docker 2.4.0.0 with Kubernetes 1.18.8 the volume is mapped to */mnt/wsl/docker-desktop-data/version-pack-data/community/k8s-pvs*
 
 ### Database
 
@@ -113,19 +113,19 @@ kubectl apply -f SqlServer-secret.yaml
 * Create a persistent volume claim for SQL Server
 
 ```bash
-kubectl -f SqlServer-volume.yaml
+kubectl apply -f SqlServer-volume.yaml
 ```
 
 * Create the deployment
 
 ```bash
-kubectl -f SqlServer-deployment.yaml
+kubectl apply -f SqlServer-deployment.yaml
 ```
 
 * Create the network service
 
 ```bash
-kubectl -f SqlServer-service.yaml
+kubectl apply -f SqlServer-service.yaml
 ```
 
 3. Create a database
@@ -141,13 +141,13 @@ Use Microsoft SQL Server Management Studio or the tool of your choice to create 
 * Create the deployment
 
 ```bash
-kubectl -f Redis-deployment.yaml
+kubectl apply -f Redis-deployment.yaml
 ```
 
 * Create the network service
 
 ```bash
-kubectl -f Redis-service.yaml
+kubectl apply -f Redis-service.yaml
 ```
 
 ### Seq
@@ -155,19 +155,19 @@ kubectl -f Redis-service.yaml
 * Create a persistent volume claim for Seq
 
 ```bash
-kubectl -f Seq-volume.yaml
+kubectl apply -f Seq-volume.yaml
 ```
 
 * Create the deployment
 
 ```bash
-kubectl -f Seq-deployment.yaml
+kubectl apply -f Seq-deployment.yaml
 ```
 
 * Create the network service
 
 ```bash
-kubectl -f Seq-service.yaml
+kubectl apply -f Seq-service.yaml
 ```
 
 ### Private farm
@@ -208,8 +208,8 @@ metadata:
   name: theidserver-private-secrets
   namespace: theidserver
 data:
-  sign-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
-  tls.pwd: d1YS0xTcx # replace by your base64 encoded password for tls-private.pfx
+  protect-key: UEBzc3cwcmQ= # replace by your base64 encoded password for theidserver.pfx
+  tls.pwd: UEBzc3cwcmQ= # replace by your base64 encoded password for tls-private.pfx
 ```
 
 * Apply the file
@@ -271,7 +271,7 @@ metadata:
   name: theidserver-public-secrets
   namespace: theidserver
 data:
-  sign-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
+  protect-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
   tls.pwd: d1YS0xTcx # replace by your base64 encoded password for tls-private.pfx
 ```
 

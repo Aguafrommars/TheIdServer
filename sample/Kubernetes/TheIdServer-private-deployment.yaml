@@ -33,11 +33,16 @@ spec:
             secretKeyRef:
               name: theidserver-private-secrets
               key: tls.pwd
-        - name: IdentityServer__Key__Password
+        - name: IdentityServer__Key__KeyProtectionOptions__X509CertificatePassword
           valueFrom:
             secretKeyRef:
               name: theidserver-private-secrets
-              key: sign-key
+              key: protect-key
+        - name: DataProtectionOptions__KeyProtectionOptions__X509CertificatePassword
+          valueFrom:
+            secretKeyRef:
+              name: theidserver-private-secrets
+              key: protect-key
         volumeMounts:
         - name: certificates-volume
           mountPath: /usr/local/share/ca-certificates

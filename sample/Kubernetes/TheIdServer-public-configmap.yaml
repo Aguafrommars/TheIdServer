@@ -11,8 +11,11 @@ data:
   Proxy: "true"
   DisableStrictSsl: "true"
   EnableOpenApiDoc: "false"
-  IdentityServer__Key__Type: File
-  IdentityServer__Key__FilePath: /usr/local/share/ca-certificates/theidserver.pfx
+  IdentityServer__Key__Type: KeysRotation
+  IdentityServer__Key__StorageKind: FileSytem
+  IdentityServer__Key__StorageConnectionString: "/usr/local/share/keys/signing"
+  DataProtectionOptions__StorageKind: FileSytem
+  DataProtectionOptions__StorageConnectionString: "/usr/local/share/keys/dataprotecttion"
   ApiAuthentication__Authority: https://localhost
   ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName: "false"
   PrivateServerAuthentication__Authority: "https://theidserver-private:5443"
@@ -25,5 +28,3 @@ data:
   SignalR__RedisOptions__Configuration__ChannelPrefix: TheIdServer
   Serilog__WriteTo__0__Args__serverUrl: http://seq:5341
   Serilog__WriteTo__0__Args__apiKey: MYZxOmhzGAwCtEyqLsQS
-  DisableStrictSsl: "true"
-  ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName: "false"
