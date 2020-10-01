@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Stores;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 
 namespace Aguacongas.IdentityServer.KeysRotation

@@ -1,9 +1,15 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/CertificateXmlEncryptor.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
 
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/XmlEncryption/CertificateXmlEncryptor.cs
+// with:
+// namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
+// add internal constructor argument check
+// original Error.CertificateXmlEncryptor_CertificateNotFound call replaced
+// original CryptoUtil.Fail call removed
+// original ILogger extensions calls replaced
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,6 +18,7 @@ using System.Security.Cryptography.Xml;
 using System.Xml;
 using System.Xml.Linq;
 
+// namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
 namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
     public sealed class CertificateXmlEncryptor : IInternalCertificateXmlEncryptor, IXmlEncryptor
@@ -58,7 +65,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 
         private CertificateXmlEncryptor(ILoggerFactory loggerFactory, IInternalCertificateXmlEncryptor encryptor)
         {
-            if (loggerFactory == null)
+            if (loggerFactory == null) // add internal constructor argument check
             {
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
@@ -117,13 +124,13 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
                     var cert = resolver.ResolveCertificate(thumbprint);
                     if (cert == null)
                     {
-                        throw new InvalidOperationException($"A certificate with the thumbprint '{thumbprint}' could not be found.");
+                        throw new InvalidOperationException($"A certificate with the thumbprint '{thumbprint}' could not be found."); // original Error.CertificateXmlEncryptor_CertificateNotFound call replaced
                     }
                     return cert;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An exception occurred while trying to resolve certificate with thumbprint '{Thumbprint}'.", thumbprint);
+                    _logger.LogError(ex, "An exception occurred while trying to resolve certificate with thumbprint '{Thumbprint}'.", thumbprint); // original ILogger extensions calls replaced
 
                     throw;
                 }
@@ -132,9 +139,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 
         EncryptedData IInternalCertificateXmlEncryptor.PerformEncryption(EncryptedXml encryptedXml, XmlElement elementToEncrypt)
         {
-            var cert = _certFactory();
+            var cert = _certFactory(); // original CryptoUtil.Fail call removed
 
-            _logger.LogDebug("Encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint);
+            _logger.LogDebug("Encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint); // original ILogger extensions calls replaced
 
             try
             {
@@ -142,7 +149,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint);
+                _logger.LogError(ex, "An error occurred while encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint); // original ILogger extensions calls replaced
                 throw;
             }
         }

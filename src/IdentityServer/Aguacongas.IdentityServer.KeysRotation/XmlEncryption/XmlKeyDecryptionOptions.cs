@@ -1,8 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+// Modifications copyright (c) 2020 @Olivier Lefebvre
+
 // This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/XmlKeyDecryptionOptions.cs
-// but adapted for our needs
+// with namespace change from proginal Microsoft.AspNetCore.DataProtection.XmlEncryption
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
+    /// <summary>
+    /// Specifies settings for how to decrypt XML keys.
+    /// </summary>
     internal class XmlKeyDecryptionOptions
     {
         private readonly Dictionary<string, List<X509Certificate2>> _certs = new Dictionary<string, List<X509Certificate2>>(StringComparer.Ordinal);

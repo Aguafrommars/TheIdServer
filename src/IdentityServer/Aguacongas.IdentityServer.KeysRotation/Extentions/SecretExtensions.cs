@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/AuthenticatedEncryption/ConfigurationModel/SecretExtensions.cs
+// with renamings
+
+using System;
 using System.Xml.Linq;
 
 namespace Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel
@@ -11,7 +17,7 @@ namespace Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.Configurat
         /// </summary>
         /// <param name="secret">The secret for accessing the master key.</param>
         /// <returns>The master key <see cref="XElement"/>.</returns>
-        public static XElement ToKeyElement(this ISecret secret)
+        public static XElement ToKeyElement(this ISecret secret) // rename from original ToMasterKeyElement
         {
             // Technically we'll be keeping the unprotected secret around in memory as
             // a string, so it can get moved by the GC, but we should be good citizens
@@ -31,7 +37,7 @@ namespace Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.Configurat
                 }
             }
 
-            var masterKeyElement = new XElement("key",
+            var masterKeyElement = new XElement("key", // rename from original masterKey
                 new XComment(" Warning: the key below is in an unencrypted form. "),
                 new XElement("value", unprotectedSecretAsBase64String));
             masterKeyElement.MarkAsRequiresEncryption();

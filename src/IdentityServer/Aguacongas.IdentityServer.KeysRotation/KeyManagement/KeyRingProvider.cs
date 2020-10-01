@@ -1,8 +1,18 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/KeyRingProvider.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
+
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/KeyRingProvider.cs
+// with:
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
+// implementation of IKeyRingProvider declaration removed
+// options change from original KeyManagementOptions
+// add property KeyManager
+// original CryptoUtil.Fail call replaced
+// original ILogger extensions calls replaced
+// next key expiration date rule change to use the default key expiration date and not now
+// explicit implemenation of ICacheableKeyRingProvider added
 
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
@@ -15,20 +25,21 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Threading;
 
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal sealed class KeyRingProvider : ICacheableKeyRingProvider
+    internal sealed class KeyRingProvider : ICacheableKeyRingProvider // implementation of IKeyRingProvider declaration removed
     {
         private CacheableKeyRing _cacheableKeyRing;
         private readonly object _cacheableKeyRingLockObj = new object();
         private readonly IDefaultKeyResolver _defaultKeyResolver;
-        private readonly KeyRotationOptions _keyManagementOptions;
+        private readonly KeyRotationOptions _keyManagementOptions; // options change from original KeyManagementOptions
         private readonly IKeyManager _keyManager;
         private readonly ILogger _logger;
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyRotationOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions, // options change from original KeyManagementOptions
             IDefaultKeyResolver defaultKeyResolver)
             : this(
                   keyManager,
@@ -40,7 +51,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public KeyRingProvider(
             IKeyManager keyManager,
-            IOptions<KeyRotationOptions> keyManagementOptions,
+            IOptions<KeyRotationOptions> keyManagementOptions, // options change from original KeyManagementOptions
             IDefaultKeyResolver defaultKeyResolver,
             ILoggerFactory loggerFactory)
         {
@@ -54,12 +65,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
             AutoRefreshWindowEnd = DateTime.UtcNow.AddMinutes(2);
         }
 
-        // for testing
         internal ICacheableKeyRingProvider CacheableKeyRingProvider { get; set; }
 
         internal DateTime AutoRefreshWindowEnd { get; set; }
 
-        public IKeyManager KeyManager => _keyManager;
+        public IKeyManager KeyManager => _keyManager; // add property KeyManager
 
         internal bool InAutoRefreshWindow() => DateTime.UtcNow < AutoRefreshWindowEnd;
 
@@ -75,13 +85,13 @@ namespace Aguacongas.IdentityServer.KeysRotation
             {
                 if (defaultKeyPolicy.DefaultKey == null)
                 {
-                    throw new CryptographicException("Assertion failed: Expected to see a default key.");
+                    throw new CryptographicException("Assertion failed: Expected to see a default key."); // original CryptoUtil.Fail call replaced
                 }
                 
                 return CreateCacheableKeyRingCoreStep2(now, cacheExpirationToken, defaultKeyPolicy.DefaultKey, allKeys);
             }
 
-            _logger.LogDebug("Policy resolution states that a new key should be added to the key ring.");
+            _logger.LogDebug("Policy resolution states that a new key should be added to the key ring."); // original ILogger extensions calls replaced
 
             // We shouldn't call CreateKey more than once, else we risk stack diving. This code path shouldn't
             // get hit unless there was an ineligible key with an activation date slightly later than the one we
@@ -102,14 +112,14 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 var keyToUse = defaultKeyPolicy.DefaultKey ?? defaultKeyPolicy.FallbackKey;
                 if (keyToUse == null)
                 {
-                    _logger.LogError("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled.");
+                    _logger.LogError("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled."); // original ILogger extensions calls replaced
                     throw new InvalidOperationException("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled.");
                 }
                 else
                 {
-                    _logger.LogWarning("Policy resolution states that a new key should be added to the key ring, but automatic generation of keys is disabled. Using fallback key {KeyId:B} with expiration {ExpirationDate:u} as default key.",
+                    _logger.LogWarning("Policy resolution states that a new key should be added to the key ring, but automatic generation of keys is disabled. Using fallback key {KeyId:B} with expiration {ExpirationDate:u} as default key.", 
                         keyToUse.KeyId,
-                        keyToUse.ExpirationDate);
+                        keyToUse.ExpirationDate); // original ILogger extensions calls replaced
                     return CreateCacheableKeyRingCoreStep2(now, cacheExpirationToken, keyToUse, allKeys);
                 }
             }
@@ -125,7 +135,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             {
                 // If there is a default key, then the new key we generate should become active upon
                 // expiration of the default key.
-                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime);
+                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime); // next key expiration date rule change to use the default key expiration date and not now
                 return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
             }
         }
@@ -137,7 +147,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             // Invariant: our caller ensures that CreateEncryptorInstance succeeded at least once
             Debug.Assert(defaultKey.CreateEncryptor() != null);
 
-            _logger.LogDebug("Using key {KeyId:B} as the default key.", defaultKey.KeyId);
+            _logger.LogDebug("Using key {KeyId:B} as the default key.", defaultKey.KeyId); // original ILogger extensions calls replaced
 
             var nextAutoRefreshTime = now + GetRefreshPeriodWithJitter(_keyManagementOptions.KeyRingRefreshPeriod);
 
@@ -204,7 +214,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
                         if (existingCacheableKeyRing != null)
                         {
-                            _logger.LogDebug("Existing cached key ring is expired. Refreshing.");
+                            _logger.LogDebug("Existing cached key ring is expired. Refreshing."); // original ILogger extensions calls replaced
                         }
                     }
 
@@ -220,11 +230,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
                     {
                         if (existingCacheableKeyRing != null)
                         {
-                            _logger.LogError(ex, "An error occurred while refreshing the key ring. Will try again in 2 minutes.");
+                            _logger.LogError(ex, "An error occurred while refreshing the key ring. Will try again in 2 minutes."); // original ILogger extensions calls replaced
                         }
                         else
                         {
-                            _logger.LogError(ex, "An error occurred while reading the key ring.");
+                            _logger.LogError(ex, "An error occurred while reading the key ring."); // original ILogger extensions calls replaced
                         }
 
                         // Failures that occur while refreshing the keyring are most likely transient, perhaps due to a
@@ -287,7 +297,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return CreateCacheableKeyRingCore(now, keyJustAdded: null);
         }
 
-        IKeyRing ICacheableKeyRingProvider.RefreshCurrentKeyRing()
+        IKeyRing ICacheableKeyRingProvider.RefreshCurrentKeyRing() // explicit implemenation of ICacheableKeyRingProvider added
         {
             return RefreshCurrentKeyRing();
         }

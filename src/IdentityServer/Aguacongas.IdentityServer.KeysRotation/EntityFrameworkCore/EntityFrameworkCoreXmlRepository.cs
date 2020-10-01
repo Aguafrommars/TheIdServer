@@ -1,6 +1,12 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+// Modifications copyright (c) 2020 @Olivier Lefebvre
+
+// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/EntityFrameworkCore/src/EntityFrameworkCoreXmlRepository.cs
+// with :
+// namespace change from original Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
+// generic context interface change from original IDataProtectionKeyContext
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,14 +16,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-
+// namespace change from original Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
 namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
 {
     /// <summary>
     /// An <see cref="IXmlRepository"/> backed by an EntityFrameworkCore datastore.
     /// </summary>
     public class EntityFrameworkCoreXmlRepository<TContext> : IXmlRepository
-        where TContext : DbContext, IKeyRotationContext
+        where TContext : DbContext, IKeyRotationContext // generic context interface change from original IDataProtectionKeyContext
     {
         private readonly IServiceProvider _services;
         private readonly ILogger _logger;
@@ -46,7 +52,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
 
             // Put logger in a local such that `this` isn't captured.
             var logger = _logger;
-            return context.KeyRotationKeys.AsNoTracking().Select(key => TryParseKeyXml(key.Xml, logger)).ToList().AsReadOnly();
+            return context.KeyRotationKeys.AsNoTracking().Select(key => TryParseKeyXml(key.Xml, logger)).ToList().AsReadOnly(); // generic context interface change from original IDataProtectionKeyContext
         }
 
         /// <inheritdoc />
@@ -60,7 +66,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
                 Xml = element.ToString(SaveOptions.DisableFormatting)
             };
 
-            context.KeyRotationKeys.Add(newKey);
+            context.KeyRotationKeys.Add(newKey); // generic context interface change from original IDataProtectionKeyContext
             _logger.LogDebug("Saving key '{FriendlyName}' to '{DbContext}'.", typeof(TContext).Name);
             context.SaveChanges();
         }

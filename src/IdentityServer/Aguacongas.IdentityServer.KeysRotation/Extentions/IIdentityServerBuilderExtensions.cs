@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Aguacongas.IdentityServer.KeysRotation.Extentions
 {
     /// <summary>
-    /// 
+    /// <see cref="IIdentityServerBuilder"/> extensions
     /// </summary>
     public static class IIdentityServerBuilderExtensions
     {

@@ -39,6 +39,8 @@ spec:
           mountPath: /usr/local/share/ca-certificates
         - name: config
           mountPath: /usr/local/share/config
+        - name: keys-volume
+          mountPath: /usr/local/share/keys
         lifecycle:
           postStart:
             exec:
@@ -50,3 +52,6 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: config
+      - name: keys-volume
+        persistentVolumeClaim:
+          claimName: keys

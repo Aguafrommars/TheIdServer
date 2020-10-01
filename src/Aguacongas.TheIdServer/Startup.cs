@@ -76,9 +76,8 @@ namespace Aguacongas.TheIdServer
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddDynamicClientRegistration();
-
-            ConfigureSigningCredentials(identityBuilder);
+                .AddDynamicClientRegistration()
+                .ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
 
             identityBuilder.AddJwtRequestUriHttpClient();
 
@@ -155,7 +154,7 @@ namespace Aguacongas.TheIdServer
         {
             if (Configuration.GetSection("IdentityServer:Key")?.Get<KeyDefinition>()?.Type == KeyKinds.KeysRotation)
             {
-                identityBuilder.ConfigureKeysRotation(Configuration.GetSection("IdentityServer:Key"));
+                identityBuilder.ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
             }
             else
             {

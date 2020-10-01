@@ -98,7 +98,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", 
 		sample\Kubernetes\SqlServer-secret.yaml = sample\Kubernetes\SqlServer-secret.yaml
 		sample\Kubernetes\SqlServer-service.yaml = sample\Kubernetes\SqlServer-service.yaml
 		sample\Kubernetes\SqlServer-volume.yaml = sample\Kubernetes\SqlServer-volume.yaml
-		sample\Kubernetes\TheIdServer-certificates-volume copy.yaml = sample\Kubernetes\TheIdServer-certificates-volume copy.yaml
+		sample\Kubernetes\TheIdServer-certificates-volume.yaml = sample\Kubernetes\TheIdServer-certificates-volume.yaml
 		sample\Kubernetes\TheIdServer-config-volume.yaml = sample\Kubernetes\TheIdServer-config-volume.yaml
 		sample\Kubernetes\TheIdServer-private-configmap.yaml = sample\Kubernetes\TheIdServer-private-configmap.yaml
 		sample\Kubernetes\TheIdServer-private-connectionstring.yaml = sample\Kubernetes\TheIdServer-private-connectionstring.yaml
@@ -108,6 +108,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", 
 		sample\Kubernetes\TheIdServer-public-configmap.yaml = sample\Kubernetes\TheIdServer-public-configmap.yaml
 		sample\Kubernetes\TheIdServer-public-deployment.yaml = sample\Kubernetes\TheIdServer-public-deployment.yaml
 		sample\Kubernetes\TheIdServer-public-ingres.yaml = sample\Kubernetes\TheIdServer-public-ingres.yaml
+		sample\Kubernetes\TheIdServer-public-keys-volume.yaml = sample\Kubernetes\TheIdServer-public-keys-volume.yaml
 		sample\Kubernetes\TheIdServer-public-secrets.yaml = sample\Kubernetes\TheIdServer-public-secrets.yaml
 		sample\Kubernetes\TheIdServer-public-service.yaml = sample\Kubernetes\TheIdServer-public-service.yaml
 	EndProjectSection
@@ -138,9 +139,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Migr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Oracle.Startup", "src\IdentityServer\Migrations\Aguacongas.TheIdServer.Oracle.Startup\Aguacongas.TheIdServer.Oracle.Startup.csproj", "{F3472861-DFB1-43FB-BE9C-C509548BACF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.KeysRotation", "src\IdentityServer\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj", "{B72DB4C4-F066-40EF-87AF-AFC00CDA8A35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.KeysRotation", "src\IdentityServer\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj", "{B72DB4C4-F066-40EF-87AF-AFC00CDA8A35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.KeysRotation.Test", "test\Aguacongas.IdentityServer.KeysRotation.Test\Aguacongas.IdentityServer.KeysRotation.Test.csproj", "{5ECA4602-B565-4483-B65E-0ED0D6EC67CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.KeysRotation.Test", "test\Aguacongas.IdentityServer.KeysRotation.Test\Aguacongas.IdentityServer.KeysRotation.Test.csproj", "{5ECA4602-B565-4483-B65E-0ED0D6EC67CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

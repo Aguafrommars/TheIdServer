@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+      <Authors>Olivier Lefebvre</Authors>
+      <Description>IdentityServer4 signing keys rotation.</Description>
+      <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+      <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PackageTags>identityserver4;signing keys rotation</PackageTags>
+      <PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+      <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

@@ -1,8 +1,14 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/KeyManagement/DefaultKeyResolver.cs
-// but adapted for our needs
+// Modifications copyright (c) 2020 @Olivier Lefebvre
+
+// This code is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/KeyManagement/DefaultKeyResolver.cs
+// with:
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
+// original construcor overload removed
+// original CryptoUtil.Fail call replaced
+// original ILogger extensions calls replaced
 
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
@@ -13,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
+// namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
 namespace Aguacongas.IdentityServer.KeysRotation
 {
     /// <summary>
@@ -43,6 +50,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// </remarks>
         private readonly TimeSpan _maxServerToServerClockSkew;
 
+        // original construcor overload removed
+
         public DefaultKeyResolver(IOptions<KeyRotationOptions> keyManagementOptions, ILoggerFactory loggerFactory)
         {
             _keyPropagationWindow = keyManagementOptions.Value.KeyPropagationWindow;
@@ -57,14 +66,14 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 var encryptorInstance = key.CreateEncryptor();
                 if (encryptorInstance == null)
                 {
-                    throw new CryptographicException("Assertion failed: CreateEncryptorInstance returned null.");
+                    throw new CryptographicException("Assertion failed: CreateEncryptorInstance returned null."); // original CryptoUtil.Fail call replaced
                 }
 
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Key {KeyId:B} is ineligible to be the default key because its {MethodName} method failed.", key.KeyId, nameof(IKey.CreateEncryptor));
+                _logger.LogWarning(ex, "Key {KeyId:B} is ineligible to be the default key because its {MethodName} method failed.", key.KeyId, nameof(IKey.CreateEncryptor)); // original ILogger extensions call replaced
                 return false;
             }
         }
@@ -79,12 +88,12 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             if (preferredDefaultKey != null)
             {
-                _logger.LogDebug("Considering key {KeyId:B} with expiration date {ExpirationDate:u} as default key.", preferredDefaultKey.KeyId, preferredDefaultKey.ExpirationDate);
+                _logger.LogDebug("Considering key {KeyId:B} with expiration date {ExpirationDate:u} as default key.", preferredDefaultKey.KeyId, preferredDefaultKey.ExpirationDate); // original ILogger extensions call replaced
 
                 // if the key has been revoked or is expired, it is no longer a candidate
                 if (preferredDefaultKey.IsRevoked || preferredDefaultKey.IsExpired(now) || !CanCreateAuthenticatedEncryptor(preferredDefaultKey))
                 {
-                    _logger.LogDebug("Key {KeyId:B} is no longer under consideration as default key because it is expired, revoked, or cannot be deciphered.", preferredDefaultKey.KeyId);
+                    _logger.LogDebug("Key {KeyId:B} is no longer under consideration as default key because it is expired, revoked, or cannot be deciphered.", preferredDefaultKey.KeyId); // original ILogger extensions call replaced
                     preferredDefaultKey = null;
                 }
             }
@@ -107,7 +116,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
                 if (callerShouldGenerateNewKey)
                 {
-                    _logger.LogDebug("Default key expiration imminent and repository contains no viable successor. Caller should generate a successor.");
+                    _logger.LogDebug("Default key expiration imminent and repository contains no viable successor. Caller should generate a successor."); // original ILogger extensions call replaced
                 }
 
                 fallbackKey = null;
@@ -128,7 +137,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                            where !key.IsRevoked && CanCreateAuthenticatedEncryptor(key)
                            select key).FirstOrDefault();
 
-            _logger.LogDebug("Repository contains no viable default key. Caller should generate a key with immediate activation.");
+            _logger.LogDebug("Repository contains no viable default key. Caller should generate a key with immediate activation."); // original ILogger extensions call replaced
 
             callerShouldGenerateNewKey = true;
             return null;

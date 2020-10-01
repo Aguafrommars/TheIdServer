@@ -4,5 +4,5 @@ metadata:
   name: theideserver-connectionstring
   namespace: theidserver
 data:
-  ConnectionString: RGF0YSBTb3VyY2U9c3FsLXNnZlcjtJbml0aWFsIENhdGFsb2GhlSWRTZXJ2Z7VXNlciBJZD1UaGFNlcnZlcjtQYXNzd29yZD1KdWluLTIwMjA= # replace with your SqlServer connection string
+  ConnectionString: RGF0YSBTb3VyY2U9c3FsLXNlcnZlcjtJbml0aWFsIENhdGFsb2c9VGhlSWRTZXJ2ZXI7VXNlciBJZD1UaGVJZFNlcnZlcjtQYXNzd29yZD1QQHNzdzByZA== # replace with your SqlServer connection string
 type: Opaque

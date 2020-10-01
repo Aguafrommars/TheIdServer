@@ -10,8 +10,15 @@ data:
   ASPNETCORE_HTTPS_PORT: "5443"
   DisableStrictSsl: "true"
   EnableOpenApiDoc: "false"
-  IdentityServer__Key__Type: File
-  IdentityServer__Key__FilePath: /usr/local/share/ca-certificates/theidserver.pfx
+  IdentityServer__Key__Type: "KeysRotation"
+  IdentityServer__Key__StorageKind: "Redis"
+  IdentityServer__Key__StorageConnectionString: "redis:6379"
+  IdentityServer__Key__KeyProtectionOptions__KeyProtectionKind: "X509"
+  IdentityServer__Key__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
+  DataProtectionOptions__StorageKind: "Redis"
+  DataProtectionOptions__StorageConnectionString: "redis:6379"
+  DataProtectionOptions__KeyProtectionOptions__KeyProtectionKind: "X509"
+  DataProtectionOptions__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
   ApiAuthentication__Authority: https://localhost:5443
   ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName: "false"
   EmailApiAuthentication__Authority: https://localhost:5443
@@ -23,5 +30,3 @@ data:
   SignalR__RedisOptions__Configuration__ChannelPrefix: TheIdServer
   Serilog__WriteTo__0__Args__serverUrl: http://seq:5341
   Serilog__WriteTo__0__Args__apiKey: T9OBdJpuMS4nsRgTRzaP
-  DisableStrictSsl: "true"
-  ApiAuthentication__IntrospectionDiscoveryPolicy__ValidateIssuerName: "false"

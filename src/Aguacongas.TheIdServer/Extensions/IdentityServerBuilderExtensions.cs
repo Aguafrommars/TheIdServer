@@ -13,8 +13,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityServerBuilderExtensions
     {
-        public static IIdentityServerBuilder ConfigureKeysRotation(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
+        public static IIdentityServerBuilder ConfigureKey(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
         {
+            if (configuration.GetValue<KeyKinds>("Type") != KeyKinds.KeysRotation)
+            {
+                identityServerBuilder.AddSigningCredentials();
+                return identityServerBuilder;
+            }
+
             var builder = identityServerBuilder.AddKeysRotation(options => configuration.GetSection(nameof(KeyRotationOptions))?.Bind(options))
                 .AddRsaEncryptorConfiguration(options => configuration.GetSection(nameof(RsaEncryptorConfiguration))?.Bind(options));
             var dataProtectionsOptions = configuration.Get<DataProtectionOptions>();

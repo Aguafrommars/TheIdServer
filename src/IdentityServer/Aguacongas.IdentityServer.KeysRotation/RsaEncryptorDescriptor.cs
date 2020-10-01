@@ -1,4 +1,6 @@
-﻿using IdentityModel;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2020 @Olivier Lefebvre
+using IdentityModel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +12,10 @@ using System.Xml.Linq;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
+    /// <summary>
+    /// Implements <see cref="IAuthenticatedEncryptorDescriptor"/> for <see cref="RsaSecurityKey"/>
+    /// </summary>
+    /// <seealso cref="IAuthenticatedEncryptorDescriptor" />
     public sealed class RsaEncryptorDescriptor : IAuthenticatedEncryptorDescriptor
     {
         public RsaEncryptorDescriptor(RsaEncryptorConfiguration configuration, RsaSecurityKey masterKey)
