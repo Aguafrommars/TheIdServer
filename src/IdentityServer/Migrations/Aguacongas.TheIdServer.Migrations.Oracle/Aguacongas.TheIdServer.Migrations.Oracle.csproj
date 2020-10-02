@@ -15,7 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.13.1098" />
+		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.13.1107" />
 	</ItemGroup>
 
 	<ItemGroup>
