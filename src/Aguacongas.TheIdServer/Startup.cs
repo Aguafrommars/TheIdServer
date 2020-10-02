@@ -150,18 +150,6 @@ namespace Aguacongas.TheIdServer
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
-        private void ConfigureSigningCredentials(IIdentityServerBuilder identityBuilder)
-        {
-            if (Configuration.GetSection("IdentityServer:Key")?.Get<KeyDefinition>()?.Type == KeyKinds.KeysRotation)
-            {
-                identityBuilder.ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
-            }
-            else
-            {
-                identityBuilder.AddSigningCredentials();
-            }
-        }
-
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {

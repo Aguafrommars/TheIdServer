@@ -15,7 +15,7 @@ spec:
         role: backend
     spec:
       containers:
-      - image: aguacongas/theidserver:1.0.0
+      - image: aguacongas/theidserver:unstable ## update with the version you want to use
         name: theidserver-private
         ports:
         - containerPort: 5443
