@@ -24,4 +24,10 @@
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="theidserver.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

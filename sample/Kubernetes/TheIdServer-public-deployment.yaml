@@ -15,7 +15,7 @@ spec:
         role: backend
     spec:
       containers:
-      - image: aguacongas/aguacongastheidserver:unstable
+      - image: aguacongas/theidserver:1.0.0
         name: theidserver-public
         ports:
         - containerPort: 443
@@ -39,6 +39,8 @@ spec:
           mountPath: /usr/local/share/ca-certificates
         - name: config
           mountPath: /usr/local/share/config
+        - name: keys-volume
+          mountPath: /usr/local/share/keys
         lifecycle:
           postStart:
             exec:
@@ -50,3 +52,6 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: config
+      - name: keys-volume
+        persistentVolumeClaim:
+          claimName: keys
