@@ -19,6 +19,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IDataProtectionBuilder ConfigureDataProtection(this IDataProtectionBuilder builder, IConfiguration configuration)
         {
             var dataProtectionsOptions = configuration.Get<Aguacongas.TheIdServer.Models.DataProtectionOptions>();
+            if (dataProtectionsOptions == null)
+            {
+                return builder;
+            }
             builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options));
             ConfigureEncryptionAlgorithm(builder, configuration);
             switch (dataProtectionsOptions.StorageKind)
