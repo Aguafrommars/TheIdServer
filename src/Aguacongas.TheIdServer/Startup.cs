@@ -3,7 +3,6 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
@@ -64,7 +63,7 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
-            services.AddDataProtection().ConfigureDataProtection(Configuration.GetSection(nameof(DataProtectionOptions)));
+            ConfigureDataProtection(services);
 
             var identityBuilder = services.AddClaimsProviders(Configuration)
                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
@@ -359,6 +358,14 @@ namespace Aguacongas.TheIdServer
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
+            }
+        }
+        private void ConfigureDataProtection(IServiceCollection services)
+        {
+            var dataprotectionSection = Configuration.GetSection(nameof(DataProtectionOptions));
+            if (dataprotectionSection != null)
+            {
+                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(Configuration.GetSection(nameof(DataProtectionOptions)));
             }
         }
     }
