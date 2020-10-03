@@ -10,5 +10,4 @@ spec:
     app: theidserver-private
   ports:
     - port: 5443
-      targetPort: 5443
   type: LoadBalancer

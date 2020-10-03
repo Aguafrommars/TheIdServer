@@ -32,6 +32,10 @@ Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core
 If you need more customization, you can use published NuGet packages.
 [sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
 
+## Configure data protection
+
+[Data protection](../../doc/DATA_PROTECTION.md) provides details on data protection configuration.
+
 ## Configure site
 
 The site name is defined by *SiteOptions:TheIdServer*.
@@ -172,7 +176,21 @@ Starting the server with the **/seed** command-line argument creates the databas
 * **spa** an authorization code flow sample client
 * **device** a device flow sample client
 
-## Configure Credentials
+## Configure Signing Key
+
+### Keys rotatation (remanded)
+
+TheIdServer can be configured with a keys rotation mechanism instead of a single key.  
+Read [Keys rotation](../doc/KEYS_ROTATION.md) to know how to configure it.
+
+```json
+"IdentityServer": {
+  "Key": {
+    "Type": "KeysRotation",
+    "StorageKind": "EntityFramework"
+  }
+}
+```
 
 ### From file
 
