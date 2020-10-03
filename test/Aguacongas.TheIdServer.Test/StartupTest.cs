@@ -11,6 +11,7 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
@@ -527,6 +528,33 @@ namespace Aguacongas.TheIdServer.Test
                 ["DataProtectionOptions:KeyProtectionOptions:KeyProtectionKind"] = KeyProtectionKind.X509.ToString(),
                 ["DataProtectionOptions:KeyProtectionOptions:X509CertificatePath"] = "theidserver.pfx",
                 ["DataProtectionOptions:KeyProtectionOptions:X509CertificatePassword"] = "YourSecurePassword"
+            }).Build();
+            var environementMock = new Mock<IWebHostEnvironment>();
+            var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
+            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
+
+            var sut = new Startup(configuration, environementMock.Object);
+
+            using var host = WebHost.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    sut.ConfigureServices(services);
+                    services.AddTransient(p => storeMock.Object);
+                })
+                .Configure(builder => sut.Configure(builder))
+                .UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
+                .Build();
+
+            Assert.Null(host.Services.GetService<IXmlRepository>());
+        }
+
+        [Fact]
+        public void Configure_should_configure_data_protection_algorithms()
+        {
+            var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["DataProtectionOptions:AuthenticatedEncryptorConfiguration:EncryptionAlgorithm"] = EncryptionAlgorithm.AES_128_CBC.ToString(),
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();

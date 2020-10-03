@@ -2,6 +2,8 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Win32;
@@ -21,6 +23,8 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return builder;
             }
+            builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options));
+            ConfigureEncryptionAlgorithm(builder, configuration);
             switch (dataProtectionsOptions.StorageKind)
             {
                 case StorageKind.AzureStorage:
@@ -68,10 +72,19 @@ namespace Microsoft.Extensions.DependencyInjection
                         }
                         builder.ProtectKeysWithCertificate(protectOptions.X509CertificateThumbprint);
                         break;
-                }                
+                }
             }
 
             return builder;
+        }
+
+        private static void ConfigureEncryptionAlgorithm(IDataProtectionBuilder builder, IConfiguration configuration)
+        {
+            var encryptorConfiguration = configuration.GetSection(nameof(AuthenticatedEncryptorConfiguration)).Get<AuthenticatedEncryptorConfiguration>();
+            if (encryptorConfiguration != null)
+            {
+                builder.UseCryptographicAlgorithms(encryptorConfiguration);
+            }
         }
 
         private static void ConfigureWindowsDpApiNg(IDataProtectionBuilder builder, KeyProtectionOptions protectOptions)
