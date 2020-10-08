@@ -36,11 +36,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var keyId = host.WaitForNode(component, "#data-protection-keys td").InnerText.Trim();
             
-            var input = host.WaitForNode(component, "#data-protection-keys input");
+            var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
 
             await host.WaitForNextRenderAsync(() => input.ChangeAsync(keyId));
 
-            var confirm = component.Find("#data-protection-keys .modal-footer button.btn-danger");
+            var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
             await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
 
@@ -88,11 +88,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var keyId = host.WaitForNode(component, "#signing-keys td").InnerText.Trim();
 
-            var input = host.WaitForNode(component, "#signing-keys input");
+            var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
 
             await host.WaitForNextRenderAsync(() => input.ChangeAsync(keyId));
 
-            var confirm = component.Find("#signing-keys .modal-footer button.btn-danger");
+            var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
             await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
 

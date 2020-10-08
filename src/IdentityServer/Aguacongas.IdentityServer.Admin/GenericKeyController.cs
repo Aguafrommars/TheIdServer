@@ -1,11 +1,11 @@
-﻿using Aguacongas.IdentityServer.Admin.Extensions;
-using Aguacongas.IdentityServer.Admin.Services;
+﻿using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
 {
@@ -38,18 +38,7 @@ namespace Aguacongas.IdentityServer.Admin
         [HttpGet]
         [Authorize(Policy = SharedConstants.READER)]
         public PageResponse<Key> Get()
-            => _wrapper.Manager.GetAllKeys().ToPageResponse(_wrapper.DefaultKeyResolver);
-
-        /// <summary>
-        /// Revokes all keys created before a specified date and persists the revocation
-        /// to the underlying repository.
-        /// </summary>
-        /// <param name="revocationDate">The revocation date. All keys with a creation date before this value will be revoked.</param>
-        /// <param name="reason">An optional human-readable reason for revocation.</param>
-        [HttpDelete()]
-        [Authorize(Policy = SharedConstants.WRITER)]
-        public void RevokeAllKeys(DateTimeOffset revocationDate, string reason)
-            => _wrapper.Manager.RevokeAllKeys(revocationDate, reason);
+            => _wrapper.GetAllKeys();
 
         /// <summary>
         ///  Revokes a specific key and persists the revocation to the underlying repository.
@@ -58,7 +47,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="reason">An optional human-readable reason for revocation.</param>
         [HttpDelete("{id}")]
         [Authorize(Policy = SharedConstants.WRITER)]
-        public void RevokeKey(Guid id, string reason)
-            =>  _wrapper.Manager.RevokeKey(id, reason);
+        public Task RevokeKey(Guid id, string reason)
+            =>  _wrapper.RevokeKey(id, reason);
     }
 }

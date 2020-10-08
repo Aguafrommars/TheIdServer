@@ -61,8 +61,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
                 .AddTransient<IImportService, ImportService>()
-                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>()))
-                .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>()))
+                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
+                .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>

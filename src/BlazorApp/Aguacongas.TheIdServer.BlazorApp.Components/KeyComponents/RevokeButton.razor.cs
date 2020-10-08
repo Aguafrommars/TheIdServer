@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.KeyComponents
 
         [Parameter]
         public EventCallback<Tuple<string, string>> RevokeConfirmed { get; set; }
-        private async Task OnDeleteClicked()
+        private async Task OnRevokeClicked()
         {
             if (_checkEntityId == Key.Id)
             {

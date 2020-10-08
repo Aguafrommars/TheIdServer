@@ -57,26 +57,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         }
 
         /// <summary>
-        /// Revokes all keys.
-        /// </summary>
-        /// <param name="revocationDate">The revocation date.</param>
-        /// <param name="reason">The reason.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        public async Task RevokeAllKeysAsync(DateTimeOffset revocationDate, string reason, CancellationToken cancellationToken = default)
-        {
-            var httpClient = await HttpClientFactory
-                .ConfigureAwait(false);
-
-            using (var response = await httpClient.DeleteAsync(GetUri(httpClient, $"{BaseUri}?revocationDate{revocationDate}&reason={reason}"), cancellationToken)
-                .ConfigureAwait(false))
-            {
-
-                await EnsureSuccess(response)
-                    .ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
         /// Revokes a key.
         /// </summary>
         /// <param name="id">The identifier.</param>

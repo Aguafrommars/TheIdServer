@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,14 +25,5 @@ namespace Aguacongas.IdentityServer.Store
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         Task RevokeKeyAsync(string id, string reason, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Revokes all keys.
-        /// </summary>
-        /// <param name="revocationDate">The revocation date.</param>
-        /// <param name="reason">The reason.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        Task RevokeAllKeysAsync(DateTimeOffset revocationDate, string reason, CancellationToken cancellationToken = default);
     }
 }

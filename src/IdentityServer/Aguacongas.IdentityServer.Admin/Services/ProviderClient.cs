@@ -42,14 +42,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="id">The key identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task KeyRevoked(string kind, Guid id, CancellationToken cancellationToken = default)
+        public Task KeyRevokedAsync(string kind, Guid id, CancellationToken cancellationToken = default)
         {            
-            return GetClientProxy(cancellationToken).SendAsync("KeyRevoked", kind, id, cancellationToken);
-        }
-
-        private string nameof(object keyRevoked)
-        {
-            throw new NotImplementedException();
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.KeyRevoked), kind, id, cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +55,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync("ProviderAdded", scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +66,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync("ProviderRemoved", scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
         }
 
         /// <summary>
@@ -82,7 +77,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync("ProviderUpdated", scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
         }
 
         private IClientProxy GetClientProxy(CancellationToken cancellationToken)
