@@ -39,7 +39,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task KeyRevokedAsync(string kind, Guid id, CancellationToken cancellationToken = default)
         {            
-            return GetConnection(cancellationToken).SendAsync(nameof(IProviderHub.KeyRevoked), kind, id, cancellationToken);
+            return GetConnection(cancellationToken)?.SendAsync(nameof(IProviderHub.KeyRevoked), kind, id, cancellationToken) ?? Task.CompletedTask;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetConnection(cancellationToken).SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
+            return GetConnection(cancellationToken)?.SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken) ?? Task.CompletedTask;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetConnection(cancellationToken).SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
+            return GetConnection(cancellationToken)?.SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken) ?? Task.CompletedTask;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetConnection(cancellationToken).SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
+            return GetConnection(cancellationToken)?.SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken) ?? Task.CompletedTask;
         }
 
         private HubConnection GetConnection(CancellationToken cancellationToken)
