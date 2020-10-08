@@ -11,8 +11,17 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// <see cref="IServiceCollection"/> extensions
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds the keys rotation.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="configureKeysRotation">Action to configure keys rotation.</param>
+        /// <returns></returns>
         public static IKeyRotationBuilder AddKeysRotation(this IServiceCollection services, Action<KeyRotationOptions> configureKeysRotation = null)
         {
             services.AddDataProtection();

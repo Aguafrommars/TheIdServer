@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -120,8 +119,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        [SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Url")]
-        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Never null")]
         protected virtual void OnRowClicked(T entity)
         {
             if (!(entity is IEntityId entityWithId))

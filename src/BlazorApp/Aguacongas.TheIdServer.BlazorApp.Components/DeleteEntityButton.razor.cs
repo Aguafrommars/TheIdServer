@@ -10,7 +10,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     public partial class DeleteEntityButton
     {
         [SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Assign by jsScript.")]
-        [SuppressMessage("Major", "CS0649:Fiel is never asign to", Justification = "Assign by jsScript.")]
         private string _checkEntityId;
 
         [Parameter]

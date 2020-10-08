@@ -2,6 +2,8 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.KeysRotation;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading;
@@ -17,27 +19,33 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly HubConnectionFactory _factory;
         private readonly NoPersistentDynamicManager<TSchemeDefinition> _manager;
         private readonly IDynamicProviderStore<TSchemeDefinition> _store;
+        private readonly KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> _dataProtectionKeyManagerWrapper;
+        private readonly KeyManagerWrapper<RsaEncryptorDescriptor> _signingKeyManagerWrapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemeChangeSubscriber{TSchemeDefinition}"/> class.
+        /// Initializes a new instance of the <see cref="SchemeChangeSubscriber{TSchemeDefinition}" /> class.
         /// </summary>
         /// <param name="factory">The factory.</param>
         /// <param name="manager">The manager.</param>
         /// <param name="store">The store.</param>
-        /// <exception cref="ArgumentNullException">
-        /// factory
+        /// <param name="dataProtectionKeyManagerWrapper">The data protection key manager wrapper.</param>
+        /// <param name="signingKeyManagerWrapper">The signing key manager wrapper.</param>
+        /// <exception cref="ArgumentNullException">factory
         /// or
         /// manager
         /// or
-        /// manager
-        /// </exception>
+        /// manager</exception>
         public SchemeChangeSubscriber(HubConnectionFactory factory,
             NoPersistentDynamicManager<TSchemeDefinition> manager,
-            IDynamicProviderStore<TSchemeDefinition> store)
+            IDynamicProviderStore<TSchemeDefinition> store,
+            KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> dataProtectionKeyManagerWrapper,
+            KeyManagerWrapper<RsaEncryptorDescriptor> signingKeyManagerWrapper)
         {
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _store = store ?? throw new ArgumentNullException(nameof(manager));
+            _dataProtectionKeyManagerWrapper = dataProtectionKeyManagerWrapper ?? throw new ArgumentNullException(nameof(dataProtectionKeyManagerWrapper));
+            _signingKeyManagerWrapper = signingKeyManagerWrapper ?? throw new ArgumentNullException(nameof(signingKeyManagerWrapper));
         }
 
         /// <summary>
@@ -68,6 +76,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 {
                     var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
                     await _manager.UpdateAsync(definition).ConfigureAwait(false);
+                });
+
+                connection.On<string, Guid>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
+                {
+                    if (kind== nameof(IAuthenticatedEncryptorDescriptor))
+                    {
+                        _dataProtectionKeyManagerWrapper.Manager.RevokeKey(id, "Revoked by another instance.");
+                        return;
+                    }
+
+                    _signingKeyManagerWrapper.Manager.RevokeKey(id, "Revoked by another instance.");
                 });
 
                 _factory.StartConnectionAsync(cancellationToken).ContinueWith(t => { });

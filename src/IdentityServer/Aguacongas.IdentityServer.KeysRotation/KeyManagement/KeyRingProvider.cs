@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
@@ -135,8 +136,16 @@ namespace Aguacongas.IdentityServer.KeysRotation
             {
                 // If there is a default key, then the new key we generate should become active upon
                 // expiration of the default key.
-                var newKey = KeyManager.CreateNewKey(activationDate: defaultKeyPolicy.DefaultKey.ExpirationDate, expirationDate: defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime); // next key expiration date rule change to use the default key expiration date and not now
-                return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
+                var newActivationDate = defaultKeyPolicy.DefaultKey.ExpirationDate;
+                var newExpirationDate = defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime;
+                var keyAlreadyCreated = allKeys.FirstOrDefault(k => k.ActivationDate == newActivationDate && k.ExpirationDate == newExpirationDate && !k.IsRevoked);
+                if (keyAlreadyCreated == null)
+                {
+                    var newKey = KeyManager.CreateNewKey(activationDate: newActivationDate, expirationDate: newExpirationDate); // next key expiration date rule change to use the default key expiration date and not now
+                    return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
+                }
+                // The next key already exists. Don't need to create a new one. It can occur when the NewKeyLifetime < KeyPropagationWindow
+                return CreateCacheableKeyRingCore(now, keyJustAdded: keyAlreadyCreated); // recursively call
             }
         }
 
