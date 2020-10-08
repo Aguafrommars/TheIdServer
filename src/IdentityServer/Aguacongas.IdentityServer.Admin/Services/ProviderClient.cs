@@ -36,6 +36,23 @@ namespace Aguacongas.IdentityServer.Admin.Services
         }
 
         /// <summary>
+        /// Key revoked.
+        /// </summary>
+        /// <param name="kind">The key kind.</param>
+        /// <param name="id">The key identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public Task KeyRevoked(string kind, Guid id, CancellationToken cancellationToken = default)
+        {
+            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.KeyRevoked), kind, id, cancellationToken);
+        }
+
+        private string nameof(object keyRevoked)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Providers the added.
         /// </summary>
         /// <param name="scheme">The scheme.</param>

@@ -29,7 +29,11 @@ namespace Microsoft.Extensions.DependencyInjection
                         p.GetRequiredService<ILogger<IdentityProviderStore>>()))
                 .AddTransient<IExternalProviderKindStore>(
                     p => new ExternalProviderKindStore(getHttpClient.Invoke(p),
-                        p.GetRequiredService<ILogger<ExternalProviderKindStore>>()));
+                        p.GetRequiredService<ILogger<ExternalProviderKindStore>>()))
+                .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new  KeyStore<IAuthenticatedEncryptorDescriptor>(getHttpClient.Invoke(p),
+                        p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
+                .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(getHttpClient.Invoke(p),
+                        p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()));
         }
 
         private static void AddHttpAdminStore(IServiceCollection services,
