@@ -94,6 +94,8 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
 
 ### Using the API
 
+![public-private.svg](../../doc/assets/public-pribate.png)
+
 If you don't want to expose a database with your server, you can set up a second server on a private network accessing the database and use this private server API to access data.
 
 ```json

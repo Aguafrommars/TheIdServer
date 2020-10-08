@@ -29,6 +29,5 @@ data:
   SignalR__HubOptions__EnableDetailedErrors: "true"
   SignalR__UseMessagePack: "true"
   SignalR__HubUrl: https://theidserver-private:5443/providerhub
-  SignalR__RedisOptions__Configuration__ChannelPrefix: TheIdServer
   Serilog__WriteTo__0__Args__serverUrl: http://seq:5341
   Serilog__WriteTo__0__Args__apiKey: MYZxOmhzGAwCtEyqLsQS
