@@ -333,6 +333,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         {
         }
 
+        protected override void BeginInvokeJS(long taskId, string identifier, string argsJson, JSCallResultType resultType, long targetInstanceId)
+        {
+        }
+
         protected override void EndInvokeDotNet(DotNetInvocationInfo invocationInfo, in DotNetInvocationResult invocationResult)
         {
         }

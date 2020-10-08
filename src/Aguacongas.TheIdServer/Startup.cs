@@ -172,7 +172,7 @@ namespace Aguacongas.TheIdServer
                     app.UseHsts();
                 }
             }
-
+            
             var scope = app.ApplicationServices.CreateScope();
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
