@@ -63,6 +63,8 @@ namespace Aguacongas.TheIdServer
                 AddDefaultServices(services);
             }
 
+            ConfigureDataProtection(services);
+
             var identityBuilder = services.AddClaimsProviders(Configuration)
                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
@@ -73,8 +75,8 @@ namespace Aguacongas.TheIdServer
                 .AddOidcStateDataFormatterCache()
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddSigningCredentials()
-                .AddDynamicClientRegistration();
+                .AddDynamicClientRegistration()
+                .ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
 
             identityBuilder.AddJwtRequestUriHttpClient();
 
@@ -147,7 +149,6 @@ namespace Aguacongas.TheIdServer
             services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
- 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
         {
@@ -300,7 +301,7 @@ namespace Aguacongas.TheIdServer
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
@@ -310,7 +311,7 @@ namespace Aguacongas.TheIdServer
             var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
             if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));                
             }
         }
 
@@ -357,6 +358,14 @@ namespace Aguacongas.TheIdServer
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
+            }
+        }
+        private void ConfigureDataProtection(IServiceCollection services)
+        {
+            var dataprotectionSection = Configuration.GetSection(nameof(DataProtectionOptions));
+            if (dataprotectionSection != null)
+            {
+                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(Configuration.GetSection(nameof(DataProtectionOptions)));
             }
         }
     }

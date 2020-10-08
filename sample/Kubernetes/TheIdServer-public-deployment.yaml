@@ -15,7 +15,7 @@ spec:
         role: backend
     spec:
       containers:
-      - image: aguacongas/aguacongastheidserver:unstable
+      - image: aguacongas/theidserver:unstable # update with the version you want to use
         name: theidserver-public
         ports:
         - containerPort: 443
@@ -33,12 +33,24 @@ spec:
           valueFrom:
             secretKeyRef:
               name: theidserver-public-secrets
-              key: sign-key
+              key: protect-key
+        - name: IdentityServer__Key__KeyProtectionOptions__X509CertificatePassword
+          valueFrom:
+            secretKeyRef:
+              name: theidserver-private-secrets
+              key: protect-key
+        - name: DataProtectionOptions__KeyProtectionOptions__X509CertificatePassword
+          valueFrom:
+            secretKeyRef:
+              name: theidserver-private-secrets
+              key: protect-key
         volumeMounts:
         - name: certificates-volume
           mountPath: /usr/local/share/ca-certificates
         - name: config
           mountPath: /usr/local/share/config
+        - name: keys-volume
+          mountPath: /usr/local/share/keys
         lifecycle:
           postStart:
             exec:
@@ -50,3 +62,6 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: config
+      - name: keys-volume
+        persistentVolumeClaim:
+          claimName: keys

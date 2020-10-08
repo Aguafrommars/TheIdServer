@@ -26,8 +26,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override void OnInitialized()
         {
-            HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
-            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
+            if (HandleModificationState != null)
+            {
+                HandleModificationState.OnFilterChange += HandleModificationState_OnFilterChange;
+                HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
+            }
             GridState.OnHeaderClicked += GridState_OnHeaderClicked;
             base.OnInitialized();
         }

@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.Admin.Hubs
@@ -15,6 +16,18 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
     [Authorize(Policy = "Is4-Reader")]
     public class ProviderHub : Hub<IProviderHub>, IProviderHub
     {
+        /// <summary>
+        /// Key revoked.
+        /// </summary>
+        /// <param name="kind">The key kind.</param>
+        /// <param name="id">The key identifier.</param>
+        /// <returns></returns>
+        [Authorize(Policy = "Is4-Writter")]
+        public Task KeyRevoked(string kind, Guid id)
+        {
+            return Clients.Others.KeyRevoked(kind, id);
+        }
+
         /// <summary>
         /// Providers the added.
         /// </summary>

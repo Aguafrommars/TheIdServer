@@ -1,5 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// Generic API contoller feature
     /// </summary>
     /// <seealso cref="IApplicationFeatureProvider{ControllerFeature}" />
-    public class GenericApiControllerFeatureProvider :
+    public class GenericControllerFeatureProvider :
         IApplicationFeatureProvider<ControllerFeature>
     {
         /// <summary>
@@ -38,6 +40,26 @@ namespace Aguacongas.IdentityServer.Admin
                     // There's no controller for this entity, so add the generic version.
                     var controllerType = typeof(GenericApiController<>)
                         .MakeGenericType(entityType.GetTypeInfo())
+                        .GetTypeInfo();
+                    feature.Controllers.Add(controllerType);
+                }
+            }
+
+            var keyTypeList = new[]
+            {
+                typeof(IAuthenticatedEncryptorDescriptor),
+                typeof(RsaEncryptorDescriptor)
+            };
+            // This is designed to run after the default ControllerTypeProvider, 
+            // so the list of 'real' controllers has already been populated.
+            foreach (var keyType in keyTypeList)
+            {
+                var typeName = keyType.Name + "Controller";
+                if (!feature.Controllers.Any(t => t.Name == typeName))
+                {
+                    // There's no controller for this key, so add the generic version.
+                    var controllerType = typeof(GenericKeyController<>)
+                        .MakeGenericType(keyType.GetTypeInfo())
                         .GetTypeInfo();
                     feature.Controllers.Add(controllerType);
                 }

@@ -15,10 +15,10 @@
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Public.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="1.0.0-preview7-0018" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="1.0.0-preview7-0018" />
-		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.0-preview7-0018" />
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="1.0.0-preview7-0018" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="1.0.1" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="1.0.1" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="1.0.1" />
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="1.0.1" />
 		
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.0" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />

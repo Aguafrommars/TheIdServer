@@ -5,11 +5,15 @@ using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.KeysRotation;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -24,6 +28,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ICacheableKeyRingProvider = Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -56,6 +61,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
                 .AddTransient<IImportService, ImportService>()
+                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
+                .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>
@@ -114,7 +121,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             builder.AddApplicationPart(assembly)
                 .ConfigureApplicationPartManager(apm =>
-                    apm.FeatureProviders.Add(new GenericApiControllerFeatureProvider()));
+                    apm.FeatureProviders.Add(new GenericControllerFeatureProvider()));
 
             return CreateDynamicAuthenticationBuilder<TUser, TSchemeDefinition>(services);
         }
@@ -128,12 +135,12 @@ namespace Microsoft.Extensions.DependencyInjection
                             .AddDynamic<TSchemeDefinition>();
 
             dynamicBuilder.AddGoogle(options =>
-            {
-                options.Events = new OAuthEvents
                 {
-                    OnTicketReceived = OnTicketReceived<TUser>()
-                };
-            })
+                    options.Events = new OAuthEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                })
                 .AddFacebook(options =>
                 {
                     options.Events = new OAuthEvents

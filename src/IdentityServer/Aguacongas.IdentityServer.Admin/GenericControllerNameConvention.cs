@@ -8,10 +8,10 @@ namespace Aguacongas.IdentityServer.Admin
     /// <summary>
     /// Generic API controller name convention
     /// </summary>
-    /// <seealso cref="System.Attribute" />
-    /// <seealso cref="Microsoft.AspNetCore.Mvc.ApplicationModels.IControllerModelConvention" />
+    /// <seealso cref="Attribute" />
+    /// <seealso cref="IControllerModelConvention" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public sealed class GenericApiControllerNameConventionAttribute : Attribute, IControllerModelConvention
+    public sealed class GenericControllerNameConventionAttribute : Attribute, IControllerModelConvention
     {
         /// <summary>
         /// Called to apply the convention to the <see cref="T:ControllerModel" />.
@@ -24,7 +24,8 @@ namespace Aguacongas.IdentityServer.Admin
                 return;
             }            
 
-            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericApiController<>))
+            if (controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericApiController<>) || 
+                controller.ControllerType.GetGenericTypeDefinition() == typeof(GenericKeyController<>))
             {
                 var entityType = controller.ControllerType.GenericTypeArguments[0];
                 controller.ControllerName = entityType.Name;

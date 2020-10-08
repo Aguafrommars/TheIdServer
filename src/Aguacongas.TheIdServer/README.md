@@ -8,11 +8,11 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ### From Docker
 
-A [server's Linux image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) is available on Docker Hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver) is available on Docker Hub.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a private Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a private Linux server container.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/aguacongastheidserver) to run a public Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a public Linux server container.
 
 Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to set up the HTTPS certificate.
 
@@ -31,6 +31,10 @@ Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core
 
 If you need more customization, you can use published NuGet packages.
 [sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
+
+## Configure data protection
+
+[Data protection](../../doc/DATA_PROTECTION.md) provides details on data protection configuration.
 
 ## Configure site
 
@@ -89,6 +93,8 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
 > A [devart dotConnect for Oracle](https://www.devart.com/dotconnect/oracle/) license is a requirement for Oracle.
 
 ### Using the API
+
+![public-private.svg](../../doc/assets/public-pribate.png)
 
 If you don't want to expose a database with your server, you can set up a second server on a private network accessing the database and use this private server API to access data.
 
@@ -172,7 +178,21 @@ Starting the server with the **/seed** command-line argument creates the databas
 * **spa** an authorization code flow sample client
 * **device** a device flow sample client
 
-## Configure Credentials
+## Configure Signing Key
+
+### Keys rotatation (remanded)
+
+TheIdServer can be configured with a keys rotation mechanism instead of a single key.  
+Read [Keys rotation](../doc/KEYS_ROTATION.md) to know how to configure it.
+
+```json
+"IdentityServer": {
+  "Key": {
+    "Type": "KeysRotation",
+    "StorageKind": "EntityFramework"
+  }
+}
+```
 
 ### From file
 
