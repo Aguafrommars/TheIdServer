@@ -1,0 +1,60 @@
+﻿@inherits EntitesGridModel<Entity.Key>
+
+<EntitiesGrid Items="@Collection" TableClass="table" Context="key">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="Id"
+                            Text="@Localizer["id"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="CreationDate"
+                            Text="@Localizer["creation"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="ActivationDate"
+                            Text="@Localizer["activation"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="ExpirationDate"
+                            Text="@Localizer["expiration"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="IsRevoked"
+                            Text="@Localizer["revoked"]"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+        <td class="@GetItemClass(key)">
+            @key.Id
+        </td>
+        <td class="@GetItemClass(key)">
+            @key.CreationDate.ToLocalTime()
+        </td>
+        <td class="@GetItemClass(key)">
+            @key.ActivationDate.ToLocalTime()
+        </td>
+        <td class="@GetItemClass(key)">
+            @key.ExpirationDate.ToLocalTime()
+        </td>
+        <td class="@GetItemClass(key)">
+            @key.IsRevoked
+        </td>
+        <td class="@GetItemClass(key)">
+            @if (!key.IsRevoked)
+            {
+                <DeleteEntityButton EntityId="key.Id" DeleteConfirmed="DeleteConfirmed" WarningText='Retype the \"{0}\" if you are sure to revoke it.'>
+                    <PopupAdditionalDetail>
+                        <div>@Localizer["reason"]</div>
+                        <InputText class="form-control" @bind-Value="@_revokeReason" />
+                    </PopupAdditionalDetail>
+                </DeleteEntityButton>
+            }
+        </td>
+    </RowTemplate>
+</EntitiesGrid>

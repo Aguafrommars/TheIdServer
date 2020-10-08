@@ -1,0 +1,19 @@
+﻿@using Aguacongas.IdentityServer.Admin.Http.Store
+@inject IKeyStore<IAuthenticatedEncryptorDescriptor> _dataProtectionKeyStore
+@inject IKeyStore<RsaEncryptorDescriptor> _signingKeyStore
+@inject IStringLocalizerAsync<Keys> Localizer
+
+@page "/keys"
+
+
+<h3>@Localizer["Keys"]</h3>
+<h5>@Localizer["Data Protection"]</h5>
+@if (_dataProtectionKeys != null)
+{
+    <KeyCollection Collection="_dataProtectionKeys" RevokeClick="RevokeDataProtectionKey" />
+}
+<h5>@Localizer["Signing"]</h5>
+@if (_signingKeys != null)
+{
+    <KeyCollection Collection="_signingKeys" RevokeClick="RevokeSigningKey" />
+}

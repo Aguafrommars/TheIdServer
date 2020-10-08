@@ -21,12 +21,17 @@
                     <div class="modal-body">
                         <div class="row">
                             <p class="col text-danger">
-                                @(new MarkupString(Localizer["Retype the \"{0}\" if you are sure to delete it.", EntityId]))
+                                @(new MarkupString(Localizer[WarningText, EntityId]))
                             </p>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <InputText class="form-control" @bind-Value="@_checkEntityId" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                @PopupAdditionalDetail
                             </div>
                         </div>
                     </div>
