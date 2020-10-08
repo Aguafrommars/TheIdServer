@@ -22,6 +22,7 @@ namespace Aguacongas.IdentityServer.Admin
             var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
             var entyTypeList = assembly.GetTypes().Where(t => t.IsClass &&
                 !t.IsAbstract &&
+                t.Name != nameof(Key) &&
                 t.GetInterface("IEntityId") != null);
             return entyTypeList;
         }

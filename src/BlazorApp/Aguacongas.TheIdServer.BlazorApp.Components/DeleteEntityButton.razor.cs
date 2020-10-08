@@ -18,12 +18,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         [Parameter]
         public EventCallback<string> DeleteConfirmed { get; set; }
 
-        [Parameter]
-        public string WarningText { get; set; } = "Retype the \"{0}\" if you are sure to delete it.";
-
-        [Parameter]
-        public RenderFragment PopupAdditionalDetail { get; set; }
-
         private async Task OnDeleteClicked()
         {
             if (_checkEntityId == EntityId)

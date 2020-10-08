@@ -43,8 +43,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         public Task KeyRevoked(string kind, Guid id, CancellationToken cancellationToken = default)
-        {
-            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.KeyRevoked), kind, id, cancellationToken);
+        {            
+            return GetClientProxy(cancellationToken).SendAsync("KeyRevoked", kind, id, cancellationToken);
         }
 
         private string nameof(object keyRevoked)
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderAddedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderAdded), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync("ProviderAdded", scheme, cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderRemoved), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync("ProviderRemoved", scheme, cancellationToken);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            return GetClientProxy(cancellationToken).SendAsync(nameof(IProviderHub.ProviderUpdated), scheme, cancellationToken);
+            return GetClientProxy(cancellationToken).SendAsync("ProviderUpdated", scheme, cancellationToken);
         }
 
         private IClientProxy GetClientProxy(CancellationToken cancellationToken)

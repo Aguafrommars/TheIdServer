@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
+﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -34,15 +36,37 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private async Task RevokeDataProtectionKey(Tuple<string, string> tuple)
         {
-            await _dataProtectionKeyStore.RevokeKeyAsync(tuple.Item1, tuple.Item2);
+            await RevokeKey(_dataProtectionKeyStore, tuple.Item1, tuple.Item2).ConfigureAwait(false);
             await GetDataProtectionKeys().ConfigureAwait(false);
         }
 
 
         private async Task RevokeSigningKey(Tuple<string, string> tuple)
         {
-            await _signingKeyStore.RevokeKeyAsync(tuple.Item1, tuple.Item2);
+            await RevokeKey(_signingKeyStore, tuple.Item1, tuple.Item2).ConfigureAwait(false);
             await GetSingingKeys().ConfigureAwait(false);
+        }
+
+        private async Task RevokeKey<T>(IKeyStore<T> keyStore, string id, string reason)
+        {
+            try
+            {
+                await keyStore.RevokeKeyAsync(id, reason).ConfigureAwait(false);
+                await _notifier.NotifyAsync(new Notification
+                {
+                    Header = id,
+                    Message = Localizer["Revoked"]
+                }).ConfigureAwait(false);
+            }
+            catch
+            {
+                await _notifier.NotifyAsync(new Notification
+                {
+                    Header = id,
+                    IsError = true,
+                    Message = Localizer["Error when trying to revoke the key."]
+                }).ConfigureAwait(false);
+            }
         }
     }
 }

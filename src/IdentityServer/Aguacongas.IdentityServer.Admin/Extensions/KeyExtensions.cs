@@ -25,15 +25,16 @@ namespace Aguacongas.IdentityServer.Admin.Extensions
             return new PageResponse<Key>
             {
                 Count = keys.Count(),
-                Items = keys.Select(k => new Key
-                {
-                    ActivationDate = k.ActivationDate,
-                    CreationDate = k.CreationDate,
-                    ExpirationDate = k.ExpirationDate,
-                    Id = k.KeyId.ToString(),
-                    IsRevoked = k.IsRevoked,
-                    IsDefault = k.KeyId == defaultKeyId
-                })
+                Items = keys.OrderBy(k => k.CreationDate)
+                    .Select(k => new Key
+                    {
+                        ActivationDate = k.ActivationDate,
+                        CreationDate = k.CreationDate,
+                        ExpirationDate = k.ExpirationDate,
+                        Id = k.KeyId.ToString(),
+                        IsRevoked = k.IsRevoked,
+                        IsDefault = k.KeyId == defaultKeyId
+                    })
             };
         }
     }
