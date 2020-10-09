@@ -245,8 +245,8 @@ kubectl apply -f TheIdServer-private-configmap.yaml
 kubectl apply -f TheIdServer-private-deployment.yaml
 ```
 
-> The deployment use the unstable version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
-> `- image: aguacongas/theidserver:unstable # update with the version you want to use`
+> The deployment use the next version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
+> `- image: aguacongas/theidserver:next # update with the version you want to use`
 
 * Create the network service
 
@@ -311,8 +311,8 @@ kubectl apply -f TheIdServer-public-keys-volume.yaml
 kubectl apply -f TheIdServer-public-deployment.yaml
 ```
 
-> The deployment use the unstable version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
-> `- image: aguacongas/theidserver:unstable # update with the version you want to use`
+> The deployment use the next version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
+> `- image: aguacongas/theidserver:next # update with the version you want to use`
 
 * Create the network service
 
