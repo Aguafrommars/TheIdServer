@@ -71,7 +71,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public Task RevokeKey(Guid id, string reason)
         {
             _keyManager.RevokeKey(id, reason);
-            return _providerClient.KeyRevokedAsync(typeof(T).Name, id);
+            return _providerClient.KeyRevokedAsync(typeof(T).Name, id.ToString());
         }
 
     }

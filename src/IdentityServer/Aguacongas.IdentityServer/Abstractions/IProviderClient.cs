@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +13,6 @@ namespace Aguacongas.IdentityServer.Abstractions
 
         Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default);
 
-        Task KeyRevokedAsync(string kind, Guid id, CancellationToken cancellationToken = default);
+        Task KeyRevokedAsync(string kind, string id, CancellationToken cancellationToken = default);
     }
 }

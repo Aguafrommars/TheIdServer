@@ -2,11 +2,7 @@
 
 <EntitiesGrid Items="@Collection" TableClass="table mb-0">
     <TableHeader>
-        <th scope="col" class="w-25">
-            <SortableHeader Property="Id"
-                            Text="@Localizer["id"]"
-                            GridState="GridState" />
-        </th>
+        <th></th>
         <th scope="col" class="w-25">
             <SortableHeader Property="CreationDate"
                             Text="@Localizer["creation"]"
@@ -17,13 +13,10 @@
                             Text="@Localizer["activation"]"
                             GridState="GridState" />
         </th>
-        <th scope="col" class="w-25">
+        <th scope="col" class="w-50">
             <SortableHeader Property="ExpirationDate"
                             Text="@Localizer["expiration"]"
                             GridState="GridState" />
-        </th>
-        <th scope="col" class="w-25">
-            @Localizer["revoked"]
         </th>
         <th></th>
     </TableHeader>
@@ -36,22 +29,22 @@ else
 {
     <EntitiesGrid Items="@Collection" TableClass="table" Context="key">
         <RowTemplate>
-            <td class="w-25 @GetItemClass(key)">
-                @key.Id
+            <td class="@GetRevokedClass(key)">
+                @if (key.IsDefault)
+                {
+                    <h3 class="text-warning">*</h3>
+                }
             </td>
-            <td class="w-25 @GetItemClass(key)">
+            <td class="w-25 @GetRevokedClass(key)">
                 @key.CreationDate.ToLocalTime()
             </td>
-            <td class="w-25 @GetItemClass(key)">
+            <td class="w-25 @GetRevokedClass(key)">
                 @key.ActivationDate.ToLocalTime()
             </td>
-            <td class="w-25 @GetItemClass(key)">
+            <td class="w-50 @GetRevokedClass(key)">
                 @key.ExpirationDate.ToLocalTime()
             </td>
-            <td class="w-25 @GetItemClass(key) text-decoration-none">
-                @key.IsRevoked
-            </td>
-            <td class="@GetItemClass(key) text-decoration-none">
+            <td>
                 @if (!key.IsRevoked)
                 {
                     <RevokeButton Key="@key" RevokeConfirmed="RevokeConfirmed" />

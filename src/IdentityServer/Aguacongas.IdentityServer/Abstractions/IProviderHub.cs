@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using System;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Abstractions
@@ -13,6 +12,6 @@ namespace Aguacongas.IdentityServer.Abstractions
 
         Task ProviderRemoved(string scheme);
 
-        Task KeyRevoked(string kind, Guid id);
+        Task KeyRevoked(string kind, string id);
     }
 }

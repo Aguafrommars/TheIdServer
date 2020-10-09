@@ -51,48 +51,44 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Subscribes this instance.
         /// </summary>
-        public Task SubscribeAsync(CancellationToken cancellationToken)
+        public async Task SubscribeAsync(CancellationToken cancellationToken)
         {
-            Task.Delay(500, cancellationToken).ContinueWith(t =>
+            var connection = _factory.GetConnection(cancellationToken);
+            if (connection == null)
             {
-                var connection = _factory.GetConnection(cancellationToken);
-                if (connection == null)
+                return;
+            }
+
+            connection.On<string>(nameof(IProviderHub.ProviderAdded), async scheme =>
+            {
+                var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
+                await _manager.AddAsync(definition).ConfigureAwait(false);
+            });
+
+            connection.On<string>(nameof(IProviderHub.ProviderRemoved), async scheme =>
+            {
+                await _manager.RemoveAsync(scheme).ConfigureAwait(false);
+            });
+
+            connection.On<string>(nameof(IProviderHub.ProviderUpdated), async scheme =>
+            {
+                var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
+                await _manager.UpdateAsync(definition).ConfigureAwait(false);
+            });
+
+            connection.On<string, string>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
+            {
+                var keyId = Guid.Parse(id);
+                if (kind == nameof(IAuthenticatedEncryptorDescriptor))
                 {
+                    _dataProtectionKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
                     return;
                 }
 
-                connection.On<string>(nameof(IProviderHub.ProviderAdded), async scheme =>
-                {
-                    var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
-                    await _manager.AddAsync(definition).ConfigureAwait(false);
-                });
-
-                connection.On<string>(nameof(IProviderHub.ProviderRemoved), async scheme =>
-                {
-                    await _manager.RemoveAsync(scheme).ConfigureAwait(false);
-                });
-
-                connection.On<string>(nameof(IProviderHub.ProviderUpdated), async scheme =>
-                {
-                    var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
-                    await _manager.UpdateAsync(definition).ConfigureAwait(false);
-                });
-
-                connection.On<string, Guid>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
-                {
-                    if (kind== nameof(IAuthenticatedEncryptorDescriptor))
-                    {
-                        _dataProtectionKeyManagerWrapper.Manager.RevokeKey(id, "Revoked by another instance.");
-                        return;
-                    }
-
-                    _signingKeyManagerWrapper.Manager.RevokeKey(id, "Revoked by another instance.");
-                });
-
-                _factory.StartConnectionAsync(cancellationToken).ContinueWith(t => { });
+                _signingKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
             });
 
-            return Task.CompletedTask;
+            await _factory.StartConnectionAsync(cancellationToken);
         }
 
         /// <summary>
