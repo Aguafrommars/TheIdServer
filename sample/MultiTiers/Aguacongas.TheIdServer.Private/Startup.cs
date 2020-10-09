@@ -99,7 +99,8 @@ namespace Aguacongas.TheIdServer
                 .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                 .AddEntityFrameworkStore<ConfigurationDbContext>();
 
-            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+            services.AddDatabaseDeveloperPageExceptionFilter()
+                .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         public void Configure(IApplicationBuilder app)
@@ -107,7 +108,7 @@ namespace Aguacongas.TheIdServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseDatabaseErrorPage();
+                    .UseMigrationsEndPoint();
             }
             else
             {

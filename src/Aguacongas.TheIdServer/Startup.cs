@@ -146,7 +146,8 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
-            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+            services.AddDatabaseDeveloperPageExceptionFilter()
+                .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -162,7 +163,7 @@ namespace Aguacongas.TheIdServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseDatabaseErrorPage();
+                    .UseMigrationsEndPoint();
             }
             else
             {
