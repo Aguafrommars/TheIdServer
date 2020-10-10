@@ -32,19 +32,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["SignalR:UseMessagePack"] = "false",
                 ["Seed"] = "false"
             };
-            
+
             TestServer server = null;
             server = TestUtils.CreateTestServer(services =>
             {
+                services.RemoveAll<HubHttpMessageHandlerAccessor>();
+                services.AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = new MockHttpMessageHandler(waitHandle, server.CreateHandler()) });
+                services.RemoveAll<HttpClient>();
+                services.AddTransient(p => server.CreateClient());
                 services.RemoveAll<HttpClientHandler>();
-                services.AddTransient<HttpClientHandler>(p => new MockHttpClientHandler(new HttpClient()));
+                services.AddTransient<HttpClientHandler>(p => new MockHttpClientHandler(p.GetRequiredService<HttpClient>()));
             }, configuration);
-            
+
             server.CreateWebSocketClient();
 
             var provider = server.Host.Services;
-            var hubHttpAccessor = provider.GetRequiredService<HubHttpMessageHandlerAccessor>();
-            hubHttpAccessor.Handler = new MockHttpMessageHandler(waitHandle, server.CreateHandler());
             var store = provider.GetRequiredService<IAdminStore<ExternalProvider>>();
             var serializer = provider.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
 
@@ -62,6 +64,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             await store.CreateAsync(extProvider).ConfigureAwait(false);
             await store.UpdateAsync(extProvider).ConfigureAwait(false);
             await store.DeleteAsync("google").ConfigureAwait(false);
+
+            await Task.Delay(1000).ConfigureAwait(false);
         }
 
         class MockHttpMessageHandler : DelegatingHandler

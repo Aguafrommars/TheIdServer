@@ -58,7 +58,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </summary>
         public Task SubscribeAsync(CancellationToken cancellationToken)
         {
-            Task.Delay(15, cancellationToken).ContinueWith(t =>
+            Task.Delay(0, cancellationToken).ContinueWith(t =>
             {
                 var connection = _factory.GetConnection(cancellationToken);
                 if (connection == null)

@@ -144,7 +144,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 
         EncryptedData IInternalCertificateXmlEncryptor.PerformEncryption(EncryptedXml encryptedXml, XmlElement elementToEncrypt)
         {
-            var cert = _certFactory() ?? throw new CryptographicException("Assertion failed: Cert factory returned null."); // original CryptoUtil.Fail call removed
+            var cert = _certFactory(); // original CryptoUtil.Fail call removed
 
             _logger.LogDebug("Encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint); // original ILogger extensions calls replaced
 
