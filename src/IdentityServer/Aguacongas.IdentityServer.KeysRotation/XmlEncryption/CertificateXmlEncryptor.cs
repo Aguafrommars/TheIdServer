@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
@@ -21,6 +22,9 @@ using System.Xml.Linq;
 // namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
 namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
+    /// <summary>
+    /// An <see cref="IXmlEncryptor"/> that can perform XML encryption by using an X.509 certificate.
+    /// </summary>
     public sealed class CertificateXmlEncryptor : IInternalCertificateXmlEncryptor, IXmlEncryptor
     {
         private readonly Func<X509Certificate2> _certFactory;
@@ -63,6 +67,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             _certFactory = () => certificate;
         }
 
+        // change to private
         private CertificateXmlEncryptor(ILoggerFactory loggerFactory, IInternalCertificateXmlEncryptor encryptor)
         {
             if (loggerFactory == null) // add internal constructor argument check
@@ -139,7 +144,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 
         EncryptedData IInternalCertificateXmlEncryptor.PerformEncryption(EncryptedXml encryptedXml, XmlElement elementToEncrypt)
         {
-            var cert = _certFactory(); // original CryptoUtil.Fail call removed
+            var cert = _certFactory() ?? throw new CryptographicException("Assertion failed: Cert factory returned null."); // original CryptoUtil.Fail call removed
 
             _logger.LogDebug("Encrypting to X.509 certificate with thumbprint '{Thumbprint}'.", cert.Thumbprint); // original ILogger extensions calls replaced
 

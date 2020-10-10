@@ -38,7 +38,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.Delay(500).ContinueWith(_ =>  _subscriber.SubscribeAsync(cancellationToken));
+            return _subscriber.SubscribeAsync(cancellationToken);
         }
 
         /// <summary>
