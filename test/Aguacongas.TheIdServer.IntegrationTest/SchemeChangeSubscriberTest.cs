@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["SignalR:UseMessagePack"] = "false",
                 ["Seed"] = "false"
             };
-            
+
             TestServer server = null;
             server = TestUtils.CreateTestServer(services =>
             {
@@ -43,7 +43,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 services.RemoveAll<HttpClientHandler>();
                 services.AddTransient<HttpClientHandler>(p => new MockHttpClientHandler(p.GetRequiredService<HttpClient>()));
             }, configuration);
-            
+
             server.CreateWebSocketClient();
 
             var provider = server.Host.Services;

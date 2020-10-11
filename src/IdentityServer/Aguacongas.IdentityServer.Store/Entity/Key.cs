@@ -55,5 +55,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         ///   <c>true</c> if this instance is default; otherwise, <c>false</c>.
         /// </value>
         public bool IsDefault { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kind.
+        /// </summary>
+        /// <value>
+        /// The kind.
+        /// </value>
+        public string Kind { get; set; }
     }
 }
