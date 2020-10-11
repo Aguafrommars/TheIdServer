@@ -50,6 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             var configuration = new Dictionary<string, string>
             {
+                ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString(),
                 ["ApiAuthentication:Authority"] = "http://localhost",
                 ["SignalR:HubUrl"] = "http://localhost/providerhub",
                 ["SignalR:UseMessagePack"] = "false",
@@ -77,6 +78,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var wrapper1 = new KeyManagerWrapper<Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.IAuthenticatedEncryptorDescriptor>(new Mock<IKeyManager>().Object, new Mock<IDefaultKeyResolver>().Object, new Mock<IProviderClient>().Object);
             var wrapper2 = new KeyManagerWrapper<IdentityServer.KeysRotation.RsaEncryptorDescriptor>(new Mock<IKeyManager>().Object, new Mock<IDefaultKeyResolver>().Object, new Mock<IProviderClient>().Object);
             var hubConnectionFactory = new HubConnectionFactory(provider.GetRequiredService<IConfiguration>(), provider, new NullLogger<HubConnectionFactory>());
+
+            var connection = hubConnectionFactory.GetConnection(default);
+            Assert.NotNull(connection);
+            await hubConnectionFactory.StartConnectionAsync(default);
+
             var subscriber = new SchemeChangeSubscriber<SchemeDefinition>(hubConnectionFactory, manager, new Mock<IDynamicProviderStore<SchemeDefinition>>().Object, wrapper1, wrapper2, new NullLogger<SchemeChangeSubscriber<SchemeDefinition>>());
             await subscriber.SubscribeAsync(default).ConfigureAwait(false);
 
@@ -89,7 +95,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 SerializedOptions = serializer.SerializeOptions(new GoogleOptions(), typeof(GoogleOptions))
             };
 
-            await Task.Delay(500).ConfigureAwait(false);
+            var result = waitHandle.WaitOne(5000);
+
+            Assert.True(result);
 
             await store.CreateAsync(extProvider).ConfigureAwait(false);
             await store.UpdateAsync(extProvider).ConfigureAwait(false);
