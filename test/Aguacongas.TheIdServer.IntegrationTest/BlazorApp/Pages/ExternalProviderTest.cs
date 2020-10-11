@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
@@ -146,10 +147,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task ClickTransformationButtons_should_not_throw()
         {
-            var apiId = await CreateProvider();
+            var providerId = await CreateProvider();
             CreateTestHost("Alice Smith",
                          SharedConstants.WRITER,
-                         apiId,
+                         providerId,
                          out TestHost host,
                          out RenderedComponent<App> component,
                          out MockHttpMessageHandler mockHttp);
@@ -187,6 +188,30 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
 
             Assert.Equal(expected, buttons.Count);
+        }
+
+        [Fact]
+        public async Task AddRemoveScope_should_not_throw()
+        {
+            var providerId = await CreateProvider();
+            CreateTestHost("Alice Smith",
+                         SharedConstants.WRITER,
+                         providerId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#scope input.new-claim");
+
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync("name"));
+
+            var divs = component.FindAll("ul.list-inline div.input-group-append.select");
+
+            Assert.NotEmpty(divs);
+
+            await host.WaitForNextRenderAsync(() => divs.Last().ClickAsync());
         }
 
         private async Task<string> CreateProvider()
