@@ -11,12 +11,10 @@ data:
   DisableStrictSsl: "true"
   EnableOpenApiDoc: "false"
   IdentityServer__Key__Type: "KeysRotation"
-  IdentityServer__Key__StorageKind: "Redis"
-  IdentityServer__Key__StorageConnectionString: "redis:6379"
+  IdentityServer__Key__StorageKind: "EntityFramework"
   IdentityServer__Key__KeyProtectionOptions__KeyProtectionKind: "X509"
   IdentityServer__Key__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
-  DataProtectionOptions__StorageKind: "Redis"
-  DataProtectionOptions__StorageConnectionString: "redis:6379"
+  DataProtectionOptions__StorageKind: "EntityFramework"
   DataProtectionOptions__KeyProtectionOptions__KeyProtectionKind: "X509"
   DataProtectionOptions__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
   ApiAuthentication__Authority: https://localhost:5443

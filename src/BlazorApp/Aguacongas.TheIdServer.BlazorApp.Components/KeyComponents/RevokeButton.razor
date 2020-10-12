@@ -1,0 +1,59 @@
+﻿@inject IJSRuntime _jsRuntime
+@inject IStringLocalizerAsync<DeleteEntityButton> Localizer
+<AuthorizeView Policy="Is4-Writer">
+    <Authorized>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#revoke-entity-@Key.Id">
+            <span class="oi oi-trash"></span>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="revoke-entity-@Key.Id" tabindex="-1" role="dialog" aria-labelledby="revoke-modal-header" aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">@Localizer["Revoke"]</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="@Localizer["Close"]">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @if (Key.IsDefault)
+                        {
+                            <div class="card border-warning mb-3">
+                                <div class="card-body bg-light">
+                                    <p class="card-text text-warning">
+                                        @Localizer["You are revoking the key currently in use. Be sure what you're doing."]
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <p class="col text-danger">
+                                @(new MarkupString(Localizer["Retype the \"{0}\" if you are sure to revoke it.", Key.Id]))
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control" @bind-value="@_checkEntityId" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                @Localizer["reason"]
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <textarea class="form-control" @bind="@_revokeReason" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @onclick="OnRevokeClicked">@Localizer["Revoke"]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>

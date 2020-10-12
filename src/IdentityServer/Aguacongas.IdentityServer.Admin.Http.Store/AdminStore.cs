@@ -21,7 +21,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             _idProperty = typeof(T).GetProperty("Id") ?? throw new ArgumentException($"The type parameter {typeof(T)} cannot be used because it doesn't contain an Id property.");
         }
 
-        public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
+        public virtual async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var httpClient = await HttpClientFactory
@@ -38,14 +38,14 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        public virtual async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             return await CreateAsync(entity as T, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
             var httpClient = await HttpClientFactory
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
+        public virtual async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
 
@@ -81,7 +81,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
         }
 
-        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        public virtual async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             return await UpdateAsync(entity as T, cancellationToken)

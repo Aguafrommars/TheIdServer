@@ -21,9 +21,9 @@ First, you will need to generate the required certificates.
 
 * *tls-private.pfx* to setup HTTPS on Kestrel for the private farm.
 * *tls-public.pfx* to setup HTTPS on Kestrel for the public farm.
-* *theidserver.pfx* to sign protect generated keys
+* *theidserver.pfx* to protect generated keys
 
-[You can generate pfx using OpenSSL](https://www.ssl.com/how-to/create-a-pfx-p12-certificate-file-using-openssl/).  
+The blog [Configuring HTTPS in ASP.NET Core across different platforms](https://devblogs.microsoft.com/aspnet/configuring-https-in-asp-net-core-across-different-platforms/) explains how to generate certificates on Windows, Linux or Mac.  
 Don't forget to save your password.
 
 2. Certificates persistent volume claim
@@ -245,6 +245,9 @@ kubectl apply -f TheIdServer-private-configmap.yaml
 kubectl apply -f TheIdServer-private-deployment.yaml
 ```
 
+> The deployment use the next version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
+> `- image: aguacongas/theidserver:next # update with the version you want to use`
+
 * Create the network service
 
 ```bash
@@ -271,8 +274,8 @@ metadata:
   name: theidserver-public-secrets
   namespace: theidserver
 data:
-  protect-key: VjZW1icmjAxOQ== # replace by your base64 encoded password for theidserver.pfx
-  tls.pwd: d1YS0xTcx # replace by your base64 encoded password for tls-private.pfx
+  protect-key: UEBzc3cwcmQ= # replace by your base64 encoded password for theidserver.pfx
+  tls.pwd: UEBzc3cwcmQ= # replace by your base64 encoded password for tls-private.pfx
 ```
 
 * Apply the file
@@ -295,11 +298,21 @@ The config map stores the environment variables configuration.
 kubectl apply -f TheIdServer-public-configmap.yaml
 ```
 
+* Create the keys volume claims  
+The keys volume claims stores data protection and identity server signing keys.
+
+```bash
+kubectl apply -f TheIdServer-public-keys-volume.yaml
+```
+
 * Create the deployment
 
 ```bash
 kubectl apply -f TheIdServer-public-deployment.yaml
 ```
+
+> The deployment use the next version of *aguacongas/theidserver* image, choose a [release image version](https://hub.docker.com/r/aguacongas/theidserver/tags) before applying this file  
+> `- image: aguacongas/theidserver:next # update with the version you want to use`
 
 * Create the network service
 
@@ -310,7 +323,7 @@ kubectl apply -f TheIdServer-public-service.yaml
 * Create the ingress
 
 ```bash
-kubectl apply -f TheIdServer-ingress-service.yaml
+kubectl apply -f TheIdServer-public-ingres.yaml
 ```
 
 4. Test the deployment
@@ -348,3 +361,7 @@ To apply those policies launch:
 ```bash
 kubectl apply -f Network-policies.yaml
 ```
+
+## Additional resources
+
+* [Configuring HTTPS in ASP.NET Core across different platforms](https://devblogs.microsoft.com/aspnet/configuring-https-in-asp-net-core-across-different-platforms/)

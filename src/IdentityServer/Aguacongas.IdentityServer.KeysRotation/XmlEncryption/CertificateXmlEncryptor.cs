@@ -21,6 +21,9 @@ using System.Xml.Linq;
 // namespace change from original Microsoft.AspNetCore.DataProtection.XmlEncryption
 namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
 {
+    /// <summary>
+    /// An <see cref="IXmlEncryptor"/> that can perform XML encryption by using an X.509 certificate.
+    /// </summary>
     public sealed class CertificateXmlEncryptor : IInternalCertificateXmlEncryptor, IXmlEncryptor
     {
         private readonly Func<X509Certificate2> _certFactory;
@@ -63,6 +66,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             _certFactory = () => certificate;
         }
 
+        // change to private
         private CertificateXmlEncryptor(ILoggerFactory loggerFactory, IInternalCertificateXmlEncryptor encryptor)
         {
             if (loggerFactory == null) // add internal constructor argument check

@@ -11,5 +11,7 @@ namespace Aguacongas.IdentityServer.Abstractions
         Task ProviderUpdated(string scheme);
 
         Task ProviderRemoved(string scheme);
+
+        Task KeyRevoked(string kind, string id);
     }
 }

@@ -20,6 +20,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.Admin.ruleset</CodeAnalysisRuleSet>
+		<NoWarn>1701;1702;AD0001</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -41,6 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
 		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
 	</ItemGroup>
 

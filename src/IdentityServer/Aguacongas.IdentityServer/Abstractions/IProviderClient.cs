@@ -12,5 +12,7 @@ namespace Aguacongas.IdentityServer.Abstractions
         Task ProviderUpdatedAsync(string scheme, CancellationToken cancellationToken = default);
 
         Task ProviderRemovedAsync(string scheme, CancellationToken cancellationToken = default);
+
+        Task KeyRevokedAsync(string kind, string id, CancellationToken cancellationToken = default);
     }
 }

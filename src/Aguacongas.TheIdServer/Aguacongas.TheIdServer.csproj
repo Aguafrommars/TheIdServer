@@ -22,6 +22,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
+		<NoWarn>1701;1702;AD0001</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Content Remove="compilerconfig.json" />

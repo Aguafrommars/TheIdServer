@@ -16,6 +16,16 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer/Aguacongas.IdentityServer.cs
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/Aguacongas.IdentityServer.EntityFramework.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/"]
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj", "src/Aguacongas.TheIdServer.BlazorApp/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin/Aguacongas.IdentityServer.Admin.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin/"]
+COPY ["src/Aguacongas.TheIdServer.Authentication/Aguacongas.TheIdServer.Authentication.csproj", "src/Aguacongas.TheIdServer.Authentication/"]
+COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/Aguacongas.TheIdServer.Migrations.MySql.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/"]
+COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Oracle/Aguacongas.TheIdServer.Migrations.Oracle.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Oracle/"]
+COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/"]
+COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Sqlite/Aguacongas.TheIdServer.Migrations.Sqlite.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Sqlite/"]
+COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.SqlServer/Aguacongas.TheIdServer.Migrations.SqlServer.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.SqlServer/"]
+COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages/Aguacongas.TheIdServer.BlazorApp.Pages.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.KeysRotation/Aguacongas.IdentityServer.KeysRotation.csproj", "src/IdentityServer/Aguacongas.IdentityServer.KeysRotation/"]
+COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Components/Aguacongas.TheIdServer.BlazorApp.Components.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Components/"]
+COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Infrastructure/Aguacongas.TheIdServer.BlazorApp.Infrastructure.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Infrastructure/"]
 RUN dotnet restore "src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer"
