@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/Aguafrommars/TheIdServer/compare/1.1.0...1.1.1) (2020-10-13)
+
+
+### Bug Fixes
+
+* mysql initail db migration ([8eb6e1e](https://github.com/Aguafrommars/TheIdServer/commit/8eb6e1e5a6ae087a282d6449065b606f1e0c5e61))
+* update packages ([8149f3d](https://github.com/Aguafrommars/TheIdServer/commit/8149f3dacda25bac423b56a95978be9db5e383d7))
+
 # [1.1.0](https://github.com/Aguafrommars/TheIdServer/compare/1.0.2...1.1.0) (2020-10-12)
 
 
