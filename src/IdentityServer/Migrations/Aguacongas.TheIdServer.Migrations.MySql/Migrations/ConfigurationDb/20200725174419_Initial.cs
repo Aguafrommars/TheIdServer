@@ -714,12 +714,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientUris_ClientId_Uri",
-                table: "ClientUris",
-                columns: new[] { "ClientId", "Uri" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ExternalClaimTransformations_Scheme_FromClaimType",
                 table: "ExternalClaimTransformations",
                 columns: new[] { "Scheme", "FromClaimType" },
