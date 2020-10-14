@@ -1,3 +1,38 @@
+## [1.1.1](https://github.com/Aguafrommars/TheIdServer/compare/1.1.0...1.1.1) (2020-10-13)
+
+
+### Bug Fixes
+
+* mysql initail db migration ([8eb6e1e](https://github.com/Aguafrommars/TheIdServer/commit/8eb6e1e5a6ae087a282d6449065b606f1e0c5e61))
+* update packages ([8149f3d](https://github.com/Aguafrommars/TheIdServer/commit/8149f3dacda25bac423b56a95978be9db5e383d7))
+
+# [1.1.0](https://github.com/Aguafrommars/TheIdServer/compare/1.0.2...1.1.0) (2020-10-12)
+
+
+### Bug Fixes
+
+* cannot remove external idp scope ([a7a2f17](https://github.com/Aguafrommars/TheIdServer/commit/a7a2f17a7a5a99e223e62aa6e243f67015e77db5))
+* update packages ([1b0a675](https://github.com/Aguafrommars/TheIdServer/commit/1b0a6759b6fc51f0ca33950395b1ce76a305ac27))
+* update packages ([a7c402c](https://github.com/Aguafrommars/TheIdServer/commit/a7c402c0fa149c0ae9802ad4ff4b1e364f36e0e7))
+* update packages ([ef0196a](https://github.com/Aguafrommars/TheIdServer/commit/ef0196a15d1e7d78a1238a2bbb2aad53fb5ef9b8))
+* update packages ([7498d94](https://github.com/Aguafrommars/TheIdServer/commit/7498d942d535cc7bcf7f5ec4b78db990fca96819))
+* update packages ([ff37a32](https://github.com/Aguafrommars/TheIdServer/commit/ff37a3276d029d5acca456aae3f7b2bfcc226280))
+* update packages ([c3af9c9](https://github.com/Aguafrommars/TheIdServer/commit/c3af9c9ba7137a7beb20c4daa228755a61df903c))
+* update packages ([258b72b](https://github.com/Aguafrommars/TheIdServer/commit/258b72bb7b9defa251cea778c35823671f4669d0))
+* update packages ([36233e0](https://github.com/Aguafrommars/TheIdServer/commit/36233e00bd66ca07b7021e20ce33f722978fbea1))
+* update packages ([c742e60](https://github.com/Aguafrommars/TheIdServer/commit/c742e60ff9bab7c229c5df0ba2556cd733578ed0))
+* update packages ([b93294d](https://github.com/Aguafrommars/TheIdServer/commit/b93294d0e9d56897d2c588157a2b19cf9f061b04))
+* update packages ([490de13](https://github.com/Aguafrommars/TheIdServer/commit/490de1372ac4361ab9b678b6e7cee7768f16c11a))
+* update packages ([3a1b36e](https://github.com/Aguafrommars/TheIdServer/commit/3a1b36ed9f2c74056e187c4159c0f8b4d77d528c))
+* update packages ([0eb841d](https://github.com/Aguafrommars/TheIdServer/commit/0eb841db289c42dcdf42711a7e4ca868bd5a00ba))
+
+
+### Features
+
+* data protection config ([514b9f2](https://github.com/Aguafrommars/TheIdServer/commit/514b9f2b95afd9831e4d3db84ad1364b26b5321c))
+* key revocation ([f679ec7](https://github.com/Aguafrommars/TheIdServer/commit/f679ec7eda2d5be99acf644d3858e0278b1dc654))
+* keys rotation ([32e0b17](https://github.com/Aguafrommars/TheIdServer/commit/32e0b1728c64bcea7fa5592f0a3b63be54083195)), closes [#210](https://github.com/Aguafrommars/TheIdServer/issues/210)
+
 ## [1.0.2](https://github.com/Aguafrommars/TheIdServer/compare/1.0.1...1.0.2) (2020-09-30)
 
 
