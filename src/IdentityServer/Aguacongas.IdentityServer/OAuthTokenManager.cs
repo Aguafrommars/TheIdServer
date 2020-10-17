@@ -106,6 +106,10 @@ namespace Aguacongas.IdentityServer
 
             if (discoveryResponse.Error != null)
             {
+                if (discoveryResponse.Exception != null)
+                {
+                    throw discoveryResponse.Exception;
+                }
                 throw new InvalidOperationException(discoveryResponse.Error);
             }
 
