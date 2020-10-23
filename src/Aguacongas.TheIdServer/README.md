@@ -6,6 +6,21 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ## Installation
 
+### From Helm
+
+The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) Helm chart is available in [hub.helm.sh](https://hub.helm.sh).
+
+#### Install
+
+``` bash
+helm repo add aguafrommars https://aguafrommars.github.io/helm
+helm install aguafrommars theidserver --set theidserver.mysql.db.password=my-P@ssword
+```
+
+#### Upgrade
+
+Follow upgrades intstructions in the [chart readme](https://github.com/Aguafrommars/helm/blob/main/charts/theidserver/README.md#upgrade).
+
 ### From Docker
 
 A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver) is available on Docker Hub.
