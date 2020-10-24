@@ -15,11 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-<<<<<<< HEAD
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.1.20451.13" />
-=======
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
->>>>>>> origin/master
 	</ItemGroup>
 
 	<ItemGroup>
