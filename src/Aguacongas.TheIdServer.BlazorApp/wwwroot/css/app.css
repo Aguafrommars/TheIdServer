@@ -14,10 +14,6 @@ span.input-group-text.oi {
     top: 0;
 }
 
-td.revoked {
-    text-decoration: line-through;
-}
-
 .resource {
     margin-left: -0.9rem;
 }
@@ -47,10 +43,10 @@ td.revoked {
             margin-left: 1.5rem;
         }
 
-    .sidebar .top-row {
-        background-color: #e6e6e6;
-        border-bottom: 1px solid #969595;
-    }
+.sidebar .top-row {
+    background-color: #e6e6e6;
+    border-bottom: 1px solid #d6d5d5;
+}
 
 .sidebar .navbar-brand {
     font-size: 1.1rem;
@@ -99,6 +95,7 @@ td.revoked {
     font-size: 0.9rem;
     color: #969595;
 }
+
 .content {
     padding-top: 1.1rem;
 }
@@ -155,7 +152,6 @@ td.revoked {
     margin-top: -5px
 }
 
-
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -176,9 +172,14 @@ td.revoked {
     }
 
 @media (max-width: 767.98px) {
+    .card-body {
+        overflow-x: auto;
+    }
+
     .main .top-row {
         display: none;
     }
+
         .main .top-row.auth {
             justify-content: space-between;
         }
@@ -197,10 +198,10 @@ td.revoked {
         border-left: 1px solid #d6d5d5;
     }
 
-    .main > div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
+        .main > div {
+            padding-left: 2rem !important;
+            padding-right: 1.5rem !important;
+        }
 
     .navbar-toggler {
         display: none;
@@ -208,13 +209,15 @@ td.revoked {
 
     .sidebar {
         width: 250px;
+        min-width: 250px;
         height: 100vh;
         position: sticky;
         top: 0;
+        overflow-y: auto;
     }
 
-    .sidebar .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
-    }
+        .sidebar .collapse {
+            /* Never collapse the sidebar for wide screens */
+            display: block;
+        }
 }

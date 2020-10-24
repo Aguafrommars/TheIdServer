@@ -29,6 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ExternalProviderComponents
         private void OnDelete(string item)
         {
             Collection.Remove(item);
+            HandleModificationState.EntityUpdated(Model);
         }
 
         private void OnInput(ChangeEventArgs e)

@@ -13,7 +13,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.ClientComponents
     public partial class ClientTokens
     {
         [SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used in component")]
-        [SuppressMessage("Major", "CS0169:Fiel is never asign to", Justification = "Used in component.")]
         private bool _showAllOptions;
 
         private readonly Dictionary<string, TimeSpan?> _accessTokenQuickValues = new Dictionary<string, TimeSpan?>

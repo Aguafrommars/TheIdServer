@@ -23,10 +23,17 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+<<<<<<< HEAD
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0-rc.1.20451.14" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.0-rc.1.20451.17" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0-rc.1.20451.14" />
 		<PackageReference Include="System.Text.Json" Version="5.0.0-rc.1.20451.14" />
+=======
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.9" />
+		<PackageReference Include="System.Text.Json" Version="4.7.2" />
+>>>>>>> origin/master
 	</ItemGroup>
 
 	<ItemGroup>

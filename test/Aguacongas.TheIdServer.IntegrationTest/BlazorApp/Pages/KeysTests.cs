@@ -34,8 +34,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out TestHost host);
 
-            var keyId = host.WaitForNode(component, "#data-protection-keys td").InnerText.Trim();
-            
+            var keyId = host.WaitForNode(component, "#data-protection-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
+
             var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
 
             await host.WaitForNextRenderAsync(() => input.ChangeAsync(keyId));
@@ -86,7 +86,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out RenderedComponent<App> component,
                 out TestHost host);
 
-            var keyId = host.WaitForNode(component, "#signing-keys td").InnerText.Trim();
+            var keyId = host.WaitForNode(component, "#signing-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
 
             var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
 

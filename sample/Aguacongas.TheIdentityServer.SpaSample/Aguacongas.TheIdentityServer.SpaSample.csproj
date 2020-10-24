@@ -14,12 +14,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+<<<<<<< HEAD
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.1.20451.14" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="5.0.0-preview.6.20312.15" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.1.20451.17" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rc.1.20451.17" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rc.1.20451.17" />
 		<PackageReference Include="System.Net.Http.Json" Version="5.0.0-rc.1.20451.14" />
+=======
+		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="3.2.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
+		<PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
+>>>>>>> origin/master
 	</ItemGroup>
 
 	<ItemGroup>

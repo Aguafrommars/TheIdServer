@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -96,7 +95,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Starts the connection asynchronous.
         /// </summary>
-        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "infinite auto reconnection")]
         public async Task StartConnectionAsync(CancellationToken cancellationToken)
         {
             while (true)
