@@ -8,7 +8,6 @@ using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

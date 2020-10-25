@@ -16,6 +16,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -146,7 +147,8 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
-            services.AddDatabaseDeveloperPageExceptionFilter()
+            services.AddScoped<LazyAssemblyLoader>()
+                .AddDatabaseDeveloperPageExceptionFilter()
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
