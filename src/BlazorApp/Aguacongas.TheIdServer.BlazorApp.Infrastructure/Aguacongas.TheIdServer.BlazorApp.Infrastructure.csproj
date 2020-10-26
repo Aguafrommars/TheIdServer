@@ -11,7 +11,6 @@
 		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
 		<Description>TheIdServer administration application models, services, validators and extensions.</Description>
 		<DebugType>Full</DebugType>
-		<RazorLangVersion>3.0</RazorLangVersion>
 		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>

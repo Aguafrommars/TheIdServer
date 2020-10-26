@@ -9,9 +9,8 @@
       <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
-      <Description>TheIdServer administration application apis pages.</Description>
+      <Description>TheIdServer administration application role list page.</Description>
       <DebugType>Full</DebugType>
-      <RazorLangVersion>3.0</RazorLangVersion>
       <PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
   </PropertyGroup>
 
