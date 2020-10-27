@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,6 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
 
         private Task OnNavigateAsync(NavigationContext args)
         {
+            _logger.LogDebug($"OnNavigateAsync {args.Path}");
             var path = args.Path;
             if (path.StartsWith("protectresource"))
             {
@@ -54,7 +56,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
         {
             var assemblies = await _assemblyLoader.LoadAssembliesAsync(
                 new[] { assemblyName }).ConfigureAwait(false);
-            _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));
+            _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));            
         }
     }
 }
