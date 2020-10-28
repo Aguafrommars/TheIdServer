@@ -76,12 +76,13 @@ namespace Microsoft.AspNetCore.Components.Forms
                 return (IValidator)Activator.CreateInstance(entityValidatorType, entity, resource.ResourceKind, localizer);
             }
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
-            var modelValidatorType = Assembly.GetExecutingAssembly()
-                .GetTypes().FirstOrDefault(t => t.IsSubclassOf(abstractValidatorType));
-            if (modelValidatorType == null)
+            var assemby = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetTypes().Any(t => t.IsSubclassOf(abstractValidatorType)));
+            if (assemby == null)
             {
                 return null;
             }
+
+            var modelValidatorType = assemby.GetTypes().First(t => t.IsSubclassOf(abstractValidatorType));
 
             var modelValidatorInstance = (IValidator)Activator.CreateInstance(modelValidatorType, entity, localizer);
             return modelValidatorInstance;

@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rc.2.20475.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rtm.20512.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.2.20475.17" PrivateAssets="all" />
 	</ItemGroup>
 
@@ -66,6 +66,7 @@
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Culture.dll" />
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.dll" />
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.dll" />
+		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identities.dll" />
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identity.dll" />
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Import.dll" />
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Keys.dll" />

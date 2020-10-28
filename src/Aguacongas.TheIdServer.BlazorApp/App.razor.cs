@@ -19,6 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
             "Api",
             "ApiScope",
             "Client",
+            "Culture",
             "ExternalProvider",
             "Identities",
             "Identity",
@@ -31,19 +32,24 @@ namespace Aguacongas.TheIdServer.BlazorApp
         private Task OnNavigateAsync(NavigationContext args)
         {
             _logger.LogDebug($"OnNavigateAsync {args.Path}");
-            var path = args.Path;
-            if (path.StartsWith("protectresource"))
+            var path = args.Path.Split("/")[0];
+            if (path == "protectresource")
             {
                 return LoadAssemblyAsync("Aguacongas.TheIdServer.BlazorApp.Pages.Api.dll");
             }
 
-            var pageKind = _pageKindList.FirstOrDefault(k => path.StartsWith($"{k.ToLower()}s"));
+            if (path == "identityresource")
+            {
+                return LoadAssemblyAsync("Aguacongas.TheIdServer.BlazorApp.Pages.Identity.dll");
+            }
+
+            var pageKind = _pageKindList.FirstOrDefault(k => path == $"{k.ToLower()}s");
             if (pageKind != null)
             {
                 return LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}s.dll");
             }
 
-            pageKind = _pageKindList.FirstOrDefault(k => path.StartsWith($"{k.ToLower()}"));
+            pageKind = _pageKindList.FirstOrDefault(k => path == k.ToLower());
             if (pageKind != null)
             {
                 return LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}.dll");
@@ -54,6 +60,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
 
         private async Task LoadAssemblyAsync(string assemblyName)
         {
+            _logger.LogDebug($"LoadAssemblyAsync {assemblyName}");
             var assemblies = await _assemblyLoader.LoadAssembliesAsync(
                 new[] { assemblyName }).ConfigureAwait(false);
             _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));            

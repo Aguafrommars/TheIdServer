@@ -15,10 +15,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20475.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="5.0.0-preview.6.20312.15" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rtm.20512.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.2.20475.17" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rc.2.20475.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rc.2.20475.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rtm.20512.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rtm.20512.8" />
 		<PackageReference Include="System.Net.Http.Json" Version="5.0.0-rc.2.20475.5" />
 	</ItemGroup>
 
