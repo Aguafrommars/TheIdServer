@@ -62,25 +62,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 options.AddIdentityServerPolicies();
             });
 
-
-            services
+            services.AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddIdentityServer4AdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));
                 })
-                .AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
-                .AddSingleton(p => settings)
-                .AddSingleton<Notifier>()
-                .AddSingleton<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
-                .AddSingleton<ISharedStringLocalizerAsync>(p => new StringLocalizer(p.GetRequiredService<IHttpClientFactory>().CreateClient("localizer"),
-                    p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>(),
-                    p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>(),
-                    p.GetRequiredService<ILogger<StringLocalizer>>()))
-                .AddTransient<IAdminStore<User>, UserAdminStore>()
-                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
-                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
-                .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
-                .AddTransient<OneTimeTokenService>()
+                .AddAdminApplication(settings)
                 .AddHttpClient("oidc")
                 .ConfigureHttpClient(httpClient =>
                 {
@@ -89,11 +76,33 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-            services.AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
-            {
-                var apiUri = new Uri(settings.ApiBaseUrl);
-                httpClient.BaseAddress = apiUri;
-            });
+            services.AddTransient<IAdminStore<Entity.LocalizedResource>>(p =>
+                {
+                    var factory = p.GetRequiredService<IHttpClientFactory>();
+                    return new AdminStore<Entity.LocalizedResource>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>());
+                }).AddTransient<IAdminStore<Entity.Culture>>(p =>
+                {
+                    var factory = p.GetRequiredService<IHttpClientFactory>();
+                    return new AdminStore<Entity.Culture>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>());
+                }).AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
+                {
+                    var apiUri = new Uri(settings.ApiBaseUrl);
+                    httpClient.BaseAddress = apiUri;
+                });
+        }
+
+        public static IServiceCollection AddAdminApplication(this IServiceCollection services, Settings settings)
+        {
+            return services
+                .AddScoped(p => settings)
+                .AddScoped<Notifier>()
+                .AddScoped<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
+                .AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
+                .AddTransient<IAdminStore<User>, UserAdminStore>()
+                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
+                .AddTransient<OneTimeTokenService>();
         }
 
         private static HttpClient CreateApiHttpClient(IServiceProvider p)

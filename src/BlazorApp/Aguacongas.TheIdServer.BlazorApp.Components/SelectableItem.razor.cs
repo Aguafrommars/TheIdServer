@@ -11,6 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     {
         private bool _value;
         private bool disposedValue;
+        private bool _hasBeenRendered;
 
         private bool Value
         {
@@ -41,6 +42,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             base.OnInitialized();
         }
 
+        protected override void OnAfterRender(bool firstRender)
+        {
+            _hasBeenRendered = true;
+            base.OnAfterRender(firstRender);
+        }
+
         private Task GridState_OnSelectAllClicked(bool value)
         {
             Value = value;
@@ -54,7 +61,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                 if (disposing)
                 {
                     GridState.OnSelectAllClicked -= GridState_OnSelectAllClicked;
-                    Selected.InvokeAsync(false);
+                    if (_hasBeenRendered)
+                    {
+                        Selected.InvokeAsync(false);
+                    }
+                    
                 }
                 disposedValue = true;
             }

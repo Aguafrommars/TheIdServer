@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Localization;
@@ -10,7 +9,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
@@ -26,23 +24,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
         public event Action ResourceReady;
 
-        public StringLocalizer(HttpClient client,
-            ILogger<AdminStore<LocalizedResource>> resourceLogger,
-            ILogger<AdminStore<Culture>> cultureLogger,
+        public StringLocalizer(IAdminStore<LocalizedResource> store,
+            IAdminStore<Culture> cultureStore,
             ILogger<StringLocalizer> logger)
         {
-            _store = new AdminStore<LocalizedResource>(Task.FromResult(client), resourceLogger);
-            _cultureStore = new AdminStore<Culture>(Task.FromResult(client), cultureLogger);
+            _store = store ?? throw new ArgumentNullException(nameof(store));
+            _cultureStore = cultureStore ?? throw new ArgumentNullException(nameof(cultureStore));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
-        private StringLocalizer(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore, ILogger<StringLocalizer> logger)
-        {
-            _store = store;
-            _cultureStore = cultureStore;
-            _logger = logger;
-        }
-
 
         public LocalizedString this[string name]
         {
@@ -120,11 +109,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             if (_resources != null)
             {
                 var loaded = _resources.FirstOrDefault(r => r.Key == key)?.Value;
-                return new LocalizedString(key, loaded, loaded == null);
+                return new LocalizedString(key, loaded ?? key, loaded == null);
             }
             await GetAllResourcesAsync().ConfigureAwait(false);
             var value = _resources.FirstOrDefault(r => r.Key == key)?.Value;
-            return new LocalizedString(key, value, value == null);
+            return new LocalizedString(key, value ?? key, value == null);
         }
 
         private async Task GetAllResourcesAsync()
@@ -219,10 +208,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Create an instance by T")]
     public class SharedStringLocalizer<T> : StringLocalizer
     {
-        public SharedStringLocalizer(IHttpClientFactory factory, ILogger<AdminStore<LocalizedResource>> resourceLogger, 
-            ILogger<AdminStore<Culture>> cultureLogger, 
+        public SharedStringLocalizer(IAdminStore<LocalizedResource> store,
+            IAdminStore<Culture> cultureStore, 
             ILogger<SharedStringLocalizer<T>> logger)
-            : base(factory.CreateClient("localizer"), resourceLogger, cultureLogger, logger)
+            : base(store, cultureStore, logger)
         {
         }
     }

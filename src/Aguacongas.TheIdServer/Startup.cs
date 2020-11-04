@@ -3,12 +3,17 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
+using Aguacongas.TheIdServer.Areas.Identity;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Aguacongas.TheIdServer.Services;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Quickstart.UI;
@@ -16,6 +21,10 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -55,9 +64,14 @@ namespace Aguacongas.TheIdServer
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
 
+            void configureOptions(IdentityServerOptions options)
+                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
+
+            services.AddConfigurationHttpStores(configureOptions);
+
             if (isProxy)
             {
-                AddProxyServices(services);
+                AddProxyServices(services, configureOptions);
             }
             else
             {
@@ -147,8 +161,18 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
-            services.AddScoped<LazyAssemblyLoader>()
-                .AddDatabaseDeveloperPageExceptionFilter()
+
+           services.AddScoped<LazyAssemblyLoader>()                
+                .AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>()
+                .AddScoped<SignOutSessionStateManager>()
+                .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
+                .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
+                .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                        p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()))
+                .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new KeyStore<IAuthenticatedEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                        p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
+                .AddAdminApplication(new Settings())
+                .AddDatabaseDeveloperPageExceptionFilter()                
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
@@ -230,6 +254,13 @@ namespace Aguacongas.TheIdServer
 
             app
                 .UseAuthorization()
+                .Use((context, next) =>
+                {
+                    var settings = context.RequestServices.GetRequiredService<Settings>();
+                    var request = context.Request;
+                    settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
+                    return next();
+                })
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapRazorPages();
@@ -239,7 +270,7 @@ namespace Aguacongas.TheIdServer
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
 
-                    endpoints.MapFallbackToFile("index.html");
+                    endpoints.MapFallbackToPage("/_Host");
                 });
 
             if (isProxy)
@@ -318,14 +349,10 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private void AddProxyServices(IServiceCollection services)
+        private void AddProxyServices(IServiceCollection services, Action<IdentityServerOptions> configureOptions)
         {
-            void configureOptions(IdentityServerOptions options)
-                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
-
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                .AddIdentityProviderStore()
-                .AddConfigurationHttpStores(configureOptions)
+             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+                .AddIdentityProviderStore()                
                 .AddOperationalHttpStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))

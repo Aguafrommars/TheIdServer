@@ -59,6 +59,9 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Page Include="Pages\_Host.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />

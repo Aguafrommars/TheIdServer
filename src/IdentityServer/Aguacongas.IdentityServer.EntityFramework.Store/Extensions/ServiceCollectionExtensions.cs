@@ -72,21 +72,21 @@ namespace Microsoft.Extensions.DependencyInjection
                         .MakeGenericType(entityType.GetTypeInfo(), typeof(ConfigurationDbContext).GetTypeInfo()).GetTypeInfo();
                 var iAdminStoreType = typeof(IAdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-                services.AddTransient(iAdminStoreType, adminStoreType);
+                services.AddScoped(iAdminStoreType, adminStoreType);
             }
 
             return services.AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser>)
                 .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole>)
-                .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole, TContext>>()
-                .AddTransient<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()
-                .AddTransient<IAdminStore<Entity.UserLogin>, IdentityUserLoginStore<TUser>>()
-                .AddTransient<IAdminStore<Entity.UserClaim>, IdentityUserClaimStore<TUser>>()
-                .AddTransient<IAdminStore<Entity.UserRole>, IdentityUserRoleStore<TUser>>()
-                .AddTransient<IAdminStore<Entity.UserToken>, IdentityUserTokenStore<TUser>>()
-                .AddTransient<IAdminStore<Entity.Role>, IdentityRoleStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<Entity.RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
-                .AddTransient<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
-                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore>();
+                .AddScoped<IUserStore<TUser>, UserStore<TUser, TRole, TContext>>()
+                .AddScoped<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()
+                .AddScoped<IAdminStore<Entity.UserLogin>, IdentityUserLoginStore<TUser>>()
+                .AddScoped<IAdminStore<Entity.UserClaim>, IdentityUserClaimStore<TUser>>()
+                .AddScoped<IAdminStore<Entity.UserRole>, IdentityUserRoleStore<TUser>>()
+                .AddScoped<IAdminStore<Entity.UserToken>, IdentityUserTokenStore<TUser>>()
+                .AddScoped<IAdminStore<Entity.Role>, IdentityRoleStore<TUser, TRole>>()
+                .AddScoped<IAdminStore<Entity.RoleClaim>, IdentityRoleClaimStore<TUser, TRole>>()
+                .AddScoped<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
+                .AddScoped<IExternalProviderKindStore, ExternalProviderKindStore>();
         }
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
