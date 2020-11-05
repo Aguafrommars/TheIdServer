@@ -10,6 +10,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Areas.Identity;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
@@ -162,18 +163,20 @@ namespace Aguacongas.TheIdServer
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
 
-           services.AddScoped<LazyAssemblyLoader>()                
-                .AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>()
-                .AddScoped<SignOutSessionStateManager>()
-                .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
-                .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
-                .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
-                        p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()))
-                .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new KeyStore<IAuthenticatedEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
-                        p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
-                .AddAdminApplication(new Settings())
-                .AddDatabaseDeveloperPageExceptionFilter()                
-                .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+            services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
+            services.AddScoped<LazyAssemblyLoader>()
+                 .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
+                 .AddScoped<SignOutSessionStateManager>()
+                 .AddScoped<ISharedStringLocalizerAsync, PreRenderStringLocalizer>()
+                 .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
+                 .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
+                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                         p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()))
+                 .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new KeyStore<IAuthenticatedEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                         p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
+                 .AddAdminApplication(new Settings())
+                 .AddDatabaseDeveloperPageExceptionFilter()
+                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -199,7 +202,7 @@ namespace Aguacongas.TheIdServer
                     app.UseHsts();
                 }
             }
-            
+
             var scope = app.ApplicationServices.CreateScope();
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
@@ -256,9 +259,13 @@ namespace Aguacongas.TheIdServer
                 .UseAuthorization()
                 .Use((context, next) =>
                 {
-                    var settings = context.RequestServices.GetRequiredService<Settings>();
+                    var service = context.RequestServices;
+                    var settings = service.GetRequiredService<Settings>();
                     var request = context.Request;
                     settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
+                    var remotePathOptions = service.GetRequiredService<IOptions<RemoteAuthenticationApplicationPathsOptions>>().Value;
+                    remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
+                    remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
                     return next();
                 })
                 .UseEndpoints(endpoints =>
@@ -335,7 +342,7 @@ namespace Aguacongas.TheIdServer
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
@@ -345,19 +352,19 @@ namespace Aguacongas.TheIdServer
             var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
             if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));                
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
             }
         }
 
         private void AddProxyServices(IServiceCollection services, Action<IdentityServerOptions> configureOptions)
         {
-             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                .AddIdentityProviderStore()                
-                .AddOperationalHttpStores()
-                .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-                .AddTheIdServerStores(configureOptions)
-                .AddDefaultTokenProviders();
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+               .AddIdentityProviderStore()
+               .AddOperationalHttpStores()
+               .AddIdentity<ApplicationUser, IdentityRole>(
+                   options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+               .AddTheIdServerStores(configureOptions)
+               .AddDefaultTokenProviders();
         }
 
         private void ConfigureInitialData(IApplicationBuilder app)

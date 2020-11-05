@@ -2,6 +2,7 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using FluentValidation.Results;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,10 +18,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     {
         private readonly IAdminStore<LocalizedResource> _store;
         private readonly IAdminStore<Culture> _cultureStore;
-        private readonly ILogger<StringLocalizer> _logger;
-        private Dictionary<string, LocalizedString> _keyValuePairs = new Dictionary<string, LocalizedString>();
         private IEnumerable<LocalizedResource> _resources;
-        private CultureInfo _currentCulture = new CultureInfo("en");
+        private IEnumerable<string> _cultureList;
+
+        protected Dictionary<string, LocalizedString> KeyValuePairs { get; set; } = new Dictionary<string, LocalizedString>();
+
+        protected ILogger<StringLocalizer> Logger { get; }
+        public CultureInfo CurrentCulture { get; set; } = new CultureInfo("en");
 
         public event Action ResourceReady;
 
@@ -30,7 +34,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _cultureStore = cultureStore ?? throw new ArgumentNullException(nameof(cultureStore));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public LocalizedString this[string name]
@@ -51,13 +55,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
         public Task Reset()
         {
-            _keyValuePairs = new Dictionary<string, LocalizedString>();
+            KeyValuePairs = new Dictionary<string, LocalizedString>();
             _resources = null;
             return GetAllResourcesAsync();
         }
 
         public async Task<IEnumerable<string>> GetSupportedCulturesAsync()
         {
+            if (_cultureList != null)
+            {
+                return _cultureList;
+            }
+
             var response = await _cultureStore.GetAsync(new PageRequest
             {
                 Select = nameof(Culture.Id),
@@ -69,34 +78,36 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 "en"
             };
             cultureList.AddRange(response.Items.Select(c => c.Id));
-            return cultureList.Distinct();
+            _cultureList = cultureList.Distinct();
+            return _cultureList;
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             if (_resources != null)
             {
-                return _keyValuePairs.Values;
+                return KeyValuePairs.Values;
             }
 
             GetAllResourcesAsync().GetAwaiter().GetResult();
-            return _keyValuePairs.Values;
+            return KeyValuePairs.Values;
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.CurrentCulture = culture;
-            return new StringLocalizer(_store, _cultureStore, _logger);
+            return new StringLocalizer(_store, _cultureStore, Logger);
         }
 
-        private LocalizedString GetLocalizedString(string name, params object[] arguments)
+        protected virtual LocalizedString GetLocalizedString(string name, params object[] arguments)
         {
-            if (!_keyValuePairs.TryAdd(name, null))
+            if (!KeyValuePairs.TryAdd(name, null))
             {
-                var localizedString = new LocalizedString(name, string.Format(_keyValuePairs[name] ?? name, arguments), _keyValuePairs[name] == null);
-                if (localizedString.ResourceNotFound && _currentCulture.Name != "en")
+                var value = KeyValuePairs[name];
+                var localizedString = new LocalizedString(name, string.Format(value ?? name, arguments), value == null);
+                if (localizedString.ResourceNotFound && CurrentCulture.Name != "en")
                 {
-                    _logger.LogWarning($"Localized value for key '{name}' not found for culture '{_currentCulture.Name}'");
+                    Logger.LogWarning($"Localized value for key '{name}' not found for culture '{CurrentCulture.Name}'");
                 }
                 return localizedString;
             }
@@ -104,7 +115,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             return new LocalizedString(name, string.Format(name, arguments), true);
         }
 
-        private async Task<LocalizedString> GetStringAsync(string key)
+        protected async Task<LocalizedString> GetStringAsync(string key)
         {
             if (_resources != null)
             {
@@ -116,16 +127,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             return new LocalizedString(key, value ?? key, value == null);
         }
 
-        private async Task GetAllResourcesAsync()
+        protected virtual async Task GetAllResourcesAsync()
         {
-            _resources = new LocalizedResource[0];
+            _resources = Array.Empty<LocalizedResource>();
 
-            _currentCulture = CultureInfo.CurrentCulture;
-            var parent = _currentCulture.Parent;
-            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{_currentCulture.Name}'";
+            CurrentCulture = CultureInfo.CurrentCulture;
+            var parent = CurrentCulture.Parent;
+            var filter = $"{nameof(LocalizedResource.CultureId)} eq '{CurrentCulture.Name}'";
             if (parent != null)
             {
-                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{_currentCulture.Parent.Name}'";
+                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{CurrentCulture.Parent.Name}'";
             }
 
             var page = await _store.GetAsync(new PageRequest
@@ -137,7 +148,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             _resources = page.Items;
             foreach (var resource in _resources)
             {
-                _keyValuePairs[resource.Key] = new LocalizedString(resource.Key, resource.Value ?? resource.Key, resource.Value == null);
+                KeyValuePairs[resource.Key] = new LocalizedString(resource.Key, resource.Value ?? resource.Key, resource.Value == null);
             }
 
             ResourceReady();
@@ -150,7 +161,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 return;
             }
 
-            _keyValuePairs[name] = task.Result;
+            KeyValuePairs[name] = task.Result;
         }
     }
 

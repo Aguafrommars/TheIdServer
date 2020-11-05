@@ -76,7 +76,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-            services.AddTransient<IAdminStore<Entity.LocalizedResource>>(p =>
+            services.AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
+                .AddTransient<IAdminStore<Entity.LocalizedResource>>(p =>
                 {
                     var factory = p.GetRequiredService<IHttpClientFactory>();
                     return new AdminStore<Entity.LocalizedResource>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>());
@@ -93,14 +94,12 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static IServiceCollection AddAdminApplication(this IServiceCollection services, Settings settings)
         {
-            return services
-                .AddScoped(p => settings)
+            return services.AddScoped(p => settings)
                 .AddScoped<Notifier>()
-                .AddScoped<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
-                .AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
-                .AddScoped<IAdminStore<User>, UserAdminStore>()
-                .AddScoped<IAdminStore<Role>, RoleAdminStore>()
-                .AddScoped<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddScoped<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()                
+                .AddTransient<IAdminStore<User>, UserAdminStore>()
+                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
+                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddTransient<OneTimeTokenService>();
         }

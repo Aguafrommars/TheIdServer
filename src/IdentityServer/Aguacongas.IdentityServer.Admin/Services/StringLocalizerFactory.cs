@@ -20,7 +20,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     public class StringLocalizerFactory : IStringLocalizerFactory, ISupportCultures
     {
         private readonly IServiceProvider _provider;
-
+        private IEnumerable<string> _cultureNames;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="StringLocalizerFactory"/> class.
@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <value>
         /// The cultures names.
         /// </value>
-        public IEnumerable<string> CulturesNames => GetCultureNamesAsync().GetAwaiter().GetResult();
+        public IEnumerable<string> CulturesNames => GetCultureNames();
 
         /// <summary>
         /// Creates an <see cref="T:Microsoft.Extensions.Localization.IStringLocalizer" /> using the <see cref="T:System.Reflection.Assembly" /> and
@@ -76,10 +76,28 @@ namespace Aguacongas.IdentityServer.Admin.Services
             return new StringLocalizer(_provider, baseName, location);
         }
 
+        private IEnumerable<string> GetCultureNames()
+        {
+            if (_cultureNames != null)
+            {
+                return _cultureNames;
+            }
+
+            lock (_provider)
+            {
+                if (_cultureNames != null)
+                {
+                    return _cultureNames;
+                }
+
+                return GetCultureNamesAsync().GetAwaiter().GetResult();
+            }
+        }
 
         private async Task<IEnumerable<string>> GetCultureNamesAsync()
         {
-            var cultureStore = _provider.GetRequiredService<IAdminStore<Culture>>();
+            using var scope = _provider.CreateScope();
+            var cultureStore = scope.ServiceProvider.GetRequiredService<IAdminStore<Culture>>();
 
             var page = await cultureStore.GetAsync(new PageRequest
             {
@@ -90,7 +108,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
             culturesList.AddRange(page
                 .Items
                 .Select(c => c.Id));
-            return culturesList.Distinct();
+            _cultureNames =  culturesList.Distinct();
+
+            return _cultureNames;
         }
     }
 }

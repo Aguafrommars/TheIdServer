@@ -18,10 +18,7 @@
 </head>
 <body class="bg-light">
     <app>
-        @if (!HttpContext.Request.Path.StartsWithSegments("/authentication"))
-        {
-            <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
-        }
+        <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
     </app>
 
     <div id="blazor-error-ui">

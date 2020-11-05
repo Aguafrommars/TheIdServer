@@ -11,6 +11,7 @@
 		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
 		<Description>TheIdServer administration application.</Description>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
