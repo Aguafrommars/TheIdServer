@@ -98,9 +98,9 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddScoped<Notifier>()
                 .AddScoped<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()
                 .AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
-                .AddTransient<IAdminStore<User>, UserAdminStore>()
-                .AddTransient<IAdminStore<Role>, RoleAdminStore>()
-                .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()
+                .AddScoped<IAdminStore<User>, UserAdminStore>()
+                .AddScoped<IAdminStore<Role>, RoleAdminStore>()
+                .AddScoped<IAdminStore<ExternalProvider>, ExternalProviderStore>()
                 .AddTransient(typeof(IStringLocalizerAsync<>), typeof(StringLocalizer<>))
                 .AddTransient<OneTimeTokenService>();
         }

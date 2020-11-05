@@ -63,13 +63,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
 
-            GridState.OnHeaderClicked += async e =>
-            {
-                _pageRequest.OrderBy = e.OrderBy;
-                await GetEntityList(_pageRequest)
-                    .ConfigureAwait(false);
-                StateHasChanged();
-            };
+            GridState.OnHeaderClicked += GridState_OnHeaderClicked;
         }
 
         protected Task OnFilterChanged(string filter)
@@ -139,7 +133,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var page = await AdminStore.GetAsync(pageRequest)
                             .ConfigureAwait(false);
             EntityList = page.Items;
-        }        
+        }
+
+        private async Task GridState_OnHeaderClicked(Models.SortEventArgs e)
+        {
+            _pageRequest.OrderBy = e.OrderBy;
+            await GetEntityList(_pageRequest)
+                .ConfigureAwait(false);
+            StateHasChanged();
+        }
+
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -150,6 +153,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 if (disposing)
                 {
+                    GridState.OnHeaderClicked -= GridState_OnHeaderClicked;
                     _cancellationTokenSource?.Dispose();
                 }
 

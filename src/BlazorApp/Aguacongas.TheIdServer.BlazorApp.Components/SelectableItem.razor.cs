@@ -19,7 +19,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             set
             {
                 _value = value;
-                Selected.InvokeAsync(value);
+                if (_hasBeenRendered)
+                {
+                    Selected.InvokeAsync(value);
+                }
             }
         }
 

@@ -35,9 +35,7 @@ else
             <RowTemplate>
                 <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
                     <td class="w-50" @onclick="() => OnRowClicked(item)">@item.Id</td>
-                    <td class="w-50" @onclick="() => OnRowClicked(item)">
-                        @item.Name
-                    </td>
+                    <td class="w-50" @onclick="() => OnRowClicked(item)">@item.Name</td>
                 </SelectableItem>
             </RowTemplate>
         </EntitiesGrid>

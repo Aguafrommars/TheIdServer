@@ -6,7 +6,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Roles
 {
     public partial class Roles
     {
-        protected override string SelectProperties => $"{nameof(Entity.Role.Id)},{nameof(Entity.Role.Name)}";
+        protected override string SelectProperties => $"{nameof(Entity.Role.Id)},{nameof(Entity.Role.Name)},{nameof(Entity.Role.ConcurrencyStamp)}";
 
         protected override string ExportExpand => nameof(Entity.Role.RoleClaims);
     }
