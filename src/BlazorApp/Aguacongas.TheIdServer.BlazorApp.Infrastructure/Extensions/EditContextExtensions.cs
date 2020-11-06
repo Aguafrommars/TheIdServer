@@ -76,7 +76,8 @@ namespace Microsoft.AspNetCore.Components.Forms
                 return (IValidator)Activator.CreateInstance(entityValidatorType, entity, resource.ResourceKind, localizer);
             }
             var abstractValidatorType = typeof(AbstractValidator<>).MakeGenericType(model.GetType());
-            var assemby = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetTypes().Any(t => t.IsSubclassOf(abstractValidatorType)));
+            var assemby = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("Aguacongas.TheIdServer.BlazorApp"))
+                .FirstOrDefault(a => a.GetTypes().Any(t => t.IsSubclassOf(abstractValidatorType)));
             if (assemby == null)
             {
                 return null;

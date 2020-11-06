@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -158,6 +159,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .AddSingleton(p => new FakeAuthenticationStateProvider(
                         userName,
                         claims))
+                    .AddScoped<LazyAssemblyLoader>()
                     .AddHttpClient("oidc")
                     .ConfigureHttpClient(httpClient =>
                     {
