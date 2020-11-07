@@ -25,6 +25,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         public abstract string Entities { get; }
 
+
         protected EntitiesPageTestBase(ApiFixture fixture, ITestOutputHelper testOutputHelper)
         {
             _fixture = fixture;

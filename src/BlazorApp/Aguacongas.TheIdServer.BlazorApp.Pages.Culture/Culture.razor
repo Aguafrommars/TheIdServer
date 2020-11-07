@@ -1,0 +1,57 @@
+﻿@using Aguacongas.TheIdServer.BlazorApp.Pages.Culture.Components
+@page "/culture"
+@page "/culture/{id}"
+@inherits EntityModel<Entity.Culture>
+
+@if (Model == null)
+{
+    <PageLoading />
+}
+else
+{
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <CascadingValue Value="HandleModificationState">
+            <div class="row bg-light sticky-top mb-3">
+                <div class="col">
+                    @if (IsNew)
+                    {
+                        <AuthorizeView Policy="Is4-Writer">
+                            <Authorized Context="culture">
+                                <CultureInfos @bind-Value="@Model.Id" Entity="_cultureInfo" EntityChanged="CultureSelected" />
+                            </Authorized>
+                        </AuthorizeView>                        
+                    }
+                    else
+                    {
+                        <h3>@Model.Id <small><em>@Info.DisplayName</em></small></h3>
+                    }
+                </div>
+                <div>
+                    <SaveButton />
+                    @if (!IsNew)
+                    {
+                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                    }
+                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                </div>
+
+                <div class="col">
+                    <Filter CssClass="mt-1" />
+                </div>
+                <div class="w-100"></div>
+                <FluentValidationValidator />
+                <ValidationSummary class="col" />
+            </div>
+            <div class="entity-details">
+                <div id="resources" class="card mb-3">
+                    <div class="card-header">
+                        <EntitySubGridTitle Text="@Localizer["Resources"]" Collection="@Model.Resources" CreateModel="CreateResource" />
+                    </div>
+                    <div class="card-body">
+                        <LocalizedResources Collection="@Model.Resources" />
+                    </div>
+                </div>
+            </div>
+        </CascadingValue>
+    </EditForm>
+}

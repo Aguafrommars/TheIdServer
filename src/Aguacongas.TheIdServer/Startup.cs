@@ -3,12 +3,18 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
+using Aguacongas.TheIdServer.Areas.Identity;
+using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Aguacongas.TheIdServer.Services;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Quickstart.UI;
@@ -16,6 +22,11 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -54,9 +65,14 @@ namespace Aguacongas.TheIdServer
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
 
+            void configureOptions(IdentityServerOptions options)
+                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
+
+            services.AddConfigurationHttpStores(configureOptions);
+
             if (isProxy)
             {
-                AddProxyServices(services);
+                AddProxyServices(services, configureOptions);
             }
             else
             {
@@ -146,7 +162,21 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                     .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
-            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+
+            services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
+            services.AddScoped<LazyAssemblyLoader>()
+                 .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
+                 .AddScoped<SignOutSessionStateManager>()
+                 .AddScoped<ISharedStringLocalizerAsync, PreRenderStringLocalizer>()
+                 .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
+                 .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
+                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                         p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()))
+                 .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new KeyStore<IAuthenticatedEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
+                         p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
+                 .AddAdminApplication(new Settings())
+                 .AddDatabaseDeveloperPageExceptionFilter()
+                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
@@ -162,7 +192,7 @@ namespace Aguacongas.TheIdServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseDatabaseErrorPage();
+                    .UseMigrationsEndPoint();
             }
             else
             {
@@ -227,6 +257,17 @@ namespace Aguacongas.TheIdServer
 
             app
                 .UseAuthorization()
+                .Use((context, next) =>
+                {
+                    var service = context.RequestServices;
+                    var settings = service.GetRequiredService<Settings>();
+                    var request = context.Request;
+                    settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
+                    var remotePathOptions = service.GetRequiredService<IOptions<RemoteAuthenticationApplicationPathsOptions>>().Value;
+                    remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
+                    remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
+                    return next();
+                })
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapRazorPages();
@@ -236,7 +277,7 @@ namespace Aguacongas.TheIdServer
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
 
-                    endpoints.MapFallbackToFile("index.html");
+                    endpoints.MapFallbackToPage("/_Host");
                 });
 
             if (isProxy)
@@ -301,7 +342,7 @@ namespace Aguacongas.TheIdServer
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
@@ -311,23 +352,19 @@ namespace Aguacongas.TheIdServer
             var redisConnectionString = Configuration.GetValue<string>("SignalR:RedisConnectionString");
             if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));                
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
             }
         }
 
-        private void AddProxyServices(IServiceCollection services)
+        private void AddProxyServices(IServiceCollection services, Action<IdentityServerOptions> configureOptions)
         {
-            void configureOptions(IdentityServerOptions options)
-                => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
-
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                .AddIdentityProviderStore()
-                .AddConfigurationHttpStores(configureOptions)
-                .AddOperationalHttpStores()
-                .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-                .AddTheIdServerStores(configureOptions)
-                .AddDefaultTokenProviders();
+               .AddIdentityProviderStore()
+               .AddOperationalHttpStores()
+               .AddIdentity<ApplicationUser, IdentityRole>(
+                   options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+               .AddTheIdServerStores(configureOptions)
+               .AddDefaultTokenProviders();
         }
 
         private void ConfigureInitialData(IApplicationBuilder app)

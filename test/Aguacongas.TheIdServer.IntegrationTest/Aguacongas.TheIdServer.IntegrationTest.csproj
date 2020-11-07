@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
   </PropertyGroup>
@@ -11,11 +11,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.0-rtm.20512.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0-rtm.20512.8" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0-rc.2.20475.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201020-06" />
     <PackageReference Include="Moq" Version="4.14.7" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

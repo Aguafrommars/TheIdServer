@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.Oracle</RootNamespace>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.13.1127" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0-rc.2.20475.6" />
 	</ItemGroup>
 
 	<ItemGroup>

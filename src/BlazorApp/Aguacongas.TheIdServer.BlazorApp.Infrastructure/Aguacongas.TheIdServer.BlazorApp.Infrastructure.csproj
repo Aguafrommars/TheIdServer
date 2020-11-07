@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
@@ -11,17 +11,16 @@
 		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
 		<Description>TheIdServer administration application models, services, validators and extensions.</Description>
 		<DebugType>Full</DebugType>
-		<RazorLangVersion>3.0</RazorLangVersion>
 		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="3.1.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="3.2.1" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.9" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="3.1.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rtm.20512.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rtm.20512.8" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20475.5" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.0-rc.2.20475.17" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.8.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>

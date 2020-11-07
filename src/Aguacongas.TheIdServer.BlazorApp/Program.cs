@@ -1,6 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
@@ -16,8 +18,14 @@ namespace Aguacongas.TheIdServer.BlazorApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
             builder.AddTheIdServerApp();
+            var configuration = builder.Configuration;
+            var settings = configuration.Get<Settings>();
+            if (!settings.Prerendered)
+            {
+                builder.RootComponents.Add<App>("app");
+            }
+            
             var host = builder.Build();
             var runtime = host.Services.GetRequiredService<IJSRuntime>();
             var cultureName = await runtime.InvokeAsync<string>("localStorage.getItem", "culture").ConfigureAwait(false);

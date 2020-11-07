@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     [Collection("api collection")]
     public class ExternalProvidersTest : EntitiesPageTestBase<ExternalProvider>
     {
-        public override string Entities => "providers";
+        public override string Entities => "externalproviders";
 
         public ExternalProvidersTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture, testOutputHelper)

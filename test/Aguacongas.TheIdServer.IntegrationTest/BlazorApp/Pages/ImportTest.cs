@@ -2,7 +2,7 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
-using BlazorInputFile;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop.Infrastructure;
@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             WaitForLoaded(component);
 
             var jsRuntime = _host.ServiceProvider.GetRequiredService<JSRuntimeImpl>();
-            DotNetDispatcher.BeginInvokeDotNet(jsRuntime, new DotNetInvocationInfo(null, nameof(InputFile.NotifyChange), 1, default), "[[{ \"name\": \"test.json\" }]]");
+            DotNetDispatcher.BeginInvokeDotNet(jsRuntime, new DotNetInvocationInfo(null, "NotifyChange", 1, default), "[[{ \"name\": \"test.json\" }]]");
 
             var markup = _host.WaitForContains(component, "text-success");
             Assert.Contains("text-success", markup);

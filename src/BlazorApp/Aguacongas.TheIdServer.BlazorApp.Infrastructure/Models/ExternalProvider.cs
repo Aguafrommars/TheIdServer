@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -66,7 +67,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 
         private static Type GetOptionsType(Entity.ExternalProvider externalProvider)
         {
-            return Type.GetType($"{typeof(RemoteAuthenticationOptions).Namespace}.{externalProvider.KindName}Options");
+            var typeName = $"{typeof(RemoteAuthenticationOptions).Namespace}.{externalProvider.KindName}Options";
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetType(typeName) != null);
+            return assembly.GetType(typeName);
         }
     }
 }

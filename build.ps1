@@ -20,10 +20,9 @@ elseif ($env:APPVEYOR_REPO_BRANCH) {
 }
 Write-Host "dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=****** -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version"
 dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=$env:sonarqube -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version
-Write-Host "dotnet test -c Release --settings coverletArgs.runsettings"
+Write-Host "dotnet test -c Release --settings coverletArgs.runsettings --filter FullyQualifiedName!~UserStoreTest"
 
-dotnet build -c Release
-dotnet test -c Release --no-build --settings coverletArgs.runsettings
+dotnet test --settings coverletArgs.runsettings --filter FullyQualifiedName!~UserStoreTest
 
 if ($LASTEXITCODE -ne 0) {
 	$result = $LASTEXITCODE

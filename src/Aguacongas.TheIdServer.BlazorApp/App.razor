@@ -1,20 +1,26 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly"
-        AdditionalAssemblies="new[] { typeof(Pages.Index).Assembly }">
-    <Found Context="routeData">
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-            <NotAuthorized>
-                <RedirectToLogin />
-            </NotAuthorized>
-            <Authorizing>
-                <PageLoading Information="Authentication in progress" />
-            </Authorizing>
-        </AuthorizeRouteView>
-    </Found>
-    <NotFound>
-        <CascadingAuthenticationState>
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.WebAssembly.Services
+@using Microsoft.Extensions.Logging
+@inject LazyAssemblyLoader _assemblyLoader
+@inject ILogger<App> _logger
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly"
+            AdditionalAssemblies="@_lazyLoadedAssemblies" OnNavigateAsync="@OnNavigateAsync">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+                <Authorizing>
+                    <PageLoading Information="Authentication in progress" />
+                </Authorizing>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
                 <PageNotFound />
             </LayoutView>
-        </CascadingAuthenticationState>
-    </NotFound>
-</Router>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
