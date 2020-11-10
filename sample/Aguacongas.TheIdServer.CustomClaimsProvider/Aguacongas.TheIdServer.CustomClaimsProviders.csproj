@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0-rc.2.20475.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0-alpha.1.20420.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-alpha.1.20420.3" />
   </ItemGroup>
 
   <ItemGroup>

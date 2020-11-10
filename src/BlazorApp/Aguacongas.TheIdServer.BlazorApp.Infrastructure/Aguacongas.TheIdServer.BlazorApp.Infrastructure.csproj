@@ -17,10 +17,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="3.1.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rtm.20512.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rtm.20512.8" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20475.5" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.0-rc.2.20475.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-alpha.1.20420.3" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.8.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>

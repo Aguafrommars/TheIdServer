@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="4.4.0" />
 		<PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.2.20475.5" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-alpha.1.20420.3" />
 	</ItemGroup>
 
 	<ItemGroup>
