@@ -387,15 +387,10 @@ namespace Aguacongas.TheIdServer
             if (Configuration.GetValue<bool>("Seed"))
             {
                 using var scope = app.ApplicationServices.CreateScope();
-                SeedData.SeedConfiguration(scope);
-                SeedData.SeedUsers(scope);
+                SeedData.SeedConfiguration(scope, Configuration);
+                SeedData.SeedUsers(scope, Configuration);
             }
 
-            if (Configuration.GetValue<bool>("SeedProvider"))
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                SeedData.SeedProviders(Configuration, scope.ServiceProvider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>());
-            }
         }
         private void ConfigureDataProtection(IServiceCollection services)
         {
