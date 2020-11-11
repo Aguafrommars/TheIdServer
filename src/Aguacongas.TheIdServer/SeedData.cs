@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
@@ -128,7 +127,7 @@ namespace Aguacongas.TheIdServer
             }
 
             var userMgr = provider.GetRequiredService<UserManager<ApplicationUser>>();
-            var userList = configuration.GetSection("InitialData:Users").Get<IEnumerable<ApplicationUser>>();
+            var userList = configuration.GetSection("InitialData:Users").Get<IEnumerable<ApplicationUser>>() ?? Array.Empty<ApplicationUser>();
             int index = 0;
             foreach(var user in userList)
             {

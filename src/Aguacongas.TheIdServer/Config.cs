@@ -1,11 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using static IdentityServer4.IdentityServerConstants;
+using IdentityServer4;
 
 namespace Aguacongas.TheIdServer
 {
@@ -27,12 +27,12 @@ namespace Aguacongas.TheIdServer
 
         public static IEnumerable<ApiResource> GetApis(IConfiguration configuration)
         {
-            var apiList = configuration.GetSection("InitialData:Apis").Get<IEnumerable<ApiResource>>();
-            foreach(var api in apiList)
+            var apiList = configuration.GetSection("InitialData:Apis").Get<IEnumerable<ApiResource>>() ?? Array.Empty<ApiResource>();
+            foreach (var api in apiList)
             {
-                foreach(var secret in api.ApiSecrets.Where(s => s.Type == SecretTypes.SharedSecret))
+                foreach(var secret in api.ApiSecrets.Where(s => s.Type == IdentityServerConstants.SecretTypes.SharedSecret))
                 {
-                    secret.Value = secret.Value.Sha256();
+                    secret.Value = HashExtensions.Sha256(secret.Value);
                 }
                 yield return api;
             }
@@ -40,17 +40,17 @@ namespace Aguacongas.TheIdServer
 
         public static IEnumerable<ApiScope> GetApiScopes(IConfiguration configuration)
         {
-            return configuration.GetSection("InitialData:ApiScopes").Get<IEnumerable<ApiScope>>();
+            return configuration.GetSection("InitialData:ApiScopes").Get<IEnumerable<ApiScope>>() ?? Array.Empty<ApiScope>();
         }
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
-            var clientList = configuration.GetSection("InitialData:Clients").Get<IEnumerable<Client>>();
+            var clientList = configuration.GetSection("InitialData:Clients").Get<IEnumerable<Client>>() ?? Array.Empty<Client>();
             foreach(var client in clientList)
             {
-                foreach(var secret in client.ClientSecrets.Where(s => s.Type == SecretTypes.SharedSecret))
+                foreach(var secret in client.ClientSecrets.Where(s => s.Type == IdentityServerConstants.SecretTypes.SharedSecret))
                 {
-                    secret.Value = secret.Value.Sha256();
+                    secret.Value = HashExtensions.Sha256(secret.Value);
                 }
                 yield return client;
             }
