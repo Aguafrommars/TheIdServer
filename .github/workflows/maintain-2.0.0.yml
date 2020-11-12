@@ -1,6 +1,6 @@
 # Update all depencies each days if needed
 
-name: Release 1.0 Dependencies
+name: Release 2.0 Dependencies
 
 # Controls when the action will run.
 on:
@@ -29,7 +29,7 @@ jobs:
         run: | 
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git merge origin/preview/1.0.0 --allow-unrelated-histories
+          git merge origin/preview/2.0.0 --allow-unrelated-histories
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.6.0
@@ -38,5 +38,5 @@ jobs:
         run: ./update-dependencies.ps1
         env:
           SRC_BRANCH: maintain/1.0.0
-          DEST_BRANCH: preview/1.0.0
+          DEST_BRANCH: preview/2.0.0
           GITHUB_TOKEN: ${{ secrets.PAT }}
