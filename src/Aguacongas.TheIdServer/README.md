@@ -165,16 +165,6 @@ Starting the server with the **/seed** command-line argument creates the databas
 * **Is4-Writer** authorizes users in this role to write data.
 * **Is4-Reader** permits users in this role to read data.
 
-#### Users
-
-* **alice** (password *Pass123$*) is assigned to the roles **Is4-Writer** and **Is4-Reader**.
-* **bob** (password *Pass123$*) is assigned to the role **Is4-Reader**.
-
-#### Protected resources (API)
-
-* **theidserveradminapi** the server API asking for claims **name** and **role**
-* **api1** a sample API 
-
 #### Identity resources
 
 * **profile** default profile resource with **role** claim
@@ -183,15 +173,220 @@ Starting the server with the **/seed** command-line argument creates the databas
 * **email** default email resource
 * **phone** default phone resource
 
+#### Users
+
+Users defined in `InitialData:Users` configuration section are loaded and stored to the DB.
+
+Default configuration:
+
+```json
+"InitialData": {
+...
+ "Users": [
+    {
+      "UserName": "alice",
+      "Email": "alice@theidserver.com",
+      "EmailConfirmed": true,
+      "PhoneNumber": "+41766403736",
+      "PhoneNumberConfirmed": true,
+      "Password": "Pass123$",
+      "Roles": [
+        "Is4-Writer",
+        "Is4-Reader"
+      ],
+      "Claims": [
+        {
+          "ClaimType": "name",
+          "ClaimValue": "Alice Smith"
+        },
+        {
+          "ClaimType": "given_name",
+          "ClaimValue": "Alice"
+        },
+        {
+          "ClaimType": "family_name",
+          "ClaimValue": "Smith"
+        },
+        {
+          "ClaimType": "middle_name",
+          "ClaimValue": "Alice Smith"
+        },
+        {
+          "ClaimType": "nickname",
+          "ClaimValue": "alice"
+        },
+        {
+          "ClaimType": "website",
+          "ClaimValue": "http://alice.com"
+        },
+        {
+          "ClaimType": "address",
+          "ClaimValue": "{ \"street_address\": \"One Hacker Way\", \"locality\": \"Heidelberg\", \"postal_code\": \"69118\", \"country\": \"Germany\" }",
+        },
+        {
+          "ClaimType": "birthdate",
+          "ClaimValue": "1970-01-01"
+        },
+        {
+          "ClaimType": "zoneinfo",
+          "ClaimValue": "ch"
+        },
+        {
+          "ClaimType": "gender",
+          "ClaimValue": "female"
+        },
+        {
+          "ClaimType": "profile",
+          "ClaimValue": "http://alice.com/profile"
+        },
+        {
+          "ClaimType": "locale",
+          "ClaimValue": "fr"
+        },
+        {
+          "ClaimType": "picture",
+          "ClaimValue": "http://alice.com/picture"
+        }
+      ]
+    }
+  ]
+}
+```
+
+> A user with *Is4-Writer* and *Is4-Reader* roles is required to use the admin app.
+
+#### Protected resources (API)
+
+Apis defined in `InitialData:Apis` configuration section are loaded and stored to the DB.
+
+Default configuration:
+
+```json
+"InitialData": {
+...
+  "Apis": [
+    {
+      "Name": "theidserveradminapi",
+      "DisplayName": "TheIdServer admin API",
+      "UserClaims": [
+        "name",
+        "role"
+      ],
+      "ApiSecrets": [
+        {
+          "Type": "SharedSecret",
+          "Value": "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d"
+        }
+      ],
+      "Scopes": [
+        "theidserveradminapi"
+      ]
+    }
+  ],
+}
+```
+
+> The api **theidserveradminapi** is required for the admin app.
+
+#### ApiScopes
+
+ApiScopes defined in `InitialData:ApiScopes` configuration section are loaded and stored to the DB.
+
+Default configuration:
+
+```json
+"InitialData": {
+...
+  "ApiScopes": [
+    {
+      "Name": "theidserveradminapi",
+      "DisplayName": "TheIdServer admin API",
+      "UserClaims": [
+        "name",
+        "role"
+      ]
+    }
+  ],
+}
+```
+
+> The scope **theidserveradminapi** is required for the admin app.
+
 #### Clients
 
-* **theidserveradmin** the admin app client
-* **public-server** the client to use a server as proxy
-* **theidserver-swagger** the client for the API documentation
-* **client** a client credential flow sample client
-* **mvc** a hybrid and client credential flow sample client
-* **spa** an authorization code flow sample client
-* **device** a device flow sample client
+Clients defined in `InitialData:Clients` configuration section are loaded and stored to the DB.
+
+Default configuration:
+
+```json
+"InitialData": {
+...
+  "Clients": [
+    {
+      "ClientId": "theidserveradmin",
+      "ClientName": "TheIdServer admin SPA Client",
+      "ClientUri": "https://localhost:5443/",
+      "ClientClaimsPrefix": null,
+      "AllowedGrantTypes": [ "authorization_code" ],
+      "RequirePkce": true,
+      "RequireClientSecret": false,
+      "BackChannelLogoutSessionRequired": false,
+      "FrontChannelLogoutSessionRequired": false,
+      "RedirectUris": [
+        "http://localhost:5001/authentication/login-callback",
+        "https://localhost:5443/authentication/login-callback"
+      ],
+      "PostLogoutRedirectUris": [
+        "http://localhost:5001/authentication/logout-callback",
+        "https://localhost:5443/authentication/logout-callback"
+      ],
+      "AllowedCorsOrigins": [
+        "http://localhost:5001",
+        "https://localhost:5443"
+      ],
+      "AllowedScopes": [
+        "openid",
+        "profile",
+        "theidserveradminapi"
+      ],
+      "AccessTokenType": "Reference"
+    },
+    {
+      "ClientId": "public-server",
+      "ClientName": "Public server Credentials Client",
+      "ClientClaimsPrefix": null,
+      "AllowedGrantTypes": [ "client_credentials" ],
+      "ClientSecrets": [
+        {
+          "Type": "SharedSecret",
+          "Value": "84137599-13d6-469c-9376-9e372dd2c1bd"
+        }
+      ],
+      "Claims": [
+        {
+          "Type": "role",
+          "Value": "Is4-Writer"
+        },
+        {
+          "Type": "role",
+          "Value": "Is4-Reader"
+        }
+      ],
+      "BackChannelLogoutSessionRequired": false,
+      "FrontChannelLogoutSessionRequired": false,
+      "AllowedScopes": [
+        "openid",
+        "profile",
+        "theidserveradminapi"
+      ],
+      "AccessTokenType": "Reference"
+    }
+  ],
+}
+```
+
+> The client **theidserveradmin** is required by the admin app.
+> The client **public-server** is required to call web apis and server side prerendering of the admin app.
 
 ## Configure Signing Key
 
