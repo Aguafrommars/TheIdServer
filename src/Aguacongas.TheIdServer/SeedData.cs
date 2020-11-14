@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
@@ -11,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
@@ -53,17 +53,19 @@ namespace Aguacongas.TheIdServer
                 appcontext.Database.Migrate();
             }
 
-            SeedUsers(scope);
-            SeedConfiguration(scope);
+            SeedUsers(scope, configuration);
+            SeedConfiguration(scope, configuration);
         }
 
-        public static void SeedConfiguration(IServiceScope scope)
+        public static void SeedConfiguration(IServiceScope scope, IConfiguration configuration)
         {
-            var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            var provider = scope.ServiceProvider;
+
+            var context = provider.GetRequiredService<ConfigurationDbContext>();
 
             if (!context.Clients.Any())
             {
-                foreach (var client in Config.GetClients())
+                foreach (var client in Config.GetClients(configuration))
                 {
                     context.Clients.Add(client.ToEntity());
                     Console.WriteLine($"Add client {client.ClientName}");
@@ -81,7 +83,7 @@ namespace Aguacongas.TheIdServer
 
             if (!context.ApiScopes.Any())
             {
-                foreach (var resource in Config.GetApiScopes())
+                foreach (var resource in Config.GetApiScopes(configuration))
                 {
                     context.ApiScopes.Add(resource.ToEntity());
                     Console.WriteLine($"Add api scope resource {resource.DisplayName}");
@@ -90,7 +92,7 @@ namespace Aguacongas.TheIdServer
 
             if (!context.Apis.Any())
             {
-                foreach (var resource in Config.GetApis())
+                foreach (var resource in Config.GetApis(configuration))
                 {
                     context.Apis.Add(resource.ToEntity());
                     Console.WriteLine($"Add api resource {resource.DisplayName}");
@@ -100,11 +102,13 @@ namespace Aguacongas.TheIdServer
             context.SaveChanges();
         }
 
-        public static void SeedUsers(IServiceScope scope)
+        public static void SeedUsers(IServiceScope scope, IConfiguration configuration)
         {
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var provider = scope.ServiceProvider;
 
-            var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var context = provider.GetService<ApplicationDbContext>();
+            
+            var roleMgr = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
             var roles = new string[]
             {
@@ -122,76 +126,37 @@ namespace Aguacongas.TheIdServer
                 }
             }
 
-            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var alice = userMgr.FindByNameAsync("alice").Result;
-            if (alice == null)
+            var userMgr = provider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userList = configuration.GetSection("InitialData:Users").Get<IEnumerable<ApplicationUser>>() ?? Array.Empty<ApplicationUser>();
+            int index = 0;
+            foreach(var user in userList)
             {
-                alice = new ApplicationUser
+                var existing = userMgr.FindByNameAsync(user.UserName).GetAwaiter().GetResult();
+                if (existing != null)
                 {
-                    UserName = "alice",
-                    Email = "alice@theidserver.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "+41766403736",
-                    PhoneNumberConfirmed = true
-                };
-                ExcuteAndCheckResult(() => userMgr.CreateAsync(alice, "Pass123$"))
+                    Console.WriteLine($"{user.UserName} already exists");
+                    continue;
+                }
+                var pwd = configuration.GetValue<string>($"InitialData:Users:{index}:Password");
+                ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd))
                     .GetAwaiter().GetResult();
 
-                ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(alice, new Claim[]{
-                        new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Alice"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        new Claim(JwtClaimTypes.Address, "{ \"street_address\": \"One Hacker Way\", \"locality\": \"Heidelberg\", \"postal_code\": \"69118\", \"country\": \"Germany\" }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                        new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64),
-                        new Claim(JwtClaimTypes.BirthDate, DateTime.Now.ToString()),
-                        new Claim(JwtClaimTypes.ZoneInfo, "ch"),
-                        new Claim(JwtClaimTypes.Gender, "female"),
-                        new Claim(JwtClaimTypes.Profile, "http://alice.com/profile"),
-                        new Claim(JwtClaimTypes.MiddleName, "Alice Smith"),
-                        new Claim(JwtClaimTypes.Locale, "fr"),
-                        new Claim(JwtClaimTypes.Picture, "http://alice.com/picture"),
-                        new Claim(JwtClaimTypes.NickName, "alice"),
-                    })).GetAwaiter().GetResult();
-
-                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(alice, roles))
+                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<UserClaim>>()
+                    .Select(c => c.ToClaim())
+                    .ToList();
+                claimList.Add(new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64));
+                ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(user, claimList))
                     .GetAwaiter().GetResult();
 
-                Console.WriteLine("alice created");
-            }
-            else
-            {
-                Console.WriteLine("alice already exists");
-            }
-
-            var bob = userMgr.FindByNameAsync("bob").GetAwaiter().GetResult();
-            if (bob == null)
-            {
-                bob = new ApplicationUser
-                {
-                    UserName = "bob",
-                    Email = "bob@theidserver.com",
-                    EmailConfirmed = true
-                };
-                ExcuteAndCheckResult(() => userMgr.CreateAsync(bob, "Pass123$"))
+                var roleList = configuration.GetSection($"InitialData:Users:{index}:Roles").Get<IEnumerable<string>>();
+                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList))
                     .GetAwaiter().GetResult();
 
-                ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(bob, new Claim[]{
-                        new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Bob"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new Claim(JwtClaimTypes.Address, "{ \"street_address\": \"One Hacker Way\", \"locality\": \"Heidelberg\", \"postal_code\": \"69118\", \"country\": \"Germany\" }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
-                        new Claim("location", "somewhere")
-                    })).GetAwaiter().GetResult();
-                ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, SharedConstants.READER))
-                    .GetAwaiter().GetResult();
-                Console.WriteLine("bob created");
+                Console.WriteLine($"{user.UserName} created");
+
+                index++;
             }
-            else
-            {
-                Console.WriteLine("bob already exists");
-            }
+            
             context.SaveChanges();
         }
 
@@ -204,26 +169,6 @@ namespace Aguacongas.TheIdServer
                 throw new Exception(result.Errors.First().Description);
             }
 
-        }
-
-        internal static void SeedProviders(IConfiguration configuration, PersistentDynamicManager<SchemeDefinition> persistentDynamicManager)
-        {
-            var googleDefinition = persistentDynamicManager.FindBySchemeAsync("Google").GetAwaiter().GetResult();
-            if (googleDefinition == null)
-            {
-                var options = new Microsoft.AspNetCore.Authentication.Google.GoogleOptions
-                {
-                    ClientId = configuration.GetValue<string>("Google:ClientId"),
-                    ClientSecret = configuration.GetValue<string>("Google:ClientSecret"),
-                };
-                persistentDynamicManager.AddAsync(new SchemeDefinition
-                {
-                    Scheme = "Google",
-                    DisplayName = "Google",
-                    HandlerType = persistentDynamicManager.ManagedHandlerType.First(t => t.Name == "GoogleHandler"),
-                    Options = options
-                }).ConfigureAwait(false);
-            }
         }
     }
 }
