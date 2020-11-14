@@ -46,7 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.PersistKeysToStackExchangeRedis(redis, dataProtectionsOptions.RedisKey);
                     break;
                 case StorageKind.Registry:
+#pragma warning disable CA1416 // Validate platform compatibility
                     builder.PersistKeysToRegistry(Registry.CurrentUser.OpenSubKey(dataProtectionsOptions.StorageConnectionString));
+#pragma warning restore CA1416 // Validate platform compatibility
                     break;
             }
             var protectOptions = dataProtectionsOptions.KeyProtectionOptions;

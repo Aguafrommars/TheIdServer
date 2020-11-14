@@ -104,7 +104,8 @@ namespace Aguacongas.TheIdServer.Api
                 });
 
 
-            services.AddResponseCompression(opts =>
+            services.AddDatabaseDeveloperPageExceptionFilter()
+                .AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
@@ -117,7 +118,7 @@ namespace Aguacongas.TheIdServer.Api
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseDatabaseErrorPage();
+                    .UseMigrationsEndPoint();
             }
             else
             {

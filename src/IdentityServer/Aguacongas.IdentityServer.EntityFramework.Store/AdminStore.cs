@@ -6,14 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
-    [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "No localization")]
     public class AdminStore<TEntity, TContext> : IAdminStore<TEntity> 
         where TEntity: class, IEntityId, new()
         where TContext: DbContext

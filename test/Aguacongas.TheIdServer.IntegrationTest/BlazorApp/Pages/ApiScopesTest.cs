@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     [Collection("api collection")]
     public class ApiScopesTest : EntitiesPageTestBase<ApiScope>
     {
-        public override string Entities => "scopes";
+        public override string Entities => "apiscopes";
         public ApiScopesTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
             : base (fixture, testOutputHelper)
         {

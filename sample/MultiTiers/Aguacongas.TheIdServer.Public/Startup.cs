@@ -8,7 +8,6 @@ using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -116,7 +115,8 @@ namespace Aguacongas.TheIdServer
             mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                     .AddTheIdServerHttpStore();
 
-            services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+            services.AddDatabaseDeveloperPageExceptionFilter()
+                .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
         }
 
         public void Configure(IApplicationBuilder app)
@@ -124,7 +124,7 @@ namespace Aguacongas.TheIdServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseDatabaseErrorPage();
+                    .UseMigrationsEndPoint();
             }
             else
             {

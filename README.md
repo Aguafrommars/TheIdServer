@@ -5,7 +5,7 @@
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver)
- [![][Docker Cloud Build Status]][Docker url]
+ [![][Docker Cloud Build Status]][Docker url] [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
 
 [Docker Cloud Build Status]: https://img.shields.io/docker/cloud/build/aguacongas/theidserver?logo=docker
 [Docker url]: https://hub.docker.com/repository/docker/aguacongas/theidserver
@@ -39,7 +39,7 @@ Choose your favorite:
 * [Roles management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/ROLE.md)
 * [Clients management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CLIENT.md)
 * [Apis management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/API.md)
-* [Scopes management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SCOPE.md)
+* [Api Scopes management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SCOPE.md)
 * [Identities management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/IDENTITY.md)
 * [External providers management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PROVIDER.md)
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)

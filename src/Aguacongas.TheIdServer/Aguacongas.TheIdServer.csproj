@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
@@ -22,7 +22,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
-		<NoWarn>1701;1702;AD0001</NoWarn>
+		<NoWarn>1701;1702;CA1416</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Content Remove="compilerconfig.json" />
@@ -36,30 +36,18 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.1.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="3.1.10" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" PrivateAssets="All" />
 		<PackageReference Include="SendGrid" Version="9.21.1" />
 		<PackageReference Include="Serilog" Version="2.10.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
@@ -69,6 +57,9 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Include="Pages\_Host.cshtml" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
