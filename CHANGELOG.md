@@ -1,3 +1,33 @@
+# [2.0.0](https://github.com/Aguafrommars/TheIdServer/compare/1.1.1...2.0.0) (2020-11-14)
+
+
+### Bug Fixes
+
+* update packages ([1489f83](https://github.com/Aguafrommars/TheIdServer/commit/1489f836b64fa16e4b556a3a1b31bc2d417b8d49))
+* update packages ([89ce677](https://github.com/Aguafrommars/TheIdServer/commit/89ce67772edb4d80ac43294662c697fabc841f43))
+* update packages ([e5c32db](https://github.com/Aguafrommars/TheIdServer/commit/e5c32db832e1dc18da918af879366e8ea9e171cc))
+* update packages ([16d4221](https://github.com/Aguafrommars/TheIdServer/commit/16d42219fb3817a685ca59530922a8d7eede70d8))
+* update packages ([1a38031](https://github.com/Aguafrommars/TheIdServer/commit/1a380316d48a4c510c4a26e3a09fe32854b5c8af))
+* update packages ([1a123dc](https://github.com/Aguafrommars/TheIdServer/commit/1a123dcda61aa6a5b10fb71effde9dc518e1c097))
+* update packages ([5741cf1](https://github.com/Aguafrommars/TheIdServer/commit/5741cf19b673529282c5b5833f5195c7f933d014))
+
+
+### Build System
+
+* .net 5.0 release ([6053ac6](https://github.com/Aguafrommars/TheIdServer/commit/6053ac68da94fc117791717c621295945f1691db))
+
+
+### Features
+
+* lazy loading ([b632e78](https://github.com/Aguafrommars/TheIdServer/commit/b632e78d9e7506de3b568e88ad53a74bd2bc949b))
+* load initial configuration ([13bf5af](https://github.com/Aguafrommars/TheIdServer/commit/13bf5af73de4c9b62354a4a6095044685a6cdb79))
+* prerender app ([ccf5040](https://github.com/Aguafrommars/TheIdServer/commit/ccf504046effab7a155ad8cacaf14fb470131c45))
+
+
+### BREAKING CHANGES
+
+* .net 5.0 release
+
 ## [1.1.1](https://github.com/Aguafrommars/TheIdServer/compare/1.1.0...1.1.1) (2020-10-13)
 
 
