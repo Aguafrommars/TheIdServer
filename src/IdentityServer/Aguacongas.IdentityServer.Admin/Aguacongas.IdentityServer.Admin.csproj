@@ -28,7 +28,7 @@
 		<PackageReference Include="IdentityServer4" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
-		<PackageReference Include="NSwag.AspNetCore" Version="13.9.3" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
