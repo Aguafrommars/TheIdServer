@@ -32,7 +32,7 @@ jobs:
           git merge origin/preview/2.0.0 --allow-unrelated-histories
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1.6.0
+        uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: '5.0.100' 
       # Run update depencies script

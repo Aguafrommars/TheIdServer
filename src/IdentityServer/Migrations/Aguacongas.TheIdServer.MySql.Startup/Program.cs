@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.MySql
                 {
                     var cn = hostContext.Configuration.GetConnectionString("db");
 
-                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseMySql(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.MySql"));
+                    Action<DbContextOptionsBuilder> optionsAction = options => options.UseMySql(cn, ServerVersion.AutoDetect(cn), options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.MySql"));
                     services.AddDbContext<ApplicationDbContext>(optionsAction)
                         .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                         .AddConfigurationEntityFrameworkStores(optionsAction)
