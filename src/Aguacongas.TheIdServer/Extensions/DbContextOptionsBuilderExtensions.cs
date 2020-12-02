@@ -23,7 +23,7 @@ namespace Microsoft.EntityFrameworkCore
                     options.UseSqlite(connectionString, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.Sqlite"));
                     break;
                 case DbTypes.MySql:
-                    options.UseMySql(connectionString, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.MySql"));
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.MySql"));
                     break;
                 case DbTypes.Oracle:
                     options.UseOracle(connectionString, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.Oracle"));
