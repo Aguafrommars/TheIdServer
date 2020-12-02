@@ -1,3 +1,29 @@
+## [2.0.1](https://github.com/Aguafrommars/TheIdServer/compare/2.0.0...2.0.1) (2020-12-02)
+
+
+### Bug Fixes
+
+* pomelo mysql 5 ([1939097](https://github.com/Aguafrommars/TheIdServer/commit/1939097b413903f8bf2c39c0ea05e5879f90cba5))
+* update packages ([bc3e041](https://github.com/Aguafrommars/TheIdServer/commit/bc3e041a7099ff016b283917287d093d48525996))
+* update packages ([efcbad4](https://github.com/Aguafrommars/TheIdServer/commit/efcbad4fe1372fa023f279a2fb34161e8e91c04d))
+* update packages ([13f55ca](https://github.com/Aguafrommars/TheIdServer/commit/13f55cacfa060b8dfbd0e5a698fe6076cb3a9bc5))
+* update packages ([a65db6a](https://github.com/Aguafrommars/TheIdServer/commit/a65db6a14f024bf1c2591cde3ae4045b3d7552ad))
+* update packages ([907a245](https://github.com/Aguafrommars/TheIdServer/commit/907a24574192e5b61c35ec30c25edcc642a56943))
+* update packages ([3f17cda](https://github.com/Aguafrommars/TheIdServer/commit/3f17cdaaf45739072e90caba27bddb6e7c75103c))
+* update packages ([930c6d0](https://github.com/Aguafrommars/TheIdServer/commit/930c6d05547c1b2e5a9634e5346718eb33be8f5c))
+* update packages ([a5e0898](https://github.com/Aguafrommars/TheIdServer/commit/a5e0898b0545df25a179f28709f7209b04a45a16))
+* update packages ([395b4c9](https://github.com/Aguafrommars/TheIdServer/commit/395b4c917d37b6070e5516326f3bf7bdf77554be))
+* update packages ([2479722](https://github.com/Aguafrommars/TheIdServer/commit/247972210254f8f05d1aa4a14dd16cf03c6269b0))
+* update packages ([fbcca38](https://github.com/Aguafrommars/TheIdServer/commit/fbcca3861c235513142dde051b7b2a1e12e05311))
+* update packages ([e1bf3e1](https://github.com/Aguafrommars/TheIdServer/commit/e1bf3e1c43beacf5e2a14737b737e05b6a5e77ad))
+* update packages ([4d2432c](https://github.com/Aguafrommars/TheIdServer/commit/4d2432cae858dc2a64f44fa13795425b6721ed23))
+* update packages ([e05f4e1](https://github.com/Aguafrommars/TheIdServer/commit/e05f4e116088fdbface64f0796d9bad509145488))
+* update packages ([ee1b54c](https://github.com/Aguafrommars/TheIdServer/commit/ee1b54c5c751f80e93a9314789f1121b5c6d4bb8))
+* update packages ([d988f19](https://github.com/Aguafrommars/TheIdServer/commit/d988f19d07c5fd654793922f487508534ba2da6c))
+* update packages ([22c5fe9](https://github.com/Aguafrommars/TheIdServer/commit/22c5fe9d88206ae71ea875efc079dd28b90bd6c8))
+* update packages ([51e265f](https://github.com/Aguafrommars/TheIdServer/commit/51e265ffda08db3eef0bd4cd48b033cae476bc00))
+* update packages ([21ffa06](https://github.com/Aguafrommars/TheIdServer/commit/21ffa0653ee48534dbbf846cc27373a4ff22c7b0))
+
 # [2.0.0](https://github.com/Aguafrommars/TheIdServer/compare/1.1.1...2.0.0) (2020-11-14)
 
 

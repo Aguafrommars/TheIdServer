@@ -3,13 +3,11 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
     public class ApiScopeValidator : AbstractValidator<ApiScope>
     {
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Our validators requires a parameter constructor.")]
         public ApiScopeValidator(ApiScope apiScope, IStringLocalizer localizer)
         {
             RuleForEach(m => m.Id).NotEmpty().WithMessage(localizer["The id is required."]);
