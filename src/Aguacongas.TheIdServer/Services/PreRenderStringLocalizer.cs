@@ -3,7 +3,6 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.Services
 {

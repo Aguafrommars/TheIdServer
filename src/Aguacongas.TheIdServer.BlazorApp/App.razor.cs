@@ -43,6 +43,11 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 return LoadAssemblyAsync("Aguacongas.TheIdServer.BlazorApp.Pages.Identity.dll");
             }
 
+            if (path == "user-details")
+            {
+                return LoadAssemblyAsync("Aguacongas.TheIdServer.BlazorApp.Pages.User.dll");
+            }
+
             var pageKind = _pageKindList.FirstOrDefault(k => path == $"{k.ToLower()}s");
             if (pageKind != null)
             {

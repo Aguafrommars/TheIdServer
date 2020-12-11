@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     [Collection("api collection")]
     public class UserTest : EntityPageTestBase
     {
-        public override string Entity => "user";
+        public override string Entity => "user-details";
 
         public UserTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
         {
