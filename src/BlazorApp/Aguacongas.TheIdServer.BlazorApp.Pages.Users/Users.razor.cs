@@ -9,10 +9,5 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Users
         protected override string SelectProperties => $"{nameof(Entity.User.Id)},{nameof(Entity.User.UserName)}";
 
         protected override string ExportExpand => $"{nameof(Entity.User.UserClaims)},{nameof(Entity.User.UserRoles)}";
-
-        protected override void OnRowClicked(Entity.User entity)
-        {
-            NavigationManager.NavigateTo($"user-details/{entity.Id}");
-        }
     }
 }
