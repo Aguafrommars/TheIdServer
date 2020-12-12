@@ -1,7 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
-using Aguacongas.IdentityServer.Http.Store;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using System;
