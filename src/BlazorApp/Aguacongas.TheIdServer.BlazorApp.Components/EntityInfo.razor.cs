@@ -24,7 +24,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             }
 
             var entityTypeName = segments[1].Trim('/')
-                .Replace("user-details", "user")
                 .Replace("protectresource", "api")
                 .Replace("apiscope", "scope")
                 .Replace("identityresource", "identity")
