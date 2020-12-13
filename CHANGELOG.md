@@ -1,3 +1,11 @@
+## [2.0.4](https://github.com/Aguafrommars/TheIdServer/compare/2.0.3...2.0.4) (2020-12-12)
+
+
+### Bug Fixes
+
+* user page not found ([3d24587](https://github.com/Aguafrommars/TheIdServer/commit/3d245877129a414728c33a1b3c254ba24abdee2d)), closes [#313](https://github.com/Aguafrommars/TheIdServer/issues/313)
+* user pahe refresh ([7010b1f](https://github.com/Aguafrommars/TheIdServer/commit/7010b1f4328e36ba3446b7cb83feb1290e1a35d6)), closes [#317](https://github.com/Aguafrommars/TheIdServer/issues/317)
+
 ## [2.0.3](https://github.com/Aguafrommars/TheIdServer/compare/2.0.2...2.0.3) (2020-12-12)
 
 
