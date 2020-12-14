@@ -35,17 +35,45 @@ Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft
 
 [/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to set up a solution with Kubernetes.
 
+### From dotnet new template
+
+The template [TheIdServer.Template](https://github.com/Aguafrommars/Templates) can be use to setup a TheIdServer solution.
+
+#### Install
+
+```bash
+dotnet new -i TheIdServer.Template
+```
+
+#### Use
+
+```bash
+> dotnet new tis -o TheIdServer
+The template "TheIdServer" was created successfully.
+
+Processing post-creation actions...
+Running 'dotnet restore' on TheIdServer\TheIdServer.sln...
+  Determining projects to restore...
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\test\WebAssembly.Net.Http\WebAssembly.Net.Http.csproj (in 114 ms).
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\src\TheIdServer.BlazorApp\TheIdServer.BlazorApp.csproj (in 916 ms).
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\test\Microsoft.AspNetCore.Components.Testing\Microsoft.AspNetCore.Components.Testing.csproj (in 1.08 sec).
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\src\TheIdServer\TheIdServer.csproj (in 2.03 sec).
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\test\TheIdServer.Test\TheIdServer.Test.csproj (in 2.04 sec).
+  Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\test\TheIdServer.IntegrationTest\TheIdServer.IntegrationTest.csproj (in 2.04 sec).
+Restore succeeded.
+```
+
+### From NuGet Packages
+
+If you need more customization, you can use published NuGet packages.
+[sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
+
 ### From Github Release
 
 Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
 Unzip in the destination of your choice. Unzip in the destination of your choice. As with any ASP.NET Core web site, it can run in IIS or as a stand-alone server using your chosen platform.
 
 Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1) for more information.
-
-### From NuGet Packages
-
-If you need more customization, you can use published NuGet packages.
-[sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
 
 ## Configure data protection
 
