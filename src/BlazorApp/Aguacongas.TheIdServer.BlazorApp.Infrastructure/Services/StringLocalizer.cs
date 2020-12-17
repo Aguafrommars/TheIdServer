@@ -2,7 +2,7 @@
 // Copyright (c) 2020 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using FluentValidation.Results;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     public class StringLocalizer : ISharedStringLocalizerAsync
     {
         private readonly IAdminStore<LocalizedResource> _store;
-        private readonly IAdminStore<Culture> _cultureStore;
+        private readonly IReadOnlyCultureStore _cultureStore;
         private IEnumerable<LocalizedResource> _resources;
         private IEnumerable<string> _cultureList;
 
@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         public event Action ResourceReady;
 
         public StringLocalizer(IAdminStore<LocalizedResource> store,
-            IAdminStore<Culture> cultureStore,
+            IReadOnlyCultureStore cultureStore,
             ILogger<StringLocalizer> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
@@ -220,7 +220,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     public class SharedStringLocalizer<T> : StringLocalizer
     {
         public SharedStringLocalizer(IAdminStore<LocalizedResource> store,
-            IAdminStore<Culture> cultureStore, 
+            IReadOnlyCultureStore cultureStore, 
             ILogger<SharedStringLocalizer<T>> logger)
             : base(store, cultureStore, logger)
         {

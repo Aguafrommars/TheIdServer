@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Http.Store;
@@ -9,9 +8,9 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
-using Aguacongas.TheIdServer.Areas.Identity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
@@ -23,7 +22,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
@@ -168,6 +166,7 @@ namespace Aguacongas.TheIdServer
                  .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
                  .AddScoped<SignOutSessionStateManager>()
                  .AddScoped<ISharedStringLocalizerAsync, PreRenderStringLocalizer>()
+                 .AddTransient<IReadOnlyCultureStore, ReadOnlyCultureStore>()
                  .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
                  .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
                  .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
@@ -184,6 +183,10 @@ namespace Aguacongas.TheIdServer
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
             var disableHttps = Configuration.GetValue<bool>("DisableHttps");
+
+            app.UseForwardedHeaders();
+            AddForceHttpsSchemeMiddleware(app);
+
             if (!isProxy)
             {
                 ConfigureInitialData(app);
@@ -207,14 +210,15 @@ namespace Aguacongas.TheIdServer
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
+
             app.UseRequestLocalization(options =>
-                {
-                    options.DefaultRequestCulture = new RequestCulture("en");
-                    options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
-                    options.SupportedUICultures = options.SupportedCultures;
-                    options.FallBackToParentCultures = true;
-                    options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
-                })
+            {
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
+                options.SupportedUICultures = options.SupportedCultures;
+                options.FallBackToParentCultures = true;
+                options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
+            })
                 .UseSerilogRequestLogging();
 
             if (!disableHttps)
@@ -223,28 +227,28 @@ namespace Aguacongas.TheIdServer
             }
 
             app.UseIdentityServerAdminApi("/api", child =>
+            {
+                if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
                 {
-                    if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
-                    {
-                        child.UseOpenApi()
-                            .UseSwaggerUi3(options =>
-                            {
-                                var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                                options.OAuth2Client = settings.OAuth2Client;
-                            });
-                    }
-                    var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-                    if (allowedOrigin != null)
-                    {
-                        child.UseCors(configure =>
+                    child.UseOpenApi()
+                        .UseSwaggerUi3(options =>
                         {
-                            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                                .AllowAnyMethod()
-                                .AllowAnyHeader()
-                                .AllowCredentials();
+                            var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                            options.OAuth2Client = settings.OAuth2Client;
                         });
-                    }
-                })
+                }
+                var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+                if (allowedOrigin != null)
+                {
+                    child.UseCors(configure =>
+                    {
+                        configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                }
+            })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
@@ -287,6 +291,20 @@ namespace Aguacongas.TheIdServer
             else
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+            }
+        }
+
+        private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
+        {
+            var forceHttpsScheme = Configuration.GetValue<bool>("ForceHttpsScheme");
+
+            if (forceHttpsScheme)
+            {
+                app.Use((context, next) =>
+                {
+                    context.Request.Scheme = "https";
+                    return next();
+                });
             }
         }
 

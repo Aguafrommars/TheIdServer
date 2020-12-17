@@ -1,15 +1,15 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.Services
 {
     public class PreRenderStringLocalizer : StringLocalizer
     {
-        public PreRenderStringLocalizer(IAdminStore<LocalizedResource> store, IAdminStore<Culture> cultureStore, ILogger<StringLocalizer> logger) : base(store, cultureStore, logger)
+        public PreRenderStringLocalizer(IAdminStore<LocalizedResource> store, IReadOnlyCultureStore cultureStore, ILogger<StringLocalizer> logger) : base(store, cultureStore, logger)
         {
             GetSupportedCulturesAsync().GetAwaiter().GetResult();
         }

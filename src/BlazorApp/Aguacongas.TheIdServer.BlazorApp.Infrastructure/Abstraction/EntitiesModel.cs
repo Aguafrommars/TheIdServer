@@ -123,6 +123,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         }
 
 
+
         protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource: IEntityResource
         {
             return entity.Resources.FirstOrDefault(r => r.ResourceKind == kind && r.CultureId == CultureInfo.CurrentCulture.Name)?.Value ?? value;
