@@ -207,7 +207,8 @@ namespace Aguacongas.TheIdServer
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
-            app.UseRequestLocalization(options =>
+            app.UseForwardedHeaders()
+                .UseRequestLocalization(options =>
                 {
                     options.DefaultRequestCulture = new RequestCulture("en");
                     options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
