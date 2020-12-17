@@ -184,6 +184,9 @@ namespace Aguacongas.TheIdServer
         {
             var isProxy = Configuration.GetValue<bool>("Proxy");
             var disableHttps = Configuration.GetValue<bool>("DisableHttps");
+
+            app.UseForwardedHeaders();
+
             if (!isProxy)
             {
                 ConfigureInitialData(app);
@@ -207,8 +210,8 @@ namespace Aguacongas.TheIdServer
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
-            app.UseForwardedHeaders()
-                .UseRequestLocalization(options =>
+            
+            app.UseRequestLocalization(options =>
                 {
                     options.DefaultRequestCulture = new RequestCulture("en");
                     options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
