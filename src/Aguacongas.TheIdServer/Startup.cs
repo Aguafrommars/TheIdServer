@@ -185,17 +185,7 @@ namespace Aguacongas.TheIdServer
             var disableHttps = Configuration.GetValue<bool>("DisableHttps");
 
             app.UseForwardedHeaders();
-
-            var forceHttpsScheme = Configuration.GetValue<bool>("ForceHttpsScheme");
-
-            if (forceHttpsScheme)
-            {
-                app.Use((context, next) =>
-                {
-                    context.Request.Scheme = "https";
-                    return next();
-                });
-            }
+            AddForceHttpsSchemeMiddleware(app);
 
             if (!isProxy)
             {
@@ -220,15 +210,15 @@ namespace Aguacongas.TheIdServer
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
-            
+
             app.UseRequestLocalization(options =>
-                {
-                    options.DefaultRequestCulture = new RequestCulture("en");
-                    options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
-                    options.SupportedUICultures = options.SupportedCultures;
-                    options.FallBackToParentCultures = true;
-                    options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
-                })
+            {
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
+                options.SupportedUICultures = options.SupportedCultures;
+                options.FallBackToParentCultures = true;
+                options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
+            })
                 .UseSerilogRequestLogging();
 
             if (!disableHttps)
@@ -237,28 +227,28 @@ namespace Aguacongas.TheIdServer
             }
 
             app.UseIdentityServerAdminApi("/api", child =>
+            {
+                if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
                 {
-                    if (Configuration.GetValue<bool>("EnableOpenApiDoc"))
-                    {
-                        child.UseOpenApi()
-                            .UseSwaggerUi3(options =>
-                            {
-                                var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                                options.OAuth2Client = settings.OAuth2Client;
-                            });
-                    }
-                    var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-                    if (allowedOrigin != null)
-                    {
-                        child.UseCors(configure =>
+                    child.UseOpenApi()
+                        .UseSwaggerUi3(options =>
                         {
-                            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                                .AllowAnyMethod()
-                                .AllowAnyHeader()
-                                .AllowCredentials();
+                            var settings = Configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                            options.OAuth2Client = settings.OAuth2Client;
                         });
-                    }
-                })
+                }
+                var allowedOrigin = Configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+                if (allowedOrigin != null)
+                {
+                    child.UseCors(configure =>
+                    {
+                        configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+                }
+            })
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
@@ -301,6 +291,20 @@ namespace Aguacongas.TheIdServer
             else
             {
                 app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+            }
+        }
+
+        private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
+        {
+            var forceHttpsScheme = Configuration.GetValue<bool>("ForceHttpsScheme");
+
+            if (forceHttpsScheme)
+            {
+                app.Use((context, next) =>
+                {
+                    context.Request.Scheme = "https";
+                    return next();
+                });
             }
         }
 
