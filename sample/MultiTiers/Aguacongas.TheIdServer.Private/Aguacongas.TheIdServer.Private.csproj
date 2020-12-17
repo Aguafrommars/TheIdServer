@@ -17,7 +17,6 @@
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="2.0.4" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="2.0.4" />
-		
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
