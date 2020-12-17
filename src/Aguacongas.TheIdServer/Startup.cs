@@ -187,6 +187,17 @@ namespace Aguacongas.TheIdServer
 
             app.UseForwardedHeaders();
 
+            var forceHttpsScheme = Configuration.GetValue<bool>("ForceHttpsScheme");
+
+            if (forceHttpsScheme)
+            {
+                app.Use((context, next) =>
+                {
+                    context.Request.Scheme = "https";
+                    return next();
+                });
+            }
+
             if (!isProxy)
             {
                 ConfigureInitialData(app);
