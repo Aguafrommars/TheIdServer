@@ -576,6 +576,15 @@ The section **ForwardedHeadersOptions** is bound to the class [`Microsoft.AspNet
 }
 ```
 
+### Force HTTPS scheme
+
+Some reverses proxies don't' forward headers. You can force HTTP requests schemes to https by settings ForceHttpsScheme.
+
+```json
+"ForceHttpsScheme": true
+```
+
+
 ## Configure the provider hub
 
 The [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders) dynamically configures external providers.  
