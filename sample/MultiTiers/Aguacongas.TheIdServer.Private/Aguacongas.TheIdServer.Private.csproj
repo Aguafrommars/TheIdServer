@@ -18,9 +18,8 @@
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="2.0.2" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="2.0.2" />
-		
+		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="2.1.0" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="2.1.0" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
@@ -44,7 +43,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" PrivateAssets="All" />
-		<PackageReference Include="SendGrid" Version="9.21.2" />
+		<PackageReference Include="SendGrid" Version="9.22.0" />
 		<PackageReference Include="Serilog" Version="2.10.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
