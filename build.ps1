@@ -22,7 +22,7 @@ Write-Host "dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d
 dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=$env:sonarqube -d:sonar.coverageReportPaths=coverage\SonarQube.xml $prArgs -v:$env:Version
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings --filter FullyQualifiedName!~Pages & FullyQualifiedName!~UserStore"
 
-dotnet test --settings coverletArgs.runsettings --filter "FullyQualifiedName!~UserStore" 
+dotnet test -c Release --settings coverletArgs.runsettings --filter "FullyQualifiedName!~UserStore" 
 
 if ($LASTEXITCODE -ne 0) {
 	$result = $LASTEXITCODE

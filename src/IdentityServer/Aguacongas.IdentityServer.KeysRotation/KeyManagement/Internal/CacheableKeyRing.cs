@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         internal CacheableKeyRing WithTemporaryExtendedLifetime(DateTimeOffset now)
         {
             var extension = TimeSpan.FromMinutes(2);
-            return new CacheableKeyRing(CancellationToken.None, now + extension, KeyRing);
+            return new CacheableKeyRing(now + extension, KeyRing, CancellationToken.None);
         }
     }
 }
