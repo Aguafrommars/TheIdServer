@@ -602,7 +602,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             IKeyRing keyRingReturnedToBackgroundThread = null;
 
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(originalKeyRingTime))
-                .Returns(new CacheableKeyRing(CancellationToken.None, StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing));
+                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, CancellationToken.None));
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(updatedKeyRingTime))
                 .Returns<DateTimeOffset>(dto =>
                 {
@@ -613,7 +613,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                     });
                     Assert.True(backgroundGetKeyRingTask.Wait(testTimeout), "Test timed out.");
 
-                    return new CacheableKeyRing(CancellationToken.None, StringToDateTime("2015-03-03 00:00:00Z"), updatedKeyRing);
+                    return new CacheableKeyRing(StringToDateTime("2015-03-03 00:00:00Z"), updatedKeyRing, CancellationToken.None);
                 });
 
             // Assert - underlying provider only should have been called once with the updated time (by the foreground thread)
@@ -632,13 +632,13 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var originalKeyRing = new Mock<IKeyRing>().Object;
             var originalKeyRingTime = StringToDateTime("2015-03-01 00:00:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(originalKeyRingTime))
-                .Returns(new CacheableKeyRing(cts.Token, StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing));
+                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, cts.Token));
             var throwKeyRingTime = StringToDateTime("2015-03-01 12:00:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(throwKeyRingTime)).Throws(new Exception("How exceptional."));
             var updatedKeyRing = new Mock<IKeyRing>().Object;
             var updatedKeyRingTime = StringToDateTime("2015-03-01 12:02:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(updatedKeyRingTime))
-                .Returns(new CacheableKeyRing(CancellationToken.None, StringToDateTime("2015-03-02 00:00:00Z"), updatedKeyRing));
+                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), updatedKeyRing, CancellationToken.None));
             var keyRingProvider = CreateKeyRingProvider(mockCacheableKeyRingProvider.Object);
 
             // Act & assert
