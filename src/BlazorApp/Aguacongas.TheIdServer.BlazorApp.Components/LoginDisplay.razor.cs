@@ -62,8 +62,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             SetPathsCulture();
         }
 
-        private string ResetCultureInPath(string path)
-            => path != null ? path.Split('?')[0] : null;
+        private static string ResetCultureInPath(string path)
+            => path?.Split('?')[0];
 
         private string SetCultureInPath(string path)
             => path != null ? $"{path}?culture={_selectedCulture}" : null;

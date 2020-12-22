@@ -51,8 +51,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Identity
             }
         }
 
-        private IdentityProperty CreateProperty()
-            => new IdentityProperty();
+        private static IdentityProperty CreateProperty()
+            => new();
 
         private Task AddResource(EntityResourceKind kind)
         {

@@ -148,7 +148,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return claim;
         }
 
-        private TValue ChechResult<TValue>(IdentityResult result, TValue value)
+        private static TValue ChechResult<TValue>(IdentityResult result, TValue value)
         {
             if (result.Succeeded)
             {

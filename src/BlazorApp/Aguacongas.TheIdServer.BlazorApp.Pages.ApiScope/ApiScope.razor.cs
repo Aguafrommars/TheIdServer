@@ -51,8 +51,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
             }
         }
 
-        private Entity.ApiScopeProperty CreateProperty()
-            => new Entity.ApiScopeProperty();
+        private static Entity.ApiScopeProperty CreateProperty()
+            => new();
 
         private Task AddResource(Entity.EntityResourceKind kind)
         {

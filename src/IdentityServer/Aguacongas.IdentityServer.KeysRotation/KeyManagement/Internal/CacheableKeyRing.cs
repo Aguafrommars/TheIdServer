@@ -23,16 +23,17 @@ namespace Aguacongas.IdentityServer.KeysRotation
     {
         private readonly CancellationToken _expirationToken;
 
-        internal CacheableKeyRing(CancellationToken expirationToken,
+        internal CacheableKeyRing(
             DateTimeOffset expirationTime, 
             IKey defaultKey, 
             IEnumerable<IKey> allKeys,
-            RsaEncryptorConfiguration configuration) // constructor change to add a RsaEncryptorConfiguration instance
-            : this(expirationToken, expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration))
+            RsaEncryptorConfiguration configuration,
+            CancellationToken expirationToken) // constructor change to add a RsaEncryptorConfiguration instance
+            : this(expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration), expirationToken)
         {
         }
 
-        internal CacheableKeyRing(CancellationToken expirationToken, DateTimeOffset expirationTime, IKeyRing keyRing)
+        internal CacheableKeyRing(DateTimeOffset expirationTime, IKeyRing keyRing, CancellationToken expirationToken)
         {
             _expirationToken = expirationToken;
             ExpirationTimeUtc = expirationTime.UtcDateTime;

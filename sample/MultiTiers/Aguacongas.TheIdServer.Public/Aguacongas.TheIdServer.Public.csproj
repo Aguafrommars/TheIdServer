@@ -15,6 +15,9 @@
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Public.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="2.1.0" />
 		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="2.1.0" />
 		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="2.1.0" />

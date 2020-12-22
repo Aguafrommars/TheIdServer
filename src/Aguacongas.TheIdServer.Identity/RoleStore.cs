@@ -270,7 +270,11 @@ namespace Aguacongas.TheIdServer.Identity
         /// Dispose the stores
         /// </summary>
         [SuppressMessage("Blocker Code Smell", "S2953:Methods named \"Dispose\" should implement \"IDisposable.Dispose\"", Justification = "<Pending>")]
-        public void Dispose() => _disposed = true;
+        public void Dispose()
+        {
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Get the claims associated with the specified <paramref name="role"/> as an asynchronous operation.

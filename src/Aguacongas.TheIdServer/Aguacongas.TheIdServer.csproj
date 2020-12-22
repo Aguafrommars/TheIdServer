@@ -31,6 +31,9 @@
 	  <_ContentIncludedByDefault Remove="compilerconfig.json" />
 	</ItemGroup>
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Include="compilerconfig.json" />
 	</ItemGroup>
 	<ItemGroup>

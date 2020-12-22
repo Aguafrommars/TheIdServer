@@ -82,7 +82,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return new XmlSerializedDescriptorInfo(rootElement, typeof(RsaEncryptorDescriptorDeserializer));
         }
 
-        private Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(RsaEncryptorConfiguration configuration)
+        private static Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(RsaEncryptorConfiguration configuration)
         {
             // basic argument checking
             if (configuration.EncryptionAlgorithmType == typeof(RSA))

@@ -13,6 +13,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Api.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.IdentityServer.Admin" Version="2.1.0" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store" Version="2.1.0" />

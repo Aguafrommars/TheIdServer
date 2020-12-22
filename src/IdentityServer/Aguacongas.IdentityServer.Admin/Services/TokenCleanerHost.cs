@@ -132,7 +132,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
+        private static async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
         {
             foreach (var token in items)
             {

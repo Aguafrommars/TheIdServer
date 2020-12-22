@@ -22,6 +22,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="4.5.0" />
 		<PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />

@@ -12,4 +12,8 @@
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.Sample.Shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
+
 </Project>
