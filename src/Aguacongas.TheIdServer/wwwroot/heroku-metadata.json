@@ -1,5 +1,5 @@
 {
-    "issuer": "http://theidserver.herokuapp.com",
+    "issuer": "https://theidserver.herokuapp.com",
     "jwks_uri": "https://theidserver.herokuapp.com/.well-known/openid-configuration/jwks",
     "authorization_endpoint": "https://theidserver.herokuapp.com/connect/authorize",
     "token_endpoint": "https://theidserver.herokuapp.com/connect/token",

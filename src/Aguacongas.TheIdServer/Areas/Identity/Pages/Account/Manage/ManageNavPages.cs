@@ -1,10 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2020 @Olivier Lefebvre
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
