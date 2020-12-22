@@ -81,8 +81,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Culture
             StateHasChanged();
         }
 
-        private Entity.LocalizedResource CreateResource()
-            => new Entity.LocalizedResource();
+        private static Entity.LocalizedResource CreateResource()
+            => new();
 
         private void CultureSelected(CultureInfo cultureInfo)
         {

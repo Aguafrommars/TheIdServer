@@ -59,8 +59,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Role
             }
         }
 
-        private Entity.RoleClaim CreateClaim()
-            => new Entity.RoleClaim();
+        private static Entity.RoleClaim CreateClaim()
+            => new();
 
         private void OnDeleteClaimClicked(Entity.RoleClaim claim)
         {

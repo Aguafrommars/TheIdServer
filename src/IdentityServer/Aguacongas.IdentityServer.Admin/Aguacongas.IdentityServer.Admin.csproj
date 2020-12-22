@@ -24,6 +24,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq.Json" Version="1.4.2" />
 		<PackageReference Include="IdentityServer4" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />

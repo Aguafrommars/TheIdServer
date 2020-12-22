@@ -65,7 +65,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             private readonly IServiceProvider _provider;
 
-            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Called by reflexion")]
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Need this")]
             public Importer(IServiceProvider provider)
             {
                 _provider = provider;
@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
             }
 
-            private async Task RemoveEntityAsync(T entity, IAdminStore<T> store, ImportFileResult result)
+            private static async Task RemoveEntityAsync(T entity, IAdminStore<T> store, ImportFileResult result)
             {
                 await store.DeleteAsync(entity.Id).ConfigureAwait(false);
                 result.Deleted.Add(entity.Id);
@@ -168,13 +168,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
             }
 
-            private Dictionary<string, IEnumerable> GetSubEntities(T entity)
+            private static Dictionary<string, IEnumerable> GetSubEntities(T entity)
             {
                 var collectionPropertyList = typeof(T).GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetInterface(typeof(IEnumerable<>).Name) != null);
                 var dictionary = new Dictionary<string, IEnumerable>(collectionPropertyList.Count());
                 foreach(var property in collectionPropertyList)
                 {
-                    if (!(property.GetValue(entity) is IEnumerable values))
+                    if (property.GetValue(entity) is not IEnumerable values)
                     {
                         continue;
                     }

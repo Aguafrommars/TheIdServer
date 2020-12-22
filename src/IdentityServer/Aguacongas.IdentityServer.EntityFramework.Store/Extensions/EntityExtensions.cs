@@ -13,7 +13,7 @@ namespace Aguacongas.IdentityServer.Store
     {
         public static Entity.Client ToEntity(this Client client)
         {
-            if(client == null)
+            if (client == null)
             {
                 return null;
             }
@@ -346,7 +346,11 @@ namespace Aguacongas.IdentityServer.Store
 
         public static IdentityRoleClaim<string> ToRoleClaim(this Entity.RoleClaim claim)
         {
-            int.TryParse(claim.Id, out int id);
+            if (!int.TryParse(claim.Id, out int id))
+            {
+                id = 0;
+            }
+
             return new IdentityRoleClaim<string>
             {
                 Id = id,

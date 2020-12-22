@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = _context.Providers.AsNoTracking();
             query = query.Expand(request?.Expand);
-            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id).ConfigureAwait(false);
+            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id, cancellationToken: cancellationToken).ConfigureAwait(false);
             return CreateEntity(definition);
         }
 

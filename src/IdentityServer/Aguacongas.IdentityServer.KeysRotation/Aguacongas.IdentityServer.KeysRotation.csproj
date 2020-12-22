@@ -12,7 +12,12 @@
       <PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
       <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="4.5.0" />

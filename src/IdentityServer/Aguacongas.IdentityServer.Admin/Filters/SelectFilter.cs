@@ -56,13 +56,13 @@ namespace Aguacongas.IdentityServer.Admin.Filters
         class SelectResult<T>: SelectResult
         {
             [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "Won't fix")]
-            private readonly static CamelCasePropertyNamesContractResolver _resolver = new CamelCasePropertyNamesContractResolver();
+            private readonly static CamelCasePropertyNamesContractResolver _resolver = new();
             public override JToken Select(object items, string select, string expand)
             {
                 return Select(items as IEnumerable<T>, select, expand);
             }
 
-            private JToken Select(IEnumerable<T> items, string select, string expand)
+            private static JToken Select(IEnumerable<T> items, string select, string expand)
             {
                 if (typeof(T) == typeof(ExternalProvider))
                 {

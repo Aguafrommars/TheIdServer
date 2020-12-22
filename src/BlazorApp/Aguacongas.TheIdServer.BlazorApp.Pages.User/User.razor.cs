@@ -131,8 +131,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
             return base.DeleteAsync(entityType, entity);
         }
 
-        private entity.UserClaim CreateClaim()
-            => new entity.UserClaim
+        private static entity.UserClaim CreateClaim()
+            => new()
             {
                 Issuer = ClaimsIdentity.DefaultIssuer
             };

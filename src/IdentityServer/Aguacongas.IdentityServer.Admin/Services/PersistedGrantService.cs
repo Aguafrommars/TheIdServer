@@ -170,7 +170,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         }
             
 
-        private IEnumerable<Grant> Join(IEnumerable<Grant> first, IEnumerable<Grant> second)
+        private static IEnumerable<Grant> Join(IEnumerable<Grant> first, IEnumerable<Grant> second)
         {
             var list = first.ToList();
 

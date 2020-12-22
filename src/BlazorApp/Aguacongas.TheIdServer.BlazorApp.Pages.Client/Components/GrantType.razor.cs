@@ -50,10 +50,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             return GetGrantTypeName(Entity.GrantType);
         }
 
-        private string GetGrantTypeName(string key)
-        {
-            return GrantTypes.GetGrantTypeName(key);
-        }
+        private static string GetGrantTypeName(string key)
+        => GrantTypes.GetGrantTypeName(key);
+        
 
         protected override void SetValue(string inputValue)
         {

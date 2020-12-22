@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             
                 _factory.StartConnectionAsync(cancellationToken).ContinueWith(t => { });
 
-            });
+            }, cancellationToken);
 
             return Task.CompletedTask;
         }

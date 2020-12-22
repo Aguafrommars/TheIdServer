@@ -151,7 +151,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .ConfigureAwait(false);
         }
 
-        private void ChechResult(IdentityResult result)
+        private static void ChechResult(IdentityResult result)
         {
             if (!result.Succeeded)
             {

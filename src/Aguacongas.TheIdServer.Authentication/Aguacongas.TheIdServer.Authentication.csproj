@@ -12,7 +12,12 @@
 		<Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="3.1.2" />

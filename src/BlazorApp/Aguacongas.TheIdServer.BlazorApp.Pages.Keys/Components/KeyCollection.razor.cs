@@ -10,12 +10,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Components
         [Parameter]
         public EventCallback<Tuple<string, string>> RevokeClick { get; set; }
 
-        string GetRevokedClass(Key key)
-        {
-            return key.IsRevoked ? "text-black-50" : null;
-        }
-
-
+        static string GetRevokedClass(Key key)
+            => key.IsRevoked ? "text-black-50" : null;
+        
         private Task RevokeConfirmed(Tuple<string, string> tuple)
             => RevokeClick.InvokeAsync(tuple);
 

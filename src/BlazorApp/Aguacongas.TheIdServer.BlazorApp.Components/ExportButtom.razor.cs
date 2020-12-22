@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             var builder = new StringBuilder(_settings.ApiBaseUrl);
             if (!_settings.ApiBaseUrl.EndsWith('/'))
             {
-                builder.Append("/");
+                builder.Append('/');
             }
             builder.Append(EntityPath);
             var dictionary = typeof(PageRequest)

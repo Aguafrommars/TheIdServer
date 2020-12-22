@@ -39,6 +39,6 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             certificates.Add(certificate);
         }
 
-        private string GetKey(X509Certificate2 cert) => cert.Thumbprint;
+        private static string GetKey(X509Certificate2 cert) => cert.Thumbprint;
     }
 }

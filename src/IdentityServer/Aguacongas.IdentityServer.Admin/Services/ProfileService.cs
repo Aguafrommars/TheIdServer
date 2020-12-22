@@ -144,7 +144,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             return GetClaimsFromResource(resource, subject, client, caller, providerTypeName);
         }
 
-        private List<Claim> SanetizeIssuedClaims(List<Claim> issuedClaims)
+        private static List<Claim> SanetizeIssuedClaims(List<Claim> issuedClaims)
         {
             var claimList = new List<Claim>(issuedClaims.Count);
 
