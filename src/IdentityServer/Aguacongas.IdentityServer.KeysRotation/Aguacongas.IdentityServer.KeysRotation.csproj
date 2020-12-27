@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="4.5.0" />
+    <PackageReference Include="IdentityModel" Version="4.6.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.10" />
