@@ -1,8 +1,13 @@
 ﻿extensions: .cs
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) %CurrentYear% @Olivier Lefebvre
 extensions:  .xml .config .xsd
 <!--
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2020 @Olivier Lefebvre
+Copyright (c) %CurrentYear% @Olivier Lefebvre
 -->
+extensions: .cshtml .razor
+@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) %CurrentYear% @Olivier Lefebvre
+*@

@@ -1,3 +1,5 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
 using System;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;

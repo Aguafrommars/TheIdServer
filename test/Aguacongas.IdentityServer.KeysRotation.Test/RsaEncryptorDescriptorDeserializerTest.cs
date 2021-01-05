@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using System;
 using Xunit;
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test
