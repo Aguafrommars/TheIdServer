@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Moq;
 using System;
 using System.Threading.Tasks;

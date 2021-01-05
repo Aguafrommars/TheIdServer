@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Admin.Configuration;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;

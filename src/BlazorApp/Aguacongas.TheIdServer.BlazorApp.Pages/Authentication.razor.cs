@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.Components;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages

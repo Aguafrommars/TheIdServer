@@ -1,4 +1,6 @@
-﻿using StackExchange.Redis;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using StackExchange.Redis;
 
 namespace Aguacongas.TheIdServer.Models
 {

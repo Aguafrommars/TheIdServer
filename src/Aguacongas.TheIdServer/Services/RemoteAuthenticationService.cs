@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Server;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Threading.Tasks;
 
