@@ -214,7 +214,7 @@ namespace Aguacongas.TheIdServer.Test
             var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
             {
                 ["DataProtectionOptions:StorageKind"] = StorageKind.AzureStorage.ToString(),
-                ["DataProtectionOptions:StorageConnectionString"] = "https://azure.com?blobUri=test"
+                ["DataProtectionOptions:StorageConnectionString"] = "https://md-3r0d4kzc5jhz.blob.core.windows.net/s3vffgdlczdj/abcd?sv=2017-04-17&sr=b&si=e931bb4b-8a79-4119-b4bb-8b2c1b763369&sig=SIGNATURE_WILL_BE_HERE"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
