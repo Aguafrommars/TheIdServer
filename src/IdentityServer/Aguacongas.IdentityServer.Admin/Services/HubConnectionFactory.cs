@@ -99,7 +99,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             while (true)
             {
-                if (_hubConnection == null)
+                if (_hubConnection == null || _hubConnection.State == HubConnectionState.Connected)
                 {
                     return;
                 }
