@@ -8,10 +8,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
     public class UriValidator : PropertyValidator
     {
         private static readonly Regex _urlRegex = new Regex("^(http|https)://.+");
-        public UriValidator() : base("{PropertyName} is not a valid uri.")
+        public UriValidator() : base()
         {
             
         }
+
+        protected override string GetDefaultMessageTemplate() => "{PropertyName} is not a valid uri.";
         protected override bool IsValid(PropertyValidatorContext context)
         {
             var value = context.PropertyValue as string;

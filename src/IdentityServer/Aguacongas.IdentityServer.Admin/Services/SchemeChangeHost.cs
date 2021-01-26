@@ -13,11 +13,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// 
     /// </summary>
     /// <seealso cref="IHostedService" />
-    public class SchemeChangeHost : IHostedService, IDisposable
+    public class SchemeChangeHost : BackgroundService
     {
-        private readonly IServiceScope _scope;
-        private readonly ISchemeChangeSubscriber _subscriber;
-        private bool disposedValue;
+        private readonly IServiceProvider _provider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchemeChangeHost"/> class.
@@ -26,54 +24,22 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <exception cref="ArgumentNullException">subscriber</exception>
         public SchemeChangeHost(IServiceProvider provider)
         {
-            provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _scope = provider.CreateScope();
-            _subscriber = _scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>();
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
-        /// <summary>
-        /// Triggered when the application host is ready to start the service.
-        /// </summary>
-        /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-        /// <returns></returns>
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            return _subscriber.SubscribeAsync(cancellationToken);
-        }
 
         /// <summary>
-        /// Triggered when the application host is performing a graceful shutdown.
+        /// This method is called when the <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> starts. The implementation should return a task that represents
+        /// the lifetime of the long running operation(s) being performed.
         /// </summary>
-        /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-        /// <returns></returns>
-        public Task StopAsync(CancellationToken cancellationToken)
+        /// <param name="stoppingToken">Triggered when <see cref="M:Microsoft.Extensions.Hosting.IHostedService.StopAsync(System.Threading.CancellationToken)" /> is called.</param>
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _subscriber.UnSubscribeAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _scope.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            using var scope = _provider.CreateScope();
+            var subscriber = scope.ServiceProvider.GetRequiredService<ISchemeChangeSubscriber>();
+            await Task.Run(() => subscriber.SubscribeAsync(stoppingToken), stoppingToken).ConfigureAwait(false); // release the calling thread.
+            stoppingToken.WaitHandle.WaitOne();
+            await subscriber.UnSubscribeAsync(default).ConfigureAwait(false);
         }
     }
 }

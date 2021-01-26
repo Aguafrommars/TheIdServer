@@ -12,10 +12,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         private readonly IEnumerable<T> _items;
 
         public UniqueValidator(IEnumerable<T> items)
-          : base("{PropertyName} must be unique")
+          : base()
         {
             _items = items;
         }
+
+        protected override string GetDefaultMessageTemplate() => "{PropertyName} must be unique";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

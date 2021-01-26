@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
-            services.AddSingleton<IHostedService, SchemeChangeHost>()
+            services.AddHostedService<SchemeChangeHost>()
                 .AddSingleton<HubConnectionFactory>()
                 .AddSingleton<StringLocalizerFactory>()
                 .AddSingleton<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())

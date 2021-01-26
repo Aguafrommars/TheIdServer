@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             switch (dataProtectionsOptions.StorageKind)
             {
                 case StorageKind.AzureStorage:
-                    builder.PersistKeysToAzureBlobStorage(new Uri(dataProtectionsOptions.StorageConnectionString));
+                    builder.PersistKeysToAzureBlobStorage(blobSasUri: new Uri(dataProtectionsOptions.StorageConnectionString));
                     break;
                 case StorageKind.EntityFramework:
                     builder.PersistKeysToDbContext<OperationalDbContext>();
