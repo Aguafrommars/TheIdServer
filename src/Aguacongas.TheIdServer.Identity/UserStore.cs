@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -175,7 +175,7 @@ namespace Aguacongas.TheIdServer.Identity
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "RoleNotFound {0}", roleName));
             }
 
-            await _userRoleStore.DeleteAsync($"{user.Id}@{roleEntity.Id}").ConfigureAwait(false);
+            await _userRoleStore.DeleteAsync($"{user.Id}@{roleEntity.Id}", cancellationToken).ConfigureAwait(false);
         }
 
 

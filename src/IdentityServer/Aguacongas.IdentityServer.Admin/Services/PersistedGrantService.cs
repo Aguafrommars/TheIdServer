@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -170,7 +170,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         }
             
 
-        private IEnumerable<Grant> Join(IEnumerable<Grant> first, IEnumerable<Grant> second)
+        private static IEnumerable<Grant> Join(IEnumerable<Grant> first, IEnumerable<Grant> second)
         {
             var list = first.ToList();
 

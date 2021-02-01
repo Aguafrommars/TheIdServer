@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -121,20 +121,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return Model.IsWebClient();
         }
 
-        private Entity.ClientSecret CreateSecret()
-            => new Entity.ClientSecret
+        private static Entity.ClientSecret CreateSecret()
+            => new()
             {
                 Type = "SharedSecret"
             };
 
-        private Entity.ClientUri CreateRedirectUri()
-            => new Entity.ClientUri();
+        private static Entity.ClientUri CreateRedirectUri()
+            => new();
 
-        private Entity.ClientClaim CreateClaim()
-            => new Entity.ClientClaim();
+        private static Entity.ClientClaim CreateClaim()
+            => new();
 
-        private Entity.ClientProperty CreateProperty()
-            => new Entity.ClientProperty();
+        private static Entity.ClientProperty CreateProperty()
+            => new();
 
         private Task AddResource(Entity.EntityResourceKind kind)
         {

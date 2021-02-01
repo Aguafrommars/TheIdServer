@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -50,10 +50,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             return GetGrantTypeName(Entity.GrantType);
         }
 
-        private string GetGrantTypeName(string key)
-        {
-            return GrantTypes.GetGrantTypeName(key);
-        }
+        private static string GetGrantTypeName(string key)
+        => GrantTypes.GetGrantTypeName(key);
+        
 
         protected override void SetValue(string inputValue)
         {

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     [Collection("api collection")]
     public class UserTest : EntityPageTestBase
     {
-        public override string Entity => "user-details";
+        public override string Entity => "user";
 
         public UserTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
         {

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.KeysRotation;
@@ -56,54 +56,48 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Subscribes this instance.
         /// </summary>
-        public Task SubscribeAsync(CancellationToken cancellationToken)
+        public async Task SubscribeAsync(CancellationToken cancellationToken)
         {
-            Task.Delay(0, cancellationToken).ContinueWith(t =>
+            var connection = _factory.GetConnection(cancellationToken);
+            if (connection == null)
             {
-                var connection = _factory.GetConnection(cancellationToken);
-                if (connection == null)
+                return;
+            }
+
+            connection.On<string>(nameof(IProviderHub.ProviderAdded), async scheme =>
+            {
+                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderAdded)}({scheme})");
+                var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
+                await _manager.AddAsync(definition).ConfigureAwait(false);
+            });
+
+            connection.On<string>(nameof(IProviderHub.ProviderRemoved), async scheme =>
+            {
+                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderRemoved)}({scheme})");
+                await _manager.RemoveAsync(scheme).ConfigureAwait(false);
+            });
+
+            connection.On<string>(nameof(IProviderHub.ProviderUpdated), async scheme =>
+            {
+                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderUpdated)}({scheme})");
+                var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
+                await _manager.UpdateAsync(definition).ConfigureAwait(false);
+            });
+
+            connection.On<string, string>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
+            {
+                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.KeyRevoked)}({kind}, {id})");
+                var keyId = Guid.Parse(id);
+                if (kind == nameof(IAuthenticatedEncryptorDescriptor))
                 {
+                    _dataProtectionKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
                     return;
                 }
 
-                connection.On<string>(nameof(IProviderHub.ProviderAdded), async scheme =>
-                {
-                    _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderAdded)}({scheme})");
-                    var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
-                    await _manager.AddAsync(definition).ConfigureAwait(false);
-                });
-
-                connection.On<string>(nameof(IProviderHub.ProviderRemoved), async scheme =>
-                {
-                    _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderRemoved)}({scheme})");
-                    await _manager.RemoveAsync(scheme).ConfigureAwait(false);
-                });
-
-                connection.On<string>(nameof(IProviderHub.ProviderUpdated), async scheme =>
-                {
-                    _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderUpdated)}({scheme})");
-                    var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
-                    await _manager.UpdateAsync(definition).ConfigureAwait(false);
-                });
-
-                connection.On<string, string>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
-                {
-                    _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.KeyRevoked)}({kind}, {id})");
-                    var keyId = Guid.Parse(id);
-                    if (kind == nameof(IAuthenticatedEncryptorDescriptor))
-                    {
-                        _dataProtectionKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
-                        return;
-                    }
-
-                    _signingKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
-                });
-            
-                _factory.StartConnectionAsync(cancellationToken).ContinueWith(t => { });
-
+                _signingKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
             });
 
-            return Task.CompletedTask;
+            await _factory.StartConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

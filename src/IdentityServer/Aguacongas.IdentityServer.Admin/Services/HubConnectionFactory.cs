@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +15,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// Hub connection factory
     /// </summary>
     /// <seealso cref="IDisposable" />
-    public class HubConnectionFactory : IDisposable
+    public class HubConnectionFactory : IAsyncDisposable
     {
         private readonly object _syncLock = new object();
         private readonly IConfiguration _configuration;
@@ -99,7 +99,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             while (true)
             {
-                if (_hubConnection == null)
+                if (_hubConnection == null || _hubConnection.State == HubConnectionState.Connected)
                 {
                     return;
                 }
@@ -118,7 +118,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 {
                     // Failed to connect, trying again in 5000 ms.
                     _logger.LogError(e, e.Message);
-                    await Task.Delay(5000).ConfigureAwait(false);
+                    await Task.Delay(5000, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -140,13 +140,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        protected virtual async Task DisposeAsync(bool disposing)
         {
             if (!disposedValue)
             {
-                if (disposing)
+                if (disposing && _hubConnection != null)
                 {
-                    _hubConnection?.DisposeAsync().GetAwaiter().GetResult();
+                    await _hubConnection.DisposeAsync().ConfigureAwait(false);
                     _hubConnection = null;
                 }
 
@@ -157,11 +157,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            await DisposeAsync(disposing: true).ConfigureAwait(false);
         }
     }
 }

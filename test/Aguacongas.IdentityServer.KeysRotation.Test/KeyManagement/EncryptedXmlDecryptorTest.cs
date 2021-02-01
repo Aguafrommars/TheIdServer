@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;

@@ -31,20 +31,22 @@
 	  <_ContentIncludedByDefault Remove="compilerconfig.json" />
 	</ItemGroup>
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Include="compilerconfig.json" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.0.0-*" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
-		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="3.1.10" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.10" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.1" />
-		<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.2" />
+		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="3.1.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" PrivateAssets="All" />

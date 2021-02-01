@@ -1,4 +1,6 @@
-﻿using Aguacongas.IdentityServer.Admin.Configuration;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection;
@@ -28,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             switch (dataProtectionsOptions.StorageKind)
             {
                 case StorageKind.AzureStorage:
-                    builder.PersistKeysToAzureBlobStorage(new Uri(dataProtectionsOptions.StorageConnectionString));
+                    builder.PersistKeysToAzureBlobStorage(blobSasUri: new Uri(dataProtectionsOptions.StorageConnectionString));
                     break;
                 case StorageKind.EntityFramework:
                     builder.PersistKeysToDbContext<OperationalDbContext>();

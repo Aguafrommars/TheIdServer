@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = _context.Providers.AsNoTracking();
             query = query.Expand(request?.Expand);
-            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id).ConfigureAwait(false);
+            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id, cancellationToken: cancellationToken).ConfigureAwait(false);
             return CreateEntity(definition);
         }
 

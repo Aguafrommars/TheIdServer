@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 using IdentityServer4.Events;
@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IStringLocalizer _localizer;
         private readonly IOptions<AccountOptions> _options;
 
+        [SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "Needed")]
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,

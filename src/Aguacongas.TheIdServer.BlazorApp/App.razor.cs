@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Routing;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;

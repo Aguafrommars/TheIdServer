@@ -1,3 +1,20 @@
+# [2.1.0](https://github.com/Aguafrommars/TheIdServer/compare/2.0.4...2.1.0) (2020-12-18)
+
+
+### Bug Fixes
+
+* cannot create culture ([92ba42f](https://github.com/Aguafrommars/TheIdServer/commit/92ba42f0520a4652959ac0f3467d1011c9e5cc3e)), closes [#331](https://github.com/Aguafrommars/TheIdServer/issues/331)
+* update packages ([54cf185](https://github.com/Aguafrommars/TheIdServer/commit/54cf185ecf7d039a0c7bcbe9a2a99925fcec7bff))
+* update packages ([34eaccc](https://github.com/Aguafrommars/TheIdServer/commit/34eaccc0f45ae407e178d9bf052b50b14d18f8c7))
+* update packages ([7b24896](https://github.com/Aguafrommars/TheIdServer/commit/7b248969288f9d43ee12ebebd6e78afdab77ed26))
+* update packages ([301441a](https://github.com/Aguafrommars/TheIdServer/commit/301441adfd542e7d18bc268cf893eed61796a20f))
+* use forwarded header ([45b8d62](https://github.com/Aguafrommars/TheIdServer/commit/45b8d626bdfe0f10739addbbde57e3f3932523cc)), closes [#328](https://github.com/Aguafrommars/TheIdServer/issues/328)
+
+
+### Features
+
+* force https scheme ([e1c4704](https://github.com/Aguafrommars/TheIdServer/commit/e1c4704c6e2bebcc2000ce8dbd5aa785df33de65)), closes [#329](https://github.com/Aguafrommars/TheIdServer/issues/329)
+
 ## [2.0.4](https://github.com/Aguafrommars/TheIdServer/compare/2.0.3...2.0.4) (2020-12-12)
 
 

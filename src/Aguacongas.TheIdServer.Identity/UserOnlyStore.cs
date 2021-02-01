@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -361,11 +361,11 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _loginStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserLogin.UserId)} eq '{user.Id}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             foreach(var login in response.Items)
             {
-                await _loginStore.DeleteAsync($"{login.UserId}@{login.LoginProvider}@{login.ProviderKey}").ConfigureAwait(false);
+                await _loginStore.DeleteAsync($"{login.UserId}@{login.LoginProvider}@{login.ProviderKey}", cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -386,7 +386,7 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _loginStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserLogin.UserId)} eq '{user.Id}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(l => new UserLoginInfo
             (
@@ -436,7 +436,7 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _userStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(User.NormalizedEmail)} eq '{normalizedEmail}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
@@ -463,7 +463,7 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _claimStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserClaim.ClaimType)} eq '{claim.Type}' and {nameof(UserClaim.ClaimValue)} eq '{claim.Value}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             var users = new ConcurrentBag<TUser>();
             var taskList = new List<Task>(response.Count);
@@ -476,7 +476,7 @@ namespace Aguacongas.TheIdServer.Identity
                     {
                         users.Add(user);
                     }
-                }));
+                }, cancellationToken));
             }
 
             await Task.WhenAll(taskList).ConfigureAwait(false);
@@ -498,7 +498,7 @@ namespace Aguacongas.TheIdServer.Identity
             ThrowIfDisposed();
             AssertNotNull(user, nameof(user));
 
-            return _tokenStore.DeleteAsync($"{user.Id}@{loginProvider}@{name}");
+            return _tokenStore.DeleteAsync($"{user.Id}@{loginProvider}@{name}", cancellationToken);
         }
 
         /// <summary>
@@ -573,7 +573,7 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _loginStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserLogin.UserId)} eq '{userId}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {
@@ -595,7 +595,7 @@ namespace Aguacongas.TheIdServer.Identity
             var response = await _loginStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             if (response.Count == 1)
             {

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -75,14 +75,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api
             }
         }
 
-        private ApiSecret CreateSecret()
-            =>  new ApiSecret
+        private static ApiSecret CreateSecret()
+            =>  new()
                 {
                     Type = "SharedSecret"
                 };
 
-        private ApiProperty CreateProperty()
-            => new ApiProperty();
+        private static ApiProperty CreateProperty()
+            => new();
 
         private Task AddResource(EntityResourceKind kind)
         {

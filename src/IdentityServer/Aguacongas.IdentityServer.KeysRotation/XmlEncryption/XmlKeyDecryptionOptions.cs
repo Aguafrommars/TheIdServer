@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// Modifications copyright (c) 2020 @Olivier Lefebvre
+// Modifications copyright (c) 2021 @Olivier Lefebvre
 
 // This code is a copy of https://github.com/dotnet/aspnetcore/blob/master/src/DataProtection/DataProtection/src/XmlEncryption/XmlKeyDecryptionOptions.cs
 // with namespace change from proginal Microsoft.AspNetCore.DataProtection.XmlEncryption
@@ -39,6 +39,6 @@ namespace Aguacongas.IdentityServer.KeysRotation.XmlEncryption
             certificates.Add(certificate);
         }
 
-        private string GetKey(X509Certificate2 cert) => cert.Thumbprint;
+        private static string GetKey(X509Certificate2 cert) => cert.Thumbprint;
     }
 }

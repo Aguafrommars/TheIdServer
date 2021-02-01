@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             var builder = new StringBuilder(_settings.ApiBaseUrl);
             if (!_settings.ApiBaseUrl.EndsWith('/'))
             {
-                builder.Append("/");
+                builder.Append('/');
             }
             builder.Append(EntityPath);
             var dictionary = typeof(PageRequest)

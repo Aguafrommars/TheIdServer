@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -270,7 +270,11 @@ namespace Aguacongas.TheIdServer.Identity
         /// Dispose the stores
         /// </summary>
         [SuppressMessage("Blocker Code Smell", "S2953:Methods named \"Dispose\" should implement \"IDisposable.Dispose\"", Justification = "<Pending>")]
-        public void Dispose() => _disposed = true;
+        public void Dispose()
+        {
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Get the claims associated with the specified <paramref name="role"/> as an asynchronous operation.
