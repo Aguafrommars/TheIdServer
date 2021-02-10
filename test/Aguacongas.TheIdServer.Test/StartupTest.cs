@@ -354,7 +354,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 ["DataProtectionOptions:StorageKind"] = StorageKind.None.ToString(),
                 ["DataProtectionOptions:KeyProtectionOptions:KeyProtectionKind"] = KeyProtectionKind.AzureKeyVault.ToString(),
-                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "test",
+                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "https://test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientId"] = "test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientSecret"] = "test",
             }).Build();

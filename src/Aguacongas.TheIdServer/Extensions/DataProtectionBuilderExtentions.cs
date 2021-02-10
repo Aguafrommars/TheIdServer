@@ -3,11 +3,13 @@
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Models;
+using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Win32;
 using StackExchange.Redis;
 using System;
@@ -59,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 switch (protectOptions.KeyProtectionKind)
                 {
                     case KeyProtectionKind.AzureKeyVault:
-                        builder.ProtectKeysWithAzureKeyVault(protectOptions.AzureKeyVaultKeyId, protectOptions.AzureKeyVaultClientId, protectOptions.AzureKeyVaultClientSecret);
+                        builder.ProtectKeysWithAzureKeyVault(new Uri(protectOptions.AzureKeyVaultKeyId), new DefaultAzureCredential());
                         break;
                     case KeyProtectionKind.WindowsDpApi:
                         builder.ProtectKeysWithDpapi(protectOptions.WindowsDPAPILocalMachine);
