@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public IAuthenticatedEncryptor CreateEncryptorInstance(IKey key)
         {
-            if (!(key.Descriptor is RsaEncryptorDescriptor descriptor))
+            if (key.Descriptor is not RsaEncryptorDescriptor descriptor)
             {
                 return null;
             }

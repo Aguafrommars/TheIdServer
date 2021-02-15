@@ -11,6 +11,7 @@
 		<PackageTags>theidserver;identityserver4;administration</PackageTags>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

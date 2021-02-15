@@ -221,8 +221,7 @@ namespace Aguacongas.TheIdServer
                 options.SupportedUICultures = options.SupportedCultures;
                 options.FallBackToParentCultures = true;
                 options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
-            })
-                .UseSerilogRequestLogging();
+            }).UseSerilogRequestLogging();
 
             if (!disableHttps)
             {

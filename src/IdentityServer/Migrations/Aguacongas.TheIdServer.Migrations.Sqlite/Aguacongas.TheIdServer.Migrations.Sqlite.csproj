@@ -13,6 +13,7 @@
 		<Description>Contains db contexts migrations code for Sqlite.</Description>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

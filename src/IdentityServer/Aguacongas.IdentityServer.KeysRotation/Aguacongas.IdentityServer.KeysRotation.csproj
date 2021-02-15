@@ -13,6 +13,7 @@
       <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+      <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,12 +23,12 @@
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="5.0.1" />
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.11" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.1.12" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.3" />
     <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.4" />

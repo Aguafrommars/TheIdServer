@@ -13,6 +13,7 @@
 		<Description>Contains db contexts migrations code for MySql.</Description>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,7 +29,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.3" />
 	</ItemGroup>
 	
 	<ItemGroup>
