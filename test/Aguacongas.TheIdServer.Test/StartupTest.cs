@@ -583,7 +583,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 ["IdentityServer:Key:Type"] = KeyKinds.KeysRotation.ToString(),
                 ["IdentityServer:Key:StorageKind"] = StorageKind.AzureStorage.ToString(),
-                ["IdentityServer:Key:StorageConnectionString"] = "https://azure.com?blobUri=test"
+                ["IdentityServer:Key:StorageConnectionString"] = "https://azure.com?sv=test"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
