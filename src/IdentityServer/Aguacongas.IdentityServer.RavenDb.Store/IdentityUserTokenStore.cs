@@ -4,10 +4,10 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -20,17 +20,17 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserTokenStore<TUser>> _logger;
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
 
         public IdentityUserTokenStore(UserManager<TUser> userManager,
-            IdentityDbContext<TUser> context,
+            IAsyncDocumentSession session,
             ILogger<IdentityUserTokenStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -94,7 +94,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<UserToken>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var query = _context.UserTokens.AsNoTracking();
+            var query = _session.Query<IdentityUserToken<string>>();
             var odataQuery = query.GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -113,7 +113,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private async Task<IdentityUserToken<string>> GetTokenAsync(string id, CancellationToken cancellationToken)
         {
             var info = id.Split('@');
-            var token = await _context.UserTokens.FirstOrDefaultAsync(l => l.UserId == info[0] &&
+            var token = await _session.Query<IdentityUserToken<string>>().FirstOrDefaultAsync(l => l.UserId == info[0] &&
                 l.LoginProvider == info[1] &&
                 l.Name == info[2], cancellationToken)
                             .ConfigureAwait(false);

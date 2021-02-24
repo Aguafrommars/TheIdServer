@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -12,6 +13,14 @@ using EntityFrameworkCore = Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TUser">The type of the user.</typeparam>
+    /// <typeparam name="TRole">The type of the role.</typeparam>
+    /// <typeparam name="TContext">The type of the context.</typeparam>
+    /// <seealso cref="EntityFrameworkCore.UserStore{TUser, TRole, TContext, string, Aguacongas.IdentityServer.EntityFramework.Store.UserClaim, Microsoft.AspNetCore.Identity.IdentityUserRole{string}, Microsoft.AspNetCore.Identity.IdentityUserLogin{string}, Microsoft.AspNetCore.Identity.IdentityUserToken{string}, Microsoft.AspNetCore.Identity.IdentityRoleClaim{string}}" />
+    [SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "Identity UserStore override.")]
     public class UserStore<TUser, TRole, TContext>
         : EntityFrameworkCore.UserStore<TUser, TRole, TContext, string, UserClaim, IdentityUserRole<string>, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>
         where TUser : IdentityUser<string>

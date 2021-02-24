@@ -2,25 +2,26 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
-    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity, OperationalDbContext>
+    public abstract class GrantStore<TEntity, TDto> : AdminStore<TEntity>
         where TEntity: class, IGrant, new()
     {
-        private readonly OperationalDbContext _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly IPersistentGrantSerializer _serializer;
 
-        protected GrantStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
-            : base(context, logger)
+        protected GrantStore(IAsyncDocumentSession session, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
+            : base(session, logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(session));
         }
 
         protected async Task<TDto> GetAsync(string handle)
@@ -55,7 +56,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var newEntity = CreateEntity(dto, clientId, subjectId, expiration);
             entity.Data = newEntity.Data;
 
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            await _session.SaveChangesAsync().ConfigureAwait(false);
         }
 
         protected async Task RemoveAsync(string handle)
@@ -66,8 +67,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             {
                 return;
             }
-            _context.Remove(entity);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            _session.Delete(entity);
+            await _session.SaveChangesAsync().ConfigureAwait(false);
         }
 
         protected async Task RemoveAsync(string subjectId, string clientId)
@@ -88,10 +89,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             try
             {
-                _context.Remove(entity);
-                await _context.SaveChangesAsync().ConfigureAwait(false);
+                _session.Delete(entity);
+                await _session.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch (DbUpdateConcurrencyException)
+            catch
             {
                 // remove can already be done
             }
@@ -111,7 +112,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             if (entity == null)
             {
                 entity = CreateEntity(dto, clientId, subjectId, expiration);
-                await _context.AddAsync(entity);
+                await _session.StoreAsync(entity, $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}");
             }
             else
             {
@@ -121,9 +122,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             try
             {
-                await _context.SaveChangesAsync().ConfigureAwait(false);
+                await _session.SaveChangesAsync().ConfigureAwait(false);
             }
-            catch (DbUpdateException e) when (e.InnerException == null)
+            catch
             {
                 // store can already be done
             }
@@ -138,14 +139,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         protected virtual async Task<TEntity> GetEntityByHandle(string handle)
         {
-            return await _context.Set<TEntity>()
+            return await _session.Query<TEntity>()
                 .FirstOrDefaultAsync(t => t.Id == handle)
                 .ConfigureAwait(false);
         }
 
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {
-            return await _context.Set<TEntity>()
+            return await _session.Query<TEntity>()
                 .FirstOrDefaultAsync(c => c.UserId == subjectId && c.ClientId == clientId)
                 .ConfigureAwait(false);
         }

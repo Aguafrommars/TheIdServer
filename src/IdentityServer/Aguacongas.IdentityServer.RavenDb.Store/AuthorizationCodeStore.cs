@@ -5,6 +5,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,10 +17,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
     public class AuthorizationCodeStore : GrantStore<Entity.AuthorizationCode, AuthorizationCode>, IAuthorizationCodeStore
     {
 
-        public AuthorizationCodeStore(OperationalDbContext context, 
+        public AuthorizationCodeStore(IAsyncDocumentSession session, 
             IPersistentGrantSerializer serializer,
             ILogger<AuthorizationCodeStore> logger)
-            : base(context, serializer, logger)
+            : base(session, serializer, logger)
         {
         }
 

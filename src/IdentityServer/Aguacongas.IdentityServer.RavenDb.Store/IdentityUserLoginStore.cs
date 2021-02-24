@@ -4,10 +4,10 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -20,17 +20,17 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserLoginStore<TUser>> _logger;
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
 
         public IdentityUserLoginStore(UserManager<TUser> userManager,
-            IdentityDbContext<TUser> context,
+            IAsyncDocumentSession session,
             ILogger<IdentityUserLoginStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -104,7 +104,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<UserLogin>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.UserLogins.AsNoTracking().GetODataQuery(request, _edmModel);
+            var odataQuery = _session.Query<IdentityUserLogin<string>>().GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -134,13 +134,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private async Task<IdentityUserLogin<string>> GetLoginAsync(string id, CancellationToken cancellationToken)
         {
             var info = id.Split('@');
-            var login = await _context.UserLogins.FirstOrDefaultAsync(l => l.UserId == info[0] &&
+            var login = await _session.Query<IdentityUserLogin<string>>().FirstOrDefaultAsync(l => l.UserId == info[0] &&
                 l.LoginProvider == info[1] &&
                 l.ProviderKey == info[2], cancellationToken)
                             .ConfigureAwait(false);
             if (login == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
             }
 
             return login;

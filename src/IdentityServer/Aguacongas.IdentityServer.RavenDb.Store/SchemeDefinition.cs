@@ -3,7 +3,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using System;
 using System.Collections.Generic;
-using Auth = Aguacongas.AspNetCore.Authentication.EntityFramework;
+using Auth = Aguacongas.AspNetCore.Authentication.RavenDb;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {

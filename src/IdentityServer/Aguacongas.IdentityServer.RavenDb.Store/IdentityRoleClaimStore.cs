@@ -3,8 +3,9 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Threading;
@@ -17,14 +18,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser
     {
         private readonly RoleManager<TRole> _roleManager;
-        private readonly IdentityDbContext<TUser, TRole> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityRoleClaimStore<TUser, TRole>> _logger;
-        public IdentityRoleClaimStore(RoleManager<TRole> roleManager, 
-            IdentityDbContext<TUser, TRole> context,
+        public IdentityRoleClaimStore(RoleManager<TRole> roleManager,
+            IAsyncDocumentSession session,
             ILogger<IdentityRoleClaimStore<TUser, TRole>> logger)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -59,7 +60,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(RoleClaim).Name} at id {id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(RoleClaim).Name} at id {id} is not found");
             }
 
             var role = await GetRoleAsync(claim.RoleId)
@@ -81,7 +82,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(RoleClaim).Name} at id {entity.Id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(RoleClaim).Name} at id {entity.Id} is not found");
             }
 
             var role = await GetRoleAsync(claim.RoleId)
@@ -114,7 +115,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<RoleClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.RoleClaims.AsNoTracking().GetODataQuery(request);
+            var odataQuery = _session.Query<IdentityRoleClaim<string>>().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -143,7 +144,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private async Task<IdentityRoleClaim<string>> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
-            var claim = await _context.RoleClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
+            var claim = await _session.LoadAsync<IdentityRoleClaim<string>>(id, cancellationToken)
                             .ConfigureAwait(false);
             return claim;
         }

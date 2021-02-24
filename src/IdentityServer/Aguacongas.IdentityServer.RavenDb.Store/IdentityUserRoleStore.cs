@@ -4,10 +4,10 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -20,16 +20,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserRoleStore<TUser>> _logger;
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
-        public IdentityUserRoleStore(UserManager<TUser> userManager, 
-            IdentityDbContext<TUser> context,
+        public IdentityUserRoleStore(UserManager<TUser> userManager,
+            IAsyncDocumentSession session,
             ILogger<IdentityUserRoleStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -93,7 +93,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<UserRole> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var info = id.Split('@');
-            var role = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(r => r.UserId == info[0] && r.RoleId == info[1], cancellationToken)
+            var role = await _session.Query<IdentityUserRole<string>>().FirstOrDefaultAsync(r => r.UserId == info[0] && r.RoleId == info[1], cancellationToken)
                             .ConfigureAwait(false);
             if (role == null)
             {
@@ -106,7 +106,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<UserRole>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.UserRoles.AsNoTracking().GetODataQuery(request, _edmModel);
+            var odataQuery = _session.Query<IdentityUserRole<string>>().GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -135,12 +135,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private async Task<IdentityRole> GetRoleAsync(string id, CancellationToken cancellationToken)
         {
-            var role = await _context.Roles.FindAsync(new object[] { id }, cancellationToken)
+            var role = await _session.LoadAsync<IdentityRole>(id, cancellationToken)
                 .ConfigureAwait(false);
 
             if (role == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(UserRole).Name} at id {id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(UserRole).Name} at id {id} is not found");
             }
 
             return role;

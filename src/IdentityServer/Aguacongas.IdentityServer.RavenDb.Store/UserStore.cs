@@ -1,27 +1,26 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.Identity.RavenDb;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityFrameworkCore = Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
-    public class UserStore<TUser, TRole, TContext>
-        : EntityFrameworkCore.UserStore<TUser, TRole, TContext, string, UserClaim, IdentityUserRole<string>, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>
+    public class UserStore<TUser, TRole>
+        : UserStore<TUser, string, TRole, UserClaim, IdentityUserRole<string>, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>
         where TUser : IdentityUser<string>
         where TRole : IdentityRole<string>
-        where TContext : DbContext
     {
-        private DbSet<UserClaim> UserClaims { get { return Context.Set<UserClaim>(); } }
-
-        public UserStore(TContext context, IdentityErrorDescriber describer = null) : base(context, describer)
+        private readonly IAsyncDocumentSession _session;
+        public UserStore(IAsyncDocumentSession session, UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>> userOnlyStore, IdentityErrorDescriber describer = null) 
+            : base(session, userOnlyStore, describer)
         {
+            _session = session;
         }
 
         /// <summary>
@@ -34,19 +33,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public override async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default)
         {
             CheckParameters(user, claims);
+
+            var userId = ConvertIdToString(user.Id);
+            var data = await _session.LoadAsync<UserData<string, TUser, UserClaim, IdentityUserLogin<string>>>($"user/{userId}", cancellationToken).ConfigureAwait(false);
+
+            var claimList = data.Claims;
+
             foreach (var claim in claims)
             {
-                var matchedClaims = await UserClaims.Where(uc => uc.UserId.Equals(user.Id) &&
-                    uc.Issuer == claim.Issuer &&
-                    uc.ClaimValue == claim.Value &&
-                    uc.ClaimType == claim.Type)
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-
-                foreach (var c in matchedClaims)
-                {
-                    UserClaims.Remove(c);
-                }
+                claimList.RemoveAll(uc => uc.UserId.Equals(user.Id) &&
+                    uc.Issuer == claim.Issuer && 
+                    uc.ClaimType == claim.Type && 
+                    uc.ClaimValue == claim.Value);
             }
         }
 

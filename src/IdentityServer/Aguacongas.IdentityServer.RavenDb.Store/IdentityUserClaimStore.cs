@@ -1,11 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Threading;
@@ -18,15 +17,15 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserClaimStore<TUser>> _logger;
         
-        public IdentityUserClaimStore(UserManager<TUser> userManager, 
-            IdentityDbContext<TUser> context,
+        public IdentityUserClaimStore(UserManager<TUser> userManager,
+            IAsyncDocumentSession session,
             ILogger<IdentityUserClaimStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -84,7 +83,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(UserClaim).Name} at id {entity.Id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(UserClaim).Name} at id {entity.Id} is not found");
             }
 
             var user = await GetUserAsync(entity.UserId)
@@ -118,7 +117,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<Entity.UserClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.UserClaims.AsNoTracking().GetODataQuery(request);
+            var odataQuery = _session.Query<UserClaim>().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -147,7 +146,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private async Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.UserClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
+            return await _session.LoadAsync<UserClaim>(id, cancellationToken)
                             .ConfigureAwait(false);
         }
 

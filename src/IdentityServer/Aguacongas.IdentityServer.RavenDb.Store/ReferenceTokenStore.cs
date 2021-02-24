@@ -5,6 +5,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
 
@@ -12,8 +13,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     public class ReferenceTokenStore : GrantStore<ReferenceToken, Token>, IReferenceTokenStore
     {
-        public ReferenceTokenStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<ReferenceTokenStore> logger)
-            : base(context, serializer, logger)
+        public ReferenceTokenStore(IAsyncDocumentSession session, IPersistentGrantSerializer serializer, ILogger<ReferenceTokenStore> logger)
+            : base(session, serializer, logger)
         {
         }
 

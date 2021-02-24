@@ -1,35 +1,25 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Models;
 using IdentityServer4.Stores;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     public class ClientStore : IClientStore
     {
-        private readonly ConfigurationDbContext _context;
+        private readonly IAsyncDocumentSession _session;
 
-        public ClientStore(ConfigurationDbContext context)
+        public ClientStore(IAsyncDocumentSession session)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
         }
-        public async Task<Client> FindClientByIdAsync(string clientId)
+        public async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
         {
-            var entity = await _context.Clients
-                .Include(c => c.AllowedGrantTypes)
-                .Include(c => c.AllowedScopes)
-                .Include(c => c.ClientClaims)
-                .Include(c => c.ClientSecrets)
-                .Include(c => c.IdentityProviderRestrictions)
-                .Include(c => c.Properties)
-                .Include(c => c.RedirectUris)
-                .Include(c => c.Resources)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == clientId)
+            var entity = await _session.LoadAsync<Entity.Client>($"{nameof(Entity.Client).ToLowerInvariant()}/{clientId}")
                 .ConfigureAwait(false);
             return entity.ToClient();
         }

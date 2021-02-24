@@ -4,33 +4,34 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
-    public class DeviceFlowStore : AdminStore<DeviceCode, OperationalDbContext>, IDeviceFlowStore
+    public class DeviceFlowStore : AdminStore<DeviceCode>, IDeviceFlowStore
     {
-        private readonly OperationalDbContext _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public DeviceFlowStore(OperationalDbContext context,
+        public DeviceFlowStore(IAsyncDocumentSession session,
             IPersistentGrantSerializer serializer,
             ILogger<DeviceFlowStore> logger)
-            : base(context, logger)
+            : base(session, logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         public async Task<Models.DeviceCode> FindByDeviceCodeAsync(string deviceCode)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
 
-            var entity = await _context.DeviceCodes.AsNoTracking()
+            var entity = await _session.Query<DeviceCode>()
                 .FirstOrDefaultAsync(d => d.Code == deviceCode)
                 .ConfigureAwait(false);
 
@@ -41,7 +42,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
 
-            var entity = await _context.DeviceCodes.AsNoTracking()
+            var entity = await _session.Query<DeviceCode>()
                 .FirstOrDefaultAsync(d => d.UserCode == userCode)
                 .ConfigureAwait(false);
             return ToModel(entity);
@@ -51,14 +52,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
 
-            var entity = await _context.DeviceCodes
+            var entity = await _session.Query<DeviceCode>()
                 .FirstOrDefaultAsync(d => d.Code == deviceCode)
                 .ConfigureAwait(false);
 
             if (entity != null)
             {
-                _context.DeviceCodes.Remove(entity);
-                await _context.SaveChangesAsync()
+                _session.Delete(entity);
+                await _session.SaveChangesAsync()
                     .ConfigureAwait(false);
             }
         }
@@ -80,8 +81,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 Expiration = data.CreationTime.AddSeconds(data.Lifetime),
             };
 
-            await _context.DeviceCodes.AddAsync(entity).ConfigureAwait(false);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            await _session.StoreAsync(entity, $"{nameof(DeviceCode).ToLowerInvariant()}/{entity.Id}").ConfigureAwait(false);
+            await _session.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task UpdateByUserCodeAsync(string userCode, Models.DeviceCode data)
@@ -89,7 +90,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
             data = data ?? throw new ArgumentNullException(nameof(data));
 
-            var entity = await _context.DeviceCodes
+            var entity = await _session.Query<DeviceCode>()
                 .FirstOrDefaultAsync(d => d.UserCode == userCode)
                 .ConfigureAwait(false);
 
@@ -102,7 +103,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             entity.Expiration = data.CreationTime.AddSeconds(data.Lifetime);
             entity.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value;
 
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            await _session.SaveChangesAsync().ConfigureAwait(false);
         }
 
         private Models.DeviceCode ToModel(DeviceCode entity)

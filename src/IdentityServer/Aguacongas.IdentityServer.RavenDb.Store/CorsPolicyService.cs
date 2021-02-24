@@ -1,28 +1,30 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using IdentityServer4.Services;
-using Microsoft.EntityFrameworkCore;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     /// <summary>
     /// <see cref="ICorsPolicyService"/> implementation
     /// </summary>
-    /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
+    /// <seealso cref="ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly ConfigurationDbContext _context;
+        private readonly IAsyncDocumentSession _session;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="session">The session.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(ConfigurationDbContext context)
+        public CorsPolicyService(IAsyncDocumentSession session)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
         }
 
         /// <summary>
@@ -33,11 +35,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public Task<bool> IsOriginAllowedAsync(string origin)
         {
             var corsUri = new Uri(origin);
-            var corsValue = IdentityServer.Store.Entity.UriKinds.Cors;
+            var corsValue = Entity.UriKinds.Cors;
             var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
-            return _context.ClientUris
-                .AsNoTracking()
-                .AnyAsync(o => (o.Kind & corsValue) == corsValue && o.SanetizedCorsUri == sanetized);
+            return _session.Query<Entity.ClientUri>()
+                .AnyAsync(u => (u.Kind & corsValue) == corsValue && u.SanetizedCorsUri == sanetized);
         }
 
     }

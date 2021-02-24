@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
@@ -12,8 +13,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
-        public RefreshTokenStore(OperationalDbContext context, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
-            : base(context, serializer, logger)
+        public RefreshTokenStore(IAsyncDocumentSession session, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
+            : base(session, serializer, logger)
         {
         }
 

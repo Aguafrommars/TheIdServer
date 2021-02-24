@@ -6,8 +6,9 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
     {
         private readonly PersistentDynamicManager<SchemeDefinition> _manager;
         private readonly IAuthenticationSchemeOptionsSerializer _serializer;
-        private readonly ConfigurationDbContext _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly IProviderClient _providerClient;
 #pragma warning disable S2743 // Static fields should not be used in generic types
         private static readonly IEdmModel _edmModel = GetEdmModel();
@@ -28,12 +29,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public ExternalProviderStore(PersistentDynamicManager<SchemeDefinition> manager, 
             IAuthenticationSchemeOptionsSerializer serializer,
-            ConfigurationDbContext context,
+            IAsyncDocumentSession session,
             IProviderClient providerClient = null)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _providerClient = providerClient;
         }
 
@@ -75,9 +76,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var query = _context.Providers.AsNoTracking();
-            query = query.Expand(request?.Expand);
-            var definition = await query.FirstOrDefaultAsync(e => e.Scheme == id, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var definition = await _session.Query<SchemeDefinition>()
+                .FirstOrDefaultAsync(e => e.Scheme == id, cancellationToken).ConfigureAwait(false);
             return CreateEntity(definition);
         }
 
@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             request.OrderBy = request.OrderBy?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
                 .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
 
-            var odataQuery = _context.Providers.AsNoTracking().GetODataQuery(request, _edmModel);
+            var odataQuery = _session.Query<SchemeDefinition>().GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -148,7 +148,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 return null;
             }
 
-            var hanlderType = definition.HandlerType ?? _serializer.DeserializeType(definition.SerializedHandlerType);
+            var hanlderType = _serializer.DeserializeType(definition.SerializedHandlerType);
             var optionsType = hanlderType.GetAuthenticationSchemeOptionsType();
             return new ExternalProvider
             {

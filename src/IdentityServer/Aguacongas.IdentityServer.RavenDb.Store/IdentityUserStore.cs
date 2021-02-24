@@ -2,10 +2,10 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +17,15 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserStore<TUser>> _logger;
 
-        public IdentityUserStore(UserManager<TUser> userManager, 
-            IdentityDbContext<TUser> context,
+        public IdentityUserStore(UserManager<TUser> userManager,
+            IAsyncDocumentSession session,
             ILogger<IdentityUserStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -76,28 +76,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<Entity.User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
-            var expandClaims = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
-            ICollection<Entity.UserClaim> claims = null;
-            if (expandClaims.HasValue && expandClaims.Value)
-            {
-                claims = await _context.UserClaims
-                    .Where(c => c.UserId == user.Id)
-                    .Select(c => c.ToEntity())
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            var expandRoles = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
-            ICollection<Entity.UserRole> roles = null;
-            if (expandRoles.HasValue && expandRoles.Value)
-            {
-                roles = await _context.UserRoles
-                    .Where(c => c.UserId == user.Id)
-                    .Select(c => c.ToEntity())
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            }
-
-            return user.ToUserEntity(claims, roles);
+            return user.ToUserEntity(null, null);
         }
 
         public async Task<PageResponse<Entity.User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
@@ -108,7 +87,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var expandRoles = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
             request.Expand = null;
             
-            var odataQuery = _context.Users.AsNoTracking().GetODataQuery(request);
+            var odataQuery = _session.Query<TUser>().GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -116,29 +95,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            ICollection<Entity.UserClaim> claims = null;
-            if (expandClaims.HasValue && expandClaims.Value)
-            {
-                claims = await _context.UserClaims
-                    .Where(c => page.Select(u => u.Id).Contains(c.UserId))
-                    .Select(c => c.ToEntity())
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            ICollection<Entity.UserRole> roles = null;
-            if (expandRoles.HasValue && expandRoles.Value)
-            {
-                roles = await _context.UserRoles
-                    .Where(c => page.Select(u => u.Id).Contains(c.UserId))
-                    .Select(c => c.ToEntity())
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            }
-
             return new PageResponse<Entity.User>
             {
                 Count = count,
-                Items = items.Select(u => u.ToUserEntity(claims?.Where(c => c.UserId == u.Id).ToList(), roles?.Where(r => r.UserId == u.Id).ToList()))
+                Items = items.Select(u => u.ToUserEntity(null, null))
             };
         }
 
