@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.RavenDb.Store.Test;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.RavenDb.Store.Test
+namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 {
     public class AdminStoreTest
     {
@@ -65,7 +66,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
             var loggerMock = new Mock<ILogger<AdminStore<ProtectResource>>>();
 
             var id = "test";
-            var claimId = Guid.NewGuid().ToString();
+            var resourceId = Guid.NewGuid().ToString();
 
             using (var s1 = store.OpenAsyncSession())
             {                
@@ -75,22 +76,24 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
                     Description = "test",
                     DisplayName = "test",
                     Enabled = true,
-                    ApiClaims = new List<ApiClaim> 
+                    Resources = new List<ApiLocalizedResource> 
                     { 
-                        new ApiClaim
+                        new ApiLocalizedResource
                         {
-                            Id = $"{nameof(ApiClaim).ToLowerInvariant()}/{claimId}"
+                            Id = $"{nameof(ApiLocalizedResource).ToLowerInvariant()}/{resourceId}"
                         }
                     }
                 }, $"{nameof(ProtectResource).ToLowerInvariant()}/{id}");
 
                 
-                await s1.StoreAsync(new ApiClaim
+                await s1.StoreAsync(new ApiLocalizedResource
                 {
-                    Id = claimId,
-                    ApiId = $"{nameof(ProtectResource).ToLowerInvariant()}/{id}",
-                    Type = "test"
-                }, $"{nameof(ApiClaim).ToLowerInvariant()}/{claimId}");
+                    Id = resourceId,
+                    ApiId = $"{nameof(ApiLocalizedResource).ToLowerInvariant()}/{id}",
+                    CultureId = "fr",
+                    ResourceKind = EntityResourceKind.DisplayName,
+                    Value = "test"
+                }, $"{nameof(ApiLocalizedResource).ToLowerInvariant()}/{resourceId}");
 
                 await s1.SaveChangesAsync();
             }
@@ -101,15 +104,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var page = await sut.GetAsync(new PageRequest
             {
-                Expand = "ApiClaims"
+                Expand = "Resources"
             });
 
             Assert.Single(page.Items);
-            Assert.NotNull(page.Items.First().ApiClaims);
-            Assert.Single(page.Items.First().ApiClaims);
-            Assert.Equal(claimId, page.Items.First().ApiClaims.First().Id);
-            Assert.Equal(id, page.Items.First().ApiClaims.First().ApiId);
-            Assert.Equal("test", page.Items.First().ApiClaims.First().Type);
+            Assert.NotNull(page.Items.First().Resources);
+            Assert.Single(page.Items.First().Resources);
+            Assert.Equal(resourceId, page.Items.First().Resources.First().Id);
+            Assert.Equal(id, page.Items.First().Resources.First().ApiId);
+            Assert.Equal("fr", page.Items.First().Resources.First().CultureId);
+            Assert.Equal("test", page.Items.First().Resources.First().Value);
         }
 
         [Fact]
@@ -239,6 +243,41 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
             var claimStore = new AdminStore<ApiClaim>(s2, new Mock<ILogger<AdminStore<ApiClaim>>>().Object);
             var claim = await claimStore.GetAsync(claimId, null);
             Assert.Null(claim);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_should_throw_on_entity_not_found()
+        {
+            using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
+
+            var loggerMock = new Mock<ILogger<AdminStore<ProtectResource>>>();
+
+            var id = "test";
+
+            using var session = store.OpenAsyncSession();
+            var sut = new AdminStore<ProtectResource>(session, loggerMock.Object);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.DeleteAsync(id));
+        }
+
+        [Fact]
+        public async Task CreateAsync_should_populate_auditable_properties_when_auditable()
+        {
+            using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
+
+            var loggerMock = new Mock<ILogger<AdminStore<TestEntity>>>();
+
+            using var session = store.OpenAsyncSession();
+            var sut = new AdminStore<TestEntity>(session, loggerMock.Object);
+
+            var result = await sut.CreateAsync(new TestEntity());
+
+            Assert.NotNull(result.Id);
+        }
+
+        public class TestEntity : IEntityId
+        {
+            public string Id { get; set; }
         }
     }
 }

@@ -183,7 +183,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Blaz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.RavenDb.Store", "src\IdentityServer\Aguacongas.IdentityServer.RavenDb.Store\Aguacongas.IdentityServer.RavenDb.Store.csproj", "{D887CCE0-A999-4CE8-92B1-AE83587CDC2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.RavenDb.Store.Test", "test\Aguacongas.IdentityServer.RavenDb.Store.Test\Aguacongas.IdentityServer.RavenDb.Store.Test.csproj", "{C1560F0F-7B46-4DF1-AC04-01AF1E884DDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.RavenDb.Store.Test", "test\Aguacongas.IdentityServer.RavenDb.Store.Test\Aguacongas.IdentityServer.RavenDb.Store.Test.csproj", "{C1560F0F-7B46-4DF1-AC04-01AF1E884DDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
