@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
+using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -13,17 +14,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Client
         {
         }
 
-        protected override void AddSubEntityIdToClient(Entity.Client client, string id)
+        protected override ICollection<Entity.ClientSecret> GetCollection(Entity.Client client)
         {
-            client.ClientSecrets.Add(new Entity.ClientSecret
+            if (client.ClientSecrets == null)
             {
-                Id = id
-            });
-        }
+                client.ClientSecrets = new List<Entity.ClientSecret>();
+            }
 
-        protected override void RemoveSubEntityIdFromClient(Entity.Client client, string id)
-        {
-            client.ClientSecrets.Remove(client.ClientSecrets.First(e => e.Id == id));
+            return client.ClientSecrets;
         }
     }
 }

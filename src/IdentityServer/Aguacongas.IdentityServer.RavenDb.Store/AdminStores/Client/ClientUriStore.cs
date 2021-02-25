@@ -2,7 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
-using System.Linq;
+using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Client
@@ -13,17 +13,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Client
         {
         }
 
-        protected override void AddSubEntityIdToClient(Entity.Client client, string id)
+        protected override ICollection<Entity.ClientUri> GetCollection(Entity.Client client)
         {
-            client.RedirectUris.Add(new Entity.ClientUri
+            if (client.RedirectUris == null)
             {
-                Id = id
-            });
-        }
+                client.RedirectUris = new List<Entity.ClientUri>();
+            }
 
-        protected override void RemoveSubEntityIdFromClient(Entity.Client client, string id)
-        {
-            client.RedirectUris.Remove(client.RedirectUris.First(e => e.Id == id));
+            return client.RedirectUris;
         }
     }
 }

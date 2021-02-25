@@ -3,27 +3,24 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Identity
 {
-    public abstract class IdentityPropertyStore : IdentitySubEntityStoreBase<IdentityProperty>
+    public class IdentityPropertyStore : IdentitySubEntityStoreBase<IdentityProperty>
     {
-        protected IdentityPropertyStore(IAsyncDocumentSession session, ILogger<AdminStore<IdentityProperty>> logger) : base(session, logger)
+        public IdentityPropertyStore(IAsyncDocumentSession session, ILogger<AdminStore<IdentityProperty>> logger) : base(session, logger)
         {
         }
 
-        protected override void AddSubEntityIdToIdentity(IdentityResource identity, string id)
+        protected override ICollection<IdentityProperty> GetCollection(IdentityResource identity)
         {
-            identity.Properties.Add(new IdentityProperty
+            if (identity.Properties == null)
             {
-                Id = id
-            });
-        }
+                identity.Properties = new List<IdentityProperty>();
+            }
 
-        protected override void RemoveSubEntityIdFromIdentity(IdentityResource identity, string id)
-        {
-            identity.Properties.Remove(identity.Properties.First(e => e.Id == id));
+            return identity.Properties;
         }
     }
 }

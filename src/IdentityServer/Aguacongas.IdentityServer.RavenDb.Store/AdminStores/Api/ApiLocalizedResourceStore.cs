@@ -3,7 +3,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Api
 {
@@ -13,17 +13,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Api
         {
         }
 
-        protected override void AddSubEntityIdToApi(ProtectResource api, string id)
+        protected override ICollection<ApiLocalizedResource> GetCollection(ProtectResource api)
         {
-            api.Resources.Add(new ApiLocalizedResource
+            if (api.Resources == null)
             {
-                Id = id
-            });
-        }
+                api.Resources = new List<ApiLocalizedResource>();
+            }
 
-        protected override void RemoveSubEntityIdFromApi(ProtectResource api, string id)
-        {
-            api.Resources.Remove(api.Resources.First(e => e.Id == id));
+            return api.Resources;
         }
     }
 }

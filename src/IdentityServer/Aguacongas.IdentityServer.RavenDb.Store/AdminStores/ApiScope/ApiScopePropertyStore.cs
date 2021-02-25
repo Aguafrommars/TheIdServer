@@ -2,7 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
-using System.Linq;
+using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.ApiScope
@@ -13,17 +13,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.ApiScope
         {
         }
 
-        protected override void AddSubEntityIdToApiScope(Entity.ApiScope apiScope, string id)
+        protected override ICollection<Entity.ApiScopeProperty> GetCollection(Entity.ApiScope apiScope)
         {
-            apiScope.Properties.Add(new Entity.ApiScopeProperty
+            if (apiScope.Properties == null)
             {
-                Id = id
-            });
-        }
+                apiScope.Properties = new List<Entity.ApiScopeProperty>();
+            }
 
-        protected override void RemoveSubEntityIdFromApiScope(Entity.ApiScope apiScope, string id)
-        {
-            apiScope.Properties.Remove(apiScope.Properties.First(e => e.Id == id));
+            return apiScope.Properties;
         }
     }
 }

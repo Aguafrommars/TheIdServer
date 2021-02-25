@@ -33,6 +33,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var entity = await _session
                 .LoadAsync<TEntity>($"{_entitybasePath}{id}", b => b.Expand(request?.Expand), cancellationToken).ConfigureAwait(false);
+            if (entity == null)
+            {
+                return null;
+            }
             await AddExpandedAsync(entity, request?.Expand).ConfigureAwait(false);
             return entity;
         }

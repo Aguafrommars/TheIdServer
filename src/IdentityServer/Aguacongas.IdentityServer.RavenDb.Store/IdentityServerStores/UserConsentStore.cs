@@ -1,5 +1,4 @@
-﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+﻿// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;

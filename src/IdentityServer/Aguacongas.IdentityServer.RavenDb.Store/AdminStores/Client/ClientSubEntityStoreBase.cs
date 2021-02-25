@@ -1,8 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -22,29 +24,25 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Client
 
         protected override async Task OnCreateEntityAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            var client = await LoadApiAsync(entity, cancellationToken).ConfigureAwait(false);
-            AddSubEntityIdToClient(client, $"{_entitybasePath}{entity.Id}");
-            await base.OnCreateEntityAsync(entity, cancellationToken).ConfigureAwait(false);
-        }
-
-        protected override async Task OnDeleteEntityAsync(TEntity entity, CancellationToken cancellationToken)
-        {
-            var client = await LoadApiAsync(entity, cancellationToken).ConfigureAwait(false);
-            RemoveSubEntityIdFromClient(client, $"{_entitybasePath}{entity.Id}");
-            await base.OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
-        }
-
-        protected abstract void AddSubEntityIdToClient(Entity.Client client, string id);
-        protected abstract void RemoveSubEntityIdFromClient(Entity.Client client, string id);
-
-        private async Task<Entity.Client> LoadApiAsync(TEntity entity, CancellationToken cancellationToken)
-        {
             var client = await _session.LoadAsync<Entity.Client>($"{nameof(Entity.Client).ToLowerInvariant()}/{entity.ClientId}", cancellationToken).ConfigureAwait(false);
             if (client == null)
             {
                 throw new InvalidOperationException($"Client '{entity.ClientId}' doesn't exist.");
             }
-            return client;
+            GetCollection(client).AddEntityId($"{_entitybasePath}{entity.Id}");
+            await base.OnCreateEntityAsync(entity, cancellationToken).ConfigureAwait(false);
         }
+
+        protected override async Task OnDeleteEntityAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            var client = await _session.LoadAsync<Entity.Client>($"{nameof(Entity.Client).ToLowerInvariant()}/{entity.ClientId}", cancellationToken).ConfigureAwait(false);
+            if (client != null)
+            {
+                GetCollection(client).RemoveEntityId($"{_entitybasePath}{entity.Id}");
+            }
+            await base.OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
+        }
+
+        protected abstract ICollection<TEntity> GetCollection(Entity.Client client);
     }
 }

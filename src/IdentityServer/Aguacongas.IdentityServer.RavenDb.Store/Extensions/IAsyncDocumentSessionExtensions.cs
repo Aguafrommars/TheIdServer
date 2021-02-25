@@ -1,13 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using AutoMapper.Internal;
 using Community.OData.Linq;
 using Microsoft.OData.Edm;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session.Loaders;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -83,7 +84,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 throw new InvalidOperationException($"{path} is not a property of '{type.Name}'.");
             }
 
-            if (property.PropertyType.IsAssignableTo(typeof(IEnumerable)))
+            if (property.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)))
             {
                 pathBuilder.Append("[].Id");
                 return pathBuilder;
@@ -92,11 +93,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             if (property.PropertyType.GetProperty("Id") == null)
             {
                 throw new InvalidOperationException($"{path} doesn't have a property named 'Id'.");
-            }
-
-            if (type.GetProperty($"{path}Id") == null)
-            {
-                throw new InvalidOperationException($"{type.Name} doesn't have a property named '{path}Id'.");
             }
 
             pathBuilder.Append("Id");
