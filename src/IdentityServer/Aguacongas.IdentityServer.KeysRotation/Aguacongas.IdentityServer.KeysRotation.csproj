@@ -1,25 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Description>IdentityServer4 signing keys rotation.</Description>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>identityserver4;signing keys rotation</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
-		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Authors>Olivier Lefebvre</Authors>
+        <Description>IdentityServer4 signing keys rotation.</Description>
+        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>identityserver4;signing keys rotation</PackageTags>
+        <PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     <PackageReference Include="IdentityModel" Version="5.0.1" />
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.2" />

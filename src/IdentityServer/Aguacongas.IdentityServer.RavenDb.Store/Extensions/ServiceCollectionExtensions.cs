@@ -99,7 +99,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ReferenceTokenStore>()
                 .AddTransient<UserConsentStore>()
                 .AddTransient<DeviceFlowStore>()
-                .AddTransient<IAdminStore<Entity.OneTimeToken>, OneTimeTokenStore>()
+                .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
                 .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
                 .AddTransient<IAdminStore<Entity.AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
