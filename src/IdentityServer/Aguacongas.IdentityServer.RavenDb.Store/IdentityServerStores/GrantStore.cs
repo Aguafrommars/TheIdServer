@@ -120,14 +120,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 entity.Expiration = GetExpiration(dto);
             }
 
-            try
-            {
-                await _session.SaveChangesAsync().ConfigureAwait(false);
-            }
-            catch
-            {
-                // store can already be done
-            }
+            await _session.SaveChangesAsync().ConfigureAwait(false);
             return entity.Id;
         }
 
