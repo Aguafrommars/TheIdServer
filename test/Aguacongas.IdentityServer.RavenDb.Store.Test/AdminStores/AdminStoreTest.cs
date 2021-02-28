@@ -16,6 +16,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
     public class AdminStoreTest
     {
         [Fact]
+        public void Constructor_should_check_parameter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new AdminStore<ProtectResource>(null, null));
+            Assert.Throws<ArgumentNullException>(() => new AdminStore<ProtectResource>(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null));
+        }
+
+        [Fact]
         public async Task GetAsync_should_filter_by_odata_request()
         {
             using var store = new RavenDbTestDriverWrapper().GetDocumentStore();

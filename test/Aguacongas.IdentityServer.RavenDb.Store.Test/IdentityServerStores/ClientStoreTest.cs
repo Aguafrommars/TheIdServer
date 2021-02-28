@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -9,6 +10,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
 {
     public class ClientStoreTest
     {
+        [Fact]
+        public void Construrctor_should_check_paameter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ClientStore(null));
+        }
+
         [Fact]
         public async Task FindClientByIdAsync_should_return_client()
         {

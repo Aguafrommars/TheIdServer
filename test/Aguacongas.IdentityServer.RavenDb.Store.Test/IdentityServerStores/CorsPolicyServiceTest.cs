@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -9,6 +9,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
 {
     public class CorsPolicyServiceTest
     {
+        [Fact]
+        public void Construrctor_should_check_paameter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new CorsPolicyService(null));
+        }
+
         [Fact]
         public async Task IsOriginAllowedAsync_should_check_SanetizedCorsUri()
         {
