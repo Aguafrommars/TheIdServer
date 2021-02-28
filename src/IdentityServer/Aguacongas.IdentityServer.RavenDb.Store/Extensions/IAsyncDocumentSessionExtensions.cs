@@ -1,21 +1,31 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using AutoMapper.Internal;
 using Community.OData.Linq;
 using Microsoft.OData.Edm;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 using Raven.Client.Documents.Session.Loaders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     public static class IAsyncDocumentSessionExtensions
     {
+        public static async Task<ICollection<TSubEntity>> GetSubEntitiesAsync<TSubEntity>(this IAsyncDocumentSession session, ICollection<TSubEntity> idList) where TSubEntity : IEntityId
+        {
+            idList ??= new List<TSubEntity>();
+            var itemList = await session.LoadAsync<TSubEntity>(idList.Select(c => c.Id)).ConfigureAwait(false);
+            return itemList.Select(i => i.Value).ToList();
+        }
+
         public static string GetSubEntityParentIdName(this Type type)
             => $"{type.Name.Replace("ProtectResource", "Api").Replace("IdentityResource", "Identity")}Id";
 
