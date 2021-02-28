@@ -4,6 +4,7 @@ using IdentityServer4.Services;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -32,13 +33,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <returns></returns>
-        public Task<bool> IsOriginAllowedAsync(string origin)
+        public async Task<bool> IsOriginAllowedAsync(string origin)
         {
             var corsUri = new Uri(origin);
-            var corsValue = Entity.UriKinds.Cors;
             var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
-            return _session.Query<Entity.ClientUri>()
-                .AnyAsync(u => (u.Kind & corsValue) == corsValue && u.SanetizedCorsUri == sanetized);
+            var urlList = await _session.Query<Entity.ClientUri>()
+                    .Where(u => u.SanetizedCorsUri == sanetized)
+                    .ToListAsync().ConfigureAwait(false);
+
+            var corsValue = Entity.UriKinds.Cors;
+            return urlList.Any(u => (u.Kind & corsValue) == corsValue);
         }
 
     }
