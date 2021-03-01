@@ -2,8 +2,6 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;

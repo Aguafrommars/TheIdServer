@@ -23,7 +23,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             ILogger<DeviceFlowStore> logger)
             : base(session, logger)
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session;
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 

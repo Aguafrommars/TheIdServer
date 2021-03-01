@@ -13,6 +13,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
     public class ApiApiScopeStoreTest
     {
         [Fact]
+        public void Constructor_should_check_parameters()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ApiApiScopeStore(null, null));
+            Assert.Throws<ArgumentNullException>(() => new ApiApiScopeStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null));
+        }
+
+        [Fact]
         public async Task CreateAsync_should_add_entity_id_to_parents()
         {
             using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
@@ -49,6 +56,38 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
             Assert.Contains(api.ApiScopes, i => i.Id == $"{typeof(Entity.ApiApiScope).Name.ToLowerInvariant()}/{entity.Id}");
             var apiScope = await s2.LoadAsync<Entity.ApiScope>($"{nameof(Entity.ApiScope).ToLowerInvariant()}/test");
             Assert.Contains(apiScope.Apis, i => i.Id == $"{typeof(Entity.ApiApiScope).Name.ToLowerInvariant()}/{entity.Id}");
+        }
+
+        [Fact]
+        public async Task CreateAsync_should_throw_when_parents_not_found()
+        {
+            using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
+
+            using var s1 = store.OpenAsyncSession();
+            await s1.StoreAsync(new Entity.ProtectResource
+            {
+                Id = "test"
+            }, $"{nameof(Entity.ProtectResource).ToLowerInvariant()}/test");
+
+            await s1.SaveChangesAsync();
+
+            var loggerMock = new Mock<ILogger<ApiApiScopeStore>>();
+
+            using var session = store.OpenAsyncSession();
+
+            var sut = new ApiApiScopeStore(session, loggerMock.Object);
+
+            var entity = new Entity.ApiApiScope
+            {
+                Id = Guid.NewGuid().ToString(),
+                ApiId = "unknow",
+                ApiScopeId = "test"
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.CreateAsync(entity));
+
+            entity.ApiId = "test";
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.CreateAsync(entity));
         }
 
         [Fact]

@@ -18,9 +18,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
         [Fact]
         public void Constructor_should_check_parameters()
         {
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null, null));
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), new PersistentGrantSerializer(), null));
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null, new Mock<ILogger<DeviceFlowStore>>().Object));
         }
 
         [Fact]
@@ -84,7 +82,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
 
             var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
 
-            var result = await sut.FindByUserCodeAsync(null);
+            var result = await sut.FindByUserCodeAsync("code");
 
             Assert.NotNull(result);
         }
