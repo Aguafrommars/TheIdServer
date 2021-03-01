@@ -54,13 +54,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// <returns></returns>
         public async Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
-            var query = from api in _session.Query<Entity.ProtectResource>()
-                        .Expand(string.Join(",", _expandApiProperttyList))
-                        where apiResourceNames.Contains(api.Id)
-                        select api;
+            var apiDictionary = await _session.LoadAsync<Entity.ProtectResource>(apiResourceNames.Select(n => $"{nameof(Entity.ProtectResource).ToLowerInvariant()}/{n}"),
+                builder => builder.Expand(string.Join(",", _expandApiProperttyList))).ConfigureAwait(false);
 
-            var apiList = await query.ToListAsync().ConfigureAwait(false);
-            return await ToApiResourceList(apiList).ConfigureAwait(false);
+            return await ToApiResourceList(apiDictionary.Values.Where(v => v != null)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -70,17 +67,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// <returns></returns>
         public async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
-            var query = from apiScope in _session.Query<Entity.ApiScope>()
-                            .Include($"{nameof(Entity.ApiScope.Apis)}[].Id")
-                        where scopeNames.Contains(apiScope.Id)
-                        select apiScope;
-
-            var apiScopeList = await query.ToListAsync().ConfigureAwait(false);
+            var apiScopeDictionary = await _session.LoadAsync<Entity.ApiScope>(scopeNames.Select(n => $"{nameof(Entity.ApiScope).ToLowerInvariant()}/{n}"),
+                    builder => builder.Expand(nameof(Entity.ApiScope.Apis))).ConfigureAwait(false);
             var dictionary = new Dictionary<string, Entity.ProtectResource>();
-            foreach (var apiScope in apiScopeList)
+            foreach (var apiScope in apiScopeDictionary.Values.Where(v => v!= null))
             {
                 var apiApiScopeList = await _session.LoadAsync<Entity.ApiApiScope>(apiScope.Apis.Select(a => a.Id)).ConfigureAwait(false);
-                var apiList = await _session.LoadAsync<Entity.ProtectResource>(apiApiScopeList.Select(s => $"{nameof(Entity.ProtectResource).ToLowerInvariant()}/{s.Value.ApiId}")).ConfigureAwait(false);
+                var apiList = await _session.LoadAsync<Entity.ProtectResource>(apiApiScopeList.Select(s => $"{nameof(Entity.ProtectResource).ToLowerInvariant()}/{s.Value.ApiId}"),
+                        builder => builder.Expand(string.Join(",", _expandApiProperttyList))).ConfigureAwait(false);
                 foreach(var api in apiList.Select(a => a.Value))
                 {
                     dictionary[api.Id] = api;
@@ -97,13 +91,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// <returns></returns>
         public async Task<IEnumerable<IdentityServer4.Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
         {
-            var query = from scope in _session.Query<Entity.ApiScope>()
-                            .Expand(string.Join(",", _expandApiScopeProperttyList))
-                        where scopeNames.Contains(scope.Id)
-                        select scope;
-
-            var apiScopeList = await query.ToListAsync().ConfigureAwait(false);
-            return await ToApiScopeList(apiScopeList).ConfigureAwait(false);
+            var apiScopeDictionary = await _session.LoadAsync<Entity.ApiScope>(scopeNames.Select(n => $"{nameof(Entity.ApiScope).ToLowerInvariant()}/{n}"),
+                    builder => builder.Expand(string.Join(",", _expandApiScopeProperttyList))).ConfigureAwait(false); 
+            
+            return await ToApiScopeList(apiScopeDictionary.Values.Where(v => v != null)).ConfigureAwait(false);
         }
 
 
@@ -114,13 +105,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// <returns></returns>
         public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
-            var query = from identity in _session.Query<Entity.IdentityResource>()
-                            .Expand(string.Join(",", _expandIdentityProperttyList))
-                        where scopeNames.Contains(identity.Id)
-                        select identity;
-
-            var identityList = await query.ToListAsync().ConfigureAwait(false);
-            return await ToIdentityResourceList(identityList).ConfigureAwait(false);
+            var identiyDictionary = await _session.LoadAsync<Entity.IdentityResource>(scopeNames.Select(n => $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/{n}"),
+                    builder => builder.Expand(string.Join(",", _expandIdentityProperttyList))).ConfigureAwait(false);
+            
+            return await ToIdentityResourceList(identiyDictionary.Values.Where(v => v != null)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -163,6 +151,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             {
                 api.ApiClaims = await _session.GetSubEntitiesAsync(api.ApiClaims).ConfigureAwait(false);
                 api.ApiScopes = await _session.GetSubEntitiesAsync(api.ApiScopes).ConfigureAwait(false);
+                api.Secrets = await _session.GetSubEntitiesAsync(api.Secrets).ConfigureAwait(false);
                 api.Resources = await _session.GetSubEntitiesAsync(api.Resources).ConfigureAwait(false);
                 api.Properties = await _session.GetSubEntitiesAsync(api.Properties).ConfigureAwait(false);
             }
