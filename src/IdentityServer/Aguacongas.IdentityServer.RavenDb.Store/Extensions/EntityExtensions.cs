@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
@@ -243,7 +244,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             return new Entity.RoleClaim
             {
-                Id = claim.Id.ToString(),
+                Id = $"{claim.RoleId}@{claim.Id}",
                 RoleId = claim.RoleId,
                 ClaimType = claim.ClaimType,
                 ClaimValue = claim.ClaimValue
@@ -254,7 +255,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             return new Entity.UserClaim
             {
-                Id = claim.Id.ToString(),
+                Id = $"{claim.UserId}@{claim.Id}",
                 UserId = claim.UserId,
                 ClaimType = claim.ClaimType,
                 ClaimValue = claim.ClaimValue,
@@ -362,9 +363,14 @@ namespace Aguacongas.IdentityServer.Store
 
         public static UserClaim ToUserClaim(this Entity.UserClaim claim)
         {
+            if (!int.TryParse(claim.Id, out int id))
+            {
+                id = 0;
+            }
+
             return new UserClaim
             {
-                Id = claim.Id != null ? int.Parse(claim.Id) : 0,
+                Id = id,
                 UserId = claim.UserId,
                 ClaimType = claim.ClaimType,
                 ClaimValue = claim.ClaimValue,
@@ -417,6 +423,6 @@ namespace Aguacongas.IdentityServer.Store
         public static void RemoveEntityId<TEntity>(this ICollection<TEntity> collection, string id) where TEntity : Entity.IEntityId
         {
             collection.Remove(collection.First(e => e.Id == id));
-        }
+        }        
     }
 }

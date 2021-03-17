@@ -110,15 +110,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             };
         }
 
-        private async Task<IdentityUserToken<string>> GetTokenAsync(string id, CancellationToken cancellationToken)
+        private Task<IdentityUserToken<string>> GetTokenAsync(string id, CancellationToken cancellationToken)
         {
-            var info = id.Split('@');
-            var token = await _session.Query<IdentityUserToken<string>>().FirstOrDefaultAsync(l => l.UserId == info[0] &&
-                l.LoginProvider == info[1] &&
-                l.Name == info[2], cancellationToken)
-                            .ConfigureAwait(false);
-
-            return token;
+            return _session.LoadAsync<IdentityUserToken<string>>($"usertoken/{id}", cancellationToken);
         }
 
         private static IEdmModel GetEdmModel()

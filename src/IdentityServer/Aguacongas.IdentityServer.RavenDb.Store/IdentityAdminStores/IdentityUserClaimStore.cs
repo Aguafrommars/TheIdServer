@@ -33,12 +33,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var user = await GetUserAsync(entity.UserId)
                 .ConfigureAwait(false);
+            var claimList = await _userManager.GetClaimsAsync(user).ConfigureAwait(false);
             var claim = entity.ToUserClaim().ToClaim();
             var result = await _userManager.AddClaimAsync(user, claim)
                 .ConfigureAwait(false);
             if (result.Succeeded)
             {
-                entity.Id = Guid.NewGuid().ToString();
+                entity.Id = $"{user.Id}@{claimList.Count}";
                 _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
                 return entity;
             }
@@ -144,10 +145,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             return user;
         }
 
-        private async Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
+        private Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
-            return await _session.LoadAsync<UserClaim>(id, cancellationToken)
-                            .ConfigureAwait(false);
+            return _session.LoadAsync<UserClaim>($"userclaim/{id}", cancellationToken);
         }
 
         private static void ChechResult(IdentityResult result)

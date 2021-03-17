@@ -131,19 +131,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             return user;
         }
 
-        private async Task<IdentityUserLogin<string>> GetLoginAsync(string id, CancellationToken cancellationToken)
+        private Task<IdentityUserLogin<string>> GetLoginAsync(string id, CancellationToken cancellationToken)
         {
-            var info = id.Split('@');
-            var login = await _session.Query<IdentityUserLogin<string>>().FirstOrDefaultAsync(l => l.UserId == info[0] &&
-                l.LoginProvider == info[1] &&
-                l.ProviderKey == info[2], cancellationToken)
-                            .ConfigureAwait(false);
-            if (login == null)
-            {
-                throw new InvalidOperationException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
-            }
-
-            return login;
+            return _session.LoadAsync<IdentityUserLogin<string>>($"userlogin/{id}", cancellationToken);
         }
 
         private static IEdmModel GetEdmModel()

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,16 +36,22 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             CheckParameters(user, claims);
 
             var userId = ConvertIdToString(user.Id);
-            var data = await _session.LoadAsync<UserData<string, TUser, UserClaim, IdentityUserLogin<string>>>($"user/{userId}", cancellationToken).ConfigureAwait(false);
+            var data = await _session.LoadAsync<UserData>($"userdata/{userId}", cancellationToken).ConfigureAwait(false);
 
-            var claimList = data.Claims;
-
-            foreach (var claim in claims)
+            var toDeleteList = new List<string>();
+            foreach (var claimId in data.ClaimIds)
             {
-                claimList.RemoveAll(uc => uc.UserId.Equals(user.Id) &&
-                    uc.Issuer == claim.Issuer && 
-                    uc.ClaimType == claim.Type && 
-                    uc.ClaimValue == claim.Value);
+                var userClaim = await _session.LoadAsync<UserClaim>(claimId, cancellationToken).ConfigureAwait(false);
+                if (claims.Any(c => userClaim.Issuer == c.Issuer && userClaim.ClaimType == c.Type && userClaim.ClaimValue == c.Value))
+                {
+                    toDeleteList.Add(claimId);
+                }
+            }
+
+            foreach (var claimId in toDeleteList)
+            {
+                _session.Delete(claimId);
+                data.ClaimIds.Remove(claimId);
             }
         }
 

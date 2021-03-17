@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.Identity.RavenDb;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -33,12 +34,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var role = await GetRoleAsync(entity.RoleId)
                 .ConfigureAwait(false);
+            var claimList = await _roleManager.GetClaimsAsync(role).ConfigureAwait(false);
             var claim = entity.ToRoleClaim().ToClaim();
             var result = await _roleManager.AddClaimAsync(role, claim)
                 .ConfigureAwait(false);
             if (result.Succeeded)
             {
-                entity.Id = role.Id;
+                entity.Id = $"{role.Id}@{claimList.Count}";
                 _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
                 return entity;
             }
@@ -57,7 +59,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
+            var claim = await GetClaimAsync(id, null, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
                 throw new InvalidOperationException($"Entity type {typeof(RoleClaim).Name} at id {id} is not found");
@@ -79,7 +81,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<RoleClaim> UpdateAsync(RoleClaim entity, CancellationToken cancellationToken = default)
         {
-            var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+            var claim = await GetClaimAsync(entity.Id, null, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
                 throw new InvalidOperationException($"Entity type {typeof(RoleClaim).Name} at id {entity.Id} is not found");
@@ -104,29 +106,37 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<RoleClaim> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var claim = await GetClaimAsync(id, cancellationToken).ConfigureAwait(false);
+            var claim = await GetClaimAsync(id, request?.Expand, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
                 return null;
             }
-            return claim.ToEntity();
+            var entity = claim.ToEntity();
+            if (request?.Expand == nameof(RoleClaim.Role))
+            {
+                var role = await _session.LoadAsync<TRole>($"role/{entity.RoleId}", cancellationToken).ConfigureAwait(false);
+                entity.Role = role.ToEntity();                
+            }
+            
+            return entity;
         }
 
         public async Task<PageResponse<RoleClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _session.Query<IdentityRoleClaim<string>>().GetODataQuery(request);
+            var query = _session.Query<IdentityRoleClaim<string>>();
+            var odataQuery = query.GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
-
+            
             var page = odataQuery.GetPage(request);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
-
+            var claimList = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            
             return new PageResponse<RoleClaim>
             {
                 Count = count,
-                Items = items.Select(r => r.ToEntity())
+                Items = claimList.Select(c => c.ToEntity())
             };
         }
 
@@ -142,11 +152,15 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             return role;
         }
 
-        private async Task<IdentityRoleClaim<string>> GetClaimAsync(string id, CancellationToken cancellationToken)
+        private Task<IdentityRoleClaim<string>> GetClaimAsync(string id, string expand, CancellationToken cancellationToken)
         {
-            var claim = await _session.LoadAsync<IdentityRoleClaim<string>>(id, cancellationToken)
-                            .ConfigureAwait(false);
-            return claim;
+            return _session.LoadAsync<IdentityRoleClaim<string>>($"roleclaim/{id}", builder =>
+            {
+                if (expand == nameof(RoleClaim.Role))
+                {
+                    builder.IncludeDocuments(c => $"role/{c.RoleId}");
+                }
+            }, cancellationToken);
         }
 
         private static TValue ChechResult<TValue>(IdentityResult result, TValue value)

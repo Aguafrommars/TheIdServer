@@ -135,7 +135,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private async Task<IdentityRole> GetRoleAsync(string id, CancellationToken cancellationToken)
         {
-            var role = await _session.LoadAsync<IdentityRole>(id, cancellationToken)
+            var role = await _session.LoadAsync<IdentityRole>($"role/{id}", cancellationToken)
                 .ConfigureAwait(false);
 
             if (role == null)

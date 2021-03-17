@@ -93,6 +93,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var role = await GetRoleAsync(id)
                 .ConfigureAwait(false);
+
             return role.ToEntity();
         }
 
