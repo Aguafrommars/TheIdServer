@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -20,11 +21,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         {
             Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(null, null, null));
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            var provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, null, null));
@@ -35,11 +38,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         public async Task CreateAsync_should_return_claim_id()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var user = new IdentityUser
             {
@@ -68,12 +76,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         public async Task DeleteAsync_should_delete_claim()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
             var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -97,11 +111,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         public async Task UdpateAsync_should_update_claim()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var user = new IdentityUser
             {
@@ -135,12 +154,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         public async Task GetAsync_by_page_request_should_find_role_claims()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
             var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -158,7 +183,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             var claimsResult = await sut.GetAsync(new PageRequest
             {
-                Filter = $"RoleId eq '{user.Id}'",
+                Filter = $"UserId eq '{user.Id}'",
                 Take = 1
             });
 
@@ -171,11 +196,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         public async Task GetAsync_by_id_should_return_claim()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddIdentity<IdentityUser, IdentityRole>()
-                .AddRavenDbStores(p => documentStore)
-                .Services.BuildServiceProvider();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var user = new IdentityUser
             {

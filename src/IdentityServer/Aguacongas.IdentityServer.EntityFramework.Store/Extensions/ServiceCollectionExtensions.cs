@@ -76,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return services.AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser>)
-                .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole>)
+                .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole>)    
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole, TContext>>()
                 .AddTransient<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()
                 .AddTransient<IAdminStore<Entity.UserLogin>, IdentityUserLoginStore<TUser>>()

@@ -18,10 +18,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         where TRole : IdentityRole<string>
     {
         private readonly IAsyncDocumentSession _session;
-        public UserStore(IAsyncDocumentSession session, UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>> userOnlyStore, IdentityErrorDescriber describer = null) 
-            : base(session, userOnlyStore, describer)
+        public UserStore(ScopedAsynDocumentcSession session, UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>> userOnlyStore, IdentityErrorDescriber describer = null) 
+            : base(session.Session, userOnlyStore, describer)
         {
-            _session = session;
+            _session = session.Session;
         }
 
         /// <summary>
