@@ -9,8 +9,8 @@ using Microsoft.OData.Edm;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,7 +45,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 .ConfigureAwait(false);                
             if (result.Succeeded)
             {
-                entity.Id = $"{user.Id}@{entity.RoleId}";
+                entity.Id = $"{role.Name}@{user.Id}";
                 _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
                 return entity;
             }
@@ -92,32 +92,37 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<UserRole> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var info = id.Split('@');
-            var role = await _session.Query<IdentityUserRole<string>>().FirstOrDefaultAsync(r => r.UserId == info[0] && r.RoleId == info[1], cancellationToken)
+            var role = await _session.LoadAsync<IdentityUserRole<string>>($"userrole/{id}", builder => builder.IncludeDocuments(r => $"role/{r.RoleId}"), cancellationToken)
                             .ConfigureAwait(false);
             if (role == null)
             {
                 return null;
             }
 
-            return role.ToEntity();
+            return role.ToEntity(await GetRoleAsync(role.RoleId, cancellationToken).ConfigureAwait(false));
         }
 
         public async Task<PageResponse<UserRole>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _session.Query<IdentityUserRole<string>>().GetODataQuery(request, _edmModel);
+            var odataQuery = _session.Query<IdentityUserRole<string>>()
+                .Include(r => $"role/{r.RoleId}")
+                .GetODataQuery(request, _edmModel);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             var page = odataQuery.GetPage(request);
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
-
+            var roles = new List<UserRole>(items.Count);
+            foreach(var userRole in items)
+            {
+                roles.Add(userRole.ToEntity(await GetRoleAsync(userRole.RoleId, cancellationToken).ConfigureAwait(false)));
+            }
             return new PageResponse<UserRole>
             {
                 Count = count,
-                Items = items.Select(r => r.ToEntity())
+                Items = roles
             };
         }
 

@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
+
 namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 {
-    public class IdentityUserLoginStoreTest
+    public class IdentityUserRoleStoreTest
     {
         [Fact]
         public void Constuctor_should_check_parameters()
         {
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(null, null, null));
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var provider = new ServiceCollection()
                 .AddLogging()
@@ -25,12 +26,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
                 .Services.BuildServiceProvider();
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(userManager, null, null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
         }
 
         [Fact]
-        public async Task CreateAsync_should_return_Login_id()
+        public async Task CreateAsync_should_return_role_id()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -54,22 +55,30 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
-            var result = await sut.CreateAsync(new Entity.UserLogin
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
             {
-                UserId = user.Id,
-                LoginProvider = Guid.NewGuid().ToString(),
-                ProviderDisplayName = Guid.NewGuid().ToString(),
-                ProviderKey = Guid.NewGuid().ToString()
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
+
+
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var result = await sut.CreateAsync(new Entity.UserRole
+            {
+                RoleId = role.Id,
+                UserId = user.Id
             } as object);
 
 
             Assert.NotNull(result);
-            Assert.NotNull(((Entity.UserLogin)result).Id);
+            Assert.NotNull(((Entity.UserRole)result).Id);
         }
 
         [Fact]
-        public async Task DeleteAsync_should_delete_Login()
+        public async Task DeleteAsync_should_delete_role()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -83,6 +92,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             provider = scope.ServiceProvider;
 
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
             var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -90,23 +100,30 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
                 EmailConfirmed = true,
                 UserName = Guid.NewGuid().ToString()
             };
-            var userResult = await userManager.CreateAsync(user);
-            Assert.True(userResult.Succeeded);
+            var result = await userManager.CreateAsync(user);
+            Assert.True(result.Succeeded);
+            
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
 
-            var providerName = Guid.NewGuid().ToString();
-            var key = Guid.NewGuid().ToString();
-            var result = await userManager.AddLoginAsync(user, new UserLoginInfo(providerName, key, providerName));
+            result = await userManager.AddToRoleAsync(user, role.Name);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
-            await sut.DeleteAsync($"{providerName}@{key}");
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            await sut.DeleteAsync($"{user.Id}@{role.Id}");
 
-            var Logins = await userManager.GetLoginsAsync(user);
-            Assert.Empty(Logins);
+            var roles = await userManager.GetRolesAsync(user);
+            Assert.Empty(roles);
         }
 
         [Fact]
-        public async Task UdpateAsync_should_not_be_implemented()
+        public async Task UdpateAsync_should_update_role()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -127,27 +144,36 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
                 EmailConfirmed = true,
                 UserName = Guid.NewGuid().ToString()
             };
-            var userResult = await userManager.CreateAsync(user);
-            Assert.True(userResult.Succeeded);
-
-            var providerName = Guid.NewGuid().ToString();
-            var key = Guid.NewGuid().ToString();
-            var result = await userManager.AddLoginAsync(user, new UserLoginInfo(providerName, key, providerName));
+            var result = await userManager.CreateAsync(user);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
-            await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Entity.UserLogin
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
             {
-                Id = $"{providerName}@{key}",
-                LoginProvider = providerName,
-                ProviderKey = key,
-                ProviderDisplayName = "test"
-            } as object));
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
+
+            result = await userManager.AddToRoleAsync(user, role.Name);
+            Assert.True(result.Succeeded);
+
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            await sut.UpdateAsync(new Entity.UserRole
+            {
+                Id = $"{user.Id}@{role.Id}",
+                UserId = user.Id,
+                RoleId = role.Id,
+            } as object);
+
+            var roles = await userManager.GetRolesAsync(user);
+            Assert.Single(roles);
         }
 
 
         [Fact]
-        public async Task GetAsync_by_page_request_should_find_role_Logins()
+        public async Task GetAsync_by_page_request_should_find_role_roles()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -161,6 +187,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             provider = scope.ServiceProvider;
 
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
             var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -171,25 +198,50 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
-            await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
-            await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            await userManager.AddToRoleAsync(user, role.Name);
 
-            var LoginsResult = await sut.GetAsync(new PageRequest
+            role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
+            await userManager.AddToRoleAsync(user, role.Name);
+
+            role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
+            await userManager.AddToRoleAsync(user, role.Name);
+
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+
+            var rolesResult = await sut.GetAsync(new PageRequest
             {
                 Filter = $"UserId eq '{user.Id}'",
                 Take = 1
             });
 
-            Assert.NotNull(LoginsResult);
-            Assert.Equal(3, LoginsResult.Count);
-            Assert.Single(LoginsResult.Items);
+            Assert.NotNull(rolesResult);
+            Assert.Equal(3, rolesResult.Count);
+            Assert.Single(rolesResult.Items);
         }
 
         [Fact]
-        public async Task GetAsync_by_id_should_return_Login()
+        public async Task GetAsync_by_id_should_return_role()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -213,15 +265,20 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var providerName = Guid.NewGuid().ToString();
-            var key = Guid.NewGuid().ToString();
-            await userManager.AddLoginAsync(user, new UserLoginInfo(providerName, key, providerName));
-            await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
-            await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            await userManager.AddToRoleAsync(user, role.Name);
 
-            var result = await sut.GetAsync($"{providerName}@{key}", null);
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+
+            var result = await sut.GetAsync($"{role.NormalizedName}@{user.Id}", null);
 
             Assert.NotNull(result);
         }

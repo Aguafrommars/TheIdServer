@@ -83,8 +83,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
             
-            var expandClaims = request?.Expand?.Contains(nameof(Entity.User.UserClaims));            
-            var expandRoles = request?.Expand?.Contains(nameof(Entity.User.UserClaims));
             request.Expand = null;
             
             var odataQuery = _session.Query<TUser>().GetODataQuery(request);

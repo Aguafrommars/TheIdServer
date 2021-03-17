@@ -264,13 +264,13 @@ namespace Aguacongas.IdentityServer.Store
             };
         }
 
-        public static Entity.UserRole ToEntity(this IdentityUserRole<string> role)
+        public static Entity.UserRole ToEntity(this IdentityUserRole<string> userRole, IdentityRole role)
         {
             return new Entity.UserRole
             {
-                Id = $"{role.UserId}@{role.RoleId}",
-                RoleId = role.RoleId,
-                UserId = role.UserId
+                Id = $"{role.NormalizedName}@{userRole.UserId}",
+                RoleId = userRole.RoleId,
+                UserId = userRole.UserId
             };
         }
 

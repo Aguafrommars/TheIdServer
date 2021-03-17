@@ -84,7 +84,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 var collection = subEntityProperty.GetValue(entity) as ICollection;
                 if (collection != null)
                 {
-                    var itemType = subEntityProperty.PropertyType.GetGenericArguments()[0];
                     foreach (IEntityId subItem in collection)
                     {
                         _session.Delete(subItem.Id);

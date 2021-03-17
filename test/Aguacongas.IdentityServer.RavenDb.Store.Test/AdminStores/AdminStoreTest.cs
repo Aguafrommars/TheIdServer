@@ -277,9 +277,27 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
             using var session = store.OpenAsyncSession();
             var sut = new AdminStore<TestEntity>(session, loggerMock.Object);
 
-            var result = await sut.CreateAsync(new TestEntity());
+            var result = await sut.CreateAsync(new TestEntity() as object) as TestEntity;
 
             Assert.NotNull(result.Id);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_should_populate_auditable_properties_when_auditable()
+        {
+            using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
+
+            var loggerMock = new Mock<ILogger<AdminStore<TestEntity>>>();
+
+            using var session = store.OpenAsyncSession();
+            var sut = new AdminStore<TestEntity>(session, loggerMock.Object);
+
+            var entity = new TestEntity();
+            entity = await sut.CreateAsync(entity);
+
+            await sut.UpdateAsync(entity);
+
+            Assert.NotNull(entity.Id);
         }
 
         public class TestEntity : IEntityId
