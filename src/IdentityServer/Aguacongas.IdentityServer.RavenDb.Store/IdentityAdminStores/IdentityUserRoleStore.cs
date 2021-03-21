@@ -105,15 +105,19 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<UserRole>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _session.Query<IdentityUserRole<string>>()
-                .Include(r => $"role/{r.RoleId}")
-                .GetODataQuery(request, _edmModel);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var rql = request.ToRQL<IdentityUserRole<string>, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(IdentityUserRole<string>)), i => i.RoleId);
+            var pageQuery = _session.Advanced.AsyncRawQuery<IdentityUserRole<string>>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var page = odataQuery.GetPage(request);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<IdentityUserRole<string>>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+
             var roles = new List<UserRole>(items.Count);
             foreach(var userRole in items)
             {

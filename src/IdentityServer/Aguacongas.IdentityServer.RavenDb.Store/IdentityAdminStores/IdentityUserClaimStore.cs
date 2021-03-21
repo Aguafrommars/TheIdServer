@@ -118,13 +118,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<Entity.UserClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _session.Query<UserClaim>().GetODataQuery(request);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var rql = request.ToRQL<UserClaim, int>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(UserClaim)), i => i.Id);
+            var pageQuery = _session.Advanced.AsyncRawQuery<UserClaim>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var page = odataQuery.GetPage(request);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<UserClaim>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             return new PageResponse<Entity.UserClaim>
             {

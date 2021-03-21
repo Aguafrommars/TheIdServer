@@ -123,20 +123,22 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<PageResponse<RoleClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            request = request ?? throw new ArgumentNullException(nameof(request));
-            var query = _session.Query<IdentityRoleClaim<string>>();
-            var odataQuery = query.GetODataQuery(request);
+            var rql = request.ToRQL<IdentityRoleClaim<string>, int>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(IdentityRoleClaim<string>)), i => i.Id);
+            var pageQuery = _session.Advanced.AsyncRawQuery<IdentityRoleClaim<string>>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
-            
-            var page = odataQuery.GetPage(request);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var claimList = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<IdentityRoleClaim<string>>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
             
             return new PageResponse<RoleClaim>
             {
                 Count = count,
-                Items = claimList.Select(c => c.ToEntity())
+                Items = items.Select(c => c.ToEntity())
             };
         }
 

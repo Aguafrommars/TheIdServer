@@ -101,13 +101,17 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
 
-            var odataQuery = _session.Query<TRole>().GetODataQuery(request);
+            var rql = request.ToRQL<TRole, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(TRole)), i => i.Id);
+            var pageQuery = _session.Advanced.AsyncRawQuery<TRole>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var page = odataQuery.GetPage(request);
-
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<TRole>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             return new PageResponse<Role>
             {

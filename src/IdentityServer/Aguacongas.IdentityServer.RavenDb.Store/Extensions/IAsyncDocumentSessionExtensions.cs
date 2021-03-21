@@ -87,6 +87,14 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             return page;
         }
 
+        public static IAsyncRawDocumentQuery<T> GetPage<T>(this IAsyncRawDocumentQuery<T> odataQuery, PageRequest request) where T : class
+        {
+            var page = odataQuery.Skip(request.Skip ?? 0)
+                .Take(request.Take.Value);
+
+            return page;
+        }
+
         private static StringBuilder GetIncludePath(Type type, string path)
         {
             var pathBuilder = new StringBuilder();

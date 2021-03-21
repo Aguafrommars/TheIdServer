@@ -26,7 +26,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             _session = session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _entitybasePath = typeof(TEntity).Name.ToLowerInvariant() + "/";
+            var entityTypeName = typeof(TEntity).Name;
+            _entitybasePath = entityTypeName.ToLowerInvariant() + "/";
         }
 
         public async Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
@@ -43,19 +44,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            var query = _session.Query<TEntity>().Expand(request.Expand);
-
-            var odataQuery = query.GetODataQuery(request);
-
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
-
-            IQueryable<TEntity> page = query;
+            var rql = request.ToRQL<TEntity, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(TEntity)), e => e.Id);
+            var pageQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
             if (request.Take.HasValue)
             {
-                page = odataQuery.GetPage(request);
+                pageQuery = pageQuery.GetPage(request);
             }
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
+
+            var countQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            
             foreach(var item in items)
             {
                 await AddExpandedAsync(item, request.Expand).ConfigureAwait(false);

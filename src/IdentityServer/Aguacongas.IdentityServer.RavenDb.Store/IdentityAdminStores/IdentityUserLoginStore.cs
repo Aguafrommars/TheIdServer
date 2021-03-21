@@ -104,13 +104,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<UserLogin>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _session.Query<IdentityUserLogin<string>>().GetODataQuery(request, _edmModel);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var rql = request.ToRQL<IdentityUserLogin<string>, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(IdentityUserLogin<string>)), i => i.UserId);
+            var pageQuery = _session.Advanced.AsyncRawQuery<IdentityUserLogin<string>>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var page = odataQuery.GetPage(request);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<IdentityUserLogin<string>>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             return new PageResponse<UserLogin>
             {
