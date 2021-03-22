@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using AutoMapper.Internal;
 using Community.OData.Linq;
+using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Aguacongas.IdentityServer.Store
         public static string ToRQL<T, TKey>(this PageRequest request, string collectionName, Expression<Func<T, TKey>> keyDefinitionExpression) where T : class
         {
             var builder = new StringBuilder("from ");
-            
+
             builder.Append(collectionName);
             var where = ToWhereClause(request, keyDefinitionExpression);
             if (where != null)
@@ -24,14 +25,21 @@ namespace Aguacongas.IdentityServer.Store
                 builder.Append('\n');
                 builder.Append(where);
             }
-            var include = ToWIncludeClause<T>(request);
-            if (include != null)
+            return ToIncludeAndOrderByClause<T>(request, builder);
+        }
+
+        public static string ToRQL<T>(this PageRequest request, string collectionName, IEdmModel edm) where T : class
+        {
+            var builder = new StringBuilder("from ");
+
+            builder.Append(collectionName);
+            var where = ToWhereClause<T>(request, edm);
+            if (where != null)
             {
                 builder.Append('\n');
-                builder.Append(include);
+                builder.Append(where);
             }
-
-            return builder.ToString();
+            return ToIncludeAndOrderByClause<T>(request, builder);
         }
 
         public static string ToWhereClause<T, TKey>(this PageRequest request, Expression<Func<T, TKey>> keyDefinitionExpression) 
@@ -56,7 +64,24 @@ namespace Aguacongas.IdentityServer.Store
             return visitor.Builder.ToString();
         }
 
-        public static string ToWIncludeClause<T>(this GetRequest request)
+        public static string ToWhereClause<T>(this PageRequest request, IEdmModel edm)
+            where T : class
+        {
+            var filter = request?.Filter;
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return null;
+            }
+
+            var parser = new ODataUriParser(edm, new Uri($"{typeof(T).Name}?$filter={filter}", UriKind.Relative));
+            var filterClause = parser.ParseFilter();
+            var visitor = new RavenDbQueryNodeVisitor<T>();
+            filterClause.Expression.Accept(visitor);
+
+            return visitor.Builder.ToString();
+        }
+
+        public static string ToIncludeClause<T>(this GetRequest request)
         {
             var expand = request?.Expand;
             if (string.IsNullOrWhiteSpace(expand))
@@ -74,6 +99,17 @@ namespace Aguacongas.IdentityServer.Store
             }
 
             return $"include {string.Join(',', expandList)}";
+        }
+
+        public static string ToOrderByClause(this PageRequest request)
+        {
+            var orderBy = request?.OrderBy;
+            if (string.IsNullOrWhiteSpace(orderBy))
+            {
+                return null;
+            }
+
+            return $"order by {orderBy}";
         }
 
         private static StringBuilder GetIncludePath(Type type, string path)
@@ -99,6 +135,24 @@ namespace Aguacongas.IdentityServer.Store
 
             pathBuilder.Append("Id");
             return pathBuilder;
+        }
+
+        private static string ToIncludeAndOrderByClause<T>(PageRequest request, StringBuilder builder) where T : class
+        {
+            var include = ToIncludeClause<T>(request);
+            if (include != null)
+            {
+                builder.Append('\n');
+                builder.Append(include);
+            }
+            var orderBy = ToOrderByClause(request);
+            if (orderBy != null)
+            {
+                builder.Append('\n');
+                builder.Append(orderBy);
+            }
+
+            return builder.ToString();
         }
 
         class RavenDbQueryNodeVisitor<TSource> : QueryNodeVisitor<TSource> where TSource : class
@@ -193,6 +247,7 @@ namespace Aguacongas.IdentityServer.Store
                 Parameters = new List<string>(paramCount);
                 _isSearch = isSearch;
             }
+
             public override TSource Visit(SingleValuePropertyAccessNode nodeIn)
             {
                 Parameters.Add(nodeIn.Property.Name);
@@ -207,6 +262,12 @@ namespace Aguacongas.IdentityServer.Store
                     return null;
                 }
                 Parameters.Add(nodeIn.LiteralText);
+                return null;
+            }
+
+            public override TSource Visit(ConvertNode nodeIn)
+            {
+                nodeIn.Source.Accept(this);
                 return null;
             }
         }

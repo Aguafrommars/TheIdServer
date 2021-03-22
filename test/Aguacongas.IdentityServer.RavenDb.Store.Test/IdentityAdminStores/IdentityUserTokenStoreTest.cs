@@ -4,7 +4,6 @@ using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Linq.Indexing;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -32,7 +31,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         }
 
         [Fact]
-        public async Task CreateAsync_should_return_role_id()
+        public async Task CreateAsync_should_return_token_id()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -71,7 +70,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
         }
 
         [Fact]
-        public async Task DeleteAsync_should_delete_role()
+        public async Task DeleteAsync_should_delete_token()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -133,7 +132,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
 
         [Fact]
-        public async Task GetAsync_by_page_request_should_find_role_roles()
+        public async Task GetAsync_by_page_request_should_find_user_tokens()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()
@@ -166,19 +165,19 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
 
-            var rolesResult = await sut.GetAsync(new PageRequest
+            var result = await sut.GetAsync(new PageRequest
             {
                 Filter = $"UserId eq '{user.Id}'",
                 Take = 1
             });
 
-            Assert.NotNull(rolesResult);
-            Assert.Equal(3, rolesResult.Count);
-            Assert.Single(rolesResult.Items);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Count);
+            Assert.Single(result.Items);
         }
 
         [Fact]
-        public async Task GetAsync_by_id_should_return_role()
+        public async Task GetAsync_by_id_should_return_token()
         {
             using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
             var services = new ServiceCollection()

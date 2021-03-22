@@ -23,9 +23,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly IAuthenticationSchemeOptionsSerializer _serializer;
         private readonly IAsyncDocumentSession _session;
         private readonly IProviderClient _providerClient;
-#pragma warning disable S2743 // Static fields should not be used in generic types
-        private static readonly IEdmModel _edmModel = GetEdmModel();
-#pragma warning restore S2743 // Static fields should not be used in generic types
 
         public ExternalProviderStore(PersistentDynamicManager<SchemeDefinition> manager, 
             IAuthenticationSchemeOptionsSerializer serializer,
@@ -84,19 +81,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<PageResponse<ExternalProvider>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            request.Filter = request.Filter?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
-                .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
-            request.OrderBy = request.OrderBy?.Replace(nameof(ExternalProvider.Id), nameof(SchemeDefinition.Scheme))
-                .Replace(nameof(ExternalProvider.KindName), nameof(SchemeDefinition.SerializedHandlerType));
+            
+            var rql = request.ToRQL<SchemeDefinition>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(SchemeDefinition)), GetEdmModel());
+            var pageQuery = _session.Advanced.AsyncRawQuery<SchemeDefinition>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var odataQuery = _session.Query<SchemeDefinition>().GetODataQuery(request, _edmModel);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
-
-            var page = odataQuery.GetPage(request);
-
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
-
+            var countQuery = _session.Advanced.AsyncRawQuery<SchemeDefinition>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
             return new PageResponse<ExternalProvider>
             {
                 Count = count,
@@ -107,18 +103,20 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<ExternalProvider> UpdateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
         {
             var definition = await GetEntity(entity.Id).ConfigureAwait(false);
-            var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
 
             definition.DisplayName = entity.DisplayName;
             definition.StoreClaims = entity.StoreClaims;
             definition.MapDefaultOutboundClaimType = entity.MapDefaultOutboundClaimType;
-
-            definition.HandlerType = handlerType;
-            definition.Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
-
+            definition.SerializedHandlerType = entity.SerializedHandlerType;
+            definition.SerializedOptions = entity.SerializedOptions;
+            
             SanetizeCallbackPath(entity, definition.Options);
 
-            await _manager.UpdateAsync(definition, cancellationToken).ConfigureAwait(false);
+            definition.HandlerType = null;
+            definition.Options = null;
+
+            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
             if (_providerClient != null)
             {
                 await _providerClient.ProviderUpdatedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
@@ -178,7 +176,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var entityType = entitySet.EntityType;
             entityType.HasKey(e => e.Scheme);
             entityType.Ignore(e => e.HandlerType);
-            entityType.Ignore(e => e.Options); 
+            entityType.Ignore(e => e.Options);
             return builder.GetEdmModel();
         }
     }

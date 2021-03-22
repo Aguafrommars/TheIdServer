@@ -62,31 +62,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             return query;
         }
 
-        public static ODataQuery<T> GetODataQuery<T>(this IQueryable<T> query, PageRequest request, IEdmModel edmModel = null) where T : class
-        {
-            var odataQuery = query
-                .OData(edmModel: edmModel);
-
-            if (!string.IsNullOrEmpty(request?.Filter))
-            {
-                odataQuery = odataQuery.Filter(request.Filter);
-            }
-            if (!string.IsNullOrEmpty(request?.OrderBy))
-            {
-                odataQuery = odataQuery.OrderBy(request.OrderBy);
-            }
-
-            return odataQuery;
-        }
-
-        public static IQueryable<T> GetPage<T>(this ODataQuery<T> odataQuery, PageRequest request) where T : class
-        {
-            var page = odataQuery.Skip(request.Skip ?? 0)
-                .Take(request.Take.Value);
-
-            return page;
-        }
-
         public static IAsyncRawDocumentQuery<T> GetPage<T>(this IAsyncRawDocumentQuery<T> odataQuery, PageRequest request) where T : class
         {
             var page = odataQuery.Skip(request.Skip ?? 0)

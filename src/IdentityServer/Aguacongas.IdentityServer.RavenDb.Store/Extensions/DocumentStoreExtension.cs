@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System;
 using System.Reflection;
@@ -19,6 +20,10 @@ namespace Raven.Client.Documents
         private static bool SetConventions(MemberInfo memberInfo, Func<MemberInfo, bool> findId)
         {
             if (memberInfo.DeclaringType.Assembly == typeof(ProtectResource).Assembly)
+            {
+                return false;
+            }
+            if (memberInfo.DeclaringType == typeof(SchemeDefinition))
             {
                 return false;
             }

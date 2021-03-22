@@ -4,7 +4,6 @@ using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
 using System;
 using System.Linq;
 using System.Security.Claims;

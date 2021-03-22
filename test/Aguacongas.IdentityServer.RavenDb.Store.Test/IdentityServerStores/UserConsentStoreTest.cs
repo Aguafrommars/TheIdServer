@@ -4,8 +4,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Raven.Client.Documents;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
