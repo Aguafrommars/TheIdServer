@@ -1,16 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
-using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Client
 {
     public class ClientSecretStore : ClientSubEntityStoreBase<Entity.ClientSecret>
     {
-        public ClientSecretStore(IAsyncDocumentSession session, ILogger<AdminStore<Entity.ClientSecret>> logger) : base(session, logger)
+        public ClientSecretStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<Entity.ClientSecret>> logger) : base(session, logger)
         {
         }
 

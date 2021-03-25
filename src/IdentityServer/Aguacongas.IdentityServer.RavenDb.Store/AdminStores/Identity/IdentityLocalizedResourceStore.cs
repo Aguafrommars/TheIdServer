@@ -2,14 +2,13 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Identity
 {
     public class IdentityLocalizedResourceStore : IdentitySubEntityStoreBase<IdentityLocalizedResource>
     {
-        public IdentityLocalizedResourceStore(IAsyncDocumentSession session, ILogger<AdminStore<IdentityLocalizedResource>> logger) : base(session, logger)
+        public IdentityLocalizedResourceStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<IdentityLocalizedResource>> logger) : base(session, logger)
         {
         }
 

@@ -4,7 +4,6 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
@@ -21,11 +20,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityRoleStore<TUser, TRole>> _logger;
         public IdentityRoleStore(RoleManager<TRole> roleManager,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityRoleStore<TUser, TRole>> logger)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

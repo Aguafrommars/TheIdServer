@@ -6,7 +6,6 @@ using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -25,11 +24,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "We use only one type of TUser")]
         private static readonly IEdmModel _edmModel = GetEdmModel();
         public IdentityUserRoleStore(UserManager<TUser> userManager,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityUserRoleStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

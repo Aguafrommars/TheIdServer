@@ -42,9 +42,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             nameof(Entity.IdentityResource.Resources)
         };
 
-        public ResourceStore(IAsyncDocumentSession session)
+        public ResourceStore(ScopedAsynDocumentcSession session)
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
         }
 
         /// <summary>

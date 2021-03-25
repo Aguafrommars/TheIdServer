@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var result = await sut.GetReferenceTokenAsync("test");
 
@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveReferenceTokenAsync("test");
 
@@ -91,7 +91,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveReferenceTokensAsync("test", "test");
 
@@ -110,7 +110,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<ReferenceTokenStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveReferenceTokenAsync("test");
 
@@ -129,7 +129,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<ReferenceTokenStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreReferenceTokenAsync(new Token
             {
@@ -165,7 +165,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new ReferenceTokenStore(session, serializer, loggerMock.Object);
+            var sut = new ReferenceTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreReferenceTokenAsync(token);
 

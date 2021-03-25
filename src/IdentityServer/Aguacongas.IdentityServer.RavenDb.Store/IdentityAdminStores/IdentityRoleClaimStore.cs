@@ -1,11 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.Identity.RavenDb;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
@@ -22,11 +20,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityRoleClaimStore<TUser, TRole>> _logger;
         public IdentityRoleClaimStore(RoleManager<TRole> roleManager,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityRoleClaimStore<TUser, TRole>> logger)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

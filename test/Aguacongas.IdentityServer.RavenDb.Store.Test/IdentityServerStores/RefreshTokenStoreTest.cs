@@ -33,7 +33,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var result = await sut.GetRefreshTokenAsync("test");
 
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveRefreshTokenAsync("test");
 
@@ -92,7 +92,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveRefreshTokensAsync("test", "test");
 
@@ -111,7 +111,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<RefreshTokenStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveRefreshTokenAsync("test");
 
@@ -130,7 +130,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<RefreshTokenStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreRefreshTokenAsync(new RefreshToken
             {
@@ -172,7 +172,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new RefreshTokenStore(session, serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreRefreshTokenAsync(token);
 
@@ -203,7 +203,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.RefreshToken)}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new RefreshTokenStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await sut.UpdateRefreshTokenAsync("test", new RefreshToken
             {
@@ -229,7 +229,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<RefreshTokenStore>>();
 
-            var sut = new RefreshTokenStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new RefreshTokenStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateRefreshTokenAsync("handle", new RefreshToken()));
         }

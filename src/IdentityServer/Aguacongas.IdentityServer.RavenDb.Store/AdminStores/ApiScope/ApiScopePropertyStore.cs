@@ -1,7 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -9,7 +8,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.ApiScope
 {
     public class ApiScopePropertyStore : ApiScopeSubEntityStoreBase<Entity.ApiScopeProperty>
     {
-        public ApiScopePropertyStore(IAsyncDocumentSession session, ILogger<AdminStore<Entity.ApiScopeProperty>> logger) : base(session, logger)
+        public ApiScopePropertyStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<Entity.ApiScopeProperty>> logger) : base(session, logger)
         {
         }
 

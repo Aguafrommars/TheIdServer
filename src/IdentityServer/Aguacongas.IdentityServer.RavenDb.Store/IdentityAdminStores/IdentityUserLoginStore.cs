@@ -6,7 +6,6 @@ using Community.OData.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -26,11 +25,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private static readonly IEdmModel _edmModel = GetEdmModel();
 
         public IdentityUserLoginStore(UserManager<TUser> userManager,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityUserLoginStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

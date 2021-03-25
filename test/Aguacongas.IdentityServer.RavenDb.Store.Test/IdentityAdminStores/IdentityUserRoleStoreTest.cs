@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             Assert.True(roleResult.Succeeded);
 
 
-            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
             var result = await sut.CreateAsync(new Entity.UserRole
             {
                 RoleId = role.Id,
@@ -115,7 +115,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             result = await userManager.AddToRoleAsync(user, role.Name);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
             await sut.DeleteAsync($"{user.Id}@{role.Id}");
 
             var roles = await userManager.GetRolesAsync(user);
@@ -159,7 +159,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             result = await userManager.AddToRoleAsync(user, role.Name);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
             await sut.UpdateAsync(new Entity.UserRole
             {
                 Id = $"{user.Id}@{role.Id}",
@@ -227,7 +227,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             Assert.True(roleResult.Succeeded);
             await userManager.AddToRoleAsync(user, role.Name);
 
-            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
 
             var rolesResult = await sut.GetAsync(new PageRequest
             {
@@ -276,7 +276,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             await userManager.AddToRoleAsync(user, role.Name);
 
-            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
+            var sut = new IdentityUserRoleStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserRoleStore<IdentityUser>>>());
 
             var result = await sut.GetAsync($"{role.NormalizedName}@{user.Id}", null);
 

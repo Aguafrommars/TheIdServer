@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var result = await sut.GetAuthorizationCodeAsync("test");
 
@@ -62,7 +62,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveAuthorizationCodeAsync("test");
 
@@ -81,7 +81,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<AuthorizationCodeStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveAuthorizationCodeAsync("test");
 
@@ -100,7 +100,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<AuthorizationCodeStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreAuthorizationCodeAsync(new AuthorizationCode
             {
@@ -139,7 +139,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var code = await sut.StoreAuthorizationCodeAsync(authorizationCode);
 
@@ -154,7 +154,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<AuthorizationCodeStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.StoreAuthorizationCodeAsync(new AuthorizationCode()));
         }
@@ -167,7 +167,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<AuthorizationCodeStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AuthorizationCodeStore(session, serializer, loggerMock.Object);
+            var sut = new AuthorizationCodeStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<Exception>(() => sut.StoreAuthorizationCodeAsync(new AuthorizationCode
             {

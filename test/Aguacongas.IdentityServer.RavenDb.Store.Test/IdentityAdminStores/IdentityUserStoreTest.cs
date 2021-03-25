@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
-            var sut = new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
             var result = await sut.CreateAsync(new Entity.User
             {
                 Email = "exemple@exemple.com",
@@ -83,7 +83,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await userManager.CreateAsync(user);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
             await sut.DeleteAsync(user.Id);
 
             var actual = await userManager.FindByIdAsync(user.Id);
@@ -115,7 +115,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await userManager.CreateAsync(user);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
             var newName = Guid.NewGuid().ToString();
             await sut.UpdateAsync(new Entity.User
             {
@@ -177,7 +177,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var sut = new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
 
             var result = await sut.GetAsync(new PageRequest
             {
@@ -237,7 +237,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var sut = new IdentityUserStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
 
             var result = await sut.GetAsync(user.Id, null);
 

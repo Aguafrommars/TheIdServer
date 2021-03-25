@@ -23,9 +23,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         /// </summary>
         /// <param name="session">The session.</param>
         /// <exception cref="ArgumentNullException">context</exception>
-        public CorsPolicyService(IAsyncDocumentSession session)
+        public CorsPolicyService(ScopedAsynDocumentcSession session)
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
         }
 
         /// <summary>

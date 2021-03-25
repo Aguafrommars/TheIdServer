@@ -1,7 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.RavenDb.Store;
+using Aguacongas.IdentityServer.RavenDb.Store.Api;
+using Aguacongas.IdentityServer.RavenDb.Store.ApiScope;
+using Aguacongas.IdentityServer.RavenDb.Store.Client;
+using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
+using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
@@ -54,26 +59,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUser: IdentityUser, new()
             where TRole: IdentityRole, new()
         {
-            var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
-            var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
-                !t.IsAbstract &&
-                !t.IsGenericType &&
-                t.GetInterface(nameof(Entity.IEntityId)) != null &&
-                t.GetInterface(nameof(Entity.IGrant)) == null &&
-                t.Name != nameof(Entity.AuthorizationCode) &&
-                t.Name != nameof(Entity.DeviceCode) &&
-                t.GetInterface(nameof(Entity.IRoleSubEntity)) == null &&
-                t.GetInterface(nameof(Entity.IUserSubEntity)) == null);
-
-            foreach (var entityType in entityTypeList)
-            {
-                var adminStoreType = typeof(AdminStore<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-                var iAdminStoreType = typeof(IAdminStore<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-                services.AddTransient(iAdminStoreType, adminStoreType);
-            }
-
             if (getDocumentStore == null)
             {
                 getDocumentStore = p => p.GetRequiredService<IDocumentStore>();
@@ -90,8 +75,41 @@ namespace Microsoft.Extensions.DependencyInjection
                     adv.MaxNumberOfRequestsPerSession = int.MaxValue;
                     return new ScopedAsynDocumentcSession(session);
                 })
+                .AddTransient<IAdminStore<Entity.ApiApiScope>, ApiApiScopeStore>()
+                .AddTransient<IAdminStore<Entity.ApiClaim>, ApiClaimStore>()
+                .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, ApiLocalizedResourceStore>()
+                .AddTransient<IAdminStore<Entity.ApiProperty>, ApiPropertyStore>()
+                .AddTransient<IAdminStore<Entity.ApiScope>, AdminStore<Entity.ApiScope>>()
+                .AddTransient<IAdminStore<Entity.ApiScopeClaim>, ApiScopeClaimStore>()
+                .AddTransient<IAdminStore<Entity.ApiScopeLocalizedResource>, ApiScopeLocalizedResourceStore>()
+                .AddTransient<IAdminStore<Entity.ApiScopeProperty>, ApiScopePropertyStore>()
+                .AddTransient<IAdminStore<Entity.ApiSecret>, ApiSecretStore>()
+                .AddTransient<IAdminStore<Entity.AuthorizationCode>, AuthorizationCodeStore>()
+                .AddTransient<IAdminStore<Entity.Client>, AdminStore<Entity.Client>>()
+                .AddTransient<IAdminStore<Entity.ClientClaim>, ClientClaimStore>()
+                .AddTransient<IAdminStore<Entity.ClientGrantType>, ClientGrantTypeStore>()
+                .AddTransient<IAdminStore<Entity.ClientIdpRestriction>, ClientIdpRestrictionStore>()
+                .AddTransient<IAdminStore<Entity.ClientLocalizedResource>, ClientLocalizedResourceStore>()
+                .AddTransient<IAdminStore<Entity.ClientProperty>, ClientPropertyStore>()
+                .AddTransient<IAdminStore<Entity.ClientScope>, ClientScopeStore>()
+                .AddTransient<IAdminStore<Entity.ClientSecret>, ClientSecretStore>()
+                .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
+                .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
+                .AddTransient<IAdminStore<Entity.DeviceCode>, DeviceFlowStore>()
+                .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, AdminStore<Entity.ExternalClaimTransformation>>()
+                .AddTransient<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
+                .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
+                .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()
+                .AddTransient<IAdminStore<Entity.IdentityProperty>, IdentityPropertyStore>()
+                .AddTransient<IAdminStore<Entity.IdentityResource>, AdminStore<Entity.IdentityResource>>()
+                .AddTransient<IAdminStore<Entity.LocalizedResource>, AdminStore<Entity.LocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.ProtectResource>, AdminStore<Entity.ProtectResource>>()
+                .AddTransient<IAdminStore<Entity.ReferenceToken>, ReferenceTokenStore>()
+                .AddTransient<IAdminStore<Entity.RefreshToken>, RefreshTokenStore>()
+                .AddTransient<IAdminStore<Entity.UserConsent>, UserConsentStore>()
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole>>()
-                .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(p.GetRequiredService<ScopedAsynDocumentcSession>().Session, 
+                .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, Aguacongas.IdentityServer.RavenDb.Store.UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(
+                    p.GetRequiredService<ScopedAsynDocumentcSession>().Session, 
                     p.GetRequiredService<IdentityErrorDescriber>()))
                 .AddTransient<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()
                 .AddTransient<IAdminStore<Entity.UserLogin>, IdentityUserLoginStore<TUser>>()

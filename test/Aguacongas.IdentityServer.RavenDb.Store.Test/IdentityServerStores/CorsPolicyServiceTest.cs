@@ -36,7 +36,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.ClientUri)}/notallowed");
             await s1.SaveChangesAsync();
 
-            var sut = new CorsPolicyService(store.OpenAsyncSession());
+            var sut = new CorsPolicyService(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             Assert.True(await sut.IsOriginAllowedAsync("http://allowed:5000"));
             Assert.False(await sut.IsOriginAllowedAsync("http://notallowed:5000"));

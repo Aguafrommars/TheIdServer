@@ -70,7 +70,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
             
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 null);
 
             var result = await sut.CreateAsync(new Entity.ExternalProvider
@@ -113,7 +113,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 mockProviderClient.Object);
 
             await sut.CreateAsync(new Entity.ExternalProvider
@@ -162,7 +162,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 null);
 
             await sut.DeleteAsync(id);
@@ -207,7 +207,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 mockProviderClient.Object);
 
             await sut.DeleteAsync(id);
@@ -250,7 +250,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 null);
 
             var expected = Guid.NewGuid().ToString();
@@ -302,7 +302,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 serializer,
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 mockProviderClient.Object);
 
             var expected = Guid.NewGuid().ToString();
@@ -365,7 +365,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 provider.GetRequiredService<IAuthenticationSchemeOptionsSerializer>(),
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 provider.GetService<IProviderClient>());
 
             var rolesResult = await sut.GetAsync(new PageRequest
@@ -412,7 +412,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 
             var sut = new ExternalProviderStore(manager,
                 provider.GetRequiredService<IAuthenticationSchemeOptionsSerializer>(),
-                documentStore.OpenAsyncSession(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
                 provider.GetService<IProviderClient>());
 
             var result = await sut.GetAsync(id, null);

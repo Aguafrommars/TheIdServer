@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
                 .Services.BuildServiceProvider();
             var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
             var result = await sut.CreateAsync(new Role
             {
                 Id = Guid.NewGuid().ToString(),
@@ -70,7 +70,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await roleManager.CreateAsync(role);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
             await sut.DeleteAsync(role.Id);
 
             var actual = await roleManager.FindByIdAsync(role.Id);
@@ -95,7 +95,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await roleManager.CreateAsync(role);
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
             await sut.UpdateAsync(new Role
             {
                 Id = role.Id,
@@ -127,7 +127,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             Assert.True(roleResult.Succeeded);
             
 
-            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
 
             var rolesResult = await sut.GetAsync(new PageRequest
             {
@@ -158,7 +158,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             Assert.True(roleResult.Succeeded);
             
 
-            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
 
             var result = await sut.GetAsync(role.Id, null);
 

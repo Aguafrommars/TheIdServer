@@ -4,8 +4,6 @@ using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Stores;
 using Raven.Client.Documents.Session;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -26,9 +24,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             nameof(Entity.Client.Resources)
         };
 
-        public ClientStore(IAsyncDocumentSession session)
+        public ClientStore(ScopedAsynDocumentcSession session)
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
         }
         public async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
         {

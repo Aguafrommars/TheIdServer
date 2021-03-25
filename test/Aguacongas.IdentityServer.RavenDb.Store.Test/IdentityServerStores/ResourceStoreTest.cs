@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.ApiClaim).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new ResourceStore(store.OpenAsyncSession());
+            var sut = new ResourceStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.FindApiResourcesByNameAsync(new[] { "test" });
 
@@ -84,7 +84,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.ApiScope).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new ResourceStore(store.OpenAsyncSession());
+            var sut = new ResourceStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.FindApiResourcesByScopeNameAsync(new[] { "test" });
 
@@ -117,7 +117,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.ApiScopeProperty).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new ResourceStore(store.OpenAsyncSession());
+            var sut = new ResourceStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.FindApiScopesByNameAsync(new[] { "test" });
 
@@ -150,7 +150,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.IdentityLocalizedResource).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new ResourceStore(store.OpenAsyncSession());
+            var sut = new ResourceStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.FindIdentityResourcesByScopeNameAsync(new[] { "test" });
 
@@ -197,7 +197,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new ResourceStore(store.OpenAsyncSession());
+            var sut = new ResourceStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.GetAllResourcesAsync();
 

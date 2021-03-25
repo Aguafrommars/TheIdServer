@@ -26,12 +26,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public ExternalProviderStore(PersistentDynamicManager<SchemeDefinition> manager, 
             IAuthenticationSchemeOptionsSerializer serializer,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             IProviderClient providerClient = null)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _providerClient = providerClient;
         }
 

@@ -19,7 +19,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
         public void Constructor_should_check_parameter()
         {
             Assert.Throws<ArgumentNullException>(() => new AdminStore<ProtectResource>(null, null));
-            Assert.Throws<ArgumentNullException>(() => new AdminStore<ProtectResource>(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new AdminStore<ProtectResource>(new ScopedAsynDocumentcSession(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new AdminStore<ProtectResource>(session, loggerMock.Object);
+            var sut = new AdminStore<ProtectResource>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var page = await sut.GetAsync(new PageRequest
             {
@@ -107,7 +107,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new AdminStore<ProtectResource>(session, loggerMock.Object);
+            var sut = new AdminStore<ProtectResource>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var page = await sut.GetAsync(new PageRequest
             {
@@ -163,7 +163,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new AdminStore<ApiClaim>(session, loggerMock.Object);
+            var sut = new AdminStore<ApiClaim>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var claim = await sut.GetAsync(claimId, new GetRequest
             {
@@ -186,7 +186,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new AdminStore<ApiClaim>(session, loggerMock.Object);
+            var sut = new AdminStore<ApiClaim>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.GetAsync("test", new GetRequest
             {
@@ -239,7 +239,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using (var session = store.OpenAsyncSession())
             {
-                var sut = new AdminStore<ProtectResource>(session, loggerMock.Object);
+                var sut = new AdminStore<ProtectResource>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
                 await sut.DeleteAsync(id);
             }
@@ -247,7 +247,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             using var s2 = store.OpenAsyncSession();
 
-            var claimStore = new AdminStore<ApiClaim>(s2, new Mock<ILogger<AdminStore<ApiClaim>>>().Object);
+            var claimStore = new AdminStore<ApiClaim>(new ScopedAsynDocumentcSession(s2), new Mock<ILogger<AdminStore<ApiClaim>>>().Object);
             var claim = await claimStore.GetAsync(claimId, null);
             Assert.Null(claim);
         }
@@ -262,7 +262,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
             var id = "test";
 
             using var session = store.OpenAsyncSession();
-            var sut = new AdminStore<ProtectResource>(session, loggerMock.Object);
+            var sut = new AdminStore<ProtectResource>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.DeleteAsync(id));
         }
@@ -275,7 +275,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
             var loggerMock = new Mock<ILogger<AdminStore<TestEntity>>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AdminStore<TestEntity>(session, loggerMock.Object);
+            var sut = new AdminStore<TestEntity>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var result = await sut.CreateAsync(new TestEntity() as object) as TestEntity;
 
@@ -290,7 +290,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
             var loggerMock = new Mock<ILogger<AdminStore<TestEntity>>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new AdminStore<TestEntity>(session, loggerMock.Object);
+            var sut = new AdminStore<TestEntity>(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var entity = new TestEntity();
             entity = await sut.CreateAsync(entity);

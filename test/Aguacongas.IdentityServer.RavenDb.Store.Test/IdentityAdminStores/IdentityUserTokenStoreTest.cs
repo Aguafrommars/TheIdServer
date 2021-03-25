@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserTokenStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
+            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
             var result = await sut.CreateAsync(new Entity.UserToken
             {
                 UserId = user.Id,
@@ -100,7 +100,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             await userManager.SetAuthenticationTokenAsync(user, loginProvder, key, Guid.NewGuid().ToString());
 
-            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
+            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
             await sut.DeleteAsync($"{user.Id}@{loginProvder}@{key}");
 
             var token = await userManager.GetAuthenticationTokenAsync(user, loginProvder, key);
@@ -124,7 +124,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
 
-            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
+            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
 
             await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Entity.UserToken()));
             await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Entity.UserToken() as object));
@@ -163,7 +163,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             await userManager.SetAuthenticationTokenAsync(user, loginProvder, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
             await userManager.SetAuthenticationTokenAsync(user, loginProvder, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
-            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
+            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
 
             var result = await sut.GetAsync(new PageRequest
             {
@@ -206,7 +206,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
 
             await userManager.SetAuthenticationTokenAsync(user, loginProvder, key, Guid.NewGuid().ToString());
 
-            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
+            var sut = new IdentityUserTokenStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserTokenStore<IdentityUser>>>());
 
             var result = await sut.GetAsync($"{user.Id}@{loginProvder}@{key}", null);
 

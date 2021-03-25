@@ -30,7 +30,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var roleResult = await userManager.CreateAsync(user);
             Assert.True(roleResult.Succeeded);
 
-            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
             var result = await sut.CreateAsync(new Entity.UserClaim
             {
                 ClaimType = "test",
@@ -99,7 +99,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             result = await userManager.AddClaimAsync(user, new Claim("test", "test"));
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
             await sut.DeleteAsync($"{user.Id}@0");
 
             var claims = await userManager.GetClaimsAsync(user);
@@ -133,7 +133,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             result = await userManager.AddClaimAsync(user, new Claim("test", "test"));
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
             await sut.UpdateAsync(new Entity.UserClaim
             {
                 Id = $"{user.Id}@0",
@@ -178,7 +178,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
             await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
 
-            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
             var claimsResult = await sut.GetAsync(new PageRequest
             {
@@ -219,7 +219,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
             await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
 
-            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
             var result = await sut.GetAsync($"{user.Id}@1", null);
 

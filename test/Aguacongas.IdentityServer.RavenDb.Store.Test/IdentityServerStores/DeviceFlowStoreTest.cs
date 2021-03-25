@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
         [Fact]
         public void Constructor_should_check_parameters()
         {
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null, new Mock<ILogger<DeviceFlowStore>>().Object));
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(new ScopedAsynDocumentcSession(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession()), null, new Mock<ILogger<DeviceFlowStore>>().Object));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.DeviceCode)}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             var result = await sut.FindByDeviceCodeAsync("code");
 
@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.FindByDeviceCodeAsync(null));
         }
@@ -80,7 +80,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.DeviceCode)}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             var result = await sut.FindByUserCodeAsync("code");
 
@@ -94,7 +94,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.FindByUserCodeAsync(null));
         }
@@ -119,7 +119,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.DeviceCode)}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await sut.RemoveByDeviceCodeAsync("code");
             await sut.RemoveByDeviceCodeAsync("code");
@@ -136,7 +136,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.RemoveByDeviceCodeAsync(null));
         }
@@ -148,7 +148,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             var code = Guid.NewGuid().ToString();
             await sut.StoreDeviceAuthorizationAsync(code, "usercode", new DeviceCode
@@ -168,7 +168,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.StoreDeviceAuthorizationAsync(null, null, null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.StoreDeviceAuthorizationAsync("code", null, null));
@@ -195,7 +195,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.DeviceCode)}/test");
             await s1.SaveChangesAsync();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await sut.UpdateByUserCodeAsync("code", new DeviceCode
             {
@@ -217,7 +217,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateByUserCodeAsync("code", new DeviceCode
             {
@@ -232,7 +232,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var serializer = new PersistentGrantSerializer();
             var loggerMock = new Mock<ILogger<DeviceFlowStore>>();
 
-            var sut = new DeviceFlowStore(store.OpenAsyncSession(), serializer, loggerMock.Object);
+            var sut = new DeviceFlowStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()), serializer, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.UpdateByUserCodeAsync(null, null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => sut.UpdateByUserCodeAsync("code", null));

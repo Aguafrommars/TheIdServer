@@ -22,9 +22,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly ILogger<AdminStore<TEntity>> _logger;
         private readonly string _entitybasePath;
         private readonly Type _entityType = typeof(TEntity);
-        public AdminStore(IAsyncDocumentSession session, ILogger<AdminStore<TEntity>> logger)
+        public AdminStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<TEntity>> logger)
         {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var entityTypeName = typeof(TEntity).Name;
             _entitybasePath = entityTypeName.ToLowerInvariant() + "/";

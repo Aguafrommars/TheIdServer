@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Client
     public class ClientIdpRestrictionStoreTest : ClientSubEntityStoreTestBase<ClientIdpRestriction>
     {
         protected override IAdminStore<ClientIdpRestriction> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<ClientIdpRestriction>> logger)
-        => new ClientIdpRestrictionStore(session, logger);
+        => new ClientIdpRestrictionStore(new ScopedAsynDocumentcSession(session), logger);
 
         protected override ICollection<ClientIdpRestriction> GetCollection(IdentityServer.Store.Entity.Client client)
         {

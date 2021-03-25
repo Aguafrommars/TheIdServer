@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
         [Fact]
         public void Constructor_should_check_parameter()
         {
-            Assert.Throws<ArgumentNullException>(() => new AuthorizationCodeStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(),
+            Assert.Throws<ArgumentNullException>(() => new AuthorizationCodeStore(new ScopedAsynDocumentcSession(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession()),
                 null, 
                 new Mock<ILogger<AuthorizationCodeStore>>().Object));
         }

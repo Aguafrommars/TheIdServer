@@ -2,14 +2,13 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Identity
 {
     public class IdentityClaimStore : IdentitySubEntityStoreBase<IdentityClaim>
     {
-        public IdentityClaimStore(IAsyncDocumentSession session, ILogger<AdminStore<IdentityClaim>> logger) : base(session, logger)
+        public IdentityClaimStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<IdentityClaim>> logger) : base(session, logger)
         {
         }
 

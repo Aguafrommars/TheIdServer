@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
@@ -21,11 +20,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly ILogger<IdentityUserStore<TUser>> _logger;
 
         public IdentityUserStore(UserManager<TUser> userManager,
-            IAsyncDocumentSession session,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityUserStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

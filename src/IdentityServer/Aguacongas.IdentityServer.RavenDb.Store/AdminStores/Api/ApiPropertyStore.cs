@@ -2,14 +2,13 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Api
 {
     public class ApiPropertyStore : ApiSubEntityStoreBase<ApiProperty>
     {
-        public ApiPropertyStore(IAsyncDocumentSession session, ILogger<AdminStore<ApiProperty>> logger) : base(session, logger)
+        public ApiPropertyStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<ApiProperty>> logger) : base(session, logger)
         {
         }
 

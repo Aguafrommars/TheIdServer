@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
     public class IdentityClaimStoreTest : IdentitySubEntityStoreTestBase<IdentityClaim>
     {
         protected override IAdminStore<IdentityClaim> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<IdentityClaim>> logger)
-        => new IdentityClaimStore(session, logger);
+        => new IdentityClaimStore(new ScopedAsynDocumentcSession(session), logger);
 
         protected override ICollection<IdentityClaim> GetCollection(IdentityResource identity)
         {

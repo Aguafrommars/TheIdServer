@@ -16,9 +16,9 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Client
     {
         private readonly IAsyncDocumentSession _session;
         private readonly string _entitybasePath;
-        protected ClientSubEntityStoreBase(IAsyncDocumentSession session, ILogger<AdminStore<TEntity>> logger) : base(session, logger)
+        protected ClientSubEntityStoreBase(ScopedAsynDocumentcSession session, ILogger<AdminStore<TEntity>> logger) : base(session, logger)
         {
-            _session = session;
+            _session = session.Session;
             _entitybasePath = typeof(TEntity).Name.ToLowerInvariant() + "/";
         }
 

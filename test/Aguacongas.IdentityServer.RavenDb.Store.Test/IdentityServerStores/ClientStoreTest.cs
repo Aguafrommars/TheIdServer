@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             }, $"{nameof(Entity.ClientGrantType)}/test");
             await s1.SaveChangesAsync();
             
-            var sut = new ClientStore(store.OpenAsyncSession());
+            var sut = new ClientStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));
 
             var result = await sut.FindClientByIdAsync("test");
 

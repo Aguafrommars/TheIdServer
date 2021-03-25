@@ -16,7 +16,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
         public void Constructor_should_check_parameters()
         {
             Assert.Throws<ArgumentNullException>(() => new ApiApiScopeStore(null, null));
-            Assert.Throws<ArgumentNullException>(() => new ApiApiScopeStore(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new ApiApiScopeStore(new ScopedAsynDocumentcSession(new RavenDbTestDriverWrapper().GetDocumentStore().OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new ApiApiScopeStore(session, loggerMock.Object);
+            var sut = new ApiApiScopeStore(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var entity = new Entity.ApiApiScope
             {
@@ -75,7 +75,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new ApiApiScopeStore(session, loggerMock.Object);
+            var sut = new ApiApiScopeStore(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
             var entity = new Entity.ApiApiScope
             {
@@ -134,7 +134,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
 
             using var session = store.OpenAsyncSession();
 
-            var sut = new ApiApiScopeStore(session, loggerMock.Object);
+            var sut = new ApiApiScopeStore(new ScopedAsynDocumentcSession(session), loggerMock.Object);
 
 
             await sut.DeleteAsync(entity.Id);

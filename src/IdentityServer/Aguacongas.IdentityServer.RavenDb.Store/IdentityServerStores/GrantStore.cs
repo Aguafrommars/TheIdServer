@@ -17,10 +17,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly IAsyncDocumentSession _session;
         private readonly IPersistentGrantSerializer _serializer;
 
-        protected GrantStore(IAsyncDocumentSession session, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
+        protected GrantStore(ScopedAsynDocumentcSession session, IPersistentGrantSerializer serializer, ILogger<GrantStore<TEntity, TDto>> logger)
             : base(session, logger)
         {
-            _session = session;
+            _session = session.Session;
             _serializer = serializer ?? throw new ArgumentNullException(nameof(session));
         }
 

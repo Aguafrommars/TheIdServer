@@ -33,7 +33,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new UserConsentStore(session, serializer, loggerMock.Object);
+            var sut = new UserConsentStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             var result = await sut.GetUserConsentAsync("test", "test");
 
@@ -61,7 +61,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new UserConsentStore(session, serializer, loggerMock.Object);
+            var sut = new UserConsentStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveUserConsentAsync("test", "test");
 
@@ -80,7 +80,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<UserConsentStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new UserConsentStore(session, serializer, loggerMock.Object);
+            var sut = new UserConsentStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.RemoveUserConsentAsync("test", "test");
 
@@ -99,7 +99,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             var loggerMock = new Mock<ILogger<UserConsentStore>>();
 
             using var session = store.OpenAsyncSession();
-            var sut = new UserConsentStore(session, serializer, loggerMock.Object);
+            var sut = new UserConsentStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.StoreUserConsentAsync(new Consent
             {
@@ -138,7 +138,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             await s1.SaveChangesAsync();
 
             using var session = store.OpenAsyncSession();
-            var sut = new UserConsentStore(session, serializer, loggerMock.Object);
+            var sut = new UserConsentStore(new ScopedAsynDocumentcSession(session), serializer, loggerMock.Object);
 
             await sut.StoreUserConsentAsync(UserConsent);
 

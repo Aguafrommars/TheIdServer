@@ -18,12 +18,12 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         private readonly IAsyncDocumentSession _session;
         private readonly IPersistentGrantSerializer _serializer;
 
-        public DeviceFlowStore(IAsyncDocumentSession session,
+        public DeviceFlowStore(ScopedAsynDocumentcSession session,
             IPersistentGrantSerializer serializer,
             ILogger<DeviceFlowStore> logger)
             : base(session, logger)
         {
-            _session = session;
+            _session = session.Session;
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 

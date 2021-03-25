@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
             Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(userManager, null, null));
-            Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), null));
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var userResult = await userManager.CreateAsync(user);
             Assert.True(userResult.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
             var result = await sut.CreateAsync(new Entity.UserLogin
             {
                 UserId = user.Id,
@@ -98,7 +98,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await userManager.AddLoginAsync(user, new UserLoginInfo(providerName, key, providerName));
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
             await sut.DeleteAsync($"{providerName}@{key}");
 
             var Logins = await userManager.GetLoginsAsync(user);
@@ -135,7 +135,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await userManager.AddLoginAsync(user, new UserLoginInfo(providerName, key, providerName));
             Assert.True(result.Succeeded);
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
             await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Entity.UserLogin
             {
                 Id = $"{providerName}@{key}",
@@ -175,7 +175,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
             await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
 
             var LoginsResult = await sut.GetAsync(new PageRequest
             {
@@ -219,7 +219,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
             await userManager.AddLoginAsync(user, new UserLoginInfo(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
 
-            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, documentStore.OpenAsyncSession(), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
+            var sut = new IdentityUserLoginStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserLoginStore<IdentityUser>>>());
 
             var result = await sut.GetAsync($"{providerName}@{key}", null);
 

@@ -12,9 +12,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Api
     public class ApiLocalizedResourceStoreTest : ApiSubEntityStoreTestBase<ApiLocalizedResource>
     {
         protected override IAdminStore<ApiLocalizedResource> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<ApiLocalizedResource>> logger)
-        {
-            return new ApiLocalizedResourceStore(session, logger);
-        }
+        => new ApiLocalizedResourceStore(new ScopedAsynDocumentcSession(session), logger);
 
         protected override ICollection<ApiLocalizedResource> GetCollection(ProtectResource api)
         {

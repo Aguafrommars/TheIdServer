@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Client
     public class ClientLocalizedResourceStoreTest : ClientSubEntityStoreTestBase<ClientLocalizedResource>
     {
         protected override IAdminStore<ClientLocalizedResource> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<ClientLocalizedResource>> logger)
-        => new ClientLocalizedResourceStore(session, logger);
+        => new ClientLocalizedResourceStore(new ScopedAsynDocumentcSession(session), logger);
 
         protected override ICollection<ClientLocalizedResource> GetCollection(IdentityServer.Store.Entity.Client client)
         {
