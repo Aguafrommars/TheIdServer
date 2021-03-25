@@ -6,7 +6,6 @@ using Aguacongas.IdentityServer.RavenDb.Store.ApiScope;
 using Aguacongas.IdentityServer.RavenDb.Store.Client;
 using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
-using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
@@ -14,8 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
-using System.Linq;
-using System.Reflection;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 using RavenDb = Aguacongas.Identity.RavenDb;
 
@@ -104,8 +101,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.IdentityResource>, AdminStore<Entity.IdentityResource>>()
                 .AddTransient<IAdminStore<Entity.LocalizedResource>, AdminStore<Entity.LocalizedResource>>()
                 .AddTransient<IAdminStore<Entity.ProtectResource>, AdminStore<Entity.ProtectResource>>()
+                .AddTransient<IAdminStore<Entity.Key>, AdminStore<Entity.Key>>()
                 .AddTransient<IAdminStore<Entity.ReferenceToken>, ReferenceTokenStore>()
                 .AddTransient<IAdminStore<Entity.RefreshToken>, RefreshTokenStore>()
+                .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, UserConsentStore>()
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole>>()
                 .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, Aguacongas.IdentityServer.RavenDb.Store.UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(
