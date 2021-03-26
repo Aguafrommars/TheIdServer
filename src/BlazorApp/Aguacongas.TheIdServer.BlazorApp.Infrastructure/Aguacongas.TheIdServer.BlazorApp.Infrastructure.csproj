@@ -27,7 +27,7 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.4" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.9.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\IdentityServer\Aguacongas.IdentityServer.Admin.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
