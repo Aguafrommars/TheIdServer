@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.Extensions.DependencyInjection;
@@ -132,7 +132,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
+        private static async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
         {
             foreach (var token in items)
             {

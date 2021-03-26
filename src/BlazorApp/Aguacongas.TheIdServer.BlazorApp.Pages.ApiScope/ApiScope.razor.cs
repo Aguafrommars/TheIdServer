@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -51,8 +51,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
             }
         }
 
-        private Entity.ApiScopeProperty CreateProperty()
-            => new Entity.ApiScopeProperty();
+        private static Entity.ApiScopeProperty CreateProperty()
+            => new();
 
         private Task AddResource(Entity.EntityResourceKind kind)
         {

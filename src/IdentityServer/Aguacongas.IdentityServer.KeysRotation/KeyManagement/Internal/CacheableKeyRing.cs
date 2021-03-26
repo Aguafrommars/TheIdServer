@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// Modifications copyright (c) 2020 @Olivier Lefebvre
+// Modifications copyright (c) 2021 @Olivier Lefebvre
 
 // This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/KeyManagement/Internal/CacheableKeyRing.cs
 // with :
@@ -23,16 +23,17 @@ namespace Aguacongas.IdentityServer.KeysRotation
     {
         private readonly CancellationToken _expirationToken;
 
-        internal CacheableKeyRing(CancellationToken expirationToken,
+        internal CacheableKeyRing(
             DateTimeOffset expirationTime, 
             IKey defaultKey, 
             IEnumerable<IKey> allKeys,
-            RsaEncryptorConfiguration configuration) // constructor change to add a RsaEncryptorConfiguration instance
-            : this(expirationToken, expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration))
+            RsaEncryptorConfiguration configuration,
+            CancellationToken expirationToken) // constructor change to add a RsaEncryptorConfiguration instance
+            : this(expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration), expirationToken)
         {
         }
 
-        internal CacheableKeyRing(CancellationToken expirationToken, DateTimeOffset expirationTime, IKeyRing keyRing)
+        internal CacheableKeyRing(DateTimeOffset expirationTime, IKeyRing keyRing, CancellationToken expirationToken)
         {
             _expirationToken = expirationToken;
             ExpirationTimeUtc = expirationTime.UtcDateTime;
@@ -58,7 +59,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
         internal CacheableKeyRing WithTemporaryExtendedLifetime(DateTimeOffset now)
         {
             var extension = TimeSpan.FromMinutes(2);
-            return new CacheableKeyRing(CancellationToken.None, now + extension, KeyRing);
+            return new CacheableKeyRing(now + extension, KeyRing, CancellationToken.None);
         }
     }
 }

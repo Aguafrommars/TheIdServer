@@ -1,19 +1,18 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer
 {
-#pragma warning disable S1118 // Utility classes should not have public constructors
-    public class Program
-#pragma warning restore S1118 // Utility classes should not have public constructors
+    public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task StartAsync(string[] args)
         {
             var seed = args.Any(x => x == "/seed");
             if (seed)
@@ -30,10 +29,10 @@ namespace Aguacongas.TheIdServer
                 return;
             }
 
-            host.Run();
+            await host.RunAsync().ConfigureAwait(false);
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
                     .UseStartup<Startup>()

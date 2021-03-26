@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var query = _context.Set<TEntity>().AsNoTracking();
             query = query.Expand(request?.Expand);
-            return query.FirstOrDefaultAsync(e => e.Id == id);
+            return query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken: cancellationToken);
         }
 
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
@@ -92,7 +92,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var storedEntity = await _context.Set<TEntity>()
                 .AsNoTracking()
                 .Where(e => e.Id == entity.Id)
-                .FirstOrDefaultAsync()
+                .FirstOrDefaultAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
             if (storedEntity == null)
             {

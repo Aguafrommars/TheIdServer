@@ -12,11 +12,16 @@
 		<PackageTags>theidserver;oracle</PackageTags>
 		<Description>Contains db contexts migrations code for Oracle.</Description>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1160" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.1" />
+	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1204" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using System.Collections.Generic;
@@ -59,8 +59,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Role
             }
         }
 
-        private Entity.RoleClaim CreateClaim()
-            => new Entity.RoleClaim();
+        private static Entity.RoleClaim CreateClaim()
+            => new();
 
         private void OnDeleteClaimClicked(Entity.RoleClaim claim)
         {

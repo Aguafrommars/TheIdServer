@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
 {

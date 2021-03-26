@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Store;
@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +31,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IAdminStore<ClientProperty> _clientPropertyStore;
         private readonly IAdminStore<ClientGrantType> _clientGrantTypeStore;
         private readonly IDiscoveryResponseGenerator _discoveryResponseGenerator;
-        private readonly IdentityServer4.Models.Client _defaultValues = new IdentityServer4.Models.Client();
+        private readonly IdentityServer4.Models.Client _defaultValues = new();
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterClientService" /> class.
@@ -56,6 +58,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// clientGrantTypeStore
         /// or
         /// discoveryResponseGenerator</exception>
+        [SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "1 more is ok")]
         public RegisterClientService(IAdminStore<Client> clientStore,
             IAdminStore<ClientUri> clientUriStore,
             IAdminStore<ClientLocalizedResource> clientResourceStore,
@@ -650,7 +653,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private void ValidateResponseType(IEnumerable<string> grantTypes, IEnumerable<string> responseTypes, IEnumerable<string> responseTypesSupported)
+        private static void ValidateResponseType(IEnumerable<string> grantTypes, IEnumerable<string> responseTypes, IEnumerable<string> responseTypesSupported)
         {
             foreach (var responseType in responseTypes)
             {
@@ -686,7 +689,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private void ValidateGrantType(IEnumerable<string> grantTypes, IEnumerable<string> grantTypesSupported)
+        private static void ValidateGrantType(IEnumerable<string> grantTypes, IEnumerable<string> grantTypesSupported)
         {
             foreach (var grantType in grantTypes)
             {
@@ -697,7 +700,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        private void ValidateUris(IEnumerable<Uri> redirectUriList, IEnumerable<LocalizableProperty> localizableProperties, string errorCode, string uriName)
+        private static void ValidateUris(IEnumerable<Uri> redirectUriList, IEnumerable<LocalizableProperty> localizableProperties, string errorCode, string uriName)
         {
             if (localizableProperties == null)
             {

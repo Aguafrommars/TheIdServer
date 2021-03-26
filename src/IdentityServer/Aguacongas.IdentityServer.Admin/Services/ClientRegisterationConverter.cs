@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -190,7 +190,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             return jObject;
         }
 
-        private void SerializeLocalizableProperty(PropertyInfo property, object value, string propertyName, JObject jObject)
+        private static void SerializeLocalizableProperty(PropertyInfo property, object value, string propertyName, JObject jObject)
         {
             var propertyValues = property.GetValue(value) as IEnumerable<LocalizableProperty>;
             if (propertyValues == null)

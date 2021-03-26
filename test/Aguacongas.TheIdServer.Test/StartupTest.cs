@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Configuration;
@@ -214,7 +214,7 @@ namespace Aguacongas.TheIdServer.Test
             var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
             {
                 ["DataProtectionOptions:StorageKind"] = StorageKind.AzureStorage.ToString(),
-                ["DataProtectionOptions:StorageConnectionString"] = "https://azure.com?blobUri=test"
+                ["DataProtectionOptions:StorageConnectionString"] = "https://md-3r0d4kzc5jhz.blob.core.windows.net/s3vffgdlczdj/abcd?sv=2017-04-17&sr=b&si=e931bb4b-8a79-4119-b4bb-8b2c1b763369&sig=SIGNATURE_WILL_BE_HERE"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
@@ -354,7 +354,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 ["DataProtectionOptions:StorageKind"] = StorageKind.None.ToString(),
                 ["DataProtectionOptions:KeyProtectionOptions:KeyProtectionKind"] = KeyProtectionKind.AzureKeyVault.ToString(),
-                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "test",
+                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "https://test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientId"] = "test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientSecret"] = "test",
             }).Build();
@@ -583,7 +583,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 ["IdentityServer:Key:Type"] = KeyKinds.KeysRotation.ToString(),
                 ["IdentityServer:Key:StorageKind"] = StorageKind.AzureStorage.ToString(),
-                ["IdentityServer:Key:StorageConnectionString"] = "https://azure.com?blobUri=test"
+                ["IdentityServer:Key:StorageConnectionString"] = "https://azure.com?sv=test"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();

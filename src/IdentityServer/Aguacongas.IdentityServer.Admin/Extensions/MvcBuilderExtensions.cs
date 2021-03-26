@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin;
@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
-            services.AddSingleton<IHostedService, SchemeChangeHost>()
+            services.AddHostedService<SchemeChangeHost>()
                 .AddSingleton<HubConnectionFactory>()
                 .AddSingleton<StringLocalizerFactory>()
                 .AddSingleton<IStringLocalizerFactory>(p => p.GetRequiredService<StringLocalizerFactory>())

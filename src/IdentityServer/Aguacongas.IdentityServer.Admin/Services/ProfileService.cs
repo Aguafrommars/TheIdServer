@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using IdentityModel;
 using IdentityServer4;
@@ -144,7 +144,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             return GetClaimsFromResource(resource, subject, client, caller, providerTypeName);
         }
 
-        private List<Claim> SanetizeIssuedClaims(List<Claim> issuedClaims)
+        private static List<Claim> SanetizeIssuedClaims(List<Claim> issuedClaims)
         {
             var claimList = new List<Claim>(issuedClaims.Count);
 

@@ -12,11 +12,16 @@
 		<Description>TheIdServer administration application pages.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.1" />
+	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

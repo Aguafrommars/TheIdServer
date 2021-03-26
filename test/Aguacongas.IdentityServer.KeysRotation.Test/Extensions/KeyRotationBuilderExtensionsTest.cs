@@ -1,19 +1,22 @@
-﻿using Aguacongas.IdentityServer.EntityFramework.Store;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection.AzureStorage;
+using Azure.Core;
+using Azure.Storage;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Auth;
-using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Moq;
 using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -48,30 +51,31 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         [Fact]
         public void PersistKeysToAzureBlobStorage_should_throw_ArgumentNulException_on_builder_null()
         {
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobReference: null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobReference: null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobUri: null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobUri: null));
-            Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), new Uri("http://www.example.com")));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobUri: null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, storageAccount: null, null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), storageAccount: null, null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), new CloudStorageAccount(new StorageCredentials("test", "test"), true), null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, container: null, null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), container: null, null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), new CloudBlobContainer(new Uri("http://www.example.com")), null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobSasUri: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobSasUri: null));
+            Assert.Throws<ArgumentException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobSasUri: new Uri("http://test")));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobUri: null, tokenCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobUri: null, tokenCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobUri: new Uri("http://www.example.com"), tokenCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobUri: null, sharedKeyCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobUri: null, sharedKeyCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobUri: new Uri("http://www.example.com"), sharedKeyCredential: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, connectionString: null, containerName: null, blobName: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), connectionString: "test", containerName: null, blobName: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), connectionString: "test", containerName: "test", blobName: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(null, blobClient: null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.PersistKeysToAzureBlobStorage(new KeyRotationBuilder(), blobClient: null));
         }
 
         [Fact]
-        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_CloudStorageAccount()
+        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_BlobSasUri()
         {
             // Arrange
-            var account = new CloudStorageAccount(new StorageCredentials("test", "test"), true);
             var serviceCollection = new ServiceCollection();
             var builder = serviceCollection.AddKeysRotation();
 
             // Act
-            builder.PersistKeysToAzureBlobStorage(account, "keys.xml");
+            builder.PersistKeysToAzureBlobStorage(new Uri("http://exemple.com?sv=test"));
             var services = serviceCollection.BuildServiceProvider();
 
             // Assert
@@ -80,14 +84,15 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         }
 
         [Fact]
-        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_blobUri()
+        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_TokenCredential()
         {
             // Arrange
+            var creds = new Mock<TokenCredential>().Object;
             var serviceCollection = new ServiceCollection();
             var builder = serviceCollection.AddKeysRotation();
 
             // Act
-            builder.PersistKeysToAzureBlobStorage(new Uri("http://www.example.com?blobUri=test"));
+            builder.PersistKeysToAzureBlobStorage(new Uri("https://www.example.com?sv=test"), creds);
             var services = serviceCollection.BuildServiceProvider();
 
             // Assert
@@ -96,18 +101,16 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         }
 
         [Fact]
-        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_blobReference()
+        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_StorageSharedKeyCredential()
         {
             // Arrange
-            var storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
-            var container = storageAccount.CreateCloudBlobClient().GetContainerReference("temp");
-            var blobReference = container.GetBlockBlobReference("test.txt");
+            var creds = new StorageSharedKeyCredential("test", "test");
 
             var serviceCollection = new ServiceCollection();
             var builder = serviceCollection.AddKeysRotation();
 
             // Act
-            builder.PersistKeysToAzureBlobStorage(blobReference);
+            builder.PersistKeysToAzureBlobStorage(new Uri("http://www.example.com?sv=test"), creds);
             var services = serviceCollection.BuildServiceProvider();
 
             // Assert
@@ -116,15 +119,31 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         }
 
         [Fact]
-        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_container()
+        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_connectionString()
         {
             // Arrange
-            var container = new CloudBlobContainer(new Uri("http://www.example.com"));
             var serviceCollection = new ServiceCollection();
             var builder = serviceCollection.AddKeysRotation();
 
             // Act
-            builder.PersistKeysToAzureBlobStorage(container, "keys.xml");
+            builder.PersistKeysToAzureBlobStorage("DefaultEndpointsProtocol=http;AccountName=myAccountName;AccountKey=myAccountKey", "test", "test");
+            var services = serviceCollection.BuildServiceProvider();
+
+            // Assert
+            var options = services.GetRequiredService<IOptions<KeyRotationOptions>>();
+            Assert.IsType<AzureBlobXmlRepository>(options.Value.XmlRepository);
+        }
+
+        [Fact]
+        public void PersistKeysToAzureBlobStorage_uses_AzureBlobXmlRepository_with_BlobClient()
+        {
+            // Arrange
+            var client = new BlobClient(new Uri("http://exemple.com?sv=test"));
+            var serviceCollection = new ServiceCollection();
+            var builder = serviceCollection.AddKeysRotation();
+
+            // Act
+            builder.PersistKeysToAzureBlobStorage(client);
             var services = serviceCollection.BuildServiceProvider();
 
             // Assert

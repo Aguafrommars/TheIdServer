@@ -5,7 +5,6 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>cobertura</Format>
-          <Exclude>[Aguacongas.TheIdServer.BlazorApp*]*</Exclude>
           <ExcludeByFile>**/*.razor</ExcludeByFile>
         </Configuration>
       </DataCollector>

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using IdentityModel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -82,7 +82,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return new XmlSerializedDescriptorInfo(rootElement, typeof(RsaEncryptorDescriptorDeserializer));
         }
 
-        private Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(RsaEncryptorConfiguration configuration)
+        private static Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(RsaEncryptorConfiguration configuration)
         {
             // basic argument checking
             if (configuration.EncryptionAlgorithmType == typeof(RSA))

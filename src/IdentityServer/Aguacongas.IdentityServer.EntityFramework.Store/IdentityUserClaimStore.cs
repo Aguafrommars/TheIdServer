@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -151,7 +151,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                             .ConfigureAwait(false);
         }
 
-        private void ChechResult(IdentityResult result)
+        private static void ChechResult(IdentityResult result)
         {
             if (!result.Succeeded)
             {

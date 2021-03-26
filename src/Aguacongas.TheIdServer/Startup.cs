@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Http.Store;
@@ -15,7 +15,6 @@ using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Quickstart.UI;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,7 +42,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Auth = Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.TheIdServer
@@ -134,7 +135,9 @@ namespace Aguacongas.TheIdServer
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies())
                 .AddAuthentication()
-                .AddIdentityServerAuthentication(JwtBearerDefaults.AuthenticationScheme, ConfigureIdentityServerAuthenticationOptions());
+                .AddJwtBearer("Bearer", options => ConfigureIdentityServerAuthenticationOptions(options))
+                // reference tokens
+                .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerAuthenticationOptions(options));
 
 
             var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
@@ -308,42 +311,93 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private Action<IdentityServerAuthenticationOptions> ConfigureIdentityServerAuthenticationOptions()
+        private void ConfigureIdentityServerAuthenticationOptions(JwtBearerOptions options)
         {
-            return options =>
+            Configuration.GetSection("ApiAuthentication").Bind(options);
+            if (Configuration.GetValue<bool>("DisableStrictSsl"))
             {
-                Configuration.GetSection("ApiAuthentication").Bind(options);
-                if (Configuration.GetValue<bool>("DisableStrictSsl"))
+                options.BackchannelHttpHandler = new HttpClientHandler
                 {
-                    options.JwtBackChannelHandler = new HttpClientHandler
-                    {
 #pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-                        ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
-                    };
-                }
-
-                static string tokenRetriever(HttpRequest request)
+                };
+            }
+            options.Audience = Configuration["ApiAuthentication:ApiName"];
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
                 {
+                    var request = context.HttpContext.Request;
                     var path = request.Path;
                     var accessToken = TokenRetrieval.FromQueryString()(request);
                     if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
                     {
-                        return accessToken;
+                        context.Token = accessToken;
+                        return Task.CompletedTask;
                     }
                     var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
                     if (!string.IsNullOrEmpty(oneTimeToken))
                     {
-                        return request.HttpContext
+                        context.Token = request.HttpContext
                             .RequestServices
                             .GetRequiredService<IRetrieveOneTimeToken>()
                             .GetOneTimeToken(oneTimeToken);
+                        return Task.CompletedTask;
                     }
-                    return TokenRetrieval.FromAuthorizationHeader()(request);
+                    context.Token = TokenRetrieval.FromAuthorizationHeader()(request);
+                    return Task.CompletedTask;
+                }
+            };
+
+            options.ForwardDefaultSelector = context =>
+            {
+                var authHeader = context.Request.Headers[HttpRequestHeader.Authorization.ToString()];
+                if (string.IsNullOrEmpty(authHeader))
+                {
+                    return null;
                 }
 
-                options.TokenRetriever = tokenRetriever;
+                var parts = authHeader.First().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length != 2)
+                {
+                    return null;
+                }
+
+                if (!parts[1].Contains("."))
+                {
+                    return "introspection";
+                }
+
+                return null;
             };
+        }
+
+        private void ConfigureIdentityServerAuthenticationOptions(OAuth2IntrospectionOptions options)
+        {
+            Configuration.GetSection("ApiAuthentication").Bind(options);
+            options.ClientId = Configuration.GetValue<string>("ApiAuthentication:ApiName");
+            options.ClientSecret = Configuration.GetValue<string>("ApiAuthentication:ApiSecret");
+            static string tokenRetriever(HttpRequest request)
+            {
+                var path = request.Path;
+                var accessToken = TokenRetrieval.FromQueryString()(request);
+                if (path.StartsWithSegments("/providerhub") && !string.IsNullOrEmpty(accessToken))
+                {
+                    return accessToken;
+                }
+                var oneTimeToken = TokenRetrieval.FromQueryString("otk")(request);
+                if (!string.IsNullOrEmpty(oneTimeToken))
+                {
+                    return request.HttpContext
+                        .RequestServices
+                        .GetRequiredService<IRetrieveOneTimeToken>()
+                        .GetOneTimeToken(oneTimeToken);
+                }
+                return TokenRetrieval.FromAuthorizationHeader()(request);
+            }
+
+            options.TokenRetriever = tokenRetriever;
         }
 
         private void AddDefaultServices(IServiceCollection services)

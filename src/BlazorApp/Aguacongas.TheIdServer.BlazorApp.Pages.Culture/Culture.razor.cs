@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,8 +81,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Culture
             StateHasChanged();
         }
 
-        private Entity.LocalizedResource CreateResource()
-            => new Entity.LocalizedResource();
+        private static Entity.LocalizedResource CreateResource()
+            => new();
 
         private void CultureSelected(CultureInfo cultureInfo)
         {

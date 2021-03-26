@@ -1,9 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
@@ -11,7 +12,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     public class ProgramTest
     {
         [Fact]
-        public void Main_should_seed_data()
+        public async Task StartAsync_should_seed_data()
         {
             var connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;database=TheIdServer.Test.SeedData;trusted_connection=yes;";
 
@@ -24,7 +25,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             using var is4DbContext1 = scope1.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             is4DbContext1.Database.EnsureDeleted();
 
-            Program.Main(new string[]
+            await Program.StartAsync(new string[]
             {
                 "--ConnectionStrings:DefaultConnection",
                 connectionString,

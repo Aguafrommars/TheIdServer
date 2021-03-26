@@ -1,16 +1,15 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2020 @Olivier Lefebvre
+// Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
-using Microsoft.AspNetCore.DataProtection.AzureStorage;
+using Azure.Core;
+using Azure.Storage.Blobs;
+using Azure.Storage;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Auth;
-using Microsoft.Azure.Storage.Blob;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -56,59 +55,56 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures the key rotation system to persist keys to the specified path
+        /// Configures the data protection system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="storageAccount">The <see cref="CloudStorageAccount"/> which
-        /// should be utilized.</param>
-        /// <param name="relativePath">A relative path where the key file should be
-        /// stored, generally specified as "/containerName/[subDir/]keys.xml".</param>
+        /// <param name="sasUri">The full URI where the key file should be stored.
+        /// The URI must contain the SAS token as a query string parameter.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
         /// <remarks>
-        /// The container referenced by <paramref name="relativePath"/> must already exist.
+        /// The container referenced by <paramref name="blobSasUri"/> must already exist.
         /// </remarks>
-        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, CloudStorageAccount storageAccount, string relativePath)
+        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobSasUri)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            if (storageAccount == null)
+            if (blobSasUri == null)
             {
-                throw new ArgumentNullException(nameof(storageAccount));
-            }
-            if (relativePath == null)
-            {
-                throw new ArgumentNullException(nameof(relativePath));
+                throw new ArgumentNullException(nameof(blobSasUri));
             }
 
-            // Simply concatenate the root storage endpoint with the relative path,
-            // which includes the container name and blob name.
+            var uriBuilder = new BlobUriBuilder(blobSasUri);
+            BlobClient client;
 
-            var uriBuilder = new UriBuilder(storageAccount.BlobEndpoint);
-            uriBuilder.Path = $"{uriBuilder.Path.TrimEnd('/')}/{relativePath.TrimStart('/')}";
+            // The SAS token is present in the query string.
+            if (uriBuilder.Sas == null)
+            {
+                throw new ArgumentException($"{nameof(blobSasUri)} is expected to be a SAS URL.", nameof(blobSasUri));
+            }
+            else
+            {
+                client = new BlobClient(blobSasUri);
+            }
 
-            // We can create a CloudBlockBlob from the storage URI and the creds.
-
-            var blobAbsoluteUri = uriBuilder.Uri;
-            var credentials = storageAccount.Credentials;
-
-            return PersistKeystoAzureBlobStorageInternal(builder, () => new CloudBlockBlob(blobAbsoluteUri, credentials));
+            return PersistKeysToAzureBlobStorage(builder, client);
         }
 
         /// <summary>
-        /// Configures the key rotation system to persist keys to the specified path
+        /// Configures the data protection system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="blobUri">The full URI where the key file should be stored.
+        /// <param name="sasUri">The full URI where the key file should be stored.
         /// The URI must contain the SAS token as a query string parameter.</param>
+        /// <param name="tokenCredential">The credentials to connect to the blob.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
         /// <remarks>
         /// The container referenced by <paramref name="blobUri"/> must already exist.
         /// </remarks>
-        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobUri)
+        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobUri, TokenCredential tokenCredential)
         {
             if (builder == null)
             {
@@ -118,86 +114,114 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(blobUri));
             }
-
-            var uriBuilder = new UriBuilder(blobUri);
-
-            // The SAS token is present in the query string.
-
-            if (string.IsNullOrEmpty(uriBuilder.Query))
+            if (tokenCredential == null)
             {
-                throw new ArgumentException(
-                    message: "URI does not have a SAS token in the query string.",
-                    paramName: nameof(blobUri));
+                throw new ArgumentNullException(nameof(tokenCredential));
             }
 
-            var credentials = new StorageCredentials(uriBuilder.Query);
-            uriBuilder.Query = null; // no longer needed
-            var blobAbsoluteUri = uriBuilder.Uri;
+            var client = new BlobClient(blobUri, tokenCredential);
 
-            return PersistKeystoAzureBlobStorageInternal(builder, () => new CloudBlockBlob(blobAbsoluteUri, credentials));
+            return PersistKeysToAzureBlobStorage(builder, client);
         }
 
         /// <summary>
-        /// Configures the key rotation system to persist keys to the specified path
+        /// Configures the data protection system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="blobReference">The <see cref="CloudBlockBlob"/> where the
-        /// key file should be stored.</param>
+        /// <param name="blobUri">The full URI where the key file should be stored.
+        /// The URI must contain the SAS token as a query string parameter.</param>
+        /// <param name="sharedKeyCredential">The credentials to connect to the blob.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
         /// <remarks>
-        /// The container referenced by <paramref name="blobReference"/> must already exist.
+        /// The container referenced by <paramref name="blobUri"/> must already exist.
         /// </remarks>
-        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, CloudBlockBlob blobReference)
+        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobUri, StorageSharedKeyCredential sharedKeyCredential)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            if (blobReference == null)
+            if (blobUri == null)
             {
-                throw new ArgumentNullException(nameof(blobReference));
+                throw new ArgumentNullException(nameof(blobUri));
+            }
+            if (sharedKeyCredential == null)
+            {
+                throw new ArgumentNullException(nameof(sharedKeyCredential));
             }
 
-            // We're basically just going to make a copy of this blob.
-            // Use (container, blobName) instead of (storageuri, creds) since the container
-            // is tied to an existing service client, which contains user-settable defaults
-            // like retry policy and secondary connection URIs.
+            var client = new BlobClient(blobUri, sharedKeyCredential);
 
-            var container = blobReference.Container;
-            var blobName = blobReference.Name;
-
-            return PersistKeystoAzureBlobStorageInternal(builder, () => container.GetBlockBlobReference(blobName));
+            return PersistKeysToAzureBlobStorage(builder, client);
         }
 
         /// <summary>
-        /// Configures the key rotation system to persist keys to the specified path
+        /// Configures the data protection system to persist keys to the specified path
         /// in Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="container">The <see cref="CloudBlobContainer"/> in which the
-        /// key file should be stored.</param>
-        /// <param name="blobName">The name of the key file, generally specified
-        /// as "[subdir/]keys.xml"</param>
+        /// <param name="connectionString">A connection string includes the authentication information
+        /// required for your application to access data in an Azure Storage
+        /// account at runtime.
+        /// </param>
+        /// <param name="containerName">The container name to use.</param>
+        /// <param name="blobName">The blob name to use.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
         /// <remarks>
-        /// The container referenced by <paramref name="container"/> must already exist.
+        /// The container referenced by <paramref name="containerName"/><paramref name="blobName"/> must already exist.
         /// </remarks>
-        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, CloudBlobContainer container, string blobName)
+        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, string connectionString, string containerName, string blobName)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            if (container == null)
+            if (connectionString == null)
             {
-                throw new ArgumentNullException(nameof(container));
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+            if (containerName == null)
+            {
+                throw new ArgumentNullException(nameof(containerName));
             }
             if (blobName == null)
             {
                 throw new ArgumentNullException(nameof(blobName));
             }
-            return PersistKeystoAzureBlobStorageInternal(builder, () => container.GetBlockBlobReference(blobName));
+
+            var client = new BlobServiceClient(connectionString).GetBlobContainerClient(containerName).GetBlobClient(blobName);
+
+            return PersistKeysToAzureBlobStorage(builder, client);
+        }
+
+        /// <summary>
+        /// Configures the data protection system to persist keys to the specified path
+        /// in Azure Blob Storage.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="blobClient">The <see cref="BlobClient"/> in which the
+        /// key file should be stored.</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        /// <remarks>
+        /// The blob referenced by <paramref name="blobClient"/> must already exist.
+        /// </remarks>
+        public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, BlobClient blobClient)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (blobClient == null)
+            {
+                throw new ArgumentNullException(nameof(blobClient));
+            }
+
+            builder.Services.Configure<KeyRotationOptions>(options =>
+            {
+                options.XmlRepository = new AzureBlobXmlRepository(blobClient);
+            });
+            return builder;
         }
 
         /// <summary>
@@ -470,16 +494,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var clientCred = new ClientCredential(clientId, clientSecret);
             var result = await authContext.AcquireTokenAsync(resource, clientCred).ConfigureAwait(false);
             return result.AccessToken;
-        }
-
-        // important: the Func passed into this method must return a new instance with each call
-        private static IKeyRotationBuilder PersistKeystoAzureBlobStorageInternal(IKeyRotationBuilder builder, Func<CloudBlockBlob> blobRefFactory)
-        {
-            builder.Services.Configure<KeyRotationOptions>(options =>
-            {
-                options.XmlRepository = new AzureBlobXmlRepository(blobRefFactory);
-            });
-            return builder;
         }
 
         private static IKeyRotationBuilder PersistKeysToStackExchangeRedisInternal(IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
