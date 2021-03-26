@@ -36,6 +36,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Raven.Client.Documents;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -44,8 +45,10 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Auth = Aguacongas.TheIdServer.Authentication;
+using RavenDb = Aguacongas.AspNetCore.Authentication.RavenDb;
 
 namespace Aguacongas.TheIdServer
 {
@@ -54,9 +57,12 @@ namespace Aguacongas.TheIdServer
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
+        public DbTypes DbType { get; }
+
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            DbType = Configuration.GetValue<DbTypes>("DbType");
             Environment = environment;
         }
 
@@ -160,8 +166,16 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                    .AddEntityFrameworkStore<ConfigurationDbContext>();
+                if (DbType == DbTypes.RavenDb)
+                {
+                    mvcBuilder.AddIdentityServerAdmin<ApplicationUser, RavenDb.SchemeDefinition>()
+                    .AddRavenDbStore();
+                }
+                else
+                {
+                    mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                        .AddEntityFrameworkStore<ConfigurationDbContext>();
+                }
             }
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
@@ -290,11 +304,14 @@ namespace Aguacongas.TheIdServer
             if (isProxy)
             {
                 app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
+                return;
             }
-            else
+            if (DbType == DbTypes.RavenDb)
             {
-                app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+                app.LoadDynamicAuthenticationConfiguration<RavenDb.SchemeDefinition>();
+                return;
             }
+            app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
         private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
@@ -402,17 +419,48 @@ namespace Aguacongas.TheIdServer
         private void AddDefaultServices(IServiceCollection services)
         {
             services.Configure<IdentityServerOptions>(options => Configuration.GetSection("ApiAuthentication").Bind(options))
-                .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
-                .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                 .AddIdentityProviderStore();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
+            var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            if (DbType == DbTypes.RavenDb)
+            {
+                services.Configure<RavenDbOptions>(options => Configuration.GetSection(nameof(RavenDbOptions)).Bind(options))
+                    .AddSingleton(p =>
+                    {
+                        var options = p.GetRequiredService<IOptions<RavenDbOptions>>().Value;
+                        var documentStore = new DocumentStore
+                        {
+                            Urls = options.Urls,
+                            Database = options.Database,
+                        };
+                        if (!string.IsNullOrWhiteSpace(options.CertificatePath))
+                        {
+                            documentStore.Certificate = new X509Certificate2(options.CertificatePath, options.CertificatePassword);
+                        }
+                        documentStore.SetFindIdentityPropertyForIdentityServerStores();
+                        return documentStore.Initialize();
+                    })
+                    .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<RavenDb.SchemeDefinition>>()
+                    .AddIdentityServer4AdminRavenDbkStores<ApplicationUser>()
+                    .AddConfigurationRavenDbkStores()
+                    .AddOperationalRavenDbStores();
+
+                identityBuilder.AddRavenDbStores();
+            }
+            else
+            {
+                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
+                    .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                    .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
+
+                identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>();
+            }
+
 
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
@@ -442,7 +490,7 @@ namespace Aguacongas.TheIdServer
         {
             var dbType = Configuration.GetValue<DbTypes>("DbType");
             if (Configuration.GetValue<bool>("Migrate") &&
-                dbType != DbTypes.InMemory)
+                dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb)
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();

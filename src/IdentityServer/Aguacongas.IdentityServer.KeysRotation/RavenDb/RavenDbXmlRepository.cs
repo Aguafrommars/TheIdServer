@@ -1,40 +1,66 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.DataProtection.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Aguacongas.IdentityServer.KeysRotation.RavenDb
 {
-    public class RavenDbXmlRepository : IXmlRepository
+    public class RavenDbXmlRepository<TKey, TWrapper> : IXmlRepository
+        where TKey: IXmlKey, new()
+        where TWrapper: DocumentSessionWrapper
     {
-        private readonly ILogger<RavenDbXmlRepository> _logger;
-        private readonly IAsyncDocumentSession _session;
+        private readonly ILogger<RavenDbXmlRepository<TKey, TWrapper>> _logger;
+        private readonly IServiceProvider _services;
 
-        public RavenDbXmlRepository(IAsyncDocumentSession session, ILoggerFactory loggerFactory)
+        public RavenDbXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory)
         {
             if (loggerFactory == null)
             {
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
 
-            _logger = loggerFactory.CreateLogger<RavenDbXmlRepository>();
-            _session = session ?? throw new ArgumentNullException(nameof(session));
+            _logger = loggerFactory.CreateLogger<RavenDbXmlRepository<TKey, TWrapper>>();
+            _services = services ?? throw new ArgumentNullException(nameof(services));
         }
-        public IReadOnlyCollection<XElement> GetAllElements()
+
+        public virtual IReadOnlyCollection<XElement> GetAllElements()
         {
-            throw new NotImplementedException();
+            var session = _services.GetRequiredService<DocumentSessionWrapper>().Session;
+            // Put logger in a local such that `this` isn't captured.
+            var logger = _logger;
+            return session.Query<TKey>().Select(key => TryParseKeyXml(key.Xml, logger)).ToList().AsReadOnly();
         }
 
         public void StoreElement(XElement element, string friendlyName)
         {
-            throw new NotImplementedException();
+            var session = _services.GetRequiredService<DocumentSessionWrapper>().Session;
+
+            var newKey = new TKey
+            {
+                FriendlyName = friendlyName,
+                Xml = element.ToString(SaveOptions.DisableFormatting)
+            };
+            session.Store(newKey);
+            session.SaveChanges();
+        }
+
+        private static XElement TryParseKeyXml(string xml, ILogger logger)
+        {
+            try
+            {
+                return XElement.Parse(xml);
+            }
+            catch (Exception e)
+            {
+                logger?.LogWarning(e, "An exception occurred while parsing the key xml '{Xml}'.", xml);
+                return null;
+            }
         }
     }
+
 }
