@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;

@@ -7,7 +7,7 @@
 // with :
 // namespace change from original Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
 // class name change from original DataProtectionKey
-namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
+namespace Aguacongas.IdentityServer.KeysRotation
 {
     /// <summary>
     /// Code first model used by <see cref="EntityFrameworkCoreXmlRepository{TContext}"/>.
