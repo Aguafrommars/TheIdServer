@@ -343,6 +343,7 @@ namespace Aguacongas.TheIdServer
                             .RequestServices
                             .GetRequiredService<IRetrieveOneTimeToken>()
                             .GetOneTimeToken(oneTimeToken);
+                        return Task.CompletedTask;
                     }
                     context.Token = TokenRetrieval.FromAuthorizationHeader()(request);
                     return Task.CompletedTask;
