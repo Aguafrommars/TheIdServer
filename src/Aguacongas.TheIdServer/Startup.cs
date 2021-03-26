@@ -322,8 +322,8 @@ namespace Aguacongas.TheIdServer
                     ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true
 #pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
                 };
-            }                
-
+            }
+            options.Audience = Configuration["ApiAuthentication:ApiName"];
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
@@ -343,7 +343,9 @@ namespace Aguacongas.TheIdServer
                             .RequestServices
                             .GetRequiredService<IRetrieveOneTimeToken>()
                             .GetOneTimeToken(oneTimeToken);
+                        return Task.CompletedTask;
                     }
+                    context.Token = TokenRetrieval.FromAuthorizationHeader()(request);
                     return Task.CompletedTask;
                 }
             };
