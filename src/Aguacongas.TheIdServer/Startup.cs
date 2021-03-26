@@ -184,6 +184,7 @@ namespace Aguacongas.TheIdServer
                  .AddScoped<SignOutSessionStateManager>()
                  .AddScoped<ISharedStringLocalizerAsync, PreRenderStringLocalizer>()
                  .AddTransient<IReadOnlyCultureStore, ReadOnlyCultureStore>()
+                 .AddTransient<IReadOnlyLocalizedResourceStore, ReadOnlyLocalizedResourceStore>()
                  .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
                  .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
                  .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(p.CreateApiHttpClient(p.GetRequiredService<IOptions<IdentityServerOptions>>().Value),
