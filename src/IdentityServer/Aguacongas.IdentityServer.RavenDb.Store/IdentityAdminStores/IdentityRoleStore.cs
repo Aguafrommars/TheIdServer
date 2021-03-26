@@ -4,8 +4,10 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -92,8 +94,15 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var role = await GetRoleAsync(id)
                 .ConfigureAwait(false);
-
-            return role.ToEntity();
+            ICollection<RoleClaim> claims = null;
+            if (request.Expand == nameof(Role.RoleClaims))
+            {
+                claims = await _session.Query<RoleClaim>()
+                    .Where(c => c.RoleId == role.Id)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+            }
+            return role.ToEntity(claims);
         }
 
         public async Task<PageResponse<Role>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)

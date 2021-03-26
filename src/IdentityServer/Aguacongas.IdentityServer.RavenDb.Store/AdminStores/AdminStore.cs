@@ -9,7 +9,10 @@ using Raven.Client.Documents.Session;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -183,7 +186,15 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var value = property.GetValue(entity);
             if (value == null)
             {
-                value = Activator.CreateInstance(property.PropertyType);
+                if (property.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)))
+                {
+                    value = Activator.CreateInstance(typeof(Collection<>).MakeGenericType(property.PropertyType.GetGenericArguments()));
+                }
+                else
+                {
+                    value = Activator.CreateInstance(property.PropertyType);
+                }
+                
                 property.SetValue(entity, value);
             }
 
@@ -210,6 +221,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var idProperty = type.GetProperty(idName);
             var id = idProperty.GetValue(subEntity);
             var loaded = await _session.LoadAsync<object>(id as string).ConfigureAwait(false);
+            if (loaded == null)
+            {
+                return;
+            }
 
             // remove navigation
             var iCollectionType = typeof(ICollection<>);
@@ -228,7 +243,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private static void CloneEntity(object entity, Type type, object loaded)
         {
-            foreach (var property in type.GetProperties())
+            foreach (var property in type.GetProperties(BindingFlags.Instance))
             {
                 property.SetValue(entity, property.GetValue(loaded));
             }

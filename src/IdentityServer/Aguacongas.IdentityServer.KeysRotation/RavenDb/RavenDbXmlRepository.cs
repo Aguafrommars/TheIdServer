@@ -33,7 +33,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.RavenDb
             var session = _services.GetRequiredService<DocumentSessionWrapper>().Session;
             // Put logger in a local such that `this` isn't captured.
             var logger = _logger;
-            return session.Query<TKey>().Select(key => TryParseKeyXml(key.Xml, logger)).ToList().AsReadOnly();
+            return session.Query<TKey>()
+                .AsEnumerable()
+                .Select(key => TryParseKeyXml(key.Xml, logger))
+                .ToList()
+                .AsReadOnly();
         }
 
         public void StoreElement(XElement element, string friendlyName)

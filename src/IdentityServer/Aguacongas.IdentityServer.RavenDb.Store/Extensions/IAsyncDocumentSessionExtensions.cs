@@ -20,8 +20,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public static async Task<ICollection<TSubEntity>> GetSubEntitiesAsync<TSubEntity>(this IAsyncDocumentSession session, ICollection<TSubEntity> idList) where TSubEntity : IEntityId
         {
             idList ??= new List<TSubEntity>();
-            var itemList = await session.LoadAsync<TSubEntity>(idList.Select(c => c.Id)).ConfigureAwait(false);
-            return itemList.Select(i => i.Value).ToList();
+            var itemList = await session.LoadAsync<TSubEntity>(idList.Select(c => c.Id)).ConfigureAwait(false);            
+            var foundList =  itemList.Where(i => i.Value != null).Select(i => i.Value).ToList();
+            var collectionName = typeof(TSubEntity).Name.ToLowerInvariant();
+            foreach(var item in foundList)
+            {
+                idList.RemoveEntityId($"{collectionName}/{item.Id}");
+                idList.Add(item);
+            }
+
+            return idList;
         }
 
         public static string GetSubEntityParentIdName(this Type type)

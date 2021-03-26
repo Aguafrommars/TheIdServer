@@ -3,8 +3,10 @@
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,7 +77,23 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<Entity.User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
-            return user.ToUserEntity(null, null);
+            ICollection<Entity.UserClaim> claims = null;
+            if (request.Expand.Contains(nameof(Entity.User.UserClaims)))
+            {
+                claims = await _session.Query<Entity.UserClaim>()
+                    .Where(c => c.UserId == user.Id)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+            }
+            ICollection<Entity.UserRole> roles = null;
+            if (request.Expand.Contains(nameof(Entity.User.UserRoles)))
+            {
+                roles = await _session.Query<Entity.UserRole>()
+                    .Where(c => c.UserId == user.Id)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+            }
+            return user.ToUserEntity(claims, roles);
         }
 
         public async Task<PageResponse<Entity.User>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
