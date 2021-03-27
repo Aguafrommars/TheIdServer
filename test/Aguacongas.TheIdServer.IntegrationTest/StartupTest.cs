@@ -18,7 +18,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         [Fact]
         public void ConfigureService_should_configure_ravendb_services()
         {
-            var sut = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
+            var wrapper = new RavenDbTestDriverWrapper();
+            var sut = TestUtils.CreateTestServer(services =>
+            {
+                services.AddSingleton(p => wrapper.GetDocumentStore());
+            },new Dictionary<string, string>
             {
                 ["DbType"] = DbTypes.RavenDb.ToString(),
                 ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
