@@ -86,6 +86,9 @@
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>
+	  <None Update="cluster.admin.client.certificate.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="theidserver.pfx">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

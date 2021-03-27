@@ -8,7 +8,6 @@ using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Raven.Client.Documents;
 using System.Collections.Generic;
 using Xunit;
 

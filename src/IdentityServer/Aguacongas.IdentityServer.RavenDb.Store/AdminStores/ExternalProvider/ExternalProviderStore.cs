@@ -77,6 +77,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 .ConfigureAwait(false);
             if(request?.Expand == nameof(SchemeDefinition.ClaimTransformations))
             {
+                definition.ClaimTransformations ??= new List<ExternalClaimTransformation>(0);
                 var transformationList = new List<ExternalClaimTransformation>(definition.ClaimTransformations.Count);
                 foreach(var transformationId in definition.ClaimTransformations)
                 {
