@@ -25,16 +25,8 @@ namespace Aguacongas.TheIdServer
         {
             
             var services = new ServiceCollection();
-            services.AddLogging()
-                .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(configuration))
-                .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
-                .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration))
-                .AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer()
-                .AddAspNetIdentity<ApplicationUser>();
+            var startup = new Startup(configuration, null);
+            startup.ConfigureServices(services);
 
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();

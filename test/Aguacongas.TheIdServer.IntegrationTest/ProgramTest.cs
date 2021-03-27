@@ -29,6 +29,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             {
                 "--ConnectionStrings:DefaultConnection",
                 connectionString,
+                "--DbType",
+                "SqlServer",
                 "--environment",
                 "Development",
                 "/seed"
@@ -45,5 +47,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             Assert.NotEmpty(appDbContext.Users);
             Assert.NotEmpty(appDbContext.Roles);
         }
+
     }
 }
