@@ -2,6 +2,8 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.RavenDb;
+using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +27,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             });
 
             var provider = sut.Host.Services;
-            Assert.NotNull(provider.GetService<IDocumentStore>());
+            Assert.NotNull(provider.GetService<IAdminStore<ApiClaim>>());
             var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
             var rotationOptions = new KeyRotationOptions();
             configureRotationOptions.Configure(rotationOptions);
