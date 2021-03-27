@@ -94,13 +94,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var role = await GetRoleAsync(id)
                 .ConfigureAwait(false);
+
             ICollection<RoleClaim> claims = null;
-            if (request.Expand == nameof(Role.RoleClaims))
+            if (request?.Expand == nameof(Role.RoleClaims))
             {
-                claims = await _session.Query<RoleClaim>()
-                    .Where(c => c.RoleId == role.Id)
-                    .ToListAsync()
-                    .ConfigureAwait(false);
+                var index = 0;
+                claims = (await _roleManager.GetClaimsAsync(role).ConfigureAwait(false)).Select(c => new RoleClaim
+                {
+                    Id = $"{id}@{index++}",
+                    ClaimType = c.Type,
+                    ClaimValue = c.Value,
+                    RoleId = id
+                }).ToList();
             }
             return role.ToEntity(claims);
         }

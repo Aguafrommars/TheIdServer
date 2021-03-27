@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -163,6 +165,41 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             var result = await sut.GetAsync(role.Id, null);
 
             Assert.NotNull(result);
+        }
+
+        
+        [Fact]
+        public async Task GetAsync_by_id_should_expand_claims()
+        {
+            using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
+            var provider = new ServiceCollection()
+                .AddLogging()
+                .AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore)
+                .Services.BuildServiceProvider();
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var role = new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString()
+            };
+            var roleResult = await roleManager.CreateAsync(role);
+            Assert.True(roleResult.Succeeded);
+
+            var claimId = Guid.NewGuid().ToString();
+            await roleManager.AddClaimAsync(role, new Claim(claimId, claimId)).ConfigureAwait(false);
+
+            var sut = new IdentityRoleStore<IdentityUser, IdentityRole>(roleManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityRoleStore<IdentityUser, IdentityRole>>>());
+
+            var result = await sut.GetAsync(role.Id, new GetRequest
+            {
+                Expand = nameof(Role.RoleClaims)
+            });
+
+            Assert.NotNull(result);
+            Assert.Single(result.RoleClaims);
+            Assert.Equal(claimId, result.RoleClaims.First().ClaimType);
+            Assert.Equal($"{role.Id}@0", result.RoleClaims.First().Id);
         }
     }
 }

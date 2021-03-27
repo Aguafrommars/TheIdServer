@@ -7,9 +7,9 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Community.OData.Linq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OData.Edm;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,8 +73,17 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
-            var definition = await _session.Query<SchemeDefinition>()
-                .FirstOrDefaultAsync(e => e.Scheme == id, cancellationToken).ConfigureAwait(false);
+            var definition = await _session.LoadAsync<SchemeDefinition>($"{nameof(SchemeDefinition).ToLowerInvariant()}/{id}", b => b.Expand(request?.Expand), cancellationToken)
+                .ConfigureAwait(false);
+            if(request?.Expand == nameof(SchemeDefinition.ClaimTransformations))
+            {
+                var transformationList = new List<ExternalClaimTransformation>(definition.ClaimTransformations.Count);
+                foreach(var transformationId in definition.ClaimTransformations)
+                {
+                    transformationList.Add(await _session.LoadAsync<ExternalClaimTransformation>(transformationId.Id, cancellationToken).ConfigureAwait(false));
+                }
+                definition.ClaimTransformations = transformationList;
+            }
             return CreateEntity(definition);
         }
 

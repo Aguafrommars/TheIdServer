@@ -243,7 +243,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         private static void CloneEntity(object entity, Type type, object loaded)
         {
-            foreach (var property in type.GetProperties(BindingFlags.Instance))
+            foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 property.SetValue(entity, property.GetValue(loaded));
             }

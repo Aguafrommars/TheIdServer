@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -418,6 +420,71 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
             var result = await sut.GetAsync(id, null);
 
             Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task GetAsync_by_id_should_expand_transforms()
+        {
+            using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            services.AddSingleton(p => documentStore)
+                .AddAuthentication()
+                .AddDynamic<SchemeDefinition>()
+                .AddRavenDbStore()
+                .AddGoogle();
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
+            var manager = provider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>();
+
+            var id = Guid.NewGuid().ToString();
+            await manager.AddAsync(new SchemeDefinition
+            {
+                DisplayName = Guid.NewGuid().ToString(),
+                Options = new GoogleOptions(),
+                HandlerType = typeof(GoogleHandler),
+                Scheme = id
+            });
+
+            using var session = documentStore.OpenAsyncSession();
+            var transformId = Guid.NewGuid().ToString();
+            await session.StoreAsync(new Entity.ExternalClaimTransformation
+            {
+                Scheme = id,
+                Id = transformId,
+                FromClaimType = "test",
+                ToClaimType = "test"
+            }, $"{nameof(Entity.ExternalClaimTransformation).ToLowerInvariant()}/{transformId}").ConfigureAwait(false);
+            var saved = await session.LoadAsync<SchemeDefinition>($"{nameof(SchemeDefinition).ToLowerInvariant()}/{id}").ConfigureAwait(false);
+            saved.ClaimTransformations = new List<Entity.ExternalClaimTransformation>
+            {
+                new Entity.ExternalClaimTransformation
+                {
+                    Id = $"{nameof(Entity.ExternalClaimTransformation).ToLowerInvariant()}/{transformId}"
+                }
+            };
+            await session.SaveChangesAsync().ConfigureAwait(false);
+
+            var sut = new ExternalProviderStore(manager,
+                provider.GetRequiredService<IAuthenticationSchemeOptionsSerializer>(),
+                new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()),
+                provider.GetService<IProviderClient>());
+
+            var result = await sut.GetAsync(id, new GetRequest
+            {
+                Expand = nameof(SchemeDefinition.ClaimTransformations)
+            });
+
+            Assert.NotNull(result);
+            Assert.Single(result.ClaimTransformations);
+            Assert.Equal("test", result.ClaimTransformations.First().FromClaimType);
         }
     }
 }

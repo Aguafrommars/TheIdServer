@@ -48,7 +48,7 @@ using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Auth = Aguacongas.TheIdServer.Authentication;
-using RavenDb = Aguacongas.AspNetCore.Authentication.RavenDb;
+using RavenDbStore = Aguacongas.IdentityServer.RavenDb.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -164,18 +164,15 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
                     .AddTheIdServerHttpStore();
             }
+            else if (DbType == DbTypes.RavenDb)
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, RavenDbStore.SchemeDefinition>()
+                    .AddRavenDbStore();
+            }
             else
             {
-                if (DbType == DbTypes.RavenDb)
-                {
-                    mvcBuilder.AddIdentityServerAdmin<ApplicationUser, RavenDb.SchemeDefinition>()
-                    .AddRavenDbStore();
-                }
-                else
-                {
-                    mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                        .AddEntityFrameworkStore<ConfigurationDbContext>();
-                }
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
+                    .AddEntityFrameworkStore<ConfigurationDbContext>();
             }
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
@@ -309,7 +306,7 @@ namespace Aguacongas.TheIdServer
             }
             if (DbType == DbTypes.RavenDb)
             {
-                app.LoadDynamicAuthenticationConfiguration<RavenDb.SchemeDefinition>();
+                app.LoadDynamicAuthenticationConfiguration<RavenDbStore.SchemeDefinition>();
                 return;
             }
             app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
@@ -445,7 +442,7 @@ namespace Aguacongas.TheIdServer
                         documentStore.SetFindIdentityPropertyForIdentityServerStores();
                         return documentStore.Initialize();
                     })
-                    .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<RavenDb.SchemeDefinition>>()
+                    .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<RavenDbStore.SchemeDefinition>>()
                     .AddIdentityServer4AdminRavenDbkStores<ApplicationUser>()
                     .AddConfigurationRavenDbkStores()
                     .AddOperationalRavenDbStores();

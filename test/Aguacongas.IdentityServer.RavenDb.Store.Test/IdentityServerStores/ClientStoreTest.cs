@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
                 {
                     new Entity.ClientGrantType
                     {
-                        Id = $"{nameof(Entity.ClientGrantType)}/test"
+                        Id = $"{nameof(Entity.ClientGrantType).ToLowerInvariant()}/test"
                     }
                 }
             }, $"{nameof(Entity.Client)}/test");
@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityServerStores
             {
                 Id = "test",
                 GrantType = "client_credential"
-            }, $"{nameof(Entity.ClientGrantType)}/test");
+            }, $"{nameof(Entity.ClientGrantType).ToLowerInvariant()}/test");
             await s1.SaveChangesAsync();
             
             var sut = new ClientStore(new ScopedAsynDocumentcSession(store.OpenAsyncSession()));

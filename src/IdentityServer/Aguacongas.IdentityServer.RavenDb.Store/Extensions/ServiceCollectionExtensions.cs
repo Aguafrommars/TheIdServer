@@ -93,13 +93,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
                 .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
                 .AddTransient<IAdminStore<Entity.DeviceCode>, DeviceFlowStore>()
-                .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, AdminStore<Entity.ExternalClaimTransformation>>()
+                .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
                 .AddTransient<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
                 .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
                 .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()
                 .AddTransient<IAdminStore<Entity.IdentityProperty>, IdentityPropertyStore>()
                 .AddTransient<IAdminStore<Entity.IdentityResource>, AdminStore<Entity.IdentityResource>>()
-                .AddTransient<IAdminStore<Entity.LocalizedResource>, AdminStore<Entity.LocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.LocalizedResource>, LocalizedResourceStore>()
                 .AddTransient<IAdminStore<Entity.ProtectResource>, AdminStore<Entity.ProtectResource>>()
                 .AddTransient<IAdminStore<Entity.Key>, AdminStore<Entity.Key>>()
                 .AddTransient<IAdminStore<Entity.ReferenceToken>, ReferenceTokenStore>()
@@ -107,7 +107,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, UserConsentStore>()
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole>>()
-                .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, Aguacongas.IdentityServer.RavenDb.Store.UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(
+                .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(
                     p.GetRequiredService<ScopedAsynDocumentcSession>().Session, 
                     p.GetRequiredService<IdentityErrorDescriber>()))
                 .AddTransient<IAdminStore<Entity.User>, IdentityUserStore<TUser>>()

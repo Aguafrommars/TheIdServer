@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -244,5 +245,57 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             Assert.NotNull(result);
         }
 
+        [Fact]
+        public async Task GetAsync_by_id_should_expand_claims_and_roles()
+        {
+            using var documentStore = new RavenDbTestDriverWrapper().GetDocumentStore();
+            var services = new ServiceCollection()
+                .AddLogging();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRavenDbStores(p => documentStore);
+
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            provider = scope.ServiceProvider;
+
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
+            var user = new IdentityUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = "exemple1@exemple.com",
+                EmailConfirmed = true,
+                UserName = Guid.NewGuid().ToString()
+            };
+            var userResult = await userManager.CreateAsync(user);
+            Assert.True(userResult.Succeeded);
+
+            await userManager.AddClaimsAsync(user, new[]
+            {
+                new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+            }).ConfigureAwait(false);
+
+            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleName = Guid.NewGuid().ToString();
+            await roleManager.CreateAsync(new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = roleName
+            }).ConfigureAwait(false);
+
+            await userManager.AddToRoleAsync(user, roleName).ConfigureAwait(false);
+
+            var sut = new IdentityUserStore<IdentityUser>(userManager, new ScopedAsynDocumentcSession(documentStore.OpenAsyncSession()), provider.GetRequiredService<ILogger<IdentityUserStore<IdentityUser>>>());
+
+            var result = await sut.GetAsync(user.Id, new GetRequest
+            {
+                Expand = $"{nameof(Entity.User.UserClaims)},{nameof(Entity.User.UserRoles)}"
+            });
+
+            Assert.NotNull(result);
+            Assert.Single(result.UserClaims);
+            Assert.Single(result.UserRoles);
+        }
     }
 }

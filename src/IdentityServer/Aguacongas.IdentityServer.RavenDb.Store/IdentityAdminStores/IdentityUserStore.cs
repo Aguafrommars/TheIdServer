@@ -77,21 +77,32 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<Entity.User> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
+            var expand = request?.Expand;
             ICollection<Entity.UserClaim> claims = null;
-            if (request.Expand.Contains(nameof(Entity.User.UserClaims)))
+            if (expand != null && expand.Contains(nameof(Entity.User.UserClaims)))
             {
-                claims = await _session.Query<Entity.UserClaim>()
-                    .Where(c => c.UserId == user.Id)
-                    .ToListAsync()
-                    .ConfigureAwait(false);
+                var index = 0;
+                claims = (await _userManager.GetClaimsAsync(user).ConfigureAwait(false))
+                    .Select(c => new Entity.UserClaim
+                    {
+                        ClaimType = c.Type,
+                        ClaimValue = c.Value,
+                        Id = $"{id}@{index++}",
+                        Issuer =c.Issuer,
+                        OriginalType = c.Properties?.Where(p => p.Key == nameof(Entity.UserClaim.OriginalType)).Select(p => p.Value).FirstOrDefault(),
+                        UserId = id
+                    }).ToList();
             }
             ICollection<Entity.UserRole> roles = null;
-            if (request.Expand.Contains(nameof(Entity.User.UserRoles)))
+            if (expand != null && expand.Contains(nameof(Entity.User.UserRoles)))
             {
-                roles = await _session.Query<Entity.UserRole>()
-                    .Where(c => c.UserId == user.Id)
-                    .ToListAsync()
-                    .ConfigureAwait(false);
+                roles = (await _userManager.GetRolesAsync(user).ConfigureAwait(false))
+                    .Select(r => new Entity.UserRole
+                    {
+                        Id = $"{r}@{id}",
+                        RoleId = r,
+                        UserId = id
+                    }).ToList();
             }
             return user.ToUserEntity(claims, roles);
         }
