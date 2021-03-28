@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
             documentStoreMock.Setup(m => m.OpenAsyncSession(It.IsAny<SessionOptions>())).Returns(sessionMock.Object);
-            var sut = new HostBuilder()
+            using var sut = new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
