@@ -67,6 +67,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var login = await GetLoginAsync(id, cancellationToken).ConfigureAwait(false);
+            if (login == null)
+            {
+                throw new DbUpdateException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
+            }
+
             var user = await GetUserAsync(login.UserId)
                 .ConfigureAwait(false);
             var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey)
@@ -138,10 +143,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 l.LoginProvider == info[1] &&
                 l.ProviderKey == info[2], cancellationToken)
                             .ConfigureAwait(false);
-            if (login == null)
-            {
-                throw new DbUpdateException($"Entity type {typeof(UserLogin).Name} at id {id} is not found");
-            }
 
             return login;
         }
