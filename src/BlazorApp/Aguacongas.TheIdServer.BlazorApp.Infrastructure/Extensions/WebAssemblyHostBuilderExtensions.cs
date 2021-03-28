@@ -77,10 +77,10 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             services.AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
-                .AddTransient<IAdminStore<Entity.LocalizedResource>>(p =>
+                .AddTransient<IReadOnlyLocalizedResourceStore>(p =>
                 {
                     var factory = p.GetRequiredService<IHttpClientFactory>();
-                    return new AdminStore<Entity.LocalizedResource>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>());
+                    return new ReadOnlyLocalizedResourceStore(new AdminStore<Entity.LocalizedResource>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()));
                 }).AddTransient<IReadOnlyCultureStore>(p =>
                 {
                     var factory = p.GetRequiredService<IHttpClientFactory>();

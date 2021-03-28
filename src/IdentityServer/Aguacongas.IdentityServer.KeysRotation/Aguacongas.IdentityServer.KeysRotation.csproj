@@ -1,36 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Description>IdentityServer4 signing keys rotation.</Description>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>identityserver4;signing keys rotation</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
-		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Authors>Olivier Lefebvre</Authors>
+        <Description>IdentityServer4 signing keys rotation.</Description>
+        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>identityserver4;signing keys rotation</PackageTags>
+        <PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
+        <PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.0" />
-		<PackageReference Include="IdentityModel" Version="5.1.0" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.4" />
-		<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.9.0" />
-		<PackageReference Include="StackExchange.Redis" Version="2.2.4" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.0" />
+        <PackageReference Include="IdentityModel" Version="5.0.1" />
+        <PackageReference Include="IdentityServer4" Version="4.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.4" />
+        <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+        <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.9.0" />
+        <PackageReference Include="RavenDB.Client" Version="5.1.5" />
+        <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+    </ItemGroup>
 
 </Project>

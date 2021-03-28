@@ -21,6 +21,9 @@ using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Aguacongas.IdentityServer.KeysRotation.RavenDb;
+using Raven.Client.Documents.Session;
+using Raven.Client.Documents;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -244,6 +247,45 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.XmlRepository = new EntityFrameworkCoreXmlRepository<TContext>(services, loggerFactory);
                 });
             });
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to persist keys to a RavenDb datasstore
+        /// </summary>
+        /// <typeparam name="TWrapper">The type of the wrapper.</typeparam>
+        /// <param name="builder">The <see cref="IDataProtectionBuilder" /> instance to modify.</param>
+        /// <param name="getSession">The get session.</param>
+        /// <returns>
+        /// The value <paramref name="builder" />.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">builder</exception>
+        public static IKeyRotationBuilder PersistKeysToRavenDb<TWrapper>(this IKeyRotationBuilder builder, Func<IServiceProvider, IDocumentSession> getSession = null)
+            where TWrapper : DocumentSessionWrapper
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (getSession == null)
+            {
+                getSession = p => {
+                    var store = p.GetRequiredService<IDocumentStore>();
+                    return store.OpenSession();
+                };
+            }
+
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+                {
+                    var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+                    return new ConfigureOptions<KeyRotationOptions>(options =>
+                    {
+                        options.XmlRepository = new RavenDbXmlRepository<Aguacongas.IdentityServer.KeysRotation.RavenDb.KeyRotationKey, TWrapper>(services, loggerFactory);
+                    });
+                })
+                .AddTransient(p => new DocumentSessionWrapper(getSession(p)));
+
             return builder;
         }
 

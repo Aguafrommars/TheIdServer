@@ -3,7 +3,7 @@
         const query = `#${id}`;
         $(query).on('hidden.bs.toast', function () {
             dotnetHelper.invokeMethodAsync('ToastClosed', id)
-                .then(_ => { });
+                .then(_ => { /* invoke it */ });
         });
         $(query).toast('show');
     },
@@ -34,7 +34,7 @@ window.browserInteropt = {
             if (key === 13) {
                 e.preventDefault();
                 dotnetHelper.invokeMethodAsync('EnterKeyPressed', id)
-                    .then(_ => { });
+                    .then(_ => { /* invoke it */ });
             }
         };
     },

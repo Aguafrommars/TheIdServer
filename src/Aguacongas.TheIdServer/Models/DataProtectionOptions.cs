@@ -11,7 +11,8 @@ namespace Aguacongas.TheIdServer.Models
         Redis,
         AzureStorage,
         FileSytem,
-        Registry
+        Registry,
+        RavenDb
     }
 
     public enum KeyProtectionKind
