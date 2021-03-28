@@ -135,6 +135,41 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
 
 > A [devart dotConnect for Oracle](https://www.devart.com/dotconnect/oracle/) license is a requirement for Oracle.
 
+### Using RavenDb
+
+Use **DbType** to the define the RavenDb database engine.
+
+```json
+"DbType": "RavenDb"
+```
+
+And **RavenDbOptions** to define the RavenDb options.
+
+```json
+"RavenDbOptions": {
+  "Urls": [
+    "https://a.ravendb.local",
+    "https://b.ravendb.local",
+    "https://c.ravendb.local"
+  ],
+  "Database": "TheIdServer",
+  "CertificatePath": "cluster.admin.client.certificate.pfx",
+  "CertificatePassword": "p@$$w0rd"
+}
+```
+
+> As no `DbContext` will be registered, you cannot store signing keys in EF but you can choose the `RavenDb` storage kind (see [Configure signin keys](#configure-signing-key)):
+```json
+"IdentityServer": {
+  "Key": {
+    "StorageKind": "RavenDb"
+  }
+},
+"DataProtectionOptions": {
+  "StorageKind": "RavenDb"
+}
+```
+
 ### Using the API
 
 ![public-private.svg](../../doc/assets/public-pribate.png)
@@ -421,7 +456,7 @@ Default configuration:
 ### Keys rotatation (remanded)
 
 TheIdServer can be configured with a keys rotation mechanism instead of a single key.  
-Read [Keys rotation](../doc/KEYS_ROTATION.md) to know how to configure it.
+Read [Keys rotation](../../doc/KEYS_ROTATION.md) to know how to configure it.
 
 ```json
 "IdentityServer": {
