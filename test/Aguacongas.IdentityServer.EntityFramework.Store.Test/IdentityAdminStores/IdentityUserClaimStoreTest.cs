@@ -10,25 +10,26 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStores
 {
-    public class IdentityRoleClaimStoreTest
+    public class IdentityUserClaimStoreTest
     {
         [Fact]
         public void Constructor_should_check_parameters()
         {
-            Assert.Throws<ArgumentNullException>(() => new IdentityRoleClaimStore<IdentityUser, IdentityRole>(null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(null, null, null));
             var provider = new ServiceCollection()
                 .AddLogging()
                 .AddDbContext<IdentityDbContext<IdentityUser>>()
                 .AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
-            Assert.Throws<ArgumentNullException>(() => new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, null, null));
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, null, null));
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            Assert.Throws<ArgumentNullException>(() => new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, null));
+            Assert.Throws<ArgumentNullException>(() => new IdentityUserClaimStore<IdentityUser>(userManager, context, null));
         }
 
         [Fact]
@@ -41,20 +42,20 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
 
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            var sut = new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, provider.GetRequiredService<ILogger<IdentityRoleClaimStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, context, provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
-            await Assert.ThrowsAsync<IdentityException>(() => sut.CreateAsync(new RoleClaim
+            await Assert.ThrowsAsync<IdentityException>(() => sut.CreateAsync(new Entity.UserClaim
             {
-                RoleId = "notfound",
+                UserId = "notfound",
                 ClaimType = "test",
                 ClaimValue = "test"
             } as object)).ConfigureAwait(false);
         }
 
         [Fact]
-        public async Task DeleteAsync_should_throw_on_not_found()
+        public async Task DeleteAsync_should_not_throw_on_not_found()
         {
             var provider = new ServiceCollection()
                 .AddLogging()
@@ -63,12 +64,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
 
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            var sut = new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, provider.GetRequiredService<ILogger<IdentityRoleClaimStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, context, provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
-            await Assert.ThrowsAsync<DbUpdateException>(() => sut.DeleteAsync("0")).ConfigureAwait(false);
+            await sut.DeleteAsync("0").ConfigureAwait(false);
 
+            Assert.True(true);
         }
 
         [Fact]
@@ -81,11 +83,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
 
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            var sut = new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, provider.GetRequiredService<ILogger<IdentityRoleClaimStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, context, provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
-            await Assert.ThrowsAsync<DbUpdateException>(() => sut.UpdateAsync(new RoleClaim
+            await Assert.ThrowsAsync<DbUpdateException>(() => sut.UpdateAsync(new Entity.UserClaim
             {
                 Id = "0"
             } as object)).ConfigureAwait(false);
@@ -101,19 +103,20 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
 
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            var sut = new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, provider.GetRequiredService<ILogger<IdentityRoleClaimStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, context, provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
-            var role = new IdentityRole
+            var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = Guid.NewGuid().ToString()
+                UserName = Guid.NewGuid().ToString(),
+                Email = "user@sample.com"
             };
-            await roleManager.CreateAsync(role).ConfigureAwait(false);
+            await userManager.CreateAsync(user).ConfigureAwait(false);
             Assert.Null(await sut.GetAsync("1", null).ConfigureAwait(false));
 
-            await roleManager.AddClaimAsync(role, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).ConfigureAwait(false);
+            await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).ConfigureAwait(false);
 
             var result = await sut.GetAsync("1", null).ConfigureAwait(false);
 
@@ -130,22 +133,23 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
                 .AddEntityFrameworkStores<IdentityDbContext<IdentityUser>>()
                 .Services.BuildServiceProvider();
 
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
             var context = provider.GetRequiredService<IdentityDbContext<IdentityUser>>();
-            var sut = new IdentityRoleClaimStore<IdentityUser, IdentityRole>(roleManager, context, provider.GetRequiredService<ILogger<IdentityRoleClaimStore<IdentityUser, IdentityRole>>>());
+            var sut = new IdentityUserClaimStore<IdentityUser>(userManager, context, provider.GetRequiredService<ILogger<IdentityUserClaimStore<IdentityUser>>>());
 
-            var role = new IdentityRole
+            var user = new IdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = Guid.NewGuid().ToString()
+                UserName = Guid.NewGuid().ToString(),
+                Email = "user@sample.com"
             };
-            await roleManager.CreateAsync(role).ConfigureAwait(false);
+            await userManager.CreateAsync(user).ConfigureAwait(false);
 
-            await roleManager.AddClaimAsync(role, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).ConfigureAwait(false);
+            await userManager.AddClaimAsync(user, new Claim(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).ConfigureAwait(false);
 
             var result = await sut.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
+                Filter = $"{nameof(Entity.UserClaim.UserId)} eq '{user.Id}'"
             }).ConfigureAwait(false);
 
             Assert.NotNull(result);

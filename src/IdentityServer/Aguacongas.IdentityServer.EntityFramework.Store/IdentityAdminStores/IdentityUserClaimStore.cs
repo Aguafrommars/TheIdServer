@@ -1,9 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
