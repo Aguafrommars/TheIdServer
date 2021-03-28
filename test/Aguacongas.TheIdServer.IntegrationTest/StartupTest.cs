@@ -6,9 +6,17 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Moq;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
@@ -18,18 +26,33 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         [Fact]
         public void ConfigureService_should_configure_ravendb_services()
         {
-            var wrapper = new RavenDbTestDriverWrapper();
-            var sut = TestUtils.CreateTestServer(services =>
-            {
-                services.AddSingleton(p => wrapper.GetDocumentStore());
-            },new Dictionary<string, string>
-            {
-                ["DbType"] = DbTypes.RavenDb.ToString(),
-                ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
-                ["DataProtectionOptions:StorageKind"] = StorageKind.RavenDb.ToString(),
-            });
-
-            var provider = sut.Host.Services;
+            var documentStoreMock = new Mock<IDocumentStore>();
+            var sessionMock = new Mock<IAsyncDocumentSession>();
+            var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
+            sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
+            documentStoreMock.Setup(m => m.OpenAsyncSession(It.IsAny<SessionOptions>())).Returns(sessionMock.Object);
+            var sut = new HostBuilder()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    builder.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["DbType"] = DbTypes.RavenDb.ToString(),
+                        ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
+                        ["DataProtectionOptions:StorageKind"] = StorageKind.RavenDb.ToString(),
+                        ["Seed"] = "false"
+                    });
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    var startup = new Startup(context.Configuration, null);
+                    services.AddSingleton(p => documentStoreMock.Object);
+                    startup.ConfigureServices(services);
+                    services.AddSingleton(p => documentStoreMock.Object);
+                }).Build();
+                 
+            var provider = sut.Services;
             Assert.NotNull(provider.GetService<IAdminStore<ApiClaim>>());
             var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
             var rotationOptions = new KeyRotationOptions();
