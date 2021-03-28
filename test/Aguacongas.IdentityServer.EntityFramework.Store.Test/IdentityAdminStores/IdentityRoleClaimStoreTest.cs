@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test.IdentityAdminStor
         }
 
         [Fact]
-        public async Task CreateAsync_should_throw_on_error()
+        public async Task CreateAsync_should_throw_on_not_found()
         {
             var provider = new ServiceCollection()
                 .AddLogging()
