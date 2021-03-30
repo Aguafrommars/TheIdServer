@@ -48,7 +48,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             var page = await sut.GetAsync(new PageRequest
             {
-                Filter = "Id eq 'test'",
+                Filter = $"{nameof(ProtectResource.Id)} eq 'test'",
                 Skip = 0,
                 Take = 10
             });
@@ -57,7 +57,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Test
 
             page = await sut.GetAsync(new PageRequest
             {
-                Filter = "DisplayName eq 'no-test'",
+                Filter = $"{nameof(ProtectResource.DisplayName)} eq 'no-test'",
+                Skip = 0,
+                Take = 10
+            });
+
+            Assert.Empty(page.Items);
+
+            page = await sut.GetAsync(new PageRequest
+            {
+                Filter = $"{nameof(ProtectResource.CreatedAt)} eq {DateTime.UtcNow.ToString("o")}",
                 Skip = 0,
                 Take = 10
             });
