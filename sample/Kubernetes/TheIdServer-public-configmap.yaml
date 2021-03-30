@@ -12,11 +12,11 @@ data:
   DisableStrictSsl: "true"
   EnableOpenApiDoc: "false"
   IdentityServer__Key__Type: KeysRotation
-  IdentityServer__Key__StorageKind: FileSytem
+  IdentityServer__Key__StorageKind: FileSystem
   IdentityServer__Key__StorageConnectionString: "/usr/local/share/keys/signing"
   IdentityServer__Key__KeyProtectionOptions__KeyProtectionKind: "X509"
   IdentityServer__Key__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
-  DataProtectionOptions__StorageKind: FileSytem
+  DataProtectionOptions__StorageKind: FileSystem
   DataProtectionOptions__StorageConnectionString: "/usr/local/share/keys/dataprotecttion"
   DataProtectionOptions__KeyProtectionOptions__KeyProtectionKind: "X509"
   DataProtectionOptions__KeyProtectionOptions__X509CertificatePath: /usr/local/share/ca-certificates/theidserver.pfx
