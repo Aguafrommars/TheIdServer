@@ -114,18 +114,20 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var definition = await GetEntity(entity.Id).ConfigureAwait(false);
 
+            var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
+            var options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType());
+
             definition.DisplayName = entity.DisplayName;
             definition.StoreClaims = entity.StoreClaims;
             definition.MapDefaultOutboundClaimType = entity.MapDefaultOutboundClaimType;
-            definition.SerializedHandlerType = entity.SerializedHandlerType;
-            definition.SerializedOptions = entity.SerializedOptions;
+            definition.SerializedHandlerType = null;
+            definition.SerializedOptions = null;
+            definition.HandlerType = handlerType;
+            definition.Options = options;
             
             SanetizeCallbackPath(entity, definition.Options);
 
-            definition.HandlerType = null;
-            definition.Options = null;
-
-            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await _manager.UpdateAsync(definition, cancellationToken).ConfigureAwait(false);
 
             if (_providerClient != null)
             {
