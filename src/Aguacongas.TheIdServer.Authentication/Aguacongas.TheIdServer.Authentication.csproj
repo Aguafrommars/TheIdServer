@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.0" />
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
