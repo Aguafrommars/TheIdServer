@@ -122,10 +122,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             
             SanetizeCallbackPath(entity, definition.Options);
 
-            definition.HandlerType = null;
-            definition.Options = null;
-
-            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await _manager.UpdateAsync(definition, cancellationToken).ConfigureAwait(false);
 
             if (_providerClient != null)
             {

@@ -73,6 +73,22 @@
     </div>
 </div>
 <div class="form-group row">
+    <label class="col col-form-label" for="signedOutCallbackPath">
+        @Localizer["signed-out callback path"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="signedOutCallbackPath" Placeholder="/sign-out-callback" @bind-Value="@Model.Options.SignedOutCallbackPath" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="signedOutRedirectUri">
+        @Localizer["signed-out redirect uri"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="signedOutRedirectUri" Placeholder="/" @bind-Value="@Model.Options.SignedOutRedirectUri" />
+    </div>
+</div>
+<div class="form-group row">
     <label class="col col-form-label" for="scope">
         @Localizer["scopes"]
     </label>
