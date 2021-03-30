@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.Models
         EntityFramework,
         Redis,
         AzureStorage,
-        FileSytem,
+        FileSystem,
         Registry,
         RavenDb
     }
