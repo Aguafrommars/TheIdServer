@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
@@ -197,6 +198,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
                             context.RunClaimActions(doc.RootElement);
                         }
+                    };
+                })
+                .AddWsFederation(options =>
+                {
+                    options.Events = new WsFederationEvents
+                    {
+                        OnTicketReceived = OnTicketReceived<TUser>()
                     };
                 });
 

@@ -1,0 +1,94 @@
+﻿@inherits ProviderOptionsBase<WsFederationOptions>
+
+<div class="form-group row">
+    <label class="col col-form-label" for="metadataAddress">
+        @Localizer["metadata address"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="metadataAddress" Placeholder="https://<ADFS FQDN or AAD tenant>/FederationMetadata/2007-06/FederationMetadata.xml" @bind-Value="@Model.Options.MetadataAddress" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="wtrealm">
+        @Localizer["wtrealm "]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="wtrealm" Placeholder="https://<Application ID URI>" @bind-Value="@Model.Options.Wtrealm" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="wreply">
+        @Localizer["wreply "]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="wreply" @bind-Value="@Model.Options.Wreply" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="signOutWreply">
+        @Localizer["sign-out wreply "]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="signOutWreply" @bind-Value="@Model.Options.SignOutWreply" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="signOutScheme">
+        @Localizer["sign-out scheme "]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="signOutScheme" @bind-Value="@Model.Options.SignOutScheme" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="remoteSignOutPath">
+        @Localizer["remote sign-out path "]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="remoteSignOutPath" Placeholder="/sign-out"  @bind-Value="@Model.Options.RemoteSignOutPath" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="requireHttpsMetadata">
+    </label>
+    <div id="require-https" class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="requireHttpsMetadata" Label="@Localizer["require https metadata"]" @bind-Value="@RequireHttpsMetadata" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="saveTokens">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="saveTokens" Label="@Localizer["save tokens"]" @bind-Value="@Model.Options.SaveTokens" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="useTokenLifetime">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="useTokenLifetime" Label="@Localizer["use token lifetime"]" @bind-Value="@Model.Options.UseTokenLifetime" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="skipUnrecognizedRequests">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="skipUnrecognizedRequests" Label="@Localizer["skip unrecognized requests"]" @bind-Value="@Model.Options.SkipUnrecognizedRequests" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="refreshOnIssuerKeyNotFound">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="refreshOnIssuerKeyNotFound" Label="@Localizer["refresh on issuer key not found"]" @bind-Value="@Model.Options.RefreshOnIssuerKeyNotFound" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="allowUnsolicitedLogins">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="allowUnsolicitedLogins" Label="@Localizer["allow unsolicited logins"]" @bind-Value="@Model.Options.AllowUnsolicitedLogins" />
+    </div>
+</div>
+
+
