@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication.RavenDb" Version="4.0.2" />
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication.RavenDb" Version="4.0.3" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
 		<PackageReference Include="Aguacongas.Identity.RavenDb" Version="2.0.0-preview0008" />
 	</ItemGroup>

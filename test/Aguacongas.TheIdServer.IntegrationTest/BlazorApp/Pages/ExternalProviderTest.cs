@@ -212,6 +212,46 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await host.WaitForNextRenderAsync(() => divs.Last().ClickAsync());
         }
 
+        [Fact]
+        public async Task RequiredHttpsMetadata_click_should_revalidate_MetadataAddress()
+        {
+            var providerId = GenerateId();
+            await DbActionAsync<ConfigurationDbContext>(async c =>
+            {
+                await c.Providers.AddAsync(new SchemeDefinition
+                {
+                    Id = providerId,
+                    DisplayName = GenerateId(),
+                    SerializedOptions = "{\"RemoteSignOutPath\":\"/signin-wsfed\",\"AllowUnsolicitedLogins\":false,\"RequireHttpsMetadata\":false,\"UseTokenLifetime\":true,\"Wtrealm\":\"urn:aspnetcorerp\",\"SignOutWreply\":null,\"Wreply\":null,\"SkipUnrecognizedRequests\":false,\"RefreshOnIssuerKeyNotFound\":true,\"MetadataAddress\":\"http://localhost:5001/wsfederation\",\"SignOutScheme\":null,\"SaveTokens\":false}",
+                    SerializedHandlerType = "{\"Name\":\"Microsoft.AspNetCore.Authentication.WsFederation.WsFederationHandler\"}"
+                });
+
+                await c.SaveChangesAsync();
+            });
+
+
+            CreateTestHost("Alice Smith",
+                         SharedConstants.WRITER,
+                         providerId,
+                         out TestHost host,
+                         out RenderedComponent<App> component,
+                         out MockHttpMessageHandler mockHttp);
+
+            WaitForLoaded(host, component);
+
+            var input = WaitForNode(host, component, "#require-https input");
+
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(true));
+
+            Assert.NotNull(component.Find("li.validation-message"));
+
+            input = WaitForNode(host, component, "#require-https input");
+
+            await host.WaitForNextRenderAsync(() => input.ChangeAsync(false));
+
+            Assert.Null(component.Find("li.validation-message"));
+        }
+
         private async Task<string> CreateProvider()
         {
             var providerId = GenerateId();
