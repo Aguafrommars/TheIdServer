@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         [Parameter]
         public Entity.Client Model { get; set; }
-
+        
         protected override void OnInitialized()
         {
             base.OnInitialized();
             Collection = Collection.OrderBy(u => u.Uri).ToList();
         }
-
         protected override void OnStort(SortEventArgs arg)
         {
             if (arg.OrderBy.StartsWith(nameof(Entity.ClientUri.Uri)))

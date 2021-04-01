@@ -48,27 +48,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         {
             _idPageRequest.Filter = $"contains({nameof(entity.IdentityResource.Id)},'{term}') or contains({nameof(entity.IdentityResource.DisplayName)},'{term}')";
             _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Id)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
-            var identityResponse = _identityStore.GetAsync(_idPageRequest);
-            var apiScopeResponse = _apiScopeStore.GetAsync(_scopeRequest);
+            var identityResponse = await _identityStore.GetAsync(_idPageRequest).ConfigureAwait(false);
+            var apiScopeResponse = await _apiScopeStore.GetAsync(_scopeRequest).ConfigureAwait(false);
 
-            await Task.WhenAll(identityResponse, apiScopeResponse)
-                .ConfigureAwait(false);
             var culture = CultureInfo.CurrentCulture.Name;
-            _filterScopes = identityResponse.Result.Items.Select(i => new Scope
-            {
-                Value = i.Id,
-                Description = i.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
-                    ?? i.DisplayName,
-                IsIdentity = true
-            })
-                .Union(apiScopeResponse.Result.Items.Select(s => new Scope
+            _filterScopes = identityResponse.Items.Select(i => new Scope
+                {
+                    Value = i.Id,
+                    Description = i.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
+                        ?? i.DisplayName,
+                    IsIdentity = true
+                })
+                .Union(apiScopeResponse.Items.Select(s => new Scope
                 {
                     Value = s.Id,
                     Description = s.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
                         ?? s.DisplayName
                 }))
                 .Distinct(_comparer)
-                .Where(s => !Model.AllowedScopes.Any(cs => cs.Id != null && s.Value == cs.Scope))
+                .Where(s => Model.AllowedScopes != null && !Model.AllowedScopes.Any(cs => cs.Id != null && s.Value == cs.Scope))
                 .Take(5)
                 .OrderBy(r => r.Value);
 

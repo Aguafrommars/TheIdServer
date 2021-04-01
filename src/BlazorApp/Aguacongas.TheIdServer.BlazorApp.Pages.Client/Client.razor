@@ -156,14 +156,7 @@ else
                             <ClientConsents Model="@Model" />
                         </div>
                     </div>
-                    <div id="urls" class="card mb-3">
-                        <div class="card-header">
-                            <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />
-                        </div>
-                        <div class="card-body">
-                            <ClientUris Model="@Model" Collection="@Model.RedirectUris" />
-                        </div>
-                    </div>
+                    <ClientUrisPanel Model="@Model" />
                     <div id="providers" class="card mb-3">
                         <div class="card-header">
                             <div class="row">
