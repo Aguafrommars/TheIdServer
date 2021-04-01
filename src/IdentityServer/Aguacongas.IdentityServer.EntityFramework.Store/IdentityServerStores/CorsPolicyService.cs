@@ -10,7 +10,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
     /// <summary>
     /// <see cref="ICorsPolicyService"/> implementation
     /// </summary>
-    /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
+    /// <seealso cref="ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
         private readonly ConfigurationDbContext _context;

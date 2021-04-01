@@ -201,6 +201,14 @@ namespace Aguacongas.IdentityServer.Store
 
             public override TSource Visit(ConstantNode nodeIn)
             {
+                if (nodeIn.Value is DateTime || nodeIn.Value is DateTimeOffset)
+                {
+                    Builder.Append('\'');
+                    Builder.Append(nodeIn.LiteralText);
+                    Builder.Append('\'');
+                    return null;
+                }
+
                 Builder.Append(nodeIn.LiteralText);
                 return null;
             }
@@ -261,6 +269,7 @@ namespace Aguacongas.IdentityServer.Store
                     Parameters.Add($"'*{nodeIn.Value}*'");
                     return null;
                 }
+
                 Parameters.Add(nodeIn.LiteralText);
                 return null;
             }
