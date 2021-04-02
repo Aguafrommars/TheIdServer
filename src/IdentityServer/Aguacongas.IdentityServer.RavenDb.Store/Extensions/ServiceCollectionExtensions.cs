@@ -68,7 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         Database = dataBase
                     });
                     var adv = session.Advanced;
-                    adv.UseOptimisticConcurrency = true;
+                    adv.UseOptimisticConcurrency = false;
                     adv.MaxNumberOfRequestsPerSession = int.MaxValue;
                     return new ScopedAsynDocumentcSession(session);
                 })

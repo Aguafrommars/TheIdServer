@@ -139,7 +139,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             {
                 auditable.ModifiedAt = DateTime.UtcNow;
             }
-            var properties = typeof(TEntity).GetProperties();
+            var properties = typeof(TEntity).GetProperties()
+                .Where(p => !p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)));
             foreach (var property in properties)
             {
                 property.SetValue(storedEntity, property.GetValue(entity));
