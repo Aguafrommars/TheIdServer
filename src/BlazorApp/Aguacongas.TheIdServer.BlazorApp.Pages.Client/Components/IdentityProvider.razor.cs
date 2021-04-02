@@ -41,13 +41,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                 .ConfigureAwait(false);
 
             _filteredProviders = response.Items;
-            StateHasChanged();
             return null;
         }
 
         protected override void SetValue(string inputValue)
         {
-            _providerName = _filteredProviders?.FirstOrDefault(p => p.Id == inputValue)?.DisplayName ?? inputValue;
+            var selected = _filteredProviders?.FirstOrDefault(p => p.Id == inputValue);
+            _providerName = selected?.DisplayName ?? inputValue;
+            Entity.Provider = selected?.Id ?? inputValue;
         }
 
         private async Task<string> GetProviderName(string id)
