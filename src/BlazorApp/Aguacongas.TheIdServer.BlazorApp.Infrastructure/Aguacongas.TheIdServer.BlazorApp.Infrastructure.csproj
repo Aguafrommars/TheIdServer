@@ -32,5 +32,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\IdentityServer\Aguacongas.IdentityServer.Admin.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+    <None Include="package-icon.png" Pack="true" PackagePath=""/>
+	</ItemGroup>
 
 </Project>
