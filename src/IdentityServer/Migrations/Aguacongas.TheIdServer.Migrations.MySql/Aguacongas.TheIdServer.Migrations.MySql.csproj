@@ -11,7 +11,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;mysql</PackageTags>
 		<Description>Contains db contexts migrations code for MySql.</Description>
-		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
+		<PackageIcon>package-icon.png</PackageIcon>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
@@ -33,6 +33,9 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+    <None Include="package-icon.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 
 </Project>
