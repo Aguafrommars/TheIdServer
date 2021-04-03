@@ -11,7 +11,7 @@
       <PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
       <Description>TheIdServer administration application external provider user and components.</Description>
       <DebugType>Full</DebugType>
-      <PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
+      <PackageIcon>package-icon.png</PackageIcon>
       <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 

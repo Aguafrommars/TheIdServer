@@ -10,7 +10,7 @@
 	  <RepositoryType>git</RepositoryType>
 	  <PackageTags>theidserver;aspnetcore;identity;security</PackageTags>
 	  <Description>TheIdServer management application.</Description>
-	  <PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
+	  <PackageIcon>package-icon.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

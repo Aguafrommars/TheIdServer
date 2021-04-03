@@ -12,7 +12,7 @@
 		<Description>TheIdServer administration application models, services, validators and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
-		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
+		<PackageIcon>package-icon.png</PackageIcon>
 		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
