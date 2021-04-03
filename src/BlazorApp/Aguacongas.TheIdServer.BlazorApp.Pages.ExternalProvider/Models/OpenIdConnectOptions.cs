@@ -17,6 +17,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 
         public string RemoteSignOutPath { get; set; }
 
+        public string SignedOutCallbackPath { get; set; }
+
+        public string SignedOutRedirectUri { get; set; }
+
         public ICollection<string> Scope { get; set; }
 
         public string Prompt { get; set; }

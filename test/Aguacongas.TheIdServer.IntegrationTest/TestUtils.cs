@@ -77,8 +77,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     });
 
                     using var scope = builder.ApplicationServices.CreateScope();
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                    if (!dbContext.Providers.Any(p => p.Scheme == "Google"))
+                    var dbContext = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+                    if (dbContext != null && !dbContext.Providers.Any(p => p.Scheme == "Google"))
                     {
                         dbContext.Providers.Add(new SchemeDefinition
                         {

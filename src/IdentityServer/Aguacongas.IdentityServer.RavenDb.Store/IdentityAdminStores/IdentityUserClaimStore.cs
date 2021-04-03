@@ -1,32 +1,30 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.RavenDb.Store
 {
     public class IdentityUserClaimStore<TUser> : IAdminStore<Entity.UserClaim>
         where TUser : IdentityUser, new()
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IdentityDbContext<TUser> _context;
+        private readonly IAsyncDocumentSession _session;
         private readonly ILogger<IdentityUserClaimStore<TUser>> _logger;
         
-        public IdentityUserClaimStore(UserManager<TUser> userManager, 
-            IdentityDbContext<TUser> context,
+        public IdentityUserClaimStore(UserManager<TUser> userManager,
+            ScopedAsynDocumentcSession session,
             ILogger<IdentityUserClaimStore<TUser>> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -34,12 +32,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             var user = await GetUserAsync(entity.UserId)
                 .ConfigureAwait(false);
+            var claimList = await _userManager.GetClaimsAsync(user).ConfigureAwait(false);
             var claim = entity.ToUserClaim().ToClaim();
             var result = await _userManager.AddClaimAsync(user, claim)
                 .ConfigureAwait(false);
             if (result.Succeeded)
             {
-                entity.Id = Guid.NewGuid().ToString();
+                entity.Id = $"{user.Id}@{claimList.Count}";
                 _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
                 return entity;
             }
@@ -84,7 +83,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var claim = await GetClaimAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             if (claim == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(UserClaim).Name} at id {entity.Id} is not found");
+                throw new InvalidOperationException($"Entity type {typeof(UserClaim).Name} at id {entity.Id} is not found");
             }
 
             var user = await GetUserAsync(entity.UserId)
@@ -118,13 +117,18 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<Entity.UserClaim>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
-            var odataQuery = _context.UserClaims.AsNoTracking().GetODataQuery(request);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var rql = request.ToRQL<UserClaim, int>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(UserClaim)), i => i.Id);
+            var pageQuery = _session.Advanced.AsyncRawQuery<UserClaim>(rql);
+            if (request.Take.HasValue)
+            {
+                pageQuery = pageQuery.GetPage(request);
+            }
 
-            var page = odataQuery.GetPage(request);
+            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var countQuery = _session.Advanced.AsyncRawQuery<UserClaim>(rql);
+            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
             return new PageResponse<Entity.UserClaim>
             {
@@ -145,10 +149,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             return user;
         }
 
-        private async Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
+        private Task<UserClaim> GetClaimAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.UserClaims.FindAsync(new object[] { int.Parse(id) }, cancellationToken)
-                            .ConfigureAwait(false);
+            return _session.LoadAsync<UserClaim>($"userclaim/{id}", cancellationToken);
         }
 
         private static void ChechResult(IdentityResult result)

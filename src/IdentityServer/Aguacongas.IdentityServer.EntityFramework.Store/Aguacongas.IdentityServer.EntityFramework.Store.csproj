@@ -9,7 +9,7 @@
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;administration</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
 		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
 	</PropertyGroup>
 
@@ -26,11 +26,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="4.0.0" />
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="4.0.3" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

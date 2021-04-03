@@ -1,0 +1,8 @@
+﻿<div id="urls" class="card mb-3">
+    <div class="card-header">
+        <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />
+    </div>
+    <div class="card-body">
+        <ClientUris Model="@Model" Collection="@Model.RedirectUris" />
+    </div>
+</div>

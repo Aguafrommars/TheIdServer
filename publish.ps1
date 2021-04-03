@@ -12,12 +12,12 @@ Get-ChildItem -Path src -rec `
     }
   }
 
-dotnet msbuild src\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj -t:Publish -p:Configuration=Release -p:OutputPath=$path\artifacts\Aguacongas.TheIdServer -p:Version=$env:Version -p:FileVersion=$fileversion
+dotnet msbuild src\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj -t:Publish -p:Configuration=Release -p:OutputPath=$path\artifacts\Aguacongas.TheIdServer -p:Version=$env:Version -p:FileVersion=$fileversion -noConsoleLogger -nr:false
 if ($LASTEXITCODE -ne 0) {
     throw "publis failed src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj"
 }
 
-dotnet msbuild src\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj -t:Publish -p:Configuration=Release -p:OutputPath=$path\artifacts\Aguacongas.TheIdServer.BlazorApp -p:Version=$env:Version -p:FileVersion=$fileversion
+dotnet msbuild src\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj -t:Publish -p:Configuration=Release -p:OutputPath=$path\artifacts\Aguacongas.TheIdServer.BlazorApp -p:Version=$env:Version -p:FileVersion=$fileversion -noConsoleLogger -nr:false
 if ($LASTEXITCODE -ne 0) {
     throw "publish failed src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 }

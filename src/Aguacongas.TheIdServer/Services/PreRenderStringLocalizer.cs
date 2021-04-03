@@ -1,7 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.Localization;
@@ -11,7 +9,7 @@ namespace Aguacongas.TheIdServer.Services
 {
     public class PreRenderStringLocalizer : StringLocalizer
     {
-        public PreRenderStringLocalizer(IAdminStore<LocalizedResource> store, IReadOnlyCultureStore cultureStore, ILogger<StringLocalizer> logger) : base(store, cultureStore, logger)
+        public PreRenderStringLocalizer(IReadOnlyLocalizedResourceStore store, IReadOnlyCultureStore cultureStore, ILogger<StringLocalizer> logger) : base(store, cultureStore, logger)
         {
             GetSupportedCulturesAsync().GetAwaiter().GetResult();
         }

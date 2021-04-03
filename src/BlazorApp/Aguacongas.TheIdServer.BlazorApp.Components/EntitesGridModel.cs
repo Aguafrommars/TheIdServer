@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
         {
-            if (entity is T)
+            if (entity is T && (kind == ModificationKind.Add || kind == ModificationKind.Delete))
             {
                 StateHasChanged();
             }

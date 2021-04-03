@@ -10,5 +10,6 @@ namespace Aguacongas.TheIdServer.Models
         MySql,
         Oracle,
         PostgreSQL,
+        RavenDb
     }
 }

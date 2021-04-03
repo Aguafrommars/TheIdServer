@@ -23,7 +23,7 @@ NuGet packages composing the application are available on [nuget.org](https://ww
 
 * **Aguacongas.TheIdServer.BlazorApp.Infrastructure** contains application models, services, validators and extensions
 * **Aguacongas.TheIdServer.BlazorApp.Components** contains application components
-* **Aguacongas.TheIdServer.BlazorApp.Pages** contains application pages
+* **Aguacongas.TheIdServer.BlazorApp.Pages.*** contains application pages
 
 ## Configuration
 

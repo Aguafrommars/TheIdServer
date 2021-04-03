@@ -9,7 +9,7 @@
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;administration</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
 		<PackageLicenseUrl>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicenseUrl>
 	</PropertyGroup>
 
@@ -26,8 +26,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel" Version="5.0.1" />
-		<PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
+		<PackageReference Include="IdentityModel" Version="5.1.0" />
+		<PackageReference Include="IdentityServer4.Storage" Version="4.1.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
 	</ItemGroup>
 

@@ -31,13 +31,11 @@ else
                     <small>@scope.Value</small>
                     @if (scope.IsIdentity)
                     {
-                        <small class="text-muted">@Localizer["identity"]</small>
+                        <small class="text-muted">&nbsp;@Localizer["identity"]</small>
                     }
                     else
                     {
-                        <small class="text-muted">
-                            @Localizer["api"]
-                        </small>
+                        <small class="text-muted">&nbsp;@Localizer["api"]</small>
                     }
                     <div class="text-muted font-italic">
                         <small>@scope.Description</small>

@@ -11,7 +11,7 @@
 		<PackageTags>theidserver;aspnetcore;authentication;security</PackageTags>
 		<Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
 		<DebugType>Full</DebugType>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
 		<CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.0" />
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

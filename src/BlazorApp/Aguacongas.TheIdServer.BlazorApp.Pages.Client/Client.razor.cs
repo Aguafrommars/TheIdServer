@@ -127,9 +127,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
                 Type = "SharedSecret"
             };
 
-        private static Entity.ClientUri CreateRedirectUri()
-            => new();
-
         private static Entity.ClientClaim CreateClaim()
             => new();
 

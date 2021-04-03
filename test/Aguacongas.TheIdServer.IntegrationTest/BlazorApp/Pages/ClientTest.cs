@@ -1,13 +1,16 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
@@ -155,7 +158,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(form);
 
             await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-        }
+        }        
 
         [Theory]
         [InlineData("0.01:00:00")]

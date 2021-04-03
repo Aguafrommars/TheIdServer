@@ -11,7 +11,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;oracle</PackageTags>
 		<Description>Contains db contexts migrations code for Oracle.</Description>
-		<PackageIconUrl>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIconUrl>
+		<PackageIcon>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/package-icon.png</PackageIcon>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
@@ -20,8 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1204" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.3" />
+		<PackageReference Include="Devart.Data.Oracle.EFCore" Version="9.14.1228" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

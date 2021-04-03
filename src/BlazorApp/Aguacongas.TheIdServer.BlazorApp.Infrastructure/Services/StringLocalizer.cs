@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 {
     public class StringLocalizer : ISharedStringLocalizerAsync
     {
-        private readonly IAdminStore<LocalizedResource> _store;
+        private readonly IReadOnlyLocalizedResourceStore _store;
         private readonly IReadOnlyCultureStore _cultureStore;
         private IEnumerable<LocalizedResource> _resources;
         private IEnumerable<string> _cultureList;
@@ -28,7 +28,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
         public event Action ResourceReady;
 
-        public StringLocalizer(IAdminStore<LocalizedResource> store,
+        public StringLocalizer(IReadOnlyLocalizedResourceStore store,
             IReadOnlyCultureStore cultureStore,
             ILogger<StringLocalizer> logger)
         {
@@ -219,7 +219,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
     [SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "Create an instance by T")]
     public class SharedStringLocalizer<T> : StringLocalizer
     {
-        public SharedStringLocalizer(IAdminStore<LocalizedResource> store,
+        public SharedStringLocalizer(IReadOnlyLocalizedResourceStore store,
             IReadOnlyCultureStore cultureStore, 
             ILogger<SharedStringLocalizer<T>> logger)
             : base(store, cultureStore, logger)

@@ -268,7 +268,7 @@ namespace Aguacongas.TheIdServer.Test
         {
             var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
             {
-                ["DataProtectionOptions:StorageKind"] = StorageKind.FileSytem.ToString(),
+                ["DataProtectionOptions:StorageKind"] = StorageKind.FileSystem.ToString(),
                 ["DataProtectionOptions:StorageConnectionString"] = @"C:\test"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
@@ -354,7 +354,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 ["DataProtectionOptions:StorageKind"] = StorageKind.None.ToString(),
                 ["DataProtectionOptions:KeyProtectionOptions:KeyProtectionKind"] = KeyProtectionKind.AzureKeyVault.ToString(),
-                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "https://test",
+                ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultKeyId"] = "http://test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientId"] = "test",
                 ["DataProtectionOptions:KeyProtectionOptions:AzureKeyVaultClientSecret"] = "test",
             }).Build();
@@ -639,7 +639,7 @@ namespace Aguacongas.TheIdServer.Test
             var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>
             {
                 ["IdentityServer:Key:Type"] = KeyKinds.KeysRotation.ToString(),
-                ["IdentityServer:Key:StorageKind"] = StorageKind.FileSytem.ToString(),
+                ["IdentityServer:Key:StorageKind"] = StorageKind.FileSystem.ToString(),
                 ["IdentityServer:Key:StorageConnectionString"] = @"C:\test"
             }).Build();
             var environementMock = new Mock<IWebHostEnvironment>();
