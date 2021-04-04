@@ -16,7 +16,8 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
         {
             CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock,
                 out Mock<IAdminStore<IdentityResource>> identityStoreMock,
-                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock, 
+                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+                out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
             await sut.GetAllResourcesAsync().ConfigureAwait(false);
@@ -34,7 +35,8 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
         {
             CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock,
                 out Mock<IAdminStore<IdentityResource>> identityStoreMock,
-                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock, 
+                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+                out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
             await sut.FindIdentityResourcesByScopeNameAsync(new string[] { "test" }).ConfigureAwait(false);
@@ -48,13 +50,29 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
         {
             CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock,
                 out Mock<IAdminStore<IdentityResource>> identityStoreMock,
-                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock, 
+                out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+                out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
+
+            apiApiScopeStoreMock.Setup(m => m.GetAsync(It.Is<PageRequest>(p =>
+                p.Filter == $"{nameof(ApiScope.Id)} eq 'test'"), default)).ReturnsAsync(new PageResponse<ApiApiScope>
+                {
+                    Count = 1,
+                    Items = new[]
+                    {
+                        new ApiApiScope
+                        {
+                            ApiId = "test"
+                        }
+                    }
+                });
+
+            apiStoreMock.Setup(m => m.GetAsync("test", It.IsAny<GetRequest>(), default)).ReturnsAsync(new ProtectResource());
 
             await sut.FindApiResourcesByScopeNameAsync(new string[] { "test" }).ConfigureAwait(false);
 
-            apiStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
-                p.Filter == $"{nameof(ProtectResource.ApiScopes)}/any(s:s/{nameof(ApiScope.Id)} eq 'test')"), default));
+            apiApiScopeStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
+                p.Filter == $"{nameof(ApiScope.Id)} eq 'test'"), default));
         }
 
         [Fact]
@@ -63,6 +81,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock,
                 out Mock<IAdminStore<IdentityResource>> identityStoreMock,
                 out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+                out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
             await sut.FindApiResourcesByNameAsync(new string[] { "test" }).ConfigureAwait(false);
@@ -77,6 +96,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock,
                 out Mock<IAdminStore<IdentityResource>> identityStoreMock,
                 out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+                out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
             await sut.FindApiScopesByNameAsync(new string[] { "test" }).ConfigureAwait(false);
@@ -87,13 +107,16 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
         private static void CreateSut(out Mock<IAdminStore<ProtectResource>> apiStoreMock, 
             out Mock<IAdminStore<IdentityResource>> identityStoreMock, 
-            out Mock<IAdminStore<ApiScope>> apiScopeStoreMock, 
+            out Mock<IAdminStore<ApiScope>> apiScopeStoreMock,
+            out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
             out ResourceStore sut)
         {
             apiStoreMock = new Mock<IAdminStore<ProtectResource>>();
             identityStoreMock = new Mock<IAdminStore<IdentityResource>>();
             apiScopeStoreMock = new Mock<IAdminStore<ApiScope>>();
-            sut = new ResourceStore(apiStoreMock.Object, identityStoreMock.Object, apiScopeStoreMock.Object);
+            apiApiScopeStoreMock = new Mock<IAdminStore<ApiApiScope>>();
+
+            sut = new ResourceStore(apiStoreMock.Object, identityStoreMock.Object, apiScopeStoreMock.Object, apiApiScopeStoreMock.Object);
 
             apiStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
                 .ReturnsAsync(new PageResponse<ProtectResource>
