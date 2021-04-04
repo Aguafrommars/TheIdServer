@@ -169,6 +169,7 @@ And **RavenDbOptions** to define the RavenDb options.
   "StorageKind": "RavenDb"
 }
 ```
+> The server support RavenDb 4.1 and above. 
 
 ### Using the API
 
