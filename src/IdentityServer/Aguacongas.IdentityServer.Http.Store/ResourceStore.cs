@@ -21,12 +21,17 @@ namespace Aguacongas.IdentityServer.Http.Store
         private readonly IAdminStore<ProtectResource> _apiStore;
         private readonly IAdminStore<IdentityResource> _identityStore;
         private readonly IAdminStore<ApiScope> _apiScopeStore;
+        private readonly IAdminStore<ApiApiScope> _apiApiScopeStore;
 
-        public ResourceStore(IAdminStore<ProtectResource> apiStore, IAdminStore<IdentityResource> identityStore, IAdminStore<ApiScope> apiScopeStore)
+        public ResourceStore(IAdminStore<ProtectResource> apiStore,
+            IAdminStore<IdentityResource> identityStore,
+            IAdminStore<ApiScope> apiScopeStore,
+            IAdminStore<ApiApiScope> apiApiScopeStore)
         {
             _apiStore = apiStore ?? throw new ArgumentNullException(nameof(apiStore));
             _identityStore = identityStore ?? throw new ArgumentNullException(nameof(identityStore));
             _apiScopeStore = apiScopeStore ?? throw new ArgumentNullException(nameof(apiScopeStore));
+            _apiApiScopeStore = apiApiScopeStore ?? throw new ArgumentNullException(nameof(apiApiScopeStore));
         }
 
         /// <summary>
@@ -60,21 +65,33 @@ namespace Aguacongas.IdentityServer.Http.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
-            var taskList = new List<Task<PageResponse<ProtectResource>>>(scopeNames.Count());
+            var taskList = new List<Task<PageResponse<ApiApiScope>>>(scopeNames.Count());
             foreach(var name in scopeNames)
             {
-                taskList.Add(_apiStore.GetAsync(new PageRequest
+                taskList.Add(_apiApiScopeStore.GetAsync(new PageRequest
                 {
                     Take = null,
-                    Filter = $"{nameof(ProtectResource.ApiScopes)}/any(s:s/{nameof(ApiScope.Id)} eq '{name}')",
+                    Filter = $"{nameof(ApiScope.Id)} eq '{name}'"
+                }));
+            }
+            await Task.WhenAll(taskList)
+                .ConfigureAwait(false);
+
+            var apiList = taskList.SelectMany(r => r.Result.Items.Select(a => a.ApiId));
+
+            var apiTaslList = new List<Task<ProtectResource>>(scopeNames.Count());
+            foreach (var id in apiList)
+            {
+                apiTaslList.Add(_apiStore.GetAsync(id, new GetRequest
+                {
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
                 }));
             }
             await Task.WhenAll(taskList)
                 .ConfigureAwait(false);
 
-            return taskList
-                .SelectMany(t => t.Result.Items.Select(a => a.ToApi()));
+            return apiTaslList
+                .Select(t => t.Result.ToApi());
         }
 
         /// <summary>
