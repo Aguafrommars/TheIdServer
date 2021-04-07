@@ -75,6 +75,14 @@ For *Redis* storage kind, the **StorageConnectionString** defines the redis conn
 
 For *EntityFramework* storage king, keys are store in the **DataProtectionKeys** table of TheIdServer database
 
+### RavenDb
+
+```js
+  "StorageKind": "RavenDb"
+```
+
+For *RavenDb* storage king, keys are store in the **DataProtectionKeys** document of RavenDb database
+
 ### Registry
 Only applies to Windows deployments.
 

@@ -86,6 +86,14 @@ For *Redis* storage kind, the **StorageConnectionString** defines the redis conn
 
 For *EntityFramework* storage king, keys are store in the **KeyRotationKeys** table of TheIdServer database
 
+### RavenDb
+
+```js
+  "StorageKind": "RavenDb"
+```
+
+For *RavenDb* storage king, keys are store in the **KeyRotationKeys** documents of RavenDb database
+
 ## Key protection
 
 *KeyProtectionOptions* controls [Key encryption at rest](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-encryption-at-rest?view=aspnetcore-3.1) configuration.  

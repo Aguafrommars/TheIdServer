@@ -48,6 +48,7 @@ Choose your favorite:
 
 ### Server
 
+* [Large chooice of database](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Aguacongas.TheIdServer/README.md#using-entity-framework-core)
 * [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
 * [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#using-the-api)
 * [Docker support](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#from-docker)
