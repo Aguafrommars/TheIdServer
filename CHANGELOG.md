@@ -1,3 +1,36 @@
+# [2.3.0](https://github.com/Aguafrommars/TheIdServer/compare/2.2.0...2.3.0) (2021-04-07)
+
+
+### Bug Fixes
+
+* add role store test ([caeb0a3](https://github.com/Aguafrommars/TheIdServer/commit/caeb0a3dbbe9d3c7add341b64334960b88cac64b))
+* cannot add localized resource ([fd5d9f5](https://github.com/Aguafrommars/TheIdServer/commit/fd5d9f57adcff0c1d82c3a3bc7fd319288c45409))
+* cannot set client IDP restriction ([9835e82](https://github.com/Aguafrommars/TheIdServer/commit/9835e8200bebe7300a8ebeac1d4a82d6e18c026d))
+* client settings lost on save in UI ([5b83178](https://github.com/Aguafrommars/TheIdServer/commit/5b83178936d9bd11741ea2167cd856bad6922162)), closes [#407](https://github.com/Aguafrommars/TheIdServer/issues/407)
+* request on datetime ([ff15d71](https://github.com/Aguafrommars/TheIdServer/commit/ff15d71efc840d088f4aef2fa66b2aec4f9e459e)), closes [#399](https://github.com/Aguafrommars/TheIdServer/issues/399)
+* set valid audience ([d1bd88a](https://github.com/Aguafrommars/TheIdServer/commit/d1bd88a51f24cae08158ccd838dbb66fb1daca57)), closes [#388](https://github.com/Aguafrommars/TheIdServer/issues/388)
+* storage kind filesystem typo ([8350b39](https://github.com/Aguafrommars/TheIdServer/commit/8350b399620d176d3d84d730f63e787f2466fed5)), closes [#397](https://github.com/Aguafrommars/TheIdServer/issues/397)
+* **ravendb:** update entity remove navigation props ([6a12d69](https://github.com/Aguafrommars/TheIdServer/commit/6a12d69a934090f2d1662f9cdafcbccc2e8c9339)), closes [#407](https://github.com/Aguafrommars/TheIdServer/issues/407)
+* update packages ([269e31d](https://github.com/Aguafrommars/TheIdServer/commit/269e31d8d117886bc6dd87e744769af8dd47b838))
+* update packages ([d9f2cb0](https://github.com/Aguafrommars/TheIdServer/commit/d9f2cb04470b6468699080cd6443c4402910afb3))
+* update packages ([721a47b](https://github.com/Aguafrommars/TheIdServer/commit/721a47bbef9fe7a076136ad7b2249de724628ae4))
+* update packages ([4f78aae](https://github.com/Aguafrommars/TheIdServer/commit/4f78aaee4fcc3fd8979fe791299f4b8ecc0060e9))
+* update packages ([b7f8c8c](https://github.com/Aguafrommars/TheIdServer/commit/b7f8c8ca5e4bf6bdaf511512fb126cf9c39a73ef))
+* update packages ([de160ce](https://github.com/Aguafrommars/TheIdServer/commit/de160cebe9c9ece5852fcd1e05e52d251e2c0141))
+* update packages ([aff1c9f](https://github.com/Aguafrommars/TheIdServer/commit/aff1c9f7debf2dae49689f588e2c87b5c070b70c))
+* update packages ([3d4df84](https://github.com/Aguafrommars/TheIdServer/commit/3d4df84d0f347068f9c9ee8ecee752926f08476e))
+* update packages ([cef74c4](https://github.com/Aguafrommars/TheIdServer/commit/cef74c4f9fc3c458dc70a7dc3ddde979f5fed4f3))
+* update packages ([23254cc](https://github.com/Aguafrommars/TheIdServer/commit/23254cc89f532f588664edf8a1377961eacd3b06))
+* update packages ([86127c0](https://github.com/Aguafrommars/TheIdServer/commit/86127c0a820c8745edb55d85ef40cba84efb1e4c))
+* update packages ([f94b3dc](https://github.com/Aguafrommars/TheIdServer/commit/f94b3dc5b9b6b44a6828b540375cd7f0b61684ba))
+* update packages ([47ab913](https://github.com/Aguafrommars/TheIdServer/commit/47ab9130e4ec8ecad0a6b3118bd85ae71f30808b))
+
+
+### Features
+
+* ravendb ([c050afa](https://github.com/Aguafrommars/TheIdServer/commit/c050afaf9ca069ab04983b0eec8e19cb886915eb))
+* wsfederation provider ([0295b1f](https://github.com/Aguafrommars/TheIdServer/commit/0295b1f2b2f912a4a306ebe707b0e0d294e3e130)), closes [#403](https://github.com/Aguafrommars/TheIdServer/issues/403)
+
 # [2.3.0](https://github.com/Aguafrommars/TheIdServer/compare/2.2.0...2.3.0) (2021-04-03)
 
 
