@@ -32,8 +32,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.5" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,6 +79,6 @@
 		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Users.dll" />
 	</ItemGroup>
 	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath=""/>
+    <None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 </Project>
