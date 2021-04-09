@@ -7,15 +7,15 @@ namespace FluentValidation
 {
     public static class RuleBuilderExentsions
     {
-        public static IRuleBuilderOptions<TItem, TProperty> IsUnique<TItem, TProperty>(this IRuleBuilder<TItem, TProperty> ruleBuilder, IEnumerable<TItem> items)
-            where TItem : class
+        public static IRuleBuilderOptions<T, string> IsUnique<T>(this IRuleBuilder<T, string> ruleBuilder, IEnumerable<T> items)
+            where T : class
         {
-            return ruleBuilder.SetValidator(new UniqueValidator<TItem>(items));
+            return ruleBuilder.SetValidator(new UniqueValidator<T>(items));
         }
 
         public static IRuleBuilderOptions<T, string> Uri<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
-            return ruleBuilder.SetValidator(new UriValidator());
+            return ruleBuilder.SetValidator(new UriValidator<T>());
         }
 
     }

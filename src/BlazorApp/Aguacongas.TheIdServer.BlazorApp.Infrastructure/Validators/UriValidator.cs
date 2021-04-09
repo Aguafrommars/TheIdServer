@@ -1,22 +1,22 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using FluentValidation;
 using FluentValidation.Validators;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
-    public class UriValidator : PropertyValidator
+    public class UriValidator<T> : PropertyValidator<T, string>
     {
+        [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "Fine like this.")]
         private static readonly Regex _urlRegex = new Regex("^(http|https)://.+");
-        public UriValidator() : base()
-        {
-            
-        }
 
-        protected override string GetDefaultMessageTemplate() => "{PropertyName} is not a valid uri.";
-        protected override bool IsValid(PropertyValidatorContext context)
+        public override string Name => $"UriValidatorOf{typeof(T).Name}";
+
+        protected override string GetDefaultMessageTemplate(string errorCode) => "{PropertyName} is not a valid uri.";
+        public override bool IsValid(ValidationContext<T> context, string value)
         {
-            var value = context.PropertyValue as string;
             if (!string.IsNullOrEmpty(value))
             {
                 return _urlRegex.IsMatch(value);
