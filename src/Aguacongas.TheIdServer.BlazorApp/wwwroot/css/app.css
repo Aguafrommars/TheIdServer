@@ -40,7 +40,6 @@ span.input-group-text.oi {
 
         .main .top-row > a, .main .top-row .btn-link {
             white-space: nowrap;
-            margin-left: 1.5rem;
         }
 
 .sidebar .top-row {
@@ -206,6 +205,8 @@ span.input-group-text.oi {
     .navbar-toggler {
         display: none;
     }
+
+
 
     .sidebar {
         height: 100vh;
