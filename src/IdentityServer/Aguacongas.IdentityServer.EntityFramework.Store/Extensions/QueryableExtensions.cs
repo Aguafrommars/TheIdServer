@@ -18,6 +18,7 @@ namespace Microsoft.EntityFrameworkCore
                 {
                     query = query.Include(path.Trim().Replace('/', '.'));
                 }
+                query = query.AsSingleQuery();
             }
 
             return query;
@@ -42,10 +43,14 @@ namespace Microsoft.EntityFrameworkCore
         }
 
         public static IQueryable<T> GetPage<T>(this ODataQuery<T> odataQuery, PageRequest request) where T : class
-        {            
-            var page = odataQuery.Skip(request.Skip ?? 0)
-                .Take(request.Take.Value);
+        {
+            var page = odataQuery.Skip(request.Skip ?? 0);
 
+            if (request.Take.HasValue)
+            {
+                page = page.Take(request.Take.Value);
+            }
+                
             return page;
         }
     }

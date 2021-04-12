@@ -1,7 +1,7 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using IdentityServer4.Stores.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,13 +16,11 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
         public void Constructor_should_validate_parameters()
         {
             var builder = new ServiceCollection()
+                .AddLogging()
                 .AddOperationalEntityFrameworkStores(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
                 .BuildServiceProvider();
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(builder.GetRequiredService<OperationalDbContext>(), null, null));
-            Assert.Throws<ArgumentNullException>(() => 
-                new DeviceFlowStore(builder.GetRequiredService<OperationalDbContext>(),
-                builder.GetRequiredService<IPersistentGrantSerializer>(), null));
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(null, null));
+            Assert.Throws<ArgumentNullException>(() => new DeviceFlowStore(builder.GetRequiredService<IAdminStore<DeviceCode>>(), null));
         }
 
         [Fact]

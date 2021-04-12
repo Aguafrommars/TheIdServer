@@ -81,7 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ApiScopeLocalizedResource>, ApiScopeLocalizedResourceStore>()
                 .AddTransient<IAdminStore<Entity.ApiScopeProperty>, ApiScopePropertyStore>()
                 .AddTransient<IAdminStore<Entity.ApiSecret>, ApiSecretStore>()
-                .AddTransient<IAdminStore<Entity.AuthorizationCode>, AuthorizationCodeStore>()
+                .AddTransient<IAdminStore<Entity.AuthorizationCode>, AdminStore<Entity.AuthorizationCode>>()
                 .AddTransient<IAdminStore<Entity.Client>, AdminStore<Entity.Client>>()
                 .AddTransient<IAdminStore<Entity.ClientClaim>, ClientClaimStore>()
                 .AddTransient<IAdminStore<Entity.ClientGrantType>, ClientGrantTypeStore>()
@@ -92,7 +92,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ClientSecret>, ClientSecretStore>()
                 .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
                 .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
-                .AddTransient<IAdminStore<Entity.DeviceCode>, DeviceFlowStore>()
+                .AddTransient<IAdminStore<Entity.DeviceCode>, AdminStore<Entity.DeviceCode>>()
                 .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
                 .AddTransient<IAdminStore<Entity.ExternalProvider>, ExternalProviderStore>()
                 .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
@@ -102,10 +102,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.LocalizedResource>, LocalizedResourceStore>()
                 .AddTransient<IAdminStore<Entity.ProtectResource>, AdminStore<Entity.ProtectResource>>()
                 .AddTransient<IAdminStore<Entity.Key>, AdminStore<Entity.Key>>()
-                .AddTransient<IAdminStore<Entity.ReferenceToken>, ReferenceTokenStore>()
-                .AddTransient<IAdminStore<Entity.RefreshToken>, RefreshTokenStore>()
+                .AddTransient<IAdminStore<Entity.ReferenceToken>, AdminStore<Entity.ReferenceToken>>()
+                .AddTransient<IAdminStore<Entity.RefreshToken>, AdminStore<Entity.RefreshToken>>()
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
-                .AddTransient<IAdminStore<Entity.UserConsent>, UserConsentStore>()
+                .AddTransient<IAdminStore<Entity.UserConsent>, AdminStore<Entity.UserConsent>>()
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole>>()
                 .AddTransient(p => new RavenDb.UserOnlyStore<TUser, string, UserClaim, IdentityUserLogin<string>, IdentityUserToken<string>>(
                     p.GetRequiredService<ScopedAsynDocumentcSession>().Session, 
@@ -123,32 +123,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationRavenDbkStores(this IServiceCollection services)
         {
-            return services
-                .AddTransient<IClientStore, ClientStore>()
-                .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<ICorsPolicyService, CorsPolicyService>();
+            return services.AddConfigurationStores();
         }
 
         public static IServiceCollection AddOperationalRavenDbStores(this IServiceCollection services)
         {
-            return services
-                .AddTransient<AuthorizationCodeStore>()
-                .AddTransient<RefreshTokenStore>()
-                .AddTransient<ReferenceTokenStore>()
-                .AddTransient<UserConsentStore>()
-                .AddTransient<DeviceFlowStore>()
-                .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
-                .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
-                .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IAdminStore<Entity.AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IAdminStore<Entity.RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IAdminStore<Entity.ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IAdminStore<Entity.UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
-                .AddTransient<IAdminStore<Entity.DeviceCode>> (p => p.GetRequiredService<DeviceFlowStore>());
+            return services.AddOperationalStores();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ClientGrantType> ClientGrantTypes { get; set; }
 
+        public virtual DbSet<ClientIdpRestriction> ClientIdpRestriction { get; set; }
+
         public virtual DbSet<ClientProperty> ClientProperties { get; set; }
 
         public virtual DbSet<ClientUri> ClientUris { get; set; }
@@ -35,7 +37,13 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<ApiScope> ApiScopes { get; set; }
 
+        public virtual DbSet<ApiProperty> ApiProperty { get; set; }
+
+        public virtual DbSet<ApiApiScope> ApiApiScope { get; set; }
+
         public virtual DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
+
+        public virtual DbSet<ApiScopeProperty> ApiScopeProperty { get; set; }
 
         public virtual DbSet<ApiSecret> ApiSecrets { get; set; }
 

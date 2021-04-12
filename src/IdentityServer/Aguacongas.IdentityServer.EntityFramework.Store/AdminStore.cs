@@ -35,16 +35,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
             request = request ?? throw new ArgumentNullException(nameof(request));
+            request.OrderBy ??= nameof(IEntityId.Id);
+
             var query = _context.Set<TEntity>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
             var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
 
-            IQueryable<TEntity> page = query;
-            if (request.Take.HasValue)
-            {
-                page = odataQuery.GetPage(request);
-            }
+            var page = odataQuery.GetPage(request);
 
             var items = (await page.ToListAsync(cancellationToken).ConfigureAwait(false)) as IEnumerable<TEntity>;
 
@@ -90,7 +88,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var storedEntity = await _context.Set<TEntity>()
-                .AsNoTracking()
                 .Where(e => e.Id == entity.Id)
                 .FirstOrDefaultAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -100,11 +97,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
             if (entity is IAuditable auditable)
             {
-                var storedAuditable = storedEntity as IAuditable;
-                auditable.CreatedAt = storedAuditable.CreatedAt;
-                auditable.ModifiedAt = storedAuditable.ModifiedAt;
+                auditable.ModifiedAt = DateTime.UtcNow;
             }
-            _context.Update(entity);
+
+            entity.Copy(storedEntity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;

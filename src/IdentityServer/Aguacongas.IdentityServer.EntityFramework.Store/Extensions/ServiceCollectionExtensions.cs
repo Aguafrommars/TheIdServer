@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using AutoMapper.Internal;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
@@ -55,26 +56,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TRole: IdentityRole, new()
             where TContext: IdentityDbContext<TUser, TRole>
         {
-            var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
-            var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
-                !t.IsAbstract &&
-                !t.IsGenericType &&
-                t.GetInterface(nameof(Entity.IEntityId)) != null &&
-                t.GetInterface(nameof(Entity.IGrant)) == null &&
-                t.Name != nameof(Entity.AuthorizationCode) &&
-                t.Name != nameof(Entity.DeviceCode) &&
-                t.GetInterface(nameof(Entity.IRoleSubEntity)) == null &&
-                t.GetInterface(nameof(Entity.IUserSubEntity)) == null);
-
-            foreach (var entityType in entityTypeList)
-            {
-                var adminStoreType = typeof(AdminStore<,>)
-                        .MakeGenericType(entityType.GetTypeInfo(), typeof(ConfigurationDbContext).GetTypeInfo()).GetTypeInfo();
-                var iAdminStoreType = typeof(IAdminStore<>)
-                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-                services.AddTransient(iAdminStoreType, adminStoreType);
-            }
-
             return services.AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser>)
                 .AddScoped(p => p.GetRequiredService<TContext>() as IdentityDbContext<TUser, TRole>)    
                 .AddTransient<IUserStore<TUser>, UserStore<TUser, TRole, TContext>>()
@@ -91,32 +72,34 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
+            var dbContextType = typeof(ConfigurationDbContext);
+            foreach(var property in dbContextType.GetProperties().Where(p => p.PropertyType.ImplementsGenericInterface(typeof(IQueryable<>))))
+            {
+                var entityType = property.PropertyType.GetGenericArguments()[0];
+                var adminStoreType = typeof(AdminStore<,>)
+                        .MakeGenericType(entityType.GetTypeInfo(), dbContextType.GetTypeInfo()).GetTypeInfo();
+                var iAdminStoreType = typeof(IAdminStore<>)
+                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+                services.AddTransient(iAdminStoreType, adminStoreType);
+            }
             return services.AddDbContext<ConfigurationDbContext>(optionsAction)
-                .AddTransient<IClientStore, ClientStore>()
-                .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<ICorsPolicyService, CorsPolicyService>();
+                .AddConfigurationStores();
         }
 
         public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
+            var dbContextType = typeof(OperationalDbContext);
+            foreach (var property in dbContextType.GetProperties().Where(p => p.PropertyType.ImplementsGenericInterface(typeof(IQueryable<>)) && p.PropertyType.GetGenericArguments()[0].IsAssignableTo(typeof(Entity.IEntityId))))
+            {
+                var entityType = property.PropertyType.GetGenericArguments()[0];
+                var adminStoreType = typeof(AdminStore<,>)
+                        .MakeGenericType(entityType.GetTypeInfo(), dbContextType.GetTypeInfo()).GetTypeInfo();
+                var iAdminStoreType = typeof(IAdminStore<>)
+                        .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+                services.AddTransient(iAdminStoreType, adminStoreType);
+            }
             return services.AddDbContext<OperationalDbContext>(optionsAction)
-                .AddTransient<AuthorizationCodeStore>()
-                .AddTransient<RefreshTokenStore>()
-                .AddTransient<ReferenceTokenStore>()
-                .AddTransient<UserConsentStore>()
-                .AddTransient<DeviceFlowStore>()
-                .AddTransient<IAdminStore<Entity.OneTimeToken>, OneTimeTokenStore>()
-                .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
-                .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IAdminStore<Entity.AuthorizationCode>>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IAdminStore<Entity.RefreshToken>>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IAdminStore<Entity.ReferenceToken>>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IAdminStore<Entity.UserConsent>>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
-                .AddTransient<IAdminStore<Entity.DeviceCode>> (p => p.GetRequiredService<DeviceFlowStore>());
+                .AddOperationalStores();
         }
     }
 }

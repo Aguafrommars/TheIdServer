@@ -3,17 +3,15 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
-namespace Aguacongas.IdentityServer.RavenDb.Store
+namespace Aguacongas.IdentityServer.Store
 {
     public class RefreshTokenStore : GrantStore<RefreshToken, Models.RefreshToken>, IRefreshTokenStore
     {
-        public RefreshTokenStore(ScopedAsynDocumentcSession session, IPersistentGrantSerializer serializer, ILogger<RefreshTokenStore> logger)
-            : base(session, serializer, logger)
+        public RefreshTokenStore(IAdminStore<RefreshToken> store, IPersistentGrantSerializer serializer)
+            : base(store, serializer)
         {
         }
 
@@ -37,8 +35,5 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         protected override string GetSubjectId(Models.RefreshToken dto)
             => dto?.SubjectId;
-
-        protected override DateTime? GetExpiration(Models.RefreshToken dto)
-            => dto.CreationTime.AddSeconds(dto.Lifetime);
     }
 }

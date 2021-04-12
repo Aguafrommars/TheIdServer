@@ -8,7 +8,7 @@
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;administration</PackageTags>
+		<PackageTags>theidserver;identityserver4;administration;ravendb</PackageTags>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
 	</PropertyGroup>
@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,11 +32,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
 		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath=""/>
+		<None Include="package-icon.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 
 </Project>

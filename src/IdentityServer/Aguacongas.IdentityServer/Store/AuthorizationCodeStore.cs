@@ -1,41 +1,37 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
-using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
+using Models = IdentityServer4.Models;
 
-namespace Aguacongas.IdentityServer.EntityFramework.Store
+namespace Aguacongas.IdentityServer.Store
 {
-    public class AuthorizationCodeStore : GrantStore<Entity.AuthorizationCode, AuthorizationCode>, IAuthorizationCodeStore
+    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, Models.AuthorizationCode>, IAuthorizationCodeStore
     {
-
-        public AuthorizationCodeStore(OperationalDbContext context, 
-            IPersistentGrantSerializer serializer,
-            ILogger<AuthorizationCodeStore> logger)
-            : base(context, serializer, logger)
+        public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store, 
+            IPersistentGrantSerializer serializer) : base(store, serializer)
         {
         }
 
-        public Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
+        public Task<Models.AuthorizationCode> GetAuthorizationCodeAsync(string code)
             => GetAsync(code);
 
         public Task RemoveAuthorizationCodeAsync(string code)
             => RemoveAsync(code);
 
-        public Task<string> StoreAuthorizationCodeAsync(AuthorizationCode code)
+        public Task<string> StoreAuthorizationCodeAsync(Models.AuthorizationCode code)
             => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
 
-        protected override string GetClientId(AuthorizationCode dto)
+        protected override string GetClientId(Models.AuthorizationCode dto)
             => dto?.ClientId;
 
-        protected override string GetSubjectId(AuthorizationCode dto)
+        protected override string GetSubjectId(Models.AuthorizationCode dto)
         {
             var subject = dto?.Subject;
             if (subject == null)
@@ -50,9 +46,5 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             return idClaim.Value;
         }
-            
-
-        protected override DateTime? GetExpiration(AuthorizationCode dto)
-            => dto.CreationTime.AddSeconds(dto.Lifetime);
     }
 }

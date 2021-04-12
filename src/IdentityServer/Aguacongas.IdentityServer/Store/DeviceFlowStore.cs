@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
 using IdentityServer4.Stores;
@@ -10,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Models = IdentityServer4.Models;
 
-namespace Aguacongas.IdentityServer.Http.Store
+namespace Aguacongas.IdentityServer.Store
 {
     public class DeviceFlowStore : IDeviceFlowStore
     {
