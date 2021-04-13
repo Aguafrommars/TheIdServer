@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 out ResourceStore sut);
 
             apiApiScopeStoreMock.Setup(m => m.GetAsync(It.Is<PageRequest>(p =>
-                p.Filter == $"{nameof(ApiScope.Id)} eq 'test'"), default)).ReturnsAsync(new PageResponse<ApiApiScope>
+                p.Filter == $"{nameof(ApiApiScope.ApiScopeId)} eq 'test'"), default)).ReturnsAsync(new PageResponse<ApiApiScope>
                 {
                     Count = 1,
                     Items = new[]
@@ -67,12 +67,24 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                     }
                 });
 
-            apiStoreMock.Setup(m => m.GetAsync("test", It.IsAny<GetRequest>(), default)).ReturnsAsync(new ProtectResource());
+            apiStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<ProtectResource>
+            {
+                Count = 1,
+                Items = new[]
+                    {
+                        new ProtectResource
+                        {
+                            Id = "test"
+                        }
+                    }
+            });
 
             await sut.FindApiResourcesByScopeNameAsync(new string[] { "test" }).ConfigureAwait(false);
 
             apiApiScopeStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
-                p.Filter == $"{nameof(ApiScope.Id)} eq 'test'"), default));
+                p.Filter == $"{nameof(ApiApiScope.ApiScopeId)} eq 'test'"), default));
+            apiStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
+                p.Filter == $"{nameof(ProtectResource.Id)} eq 'test'"), default));
         }
 
         [Fact]

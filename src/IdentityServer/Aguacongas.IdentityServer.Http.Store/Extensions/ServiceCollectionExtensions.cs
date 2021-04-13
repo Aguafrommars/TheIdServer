@@ -1,11 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
-using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Http.Store;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

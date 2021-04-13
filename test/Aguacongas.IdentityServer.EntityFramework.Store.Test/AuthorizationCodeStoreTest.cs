@@ -68,7 +68,6 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
 
                 Assert.Null(await context.DeviceCodes.FirstOrDefaultAsync(d => d.Id == id));
             }
-
         }
 
         [Fact]

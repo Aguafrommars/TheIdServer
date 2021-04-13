@@ -61,8 +61,11 @@ namespace Aguacongas.IdentityServer.Store
             var entity = await GetEntityByHandle(handle)
                 .ConfigureAwait(false);
 
-            await _store.DeleteAsync(entity.Id)
-                .ConfigureAwait(false);
+            if (entity != null)
+            {
+                await _store.DeleteAsync(entity.Id)
+                    .ConfigureAwait(false);
+            }
         }
 
         protected async Task RemoveAsync(string subjectId, string clientId)

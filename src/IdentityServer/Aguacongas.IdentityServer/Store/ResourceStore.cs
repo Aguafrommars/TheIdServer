@@ -40,18 +40,15 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
-            var list = new List<PageResponse<ProtectResource>>(apiResourceNames.Count());
-            foreach (var name in apiResourceNames)
+            var filter = string.Join(" or ", apiResourceNames.Select(s => $"{nameof(ProtectResource.Id)} eq '{s}'"));
+            var response = await _apiStore.GetAsync(new PageRequest
             {
-                list.Add(await _apiStore.GetAsync(new PageRequest
-                {
-                    Take = null,
-                    Filter = $"{nameof(ProtectResource.Id)} eq '{name}'",
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
-                }).ConfigureAwait(false));
-            }
-            return list
-                .SelectMany(r => r.Items.Select(a => a.ToApi()));
+                Take = null,
+                Filter = filter,
+                Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
+            }).ConfigureAwait(false);
+
+            return response.Items.Select(a => a.ToApi());
         }
 
         /// <summary>
@@ -61,30 +58,23 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
-            var list = new List<PageResponse<ApiApiScope>>(scopeNames.Count());
-            foreach(var name in scopeNames)
+            var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiApiScope.ApiScopeId)} eq '{s}'"));
+            var apiIdListResponse = await _apiApiScopeStore.GetAsync(new PageRequest
             {
-                list.Add(await _apiApiScopeStore.GetAsync(new PageRequest
-                {
-                    Take = null,
-                    Select = nameof(ApiApiScope.ApiId),
-                    Filter = $"{nameof(ApiApiScope.ApiScopeId)} eq '{name}'"
-                }).ConfigureAwait(false));
-            }
-            
-            var apiIdList = list.SelectMany(r => r.Items.Select(a => a.ApiId));
+                Take = null,
+                Select = nameof(ApiApiScope.ApiId),
+                Filter = filter
+            }).ConfigureAwait(false);
 
-            var apiList = new List<ProtectResource>(apiIdList.Count());
-            foreach (var id in apiIdList)
+            filter = string.Join(" or ", apiIdListResponse.Items.Select(i => $"{nameof(ProtectResource.Id)} eq '{i.ApiId}'"));
+            var apiResposne = await _apiStore.GetAsync(new PageRequest
             {
-                apiList.Add(await _apiStore.GetAsync(id, new GetRequest
-                {
-                    Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
-                }).ConfigureAwait(false));
-            }
+                Take = null,
+                Filter = filter,
+                Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
+            }).ConfigureAwait(false);
             
-            return apiList
-                .Select(r => r.ToApi());
+            return apiResposne.Items.Select(r => r.ToApi());
         }
 
         /// <summary>
@@ -94,17 +84,14 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
         {
-            var list = new List<PageResponse<ApiScope>>(scopeNames.Count());
-            foreach (var name in scopeNames)
+            var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiScope.Id)} eq '{s}'"));
+            var response = await _apiScopeStore.GetAsync(new PageRequest
             {
-                list.Add(await _apiScopeStore.GetAsync(new PageRequest
-                {
-                    Take = null,
-                    Filter = $"{nameof(ApiScope.Id)} eq '{name}'",
-                    Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
-                }).ConfigureAwait(false));
-            }
-            return list.SelectMany(r => r.Items.Select(s => s.ToApiScope()));
+                Take = null,
+                Filter = filter,
+                Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
+            }).ConfigureAwait(false);
+            return response.Items.Select(s => s.ToApiScope());
         }
 
         /// <summary>
@@ -114,19 +101,15 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
-            var list = new List<PageResponse<IdentityResource>>(scopeNames.Count());
-            foreach (var name in scopeNames)
+            var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(IdentityResource.Id)} eq '{s}'"));
+            var response = await _identityStore.GetAsync(new PageRequest
             {
-                list.Add(await _identityStore.GetAsync(new PageRequest
-                {
-                    Take = null,
-                    Filter = $"{nameof(IdentityResource.Id)} eq '{name}'",
-                    Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
-                }).ConfigureAwait(false));
-            }
+                Take = null,
+                Filter = filter,
+                Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
+            }).ConfigureAwait(false);
 
-            return list
-                .SelectMany(r => r.Items.Select(e => e.ToIdentity()));
+            return response.Items.Select(e => e.ToIdentity());
         }
 
         /// <summary>

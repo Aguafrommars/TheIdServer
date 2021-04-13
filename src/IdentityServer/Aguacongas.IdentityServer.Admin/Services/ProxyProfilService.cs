@@ -61,7 +61,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         protected override async Task<IEnumerable<Claim>> GetClaimsFromResource(Resource resource, ClaimsPrincipal subject, Client client, string caller, string providerTypeName)
         {
             var response = await _httpClient
-                .GetAsync($"/claimsprovider?resource={resource.Name}&subject={subject.GetSubjectId()}&client={client.ClientId}&caller={caller}&type={providerTypeName}")
+                .GetAsync($"claimsprovider?resourceName={resource.Name}&userId={subject.GetSubjectId()}&clientId={client.ClientId}&caller={caller}&providerTypeName={providerTypeName}")
                 .ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();

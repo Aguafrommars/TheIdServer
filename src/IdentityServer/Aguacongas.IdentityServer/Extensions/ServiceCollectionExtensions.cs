@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Net.Http;
+using static IdentityServer4.Stores.CachingCorsPolicyService<Aguacongas.IdentityServer.Store.CorsPolicyService>;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -40,6 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ICache<IEnumerable<ApiResource>>>(p => new DefaultCache<IEnumerable<ApiResource>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
             services.TryAddScoped<ICache<IEnumerable<ApiScope>>>(p => new DefaultCache<IEnumerable<ApiScope>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
             services.TryAddScoped<ICache<Resources>>(p => new DefaultCache<Resources>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
+            services.TryAddScoped<ICache<CorsCacheEntry>>(p => new DefaultCache<CorsCacheEntry>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
 
             return services.AddTransient<ClientStore>()
                 .AddTransient<ResourceStore>()
