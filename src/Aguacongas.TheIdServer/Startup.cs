@@ -73,8 +73,6 @@ namespace Aguacongas.TheIdServer
             void configureOptions(IdentityServerOptions options)
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
-            services.AddConfigurationHttpStores(configureOptions);
-
             if (isProxy)
             {
                 AddProxyServices(services, configureOptions);
@@ -478,6 +476,7 @@ namespace Aguacongas.TheIdServer
         {
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
                .AddIdentityProviderStore()
+               .AddConfigurationHttpStores(configureOptions)
                .AddOperationalHttpStores()
                .AddIdentity<ApplicationUser, IdentityRole>(
                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))

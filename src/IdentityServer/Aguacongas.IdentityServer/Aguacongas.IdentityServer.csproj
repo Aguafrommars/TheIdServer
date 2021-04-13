@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
@@ -23,12 +23,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
+		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -44,7 +45,7 @@
 		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath="" />
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 </Project>

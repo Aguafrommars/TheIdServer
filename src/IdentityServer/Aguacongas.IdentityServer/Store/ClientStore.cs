@@ -1,13 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using System;
 using System.Threading.Tasks;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.IdentityServer.Http.Store
+namespace Aguacongas.IdentityServer.Store
 {
     public class ClientStore : IClientStore
     {

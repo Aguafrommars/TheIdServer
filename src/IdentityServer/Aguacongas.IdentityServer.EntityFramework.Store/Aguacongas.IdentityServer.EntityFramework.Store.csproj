@@ -1,43 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;administration</PackageTags>
-		<PackageIcon>package-icon.png</PackageIcon>
-		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Authors>Olivier Lefebvre</Authors>
+        <Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
+        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>theidserver;identityserver4;administration</PackageTags>
+        <PackageIcon>package-icon.png</PackageIcon>
+        <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <CodeAnalysisRuleSet>Aguacongas.IdentityServer.EntityFramework.Store.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="4.0.3" />
-		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Aguacongas.AspNetCore.Authentication.EntityFramework" Version="4.0.3" />
+        <PackageReference Include="Community.OData.Linq" Version="1.4.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
-		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
-		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath="" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
+        <ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="package-icon.png" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>

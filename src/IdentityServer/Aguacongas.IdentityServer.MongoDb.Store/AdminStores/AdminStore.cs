@@ -3,9 +3,11 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using AutoMapper.Internal;
+using Community.OData.Linq;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,27 +17,28 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.RavenDb.Store
+namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
 {
     public class AdminStore<TEntity> : IAdminStore<TEntity>
         where TEntity : class, IEntityId, new()
     {
-        private readonly IAsyncDocumentSession _session;
+        private readonly IMongoCollection<TEntity> _collection;
         private readonly ILogger<AdminStore<TEntity>> _logger;
         private readonly string _entitybasePath;
         private readonly Type _entityType = typeof(TEntity);
-        public AdminStore(ScopedAsynDocumentcSession session, ILogger<AdminStore<TEntity>> logger)
+        public AdminStore(IMongoCollection<TEntity> collection, ILogger<AdminStore<TEntity>> logger)
         {
-            _session = session?.Session ?? throw new ArgumentNullException(nameof(session));
+            _collection = collection ?? throw new ArgumentNullException(nameof(collection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var entityTypeName = typeof(TEntity).Name;
             _entitybasePath = entityTypeName.ToLowerInvariant() + "/";
         }
 
         public async Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
-        {
-            var entity = await _session
-                .LoadAsync<TEntity>($"{_entitybasePath}{id}", b => b.Expand(request?.Expand), cancellationToken).ConfigureAwait(false);
+        {            
+            var entity = await _collection.AsQueryable()
+                .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
+                .ConfigureAwait(false);
             if (entity == null)
             {
                 return null;
@@ -46,19 +49,17 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            var rql = request.ToRQL<TEntity, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(TEntity)), e => e.Id);
-            var pageQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
+            var oDataQuery = (IMongoQueryable<TEntity>) _collection.AsQueryable().OData().Filter(request.Filter);
+            var count = await oDataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
             if (request.Take.HasValue)
             {
-                pageQuery = pageQuery.GetPage(request);
+                oDataQuery = oDataQuery.Skip(request.Skip ?? 0).Take(request.Take.Value);
             }
 
-            var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var items = await oDataQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var countQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
-            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
             
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 await AddExpandedAsync(item, request.Expand).ConfigureAwait(false);
             }
@@ -68,34 +69,43 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 Count = count,
                 Items = items
             };
-        }        
+        }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var entity = await _session.LoadAsync<TEntity>($"{_entitybasePath}{id}", cancellationToken).ConfigureAwait(false);
+            using var session = await _collection.Database.Client.StartSessionAsync(cancellationToken: cancellationToken);
+            session.StartTransaction();
+
+            var entity = await _collection.AsQueryable()
+                .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
+                .ConfigureAwait(false);
+
             if (entity == null)
             {
                 throw new InvalidOperationException($"Entity type {typeof(TEntity).Name} at id {id} is not found");
             }
-            _session.Delete(entity);
+
+            await _collection.DeleteOneAsync(session, new BsonDocument("Id", entity.Id), cancellationToken: cancellationToken).ConfigureAwait(false);
+            
+            await OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
+
             var iCollectionType = typeof(ICollection<>);
             var iEntityIdType = typeof(IEntityId);
             var subEntitiesProperties = _entityType.GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.ImplementsGenericInterface(iCollectionType) && p.PropertyType.GetGenericArguments()[0].IsAssignableTo(iEntityIdType));
-            foreach(var subEntityProperty in subEntitiesProperties)
+            foreach (var subEntityProperty in subEntitiesProperties)
             {
                 var collection = subEntityProperty.GetValue(entity) as ICollection;
                 if (collection != null)
                 {
                     foreach (IEntityId subItem in collection)
                     {
-                        _session.Delete(subItem.Id);
+                        var subCollection = _collection.Database.GetCollection<BsonDocument>(subItem.GetType().Name);
+                        await subCollection.DeleteOneAsync(session, new BsonDocument("Id", subItem.Id), cancellationToken: cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
 
-            await OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
-
-            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await session.CommitTransactionAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
         }
 
@@ -113,8 +123,8 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             await OnCreateEntityAsync(entity, cancellationToken).ConfigureAwait(false);
 
-            await _session.StoreAsync(entity, $"{_entitybasePath}{entity.Id}", cancellationToken).ConfigureAwait(false);
-            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
+
             _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
             return entity;
         }
@@ -128,19 +138,27 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            var storedEntity = await _session.LoadAsync<TEntity>($"{_entitybasePath}{entity.Id}", cancellationToken).ConfigureAwait(false);
+            var storedEntity = await _collection.AsQueryable()
+                .FirstOrDefaultAsync(e => e.Id == entity.Id, cancellationToken)
+                .ConfigureAwait(false);
 
             if (storedEntity == null)
             {
                 throw new InvalidOperationException($"Entity type {typeof(TEntity).Name} at id {entity.Id} is not found");
             }
+
             if (entity is IAuditable auditable)
             {
                 auditable.ModifiedAt = DateTime.UtcNow;
             }
-            entity.Copy(storedEntity);
+            var properties = typeof(TEntity).GetProperties()
+                .Where(p => !p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)));
+            foreach (var property in properties)
+            {
+                property.SetValue(storedEntity, property.GetValue(entity));
+            }
 
-            await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await _database.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;
         }
@@ -189,7 +207,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
                 {
                     value = Activator.CreateInstance(property.PropertyType);
                 }
-                
+
                 property.SetValue(entity, value);
             }
 
@@ -215,7 +233,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var type = subEntity.GetType();
             var idProperty = type.GetProperty(idName);
             var id = idProperty.GetValue(subEntity);
-            var loaded = await _session.LoadAsync<object>(id as string).ConfigureAwait(false);
+            var loaded = await _database.LoadAsync<object>(id as string).ConfigureAwait(false);
             if (loaded == null)
             {
                 return;

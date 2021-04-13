@@ -1,11 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
-using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Http.Store;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,11 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
                 .AddIdentityServer4AdminHttpStores(getHttpClient)
-                .AddTransient<IClientStore, ClientStore>()
-                .AddTransient<IResourceStore, ResourceStore>()
-                .AddTransient<ICorsPolicyService, CorsPolicyService>()
-                .AddTransient<IStringLocalizerFactory, StringLocalizerFactory>()
-                .AddTransient<ISupportCultures, StringLocalizerFactory>();
+                .AddConfigurationStores();
         }
 
         /// <summary>
@@ -54,16 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddOperationalHttpStores(this IServiceCollection services)
         {
-            return services.AddTransient<AuthorizationCodeStore>()
-                .AddTransient<RefreshTokenStore>()
-                .AddTransient<ReferenceTokenStore>()
-                .AddTransient<UserConsentStore>()
-                .AddTransient<DeviceFlowStore>()
-                .AddTransient<IAuthorizationCodeStore>(p => p.GetRequiredService<AuthorizationCodeStore>())
-                .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
-                .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
-                .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
+            return services.AddOperationalStores();
         }
 
         /// <summary>
