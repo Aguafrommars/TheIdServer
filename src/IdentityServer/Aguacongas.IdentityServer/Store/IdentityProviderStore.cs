@@ -5,6 +5,7 @@ using Community.OData.Linq;
 using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store

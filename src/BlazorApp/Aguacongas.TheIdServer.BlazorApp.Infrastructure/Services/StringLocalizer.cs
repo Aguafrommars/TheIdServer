@@ -134,9 +134,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
             CurrentCulture = CultureInfo.CurrentCulture;
             var parent = CurrentCulture.Parent;
             var filter = $"{nameof(LocalizedResource.CultureId)} eq '{CurrentCulture.Name}'";
-            if (parent != null)
+            if (!string.IsNullOrWhiteSpace(parent?.Name))
             {
-                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{CurrentCulture.Parent.Name}'";
+                filter += $" or {nameof(LocalizedResource.CultureId)} eq '{parent.Name}'";
             }
 
             var page = await _store.GetAsync(new PageRequest

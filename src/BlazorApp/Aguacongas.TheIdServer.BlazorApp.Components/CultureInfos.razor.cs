@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
@@ -16,7 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override string PropertyName => "Name";
 
-        protected override Task<IEnumerable<string>> GetFilteredValues(string term)
+        protected override Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             term = term ?? string.Empty;
             _filterValues = _cultureInfos

@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -16,7 +17,7 @@ namespace Aguacongas.IdentityServer.Store
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<IdentityProvider> GetAsync(string id);
-        
+
         /// <summary>
         /// Gets a page of identity provider corresponding to the request.
         /// </summary>

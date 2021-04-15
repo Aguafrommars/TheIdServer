@@ -4,6 +4,7 @@ using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -21,7 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override string PropertyName => "GrantType";
 
 
-        protected override Task<IEnumerable<string>> GetFilteredValues(string term)
+        protected override Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             term ??= string.Empty;
             var grantTypes = GrantTypes.Instance;

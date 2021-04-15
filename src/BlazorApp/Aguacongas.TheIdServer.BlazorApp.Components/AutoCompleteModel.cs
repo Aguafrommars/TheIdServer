@@ -91,9 +91,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                         {
                             return;
                         }
-                        FilteredValues = await GetFilteredValues(CurrentValueAsString)
+                        FilteredValues = await GetFilteredValues(CurrentValueAsString, token)
                             .ConfigureAwait(false);
-                       await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", Id);
+                       await JSRuntime.InvokeVoidAsync("bootstrapInteropt.showDropDownMenu", token, Id);
                        await InvokeAsync(StateHasChanged).ConfigureAwait(false);
                     }, TaskScheduler.Default);
         }
@@ -108,7 +108,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected abstract void SetValue(string inputValue);
 
-        protected abstract Task<IEnumerable<string>> GetFilteredValues(string term);
+        protected abstract Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken);
 
         private CancellationTokenSource _cancellationTokenSource;
 

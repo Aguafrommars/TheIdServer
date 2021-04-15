@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -28,10 +29,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api.Components
             _isReadOnly = Entity.Id != null;
         }
 
-        protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
+        protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             _pageRequest.Filter = $"contains({nameof(Entity.Id)},'{term}')";
-            var response = await _store.GetAsync(_pageRequest)
+            var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 
             return response.Items.Select(c => c.Id);
