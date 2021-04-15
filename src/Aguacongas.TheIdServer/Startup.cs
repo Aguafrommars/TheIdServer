@@ -440,8 +440,8 @@ namespace Aguacongas.TheIdServer
                         return documentStore.Initialize();
                     })
                     .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<RavenDbStore.SchemeDefinition>>()
-                    .AddIdentityServer4AdminRavenDbkStores<ApplicationUser>()
-                    .AddConfigurationRavenDbkStores()
+                    .AddIdentityServer4AdminRavenDbStores<ApplicationUser>()
+                    .AddConfigurationRavenDbStores()
                     .AddOperationalRavenDbStores();
 
                 identityBuilder.AddRavenDbStores();

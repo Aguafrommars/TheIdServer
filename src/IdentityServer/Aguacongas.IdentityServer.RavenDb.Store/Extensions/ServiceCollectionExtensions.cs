@@ -6,9 +6,6 @@ using Aguacongas.IdentityServer.RavenDb.Store.ApiScope;
 using Aguacongas.IdentityServer.RavenDb.Store.Client;
 using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -27,9 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminRavenDbkStores(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
+        public static IServiceCollection AddIdentityServer4AdminRavenDbStores(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
         {
-            return AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(services, getDocumentStore, dataBase);
+            return AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(services, getDocumentStore, dataBase);
         }
 
         /// <summary>
@@ -39,10 +36,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminRavenDbkStores<TUser>(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
+        public static IServiceCollection AddIdentityServer4AdminRavenDbStores<TUser>(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
             where TUser : IdentityUser, new()
         {
-            return AddIdentityServer4AdminRavenDbkStores<TUser, IdentityRole>(services, getDocumentStore, dataBase);
+            return AddIdentityServer4AdminRavenDbStores<TUser, IdentityRole>(services, getDocumentStore, dataBase);
         }
 
 
@@ -52,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminRavenDbkStores<TUser, TRole>(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
+        public static IServiceCollection AddIdentityServer4AdminRavenDbStores<TUser, TRole>(this IServiceCollection services, Func<IServiceProvider, IDocumentStore> getDocumentStore = null, string dataBase = null)
             where TUser: IdentityUser, new()
             where TRole: IdentityRole, new()
         {
@@ -121,7 +118,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore>();
         }
 
-        public static IServiceCollection AddConfigurationRavenDbkStores(this IServiceCollection services)
+        public static IServiceCollection AddConfigurationRavenDbStores(this IServiceCollection services)
         {
             return services.AddConfigurationStores();
         }

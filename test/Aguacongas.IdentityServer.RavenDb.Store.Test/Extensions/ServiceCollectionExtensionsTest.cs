@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
         {
             var services = new ServiceCollection();
 
-            services.AddIdentityServer4AdminRavenDbkStores<IdentityUser>(p => new RavenDbTestDriverWrapper().GetDocumentStore());
+            services.AddIdentityServer4AdminRavenDbStores<IdentityUser>(p => new RavenDbTestDriverWrapper().GetDocumentStore());
 
             var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
         {
             var services = new ServiceCollection();
 
-            services.AddConfigurationRavenDbkStores();
+            services.AddConfigurationRavenDbStores();
             
             Assert.Contains(services, d => d.ServiceType == typeof(IClientStore));
             Assert.Contains(services, d => d.ServiceType == typeof(IResourceStore));

@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
@@ -141,7 +141,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
@@ -201,7 +201,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
@@ -255,7 +255,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.IdentityAdminStores
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRavenDbStores(p => documentStore);
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 

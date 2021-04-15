@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
                 .AddRavenDbStore()
                 .AddGoogle();
 
-            var provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            var provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
 
             var manager = provider.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>();
 
@@ -57,7 +57,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
                 .AddRavenDbStore()
                 .AddGoogle();
 
-            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbkStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
+            IServiceProvider provider = services.AddIdentityServer4AdminRavenDbStores<IdentityUser, IdentityRole>(p => documentStore).BuildServiceProvider();
             using var scope = provider.CreateScope();
             provider = scope.ServiceProvider;
 
