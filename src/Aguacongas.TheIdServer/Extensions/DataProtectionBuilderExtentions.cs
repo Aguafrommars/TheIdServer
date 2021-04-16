@@ -2,7 +2,6 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.TheIdServer.Models;
 using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
@@ -10,10 +9,6 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Win32;
 using StackExchange.Redis;
 using System;
@@ -42,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.PersistKeysToDbContext<OperationalDbContext>();
                     break;
                 case StorageKind.RavenDb:
-                    builder.PersistKeysToRavenDb<DocumentSessionWrapper>();
+                    builder.PersistKeysToRavenDb();
                     break;
                 case StorageKind.FileSystem:
                     builder.PersistKeysToFileSystem(new DirectoryInfo(dataProtectionsOptions.StorageConnectionString));

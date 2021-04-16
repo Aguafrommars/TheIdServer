@@ -260,8 +260,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// The value <paramref name="builder" />.
         /// </returns>
         /// <exception cref="ArgumentNullException">builder</exception>
-        public static IKeyRotationBuilder PersistKeysToRavenDb<TWrapper>(this IKeyRotationBuilder builder, Func<IServiceProvider, IDocumentSession> getSession = null)
-            where TWrapper : DocumentSessionWrapper
+        public static IKeyRotationBuilder PersistKeysToRavenDb(this IKeyRotationBuilder builder, Func<IServiceProvider, IDocumentSession> getSession = null)
         {
             if (builder == null)
             {
@@ -281,7 +280,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
                     return new ConfigureOptions<KeyRotationOptions>(options =>
                     {
-                        options.XmlRepository = new RavenDbXmlRepository<Aguacongas.IdentityServer.KeysRotation.RavenDb.KeyRotationKey, TWrapper>(services, loggerFactory);
+                        options.XmlRepository = new RavenDbXmlRepository<Aguacongas.IdentityServer.KeysRotation.RavenDb.KeyRotationKey>(services, loggerFactory);
                     });
                 })
                 .AddTransient(p => new DocumentSessionWrapper(getSession(p)));

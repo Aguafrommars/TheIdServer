@@ -10,11 +10,10 @@ using System.Xml.Linq;
 
 namespace Aguacongas.IdentityServer.KeysRotation.RavenDb
 {
-    public class RavenDbXmlRepository<TKey, TWrapper> : IXmlRepository
+    public class RavenDbXmlRepository<TKey> : IXmlRepository
         where TKey: IXmlKey, new()
-        where TWrapper: DocumentSessionWrapper
     {
-        private readonly ILogger<RavenDbXmlRepository<TKey, TWrapper>> _logger;
+        private readonly ILogger<RavenDbXmlRepository<TKey>> _logger;
         private readonly IServiceProvider _services;
 
         public RavenDbXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory)
@@ -24,7 +23,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.RavenDb
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
 
-            _logger = loggerFactory.CreateLogger<RavenDbXmlRepository<TKey, TWrapper>>();
+            _logger = loggerFactory.CreateLogger<RavenDbXmlRepository<TKey>>();
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
