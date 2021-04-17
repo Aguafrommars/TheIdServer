@@ -39,6 +39,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 case StorageKind.RavenDb:
                     builder.PersistKeysToRavenDb();
                     break;
+                case StorageKind.MongoDb:
+                    builder.PersistKeysToMongoDb();
+                    break;
                 case StorageKind.FileSystem:
                     builder.PersistKeysToFileSystem(new DirectoryInfo(dataProtectionsOptions.StorageConnectionString));
                     break;

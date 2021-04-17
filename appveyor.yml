@@ -9,6 +9,8 @@ branches:
   - /release\/*/
 image: 
 - Visual Studio 2019 Preview
+services:
+  - mongodb
 environment:
   GH_TOKEN: 
     secure: 0NJdORJRFjpB0dwUYv7bVNsbkldkoBhnvWik/CTOwAF/k9kP+/uTWMFnDcpEpt8E

@@ -13,6 +13,14 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
         {
+            services.AddTheIdServerStores(userType, roleType);
+            services.AddIdentityServer4AdminHttpStores(getHttpClient);
+
+            return services;
+        }
+
+        public static void AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType)
+        {
             var userOnlyStoreType = typeof(UserOnlyStore<>).MakeGenericType(userType);
 
             if (roleType != null)
@@ -33,10 +41,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddScoped(typeof(IUserStore<>)
                     .MakeGenericType(userType), provider => provider.CreateUserOnlyStore(userOnlyStoreType));
             }
-
-            services.AddIdentityServer4AdminHttpStores(getHttpClient);
-
-            return services;
         }
     }
 }

@@ -64,8 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         options.XmlRepository = new mongoDb.MongoDbXmlRepository<mongoDb.DataProtectionKey>(services, loggerFactory);
                     });
                 })
-                .AddTransient(p => getCollection(p))
-                .AddTransient<mongoDb.MongoCollectionWrapper<mongoDb.DataProtectionKey>>();
+                .AddTransient(p => new mongoDb.MongoCollectionWrapper<mongoDb.DataProtectionKey>(getCollection(p)));
 
             return builder;
         }

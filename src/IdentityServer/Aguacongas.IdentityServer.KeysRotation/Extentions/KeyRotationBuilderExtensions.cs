@@ -24,6 +24,8 @@ using System.Threading.Tasks;
 using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Raven.Client.Documents.Session;
 using Raven.Client.Documents;
+using mongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
+using MongoDB.Driver;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -253,7 +255,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Configures the key rotation system to persist keys to a RavenDb datasstore
         /// </summary>
-        /// <typeparam name="TWrapper">The type of the wrapper.</typeparam>
         /// <param name="builder">The <see cref="IDataProtectionBuilder" /> instance to modify.</param>
         /// <param name="getSession">The get session.</param>
         /// <returns>
@@ -284,6 +285,40 @@ namespace Microsoft.Extensions.DependencyInjection
                     });
                 })
                 .AddTransient(p => new DocumentSessionWrapper(getSession(p)));
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to persist keys to a MongoDb datasstore
+        /// </summary>
+        /// <param name="builder">The <see cref="IDataProtectionBuilder" /> instance to modify.</param>
+        /// <param name="getSession">The get session.</param>
+        /// <returns>
+        /// The value <paramref name="builder" />.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">builder</exception>
+        public static IKeyRotationBuilder PersistKeysToMongoDb(this IKeyRotationBuilder builder, Func<IServiceProvider, IMongoCollection<mongoDb.KeyRotationKey>> getCollection = null)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (getCollection == null)
+            {
+                getCollection = p => p.GetRequiredService<IMongoDatabase>().GetCollection<mongoDb.KeyRotationKey>(nameof(mongoDb.KeyRotationKey));
+            }
+
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+                {
+                    var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+                    return new ConfigureOptions<KeyRotationOptions>(options =>
+                    {
+                        options.XmlRepository = new mongoDb.MongoDbXmlRepository<mongoDb.KeyRotationKey>(services, loggerFactory);
+                    });
+                })
+                .AddTransient(p => new mongoDb.MongoCollectionWrapper<mongoDb.KeyRotationKey>(getCollection(p)));
 
             return builder;
         }

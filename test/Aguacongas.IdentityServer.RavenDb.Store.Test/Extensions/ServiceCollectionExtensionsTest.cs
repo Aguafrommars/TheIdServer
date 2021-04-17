@@ -20,7 +20,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
         {
             var services = new ServiceCollection();
 
-            services.AddIdentityServer4AdminRavenDbkStores();
+            services.AddIdentityServer4AdminRavenDbStores();
 
             var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&

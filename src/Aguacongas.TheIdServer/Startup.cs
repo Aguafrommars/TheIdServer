@@ -168,6 +168,11 @@ namespace Aguacongas.TheIdServer
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, RavenDbStore.SchemeDefinition>()
                     .AddRavenDbStore();
             }
+            else if (DbType == DbTypes.MongoDb)
+            {
+                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
+                    .AddMongoDbStore();
+            }
             else
             {
                 mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
@@ -296,7 +301,12 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToPage("/_Host");
                 });
 
-            if (isProxy)
+            LoadDynamicConfiguration(app, isProxy);
+        }
+
+        private void LoadDynamicConfiguration(IApplicationBuilder app, bool isProxy)
+        {
+            if (isProxy || DbType == DbTypes.MongoDb)
             {
                 app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
                 return;
@@ -446,6 +456,16 @@ namespace Aguacongas.TheIdServer
 
                 identityBuilder.AddRavenDbStores();
             }
+            if (DbType == DbTypes.MongoDb)
+            {
+                var connectionString = Configuration.GetConnectionString("DefaultConnection");
+                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
+                    .AddIdentityServer4AdminMongoDbStores(connectionString)
+                    .AddConfigurationStores()
+                    .AddOperationalStores();
+
+                identityBuilder.AddTheIdServerStores();
+            }
             else
             {
                 services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
@@ -487,7 +507,7 @@ namespace Aguacongas.TheIdServer
         {
             var dbType = Configuration.GetValue<DbTypes>("DbType");
             if (Configuration.GetValue<bool>("Migrate") &&
-                dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb)
+                dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();

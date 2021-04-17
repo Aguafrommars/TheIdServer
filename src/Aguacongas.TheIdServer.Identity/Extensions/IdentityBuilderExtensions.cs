@@ -47,5 +47,16 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddTheIdServerStores(builder.UserType, builder.RoleType, getHttpClient);
             return builder;
         }
+
+        /// <summary>
+        /// Adds the identifier server stores.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns></returns>
+        public static IdentityBuilder AddTheIdServerStores(this IdentityBuilder builder)
+        {
+            builder.Services.AddTheIdServerStores(builder.UserType, builder.RoleType);
+            return builder;
+        }
     }
 }

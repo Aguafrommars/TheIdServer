@@ -15,10 +15,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="AdminStores\AdminStore.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
@@ -27,14 +23,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
 		<PackageReference Include="MongoDB.Driver" Version="2.12.2" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
 		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="AdminStores\" />
 	</ItemGroup>
 
 </Project>

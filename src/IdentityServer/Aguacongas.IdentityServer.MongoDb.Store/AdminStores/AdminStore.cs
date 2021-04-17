@@ -4,34 +4,32 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using AutoMapper.Internal;
 using Community.OData.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Clusters;
 using MongoDB.Driver.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
+namespace Aguacongas.IdentityServer.MongoDb.Store
 {
     public class AdminStore<TEntity> : IAdminStore<TEntity>
         where TEntity : class, IEntityId, new()
     {
+        private readonly IServiceProvider _provider;
         private readonly IMongoCollection<TEntity> _collection;
         private readonly ILogger<AdminStore<TEntity>> _logger;
-        private readonly string _entitybasePath;
         private readonly Type _entityType = typeof(TEntity);
-        public AdminStore(IMongoCollection<TEntity> collection, ILogger<AdminStore<TEntity>> logger)
+        public AdminStore(IServiceProvider provider, ILogger<AdminStore<TEntity>> logger)
         {
-            _collection = collection ?? throw new ArgumentNullException(nameof(collection));
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            var entityTypeName = typeof(TEntity).Name;
-            _entitybasePath = entityTypeName.ToLowerInvariant() + "/";
+            _collection = provider.GetRequiredService<IMongoCollection<TEntity>>();
         }
 
         public async Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
@@ -49,14 +47,18 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
 
         public async Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         {
-            var oDataQuery = (IMongoQueryable<TEntity>) _collection.AsQueryable().OData().Filter(request.Filter);
-            var count = await oDataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            var oDataQuery = _collection.AsQueryable().OData();
+            oDataQuery = !string.IsNullOrWhiteSpace(request.Filter) ? oDataQuery.Filter(request.Filter) : oDataQuery;
+
+            var query = oDataQuery.Inner as IMongoQueryable<TEntity>;
+
+            var count = await query.CountAsync(cancellationToken).ConfigureAwait(false);
             if (request.Take.HasValue)
             {
-                oDataQuery = oDataQuery.Skip(request.Skip ?? 0).Take(request.Take.Value);
+                query = query.Skip(request.Skip ?? 0).Take(request.Take.Value);
             }
 
-            var items = await oDataQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var items = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
 
             
             foreach (var item in items)
@@ -74,7 +76,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             using var session = await _collection.Database.Client.StartSessionAsync(cancellationToken: cancellationToken);
-            session.StartTransaction();
+
+            var isTransactionSupported = session.Client.Cluster.Description.Type != ClusterType.Standalone;
+            if (isTransactionSupported)
+            {
+                session.StartTransaction();
+            }
 
             var entity = await _collection.AsQueryable()
                 .FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
@@ -85,27 +92,24 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
                 throw new InvalidOperationException($"Entity type {typeof(TEntity).Name} at id {id} is not found");
             }
 
-            await _collection.DeleteOneAsync(session, new BsonDocument("Id", entity.Id), cancellationToken: cancellationToken).ConfigureAwait(false);
+            await _collection.DeleteOneAsync(session, Builders<TEntity>.Filter.Eq(e => e.Id, id), cancellationToken: cancellationToken).ConfigureAwait(false);
             
-            await OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
-
             var iCollectionType = typeof(ICollection<>);
             var iEntityIdType = typeof(IEntityId);
             var subEntitiesProperties = _entityType.GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.ImplementsGenericInterface(iCollectionType) && p.PropertyType.GetGenericArguments()[0].IsAssignableTo(iEntityIdType));
+
+            var dataBase = _collection.Database;
             foreach (var subEntityProperty in subEntitiesProperties)
             {
-                var collection = subEntityProperty.GetValue(entity) as ICollection;
-                if (collection != null)
-                {
-                    foreach (IEntityId subItem in collection)
-                    {
-                        var subCollection = _collection.Database.GetCollection<BsonDocument>(subItem.GetType().Name);
-                        await subCollection.DeleteOneAsync(session, new BsonDocument("Id", subItem.Id), cancellationToken: cancellationToken).ConfigureAwait(false);
-                    }
-                }
+                var subCollection = dataBase.GetCollection<BsonDocument>(subEntityProperty.PropertyType.GetGenericArguments()[0].Name);
+                await subCollection.DeleteManyAsync(session, new BsonDocument(GetSubEntityParentIdName(_entityType), id), cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
-            await session.CommitTransactionAsync(cancellationToken).ConfigureAwait(false);
+            if (isTransactionSupported)
+            {
+                await session.CommitTransactionAsync(cancellationToken).ConfigureAwait(false);
+            }
+
             _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
         }
 
@@ -120,8 +124,6 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
             {
                 auditable.CreatedAt = DateTime.UtcNow;
             }
-
-            await OnCreateEntityAsync(entity, cancellationToken).ConfigureAwait(false);
 
             await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -158,7 +160,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
                 property.SetValue(storedEntity, property.GetValue(entity));
             }
 
-            await _database.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await _collection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id), storedEntity).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;
         }
@@ -169,97 +171,70 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.AdminStores
                 .ConfigureAwait(false);
         }
 
-        protected virtual Task OnCreateEntityAsync(TEntity entity, CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        protected virtual Task OnDeleteEntityAsync(TEntity entity, CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-
         private async Task AddExpandedAsync(TEntity entity, string expand)
         {
             if (expand != null)
             {
-                var idName = _entityType.GetSubEntityParentIdName();
                 var pathList = expand.Split(',');
                 foreach (var path in pathList)
                 {
-                    await PopulateSubEntitiesAsync(idName, path, entity).ConfigureAwait(false);
+                    await PopulateSubEntitiesAsync(path, entity).ConfigureAwait(false);
                 }
             }
         }
 
-        private async Task PopulateSubEntitiesAsync(string idName, string path, TEntity entity)
+        private async Task PopulateSubEntitiesAsync(string path, TEntity entity)
         {
             var property = _entityType.GetProperty(path);
-            var value = property.GetValue(entity);
-            if (value == null)
+            var propertyType = property.PropertyType;
+            
+            if (propertyType.ImplementsGenericInterface(typeof(ICollection<>)))
             {
-                if (property.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)))
-                {
-                    value = Activator.CreateInstance(typeof(Collection<>).MakeGenericType(property.PropertyType.GetGenericArguments()));
-                }
-                else
-                {
-                    value = Activator.CreateInstance(property.PropertyType);
-                }
-
-                property.SetValue(entity, value);
-            }
-
-            if (value is ICollection collection)
-            {
-                foreach (var v in collection)
-                {
-                    await PopulateSubEntityAsync("Id", v).ConfigureAwait(false);
-                    var idProperty = v.GetType().GetProperty(idName);
-                    idProperty.SetValue(v, entity.Id);
-                }
+                var items = await GetSubItemsAsync(entity, propertyType).ConfigureAwait(false);
+                property.SetValue(entity, items);
                 return;
             }
 
-            var parentIdProperty = _entityType.GetProperty($"{path}Id");
-            ((IEntityId)value).Id = parentIdProperty.GetValue(entity) as string;
-            await PopulateSubEntityAsync("Id", value).ConfigureAwait(false);
-            parentIdProperty.SetValue(entity, ((IEntityId)value).Id);
+            var navigationProperty = _entityType.GetProperty($"{path}Id");
+            var parentId = navigationProperty.GetValue(entity) as string;
+            var storeType = typeof(IAdminStore<>).MakeGenericType(propertyType);
+            var subStore = _provider.GetRequiredService(storeType);
+            var getMethod = storeType.GetMethod(nameof(IAdminStore<object>.GetAsync), new[] { typeof(string), typeof(GetRequest), typeof(CancellationToken) });
+
+            var task = getMethod.Invoke(subStore, new[]
+            {
+                    parentId,
+                    null,
+                    null
+                });
+            await (task as Task).ConfigureAwait(false);
+            var response = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
+            property.SetValue(entity, response);
         }
 
-        private async Task PopulateSubEntityAsync(string idName, object subEntity)
+        private async Task<object> GetSubItemsAsync(TEntity entity, Type propertyType)
         {
-            var type = subEntity.GetType();
-            var idProperty = type.GetProperty(idName);
-            var id = idProperty.GetValue(subEntity);
-            var loaded = await _database.LoadAsync<object>(id as string).ConfigureAwait(false);
-            if (loaded == null)
+            var storeType = typeof(IAdminStore<>).MakeGenericType(propertyType.GetGenericArguments()[0]);
+            var subStore = _provider.GetRequiredService(storeType);
+            var getPageResponseMethod = storeType.GetMethod(nameof(IAdminStore<object>.GetAsync), new[] { typeof(PageRequest), typeof(CancellationToken) });
+            var task = getPageResponseMethod.Invoke(subStore, new[]
             {
-                return;
-            }
-
-            // remove navigation
-            var iCollectionType = typeof(ICollection<>);
-            var iEntityIdType = typeof(IEntityId);
-            var subEntitiesProperties = type.GetProperties().Where(p => p.PropertyType.IsGenericType &&
-                p.PropertyType.ImplementsGenericInterface(iCollectionType) &&
-                p.PropertyType.GetGenericArguments()[0].IsAssignableTo(iEntityIdType));
-            foreach (var subEntityProperty in subEntitiesProperties)
-            {
-                subEntityProperty.SetValue(loaded, null);
-            }
-
-            CloneEntity(subEntity, type, loaded);
-            idProperty.SetValue(subEntity, ((IEntityId)loaded).Id);
+                    new PageRequest
+                    {
+                        Filter = $"{GetSubEntityParentIdName(_entityType)} eq '{entity.Id}'",
+                        Take = null
+                    },
+                    null
+                });
+            await (task as Task).ConfigureAwait(false);
+            var response = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
+            var items = response.GetType().GetProperty(nameof(PageResponse<object>.Items)).GetValue(response);
+            return items;
         }
 
-        private static void CloneEntity(object entity, Type type, object loaded)
-        {
-            foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                property.SetValue(entity, property.GetValue(loaded));
-            }
-        }
+        private static string GetSubEntityParentIdName(Type type)
+            => $"{type.Name.Replace("ProtectResource", "Api").Replace("IdentityResource", "Identity")}Id";
+
+        
     }
 }

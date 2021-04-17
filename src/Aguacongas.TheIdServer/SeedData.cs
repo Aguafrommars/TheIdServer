@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer
             using var scope = serviceProvider.CreateScope();
 
             var dbType = configuration.GetValue<DbTypes>("DbType");
-            if (dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb)
+            if (dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
             {
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 configContext.Database.Migrate();
