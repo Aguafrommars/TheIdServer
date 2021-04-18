@@ -109,9 +109,10 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             await sut.UpdateAsync(entity).ConfigureAwait(false);
 
             var updated = await sut.GetAsync(entity.Id, null).ConfigureAwait(false);
-            var auditable = updated as IAuditable;
-
-            Assert.NotNull(auditable.ModifiedAt);
+            if (updated is IAuditable auditable)
+            {
+                Assert.NotNull(auditable.ModifiedAt);
+            }            
         }
 
         [Fact]

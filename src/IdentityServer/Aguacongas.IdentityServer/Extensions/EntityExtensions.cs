@@ -2,7 +2,6 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using AutoMapper.Internal;
 using IdentityServer4.Models;
-using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,19 +11,6 @@ namespace Aguacongas.IdentityServer.Store
 {
     public static class EntityExtensions
     {
-        public static Entity.IdentityProvider ToIdentityProvider(this AuthenticationScheme scheme)
-        {
-            if (scheme == null)
-            {
-                return null;
-            }
-            return new Entity.IdentityProvider
-            {
-                Id = scheme.Name,
-                DisplayName = scheme.DisplayName
-            };
-        }
-
         public static Client ToClient(this Entity.Client client)
         {
             if (client == null)

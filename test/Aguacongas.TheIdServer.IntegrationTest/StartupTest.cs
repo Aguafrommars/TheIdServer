@@ -57,11 +57,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
             var rotationOptions = new KeyRotationOptions();
             configureRotationOptions.Configure(rotationOptions);
-            Assert.IsType<MongoDbXmlRepository<KeyRotationKey, DocumentSessionWrapper>>(rotationOptions.XmlRepository);
+            Assert.IsType<RavenDbXmlRepository<KeyRotationKey>>(rotationOptions.XmlRepository);
             var configureManagementOptions = provider.GetService<IConfigureOptions<KeyManagementOptions>>();
             var managementOptions = new KeyRotationOptions();
             configureManagementOptions.Configure(managementOptions);
-            Assert.IsType<MongoDbXmlRepository<DataProtectionKey, DocumentSessionWrapper>>(managementOptions.XmlRepository);
+            Assert.IsType<RavenDbXmlRepository<DataProtectionKey>>(managementOptions.XmlRepository);
         }
     }
 }

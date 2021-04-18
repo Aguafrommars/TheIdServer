@@ -83,7 +83,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddTransient(iAdminStoreType, adminStoreType);
             }
             return services.AddDbContext<ConfigurationDbContext>(optionsAction)
-                .AddConfigurationStores();
+                .AddConfigurationStores<SchemeDefinition>();
         }
 
         public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)

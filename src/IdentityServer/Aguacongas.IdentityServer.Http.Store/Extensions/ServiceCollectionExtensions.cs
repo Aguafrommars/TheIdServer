@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using System;
 using System.Net.Http;
@@ -9,8 +10,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+        public static IServiceCollection AddConfigurationHttpStores<TSchemeDefinition>(this IServiceCollection services,
             Action<IdentityServerOptions> configureOptions)
+            where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             var options = new IdentityServerOptions();
@@ -19,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .ConfigurePrimaryHttpMessageHandler((p => p.GetRequiredService<HttpClientHandler>()))
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
-            return services.AddConfigurationHttpStores(p => p.CreateApiHttpClient(options), configureOptions);
+            return services.AddConfigurationHttpStores<TSchemeDefinition>(p => p.CreateApiHttpClient(options), configureOptions);
         }
 
         /// <summary>
@@ -27,15 +29,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+        public static IServiceCollection AddConfigurationHttpStores<TSchemeDefinition>(this IServiceCollection services,
         Func<IServiceProvider, Task<HttpClient>> getHttpClient,
         Action<IdentityServerOptions> configureOptions)
+            where TSchemeDefinition: SchemeDefinitionBase, new()
         {
             getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
                 .AddIdentityServer4AdminHttpStores(getHttpClient)
-                .AddConfigurationStores();
+                .AddConfigurationStores<TSchemeDefinition>();
         }
 
         /// <summary>

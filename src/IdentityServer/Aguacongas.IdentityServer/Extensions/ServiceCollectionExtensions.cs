@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
 using IdentityServer4.Models;
@@ -30,11 +31,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
                 .AddSingleton(p => new OAuthTokenManager(p.GetRequiredService<HttpClient>(), p.GetRequiredService<IOptions<IdentityServerOptions>>()))
                 .AddTransient<OAuthDelegatingHandler>()
-                .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()))
-                .AddTransient<IIdentityProviderStore, IdentityProviderStore>();
+                .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()));
         }
 
-        public static IServiceCollection AddConfigurationStores(this IServiceCollection services)
+        public static IServiceCollection AddConfigurationStores<TSchemeDefinition>(this IServiceCollection services)
+            where TSchemeDefinition: SchemeDefinitionBase, new()
         {
             services.TryAddScoped<ICache<Client>>(p => new DefaultCache<Client>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
             services.TryAddScoped<ICache<IEnumerable<IdentityResource>>>(p => new DefaultCache<IEnumerable<IdentityResource>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
@@ -51,7 +52,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ResourceStore>()
                 .AddTransient<IResourceStore, CachingResourceStore<ResourceStore>>()
                 .AddTransient<CorsPolicyService>()
-                .AddTransient<ICorsPolicyService, CachingCorsPolicyService<CorsPolicyService>>();
+                .AddTransient<ICorsPolicyService, CachingCorsPolicyService<CorsPolicyService>>()
+                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore<TSchemeDefinition>>();
         }
 
         public static IServiceCollection AddOperationalStores(this IServiceCollection services)

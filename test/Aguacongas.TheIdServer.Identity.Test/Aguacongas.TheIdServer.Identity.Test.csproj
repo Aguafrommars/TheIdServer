@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
   </ItemGroup>
 

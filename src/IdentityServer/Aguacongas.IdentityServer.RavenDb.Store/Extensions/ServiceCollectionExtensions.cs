@@ -120,7 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationRavenDbStores(this IServiceCollection services)
         {
-            return services.AddConfigurationStores();
+            return services.AddConfigurationStores<SchemeDefinition>();
         }
 
         public static IServiceCollection AddOperationalRavenDbStores(this IServiceCollection services)

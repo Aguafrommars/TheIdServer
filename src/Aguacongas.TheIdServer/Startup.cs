@@ -461,7 +461,7 @@ namespace Aguacongas.TheIdServer
                 var connectionString = Configuration.GetConnectionString("DefaultConnection");
                 services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
                     .AddIdentityServer4AdminMongoDbStores(connectionString)
-                    .AddConfigurationStores()
+                    .AddConfigurationStores<Auth.SchemeDefinition>()
                     .AddOperationalStores();
 
                 identityBuilder.AddTheIdServerStores();
@@ -495,7 +495,7 @@ namespace Aguacongas.TheIdServer
         {
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
                .AddIdentityProviderStore()
-               .AddConfigurationHttpStores(configureOptions)
+               .AddConfigurationHttpStores<Auth.SchemeDefinition>(configureOptions)
                .AddOperationalHttpStores()
                .AddIdentity<ApplicationUser, IdentityRole>(
                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))

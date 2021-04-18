@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
@@ -16,7 +17,7 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
                 .AddIdentityProviderStore()
-                .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
+                .AddConfigurationHttpStores<SchemeDefinition>(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentity<IdentityUser, IdentityRole>()
                 .AddTheIdServerStores(options => options.ApiUrl = "http://exemple.com");
@@ -32,7 +33,7 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
                 .AddIdentityProviderStore()
-                .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
+                .AddConfigurationHttpStores<SchemeDefinition>(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalHttpStores()
                 .AddIdentityCore<IdentityUser>()
                 .AddTheIdServerStores(options => options.ApiUrl = "http://exemple.com");

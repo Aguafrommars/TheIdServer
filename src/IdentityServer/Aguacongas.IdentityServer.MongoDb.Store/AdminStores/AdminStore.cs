@@ -13,6 +13,7 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,6 +54,11 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
             var query = oDataQuery.Inner as IMongoQueryable<TEntity>;
 
             var count = await query.CountAsync(cancellationToken).ConfigureAwait(false);
+
+            var orderBy = request.OrderBy ?? nameof(IEntityId.Id);
+            oDataQuery = oDataQuery.OrderBy(orderBy);
+            query = oDataQuery.Inner as IMongoQueryable<TEntity>;
+
             if (request.Take.HasValue)
             {
                 query = query.Skip(request.Skip ?? 0).Take(request.Take.Value);
