@@ -505,8 +505,8 @@ namespace Aguacongas.TheIdServer
                 ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd))
                     .GetAwaiter().GetResult();
 
-                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<UserClaim>>()
-                    .Select(c => c.ToClaim())
+                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()
+                    .Select(c => new Claim(c.ClaimType, c.ClaimValue, c.OriginalType, c.Issuer))
                     .ToList();
                 claimList.Add(new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64));
                 ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(user, claimList))

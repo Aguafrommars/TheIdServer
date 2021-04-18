@@ -215,7 +215,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var roleId = GenerateId();
             await DbActionAsync<ApplicationDbContext>(context =>
             {
-                context.Roles.Add(new IdentityRole
+                context.Roles.Add(new Role
                 {
                     Id = roleId,
                     Name = roleId,
@@ -500,27 +500,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await DbActionAsync<ApplicationDbContext>(context =>
             {
-                context.Users.Add(new ApplicationUser
+                context.Users.Add(new User
                 {
                     Id = userId,
                     UserName = userId,
                     NormalizedUserName = userId.ToUpper()
                 });
-                context.UserClaims.Add(new IdentityServer.EntityFramework.Store.UserClaim
+                context.UserClaims.Add(new UserClaim
                 {
                     ClaimType = "filtered",
                     ClaimValue = "filtered",
                     Issuer = ClaimsIdentity.DefaultIssuer,
                     UserId = userId
                 });
-                context.UserTokens.Add(new IdentityUserToken<string>
+                context.UserTokens.Add(new UserToken
                 {
                     UserId = userId,
                     LoginProvider = "filtered",
                     Name = "filtered",
                     Value = "filtered"
                 });
-                context.UserLogins.Add(new IdentityUserLogin<string>
+                context.UserLogins.Add(new UserLogin
                 {
                     UserId = userId,
                     LoginProvider = "filtered",

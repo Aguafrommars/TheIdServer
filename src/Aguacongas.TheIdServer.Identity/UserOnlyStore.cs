@@ -28,9 +28,9 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="tokenStore"></param>
         /// <param name="describer">The <see cref="T:Microsoft.AspNetCore.Identity.IdentityErrorDescriber" /> used to describe store errors.</param>
         public UserOnlyStore(IAdminStore<User> store,
-            IAdminStore<UserClaim> claimStore, 
-            IAdminStore<UserLogin> loginStore, 
-            IAdminStore<UserToken> tokenStore, 
+            IAdminStore<UserClaim> claimStore,
+            IAdminStore<UserLogin> loginStore,
+            IAdminStore<UserToken> tokenStore,
             IdentityErrorDescriber describer = null) : base(store, claimStore, loginStore, tokenStore, describer)
         {
         }
@@ -39,11 +39,11 @@ namespace Aguacongas.TheIdServer.Identity
     /// <summary>
     /// Represents a new instance of a persistence store for <see cref="IdentityUser"/>.
     /// </summary>
-    public class UserOnlyStore<TUser> : TheIdServerUserStoreBase<TUser, 
-            string, 
-            IdentityUserLogin<string>, 
+    public class UserOnlyStore<TUser> : TheIdServerUserStoreBase<TUser,
+            string,
+            IdentityUserLogin<string>,
             IdentityUserToken<string>>
-        where TUser: IdentityUser, new()
+        where TUser : IdentityUser, new()
     {
         private readonly IAdminStore<User> _userStore;
         private readonly IAdminStore<UserClaim> _claimStore;
@@ -86,7 +86,7 @@ namespace Aguacongas.TheIdServer.Identity
                 user.Id = created.Id;
                 return IdentityResult.Success;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return IdentityResult.Failed(new IdentityError
                 {
@@ -258,15 +258,10 @@ namespace Aguacongas.TheIdServer.Identity
             AssertNotNull(user, nameof(user));
             AssertNotNull(claims, nameof(claims));
 
-            var taskList = new List<Task>(claims.Count());
-
-            foreach(var claim in claims)
+            foreach (var claim in claims)
             {
-                taskList.Add(_claimStore.CreateAsync(CreateUserClaim(user, claim), cancellationToken));
+                await _claimStore.CreateAsync(CreateUserClaim(user, claim), cancellationToken).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -290,15 +285,12 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserClaim.UserId)} eq '{user.Id}' and {nameof(UserClaim.ClaimType)} eq '{claim.Type}' and {nameof(UserClaim.ClaimValue)} eq '{claim.Value}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            var taskList = new List<Task>(response.Count);
             foreach (var roleClaim in response.Items)
             {
                 roleClaim.ClaimType = newClaim.Type;
                 roleClaim.ClaimValue = newClaim.Value;
-                taskList.Add(_claimStore.UpdateAsync(roleClaim, cancellationToken));
+                await _claimStore.UpdateAsync(roleClaim, cancellationToken).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -316,13 +308,10 @@ namespace Aguacongas.TheIdServer.Identity
 
             var userClaims = await GetUserClaimsAsync(user).ConfigureAwait(false);
             var toRemove = userClaims.Where(c => claims.Any(cl => cl.Type == c.ClaimType && cl.Value == c.ClaimValue));
-            var taskList = new List<Task>(toRemove.Count());
             foreach (var claim in toRemove)
             {
-                taskList.Add(_claimStore.DeleteAsync(claim.Id.ToString(), cancellationToken));
+                await _claimStore.DeleteAsync(claim.Id.ToString(), cancellationToken).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -363,7 +352,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserLogin.UserId)} eq '{user.Id}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            foreach(var login in response.Items)
+            foreach (var login in response.Items)
             {
                 await _loginStore.DeleteAsync($"{login.UserId}@{login.LoginProvider}@{login.ProviderKey}", cancellationToken).ConfigureAwait(false);
             }
@@ -465,23 +454,17 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserClaim.ClaimType)} eq '{claim.Type}' and {nameof(UserClaim.ClaimValue)} eq '{claim.Value}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            var users = new ConcurrentBag<TUser>();
-            var taskList = new List<Task>(response.Count);
+            var userList = new List<TUser>();
             foreach (var uc in response.Items)
             {
-                taskList.Add(Task.Run(async () => {
-                    var user = await FindByIdAsync(uc.UserId, cancellationToken)
-                        .ConfigureAwait(false);
-                    if (user != null)
-                    {
-                        users.Add(user);
-                    }
-                }, cancellationToken));
+                var user = await FindByIdAsync(uc.UserId, cancellationToken).ConfigureAwait(false);
+                if (user != null)
+                {
+                    userList.Add(user);
+                }
             }
 
-            await Task.WhenAll(taskList).ConfigureAwait(false);
-
-            return users.ToList();
+            return userList;
         }
 
         /// <summary>
@@ -548,7 +531,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             return SaveUserTokensAsync(user, tokens, cancellationToken);
         }
-        
+
         /// <summary>
         /// Return a user with the matching userId if it exists.
         /// </summary>
@@ -628,13 +611,10 @@ namespace Aguacongas.TheIdServer.Identity
         /// <returns></returns>
         protected override async Task SaveUserTokensAsync(TUser user, IEnumerable<IdentityUserToken<string>> tokens, CancellationToken cancellationToken)
         {
-            var taskList = new List<Task>(tokens.Count());
-            foreach(var token in tokens)
+            foreach (var token in tokens)
             {
-                taskList.Add(_tokenStore.CreateAsync(token.ToEntity(), cancellationToken));
+                await _tokenStore.CreateAsync(token.ToEntity(), cancellationToken).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
         }
 
         protected virtual async Task<List<IdentityUserClaim<string>>> GetUserClaimsAsync(TUser user)

@@ -329,13 +329,10 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}' and {nameof(RoleClaim.ClaimType)} eq '{claim.Type}' and {nameof(RoleClaim.ClaimValue)} eq '{claim.Value}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            var taskList = new List<Task>(response.Count);
             foreach(var roleClaim in response.Items)
             {
-                taskList.Add(_claimStore.DeleteAsync(roleClaim.Id.ToString(), cancellationToken));
+                await _claimStore.DeleteAsync(roleClaim.Id.ToString(), cancellationToken).ConfigureAwait(false);
             }
-
-            await Task.WhenAll(taskList).ConfigureAwait(false);
         }
 
         /// <summary>

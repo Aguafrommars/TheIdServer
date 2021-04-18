@@ -29,9 +29,8 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
             Sut = TestUtils.CreateTestServer(
                 services =>
                 {
-                    services.AddDbContext<ApplicationDbContext>(options =>
+                    services.AddIdentityServer4AdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddIdentityProviderStore()
                     .AddConfigurationEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))

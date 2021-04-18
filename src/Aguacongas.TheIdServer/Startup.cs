@@ -469,12 +469,11 @@ namespace Aguacongas.TheIdServer
             else
             {
                 services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
-                    .AddDbContext<ApplicationDbContext>(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                    .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
 
-                identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>();
+                identityBuilder.AddTheIdServerStores();
             }
 
 

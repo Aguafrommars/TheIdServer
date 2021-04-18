@@ -1,7 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.Identity;
-using System;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
@@ -38,7 +37,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
                 EmailConfirmed = user.EmailConfirmed,
                 Id = user.Id,
                 LockoutEnabled = user.LockoutEnabled,
-                LockoutEnd = user.LockoutEnd.HasValue ? (DateTime?)user.LockoutEnd.Value.DateTime : null,
+                LockoutEnd = user.LockoutEnd.HasValue ? user.LockoutEnd.Value.DateTime : null,
                 NormalizedEmail = string.IsNullOrEmpty(user.NormalizedEmail) ? null : user.NormalizedEmail,
                 NormalizedUserName = user.NormalizedUserName,
                 PasswordHash = user.PasswordHash,

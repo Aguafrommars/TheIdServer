@@ -2,7 +2,6 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
-using Aguacongas.TheIdServer.Models;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -23,7 +22,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             return DbActionAsync<ApplicationDbContext>(context =>
             {
-                context.Users.Add(new ApplicationUser
+                context.Users.Add(new User
                 {
                     Id = GenerateId(),
                     UserName = "filtered",
