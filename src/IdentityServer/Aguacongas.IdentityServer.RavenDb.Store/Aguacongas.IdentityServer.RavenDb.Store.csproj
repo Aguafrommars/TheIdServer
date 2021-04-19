@@ -28,14 +28,14 @@
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication.RavenDb" Version="4.0.3" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
-		<PackageReference Include="Aguacongas.Identity.RavenDb" Version="2.0.0-preview0008" />
+		<PackageReference Include="Aguacongas.Identity.RavenDb" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="package-icon.png" Pack="true" PackagePath=""/>
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 </Project>
