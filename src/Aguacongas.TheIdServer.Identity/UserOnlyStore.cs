@@ -307,10 +307,10 @@ namespace Aguacongas.TheIdServer.Identity
             AssertNotNull(claims, nameof(claims));
 
             var userClaims = await GetUserClaimsAsync(user).ConfigureAwait(false);
-            var toRemove = userClaims.Where(c => claims.Any(cl => cl.Type == c.ClaimType && cl.Value == c.ClaimValue));
+            var toRemove = userClaims.Items.Where(c => claims.Any(cl => cl.Type == c.ClaimType && cl.Value == c.ClaimValue));
             foreach (var claim in toRemove)
             {
-                await _claimStore.DeleteAsync(claim.Id.ToString(), cancellationToken).ConfigureAwait(false);
+                await _claimStore.DeleteAsync(claim.Id, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -617,13 +617,12 @@ namespace Aguacongas.TheIdServer.Identity
             }
         }
 
-        protected virtual async Task<List<IdentityUserClaim<string>>> GetUserClaimsAsync(TUser user)
+        protected virtual Task<PageResponse<UserClaim>> GetUserClaimsAsync(TUser user)
         {
-            var response = await _claimStore.GetAsync(new PageRequest
+            return _claimStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserClaim.UserId)} eq '{user.Id}'"
-            }).ConfigureAwait(false);
-            return response.Items.Select(CreateIdentityUserClaim).ToList();
+            });
         }
 
         protected virtual async Task<List<IdentityUserLogin<string>>> GetUserLoginsAsync(string userId)
@@ -643,18 +642,6 @@ namespace Aguacongas.TheIdServer.Identity
                 LoginProvider = entity.LoginProvider,
                 Name = entity.Name,
                 Value = entity.Value
-            };
-        }
-
-        private IdentityUserClaim<string> CreateIdentityUserClaim(UserClaim entity)
-        {
-            return new IdentityUserClaim<string>
-            {
-                UserId = entity.UserId,
-                ClaimType = entity.ClaimType,
-                ClaimValue = entity.ClaimValue,
-
-                Id = int.Parse(entity.Id)
             };
         }
 

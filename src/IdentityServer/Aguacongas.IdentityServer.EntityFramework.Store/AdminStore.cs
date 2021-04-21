@@ -72,6 +72,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             {
                 entity.Id = Guid.NewGuid().ToString();
             }
+            if (entity is IAuditable auditable)
+            {
+                auditable.CreatedAt = DateTime.UtcNow;
+            }
             await _context.AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);

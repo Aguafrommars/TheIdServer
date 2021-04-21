@@ -132,8 +132,8 @@ namespace Aguacongas.TheIdServer.MySql.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()

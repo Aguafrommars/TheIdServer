@@ -158,26 +158,8 @@ namespace Aguacongas.TheIdServer
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
-            if (isProxy)
-            {
-                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
-                    .AddTheIdServerHttpStore();
-            }
-            else if (DbType == DbTypes.RavenDb)
-            {
-                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, RavenDbStore.SchemeDefinition>()
-                    .AddRavenDbStore();
-            }
-            else if (DbType == DbTypes.MongoDb)
-            {
-                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
-                    .AddMongoDbStore();
-            }
-            else
-            {
-                mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                    .AddEntityFrameworkStore<ConfigurationDbContext>();
-            }
+            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
+                .AddTheIdServerStore();
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
             services.AddScoped<LazyAssemblyLoader>()
@@ -301,22 +283,17 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToPage("/_Host");
                 });
 
-            LoadDynamicConfiguration(app, isProxy);
+            LoadDynamicConfiguration(app);
         }
 
-        private void LoadDynamicConfiguration(IApplicationBuilder app, bool isProxy)
+        private void LoadDynamicConfiguration(IApplicationBuilder app)
         {
-            if (isProxy || DbType == DbTypes.MongoDb)
-            {
-                app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
-                return;
-            }
             if (DbType == DbTypes.RavenDb)
             {
                 app.LoadDynamicAuthenticationConfiguration<RavenDbStore.SchemeDefinition>();
                 return;
             }
-            app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+            app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
         }
 
         private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
@@ -468,9 +445,9 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
+                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
                     .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddConfigurationEntityFrameworkStores<Auth.SchemeDefinition>(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
 
                 identityBuilder.AddTheIdServerStores();

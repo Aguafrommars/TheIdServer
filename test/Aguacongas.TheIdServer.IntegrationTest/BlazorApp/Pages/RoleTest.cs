@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -257,6 +258,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 context.RoleClaims.Add(new RoleClaim
                 {
+                    Id = Guid.NewGuid().ToString(),
                     RoleId = roleId,
                     ClaimType = "filtered",
                     ClaimValue = "filtered"

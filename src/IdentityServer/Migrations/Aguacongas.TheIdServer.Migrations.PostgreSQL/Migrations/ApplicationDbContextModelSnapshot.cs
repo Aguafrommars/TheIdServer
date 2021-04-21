@@ -46,8 +46,8 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RoleClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()
@@ -134,8 +134,8 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()

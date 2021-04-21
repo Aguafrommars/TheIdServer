@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _isReadOnly = Entity.Provider != null;
+            _isReadOnly = Entity.Id != null;
         }
 
         protected override async Task OnInitializedAsync()

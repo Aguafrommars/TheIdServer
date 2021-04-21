@@ -58,7 +58,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _fieldIdentifier = base.FieldIdentifier;
+            _fieldIdentifier = FieldIdentifier;
         }
 
         protected override void OnInitialized()

@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
@@ -27,11 +28,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.AddDbContext<ApplicationDbContext>(optionsAction);
         }
 
-        public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddConfigurationEntityFrameworkStores<TSchemeDefinition>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+            where TSchemeDefinition: SchemeDefinitionBase, new()
         {
             AddStoresForContext(services, typeof(ConfigurationDbContext));
             return services.AddDbContext<ConfigurationDbContext>(optionsAction)
-                .AddConfigurationStores<SchemeDefinition>();
+                .AddConfigurationStores<TSchemeDefinition>();
         }
 
         public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)

@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -81,13 +82,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                         return;
                     }
 
-                    var propertyArray = SelectProperties.Split(',');
-                    var expressionArray = new string[propertyArray.Length];
-                    for (int i = 0; i < propertyArray.Length; i++)
-                    {
-                        expressionArray[i] = $"contains({propertyArray[i]},'{filter.Replace("'", "''")}')";
-                    }
-                    _pageRequest.Filter = string.Join(" or ", expressionArray);
+                    _pageRequest.Filter = CreateRequestFilter(filter);
 
                     var page = await AdminStore.GetAsync(_pageRequest, token)
                                 .ConfigureAwait(false);
@@ -97,6 +92,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     await InvokeAsync(() => StateHasChanged())
                         .ConfigureAwait(false);
                 }, TaskScheduler.Default);
+        }
+
+        protected virtual string CreateRequestFilter(string filter)
+        {
+            var propertyArray = SelectProperties.Split(',');
+            var expressionArray = new string[propertyArray.Length];
+            for (int i = 0; i < propertyArray.Length; i++)
+            {
+                expressionArray[i] = $"contains({propertyArray[i]},'{filter.Replace("'", "''")}')";
+            }
+            return string.Join(" or ", expressionArray);
         }
 
         protected void OnItemSelected(string id, bool isSelected)
@@ -136,14 +142,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             EntityList = page.Items;
         }
 
-        private async Task GridState_OnHeaderClicked(Models.SortEventArgs e)
+        private async Task GridState_OnHeaderClicked(SortEventArgs e)
         {
             _pageRequest.OrderBy = e.OrderBy;
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
             StateHasChanged();
         }
-
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

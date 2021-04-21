@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 .AddLogging()
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => options.Caching.CorsExpiration = TimeSpan.FromMinutes(1))
                 .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
-                .AddConfigurationEntityFrameworkStores(options =>
+                .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options =>
                     options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
                 .BuildServiceProvider();
 

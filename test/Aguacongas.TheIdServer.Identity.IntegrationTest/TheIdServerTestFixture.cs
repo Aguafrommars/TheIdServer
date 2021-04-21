@@ -1,8 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
-using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     .AddIdentityServer4AdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
                     .AddIdentityProviderStore()
-                    .AddConfigurationEntityFrameworkStores(options =>
+                    .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options =>
                         options.UseInMemoryDatabase(dbName))
                     .AddOperationalEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName));

@@ -22,8 +22,7 @@ namespace Aguacongas.TheIdServer
     static class SeedData
     {
         public static void EnsureSeedData(IConfiguration configuration)
-        {
-            
+        {            
             var services = new ServiceCollection();
             var startup = new Startup(configuration, null);
             startup.ConfigureServices(services);
@@ -44,8 +43,11 @@ namespace Aguacongas.TheIdServer
                 appcontext.Database.Migrate();
             }
 
-            SeedUsers(scope, configuration);
-            SeedConfiguration(scope, configuration);
+            if (configuration.GetValue<bool>("Seed"))
+            {
+                SeedUsers(scope, configuration);
+                SeedConfiguration(scope, configuration);
+            }
         }
 
         public static void SeedConfiguration(IServiceScope scope, IConfiguration configuration)

@@ -18,14 +18,26 @@ namespace Microsoft.Extensions.DependencyInjection
         public static DynamicAuthenticationBuilder AddTheIdServerHttpStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder, Func<IServiceProvider, Task<HttpClient>> getHttpClient = null)
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
-            var services = builder.Services;
-            services
-                .AddTransient<IDynamicProviderStore<TSchemeDefinition>, DynamicProviderStore<TSchemeDefinition>>()
-                .AddTransient<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>();
+            builder.AddTheIdServerStore<TSchemeDefinition>();
             if (getHttpClient != null)
             {
-                services.AddIdentityServer4AdminHttpStores(getHttpClient);
+                builder.Services.AddIdentityServer4AdminHttpStores(getHttpClient);
             }
+            return builder;
+        }
+
+        public static DynamicAuthenticationBuilder AddTheIdServerStore(this DynamicAuthenticationBuilder builder)
+        {
+            return builder.AddTheIdServerStore<SchemeDefinition>();
+        }
+
+        public static DynamicAuthenticationBuilder AddTheIdServerStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
+            where TSchemeDefinition : SchemeDefinitionBase, new()
+        {
+            builder.Services
+                .AddTransient<IDynamicProviderStore<TSchemeDefinition>, DynamicProviderStore<TSchemeDefinition>>()
+                .AddTransient<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>();
+
             return builder;
         }
     }

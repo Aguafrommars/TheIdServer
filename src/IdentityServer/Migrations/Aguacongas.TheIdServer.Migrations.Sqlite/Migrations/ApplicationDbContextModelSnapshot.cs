@@ -43,8 +43,8 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RoleClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()
@@ -131,8 +131,8 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserClaim", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()
