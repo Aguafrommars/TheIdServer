@@ -8,6 +8,7 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -47,9 +48,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Auth = Aguacongas.TheIdServer.Authentication;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
-using RavenDbStore = Aguacongas.IdentityServer.RavenDb.Store;
 
 namespace Aguacongas.TheIdServer
 {
@@ -74,9 +73,17 @@ namespace Aguacongas.TheIdServer
             void configureOptions(IdentityServerOptions options)
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
+                .AddIdentityProviderStore()                
+                .AddOperationalStores()
+                .AddIdentity<ApplicationUser, IdentityRole>(
+                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+                .AddTheIdServerStores(configureOptions)
+                .AddDefaultTokenProviders();
+
             if (isProxy)
             {
-                AddProxyServices(services, configureOptions);
+                services.AddConfigurationHttpStores<SchemeDefinition>(configureOptions);
             }
             else
             {
@@ -85,7 +92,7 @@ namespace Aguacongas.TheIdServer
 
             ConfigureDataProtection(services);
 
-            var identityBuilder = services.AddClaimsProviders(Configuration)
+            var identityServerBuilder = services.AddClaimsProviders(Configuration)
                 .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
                 .Configure<AccountOptions>(Configuration.GetSection(nameof(AccountOptions)))
                 .Configure<DynamicClientRegistrationOptions>(Configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
@@ -98,11 +105,11 @@ namespace Aguacongas.TheIdServer
                 .AddDynamicClientRegistration()
                 .ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
 
-            identityBuilder.AddJwtRequestUriHttpClient();
+            identityServerBuilder.AddJwtRequestUriHttpClient();
 
             if (isProxy)
             {
-                identityBuilder.Services.AddTransient<IProfileService>(p =>
+                identityServerBuilder.Services.AddTransient<IProfileService>(p =>
                 {
                     var options = p.GetRequiredService<IOptions<IdentityServerOptions>>().Value;
                     var httpClient = p.GetRequiredService<IHttpClientFactory>().CreateClient(options.HttpClientName);
@@ -115,10 +122,10 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                identityBuilder.AddProfileService<ProfileService<ApplicationUser>>();
+                identityServerBuilder.AddProfileService<ProfileService<ApplicationUser>>();
                 if (!Configuration.GetValue<bool>("DisableTokenCleanup"))
                 {
-                    identityBuilder.AddTokenCleaner(Configuration.GetValue<TimeSpan?>("TokenCleanupInterval") ?? TimeSpan.FromMinutes(1));
+                    identityServerBuilder.AddTokenCleaner(Configuration.GetValue<TimeSpan?>("TokenCleanupInterval") ?? TimeSpan.FromMinutes(1));
                 }
             }
 
@@ -158,7 +165,7 @@ namespace Aguacongas.TheIdServer
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
-            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, Auth.SchemeDefinition>()
+            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
                 .AddTheIdServerStore();
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
@@ -283,12 +290,7 @@ namespace Aguacongas.TheIdServer
                     endpoints.MapFallbackToPage("/_Host");
                 });
 
-            LoadDynamicConfiguration(app);
-        }
-
-        private void LoadDynamicConfiguration(IApplicationBuilder app)
-        {
-            app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
+            app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
         private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
@@ -399,12 +401,6 @@ namespace Aguacongas.TheIdServer
             services.Configure<IdentityServerOptions>(options => Configuration.GetSection("ApiAuthentication").Bind(options))
                 .AddIdentityProviderStore();
 
-            var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>(
-                    options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-                .AddDefaultTokenProviders();
-
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>();
-
             if (DbType == DbTypes.RavenDb)
             {
                 services.Configure<RavenDbOptions>(options => Configuration.GetSection(nameof(RavenDbOptions)).Bind(options))
@@ -423,28 +419,19 @@ namespace Aguacongas.TheIdServer
                         documentStore.SetFindIdentityPropertyForIdentityServerStores();
                         return documentStore.Initialize();
                     })                    
-                    .AddIdentityServer4AdminRavenDbStores()
-                    .AddConfigurationStores<Auth.SchemeDefinition>()
-                    .AddOperationalStores();
+                    .AddIdentityServer4AdminRavenDbStores();
 
-                identityBuilder.AddRavenDbStores();
             }
             if (DbType == DbTypes.MongoDb)
             {
                 var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                services.AddIdentityServer4AdminMongoDbStores(connectionString)
-                    .AddConfigurationStores<Auth.SchemeDefinition>()
-                    .AddOperationalStores();
-
-                identityBuilder.AddTheIdServerStores();
+                services.AddIdentityServer4AdminMongoDbStores(connectionString);
             }
             else
             {
                 services.AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddConfigurationEntityFrameworkStores<Auth.SchemeDefinition>(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
-
-                identityBuilder.AddTheIdServerStores();
             }
 
 
@@ -459,18 +446,6 @@ namespace Aguacongas.TheIdServer
             {
                 signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => Configuration.GetSection("SignalR:RedisOptions").Bind(options));
             }
-        }
-
-        private void AddProxyServices(IServiceCollection services, Action<IdentityServerOptions> configureOptions)
-        {
-            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-               .AddIdentityProviderStore()
-               .AddConfigurationHttpStores<Auth.SchemeDefinition>(configureOptions)
-               .AddOperationalHttpStores()
-               .AddIdentity<ApplicationUser, IdentityRole>(
-                   options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-               .AddTheIdServerStores(configureOptions)
-               .AddDefaultTokenProviders();
         }
 
         private void ConfigureInitialData(IApplicationBuilder app)

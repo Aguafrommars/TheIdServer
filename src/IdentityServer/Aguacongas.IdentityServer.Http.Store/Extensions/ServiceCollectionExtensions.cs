@@ -42,16 +42,6 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Adds the operational HTTP stores.
-        /// </summary>
-        /// <param name="services">The services.</param>
-        /// <returns></returns>
-        public static IServiceCollection AddOperationalHttpStores(this IServiceCollection services)
-        {
-            return services.AddOperationalStores();
-        }
-
-        /// <summary>
         /// Creates the API HTTP client.
         /// </summary>
         /// <param name="provider">The provider.</param>
