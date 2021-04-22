@@ -166,7 +166,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
                 property.SetValue(storedEntity, property.GetValue(entity));
             }
 
-            await _collection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id), storedEntity).ConfigureAwait(false);
+            await _collection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id), storedEntity, cancellationToken: cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
             return entity;
         }

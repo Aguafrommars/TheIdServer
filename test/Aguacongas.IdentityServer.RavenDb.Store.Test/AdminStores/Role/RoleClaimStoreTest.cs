@@ -135,10 +135,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Role
             Assert.Null(await s2.LoadAsync<Entity.RoleClaim>($"{typeof(Entity.RoleClaim).Name.ToLowerInvariant()}/{entity.Id}"));
         }
 
-        private IAdminStore<Entity.RoleClaim> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.RoleClaim>> logger)
+        private static IAdminStore<Entity.RoleClaim> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.RoleClaim>> logger)
             => new RoleClaimStore(new ScopedAsynDocumentcSession(session), logger);
 
-        private ICollection<Entity.RoleClaim> GetCollection(Entity.Role role)
+        private static ICollection<Entity.RoleClaim> GetCollection(Entity.Role role)
         {
             role.RoleClaims = role.RoleClaims ?? new List<Entity.RoleClaim>();
             return role.RoleClaims;

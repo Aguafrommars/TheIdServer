@@ -38,7 +38,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             _pageRequest.Filter = $"contains({nameof(entity.ExternalProvider.Id)},'{term}') or contains({nameof(entity.ExternalProvider.DisplayName)},'{term}')";
-            var response = await _store.GetAsync(_pageRequest)
+            var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 
             _filteredProviders = response.Items;

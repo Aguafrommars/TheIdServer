@@ -51,8 +51,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static object GetCollection(Func<IServiceProvider, IMongoDatabase> getDatabase, IServiceProvider provider, Type entityType)
         {
-            var mongoDatabaseType = typeof(IMongoDatabase);
-            var getCollectionMethod = mongoDatabaseType.GetMethod(nameof(IMongoDatabase.GetCollection));
             var database = getDatabase(provider);
             return database.GetCollection(entityType);
         }

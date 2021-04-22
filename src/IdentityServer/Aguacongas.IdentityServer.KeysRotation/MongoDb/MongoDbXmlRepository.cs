@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.MongoDb
                 FriendlyName = friendlyName,
                 Xml = element.ToString(SaveOptions.DisableFormatting)
             };
-            collection.InsertOne(newKey);;
+            collection.InsertOne(newKey);
         }
 
         private static XElement TryParseKeyXml(string xml, ILogger logger)

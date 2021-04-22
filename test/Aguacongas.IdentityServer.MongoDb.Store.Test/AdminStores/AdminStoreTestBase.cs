@@ -229,7 +229,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 _ => throw new InvalidOperationException(),
             };        
 
-        private string GetExpand()
+        private static string GetExpand()
         {
             return string.Join(',', GetNavigrationProperties().Select(p => p.Name));
         }
