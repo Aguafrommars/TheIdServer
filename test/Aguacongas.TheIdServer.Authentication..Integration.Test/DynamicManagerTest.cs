@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                     new Claim("role", SharedConstants.READER)
                 });
 
-            return builder.AddTheIdServerHttpStore();
+            return builder.AddTheIdServerStore();
         }
     }
 }

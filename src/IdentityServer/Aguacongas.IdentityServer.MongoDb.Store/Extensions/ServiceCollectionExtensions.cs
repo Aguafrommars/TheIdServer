@@ -1,8 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.MongoDb.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -35,6 +37,11 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 AddMonogoAdminStore(services, entityType, getDatabase);
             }
+
+            services.AddTransient<IAdminStore<ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<ExternalProvider>(
+                p,
+                p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>()),
+                p.GetRequiredService<IProviderClient>()));
 
             return services;
         }

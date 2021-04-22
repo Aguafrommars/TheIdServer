@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Role;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.User;
@@ -9,6 +10,7 @@ using Aguacongas.IdentityServer.RavenDb.Store.ApiScope;
 using Aguacongas.IdentityServer.RavenDb.Store.Client;
 using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
+using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
@@ -63,7 +65,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
                 .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
                 .AddTransient<IAdminStore<Entity.DeviceCode>, AdminStore<Entity.DeviceCode>>()
-                .AddTransient<IAdminStore<Entity.ExternalProvider>, AdminStore<Entity.ExternalProvider>>()
+                .AddTransient<IAdminStore<Entity.ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<Entity.ExternalProvider>(
+                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                    p.GetRequiredService<ILogger<AdminStore<Entity.ExternalProvider>>>()),
+                    p.GetRequiredService<IProviderClient>()))
                 .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
                 .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
                 .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()

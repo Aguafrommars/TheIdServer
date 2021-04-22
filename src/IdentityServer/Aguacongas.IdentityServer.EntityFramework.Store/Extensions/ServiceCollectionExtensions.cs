@@ -1,12 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using AutoMapper.Internal;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -32,6 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
             where TSchemeDefinition: SchemeDefinitionBase, new()
         {
             AddStoresForContext(services, typeof(ConfigurationDbContext));
+            services.AddTransient<IAdminStore<ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<ExternalProvider, ConfigurationDbContext>(
+                p.GetRequiredService<ConfigurationDbContext>(),
+                p.GetRequiredService<ILogger<AdminStore<ExternalProvider, ConfigurationDbContext>>>()),
+                p.GetRequiredService<IProviderClient>()));
             return services.AddDbContext<ConfigurationDbContext>(optionsAction)
                 .AddConfigurationStores<TSchemeDefinition>();
         }

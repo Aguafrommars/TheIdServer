@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
+using MongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -62,6 +63,47 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var managementOptions = new KeyRotationOptions();
             configureManagementOptions.Configure(managementOptions);
             Assert.IsType<RavenDbXmlRepository<DataProtectionKey>>(managementOptions.XmlRepository);
+        }
+
+        [Fact]
+        public void ConfigureService_should_configure_mongodb_services()
+        {
+            var documentStoreMock = new Mock<IDocumentStore>();
+            var sessionMock = new Mock<IAsyncDocumentSession>();
+            var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
+            sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
+            documentStoreMock.Setup(m => m.OpenAsyncSession(It.IsAny<SessionOptions>())).Returns(sessionMock.Object);
+            using var sut = new HostBuilder()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    builder.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["DbType"] = DbTypes.RavenDb.ToString(),
+                        ["IdentityServer:Key:StorageKind"] = StorageKind.MongoDb.ToString(),
+                        ["DataProtectionOptions:StorageKind"] = StorageKind.MongoDb.ToString(),
+                        ["Seed"] = "false"
+                    });
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    var startup = new Startup(context.Configuration, null);
+                    services.AddSingleton(p => documentStoreMock.Object);
+                    startup.ConfigureServices(services);
+                    services.AddSingleton(p => documentStoreMock.Object);
+                }).Build();
+
+            var provider = sut.Services;
+            Assert.NotNull(provider.GetService<IAdminStore<ApiClaim>>());
+            var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
+            var rotationOptions = new KeyRotationOptions();
+            configureRotationOptions.Configure(rotationOptions);
+            Assert.IsType<MongoDb.MongoDbXmlRepository<MongoDb.KeyRotationKey>>(rotationOptions.XmlRepository);
+            var configureManagementOptions = provider.GetService<IConfigureOptions<KeyManagementOptions>>();
+            var managementOptions = new KeyRotationOptions();
+            configureManagementOptions.Configure(managementOptions);
+            Assert.IsType<MongoDb.MongoDbXmlRepository<MongoDb.DataProtectionKey>>(managementOptions.XmlRepository);
         }
     }
 }
