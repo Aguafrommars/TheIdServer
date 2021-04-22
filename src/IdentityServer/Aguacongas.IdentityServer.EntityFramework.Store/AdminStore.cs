@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var query = _context.Set<TEntity>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            int? count = request.Take.HasValue ? await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
             var page = odataQuery.GetPage(request);
 

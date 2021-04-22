@@ -288,11 +288,6 @@ namespace Aguacongas.TheIdServer
 
         private void LoadDynamicConfiguration(IApplicationBuilder app)
         {
-            if (DbType == DbTypes.RavenDb)
-            {
-                app.LoadDynamicAuthenticationConfiguration<RavenDbStore.SchemeDefinition>();
-                return;
-            }
             app.LoadDynamicAuthenticationConfiguration<Auth.SchemeDefinition>();
         }
 
@@ -408,6 +403,8 @@ namespace Aguacongas.TheIdServer
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddDefaultTokenProviders();
 
+            services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>();
+
             if (DbType == DbTypes.RavenDb)
             {
                 services.Configure<RavenDbOptions>(options => Configuration.GetSection(nameof(RavenDbOptions)).Bind(options))
@@ -425,19 +422,17 @@ namespace Aguacongas.TheIdServer
                         }
                         documentStore.SetFindIdentityPropertyForIdentityServerStores();
                         return documentStore.Initialize();
-                    })
-                    .AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<RavenDbStore.SchemeDefinition>>()
-                    .AddIdentityServer4AdminRavenDbStores<ApplicationUser>()
-                    .AddConfigurationRavenDbStores()
-                    .AddOperationalRavenDbStores();
+                    })                    
+                    .AddIdentityServer4AdminRavenDbStores()
+                    .AddConfigurationStores<Auth.SchemeDefinition>()
+                    .AddOperationalStores();
 
                 identityBuilder.AddRavenDbStores();
             }
             if (DbType == DbTypes.MongoDb)
             {
                 var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                    .AddIdentityServer4AdminMongoDbStores(connectionString)
+                services.AddIdentityServer4AdminMongoDbStores(connectionString)
                     .AddConfigurationStores<Auth.SchemeDefinition>()
                     .AddOperationalStores();
 
@@ -445,8 +440,7 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<Auth.SchemeDefinition>>()
-                    .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                services.AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddConfigurationEntityFrameworkStores<Auth.SchemeDefinition>(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
 

@@ -190,7 +190,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(User.Id)} eq '{userId}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return CreateUser(response.Items.First());
             }
@@ -215,7 +215,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(User.NormalizedUserName)} eq '{normalizedUserName}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
 
                 return CreateUser(response.Items.First());
@@ -427,7 +427,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(User.NormalizedEmail)} eq '{normalizedEmail}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return CreateUser(response.Items.First());
             }
@@ -558,7 +558,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserLogin.UserId)} eq '{userId}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return CreateIdentityUserLogin(response.Items.First());
             }
@@ -580,7 +580,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return CreateIdentityUserLogin(response.Items.First());
             }

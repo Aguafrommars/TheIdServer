@@ -504,10 +504,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 {
                     Id = userId,
                     UserName = userId,
-                    NormalizedUserName = userId.ToUpper()
+                    NormalizedUserName = userId.ToUpper(),
+                    SecurityStamp = Guid.NewGuid().ToString()
                 });
                 context.UserClaims.Add(new UserClaim
                 {
+                    Id = Guid.NewGuid().ToString(),
                     ClaimType = "filtered",
                     ClaimValue = "filtered",
                     Issuer = ClaimsIdentity.DefaultIssuer,
@@ -515,6 +517,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 context.UserTokens.Add(new UserToken
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserId = userId,
                     LoginProvider = "filtered",
                     Name = "filtered",
@@ -522,6 +525,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 context.UserLogins.Add(new UserLogin
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserId = userId,
                     LoginProvider = "filtered",
                     ProviderDisplayName = "filtered",

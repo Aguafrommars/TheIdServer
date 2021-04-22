@@ -64,7 +64,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             var request = new PageRequest
             {
-                Take = null,
                 Filter = $"{nameof(Entity.IGrant.UserId)} eq '{subjectId}'"
             };
 
@@ -143,7 +142,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             var request = new PageRequest
             {
-                Take = null,
                 Filter = filter
             };
             var consentListResponse = await _userConsentStore.GetAsync(request).ConfigureAwait(false);

@@ -53,7 +53,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
 
             var query = oDataQuery.Inner as IMongoQueryable<TEntity>;
 
-            var count = await query.CountAsync(cancellationToken).ConfigureAwait(false);
+            int? count = request.Take.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
             var orderBy = request.OrderBy ?? nameof(IEntityId.Id);
             oDataQuery = oDataQuery.OrderBy(orderBy);

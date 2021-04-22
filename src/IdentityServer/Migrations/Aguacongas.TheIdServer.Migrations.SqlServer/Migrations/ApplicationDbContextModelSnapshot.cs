@@ -167,65 +167,81 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserLogin", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("LoginProvider", "ProviderKey")
+                        .IsUnique();
 
                     b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserRole", b =>
                 {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("RoleId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RoleId", "UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("RoleId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserToken", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "LoginProvider", "Name")
+                        .IsUnique();
 
                     b.ToTable("AspNetUserTokens");
                 });
@@ -255,7 +271,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserLogin", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.User", "User")
-                        .WithMany()
+                        .WithMany("UserLogins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -285,7 +301,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserToken", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.User", "User")
-                        .WithMany()
+                        .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -302,7 +318,11 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
                 {
                     b.Navigation("UserClaims");
 
+                    b.Navigation("UserLogins");
+
                     b.Navigation("UserRoles");
+
+                    b.Navigation("UserTokens");
                 });
 #pragma warning restore 612, 618
         }

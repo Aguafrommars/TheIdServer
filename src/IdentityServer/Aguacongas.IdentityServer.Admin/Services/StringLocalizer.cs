@@ -147,7 +147,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             var response = await _store.GetAsync(new PageRequest
             {
-                Take = null,
                 Select = select
             }).ConfigureAwait(false);
 

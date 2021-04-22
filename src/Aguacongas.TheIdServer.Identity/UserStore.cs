@@ -363,7 +363,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(UserRole.RoleId)} eq '{roleEntity.Id}'"
             }, cancellationToken).ConfigureAwait(false);
             
-            var userList = new List<TUser>(userRoles.Count);
+            var userList = new List<TUser>();
             foreach(var userRole in userRoles.Items)
             {
                 userList.Add(await FindByIdAsync(userRole.UserId, cancellationToken).ConfigureAwait(false));
@@ -424,7 +424,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (respone.Count == 1)
+            if (respone.Items.Any())
             {
                 return respone.Items.First().ToIdentityRole<TRole>();
             }

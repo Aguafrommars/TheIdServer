@@ -4,14 +4,15 @@ using System;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aguacongas.TheIdServer.Oracle.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210420160524_UpdateClaimsKey")]
-    partial class UpdateClaimsKey
+    [Migration("20210422071825_UpdateUserSubentityKeys")]
+    partial class UpdateUserSubentityKeys
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

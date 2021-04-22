@@ -18,6 +18,7 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.5");
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserClaim", b =>
             {
                 b.Property<int>("Id")

@@ -191,7 +191,7 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 Filter = $"{nameof(Role.Id)} eq '{roleId}'"
             }, cancellationToken).ConfigureAwait(false);
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return response.Items.First().ToIdentityRole<TRole>();
             }
@@ -214,7 +214,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return response.Items.First().ToIdentityRole<TRole>();
             }

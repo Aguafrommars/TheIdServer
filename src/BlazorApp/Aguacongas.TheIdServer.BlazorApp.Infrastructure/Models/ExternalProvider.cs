@@ -1,9 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Store;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -79,6 +79,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 
         class HandlerType
         {
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Setter needed for deserialization.")]
             public string Name { get; set; }
         }
     }

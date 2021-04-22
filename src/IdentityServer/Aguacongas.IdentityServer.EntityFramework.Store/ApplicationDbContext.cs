@@ -63,13 +63,16 @@ namespace Aguacongas.TheIdServer.Data
                 .IsUnique();
             modelBuilder.Entity<Role>().Property(r => r.NormalizedName).HasMaxLength(256);
             modelBuilder.Entity<Role>().Property(r => r.Name).HasMaxLength(256);
+
+            modelBuilder.Entity<UserLogin>().HasKey(l => l.Id);
+            modelBuilder.Entity<UserLogin>().HasIndex(l => new { l.LoginProvider, l.ProviderKey }).IsUnique();
+
+            modelBuilder.Entity<UserRole>().HasKey(l => l.Id);
+            modelBuilder.Entity<UserRole>().HasIndex(r => new { r.RoleId, r.UserId }).IsUnique();
+
+            modelBuilder.Entity<UserToken>().HasKey(l => l.Id);
+            modelBuilder.Entity<UserToken>().HasIndex(t => new { t.UserId, t.LoginProvider, t.Name }).IsUnique();
            
-            modelBuilder.Entity<UserLogin>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
-                
-            modelBuilder.Entity<UserRole>().HasKey(r => new { r.RoleId, r.UserId });
-
-            modelBuilder.Entity<UserToken>().HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
-
             base.OnModelCreating(modelBuilder);
         }
 

@@ -33,7 +33,7 @@ namespace Aguacongas.IdentityServer.Store
                 Select = nameof(DeviceCode.Data)
             }).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return ToModel(response.Items.First());
             }
@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.Store
                 Select = nameof(DeviceCode.Data)
             }).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 return ToModel(response.Items.First());
             }
@@ -105,7 +105,7 @@ namespace Aguacongas.IdentityServer.Store
                 Filter = $"{nameof(DeviceCode.UserCode)} eq '{userCode}'"
             }).ConfigureAwait(false);
 
-            if (response.Count == 1)
+            if (response.Items.Any())
             {
                 var entity = response.Items.First();
                 entity.Data = _serializer.Serialize(data);
