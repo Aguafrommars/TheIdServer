@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
+namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.User
 {
-    public abstract class IdentitySubEntityStoreTestBase<TEntity>
-        where TEntity : class, Entity.IEntityId, Entity.IIdentitySubEntity, new()
+    public abstract class UserSubEntityStoreTestBase<TEntity>
+        where TEntity : class, Entity.IEntityId, Entity.IUserSubEntity, new()
     {
         [Fact]
         public async Task CreateAsync_should_add_entity_id_to_parent()
@@ -21,10 +21,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             using var store = new RavenDbTestDriverWrapper().GetDocumentStore();
 
             using var s1 = store.OpenAsyncSession();
-            await s1.StoreAsync(new Entity.IdentityResource
+            await s1.StoreAsync(new Entity.User
             {
                 Id = "test"
-            }, $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/test");
+            }, $"{nameof(Entity.User).ToLowerInvariant()}/test");
 
             await s1.SaveChangesAsync();
 
@@ -37,13 +37,13 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             var entity = new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                IdentityId = "test"
+                UserId = "test"
             };
 
             await sut.CreateAsync(entity);
 
             using var s2 = store.OpenAsyncSession();
-            var identity = await s2.LoadAsync<Entity.IdentityResource>($"{nameof(Entity.IdentityResource).ToLowerInvariant()}/test");
+            var identity = await s2.LoadAsync<Entity.User>($"{nameof(Entity.User).ToLowerInvariant()}/test");
             var collection = GetCollection(identity);
             Assert.Contains(collection, i => i.Id == $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}");
         }
@@ -62,10 +62,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             var entity = new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                IdentityId = "test"
+                UserId = "test"
             };
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() =>sut.CreateAsync(entity));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.CreateAsync(entity));
         }
 
         [Fact]
@@ -76,20 +76,20 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             var entity = new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                IdentityId = "test"
+                UserId = "test"
             };
-            var identity = new Entity.IdentityResource
+            var user = new Entity.User
             {
                 Id = "test",
             };
-            var collection = GetCollection(identity);
+            var collection = GetCollection(user);
             collection.Add(new TEntity
             {
                 Id = $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}"
             });
 
             using var s1 = store.OpenAsyncSession();
-            await s1.StoreAsync(identity, $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/{identity.Id}");
+            await s1.StoreAsync(user, $"{nameof(Entity.User).ToLowerInvariant()}/{user.Id}");
             await s1.StoreAsync(entity, $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}");
             await s1.SaveChangesAsync();
 
@@ -103,7 +103,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             await sut.DeleteAsync(entity.Id);
 
             using var s2 = store.OpenAsyncSession();
-            var updated = await s2.LoadAsync<Entity.IdentityResource>($"{nameof(Entity.IdentityResource).ToLowerInvariant()}/test");
+            var updated = await s2.LoadAsync<Entity.User>($"{nameof(Entity.User).ToLowerInvariant()}/test");
             var updatedCollection = GetCollection(updated);
             Assert.DoesNotContain(updatedCollection, i => i.Id == $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}");
         }
@@ -116,7 +116,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             var entity = new TEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                IdentityId = "test"
+                UserId = "test"
             };
 
             using var s1 = store.OpenAsyncSession();
@@ -133,11 +133,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
             await sut.DeleteAsync(entity.Id);
 
             using var s2 = store.OpenAsyncSession();
-            Assert.Null(await s2.LoadAsync<Entity.IdentityResource>($"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}"));
+            Assert.Null(await s2.LoadAsync<Entity.User>($"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}"));
         }
 
         protected abstract IAdminStore<TEntity> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<TEntity>> logger);
 
-        protected abstract ICollection<TEntity> GetCollection(Entity.IdentityResource identity);
+        protected abstract ICollection<TEntity> GetCollection(Entity.User user);
     }
 }

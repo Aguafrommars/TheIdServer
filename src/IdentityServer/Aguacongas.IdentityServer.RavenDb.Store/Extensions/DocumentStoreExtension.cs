@@ -23,10 +23,6 @@ namespace Raven.Client.Documents
             {
                 return false;
             }
-            if (memberInfo.DeclaringType == typeof(SchemeDefinition))
-            {
-                return false;
-            }
             return findId(memberInfo);
         }
     }

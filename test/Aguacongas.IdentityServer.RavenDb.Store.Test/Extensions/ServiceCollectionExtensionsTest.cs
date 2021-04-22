@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
@@ -40,7 +41,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
         {
             var services = new ServiceCollection();
 
-            services.AddIdentityServer4AdminRavenDbStores<IdentityUser>(p => new RavenDbTestDriverWrapper().GetDocumentStore());
+            services.AddIdentityServer4AdminRavenDbStores(p => new RavenDbTestDriverWrapper().GetDocumentStore());
 
             var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
             var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
@@ -53,33 +54,6 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
                 var storeType = typeof(IAdminStore<>).MakeGenericType(entityType);
                 Assert.Contains(services, d => d.ServiceType == storeType);
             }
-        }
-
-        [Fact]
-        public void AddConfigurationRavenDbkStores_should_add_ravendb_configuration_stores()
-        {
-            var services = new ServiceCollection();
-
-            services.AddConfigurationRavenDbStores();
-            
-            Assert.Contains(services, d => d.ServiceType == typeof(IClientStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(IResourceStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(ICorsPolicyService));
-        }
-
-        [Fact]
-        public void AddOperationalRavenDbStores_should_add_ravendb_operational_stores()
-        {
-            var services = new ServiceCollection();
-
-            services.AddOperationalRavenDbStores();
-
-            Assert.Contains(services, d => d.ServiceType == typeof(IPersistentGrantSerializer));
-            Assert.Contains(services, d => d.ServiceType == typeof(IAuthorizationCodeStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(IRefreshTokenStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(IReferenceTokenStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(IUserConsentStore));
-            Assert.Contains(services, d => d.ServiceType == typeof(IDeviceFlowStore));
         }
     }
 }
