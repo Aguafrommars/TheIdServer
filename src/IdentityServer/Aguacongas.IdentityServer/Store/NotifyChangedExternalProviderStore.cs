@@ -22,19 +22,19 @@ namespace Aguacongas.IdentityServer.Store
         public async Task<ExternalProvider> CreateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
         {
             var result = await _parent.CreateAsync(entity, cancellationToken).ConfigureAwait(false);
-            await _providerClient.ProviderAddedAsync(entity.Id).ConfigureAwait(false);
+            await _providerClient.ProviderAddedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             return result;
         }
 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await CreateAsync(entity as ExternalProvider).ConfigureAwait(false);
+            return await CreateAsync(entity as ExternalProvider, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             await _parent.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
-            await _providerClient.ProviderRemovedAsync(id).ConfigureAwait(false);
+            await _providerClient.ProviderRemovedAsync(id, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<ExternalProvider> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
@@ -46,13 +46,13 @@ namespace Aguacongas.IdentityServer.Store
         public async Task<ExternalProvider> UpdateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
         {
             var result = await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
-            await _providerClient.ProviderUpdatedAsync(entity.Id).ConfigureAwait(false);
+            await _providerClient.ProviderUpdatedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             return result;
         }
 
         public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
         {
-            return await UpdateAsync(entity as ExternalProvider).ConfigureAwait(false);
+            return await UpdateAsync(entity as ExternalProvider, cancellationToken).ConfigureAwait(false);
         }
     }
 }
