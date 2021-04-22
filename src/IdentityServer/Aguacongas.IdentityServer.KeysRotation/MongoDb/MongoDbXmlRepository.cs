@@ -31,10 +31,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.MongoDb
         public virtual IReadOnlyCollection<XElement> GetAllElements()
         {
             using var scope = _services.CreateScope();
-            var collection = scope.ServiceProvider.GetRequiredService<MongoCollectionWrapper<TKey>>().Collection;
+            var queryable = scope.ServiceProvider.GetRequiredService<MongoCollectionWrapper<TKey>>().Queryable;
             // Put logger in a local such that `this` isn't captured.
             var logger = _logger;
-            var list = collection.AsQueryable().ToList();
+            var list = queryable.ToList();
             return list
                 .Select(key => TryParseKeyXml(key.Xml, logger))
                 .ToList()
