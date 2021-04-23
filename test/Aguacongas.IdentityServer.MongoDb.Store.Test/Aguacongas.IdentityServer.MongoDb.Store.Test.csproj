@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
     <ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj" />
   </ItemGroup>
 

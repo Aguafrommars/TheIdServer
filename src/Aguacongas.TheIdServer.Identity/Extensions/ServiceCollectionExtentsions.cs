@@ -4,19 +4,11 @@ using Aguacongas.TheIdServer.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtentsions
     {
-        public static IServiceCollection AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
-        {
-            services.AddTheIdServerStores(userType, roleType);
-            return services;
-        }
-
         public static void AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType)
         {
             var userOnlyStoreType = typeof(UserOnlyStore<>).MakeGenericType(userType);

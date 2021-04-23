@@ -20,11 +20,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Adds the mongo database store.
         /// </summary>
         /// <param name="builder">The builder.</param>
-        /// <param name="getDatabase">The get database.</param>
         /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddRavenDbStore(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddTheIdServerStoreRavenDbStore(this DynamicAuthenticationBuilder builder)
         {
-            return builder.AddRavenDbStore<SchemeDefinition>();
+            return builder.AddTheIdServerStoreRavenDbStore<SchemeDefinition>();
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The builder.</param>
         /// <param name="getDatabase">The get database.</param>
         /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddRavenDbStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddTheIdServerStoreRavenDbStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             builder.AddTheIdServerStore<TSchemeDefinition>();

@@ -2,7 +2,9 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Models;
 using AutoMapper.Internal;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Moq;
@@ -42,8 +44,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task GetAsync_by_page_request_should_expand_sur_entities()
         {
             var navigationProperties = GetNavigrationProperties();
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -68,8 +74,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task GetAsync_by_id_should_expand_sur_entities()
         {
             var navigationProperties = GetNavigrationProperties();
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -96,8 +106,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         [Fact]
         public async Task UpdateAsync_should_update_entity()
         {
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -119,8 +133,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task DeleteAsync_should_cascade_delete()
         {
             var navigationProperties = GetNavigrationProperties();
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -157,8 +175,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         [Fact]
         public async Task DeleteAsync_should_throw_on_entity_not_found()
         {
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -171,8 +193,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         [Fact]
         public async Task UpdateAsync_should_throw_on_entity_not_found()
         {
-            var provider = new ServiceCollection()
-                .AddLogging()
+            var services = new ServiceCollection()
+                .AddLogging();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddTheIdServerStores()
+                .AddDefaultTokenProviders();
+            var provider = services
                 .AddIdentityServer4AdminMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
@@ -184,17 +210,24 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateAsync(notFound)).ConfigureAwait(false);
         }
 
-        private static async Task<TEntity> CreateEntityGraphAsync(IEnumerable<PropertyInfo> navigationProperties, ServiceProvider provider, IAdminStore<TEntity> sut)
+        protected virtual object CreateParentEntiy(Type parentType)
         {
-            var create = new TEntity();
-            create.Id = Guid.NewGuid().ToString();
+            return Activator.CreateInstance(parentType);
+        }
+
+        private async Task<TEntity> CreateEntityGraphAsync(IEnumerable<PropertyInfo> navigationProperties, ServiceProvider provider, IAdminStore<TEntity> sut)
+        {
+            var create = new TEntity
+            {
+                Id = Guid.NewGuid().ToString()
+            };
             var parentPropetyName = GetParentIdName(create.GetType());
             if (parentPropetyName != null)
             {
                 var parentPropetyType = GetParentType(parentPropetyName);
                 var parentStoreType = typeof(IAdminStore<>).MakeGenericType(parentPropetyType);
                 var parentStore = provider.GetRequiredService(parentStoreType) as IAdminStore;
-                var parent = await parentStore.CreateAsync(Activator.CreateInstance(GetParentType(parentPropetyName))).ConfigureAwait(false) as IEntityId;
+                var parent = await parentStore.CreateAsync(CreateParentEntiy(GetParentType(parentPropetyName))).ConfigureAwait(false) as IEntityId;
                 var parentPropety = create.GetType().GetProperty(parentPropetyName);
                 parentPropety.SetValue(create, parent.Id);
             }

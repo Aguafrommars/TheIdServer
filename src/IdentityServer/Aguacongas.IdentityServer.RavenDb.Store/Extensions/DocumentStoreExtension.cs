@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System;
 using System.Reflection;
@@ -11,7 +10,6 @@ namespace Raven.Client.Documents
     {
         public static IDocumentStore SetFindIdentityPropertyForIdentityServerStores(this IDocumentStore store)
         {
-            store.SetFindIdentityPropertyForIdentityModel();
             var findId = store.Conventions.FindIdentityProperty;
             store.Conventions.FindIdentityProperty = memberInfo => SetConventions(memberInfo, findId);
             return store;

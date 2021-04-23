@@ -6,9 +6,11 @@ using Aguacongas.IdentityServer.MongoDb.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.Identity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -48,14 +50,51 @@ namespace Microsoft.Extensions.DependencyInjection
                     p.GetRequiredService<IProviderClient>(),
                     p.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>(),
                     p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()))
-                .AddTransient<IAdminStore<User>>(p => new CheckIdentityRulesUserStore(new AdminStore<User>(
-                    p,
-                    p.GetRequiredService<ILogger<AdminStore<User>>>()),
-                    p.GetRequiredService<UserManager<ApplicationUser>>()))
-                .AddTransient<IAdminStore<Role>>(p => new CheckIdentityRulesRoleStore(new AdminStore<Role>(
-                    p,
-                    p.GetRequiredService<ILogger<AdminStore<Role>>>()),
-                    p.GetRequiredService<RoleManager<IdentityRole>>()));
+                .AddTransient<IAdminStore<User>>(p => {
+                    var userStore = new AdminStore<User>(
+                        p,
+                        p.GetRequiredService<ILogger<AdminStore<User>>>());
+                    var roleStore = new AdminStore<Role>(
+                        p,
+                        p.GetRequiredService<ILogger<AdminStore<Role>>>());
+
+                    return new CheckIdentityRulesUserStore(userStore,
+                        new UserManager<ApplicationUser>(
+                            new UserStore<ApplicationUser>(
+                                roleStore,
+                                p.GetRequiredService<IAdminStore<UserRole>>(),
+                                new UserOnlyStore<ApplicationUser>(
+                                    userStore,
+                                    p.GetRequiredService<IAdminStore<UserClaim>>(),
+                                    p.GetRequiredService<IAdminStore<UserLogin>>(),
+                                    p.GetRequiredService<IAdminStore<UserToken>>(),
+                                    p.GetService<IdentityErrorDescriber>()),
+                                p.GetService<IdentityErrorDescriber>()),
+                            p.GetRequiredService<IOptions<IdentityOptions>>(),
+                            p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
+                            p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
+                            p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
+                            p.GetRequiredService<ILookupNormalizer>(),
+                            p.GetRequiredService<IdentityErrorDescriber>(),
+                            p,
+                            p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
+                })
+                .AddTransient<IAdminStore<Role>>(p => {
+                    var store = new AdminStore<Role>(
+                        p,
+                        p.GetRequiredService<ILogger<AdminStore<Role>>>());
+
+                    return new CheckIdentityRulesRoleStore(store,
+                        new RoleManager<IdentityRole>(
+                            new RoleStore<IdentityRole>(
+                                store,
+                                p.GetRequiredService<IAdminStore<RoleClaim>>(),
+                                p.GetService<IdentityErrorDescriber>()),
+                            p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
+                            p.GetRequiredService<ILookupNormalizer>(),
+                            p.GetRequiredService<IdentityErrorDescriber>(),
+                            p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
+                });
 
             return services;
         }

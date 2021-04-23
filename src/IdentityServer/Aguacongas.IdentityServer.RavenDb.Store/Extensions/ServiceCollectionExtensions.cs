@@ -11,12 +11,15 @@ using Aguacongas.IdentityServer.RavenDb.Store.Client;
 using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.Identity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -68,12 +71,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
                 .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
                 .AddTransient<IAdminStore<Entity.DeviceCode>, AdminStore<Entity.DeviceCode>>()
-                .AddTransient<IAdminStore<Entity.ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<Entity.ExternalProvider>(
-                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                    p.GetRequiredService<ILogger<AdminStore<Entity.ExternalProvider>>>()),
-                    p.GetRequiredService<IProviderClient>(),
-                    p.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>(),
-                    p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()))
                 .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
                 .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
                 .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()
@@ -86,18 +83,55 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.RefreshToken>, AdminStore<Entity.RefreshToken>>()
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, AdminStore<Entity.UserConsent>>()
-                .AddTransient<IAdminStore<Entity.User>>(p => new CheckIdentityRulesUserStore(new AdminStore<Entity.User>(
-                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                    p.GetRequiredService<ILogger<AdminStore<Entity.User>>>()),
-                    p.GetRequiredService<UserManager<ApplicationUser>>()))
+                .AddTransient<IAdminStore<Entity.User>>(p => {
+                    var userStore = new AdminStore<Entity.User>(
+                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                        p.GetRequiredService<ILogger<AdminStore<Entity.User>>>());
+                    var roleStore = new AdminStore<Entity.Role>(
+                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                        p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>());
+
+                    return new CheckIdentityRulesUserStore(userStore,
+                        new UserManager<ApplicationUser>(
+                            new UserStore<ApplicationUser>(
+                                roleStore,
+                                p.GetRequiredService<IAdminStore<Entity.UserRole>>(),
+                                new UserOnlyStore<ApplicationUser>(
+                                    userStore,
+                                    p.GetRequiredService<IAdminStore<Entity.UserClaim>>(),
+                                    p.GetRequiredService<IAdminStore<Entity.UserLogin>>(),
+                                    p.GetRequiredService<IAdminStore<Entity.UserToken>>(),
+                                    p.GetService<IdentityErrorDescriber>()),
+                                p.GetService<IdentityErrorDescriber>()),
+                            p.GetRequiredService<IOptions<IdentityOptions>>(),
+                            p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
+                            p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
+                            p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
+                            p.GetRequiredService<ILookupNormalizer>(),
+                            p.GetRequiredService<IdentityErrorDescriber>(),
+                            p,
+                            p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
+                })
                 .AddTransient<IAdminStore<Entity.UserLogin>, UserLoginStore>()
                 .AddTransient<IAdminStore<Entity.UserClaim>, UserClaimStore>()
                 .AddTransient<IAdminStore<Entity.UserRole>, UserRoleStore>()
                 .AddTransient<IAdminStore<Entity.UserToken>, UserTokenStore>()
-                .AddTransient<IAdminStore<Entity.Role>>(p => new CheckIdentityRulesRoleStore(new AdminStore<Entity.Role>(
-                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                    p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>()),
-                    p.GetRequiredService<RoleManager<IdentityRole>>()))
+                .AddTransient<IAdminStore<Entity.Role>>(p => {
+                    var store = new AdminStore<Entity.Role>(
+                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                        p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>());
+
+                    return new CheckIdentityRulesRoleStore(store,
+                        new RoleManager<IdentityRole>(
+                            new RoleStore<IdentityRole>(
+                                store,
+                                p.GetRequiredService<IAdminStore<Entity.RoleClaim>>(),
+                                p.GetService<IdentityErrorDescriber>()),
+                            p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
+                            p.GetRequiredService<ILookupNormalizer>(),
+                            p.GetRequiredService<IdentityErrorDescriber>(),
+                            p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
+                    })
                 .AddTransient<IAdminStore<Entity.RoleClaim>, RoleClaimStore>();
                 
         }

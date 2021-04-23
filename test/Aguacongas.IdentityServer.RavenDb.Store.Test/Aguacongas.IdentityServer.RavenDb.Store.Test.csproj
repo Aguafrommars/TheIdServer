@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
+		<ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
 		<ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.RavenDb.Store\Aguacongas.IdentityServer.RavenDb.Store.csproj" />
 	</ItemGroup>
 

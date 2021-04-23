@@ -20,7 +20,23 @@ namespace Aguacongas.IdentityServer.Store
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
         public async Task<User> CreateAsync(User entity, CancellationToken cancellationToken = default)
-        => CheckResult(entity, await _manager.CreateAsync(CreateUser(entity), entity.Password).ConfigureAwait(false));
+        {
+            var user = CreateUser(entity);
+            IdentityResult result;
+            if (!string .IsNullOrEmpty(entity.Password))
+            {
+                result = await _manager.CreateAsync(user, entity.Password).ConfigureAwait(false);
+            }
+            else
+            {
+                result = await _manager.CreateAsync(user).ConfigureAwait(false);
+            }
+
+            entity = CheckResult(entity, result);
+            entity.Id = user.Id;
+            return entity;
+        }
+
                 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         => await CreateAsync(entity as User, cancellationToken).ConfigureAwait(false);

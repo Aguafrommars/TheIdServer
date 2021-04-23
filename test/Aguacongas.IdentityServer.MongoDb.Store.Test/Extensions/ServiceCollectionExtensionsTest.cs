@@ -8,46 +8,45 @@ using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using Moq;
-using Raven.Client.Documents;
+using System;
 using System.Linq;
 using System.Reflection;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
-namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
+namespace Aguacongas.IdentityServer.MongoDb.Store.Test.Extensions
 {
     public class ServiceCollectionExtensionsTest
     {
         [Fact]
-        public void AddIdentityServer4AdminRavenDbkStores_should_add_ravendb_stores_for_each_entity()
+        public void AddIdentityServer4AdminMongoDbkStores_with_connectionString_should_add_ravendb_stores_for_each_entity()
         {
             var services = new ServiceCollection().AddLogging();
-            
-            var wrapper = new RavenDbTestDriverWrapper();
-            services.AddIdentityServer4AdminRavenDbStores()
+
+            services.AddIdentityServer4AdminMongoDbStores("mongodb://localhost/test")
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new Mock<IConfiguration>().Object)
-                .AddTransient<IProviderClient, ProviderClient>()
-                .AddTransient(p => wrapper.GetDocumentStore());
+                .AddTransient<IProviderClient, ProviderClient>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores();
 
             services.AddAuthentication()
                 .AddDynamic<SchemeDefinition>()
-                .AddTheIdServerStoreRavenDbStore()
-                .AddGoogle();                
+                .AddTheIdServerEntityMongoDbStore()
+                .AddGoogle();
 
             var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
-            var entityTypeList = assembly.GetTypes().Where(t => 
+            var entityTypeList = assembly.GetTypes().Where(t =>
                 t.IsClass &&
                 !t.IsAbstract &&
                 !t.IsGenericType &&
                 t.GetInterface(nameof(Entity.IEntityId)) != null);
 
             var provider = services.BuildServiceProvider();
-            foreach(var entityType in entityTypeList)
+            foreach (var entityType in entityTypeList)
             {
                 var storeType = typeof(IAdminStore<>).MakeGenericType(entityType);
                 Assert.NotNull(provider.GetService(storeType));
@@ -55,27 +54,30 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
         }
 
         [Fact]
-        public void AddIdentityServer4AdminRavenDbkStores_should_add_ravendb_stores_for_each_entity_using_getDocumentStore_function()
+        public void AddIdentityServer4AdminMongoDbkStores_with_getDatabase_should_add_ravendb_stores_for_each_entity()
         {
             var services = new ServiceCollection().AddLogging();
 
-            var wrapper = new RavenDbTestDriverWrapper();
-            services.AddIdentityServer4AdminRavenDbStores(p => new RavenDbTestDriverWrapper().GetDocumentStore())
+            var connectionString = "mongodb://localhost/test";
+            var uri = new Uri(connectionString);
+            services.AddIdentityServer4AdminMongoDbStores(p => p.GetRequiredService<IMongoDatabase>())
+                .AddScoped<IMongoClient>(p => new MongoClient(connectionString))
+                .AddScoped(p => p.GetRequiredService<IMongoClient>().GetDatabase(uri.Segments[1]))
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new Mock<IConfiguration>().Object)
-                .AddTransient<IProviderClient, ProviderClient>()
-                .AddTransient(p => wrapper.GetDocumentStore());
+                .AddTransient<IProviderClient, ProviderClient>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores();
 
             services.AddAuthentication()
                 .AddDynamic<SchemeDefinition>()
-                .AddTheIdServerStoreRavenDbStore()
+                .AddTheIdServerEntityMongoDbStore()
                 .AddGoogle();
 
             var assembly = typeof(Entity.IEntityId).GetTypeInfo().Assembly;
-            var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
+            var entityTypeList = assembly.GetTypes().Where(t =>
+                t.IsClass &&
                 !t.IsAbstract &&
                 !t.IsGenericType &&
                 t.GetInterface(nameof(Entity.IEntityId)) != null);

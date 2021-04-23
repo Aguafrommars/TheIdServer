@@ -77,15 +77,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return Task.Delay(500, token)
                 .ContinueWith(async task =>
                 {
-                    if (task.IsCanceled)
-                    {
-                        return;
-                    }
-
                     _pageRequest.Filter = CreateRequestFilter(filter);
 
                     var page = await AdminStore.GetAsync(_pageRequest, token)
                                 .ConfigureAwait(false);
+
+                    if (task.IsCanceled)
+                    {
+                        return;
+                    }
 
                     EntityList = page.Items;
 

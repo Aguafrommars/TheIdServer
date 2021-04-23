@@ -304,7 +304,7 @@ namespace Aguacongas.TheIdServer
             }
             else if (DbType == DbTypes.RavenDb)
             {
-                dynamicBuilder.AddRavenDbStore();
+                dynamicBuilder.AddTheIdServerStoreRavenDbStore();
             }
             else
             {

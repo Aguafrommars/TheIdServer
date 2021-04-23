@@ -18,8 +18,16 @@ namespace Aguacongas.IdentityServer.Store
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
+
         public async Task<Role> CreateAsync(Role entity, CancellationToken cancellationToken = default)
-        => CheckResult(entity, await _manager.CreateAsync(CreateRole(entity)).ConfigureAwait(false));
+        {
+            var role = CreateRole(entity);
+            var result = await _manager.CreateAsync(role).ConfigureAwait(false);
+            entity = CheckResult(entity, result);
+            entity.Id = role.Id;
+            return entity;
+        }
+        
                 
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         => await CreateAsync(entity as Role, cancellationToken).ConfigureAwait(false);
