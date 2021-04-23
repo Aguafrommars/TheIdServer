@@ -8,6 +8,14 @@ namespace Aguacongas.TheIdServer.MySql.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("update AspNetUserRoles set Id = uuid() where Id is null");
+            migrationBuilder.Sql("update AspNetUserTokens set Id = uuid() where Id is null");
+            migrationBuilder.Sql("update AspNetUserLogins set Id = uuid() where Id is null");
+
+            migrationBuilder.DropCheckConstraint("FK_AspNetUserTokens_AspNetUsers_UserId", "AspNetUserTokens");
+            migrationBuilder.DropCheckConstraint("FK_AspNetUserRoles_AspNetUsers_UserId", "AspNetUserRoles");
+            migrationBuilder.DropCheckConstraint("FK_AspNetUserLogins_AspNetUsers_UserId", "AspNetUserLogins");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_AspNetUserTokens",
                 table: "AspNetUserTokens");
@@ -20,10 +28,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations
                 name: "PK_AspNetUserLogins",
                 table: "AspNetUserLogins");
 
-            migrationBuilder.Sql("update [AspNetUserRoles] set Id = uuid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserTokens] set Id = uuid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = uuid() where id is null");
-
             migrationBuilder.AlterColumn<string>(
                 name: "Id",
                 table: "AspNetUserTokens",
@@ -68,6 +72,10 @@ namespace Aguacongas.TheIdServer.MySql.Migrations
                 name: "PK_AspNetUserLogins",
                 table: "AspNetUserLogins",
                 column: "Id");
+
+            migrationBuilder.AddForeignKey("FK_AspNetUserTokens_AspNetUsers_UserId", "AspNetUserTokens", "UserId", "AspNetUsers", principalColumn: "Id");
+            migrationBuilder.AddForeignKey("FK_AspNetUserRoles_AspNetUsers_UserId", "AspNetUserRoles", "UserId", "AspNetUsers", principalColumn: "Id");
+            migrationBuilder.AddForeignKey("FK_AspNetUserLogins_AspNetUsers_UserId", "AspNetUserLogins", "UserId", "AspNetUsers", principalColumn: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserTokens_UserId_LoginProvider_Name",

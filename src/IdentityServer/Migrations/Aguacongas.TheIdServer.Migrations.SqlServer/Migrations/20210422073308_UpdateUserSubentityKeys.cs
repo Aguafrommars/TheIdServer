@@ -20,9 +20,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
                 name: "PK_AspNetUserLogins",
                 table: "AspNetUserLogins");
 
-            migrationBuilder.Sql("update [AspNetUserRoles] set Id = newid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserTokens] set Id = newid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = newid() where id is null");
+            migrationBuilder.Sql("update [AspNetUserRoles] set Id = newid() where Id is null");
+            migrationBuilder.Sql("update [AspNetUserTokens] set Id = newid() where Id is null");
+            migrationBuilder.Sql("update [AspNetUserLogins] set Id = newid() where Îd is null");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Id",

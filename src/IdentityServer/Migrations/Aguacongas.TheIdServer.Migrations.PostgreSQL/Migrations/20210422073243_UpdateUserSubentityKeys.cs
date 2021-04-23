@@ -20,9 +20,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations
                 name: "PK_AspNetUserLogins",
                 table: "AspNetUserLogins");
 
-            migrationBuilder.Sql("update [AspNetUserRoles] set Id = uuid_generate_v4() where id is null");
-            migrationBuilder.Sql("update [AspNetUserTokens] set Id = uuid_generate_v4() where id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = uuid_generate_v4() where id is null");
+            migrationBuilder.Sql("update \"AspNetUserRoles\" set \"Id\" = uuid_generate_v4() where \"Id\" is null");
+            migrationBuilder.Sql("update \"AspNetUserTokens\" set \"Id\" = uuid_generate_v4() where \"Id\" is null");
+            migrationBuilder.Sql("update \"AspNetUserLogins\" set \"Id\" = uuid_generate_v4() where \"Id\" is null");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Id",

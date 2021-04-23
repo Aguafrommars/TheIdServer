@@ -35,9 +35,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations
                 table: "AspNetUserLogins",
                 column: "Id");
 
-            migrationBuilder.Sql("update [AspNetUserRoles] set Id = sys_guid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserTokens] set Id = sys_guid() where id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = sys_guid() where id is null");
+            migrationBuilder.Sql("update AspNetUserRoles set Id = sys_guid() where Id is null");
+            migrationBuilder.Sql("update AspNetUserTokens set Id = sys_guid() where Id is null");
+            migrationBuilder.Sql("update AspNetUserLogins set Id = sys_guid() where Id is null");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Id",

@@ -8,9 +8,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("update [AspNetUserRoles] set Id = hex(randomblob(16)) where id is null");
-            migrationBuilder.Sql("update [AspNetUserTokens] set Id = hex(randomblob(16)) where id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = hex(randomblob(16)) where id is null");
+            migrationBuilder.Sql("update AspNetUserRoles set Id = hex(randomblob(16)) where Id is null");
+            migrationBuilder.Sql("update AspNetUserTokens set Id = hex(randomblob(16)) where Id is null");
+            migrationBuilder.Sql("update AspNetUserLogins set Id = hex(randomblob(16)) where Id is null");
             
             migrationBuilder.DropPrimaryKey(
                 name: "PK_AspNetUserTokens",
