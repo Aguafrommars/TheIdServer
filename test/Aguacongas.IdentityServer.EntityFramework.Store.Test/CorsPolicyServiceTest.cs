@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 .AddLogging()
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => options.Caching.CorsExpiration = TimeSpan.FromMinutes(1))
                 .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
-                .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options =>
+                .AddConfigurationEntityFrameworkStores(options =>
                     options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
                 .BuildServiceProvider();
 

@@ -17,6 +17,6 @@ namespace Aguacongas.IdentityServer.Store
         /// <summary>
         /// Gets or sets total number of items
         /// </summary>
-        public int? Count { get; set; }
+        public int Count { get; set; }
     }
 }

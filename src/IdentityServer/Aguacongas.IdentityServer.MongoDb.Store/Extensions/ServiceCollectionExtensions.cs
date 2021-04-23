@@ -1,9 +1,13 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.MongoDb.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -39,9 +43,19 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddTransient<IAdminStore<ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<ExternalProvider>(
-                p,
-                p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>()),
-                p.GetRequiredService<IProviderClient>()));
+                    p,
+                    p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>()),
+                    p.GetRequiredService<IProviderClient>(),
+                    p.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>(),
+                    p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()))
+                .AddTransient<IAdminStore<User>>(p => new CheckIdentityRulesUserStore(new AdminStore<User>(
+                    p,
+                    p.GetRequiredService<ILogger<AdminStore<User>>>()),
+                    p.GetRequiredService<UserManager<ApplicationUser>>()))
+                .AddTransient<IAdminStore<Role>>(p => new CheckIdentityRulesRoleStore(new AdminStore<Role>(
+                    p,
+                    p.GetRequiredService<ILogger<AdminStore<Role>>>()),
+                    p.GetRequiredService<RoleManager<IdentityRole>>()));
 
             return services;
         }

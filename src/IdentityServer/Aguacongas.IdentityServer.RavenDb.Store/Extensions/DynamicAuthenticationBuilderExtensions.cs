@@ -2,7 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.MongoDb.Store;
+using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
@@ -20,10 +20,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Adds the mongo database store.
         /// </summary>
         /// <param name="builder">The builder.</param>
+        /// <param name="getDatabase">The get database.</param>
         /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddTheIdServerEntityMongoDbStore(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddRavenDbStore(this DynamicAuthenticationBuilder builder)
         {
-            return builder.AddTheIdServerEntityMongoDbStore<SchemeDefinition>();
+            return builder.AddRavenDbStore<SchemeDefinition>();
         }
 
         /// <summary>
@@ -31,8 +32,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <typeparam name="TSchemeDefinition">The type of the scheme definition.</typeparam>
         /// <param name="builder">The builder.</param>
+        /// <param name="getDatabase">The get database.</param>
         /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddTheIdServerEntityMongoDbStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddRavenDbStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             builder.AddTheIdServerStore<TSchemeDefinition>();
@@ -40,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IAdminStore<ExternalProvider>>(p =>
             {
                 var store = new AdminStore<ExternalProvider>(
-                        p,
+                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
                         p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>());
 
                 return new NotifyChangedExternalProviderStore(

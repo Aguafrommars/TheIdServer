@@ -74,16 +74,16 @@ namespace Aguacongas.TheIdServer
                 => Configuration.GetSection("PrivateServerAuthentication").Bind(options);
 
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
-                .AddIdentityProviderStore()                
+                .AddIdentityProviderStore()
                 .AddOperationalStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
-                .AddTheIdServerStores(configureOptions)
+                .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
 
             if (isProxy)
             {
-                services.AddConfigurationHttpStores<SchemeDefinition>(configureOptions);
+                services.AddConfigurationHttpStores(configureOptions);
             }
             else
             {
@@ -164,9 +164,7 @@ namespace Aguacongas.TheIdServer
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
-
-            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                .AddTheIdServerStore();
+            ConfigureDynamicProviderManager(mvcBuilder, isProxy);
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
             services.AddScoped<LazyAssemblyLoader>()
@@ -177,12 +175,12 @@ namespace Aguacongas.TheIdServer
                  .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
                  .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
                  .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>()
-                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
+                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
                  .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
                  .AddAdminApplication(new Settings())
                  .AddDatabaseDeveloperPageExceptionFilter()
                  .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
-        }
+        }       
 
         [SuppressMessage("Usage", "ASP0001:Authorization middleware is incorrectly configured.", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app)
@@ -293,6 +291,26 @@ namespace Aguacongas.TheIdServer
             app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
+        private void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy)
+        {
+            var dynamicBuilder = mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
+            if (isProxy)
+            {
+                dynamicBuilder.AddTheIdServerStore();
+            }
+            else if (DbType == DbTypes.MongoDb)
+            {
+                dynamicBuilder.AddTheIdServerEntityMongoDbStore();
+            }
+            else if (DbType == DbTypes.RavenDb)
+            {
+                dynamicBuilder.AddRavenDbStore();
+            }
+            else
+            {
+                dynamicBuilder.AddTheIdServerEntityFrameworkStore();
+            }
+        }
         private void AddForceHttpsSchemeMiddleware(IApplicationBuilder app)
         {
             var forceHttpsScheme = Configuration.GetValue<bool>("ForceHttpsScheme");
@@ -430,7 +448,7 @@ namespace Aguacongas.TheIdServer
             else
             {
                 services.AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
-                    .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options => options.UseDatabaseFromConfiguration(Configuration))
+                    .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
             }
 

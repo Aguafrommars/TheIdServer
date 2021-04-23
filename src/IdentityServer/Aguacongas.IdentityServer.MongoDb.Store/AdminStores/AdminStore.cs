@@ -53,7 +53,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
 
             var query = oDataQuery.Inner as IMongoQueryable<TEntity>;
 
-            int? count = request.Take.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
+            int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
             var orderBy = request.OrderBy ?? nameof(IEntityId.Id);
             oDataQuery = oDataQuery.OrderBy(orderBy);
@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
 
             return new PageResponse<TEntity>
             {
-                Count = count,
+                Count = count ?? items.Count,
                 Items = items
             };
         }

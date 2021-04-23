@@ -260,7 +260,7 @@ namespace Aguacongas.TheIdServer.Test
                 .AddTransient<IConfiguration>(p => configuration)
                 .AddLogging()
                 .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
-                .AddConfigurationEntityFrameworkStores<SchemeDefinition>(options => options.UseInMemoryDatabase(dbId))
+                .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
+    <ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
   </ItemGroup>
 
 </Project>

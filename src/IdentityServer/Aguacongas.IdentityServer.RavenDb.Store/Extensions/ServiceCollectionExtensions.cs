@@ -10,6 +10,9 @@ using Aguacongas.IdentityServer.RavenDb.Store.ApiScope;
 using Aguacongas.IdentityServer.RavenDb.Store.Client;
 using Aguacongas.IdentityServer.RavenDb.Store.Identity;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -68,7 +71,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<Entity.ExternalProvider>(
                     p.GetRequiredService<ScopedAsynDocumentcSession>(),
                     p.GetRequiredService<ILogger<AdminStore<Entity.ExternalProvider>>>()),
-                    p.GetRequiredService<IProviderClient>()))
+                    p.GetRequiredService<IProviderClient>(),
+                    p.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>(),
+                    p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()))
                 .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
                 .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
                 .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()
@@ -81,12 +86,18 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.RefreshToken>, AdminStore<Entity.RefreshToken>>()
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, AdminStore<Entity.UserConsent>>()
-                .AddTransient<IAdminStore<Entity.User>, AdminStore<Entity.User>>()
+                .AddTransient<IAdminStore<Entity.User>>(p => new CheckIdentityRulesUserStore(new AdminStore<Entity.User>(
+                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                    p.GetRequiredService<ILogger<AdminStore<Entity.User>>>()),
+                    p.GetRequiredService<UserManager<ApplicationUser>>()))
                 .AddTransient<IAdminStore<Entity.UserLogin>, UserLoginStore>()
                 .AddTransient<IAdminStore<Entity.UserClaim>, UserClaimStore>()
                 .AddTransient<IAdminStore<Entity.UserRole>, UserRoleStore>()
                 .AddTransient<IAdminStore<Entity.UserToken>, UserTokenStore>()
-                .AddTransient<IAdminStore<Entity.Role>, AdminStore<Entity.Role>>()
+                .AddTransient<IAdminStore<Entity.Role>>(p => new CheckIdentityRulesRoleStore(new AdminStore<Entity.Role>(
+                    p.GetRequiredService<ScopedAsynDocumentcSession>(),
+                    p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>()),
+                    p.GetRequiredService<RoleManager<IdentityRole>>()))
                 .AddTransient<IAdminStore<Entity.RoleClaim>, RoleClaimStore>();
                 
         }

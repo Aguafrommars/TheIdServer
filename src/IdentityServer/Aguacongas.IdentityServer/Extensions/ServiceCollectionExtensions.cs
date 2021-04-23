@@ -3,6 +3,7 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -34,8 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient(p => new HttpClient(p.GetRequiredService<HttpClientHandler>()));
         }
 
-        public static IServiceCollection AddConfigurationStores<TSchemeDefinition>(this IServiceCollection services)
-            where TSchemeDefinition: SchemeDefinitionBase, new()
+        public static IServiceCollection AddConfigurationStores(this IServiceCollection services)
         {
             services.TryAddScoped<ICache<Client>>(p => new DefaultCache<Client>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
             services.TryAddScoped<ICache<IEnumerable<IdentityResource>>>(p => new DefaultCache<IEnumerable<IdentityResource>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IResourceStore, CachingResourceStore<ResourceStore>>()
                 .AddTransient<CorsPolicyService>()
                 .AddTransient<ICorsPolicyService, CachingCorsPolicyService<CorsPolicyService>>()
-                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore<TSchemeDefinition>>();
+                .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore<SchemeDefinition>>();
         }
 
         public static IServiceCollection AddOperationalStores(this IServiceCollection services)

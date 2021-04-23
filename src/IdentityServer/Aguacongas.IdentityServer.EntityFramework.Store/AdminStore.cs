@@ -5,7 +5,6 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +41,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             query = odataQuery.Inner as IQueryable<TEntity>;
 
-            int? count = request.Take.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
+            int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
             var page = query.GetPage(request);
 
@@ -50,7 +49,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             return new PageResponse<TEntity>
             {
-                Count = count,
+                Count = count ?? items.Count,
                 Items = items
             };
         }

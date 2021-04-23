@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => options.Caching.ClientStoreExpiration = TimeSpan.FromMinutes(1))
                 .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
                 .AddIdentityProviderStore()
-                .AddConfigurationHttpStores<SchemeDefinition>(options => options.ApiUrl = "http://test")
+                .AddConfigurationHttpStores(options => options.ApiUrl = "http://test")
                 .BuildServiceProvider();
 
             Assert.NotNull(provider.GetService<OAuthDelegatingHandler>());

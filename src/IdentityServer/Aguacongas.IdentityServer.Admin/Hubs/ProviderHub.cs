@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         [Authorize(Policy = "Is4-Writer")]
         public Task KeyRevoked(string kind, string id)
         {
-            return Clients.All.KeyRevoked(kind, id);
+            return Clients.Others.KeyRevoked(kind, id);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         [Authorize(Policy = "Is4-Writer")]
         public Task ProviderAdded(string scheme)
         {
-            return Clients.All.ProviderAdded(scheme);
+            return Clients.Others.ProviderAdded(scheme);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         [Authorize(Policy = "Is4-Writer")]
         public Task ProviderRemoved(string scheme)
         {
-            return Clients.All.ProviderRemoved(scheme);
+            return Clients.Others.ProviderRemoved(scheme);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         [Authorize(Policy = "Is4-Writer")]
         public Task ProviderUpdated(string scheme)
         {
-            return Clients.All.ProviderUpdated(scheme);
+            return Clients.Others.ProviderUpdated(scheme);
         }
     }
 }

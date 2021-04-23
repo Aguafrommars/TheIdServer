@@ -17,10 +17,10 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
                 .AddIdentityProviderStore()
-                .AddConfigurationHttpStores<SchemeDefinition>(options => options.ApiUrl = "http://exemple.com")
+                .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalStores()
                 .AddIdentity<IdentityUser, IdentityRole>()
-                .AddTheIdServerStores(options => options.ApiUrl = "http://exemple.com");
+                .AddTheIdServerStores();
 
             var userStore = services.BuildServiceProvider().GetService<IUserStore<IdentityUser>>();
             Assert.NotNull(userStore);
@@ -33,10 +33,10 @@ namespace Aguacongas.TheIdServer.Identity.Test.Extensions
             services.AddTransient<HttpClient>()
                 .AddTransient<HttpClientHandler>()
                 .AddIdentityProviderStore()
-                .AddConfigurationHttpStores<SchemeDefinition>(options => options.ApiUrl = "http://exemple.com")
+                .AddConfigurationHttpStores(options => options.ApiUrl = "http://exemple.com")
                 .AddOperationalStores()
                 .AddIdentityCore<IdentityUser>()
-                .AddTheIdServerStores(options => options.ApiUrl = "http://exemple.com");
+                .AddTheIdServerStores();
 
 
             var userOnlyStore = services.BuildServiceProvider().GetService<IUserStore<IdentityUser>>();

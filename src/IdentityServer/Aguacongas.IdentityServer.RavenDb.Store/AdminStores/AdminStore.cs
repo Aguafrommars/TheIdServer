@@ -50,7 +50,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             var pageQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
 
             int? count = null;
-            if (request.Take.HasValue)
+            if (request.Take.HasValue || request.Skip.HasValue)
             {
                 var countQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
                 count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -66,7 +66,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             return new PageResponse<TEntity>
             {
-                Count = count,
+                Count = count ?? items.Count,
                 Items = items
             };
         }        

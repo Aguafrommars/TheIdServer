@@ -14,8 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
         {
             services.AddTheIdServerStores(userType, roleType);
-            services.AddIdentityServer4AdminHttpStores(getHttpClient);
-
             return services;
         }
 

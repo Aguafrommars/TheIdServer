@@ -2,7 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.MongoDb.Store;
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
@@ -11,37 +11,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    /// <summary>
-    /// <see cref="IMvcBuilder"/> extensions
-    /// </summary>
     public static class DynamicAuthenticationBuilderExtensions
     {
-        /// <summary>
-        /// Adds the mongo database store.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddTheIdServerEntityMongoDbStore(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddTheIdServerEntityFrameworkStore(this DynamicAuthenticationBuilder builder)
         {
-            return builder.AddTheIdServerEntityMongoDbStore<SchemeDefinition>();
+            return builder.AddTheIdServerEntityFrameworkStore<SchemeDefinition>();
         }
 
-        /// <summary>
-        /// Adds the identity server admin.
-        /// </summary>
-        /// <typeparam name="TSchemeDefinition">The type of the scheme definition.</typeparam>
-        /// <param name="builder">The builder.</param>
-        /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddTheIdServerEntityMongoDbStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
+        public static DynamicAuthenticationBuilder AddTheIdServerEntityFrameworkStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             builder.AddTheIdServerStore<TSchemeDefinition>();
             var services = builder.Services;
             services.AddTransient<IAdminStore<ExternalProvider>>(p =>
             {
-                var store = new AdminStore<ExternalProvider>(
-                        p,
-                        p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>());
+                var store = new AdminStore<ExternalProvider, ConfigurationDbContext>(
+                        p.GetRequiredService<ConfigurationDbContext>(),
+                        p.GetRequiredService<ILogger<AdminStore<ExternalProvider, ConfigurationDbContext>>>());
 
                 return new NotifyChangedExternalProviderStore(
                     store,
@@ -55,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         builder.HandlerTypes),
                     p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>());
             });
-            return builder;
+            return builder;            
         }
     }
 }
