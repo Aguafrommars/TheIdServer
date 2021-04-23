@@ -10,14 +10,14 @@ using Aguacongas.TheIdServer.Authentication;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class NotifyChangedExternalProviderStore : IAdminStore<ExternalProvider>
+    public class NotifyChangedExternalProviderStore<TStore> : IAdminStore<ExternalProvider> where TStore : IAdminStore<ExternalProvider>
     {
-        private readonly IAdminStore<ExternalProvider> _parent;
+        private readonly TStore _parent;
         private readonly PersistentDynamicManager<SchemeDefinition> _manager;
         private readonly IAuthenticationSchemeOptionsSerializer _serializer;
         private readonly IProviderClient _providerClient;
 
-        public NotifyChangedExternalProviderStore(IAdminStore<ExternalProvider> parent,
+        public NotifyChangedExternalProviderStore(TStore parent,
             IProviderClient providerClient, 
             PersistentDynamicManager<SchemeDefinition> manager,
             IAuthenticationSchemeOptionsSerializer serializer)

@@ -1,11 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
-using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.MongoDb.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Identity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
@@ -44,47 +41,35 @@ namespace Microsoft.Extensions.DependencyInjection
                 AddMonogoAdminStore(services, entityType, getDatabase);
             }
 
-            services.AddTransient<IAdminStore<ExternalProvider>>(p => new NotifyChangedExternalProviderStore(new AdminStore<ExternalProvider>(
-                    p,
-                    p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>()),
-                    p.GetRequiredService<IProviderClient>(),
-                    p.GetRequiredService<PersistentDynamicManager<SchemeDefinition>>(),
-                    p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()))
-                .AddTransient<IAdminStore<User>>(p => {
-                    var userStore = new AdminStore<User>(
-                        p,
-                        p.GetRequiredService<ILogger<AdminStore<User>>>());
-                    var roleStore = new AdminStore<Role>(
-                        p,
-                        p.GetRequiredService<ILogger<AdminStore<Role>>>());
+            services.AddTransient<IAdminStore<User>>(p => {
+                var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<User>, User>>();
+                var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Role>, Role>>();
 
-                    return new CheckIdentityRulesUserStore(userStore,
-                        new UserManager<ApplicationUser>(
-                            new UserStore<ApplicationUser>(
-                                roleStore,
-                                p.GetRequiredService<IAdminStore<UserRole>>(),
-                                new UserOnlyStore<ApplicationUser>(
-                                    userStore,
-                                    p.GetRequiredService<IAdminStore<UserClaim>>(),
-                                    p.GetRequiredService<IAdminStore<UserLogin>>(),
-                                    p.GetRequiredService<IAdminStore<UserToken>>(),
-                                    p.GetService<IdentityErrorDescriber>()),
+                return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<User>, User>>(userStore,
+                    new UserManager<ApplicationUser>(
+                        new UserStore<ApplicationUser>(
+                            roleStore,
+                            p.GetRequiredService<IAdminStore<UserRole>>(),
+                            new UserOnlyStore<ApplicationUser>(
+                                userStore,
+                                p.GetRequiredService<IAdminStore<UserClaim>>(),
+                                p.GetRequiredService<IAdminStore<UserLogin>>(),
+                                p.GetRequiredService<IAdminStore<UserToken>>(),
                                 p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IOptions<IdentityOptions>>(),
-                            p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
-                            p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p,
-                            p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
+                            p.GetService<IdentityErrorDescriber>()),
+                        p.GetRequiredService<IOptions<IdentityOptions>>(),
+                        p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
+                        p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
+                        p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
+                        p.GetRequiredService<ILookupNormalizer>(),
+                        p.GetRequiredService<IdentityErrorDescriber>(),
+                        p,
+                        p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
                 })
                 .AddTransient<IAdminStore<Role>>(p => {
-                    var store = new AdminStore<Role>(
-                        p,
-                        p.GetRequiredService<ILogger<AdminStore<Role>>>());
+                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Role>, Role>>();
 
-                    return new CheckIdentityRulesRoleStore(store,
+                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Role>, Role>>(store,
                         new RoleManager<IdentityRole>(
                             new RoleStore<IdentityRole>(
                                 store,
@@ -105,8 +90,20 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return GetCollection(getDatabase, provider, entityType);
             });
-            services.AddTransient(typeof(IAdminStore<>).MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo(), 
-                typeof(AdminStore<>).MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo());
+            
+            var adminStoreType = typeof(AdminStore<>)
+                    .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+            services.AddTransient(adminStoreType);
+
+            var cacheAdminStoreType = typeof(CacheAdminStore<,>)
+                    .MakeGenericType(adminStoreType.GetTypeInfo(), entityType.GetTypeInfo()).GetTypeInfo();
+            services.AddTransient(cacheAdminStoreType);
+
+            var iAdminStoreType = typeof(IAdminStore<>)
+                    .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
+            services.AddTransient(iAdminStoreType, cacheAdminStoreType);
+
+            
         }
 
         private static object GetCollection(Func<IServiceProvider, IMongoDatabase> getDatabase, IServiceProvider provider, Type entityType)

@@ -61,7 +61,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="userRoleStore">The user role store.</param>
         /// <param name="userOnlyStore">The user only store.</param>
         /// <param name="describer">The <see cref="IdentityErrorDescriber" /> used to describe store errors.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// store
         /// or
         /// userRoleStore

@@ -1,16 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
-using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Identity;
 using Aguacongas.TheIdServer.Models;
 using AutoMapper.Internal;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -36,20 +32,16 @@ namespace Microsoft.Extensions.DependencyInjection
             AddStoresForContext(services, typeof(ApplicationDbContext));
             return services.AddDbContext<ApplicationDbContext>(optionsAction)
                 .AddTransient<IAdminStore<User>>(p => {
-                    var userStore = new AdminStore<User, ApplicationDbContext>(
-                        p.GetRequiredService<ApplicationDbContext>(),
-                        p.GetRequiredService<ILogger<AdminStore<User, ApplicationDbContext>>>());
-                    var roleStore = new AdminStore<Role, ApplicationDbContext>(
-                        p.GetRequiredService<ApplicationDbContext>(),
-                        p.GetRequiredService<ILogger<AdminStore<Role, ApplicationDbContext>>>());
+                    var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<User, ApplicationDbContext>, User>>();
+                    var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>();
 
-                    return new CheckIdentityRulesUserStore(userStore,
+                    return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<User, ApplicationDbContext>, User>>(userStore,
                         new UserManager<ApplicationUser>(
                             new UserStore<ApplicationUser>(
-                                roleStore, 
+                                roleStore,
                                 p.GetRequiredService<IAdminStore<UserRole>>(),
                                 new UserOnlyStore<ApplicationUser>(
-                                    userStore, 
+                                    userStore,
                                     p.GetRequiredService<IAdminStore<UserClaim>>(),
                                     p.GetRequiredService<IAdminStore<UserLogin>>(),
                                     p.GetRequiredService<IAdminStore<UserToken>>(),
@@ -65,15 +57,12 @@ namespace Microsoft.Extensions.DependencyInjection
                             p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
                 })
                 .AddTransient<IAdminStore<Role>>(p => {
-                    var store = new AdminStore<Role, ApplicationDbContext>(
-                        p.GetRequiredService<ApplicationDbContext>(),
-                        p.GetRequiredService<ILogger<AdminStore<Role, ApplicationDbContext>>>());
-
-                    return new CheckIdentityRulesRoleStore(store,
+                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>(); 
+                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>(store,
                         new RoleManager<IdentityRole>(
                             new RoleStore<IdentityRole>(
-                                store, 
-                                p.GetRequiredService<IAdminStore<RoleClaim>>(), 
+                                store,
+                                p.GetRequiredService<IAdminStore<RoleClaim>>(),
                                 p.GetService<IdentityErrorDescriber>()),
                             p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
                             p.GetRequiredService<ILookupNormalizer>(),
@@ -104,9 +93,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 var entityType = property.PropertyType.GetGenericArguments()[0];
                 var adminStoreType = typeof(AdminStore<,>)
                         .MakeGenericType(entityType.GetTypeInfo(), dbContextType.GetTypeInfo()).GetTypeInfo();
+                services.AddTransient(adminStoreType);
+
+                var cacheAdminStoreType = typeof(CacheAdminStore<,>)
+                        .MakeGenericType(adminStoreType.GetTypeInfo(), entityType.GetTypeInfo()).GetTypeInfo();
+                services.AddTransient(cacheAdminStoreType);
+
                 var iAdminStoreType = typeof(IAdminStore<>)
                         .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
-                services.AddTransient(iAdminStoreType, adminStoreType);
+                services.AddTransient(iAdminStoreType, cacheAdminStoreType);
             }
         }
     }

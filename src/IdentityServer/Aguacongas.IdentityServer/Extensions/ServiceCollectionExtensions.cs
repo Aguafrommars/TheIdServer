@@ -1,19 +1,15 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
-using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Net.Http;
-using static IdentityServer4.Stores.CachingCorsPolicyService<Aguacongas.IdentityServer.Store.CorsPolicyService>;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -37,23 +33,15 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationStores(this IServiceCollection services)
         {
-            services.TryAddScoped<ICache<Client>>(p => new DefaultCache<Client>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
-            services.TryAddScoped<ICache<IEnumerable<IdentityResource>>>(p => new DefaultCache<IEnumerable<IdentityResource>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
-            services.TryAddScoped<ICache<IEnumerable<ApiResource>>>(p => new DefaultCache<IEnumerable<ApiResource>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
-            services.TryAddScoped<ICache<IEnumerable<ApiScope>>>(p => new DefaultCache<IEnumerable<ApiScope>>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
-            services.TryAddScoped<ICache<Resources>>(p => new DefaultCache<Resources>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
-            services.TryAddScoped<ICache<CorsCacheEntry>>(p => new DefaultCache<CorsCacheEntry>(new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>())));
+            services.TryAddScoped<IMemoryCache>(p => new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>()));
+            services.TryAddTransient(typeof(ICache<>), typeof(DefaultCache<>));
 
             return services.AddTransient<ClientStore>()
-                .AddTransient<ResourceStore>()
-                .AddTransient<CorsPolicyService>()
-                .AddTransient<ValidatingClientStore<ClientStore>>()
-                .AddTransient<IClientStore, CachingClientStore<ValidatingClientStore<ClientStore>>>()
-                .AddTransient<ResourceStore>()
-                .AddTransient<IResourceStore, CachingResourceStore<ResourceStore>>()
-                .AddTransient<CorsPolicyService>()
-                .AddTransient<ICorsPolicyService, CachingCorsPolicyService<CorsPolicyService>>()
+                .AddTransient<IClientStore, ValidatingClientStore<ClientStore>>()
+                .AddTransient<IResourceStore, ResourceStore>()
+                .AddTransient<ICorsPolicyService, CorsPolicyService>()
                 .AddTransient<IExternalProviderKindStore, ExternalProviderKindStore<SchemeDefinition>>();
+
         }
 
         public static IServiceCollection AddOperationalStores(this IServiceCollection services)

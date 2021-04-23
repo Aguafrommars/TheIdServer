@@ -12,8 +12,8 @@ namespace System
         public static object CreateRoleStore(this IServiceProvider provider, Type roleStoreType)
         {
             roleStoreType = roleStoreType ?? throw new ArgumentNullException(nameof(roleStoreType));
-            var roleStore = provider.GetRequiredService<IAdminStore<Role>>();
             var RoleClaimeStore = provider.GetRequiredService<IAdminStore<RoleClaim>>();
+            var roleStore = provider.GetRequiredService<IAdminStore<Role>>();
             var errorDescriber = provider.GetRequiredService<IdentityErrorDescriber>();
             var constructor = roleStoreType.GetConstructor(new Type[]
             {

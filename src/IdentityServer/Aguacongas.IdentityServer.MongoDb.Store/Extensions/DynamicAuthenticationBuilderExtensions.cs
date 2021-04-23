@@ -7,7 +7,6 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -39,11 +38,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var services = builder.Services;
             services.AddTransient<IAdminStore<ExternalProvider>>(p =>
             {
-                var store = new AdminStore<ExternalProvider>(
-                        p,
-                        p.GetRequiredService<ILogger<AdminStore<ExternalProvider>>>());
+                var store = p.GetRequiredService<CacheAdminStore<AdminStore<ExternalProvider>, ExternalProvider>>();
 
-                return new NotifyChangedExternalProviderStore(
+                return new NotifyChangedExternalProviderStore<CacheAdminStore<AdminStore<ExternalProvider>, ExternalProvider>>(
                     store,
                     p.GetRequiredService<IProviderClient>(),
                     new PersistentDynamicManager<SchemeDefinition>(

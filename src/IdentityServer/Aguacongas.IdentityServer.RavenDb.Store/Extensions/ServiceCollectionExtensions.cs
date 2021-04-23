@@ -50,48 +50,77 @@ namespace Microsoft.Extensions.DependencyInjection
                     adv.MaxNumberOfRequestsPerSession = int.MaxValue;
                     return new ScopedAsynDocumentcSession(session);
                 })
-                .AddTransient<IAdminStore<Entity.ApiApiScope>, ApiApiScopeStore>()
-                .AddTransient<IAdminStore<Entity.ApiClaim>, ApiClaimStore>()
-                .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, ApiLocalizedResourceStore>()
-                .AddTransient<IAdminStore<Entity.ApiProperty>, ApiPropertyStore>()
-                .AddTransient<IAdminStore<Entity.ApiScope>, AdminStore<Entity.ApiScope>>()
-                .AddTransient<IAdminStore<Entity.ApiScopeClaim>, ApiScopeClaimStore>()
-                .AddTransient<IAdminStore<Entity.ApiScopeLocalizedResource>, ApiScopeLocalizedResourceStore>()
-                .AddTransient<IAdminStore<Entity.ApiScopeProperty>, ApiScopePropertyStore>()
-                .AddTransient<IAdminStore<Entity.ApiSecret>, ApiSecretStore>()
-                .AddTransient<IAdminStore<Entity.AuthorizationCode>, AdminStore<Entity.AuthorizationCode>>()
-                .AddTransient<IAdminStore<Entity.Client>, AdminStore<Entity.Client>>()
-                .AddTransient<IAdminStore<Entity.ClientClaim>, ClientClaimStore>()
-                .AddTransient<IAdminStore<Entity.ClientGrantType>, ClientGrantTypeStore>()
-                .AddTransient<IAdminStore<Entity.ClientIdpRestriction>, ClientIdpRestrictionStore>()
-                .AddTransient<IAdminStore<Entity.ClientLocalizedResource>, ClientLocalizedResourceStore>()
-                .AddTransient<IAdminStore<Entity.ClientProperty>, ClientPropertyStore>()
-                .AddTransient<IAdminStore<Entity.ClientScope>, ClientScopeStore>()
-                .AddTransient<IAdminStore<Entity.ClientSecret>, ClientSecretStore>()
-                .AddTransient<IAdminStore<Entity.ClientUri>, ClientUriStore>()
-                .AddTransient<IAdminStore<Entity.Culture>, AdminStore<Entity.Culture>>()
-                .AddTransient<IAdminStore<Entity.DeviceCode>, AdminStore<Entity.DeviceCode>>()
-                .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, ExternalClaimTransformationStore>()
-                .AddTransient<IAdminStore<Entity.IdentityClaim>, IdentityClaimStore>()
-                .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, IdentityLocalizedResourceStore>()
-                .AddTransient<IAdminStore<Entity.IdentityProperty>, IdentityPropertyStore>()
-                .AddTransient<IAdminStore<Entity.IdentityResource>, AdminStore<Entity.IdentityResource>>()
-                .AddTransient<IAdminStore<Entity.LocalizedResource>, LocalizedResourceStore>()
-                .AddTransient<IAdminStore<Entity.ProtectResource>, AdminStore<Entity.ProtectResource>>()
-                .AddTransient<IAdminStore<Entity.Key>, AdminStore<Entity.Key>>()
-                .AddTransient<IAdminStore<Entity.ReferenceToken>, AdminStore<Entity.ReferenceToken>>()
-                .AddTransient<IAdminStore<Entity.RefreshToken>, AdminStore<Entity.RefreshToken>>()
-                .AddTransient<IAdminStore<Entity.OneTimeToken>, AdminStore<Entity.OneTimeToken>>()
-                .AddTransient<IAdminStore<Entity.UserConsent>, AdminStore<Entity.UserConsent>>()
+                .AddTransient<ApiApiScopeStore>()
+                .AddTransient<ApiClaimStore>()
+                .AddTransient<ApiLocalizedResourceStore>()
+                .AddTransient<ApiPropertyStore>()
+                .AddTransient<AdminStore<Entity.ApiScope>>()
+                .AddTransient<ApiScopeClaimStore>()
+                .AddTransient<ApiScopeLocalizedResourceStore>()
+                .AddTransient<ApiScopePropertyStore>()
+                .AddTransient<ApiSecretStore>()
+                .AddTransient<AdminStore<Entity.AuthorizationCode>>()
+                .AddTransient<AdminStore<Entity.Client>>()
+                .AddTransient<ClientClaimStore>()
+                .AddTransient<ClientGrantTypeStore>()
+                .AddTransient<ClientIdpRestrictionStore>()
+                .AddTransient<ClientLocalizedResourceStore>()
+                .AddTransient<ClientPropertyStore>()
+                .AddTransient<ClientScopeStore>()
+                .AddTransient<ClientSecretStore>()
+                .AddTransient<ClientUriStore>()
+                .AddTransient<AdminStore<Entity.Culture>>()
+                .AddTransient<AdminStore<Entity.DeviceCode>>()
+                .AddTransient<ExternalClaimTransformationStore>()
+                .AddTransient<IdentityClaimStore>()
+                .AddTransient<IdentityLocalizedResourceStore>()
+                .AddTransient<IdentityPropertyStore>()
+                .AddTransient<AdminStore<Entity.IdentityResource>>()
+                .AddTransient<LocalizedResourceStore>()
+                .AddTransient<AdminStore<Entity.ProtectResource>>()
+                .AddTransient<AdminStore<Entity.Key>>()
+                .AddTransient<AdminStore<Entity.ReferenceToken>>()
+                .AddTransient<AdminStore<Entity.RefreshToken>>()
+                .AddTransient<AdminStore<Entity.OneTimeToken>>()
+                .AddTransient<AdminStore<Entity.UserConsent>>()
+                .AddTransient<IAdminStore<Entity.ApiApiScope>, CacheAdminStore<ApiApiScopeStore, Entity.ApiApiScope>>()
+                .AddTransient<IAdminStore<Entity.ApiClaim>, CacheAdminStore<ApiClaimStore, Entity.ApiClaim>>()
+                .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, CacheAdminStore<ApiLocalizedResourceStore, Entity.ApiLocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.ApiProperty>, CacheAdminStore<ApiPropertyStore, Entity.ApiProperty>>()
+                .AddTransient<IAdminStore<Entity.ApiScope>, CacheAdminStore<AdminStore<Entity.ApiScope>, Entity.ApiScope>>()
+                .AddTransient<IAdminStore<Entity.ApiScopeClaim>, CacheAdminStore<ApiScopeClaimStore, Entity.ApiScopeClaim>>()
+                .AddTransient<IAdminStore<Entity.ApiScopeLocalizedResource>, CacheAdminStore<ApiScopeLocalizedResourceStore, Entity.ApiScopeLocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.ApiScopeProperty>, CacheAdminStore<ApiScopePropertyStore, Entity.ApiScopeProperty>>()
+                .AddTransient<IAdminStore<Entity.ApiSecret>, CacheAdminStore<ApiSecretStore, Entity.ApiSecret>>()
+                .AddTransient<IAdminStore<Entity.AuthorizationCode>, CacheAdminStore<AdminStore<Entity.AuthorizationCode>, Entity.AuthorizationCode>>()
+                .AddTransient<IAdminStore<Entity.Client>, CacheAdminStore<AdminStore<Entity.Client>, Entity.Client>>()
+                .AddTransient<IAdminStore<Entity.ClientClaim>, CacheAdminStore<ClientClaimStore, Entity.ClientClaim>>()
+                .AddTransient<IAdminStore<Entity.ClientGrantType>, CacheAdminStore<ClientGrantTypeStore, Entity.ClientGrantType>>()
+                .AddTransient<IAdminStore<Entity.ClientIdpRestriction>, CacheAdminStore<ClientIdpRestrictionStore, Entity.ClientIdpRestriction>>()
+                .AddTransient<IAdminStore<Entity.ClientLocalizedResource>, CacheAdminStore<ClientLocalizedResourceStore, Entity.ClientLocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.ClientProperty>, CacheAdminStore<ClientPropertyStore, Entity.ClientProperty>>()
+                .AddTransient<IAdminStore<Entity.ClientScope>, CacheAdminStore<ClientScopeStore, Entity.ClientScope>>()
+                .AddTransient<IAdminStore<Entity.ClientSecret>, CacheAdminStore<ClientSecretStore, Entity.ClientSecret>>()
+                .AddTransient<IAdminStore<Entity.ClientUri>, CacheAdminStore<ClientUriStore, Entity.ClientUri>>()
+                .AddTransient<IAdminStore<Entity.Culture>, CacheAdminStore<AdminStore<Entity.Culture>, Entity.Culture>>()
+                .AddTransient<IAdminStore<Entity.DeviceCode>, CacheAdminStore<AdminStore<Entity.DeviceCode>, Entity.DeviceCode>>()
+                .AddTransient<IAdminStore<Entity.ExternalClaimTransformation>, CacheAdminStore<ExternalClaimTransformationStore, Entity.ExternalClaimTransformation>>()
+                .AddTransient<IAdminStore<Entity.IdentityClaim>, CacheAdminStore<IdentityClaimStore, Entity.IdentityClaim>>()
+                .AddTransient<IAdminStore<Entity.IdentityLocalizedResource>, CacheAdminStore<IdentityLocalizedResourceStore, Entity.IdentityLocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.IdentityProperty>, CacheAdminStore<IdentityPropertyStore, Entity.IdentityProperty>>()
+                .AddTransient<IAdminStore<Entity.IdentityResource>, CacheAdminStore<AdminStore<Entity.IdentityResource>, Entity.IdentityResource>>()
+                .AddTransient<IAdminStore<Entity.LocalizedResource>, CacheAdminStore<LocalizedResourceStore, Entity.LocalizedResource>>()
+                .AddTransient<IAdminStore<Entity.ProtectResource>, CacheAdminStore<AdminStore<Entity.ProtectResource>, Entity.ProtectResource>>()
+                .AddTransient<IAdminStore<Entity.Key>, CacheAdminStore<AdminStore<Entity.Key>, Entity.Key>>()
+                .AddTransient<IAdminStore<Entity.ReferenceToken>, CacheAdminStore<AdminStore<Entity.ReferenceToken>, Entity.ReferenceToken>>()
+                .AddTransient<IAdminStore<Entity.RefreshToken>, CacheAdminStore<AdminStore<Entity.RefreshToken>, Entity.RefreshToken>>()
+                .AddTransient<IAdminStore<Entity.OneTimeToken>, CacheAdminStore<AdminStore<Entity.OneTimeToken>, Entity.OneTimeToken>>()
+                .AddTransient<IAdminStore<Entity.UserConsent>, CacheAdminStore<AdminStore<Entity.UserConsent>, Entity.UserConsent>>()
                 .AddTransient<IAdminStore<Entity.User>>(p => {
-                    var userStore = new AdminStore<Entity.User>(
-                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                        p.GetRequiredService<ILogger<AdminStore<Entity.User>>>());
-                    var roleStore = new AdminStore<Entity.Role>(
-                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                        p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>());
+                    var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>();
+                    var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
 
-                    return new CheckIdentityRulesUserStore(userStore,
+                    return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>(userStore,
                         new UserManager<ApplicationUser>(
                             new UserStore<ApplicationUser>(
                                 roleStore,
@@ -112,16 +141,15 @@ namespace Microsoft.Extensions.DependencyInjection
                             p,
                             p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
                 })
-                .AddTransient<IAdminStore<Entity.UserLogin>, UserLoginStore>()
-                .AddTransient<IAdminStore<Entity.UserClaim>, UserClaimStore>()
-                .AddTransient<IAdminStore<Entity.UserRole>, UserRoleStore>()
-                .AddTransient<IAdminStore<Entity.UserToken>, UserTokenStore>()
+                .AddTransient<IAdminStore<Entity.User>, CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>>()
+                .AddTransient<IAdminStore<Entity.UserLogin>, CacheAdminStore<UserLoginStore, Entity.UserLogin>>()
+                .AddTransient<IAdminStore<Entity.UserClaim>, CacheAdminStore<UserClaimStore, Entity.UserClaim>>()
+                .AddTransient<IAdminStore<Entity.UserRole>, CacheAdminStore<UserRoleStore, Entity.UserRole>>()
+                .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
                 .AddTransient<IAdminStore<Entity.Role>>(p => {
-                    var store = new AdminStore<Entity.Role>(
-                        p.GetRequiredService<ScopedAsynDocumentcSession>(),
-                        p.GetRequiredService<ILogger<AdminStore<Entity.Role>>>());
+                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
 
-                    return new CheckIdentityRulesRoleStore(store,
+                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>(store,
                         new RoleManager<IdentityRole>(
                             new RoleStore<IdentityRole>(
                                 store,
@@ -131,8 +159,9 @@ namespace Microsoft.Extensions.DependencyInjection
                             p.GetRequiredService<ILookupNormalizer>(),
                             p.GetRequiredService<IdentityErrorDescriber>(),
                             p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
-                    })
-                .AddTransient<IAdminStore<Entity.RoleClaim>, RoleClaimStore>();
+                })
+                .AddTransient<IAdminStore<Entity.Role>, CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>>()
+                .AddTransient<IAdminStore<Entity.RoleClaim>,CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>();
                 
         }
     }

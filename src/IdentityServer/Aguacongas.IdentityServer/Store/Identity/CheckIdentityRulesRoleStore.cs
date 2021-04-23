@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class CheckIdentityRulesRoleStore : IAdminStore<Role>
+    public class CheckIdentityRulesRoleStore<TStore> : IAdminStore<Role> where TStore: IAdminStore<Role>
     {
-        private readonly IAdminStore<Role> _parent;
+        private readonly TStore _parent;
         private readonly RoleManager<IdentityRole> _manager;
 
-        public CheckIdentityRulesRoleStore(IAdminStore<Role> parent, RoleManager<IdentityRole> manager)
+        public CheckIdentityRulesRoleStore(TStore parent, RoleManager<IdentityRole> manager)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));

@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class CheckIdentityRulesUserStore : IAdminStore<User>
+    public class CheckIdentityRulesUserStore<TStore> : IAdminStore<User> where TStore: IAdminStore<User>
     {
-        private readonly IAdminStore<User> _parent;
+        private readonly TStore _parent;
         private readonly UserManager<ApplicationUser> _manager;
 
-        public CheckIdentityRulesUserStore(IAdminStore<User> parent, UserManager<ApplicationUser> manager)
+        public CheckIdentityRulesUserStore(TStore parent, UserManager<ApplicationUser> manager)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
+
         public async Task<User> CreateAsync(User entity, CancellationToken cancellationToken = default)
         {
             var user = CreateUser(entity);
