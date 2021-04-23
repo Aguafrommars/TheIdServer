@@ -26,16 +26,17 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
-    </ItemGroup>
-    <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-beta.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
-    </ItemGroup>
+  </ItemGroup>
 
 </Project>
