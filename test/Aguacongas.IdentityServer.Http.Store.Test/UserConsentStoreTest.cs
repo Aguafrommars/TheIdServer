@@ -61,7 +61,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             await sut.RemoveUserConsentAsync("test", "test");
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' And ClientId eq 'test'"), default));
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' and ClientId eq 'test'"), default));
             storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
         }
 
@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 SubjectId = "test"
             });
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' And ClientId eq 'test'"), default));
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' and ClientId eq 'test'"), default));
             storeMock.Verify(m => m.CreateAsync(It.IsAny<UserConsent>(), default));
         }
 
