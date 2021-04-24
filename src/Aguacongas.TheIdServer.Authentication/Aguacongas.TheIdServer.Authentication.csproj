@@ -1,33 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Authentication</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;aspnetcore;authentication;security</PackageTags>
-		<Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
-		<DebugType>Full</DebugType>
-		<PackageIcon>package-icon.png</PackageIcon>
-		<CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Authors>Olivier Lefebvre</Authors>
+        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Authentication</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>theidserver;aspnetcore;authentication;security</PackageTags>
+        <Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
+        <DebugType>Full</DebugType>
+        <PackageIcon>package-icon.png</PackageIcon>
+        <CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin.Http.Store\Aguacongas.IdentityServer.Admin.Http.Store.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath=""/>
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+    <None Include="package-icon.png" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>

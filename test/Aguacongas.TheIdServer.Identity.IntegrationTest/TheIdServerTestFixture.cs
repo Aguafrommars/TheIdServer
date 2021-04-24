@@ -1,8 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
-using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,9 +43,10 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                 services =>
                 {
                     services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
-                    .AddDbContext<ApplicationDbContext>(options =>
+                    .AddSingleton<HubConnectionFactory>()
+                    .AddTransient<IProviderClient, ProviderClient>()
+                    .AddIdentityServer4AdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddIdentityProviderStore()
                     .AddConfigurationEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -44,12 +45,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             _isReadOnly = Entity.Id != null;
         }
 
-        protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
+        protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             _idPageRequest.Filter = $"contains({nameof(entity.IdentityResource.Id)},'{term}') or contains({nameof(entity.IdentityResource.DisplayName)},'{term}')";
             _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Id)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
-            var identityResponse = await _identityStore.GetAsync(_idPageRequest).ConfigureAwait(false);
-            var apiScopeResponse = await _apiScopeStore.GetAsync(_scopeRequest).ConfigureAwait(false);
+            var identityResponse = await _identityStore.GetAsync(_idPageRequest, cancellationToken).ConfigureAwait(false);
+            var apiScopeResponse = await _apiScopeStore.GetAsync(_scopeRequest, cancellationToken).ConfigureAwait(false);
 
             var culture = CultureInfo.CurrentCulture.Name;
             _filterScopes = identityResponse.Items.Select(i => new Scope

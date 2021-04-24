@@ -5,7 +5,6 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,15 +39,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var query = _context.Set<TEntity>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
-            var count = await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+            query = odataQuery.Inner as IQueryable<TEntity>;
 
-            var page = odataQuery.GetPage(request);
+            int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
-            var items = (await page.ToListAsync(cancellationToken).ConfigureAwait(false)) as IEnumerable<TEntity>;
+            var page = query.GetPage(request);
+
+            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
             return new PageResponse<TEntity>
             {
-                Count = count,
+                Count = count ?? items.Count,
                 Items = items
             };
         }
@@ -58,7 +59,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await _context.Set<TEntity>().FindAsync(new[] { id }, cancellationToken).ConfigureAwait(false);
             if (entity == null)
             {
-                throw new DbUpdateException($"Entity type {typeof(TEntity).Name} at id {id} is not found");
+                return;
             }
             _context.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -71,6 +72,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             if (entity.Id == null)
             {
                 entity.Id = Guid.NewGuid().ToString();
+            }
+            if (entity is IAuditable auditable)
+            {
+                auditable.CreatedAt = DateTime.UtcNow;
             }
             await _context.AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

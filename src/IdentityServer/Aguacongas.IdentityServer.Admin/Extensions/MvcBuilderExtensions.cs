@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -219,7 +218,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var filters = options.Filters;
             filters.Add<FormatFilter>();
-            filters.Add<SelectFilter>();
+            filters.Add<ExternalProviderFilter>();
             filters.Add<ExceptionFilter>();
             filters.Add<ActionsFilter>();
 

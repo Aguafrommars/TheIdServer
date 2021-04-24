@@ -72,6 +72,7 @@
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
+		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.RavenDb.Store\Aguacongas.IdentityServer.RavenDb.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Oracle\Aguacongas.TheIdServer.Migrations.Oracle.csproj" />

@@ -4,6 +4,7 @@ using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
@@ -39,7 +40,7 @@ namespace Aguacongas.TheIdServer.Test
                 Scheme = "test"
             });
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 SerializedHandlerType = serializer.SerializeType(typeof(GoogleHandler)),
@@ -70,7 +71,7 @@ namespace Aguacongas.TheIdServer.Test
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 StoreClaims = true,
@@ -101,7 +102,7 @@ namespace Aguacongas.TheIdServer.Test
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 StoreClaims = true,
@@ -139,7 +140,7 @@ namespace Aguacongas.TheIdServer.Test
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 StoreClaims = true,
@@ -191,7 +192,7 @@ namespace Aguacongas.TheIdServer.Test
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 StoreClaims = true,
@@ -219,7 +220,7 @@ namespace Aguacongas.TheIdServer.Test
             using var scope = builder.CreateScope();
             var configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             var serializer = builder.GetRequiredService<IAuthenticationSchemeOptionsSerializer>();
-            configurationDbContext.Providers.Add(new SchemeDefinition
+            configurationDbContext.Providers.Add(new ExternalProvider
             {
                 Id = "test",
                 StoreClaims = true,
@@ -258,20 +259,20 @@ namespace Aguacongas.TheIdServer.Test
             var services = new ServiceCollection()
                 .AddTransient<IConfiguration>(p => configuration)
                 .AddLogging()
-                .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(dbId))
-                .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
+                .AddTransient<IdentityServer4.Configuration.IdentityServerOptions>()
+                .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
                 .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
                 .AddIdentityProviderStore();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
 
             services.AddSignalR();
 
             services.AddControllersWithViews()
                 .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                .AddEntityFrameworkStore<ConfigurationDbContext>();
+                .AddTheIdServerStore();
 
             return services;
         }

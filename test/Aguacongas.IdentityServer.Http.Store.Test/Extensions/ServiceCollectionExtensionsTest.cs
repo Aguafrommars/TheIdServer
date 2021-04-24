@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
@@ -37,28 +38,6 @@ namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
             Assert.NotNull(provider.GetService<IClientStore>());
             Assert.NotNull(provider.GetService<IResourceStore>());
             Assert.NotNull(provider.GetService<ICorsPolicyService>());
-        }
-
-        [Fact]
-        public void AddOperationalHttpStores_should_add_http_operational_stores()
-        {
-            var provider = new ServiceCollection()
-                .AddLogging()
-                .AddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>()
-                .AddIdentityServer4AdminHttpStores(p => Task.FromResult(new HttpClient()))
-                .AddOperationalHttpStores()
-                .BuildServiceProvider();
-
-            Assert.NotNull(provider.GetService<AuthorizationCodeStore>());
-            Assert.NotNull(provider.GetService<RefreshTokenStore>());
-            Assert.NotNull(provider.GetService<ReferenceTokenStore>());
-            Assert.NotNull(provider.GetService<UserConsentStore>());
-            Assert.NotNull(provider.GetService<DeviceFlowStore>());
-            Assert.NotNull(provider.GetService<IAuthorizationCodeStore>());
-            Assert.NotNull(provider.GetService<IRefreshTokenStore>());
-            Assert.NotNull(provider.GetService<IReferenceTokenStore>());
-            Assert.NotNull(provider.GetService<IUserConsentStore>());
-            Assert.NotNull(provider.GetService<IDeviceFlowStore>());
         }
     }
 }

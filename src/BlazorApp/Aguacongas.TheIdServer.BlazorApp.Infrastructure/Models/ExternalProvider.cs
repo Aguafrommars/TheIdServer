@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -46,6 +47,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
 
         public static ExternalProvider FromEntity(Entity.ExternalProvider externalProvider)
         {
+            if (string.IsNullOrEmpty(externalProvider.KindName))
+            {
+                var handlerTypeName = JsonSerializer.Deserialize<HandlerType>(externalProvider.SerializedHandlerType);
+                externalProvider.KindName = handlerTypeName.Name.Split('.').Last().Replace("Handler", "");
+            }
             var optionsType = GetOptionsType(externalProvider);
             return new ExternalProvider
             {
@@ -65,10 +71,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         }
 
         private static Type GetOptionsType(Entity.ExternalProvider externalProvider)
-        {
+        {            
             var typeName = $"{typeof(RemoteAuthenticationOptions).Namespace}.{externalProvider.KindName}Options";
             var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetType(typeName) != null);
             return assembly.GetType(typeName);
+        }
+
+        class HandlerType
+        {
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Setter needed for deserialization.")]
+            public string Name { get; set; }
         }
     }
 }

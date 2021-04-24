@@ -18,8 +18,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.RavenDb
         [Fact]
         public void Constructor_should_check_parameters()
         {
-            Assert.Throws<ArgumentNullException>(() => new RavenDbXmlRepository<DataProtectionKey, DocumentSessionWrapper>(null, null));
-            Assert.Throws<ArgumentNullException>(() => new RavenDbXmlRepository<KeyRotationKey, DocumentSessionWrapper>(new Mock<IServiceProvider>().Object, null));
+            Assert.Throws<ArgumentNullException>(() => new RavenDbXmlRepository<DataProtectionKey>(null, null));
+            Assert.Throws<ArgumentNullException>(() => new RavenDbXmlRepository<KeyRotationKey>(new Mock<IServiceProvider>().Object, null));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.RavenDb
                 .AddTransient(p => new DocumentSessionWrapper(sessionMock.Object))
                 .BuildServiceProvider();
 
-            var sut = new RavenDbXmlRepository<DataProtectionKey, DocumentSessionWrapper>(provider, provider.GetRequiredService<ILoggerFactory>());
+            var sut = new RavenDbXmlRepository<DataProtectionKey>(provider, provider.GetRequiredService<ILoggerFactory>());
 
             var result = sut.GetAllElements();
 
@@ -69,7 +69,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.RavenDb
                 .AddTransient(p => new DocumentSessionWrapper(sessionMock.Object))
                 .BuildServiceProvider();
 
-            var sut = new RavenDbXmlRepository<KeyRotationKey, DocumentSessionWrapper>(provider, provider.GetRequiredService<ILoggerFactory>());
+            var sut = new RavenDbXmlRepository<KeyRotationKey>(provider, provider.GetRequiredService<ILoggerFactory>());
 
             var result = sut.GetAllElements();
 
@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.RavenDb
                 .AddTransient(p => new DocumentSessionWrapper(sessionMock.Object))
                 .BuildServiceProvider();
 
-            var sut = new RavenDbXmlRepository<KeyRotationKey, DocumentSessionWrapper>(provider, provider.GetRequiredService<ILoggerFactory>());
+            var sut = new RavenDbXmlRepository<KeyRotationKey>(provider, provider.GetRequiredService<ILoggerFactory>());
 
             sut.StoreElement(XElement.Parse("<a/>"), "test");
             sessionMock.Verify();

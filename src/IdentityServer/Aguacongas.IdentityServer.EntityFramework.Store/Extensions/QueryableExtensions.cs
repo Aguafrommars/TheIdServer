@@ -42,16 +42,19 @@ namespace Microsoft.EntityFrameworkCore
             return odataQuery;
         }
 
-        public static IQueryable<T> GetPage<T>(this ODataQuery<T> odataQuery, PageRequest request) where T : class
+        public static IQueryable<T> GetPage<T>(this IQueryable<T> query, PageRequest request) where T : class
         {
-            var page = odataQuery.Skip(request.Skip ?? 0);
+            if (request.Skip.HasValue)
+            {
+                query = query.Skip(request.Skip.Value);
+            }
 
             if (request.Take.HasValue)
             {
-                page = page.Take(request.Take.Value);
+                query = query.Take(request.Take.Value);
             }
                 
-            return page;
+            return query;
         }
     }
 }

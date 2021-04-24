@@ -1,6 +1,6 @@
 ﻿@using  Aguacongas.IdentityServer.Store
 @inherits AutoCompleteModel<Entity.ClientIdpRestriction>
-@inject IIdentityProviderStore _store
+@inject IAdminStore<Entity.ExternalProvider>  _store
 
 @if (IsReadOnly)
 {

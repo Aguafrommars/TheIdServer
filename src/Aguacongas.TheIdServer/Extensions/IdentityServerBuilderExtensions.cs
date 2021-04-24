@@ -36,7 +36,10 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.PersistKeysToDbContext<OperationalDbContext>();
                     break;
                 case StorageKind.RavenDb:
-                    builder.PersistKeysToRavenDb<DocumentSessionWrapper>();
+                    builder.PersistKeysToRavenDb();
+                    break;
+                case StorageKind.MongoDb:
+                    builder.PersistKeysToMongoDb();
                     break;
                 case StorageKind.FileSystem:
                     builder.PersistKeysToFileSystem(new DirectoryInfo(dataProtectionsOptions.StorageConnectionString));

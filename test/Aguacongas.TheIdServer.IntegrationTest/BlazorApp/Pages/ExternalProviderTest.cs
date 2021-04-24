@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +74,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var provider = await context.Providers.FirstOrDefaultAsync(r => r.Scheme == providerName);
+                var provider = await context.Providers.FirstOrDefaultAsync(r => r.Id == providerName);
                 Assert.NotNull(provider);
             });
         }
@@ -137,7 +138,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var provider = await context.Providers.FirstOrDefaultAsync(p => p.Scheme == providerId);
+                var provider = await context.Providers.FirstOrDefaultAsync(p => p.Id == providerId);
                 Assert.Null(provider);
             });
         }
@@ -218,7 +219,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var providerId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(async c =>
             {
-                await c.Providers.AddAsync(new SchemeDefinition
+                await c.Providers.AddAsync(new ExternalProvider
                 {
                     Id = providerId,
                     DisplayName = GenerateId(),
@@ -257,7 +258,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var providerId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(async c =>
             {
-                await c.Providers.AddAsync(new SchemeDefinition
+                await c.Providers.AddAsync(new ExternalProvider
                 {
                     Id = providerId,
                     DisplayName = GenerateId(),

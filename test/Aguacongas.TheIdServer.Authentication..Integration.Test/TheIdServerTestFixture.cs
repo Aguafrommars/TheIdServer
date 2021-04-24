@@ -3,7 +3,6 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
-using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -29,9 +28,8 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
             Sut = TestUtils.CreateTestServer(
                 services =>
                 {
-                    services.AddDbContext<ApplicationDbContext>(options =>
+                    services.AddIdentityServer4AdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
-                    .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
                     .AddIdentityProviderStore()
                     .AddConfigurationEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))

@@ -1,13 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Testing;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -250,13 +251,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var roleId = GenerateId();
             await DbActionAsync<ApplicationDbContext>(context =>
             {
-                context.Roles.Add(new IdentityRole
+                context.Roles.Add(new Role
                 {
                     Id = roleId,
                     Name = roleId
                 });
-                context.RoleClaims.Add(new IdentityRoleClaim<string>
+                context.RoleClaims.Add(new RoleClaim
                 {
+                    Id = Guid.NewGuid().ToString(),
                     RoleId = roleId,
                     ClaimType = "filtered",
                     ClaimValue = "filtered"

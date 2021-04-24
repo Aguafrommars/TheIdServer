@@ -151,6 +151,22 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<UserClaim> UserClaims { get; set; }
 
         /// <summary>
+        /// Gets or sets the user logins.
+        /// </summary>
+        /// <value>
+        /// The user logins.
+        /// </value>
+        public virtual ICollection<UserLogin> UserLogins { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user tokens.
+        /// </summary>
+        /// <value>
+        /// The user tokens.
+        /// </value>
+        public virtual ICollection<UserToken> UserTokens { get; set; }
+
+        /// <summary>
         /// Gets or sets the user roles.
         /// </summary>
         /// <value>

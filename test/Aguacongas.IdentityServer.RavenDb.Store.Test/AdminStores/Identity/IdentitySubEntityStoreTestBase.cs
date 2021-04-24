@@ -78,18 +78,18 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.Identity
                 Id = Guid.NewGuid().ToString(),
                 IdentityId = "test"
             };
-            var api = new Entity.IdentityResource
+            var identity = new Entity.IdentityResource
             {
                 Id = "test",
             };
-            var collection = GetCollection(api);
+            var collection = GetCollection(identity);
             collection.Add(new TEntity
             {
                 Id = $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}"
             });
 
             using var s1 = store.OpenAsyncSession();
-            await s1.StoreAsync(api, $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/{api.Id}");
+            await s1.StoreAsync(identity, $"{nameof(Entity.IdentityResource).ToLowerInvariant()}/{identity.Id}");
             await s1.StoreAsync(entity, $"{typeof(TEntity).Name.ToLowerInvariant()}/{entity.Id}");
             await s1.SaveChangesAsync();
 

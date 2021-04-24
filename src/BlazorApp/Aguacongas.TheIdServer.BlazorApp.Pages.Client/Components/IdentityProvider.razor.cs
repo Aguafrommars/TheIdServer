@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -11,7 +12,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
     public partial class IdentityProvider
     {
         private bool _isReadOnly;
-        private IEnumerable<entity.IdentityProvider> _filteredProviders;
+        private IEnumerable<entity.ExternalProvider> _filteredProviders;
         private string _providerName;
         private readonly PageRequest _pageRequest = new PageRequest
         {
@@ -25,7 +26,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            _isReadOnly = Entity.Provider != null;
+            _isReadOnly = Entity.Id != null;
         }
 
         protected override async Task OnInitializedAsync()
@@ -34,10 +35,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             await base.OnInitializedAsync().ConfigureAwait(false);
         }
 
-        protected override async Task<IEnumerable<string>> GetFilteredValues(string term)
+        protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
-            _pageRequest.Filter = $"contains({nameof(entity.IdentityProvider.Id)},'{term}') or contains({nameof(entity.IdentityProvider.DisplayName)},'{term}')";
-            var response = await _store.GetAsync(_pageRequest)
+            _pageRequest.Filter = $"contains({nameof(entity.ExternalProvider.Id)},'{term}') or contains({nameof(entity.ExternalProvider.DisplayName)},'{term}')";
+            var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 
             _filteredProviders = response.Items;
@@ -53,7 +54,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         private async Task<string> GetProviderName(string id)
         {
-            var provider = await _store.GetAsync(id)
+            var provider = await _store.GetAsync(id, null)
                 .ConfigureAwait(false);
 
             return provider.DisplayName;

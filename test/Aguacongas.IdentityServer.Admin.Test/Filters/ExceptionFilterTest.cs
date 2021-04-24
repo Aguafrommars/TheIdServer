@@ -89,7 +89,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Filters
             {
                 ActionDescriptor = new ControllerActionDescriptor
                 {
-                    ControllerTypeInfo = typeof(IdentityProviderController).GetTypeInfo()
+                    ControllerTypeInfo = typeof(ExternalProviderKindController).GetTypeInfo()
                 },
                 Exception = e,
 

@@ -32,4 +32,10 @@
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

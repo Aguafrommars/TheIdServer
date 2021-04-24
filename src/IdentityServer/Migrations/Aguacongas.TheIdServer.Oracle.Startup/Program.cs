@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.EntityFrameworkCore;
@@ -28,9 +29,8 @@ namespace Aguacongas.TheIdServer.Oracle
 
                     Action<DbContextOptionsBuilder> optionsAction = options => options.UseOracle(cn, options => options.MigrationsAssembly("Aguacongas.TheIdServer.Migrations.Oracle"));
                     services.AddDbContext<ApplicationDbContext>(optionsAction)
-                        .AddIdentityServer4AdminEntityFrameworkStores<ApplicationUser, ApplicationDbContext>()
-                        .AddConfigurationEntityFrameworkStores(optionsAction)
-                        .AddOperationalEntityFrameworkStores(optionsAction);
+                        .AddDbContext<ConfigurationDbContext>(optionsAction)
+                        .AddDbContext<OperationalDbContext>(optionsAction);
                 });
 
     }

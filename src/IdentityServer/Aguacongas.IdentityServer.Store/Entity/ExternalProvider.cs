@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using System;
 using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.Store.Entity
@@ -8,7 +9,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// SchemeDefinition entity
     /// </summary>
     /// <seealso cref="IEntityId" />
-    public class ExternalProvider : IEntityId
+    public class ExternalProvider : IAuditable
     {
         /// <summary>
         /// Gets the identifier.
@@ -73,5 +74,21 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The claim transformations.
         /// </value>
         public virtual ICollection<ExternalClaimTransformation> ClaimTransformations { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created at.
+        /// </summary>
+        /// <value>
+        /// The created at.
+        /// </value>
+        public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modified at.
+        /// </summary>
+        /// <value>
+        /// The modified at.
+        /// </value>
+        public DateTime? ModifiedAt { get; set; }
     }
 }

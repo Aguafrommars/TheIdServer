@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Localizer.OnResourceReady = () => InvokeAsync(async () => 
             {
                 await GetRenderFragmentAsync().ConfigureAwait(false);
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             });
         }
 

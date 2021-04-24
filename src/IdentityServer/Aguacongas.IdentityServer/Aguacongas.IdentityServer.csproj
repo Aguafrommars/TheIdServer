@@ -27,7 +27,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.2" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
@@ -42,6 +41,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
+		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
 		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
 	</ItemGroup>
 	<ItemGroup>

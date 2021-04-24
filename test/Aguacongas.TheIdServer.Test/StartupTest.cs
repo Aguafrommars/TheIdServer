@@ -4,11 +4,10 @@ using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Services;
-using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
-using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
@@ -50,7 +49,6 @@ namespace Aguacongas.TheIdServer.Test
             var schemeChangeSubscriber = provider.GetService<ISchemeChangeSubscriber>();
             Assert.NotNull(schemeChangeSubscriber);
             Assert.Equal(typeof(SchemeChangeSubscriber<SchemeDefinition>), schemeChangeSubscriber.GetType());
-            Assert.NotNull(provider.GetService<ApplicationDbContext>());
         }
 
         [Fact]
@@ -74,7 +72,6 @@ namespace Aguacongas.TheIdServer.Test
             var schemeChangeSubscriber = provider.GetService<ISchemeChangeSubscriber>();
             Assert.NotNull(schemeChangeSubscriber);
             Assert.Equal(typeof(SchemeChangeSubscriber<Auth.SchemeDefinition>), schemeChangeSubscriber.GetType());
-            Assert.Null(provider.GetService<ApplicationDbContext>());
         }
 
         [Fact]

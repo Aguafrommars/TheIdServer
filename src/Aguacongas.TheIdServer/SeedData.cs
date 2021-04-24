@@ -22,8 +22,7 @@ namespace Aguacongas.TheIdServer
     static class SeedData
     {
         public static void EnsureSeedData(IConfiguration configuration)
-        {
-            
+        {            
             var services = new ServiceCollection();
             var startup = new Startup(configuration, null);
             startup.ConfigureServices(services);
@@ -32,7 +31,7 @@ namespace Aguacongas.TheIdServer
             using var scope = serviceProvider.CreateScope();
 
             var dbType = configuration.GetValue<DbTypes>("DbType");
-            if (dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb)
+            if (dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
             {
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 configContext.Database.Migrate();
@@ -44,8 +43,11 @@ namespace Aguacongas.TheIdServer
                 appcontext.Database.Migrate();
             }
 
-            SeedUsers(scope, configuration);
-            SeedConfiguration(scope, configuration);
+            if (configuration.GetValue<bool>("Seed"))
+            {
+                SeedUsers(scope, configuration);
+                SeedConfiguration(scope, configuration);
+            }
         }
 
         public static void SeedConfiguration(IServiceScope scope, IConfiguration configuration)
@@ -505,8 +507,8 @@ namespace Aguacongas.TheIdServer
                 ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd))
                     .GetAwaiter().GetResult();
 
-                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<UserClaim>>()
-                    .Select(c => c.ToClaim())
+                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()
+                    .Select(c => new Claim(c.ClaimType, c.ClaimValue, c.OriginalType, c.Issuer))
                     .ToList();
                 claimList.Add(new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64));
                 ExcuteAndCheckResult(() => userMgr.AddClaimsAsync(user, claimList))

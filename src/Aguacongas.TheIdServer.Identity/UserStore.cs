@@ -61,7 +61,7 @@ namespace Aguacongas.TheIdServer.Identity
         /// <param name="userRoleStore">The user role store.</param>
         /// <param name="userOnlyStore">The user only store.</param>
         /// <param name="describer">The <see cref="IdentityErrorDescriber" /> used to describe store errors.</param>
-        /// <exception cref="System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// store
         /// or
         /// userRoleStore
@@ -192,17 +192,13 @@ namespace Aguacongas.TheIdServer.Identity
             AssertNotNull(user, nameof(user));
 
             var userRoles = await GetUserRolesAsync(user.Id, cancellationToken).ConfigureAwait(false);
-            var taskList = new List<Task<TRole>>(userRoles.Count);
-
+            var roleList = new List<TRole>();
             foreach(var userRole in userRoles)
             {
-                taskList.Add(FindRoleByIdAsync(userRole.RoleId, cancellationToken));
+                roleList.Add(await FindRoleByIdAsync(userRole.RoleId, cancellationToken).ConfigureAwait(false));
             }
 
-            var result = await Task.WhenAll(taskList)
-                .ConfigureAwait(false);
-
-            return result.Where(r => r != null)
+            return roleList.Where(r => r != null)
                 .Select(r => r.Name)
                 .ToList();
         }
@@ -366,16 +362,14 @@ namespace Aguacongas.TheIdServer.Identity
             {
                 Filter = $"{nameof(UserRole.RoleId)} eq '{roleEntity.Id}'"
             }, cancellationToken).ConfigureAwait(false);
-            var taskList = new List<Task<TUser>>(userRoles.Count);
+            
+            var userList = new List<TUser>();
             foreach(var userRole in userRoles.Items)
             {
-                taskList.Add(FindByIdAsync(userRole.UserId, cancellationToken));
+                userList.Add(await FindByIdAsync(userRole.UserId, cancellationToken).ConfigureAwait(false));
             }
 
-            var results = await Task.WhenAll(taskList)
-                .ConfigureAwait(false);
-
-            return results.Where(u => u != null)
+            return userList.Where(u => u != null)
                 .Select(u => u)
                 .ToList();
         }
@@ -430,7 +424,7 @@ namespace Aguacongas.TheIdServer.Identity
                 Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
             }, cancellationToken).ConfigureAwait(false);
 
-            if (respone.Count == 1)
+            if (respone.Items.Any())
             {
                 return respone.Items.First().ToIdentityRole<TRole>();
             }

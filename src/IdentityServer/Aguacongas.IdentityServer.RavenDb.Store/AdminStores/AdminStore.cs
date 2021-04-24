@@ -48,24 +48,25 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
         {
             var rql = request.ToRQL<TEntity, string>(_session.Advanced.DocumentStore.Conventions.FindCollectionName(typeof(TEntity)), e => e.Id);
             var pageQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
-            if (request.Take.HasValue)
+
+            int? count = null;
+            if (request.Take.HasValue || request.Skip.HasValue)
             {
+                var countQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
+                count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
+
                 pageQuery = pageQuery.GetPage(request);
             }
-
             var items = await pageQuery.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var countQuery = _session.Advanced.AsyncRawQuery<TEntity>(rql);
-            var count = await countQuery.CountAsync(cancellationToken).ConfigureAwait(false);
-            
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 await AddExpandedAsync(item, request.Expand).ConfigureAwait(false);
             }
 
             return new PageResponse<TEntity>
             {
-                Count = count,
+                Count = count ?? items.Count,
                 Items = items
             };
         }        

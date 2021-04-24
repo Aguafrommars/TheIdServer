@@ -4,14 +4,12 @@ using Aguacongas.TheIdServer.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtentsions
     {
-        public static IServiceCollection AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
+        public static void AddTheIdServerStores(this IServiceCollection services, Type userType, Type roleType)
         {
             var userOnlyStoreType = typeof(UserOnlyStore<>).MakeGenericType(userType);
 
@@ -20,12 +18,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 var userStoreType = typeof(UserStore<,>).MakeGenericType(userType, roleType);
                 var roleStoreType = typeof(RoleStore<>).MakeGenericType(roleType);
 
-                services.TryAddScoped(typeof(UserOnlyStore<>)
+                services.TryAddTransient(typeof(UserOnlyStore<>)
                     .MakeGenericType(userType),
                         provider => provider.CreateUserOnlyStore(userOnlyStoreType));
-                services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(userType),
+                services.TryAddTransient(typeof(IUserStore<>).MakeGenericType(userType),
                     provider => provider.CreateUserStore(userOnlyStoreType, userStoreType));
-                services.TryAddScoped(typeof(IRoleStore<>).MakeGenericType(roleType),
+                services.TryAddTransient(typeof(IRoleStore<>).MakeGenericType(roleType),
                         provider => provider.CreateRoleStore(roleStoreType));
             }
             else
@@ -33,10 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddScoped(typeof(IUserStore<>)
                     .MakeGenericType(userType), provider => provider.CreateUserOnlyStore(userOnlyStoreType));
             }
-
-            services.AddIdentityServer4AdminHttpStores(getHttpClient);
-
-            return services;
         }
     }
 }
