@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using IdentityServer4.Services;
@@ -33,8 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationStores(this IServiceCollection services)
         {
-            services.TryAddScoped<IMemoryCache>(p => new MemoryCache(p.GetRequiredService<IOptions<MemoryCacheOptions>>()));
-            services.TryAddTransient(typeof(ICache<>), typeof(DefaultCache<>));
+            services.TryAddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
 
             return services.AddTransient<ClientStore>()
                 .AddTransient<IClientStore, ValidatingClientStore<ClientStore>>()

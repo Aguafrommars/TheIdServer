@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Abstractions;
 using IdentityServer4.Extensions;
-using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -14,14 +14,14 @@ namespace Aguacongas.IdentityServer.Store
         where TEntity : class
     {
         private readonly TStore _parent;
-        private readonly ICache<TEntity> _entityCache;
-        private readonly ICache<PageResponse<TEntity>> _responseCache;
+        private readonly IFlushableCache<TEntity> _entityCache;
+        private readonly IFlushableCache<PageResponse<TEntity>> _responseCache;
         private readonly ILogger<CacheAdminStore<TStore, TEntity>> _logger;
         private readonly IdentityServer4.Configuration.IdentityServerOptions _options;
 
         public CacheAdminStore(TStore parent,
-            ICache<TEntity> entityCache,
-            ICache<PageResponse<TEntity>> responseCache,
+            IFlushableCache<TEntity> entityCache,
+            IFlushableCache<PageResponse<TEntity>> responseCache,
             ILogger<CacheAdminStore<TStore, TEntity>> logger, 
             IdentityServer4.Configuration.IdentityServerOptions options)
         {
@@ -32,14 +32,21 @@ namespace Aguacongas.IdentityServer.Store
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
-        => _parent.CreateAsync(entity, cancellationToken);
+        public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            var result = await _parent.CreateAsync(entity, cancellationToken).ConfigureAwait(false);
+            FlushCaches();
+            return result;
+        }
 
-        public Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
-        => _parent.CreateAsync(entity, cancellationToken);
+        public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
+        => await CreateAsync(entity as TEntity, cancellationToken).ConfigureAwait(false);
 
-        public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
-        => _parent.DeleteAsync(id, cancellationToken);
+        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        {
+            await _parent.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            FlushCaches();
+        }
 
         public Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
         => _entityCache.GetAsync($"{id}_{request?.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(id, request, cancellationToken), _logger);
@@ -47,10 +54,19 @@ namespace Aguacongas.IdentityServer.Store
         public Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
         => _responseCache.GetAsync($"{request.Filter}_{request.Skip}_{request.Take}_{request.OrderBy}_{request.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(request, cancellationToken), _logger);
 
-        public Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
-        => _parent.UpdateAsync(entity, cancellationToken);
+        public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            var result = await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
+            FlushCaches();
+            return result;
+        }
+        public async Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
+        => await UpdateAsync(entity as TEntity, cancellationToken).ConfigureAwait(false);
 
-        public Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default)
-        => _parent.UpdateAsync(entity, cancellationToken);        
+        private void FlushCaches()
+        {
+            _entityCache.Flush();
+            _responseCache.Flush();
+        }
     }
 }

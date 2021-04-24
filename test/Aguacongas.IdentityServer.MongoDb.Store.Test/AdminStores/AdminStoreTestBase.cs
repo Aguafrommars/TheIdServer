@@ -1,11 +1,15 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
 using AutoMapper.Internal;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Moq;
 using System;
@@ -45,7 +49,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         {
             var navigationProperties = GetNavigrationProperties();
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
@@ -75,7 +84,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         {
             var navigationProperties = GetNavigrationProperties();
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
@@ -107,7 +121,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task UpdateAsync_should_update_entity()
         {
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
@@ -134,7 +153,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         {
             var navigationProperties = GetNavigrationProperties();
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
@@ -176,7 +200,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task DeleteAsync_should_throw_on_entity_not_found()
         {
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
@@ -194,7 +223,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         public async Task UpdateAsync_should_throw_on_entity_not_found()
         {
             var services = new ServiceCollection()
-                .AddLogging();
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();

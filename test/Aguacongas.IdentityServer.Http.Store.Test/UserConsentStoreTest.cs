@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
 
             await sut.GetUserConsentAsync("test", "test");
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' And ClientId eq 'test'"), default));
+            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' and ClientId eq 'test'"), default));
         }
 
         [Fact]

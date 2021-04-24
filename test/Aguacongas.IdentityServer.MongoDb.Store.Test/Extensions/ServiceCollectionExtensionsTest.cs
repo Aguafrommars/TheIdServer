@@ -5,9 +5,12 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Moq;
 using System;
@@ -26,6 +29,11 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.Extensions
             var services = new ServiceCollection().AddLogging();
 
             services.AddIdentityServer4AdminMongoDbStores("mongodb://localhost/test")
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>))
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new Mock<IConfiguration>().Object)
                 .AddTransient<IProviderClient, ProviderClient>();
@@ -61,6 +69,11 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.Extensions
             var connectionString = "mongodb://localhost/test";
             var uri = new Uri(connectionString);
             services.AddIdentityServer4AdminMongoDbStores(p => p.GetRequiredService<IMongoDatabase>())
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>))
                 .AddScoped<IMongoClient>(p => new MongoClient(connectionString))
                 .AddScoped(p => p.GetRequiredService<IMongoClient>().GetDatabase(uri.Segments[1]))
                 .AddSingleton<HubConnectionFactory>()

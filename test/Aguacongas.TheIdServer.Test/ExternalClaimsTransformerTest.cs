@@ -259,6 +259,7 @@ namespace Aguacongas.TheIdServer.Test
             var services = new ServiceCollection()
                 .AddTransient<IConfiguration>(p => configuration)
                 .AddLogging()
+                .AddTransient<IdentityServer4.Configuration.IdentityServerOptions>()
                 .AddIdentityServer4AdminEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
                 .AddConfigurationEntityFrameworkStores(options => options.UseInMemoryDatabase(dbId))
                 .AddIdentityProviderStore();

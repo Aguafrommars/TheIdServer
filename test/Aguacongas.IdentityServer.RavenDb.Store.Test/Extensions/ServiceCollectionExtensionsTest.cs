@@ -5,9 +5,12 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 using Raven.Client.Documents;
 using System.Linq;
@@ -26,6 +29,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
             
             var wrapper = new RavenDbTestDriverWrapper();
             services.AddIdentityServer4AdminRavenDbStores()
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>))
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new Mock<IConfiguration>().Object)
                 .AddTransient<IProviderClient, ProviderClient>()
@@ -61,6 +69,11 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
 
             var wrapper = new RavenDbTestDriverWrapper();
             services.AddIdentityServer4AdminRavenDbStores(p => new RavenDbTestDriverWrapper().GetDocumentStore())
+                .AddLogging()
+                .Configure<MemoryCacheOptions>(options => { })
+                .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<IdentityServer4.Configuration.IdentityServerOptions>>().Value)
+                .AddScoped(typeof(IFlushableCache<>), typeof(FlushableCache<>))
                 .AddSingleton<HubConnectionFactory>()
                 .AddTransient(p => new Mock<IConfiguration>().Object)
                 .AddTransient<IProviderClient, ProviderClient>()

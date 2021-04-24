@@ -22,7 +22,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations
 
             migrationBuilder.Sql("update [AspNetUserRoles] set Id = newid() where Id is null");
             migrationBuilder.Sql("update [AspNetUserTokens] set Id = newid() where Id is null");
-            migrationBuilder.Sql("update [AspNetUserLogins] set Id = newid() where Îd is null");
+            migrationBuilder.Sql("update [AspNetUserLogins] set Id = newid() where Id is null");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Id",

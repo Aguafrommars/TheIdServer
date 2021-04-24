@@ -71,6 +71,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ClientUriStore>()
                 .AddTransient<AdminStore<Entity.Culture>>()
                 .AddTransient<AdminStore<Entity.DeviceCode>>()
+                .AddTransient<AdminStore<Entity.ExternalProvider>>()
                 .AddTransient<ExternalClaimTransformationStore>()
                 .AddTransient<IdentityClaimStore>()
                 .AddTransient<IdentityLocalizedResourceStore>()
@@ -83,6 +84,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<AdminStore<Entity.RefreshToken>>()
                 .AddTransient<AdminStore<Entity.OneTimeToken>>()
                 .AddTransient<AdminStore<Entity.UserConsent>>()
+                .AddTransient<AdminStore<Entity.User>>()
+                .AddTransient<AdminStore<Entity.Role>>()
+                .AddTransient<RoleClaimStore>()
+                .AddTransient<UserClaimStore>()
+                .AddTransient<UserLoginStore>()
+                .AddTransient<UserTokenStore>()
+                .AddTransient<UserRoleStore>()
                 .AddTransient<IAdminStore<Entity.ApiApiScope>, CacheAdminStore<ApiApiScopeStore, Entity.ApiApiScope>>()
                 .AddTransient<IAdminStore<Entity.ApiClaim>, CacheAdminStore<ApiClaimStore, Entity.ApiClaim>>()
                 .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, CacheAdminStore<ApiLocalizedResourceStore, Entity.ApiLocalizedResource>>()
@@ -116,6 +124,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.RefreshToken>, CacheAdminStore<AdminStore<Entity.RefreshToken>, Entity.RefreshToken>>()
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, CacheAdminStore<AdminStore<Entity.OneTimeToken>, Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, CacheAdminStore<AdminStore<Entity.UserConsent>, Entity.UserConsent>>()
+                .AddTransient<IAdminStore<Entity.User>, CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>>()
+                .AddTransient<IAdminStore<Entity.UserLogin>, CacheAdminStore<UserLoginStore, Entity.UserLogin>>()
+                .AddTransient<IAdminStore<Entity.UserClaim>, CacheAdminStore<UserClaimStore, Entity.UserClaim>>()
+                .AddTransient<IAdminStore<Entity.UserRole>, CacheAdminStore<UserRoleStore, Entity.UserRole>>()
+                .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
+                .AddTransient<IAdminStore<Entity.Role>, CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>>()
+                .AddTransient<IAdminStore<Entity.RoleClaim>, CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>()
+                .AddTransient<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
+                .AddTransient<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
+                .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>()
                 .AddTransient<IAdminStore<Entity.User>>(p => {
                     var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>();
                     var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
@@ -141,11 +159,6 @@ namespace Microsoft.Extensions.DependencyInjection
                             p,
                             p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
                 })
-                .AddTransient<IAdminStore<Entity.User>, CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>>()
-                .AddTransient<IAdminStore<Entity.UserLogin>, CacheAdminStore<UserLoginStore, Entity.UserLogin>>()
-                .AddTransient<IAdminStore<Entity.UserClaim>, CacheAdminStore<UserClaimStore, Entity.UserClaim>>()
-                .AddTransient<IAdminStore<Entity.UserRole>, CacheAdminStore<UserRoleStore, Entity.UserRole>>()
-                .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
                 .AddTransient<IAdminStore<Entity.Role>>(p => {
                     var store = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
 
@@ -159,9 +172,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             p.GetRequiredService<ILookupNormalizer>(),
                             p.GetRequiredService<IdentityErrorDescriber>(),
                             p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
-                })
-                .AddTransient<IAdminStore<Entity.Role>, CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>>()
-                .AddTransient<IAdminStore<Entity.RoleClaim>,CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>();
+                });
                 
         }
     }
