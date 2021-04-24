@@ -39,7 +39,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 getDocumentStore = p => p.GetRequiredService<IDocumentStore>();
             }
 
-            return services.AddScoped(p =>
+            return services.AddConfigurationStores()
+                .AddOperationalStores()
+                .AddScoped(p =>
                 {
                     var session = getDocumentStore(p).OpenAsyncSession(new SessionOptions
                     {

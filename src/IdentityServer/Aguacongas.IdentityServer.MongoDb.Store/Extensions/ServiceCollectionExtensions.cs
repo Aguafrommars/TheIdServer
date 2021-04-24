@@ -41,7 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 AddMonogoAdminStore(services, entityType, getDatabase);
             }
 
-            services.AddTransient<IAdminStore<User>>(p => {
+            services.AddConfigurationStores()
+                .AddOperationalStores()
+                .AddTransient<IAdminStore<User>>(p => {
                 var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<User>, User>>();
                 var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Role>, Role>>();
 

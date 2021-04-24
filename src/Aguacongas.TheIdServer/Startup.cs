@@ -440,7 +440,7 @@ namespace Aguacongas.TheIdServer
                     .AddIdentityServer4AdminRavenDbStores();
 
             }
-            if (DbType == DbTypes.MongoDb)
+            else if (DbType == DbTypes.MongoDb)
             {
                 var connectionString = Configuration.GetConnectionString("DefaultConnection");
                 services.AddIdentityServer4AdminMongoDbStores(connectionString);
@@ -451,7 +451,6 @@ namespace Aguacongas.TheIdServer
                     .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
             }
-
 
             var signalRBuilder = services.AddSignalR(options => Configuration.GetSection("SignalR:HubOptions").Bind(options));
             if (Configuration.GetValue<bool>("SignalR:UseMessagePack"))
