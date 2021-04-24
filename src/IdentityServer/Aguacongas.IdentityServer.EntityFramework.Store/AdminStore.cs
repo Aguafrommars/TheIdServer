@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var entity = await _context.Set<TEntity>().FindAsync(new[] { id }, cancellationToken).ConfigureAwait(false);
             if (entity == null)
             {
-                return; ;
+                return;
             }
             _context.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
