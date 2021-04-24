@@ -136,45 +136,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>()
-                .AddTransient<IAdminStore<Entity.User>>(p => {
-                    var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>();
-                    var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
-
-                    return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>(userStore,
-                        new UserManager<ApplicationUser>(
-                            new UserStore<ApplicationUser>(
-                                roleStore,
-                                p.GetRequiredService<IAdminStore<Entity.UserRole>>(),
-                                new UserOnlyStore<ApplicationUser>(
-                                    userStore,
-                                    p.GetRequiredService<IAdminStore<Entity.UserClaim>>(),
-                                    p.GetRequiredService<IAdminStore<Entity.UserLogin>>(),
-                                    p.GetRequiredService<IAdminStore<Entity.UserToken>>(),
-                                    p.GetService<IdentityErrorDescriber>()),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IOptions<IdentityOptions>>(),
-                            p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
-                            p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p,
-                            p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
-                })
-                .AddTransient<IAdminStore<Entity.Role>>(p => {
-                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
-
-                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>(store,
-                        new RoleManager<IdentityRole>(
-                            new RoleStore<IdentityRole>(
-                                store,
-                                p.GetRequiredService<IAdminStore<Entity.RoleClaim>>(),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
-                });
+                .AddRulesCheckStores<CacheAdminStore<AdminStore<Entity.User>, Entity.User>, CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
                 
         }
     }

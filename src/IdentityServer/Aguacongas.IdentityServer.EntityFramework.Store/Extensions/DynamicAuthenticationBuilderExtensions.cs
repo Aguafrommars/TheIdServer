@@ -20,25 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static DynamicAuthenticationBuilder AddTheIdServerEntityFrameworkStore<TSchemeDefinition>(this DynamicAuthenticationBuilder builder)
             where TSchemeDefinition : SchemeDefinitionBase, new()
         {
-            builder.AddTheIdServerStore<TSchemeDefinition>();
-            var services = builder.Services;
-            services.AddTransient<IAdminStore<ExternalProvider>>(p =>
-            {
-                var store = p.GetRequiredService<CacheAdminStore<AdminStore<ExternalProvider, ConfigurationDbContext>, ExternalProvider>>();
-
-                return new NotifyChangedExternalProviderStore<CacheAdminStore<AdminStore<ExternalProvider, ConfigurationDbContext>, ExternalProvider>>(
-                    store,
-                    p.GetRequiredService<IProviderClient>(),
-                    new PersistentDynamicManager<SchemeDefinition>(
-                        p.GetRequiredService<IAuthenticationSchemeProvider>(),
-                        p.GetRequiredService<OptionsMonitorCacheWrapperFactory>(),
-                        new DynamicProviderStore<SchemeDefinition>(
-                            store,
-                            p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>()),
-                        builder.HandlerTypes),
-                    p.GetRequiredService<IAuthenticationSchemeOptionsSerializer>());
-            });
-            return builder;            
+            return builder.AddTheIdServerStore<TSchemeDefinition>()
+                .AddNotifyChangedExternalProviderStore<CacheAdminStore<AdminStore<ExternalProvider, ConfigurationDbContext>, ExternalProvider>>();
         }
     }
 }

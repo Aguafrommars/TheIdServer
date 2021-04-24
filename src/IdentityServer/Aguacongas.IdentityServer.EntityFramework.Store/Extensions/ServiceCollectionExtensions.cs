@@ -31,44 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             AddStoresForContext(services, typeof(ApplicationDbContext));
             return services.AddDbContext<ApplicationDbContext>(optionsAction)
-                .AddTransient<IAdminStore<User>>(p => {
-                    var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<User, ApplicationDbContext>, User>>();
-                    var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>();
-
-                    return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<User, ApplicationDbContext>, User>>(userStore,
-                        new UserManager<ApplicationUser>(
-                            new UserStore<ApplicationUser>(
-                                roleStore,
-                                p.GetRequiredService<IAdminStore<UserRole>>(),
-                                new UserOnlyStore<ApplicationUser>(
-                                    userStore,
-                                    p.GetRequiredService<IAdminStore<UserClaim>>(),
-                                    p.GetRequiredService<IAdminStore<UserLogin>>(),
-                                    p.GetRequiredService<IAdminStore<UserToken>>(),
-                                    p.GetService<IdentityErrorDescriber>()),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IOptions<IdentityOptions>>(),
-                            p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
-                            p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p,
-                            p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
-                })
-                .AddTransient<IAdminStore<Role>>(p => {
-                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>(); 
-                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>(store,
-                        new RoleManager<IdentityRole>(
-                            new RoleStore<IdentityRole>(
-                                store,
-                                p.GetRequiredService<IAdminStore<RoleClaim>>(),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
-                });
+                .AddRulesCheckStores<CacheAdminStore<AdminStore<User, ApplicationDbContext>, User>, CacheAdminStore<AdminStore<Role, ApplicationDbContext>, Role>>();
         }
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)

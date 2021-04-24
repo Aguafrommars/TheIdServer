@@ -43,45 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddConfigurationStores()
                 .AddOperationalStores()
-                .AddTransient<IAdminStore<User>>(p => {
-                var userStore = p.GetRequiredService<CacheAdminStore<AdminStore<User>, User>>();
-                var roleStore = p.GetRequiredService<CacheAdminStore<AdminStore<Role>, Role>>();
-
-                return new CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<User>, User>>(userStore,
-                    new UserManager<ApplicationUser>(
-                        new UserStore<ApplicationUser>(
-                            roleStore,
-                            p.GetRequiredService<IAdminStore<UserRole>>(),
-                            new UserOnlyStore<ApplicationUser>(
-                                userStore,
-                                p.GetRequiredService<IAdminStore<UserClaim>>(),
-                                p.GetRequiredService<IAdminStore<UserLogin>>(),
-                                p.GetRequiredService<IAdminStore<UserToken>>(),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetService<IdentityErrorDescriber>()),
-                        p.GetRequiredService<IOptions<IdentityOptions>>(),
-                        p.GetRequiredService<IPasswordHasher<ApplicationUser>>(),
-                        p.GetRequiredService<IEnumerable<IUserValidator<ApplicationUser>>>(),
-                        p.GetRequiredService<IEnumerable<IPasswordValidator<ApplicationUser>>>(),
-                        p.GetRequiredService<ILookupNormalizer>(),
-                        p.GetRequiredService<IdentityErrorDescriber>(),
-                        p,
-                        p.GetRequiredService<ILogger<UserManager<ApplicationUser>>>()));
-                })
-                .AddTransient<IAdminStore<Role>>(p => {
-                    var store = p.GetRequiredService<CacheAdminStore<AdminStore<Role>, Role>>();
-
-                    return new CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Role>, Role>>(store,
-                        new RoleManager<IdentityRole>(
-                            new RoleStore<IdentityRole>(
-                                store,
-                                p.GetRequiredService<IAdminStore<RoleClaim>>(),
-                                p.GetService<IdentityErrorDescriber>()),
-                            p.GetRequiredService<IEnumerable<IRoleValidator<IdentityRole>>>(),
-                            p.GetRequiredService<ILookupNormalizer>(),
-                            p.GetRequiredService<IdentityErrorDescriber>(),
-                            p.GetRequiredService<ILogger<RoleManager<IdentityRole>>>()));
-                });
+                .AddRulesCheckStores<CacheAdminStore<AdminStore<User>, User>, CacheAdminStore<AdminStore<Role>, Role>>();
 
             return services;
         }
