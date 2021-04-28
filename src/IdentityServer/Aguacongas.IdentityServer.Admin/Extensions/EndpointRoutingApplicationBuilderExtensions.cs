@@ -175,7 +175,13 @@ namespace Microsoft.AspNetCore.Builder
                 }
 
                 // get token for registration end point
-                var token = authorizationHeaderValue.First().Split(' ')[1];
+                if (!Guid.TryParse(authorizationHeaderValue.First().Split(' ')[1], out Guid token))
+                {
+                    // The token is not au GUID
+                    await SetForbiddenResponse(context).ConfigureAwait(false);
+                    return false;
+                }
+
                 var store = context.RequestServices.GetRequiredService<IAdminStore<Client>>();
                 var clientResponse = await store.GetAsync(new PageRequest
                 {
@@ -183,6 +189,7 @@ namespace Microsoft.AspNetCore.Builder
                     Select = nameof(Client.Id),
                     Take = 1
                 }).ConfigureAwait(false);
+
                 var client = clientResponse.Items.FirstOrDefault();
                 if (client == null || path.Value.EndsWith(client.Id))
                 {

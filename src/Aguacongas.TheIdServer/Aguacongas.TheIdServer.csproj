@@ -74,6 +74,7 @@
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj" />
 		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.RavenDb.Store\Aguacongas.IdentityServer.RavenDb.Store.csproj" />
+		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.WsFederation\Aguacongas.IdentityServer.WsFederation.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.MySql\Aguacongas.TheIdServer.Migrations.MySql.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.Oracle\Aguacongas.TheIdServer.Migrations.Oracle.csproj" />
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.PostgreSQL\Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj" />
@@ -89,6 +90,9 @@
 	<ItemGroup>
 	  <None Update="cluster.admin.client.certificate.pfx">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="idsrvtest.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="TheIdServer.crt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

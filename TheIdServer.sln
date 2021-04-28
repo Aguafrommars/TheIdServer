@@ -187,7 +187,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.MongoDb.Store", "src\IdentityServer\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj", "{40AFC1C5-8A1A-488F-9CDA-F2D29BE0BAEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.MongoDb.Store.Test", "test\Aguacongas.IdentityServer.MongoDb.Store.Test\Aguacongas.IdentityServer.MongoDb.Store.Test.csproj", "{F24C3E47-0279-4A83-9AB5-75D67F628102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.MongoDb.Store.Test", "test\Aguacongas.IdentityServer.MongoDb.Store.Test\Aguacongas.IdentityServer.MongoDb.Store.Test.csproj", "{F24C3E47-0279-4A83-9AB5-75D67F628102}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.WsFederation", "src\IdentityServer\Aguacongas.IdentityServer.WsFederation\Aguacongas.IdentityServer.WsFederation.csproj", "{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1027,6 +1029,18 @@ Global
 		{F24C3E47-0279-4A83-9AB5-75D67F628102}.Release|x64.Build.0 = Release|Any CPU
 		{F24C3E47-0279-4A83-9AB5-75D67F628102}.Release|x86.ActiveCfg = Release|Any CPU
 		{F24C3E47-0279-4A83-9AB5-75D67F628102}.Release|x86.Build.0 = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|x64.Build.0 = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|x64.Build.0 = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1106,6 +1120,7 @@ Global
 		{C1560F0F-7B46-4DF1-AC04-01AF1E884DDB} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{40AFC1C5-8A1A-488F-9CDA-F2D29BE0BAEF} = {DF368D6C-D11F-49F9-BF41-090AE1D10C6D}
 		{F24C3E47-0279-4A83-9AB5-75D67F628102} = {DE50F426-4409-4573-8502-93364ED12E0C}
+		{325A7C5C-CF5C-49A0-80D6-2283C2D6D2C4} = {DF368D6C-D11F-49F9-BF41-090AE1D10C6D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

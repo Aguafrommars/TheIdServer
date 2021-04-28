@@ -62,6 +62,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public Guid DefaultKeyId { get; }
 
+        public IKey DefaultKey => _defaultKeyHolder.Key;
+
         public IAuthenticatedEncryptor GetAuthenticatedEncryptorByKeyId(Guid keyId, out bool isRevoked) // interface implementation chance from orignal IKeyRing
         {
             isRevoked = false;
