@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.WsFederation;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -67,10 +66,9 @@ namespace Aguacongas.IdentityServer.WsFederation
         public async Task<IActionResult> ProcessRequestAsync(HttpRequest request, IUrlHelper helper)
         {
             var queryString = request.QueryString;
-            var url = $"{helper.Action(nameof(WsFederationController.Index), "WsFederation", null, request.Scheme, request.Host.Value)}{queryString}";
 
             var user = await _userSession.GetUserAsync();
-            var message = WsFederationMessage.FromUri(new Uri(url));
+            var message = WsFederationMessage.FromQueryString(queryString.ToString());
 
             if (message.IsSignInMessage)
             {
@@ -83,7 +81,6 @@ namespace Aguacongas.IdentityServer.WsFederation
             }
 
             return new BadRequestObjectResult("Invalid WS-Federation request");
-
         }
 
         private async Task<IActionResult> ProcessSignInAsync(WsFederationMessage signin, ClaimsPrincipal user, HttpRequest request, IUrlHelper helper)
@@ -102,7 +99,7 @@ namespace Aguacongas.IdentityServer.WsFederation
 
             if (result.IsError)
             {
-                throw new ValidationException(result.Error);
+                return new BadRequestObjectResult(result);
             }
 
             if (result.SignInRequired)

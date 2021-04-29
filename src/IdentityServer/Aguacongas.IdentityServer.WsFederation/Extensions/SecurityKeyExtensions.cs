@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         {
             if (key is RsaSecurityKey rsaKey)
             {
-                var rsa = RSA.Create(rsaKey.Parameters);
+                var rsa = rsaKey.Rsa ?? RSA.Create(rsaKey.Parameters);
                 var certRequest = new CertificateRequest("cn=theidserver", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
                 if (store is IKeyRingStores keyRingStore)
                 {
