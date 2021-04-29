@@ -3,6 +3,7 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.RavenDb.Store;
+using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.RelyingParty;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Role;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.User;
 using Aguacongas.IdentityServer.RavenDb.Store.Api;
@@ -93,6 +94,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<UserLoginStore>()
                 .AddTransient<UserTokenStore>()
                 .AddTransient<UserRoleStore>()
+                .AddTransient<AdminStore<Entity.RelyingParty>>()
+                .AddTransient<RelyingPartyClaimMappingStore>()
                 .AddTransient<IAdminStore<Entity.ApiApiScope>, CacheAdminStore<ApiApiScopeStore, Entity.ApiApiScope>>()
                 .AddTransient<IAdminStore<Entity.ApiClaim>, CacheAdminStore<ApiClaimStore, Entity.ApiClaim>>()
                 .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, CacheAdminStore<ApiLocalizedResourceStore, Entity.ApiLocalizedResource>>()
@@ -133,6 +136,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
                 .AddTransient<IAdminStore<Entity.Role>, CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>>()
                 .AddTransient<IAdminStore<Entity.RoleClaim>, CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>()
+                .AddTransient<IAdminStore<Entity.RelyingParty>, CacheAdminStore<AdminStore<Entity.RelyingParty>, Entity.RelyingParty>>()
+                .AddTransient<IAdminStore<Entity.RelyingPartyClaimMapping>, CacheAdminStore<RelyingPartyClaimMappingStore, Entity.RelyingPartyClaimMapping>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>()
