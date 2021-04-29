@@ -40,15 +40,13 @@ namespace Aguacongas.IdentityServer.WsFederation
         public Task ExecuteResultAsync(ActionContext context)
         {
             var ser = new WsFederationMetadataSerializer();
-            using (var ms = new MemoryStream())
-            using (XmlWriter writer = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false))
-            {
-                WsFederationMetadataSerializerExtensions.WriteMetadata(ser, writer, _config);                
-                writer.Flush();
-                context.HttpContext.Response.ContentType = "application/xml";
-                var metaAsString = Encoding.UTF8.GetString(ms.ToArray());
-                return context.HttpContext.Response.WriteAsync(metaAsString);
-            }
+            using var ms = new MemoryStream();
+            using XmlWriter writer = XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false);
+            ser.WriteMetadata(writer, _config);
+            writer.Flush();
+            context.HttpContext.Response.ContentType = "application/xml";
+            var metaAsString = Encoding.UTF8.GetString(ms.ToArray());
+            return context.HttpContext.Response.WriteAsync(metaAsString);
         }
     }
 }

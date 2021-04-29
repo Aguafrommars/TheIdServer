@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// <param name="request">The request.</param>
         /// <param name="helper">The helper.</param>
         /// <returns></returns>
-        public async Task<IActionResult> ProcessRequest(HttpRequest request, IUrlHelper helper)
+        public async Task<IActionResult> ProcessRequestAsync(HttpRequest request, IUrlHelper helper)
         {
             var queryString = request.QueryString;
             var url = $"{helper.Action(nameof(WsFederationController.Index), "WsFederation", null, request.Scheme, request.Host.Value)}{queryString}";

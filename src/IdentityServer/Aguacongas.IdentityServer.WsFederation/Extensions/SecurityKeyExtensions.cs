@@ -18,7 +18,9 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// Gets the X509 certificate.
         /// </summary>
         /// <param name="key">The key.</param>
+        /// <param name="store">The store.</param>
         /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">Cannot use signing credential with key of type '{key.GetType().Name}'</exception>
         /// <exception cref="InvalidOperationException">Cannot use signing credential with key of type '{key.GetType().Name}'</exception>
         public static X509Certificate2 GetX509Certificate(this SecurityKey key, ISigningCredentialStore store)
         {

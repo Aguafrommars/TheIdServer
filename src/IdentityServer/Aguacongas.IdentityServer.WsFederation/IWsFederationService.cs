@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IWsFederationService
     {
-        Task<IActionResult> ProcessRequest(HttpRequest request, IUrlHelper helper);
+        /// <summary>
+        /// Processes the request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="helper">The helper.</param>
+        /// <returns></returns>
+        Task<IActionResult> ProcessRequestAsync(HttpRequest request, IUrlHelper helper);
     }
 }

@@ -7,10 +7,13 @@ using IdentityServer4.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// IServiceCollection extensions to add WS-Federation servives
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the ws federation.
+        /// Adds WS-Federation services.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>

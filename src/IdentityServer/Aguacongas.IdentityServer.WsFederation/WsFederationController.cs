@@ -45,6 +45,6 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// <returns></returns>
         [HttpGet]
         public Task<IActionResult> Index()
-        => _service.ProcessRequest(Request, Url);
+        => _service.ProcessRequestAsync(Request, Url);
     }
 }
