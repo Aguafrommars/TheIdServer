@@ -15,16 +15,19 @@ namespace Aguacongas.IdentityServer.WsFederation.Stores
     /// <seealso cref="IRelyingPartyStore" />
     public class RelyingPartyStore : IRelyingPartyStore
     {
-        private readonly IAdminStore<Entity.RelyingParty> _adminStore;
+        private readonly IAdminStore<Entity.Client> _clientStore;
+        private readonly IAdminStore<Entity.RelyingParty> _relyingPartyStore;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RelyingPartyStore"/> class.
+        /// Initializes a new instance of the <see cref="RelyingPartyStore" /> class.
         /// </summary>
-        /// <param name="adminStore">The admin store.</param>
+        /// <param name="clientStore">The client store.</param>
+        /// <param name="relyingPartyStore">The relying party store.</param>
         /// <exception cref="ArgumentNullException">adminStore</exception>
-        public RelyingPartyStore(IAdminStore<Entity.RelyingParty> adminStore)
+        public RelyingPartyStore(IAdminStore<Entity.Client> clientStore, IAdminStore<Entity.RelyingParty> relyingPartyStore)
         {
-            _adminStore = adminStore ?? throw new ArgumentNullException(nameof(adminStore));
+            _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
+            _relyingPartyStore = relyingPartyStore ?? throw new ArgumentNullException(nameof(relyingPartyStore));
         }
 
         /// <summary>
@@ -34,7 +37,9 @@ namespace Aguacongas.IdentityServer.WsFederation.Stores
         /// <returns></returns>
         public async Task<RelyingParty> FindRelyingPartyByRealm(string realm)
         {
-            var entity = await _adminStore.GetAsync(realm, new GetRequest
+            var client = await _clientStore.GetAsync(realm, null).ConfigureAwait(false);
+            var relyingPartyId = client.RelyingPartyId;
+            var entity = await _relyingPartyStore.GetAsync(relyingPartyId, new GetRequest
             {
                 Expand = nameof(Entity.RelyingParty.ClaimMappings)
             }).ConfigureAwait(false);

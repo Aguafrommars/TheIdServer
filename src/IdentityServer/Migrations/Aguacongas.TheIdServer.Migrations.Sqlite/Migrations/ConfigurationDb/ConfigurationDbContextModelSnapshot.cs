@@ -420,6 +420,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                     b.Property<Guid?>("RegistrationToken")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RelyingPartyId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("RequireClientSecret")
                         .HasColumnType("INTEGER");
 
@@ -446,6 +449,8 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RelyingPartyId");
 
                     b.ToTable("Clients");
                 });
@@ -720,7 +725,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 4, 27, 14, 38, 24, 60, DateTimeKind.Utc).AddTicks(8421)
+                            CreatedAt = new DateTime(2021, 4, 30, 15, 45, 1, 639, DateTimeKind.Utc).AddTicks(2605)
                         });
                 });
 
@@ -1145,6 +1150,15 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                     b.Navigation("Api");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "Relying")
+                        .WithMany("Clients")
+                        .HasForeignKey("RelyingPartyId");
+
+                    b.Navigation("Relying");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -1360,6 +1374,8 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RelyingParty", b =>
                 {
                     b.Navigation("ClaimMappings");
+
+                    b.Navigation("Clients");
                 });
 #pragma warning restore 612, 618
         }

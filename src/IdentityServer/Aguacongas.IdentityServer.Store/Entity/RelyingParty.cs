@@ -69,6 +69,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<RelyingPartyClaimMapping> ClaimMappings { get; set; }
 
         /// <summary>
+        /// Gets or sets the clients.
+        /// </summary>
+        /// <value>
+        /// The clients.
+        /// </value>
+        public virtual ICollection<Client> Clients { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>
