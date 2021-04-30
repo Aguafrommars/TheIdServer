@@ -135,10 +135,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.RelyingParty
             Assert.Null(await s2.LoadAsync<Entity.RelyingPartyClaimMapping>($"{typeof(Entity.RelyingPartyClaimMapping).Name.ToLowerInvariant()}/{entity.Id}"));
         }
 
-        private IAdminStore<Entity.RelyingPartyClaimMapping> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.RelyingPartyClaimMapping>> logger)
+        private static  IAdminStore<Entity.RelyingPartyClaimMapping> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.RelyingPartyClaimMapping>> logger)
             => new RelyingPartyClaimMappingStore(new ScopedAsynDocumentcSession(session), logger);
 
-        private ICollection<Entity.RelyingPartyClaimMapping> GetCollection(Entity.RelyingParty provider)
+        private static ICollection<Entity.RelyingPartyClaimMapping> GetCollection(Entity.RelyingParty provider)
         {
             provider.ClaimMappings ??= new List<Entity.RelyingPartyClaimMapping>();
             return provider.ClaimMappings;
