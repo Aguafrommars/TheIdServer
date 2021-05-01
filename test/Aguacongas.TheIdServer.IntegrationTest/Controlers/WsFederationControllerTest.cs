@@ -145,20 +145,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
-            await context.Clients.AddAsync(new IdentityServer.Store.Entity.Client
+            await context.Clients.AddAsync(new Client
             {
                 Id = clientId,
                 Enabled = true,
-                ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation
+                ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation,
+                RelyingParty = new RelyingParty
+                {
+                    Id = clientId,
+                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
+                    SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
+                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
+                }
             }).ConfigureAwait(false);
-            await context.RelyingParties.AddAsync(new IdentityServer.Store.Entity.RelyingParty
-            {
-                Id = clientId,
-                TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
-                DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
-                SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
-            });
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             using var client = sut.CreateClient();
@@ -185,16 +185,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 Id = clientId,
                 Enabled = true,
-                ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation
+                ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation,
+                RelyingParty = new RelyingParty
+                {
+                    Id = clientId,
+                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
+                    SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
+                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
+                }
             }).ConfigureAwait(false);
-            await context.RelyingParties.AddAsync(new RelyingParty
-            {
-                Id = clientId,
-                TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
-                DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
-                SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
-            });
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             using var client = sut.CreateClient();
@@ -256,82 +256,82 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                         ClientId = clientId,
                         Scope = "profile"
                     }
-                }
-            }).ConfigureAwait(false);
-            await context.RelyingParties.AddAsync(new RelyingParty
-            {
-                Id = clientId,
-                TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
-                DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
-                SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
-                ClaimMappings = new [] 
+                },
+                RelyingParty = new RelyingParty
                 {
-                    new RelyingPartyClaimMapping
+                    Id = clientId,
+                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
+                    SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
+                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    ClaimMappings = new[]
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Name,
-                        ToClaimType = ClaimTypes.Name
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Subject,
-                        ToClaimType = ClaimTypes.NameIdentifier
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Email,
-                        ToClaimType = ClaimTypes.Email
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.GivenName,
-                        ToClaimType = ClaimTypes.GivenName
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.FamilyName,
-                        ToClaimType = ClaimTypes.Surname
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.BirthDate,
-                        ToClaimType = ClaimTypes.DateOfBirth
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.WebSite,
-                        ToClaimType = ClaimTypes.Webpage
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Gender,
-                        ToClaimType = ClaimTypes.Gender
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Role,
-                        ToClaimType = ClaimTypes.Role
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Name,
+                            ToClaimType = ClaimTypes.Name
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Subject,
+                            ToClaimType = ClaimTypes.NameIdentifier
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Email,
+                            ToClaimType = ClaimTypes.Email
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.GivenName,
+                            ToClaimType = ClaimTypes.GivenName
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.FamilyName,
+                            ToClaimType = ClaimTypes.Surname
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.BirthDate,
+                            ToClaimType = ClaimTypes.DateOfBirth
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.WebSite,
+                            ToClaimType = ClaimTypes.Webpage
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Gender,
+                            ToClaimType = ClaimTypes.Gender
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Role,
+                            ToClaimType = ClaimTypes.Role
+                        }
                     }
                 }
-            });            
+            }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -428,82 +428,82 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                         Type = "http://myorg.com/claim",
                         Value = Guid.NewGuid().ToString()
                     }
-                }
-            }).ConfigureAwait(false);
-            await context.RelyingParties.AddAsync(new RelyingParty
-            {
-                Id = clientId,
-                TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
-                DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
-                SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
-                ClaimMappings = new[]
+                },
+                RelyingParty = new RelyingParty
                 {
-                    new RelyingPartyClaimMapping
+                    Id = clientId,
+                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
+                    SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
+                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    ClaimMappings = new[]
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Name,
-                        ToClaimType = ClaimTypes.Name
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Subject,
-                        ToClaimType = ClaimTypes.NameIdentifier
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Email,
-                        ToClaimType = ClaimTypes.Email
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.GivenName,
-                        ToClaimType = ClaimTypes.GivenName
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.FamilyName,
-                        ToClaimType = ClaimTypes.Surname
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.BirthDate,
-                        ToClaimType = ClaimTypes.DateOfBirth
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.WebSite,
-                        ToClaimType = ClaimTypes.Webpage
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Gender,
-                        ToClaimType = ClaimTypes.Gender
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Role,
-                        ToClaimType = ClaimTypes.Role
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Name,
+                            ToClaimType = ClaimTypes.Name
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Subject,
+                            ToClaimType = ClaimTypes.NameIdentifier
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Email,
+                            ToClaimType = ClaimTypes.Email
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.GivenName,
+                            ToClaimType = ClaimTypes.GivenName
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.FamilyName,
+                            ToClaimType = ClaimTypes.Surname
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.BirthDate,
+                            ToClaimType = ClaimTypes.DateOfBirth
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.WebSite,
+                            ToClaimType = ClaimTypes.Webpage
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Gender,
+                            ToClaimType = ClaimTypes.Gender
+                        },
+                        new RelyingPartyClaimMapping
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RelyingPartyId = clientId,
+                            FromClaimType = JwtClaimTypes.Role,
+                            ToClaimType = ClaimTypes.Role
+                        }
                     }
                 }
-            });
+            }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -592,82 +592,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                         ClientId = clientId,
                         Scope = "profile"
                     }
+                },
+                RelyingParty = new RelyingParty
+                {
+                    Id = clientId,
+                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11,
+                    DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
+                    SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
+                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    ClaimMappings = Array.Empty<RelyingPartyClaimMapping>()
                 }
             }).ConfigureAwait(false);
-            await context.RelyingParties.AddAsync(new RelyingParty
-            {
-                Id = clientId,
-                TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11,
-                DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
-                SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
-                ClaimMappings = new[]
-                {
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Name,
-                        ToClaimType = ClaimTypes.Name
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Subject,
-                        ToClaimType = ClaimTypes.NameIdentifier
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Email,
-                        ToClaimType = ClaimTypes.Email
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.GivenName,
-                        ToClaimType = ClaimTypes.GivenName
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.FamilyName,
-                        ToClaimType = ClaimTypes.Surname
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.BirthDate,
-                        ToClaimType = ClaimTypes.DateOfBirth
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.WebSite,
-                        ToClaimType = ClaimTypes.Webpage
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Gender,
-                        ToClaimType = ClaimTypes.Gender
-                    },
-                    new RelyingPartyClaimMapping
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        RelyingPartyId = clientId,
-                        FromClaimType = JwtClaimTypes.Role,
-                        ToClaimType = ClaimTypes.Role
-                    }
-                }
-            });
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

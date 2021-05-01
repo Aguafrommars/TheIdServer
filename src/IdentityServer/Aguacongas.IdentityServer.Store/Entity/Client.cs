@@ -367,7 +367,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The relying.
         /// </value>
-        public virtual RelyingParty Relying { get; set; }
+        public virtual RelyingParty RelyingParty { get; set; }
 
         /// <summary>
         /// Gets or sets the identity provider restrictions.
