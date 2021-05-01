@@ -259,11 +259,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             if (parentPropetyName != null)
             {
                 var parentPropetyType = GetParentType(parentPropetyName);
-                var parentStoreType = typeof(IAdminStore<>).MakeGenericType(parentPropetyType);
-                var parentStore = provider.GetRequiredService(parentStoreType) as IAdminStore;
-                var parent = await parentStore.CreateAsync(CreateParentEntiy(GetParentType(parentPropetyName))).ConfigureAwait(false) as IEntityId;
-                var parentPropety = create.GetType().GetProperty(parentPropetyName);
-                parentPropety.SetValue(create, parent.Id);
+                await AddParentEntity(provider, create, parentPropetyName, parentPropetyType).ConfigureAwait(false);
             }
             var entity = await sut.CreateAsync(create).ConfigureAwait(false);
             foreach (var property in navigationProperties)
@@ -279,10 +275,23 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                     var storeType = typeof(IAdminStore<>).MakeGenericType(subEntityType);
                     var subStore = provider.GetRequiredService(storeType) as IAdminStore;
                     await subStore.CreateAsync(subEntity).ConfigureAwait(false);
+                    continue;
                 }
+
+                await AddParentEntity(provider, create, $"{property.Name}Id", property.PropertyType).ConfigureAwait(false);
             }
+            await sut.UpdateAsync(entity).ConfigureAwait(false);
 
             return entity;
+        }
+
+        private async Task AddParentEntity(ServiceProvider provider, TEntity create, string parentPropetyName, Type parentPropetyType)
+        {
+            var parentStoreType = typeof(IAdminStore<>).MakeGenericType(parentPropetyType);
+            var parentStore = provider.GetRequiredService(parentStoreType) as IAdminStore;
+            var parent = await parentStore.CreateAsync(CreateParentEntiy(parentPropetyType)).ConfigureAwait(false) as IEntityId;
+            var parentPropety = create.GetType().GetProperty(parentPropetyName);
+            parentPropety.SetValue(create, parent.Id);
         }
 
         private static Type GetParentType(string parentPropetyName)

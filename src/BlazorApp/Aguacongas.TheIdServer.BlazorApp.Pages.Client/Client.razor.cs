@@ -12,6 +12,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
 {
     public partial class Client
     {
+        public static readonly string OIDC = "oidc";
+        public static readonly string WSFED = "wsfed";
+
         private bool _filtered;
         private bool _isWebClient;
 
@@ -94,13 +97,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             }
         }
 
-        protected override void OnEntityUpdated(Type entityType, Entity.IEntityId entityModel)
+        protected override Task<object> UpdateAsync(Type entityType, object entity)
         {
-            if (entityType == typeof(Entity.ClientGrantType))
+            if (entity is Entity.ClientUri clientUri && string.IsNullOrWhiteSpace(clientUri.Uri))
             {
-                return;
+                return base.DeleteAsync(entityType, entity);
             }
-            base.OnEntityUpdated(entityType, entityModel);
+
+            return base.UpdateAsync(entityType, entity);
+        }
+
+        protected override Task<object> CreateAsync(Type entityType, object entity)
+        {
+            if (entity is Entity.ClientUri clientUri && string.IsNullOrWhiteSpace(clientUri.Uri))
+            {
+                return Task.FromResult(entity);
+            }
+            return base.CreateAsync(entityType, entity);
         }
 
         private void FilterFocusChanged(bool hasFocus)
@@ -142,6 +155,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             Model.Resources.Add(entity);
             HandleModificationState.EntityCreated(entity);
             return Task.CompletedTask;
+        }
+
+        private void SetProtcolType(string protocolType)
+        {
+            Model.ProtocolType = protocolType;
+            StateHasChanged();
         }
     }
 }
