@@ -67,7 +67,7 @@ else
                                 @Localizer["token type"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.TokenType" Values="TokenTypeList" />
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.TokenType" Values="TOKENTYPELIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -75,7 +75,7 @@ else
                                 @Localizer["signature algorithm"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SignatureAlgorithm" Values="SignatureAlgorithmList" />
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SignatureAlgorithm" Values="SIGNATUREALGORITHMLIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -83,7 +83,7 @@ else
                                 @Localizer["signature digest"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.DigestAlgorithm" Values="DigestList" />
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.DigestAlgorithm" Values="DIGESTLIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -91,7 +91,7 @@ else
                                 @Localizer["name id format"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SamlNameIdentifierFormat" Values="NameIdentifierFormatList" />
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SamlNameIdentifierFormat" Values="NAMEIDENTIFIERFORMATLIST" />
                             </div>
                         </div>
                         <div class="form-group row">

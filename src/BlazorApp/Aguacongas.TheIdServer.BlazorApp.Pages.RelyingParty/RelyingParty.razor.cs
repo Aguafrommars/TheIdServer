@@ -16,27 +16,27 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
 {
     public partial class RelyingParty
     {
-        private IEnumerable<string> TokenTypeList => new[]
+        private readonly static IEnumerable<string> TOKENTYPELIST = new[]
         {
             "urn:oasis:names:tc:SAML:1.0:assertion",
             "urn:oasis:names:tc:SAML:2.0:assertion"
         };
 
-        private IEnumerable<string> SignatureAlgorithmList = new[]
+        private readonly static IEnumerable<string> SIGNATUREALGORITHMLIST = new[]
         {
             SecurityAlgorithms.RsaSha256Signature,
             SecurityAlgorithms.RsaSha384Signature,
             SecurityAlgorithms.RsaSha512Signature
         };
 
-        private IEnumerable<string> DigestList = new[]
+        private readonly static IEnumerable<string> DIGESTLIST = new[]
         {
             SecurityAlgorithms.Sha256Digest,
             SecurityAlgorithms.Sha384Digest,
             SecurityAlgorithms.Sha512Digest
         };
 
-        private IEnumerable<string> NameIdentifierFormatList = new[]
+        private readonly static IEnumerable<string> NAMEIDENTIFIERFORMATLIST = new[]
         {
             "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
             "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
@@ -125,10 +125,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
 
             return Task.FromResult(new Entity.RelyingParty
             {
-                TokenType = TokenTypeList.First(),
-                DigestAlgorithm = DigestList.First(),
-                SamlNameIdentifierFormat = NameIdentifierFormatList.First(),
-                SignatureAlgorithm = SignatureAlgorithmList.First(),
+                TokenType = TOKENTYPELIST.First(),
+                DigestAlgorithm = DIGESTLIST.First(),
+                SamlNameIdentifierFormat = NAMEIDENTIFIERFORMATLIST.First(),
+                SignatureAlgorithm = SIGNATUREALGORITHMLIST.First(),
                 ClaimMappings = claimMappingList
             });
         }
