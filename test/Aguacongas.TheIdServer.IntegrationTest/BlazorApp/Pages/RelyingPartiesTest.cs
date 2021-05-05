@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection("api collection")]
-    public class RelyingPartiesTest : EntitiesPageTestBase<IdentityResource>
+    public class RelyingPartiesTest : EntitiesPageTestBase<RelyingParty>
     {
         public override string Entities => "relyingparties";
         public RelyingPartiesTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
