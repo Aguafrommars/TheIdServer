@@ -728,7 +728,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 4, 30, 15, 44, 47, 806, DateTimeKind.Utc).AddTicks(4314)
+                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 25, 819, DateTimeKind.Utc).AddTicks(8476)
                         });
                 });
 
@@ -1002,6 +1002,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<string>("DigestAlgorithm")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1155,11 +1158,11 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
-                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "Relying")
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "RelyingParty")
                         .WithMany("Clients")
                         .HasForeignKey("RelyingPartyId");
 
-                    b.Navigation("Relying");
+                    b.Navigation("RelyingParty");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>

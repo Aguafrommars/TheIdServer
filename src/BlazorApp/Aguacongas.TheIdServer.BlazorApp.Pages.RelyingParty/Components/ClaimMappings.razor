@@ -1,6 +1,6 @@
-﻿@inherits EntitesGridModel<Entity.ExternalClaimTransformation>
+﻿@inherits EntitesGridModel<Entity.RelyingPartyClaimMapping>
 
-<EntitiesGrid Items="@Transformations" TableClass="table table-hover" Context="transformation">
+<EntitiesGrid Items="@Mappings" TableClass="table table-hover" Context="mapping">
     <TableHeader>
         <th scope="col">
             <SortableHeader Property="FromClaimType"
@@ -16,13 +16,13 @@
     </TableHeader>
     <RowTemplate>
         <td>
-            <AuthorizeText Id="fromClaimType" @bind-Value="@transformation.FromClaimType" />
+            <AuthorizeText Id="fromClaimType" @bind-Value="@mapping.FromClaimType" />
         </td>
         <td>
-            <AuthorizeText Id="toClaimType" @bind-Value="@transformation.ToClaimType" />
+            <AuthorizeText Id="toClaimType" @bind-Value="@mapping.ToClaimType" />
         </td>
         <td>
-            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(transformation)">
+            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(mapping)">
                 <span class="oi oi-trash"></span>
             </AuthorizeButton>
         </td>

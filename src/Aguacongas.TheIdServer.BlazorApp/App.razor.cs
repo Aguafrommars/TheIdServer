@@ -28,7 +28,9 @@ namespace Aguacongas.TheIdServer.BlazorApp
             "Import",
             "Key",
             "Role",
-            "User"
+            "User",
+            "RelyingParties",
+            "RelyingParty"
         };
 
         private Task OnNavigateAsync(NavigationContext args)

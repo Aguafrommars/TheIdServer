@@ -728,7 +728,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 4, 30, 15, 45, 15, 284, DateTimeKind.Utc).AddTicks(8913)
+                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 52, 422, DateTimeKind.Utc).AddTicks(8130)
                         });
                 });
 
@@ -1003,6 +1003,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DigestAlgorithm")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1156,11 +1159,11 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
-                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "Relying")
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "RelyingParty")
                         .WithMany("Clients")
                         .HasForeignKey("RelyingPartyId");
 
-                    b.Navigation("Relying");
+                    b.Navigation("RelyingParty");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>

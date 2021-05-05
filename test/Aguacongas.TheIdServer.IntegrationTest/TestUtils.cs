@@ -346,16 +346,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
     class JSRuntimeImpl : JSRuntime
     {
+        public ManualResetEvent Called { get; } = new ManualResetEvent(false);
         protected override void BeginInvokeJS(long taskId, string identifier, string argsJson)
         {
+            Called.Set();
         }
 
         protected override void BeginInvokeJS(long taskId, string identifier, string argsJson, JSCallResultType resultType, long targetInstanceId)
         {
+            Called.Set();
         }
 
         protected override void EndInvokeDotNet(DotNetInvocationInfo invocationInfo, in DotNetInvocationResult invocationResult)
         {
+            Called.Set();
         }
     }
 

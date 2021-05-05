@@ -176,6 +176,17 @@ else
                                 </div>
                             </div>
                         }
+                        else
+                        {
+                            <div class="form-group row">
+                                <label class="col col-form-label" for="relying-party">
+                                    @Localizer["relying party"]
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <ClientRelyingParty @bind-Value="@Model.RelyingPartyId" />
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
                 @if (Model.ProtocolType == OIDC)

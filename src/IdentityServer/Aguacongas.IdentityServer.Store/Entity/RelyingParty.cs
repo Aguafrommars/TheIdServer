@@ -11,7 +11,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// 
     /// </summary>
     /// <seealso cref="IAuditable" />
-    public class RelyingParty : IAuditable
+    public class RelyingParty : IAuditable, ICloneable<RelyingParty>
     {
         /// <summary>
         /// Gets or sets the realm.
@@ -20,6 +20,15 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The realm.
         /// </value>
         public string Id { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the token.
@@ -91,5 +100,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public RelyingParty Clone()
+        {
+            return MemberwiseClone() as RelyingParty;
+        }
     }
 }

@@ -725,7 +725,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 4, 30, 15, 45, 1, 639, DateTimeKind.Utc).AddTicks(2605)
+                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 38, 537, DateTimeKind.Utc).AddTicks(8840)
                         });
                 });
 
@@ -999,6 +999,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DigestAlgorithm")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -1152,11 +1155,11 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
-                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "Relying")
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.RelyingParty", "RelyingParty")
                         .WithMany("Clients")
                         .HasForeignKey("RelyingPartyId");
 
-                    b.Navigation("Relying");
+                    b.Navigation("RelyingParty");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>

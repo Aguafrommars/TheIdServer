@@ -61,6 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
                 .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
                 .AddTransient<IImportService, ImportService>()
+                .AddTransient<ICertificateVerifierService, CertificateVerifierService>()
                 .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>
