@@ -18,8 +18,11 @@
         </ul>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-        <AuthorizeCheckbox Name="allow-offline-access" Label="@Localizer["allow offline access"]" @bind-Value="@Model.AllowOfflineAccess" />
+@if (Model.ProtocolType == "oidc")
+{
+    <div class="row">
+        <div class="col">
+            <AuthorizeCheckbox Name="allow-offline-access" Label="@Localizer["allow offline access"]" @bind-Value="@Model.AllowOfflineAccess" />
+        </div>
     </div>
-</div>
+}

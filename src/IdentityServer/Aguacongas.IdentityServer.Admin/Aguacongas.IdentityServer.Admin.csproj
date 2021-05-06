@@ -1,31 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Description>Expose OData controllers to manage IdentityServer4.</Description>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.Admin</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;administration</PackageTags>
-		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<PackageIcon>package-icon.png</PackageIcon>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Authors>Olivier Lefebvre</Authors>
+        <Description>Expose OData controllers to manage IdentityServer4.</Description>
+        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.Admin</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>theidserver;identityserver4;administration</PackageTags>
+        <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageIcon>package-icon.png</PackageIcon>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.Admin.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <CodeAnalysisRuleSet>Aguacongas.IdentityServer.Admin.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.Admin.ruleset</CodeAnalysisRuleSet>
-		<NoWarn>1701;1702;AD0001</NoWarn>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <CodeAnalysisRuleSet>Aguacongas.IdentityServer.Admin.ruleset</CodeAnalysisRuleSet>
+        <NoWarn>1701;1702;AD0001</NoWarn>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq.Json" Version="1.4.2" />		
@@ -44,13 +44,15 @@
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="5.0.5" />
 		<PackageReference Include="SendGrid" Version="9.23.1" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
-		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
-	</ItemGroup>
-	<ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
+        <ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
+    </ItemGroup>
+    <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
-	</ItemGroup>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Services\WsFederation\" />
+    </ItemGroup>
 
 </Project>

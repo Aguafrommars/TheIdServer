@@ -43,7 +43,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return key;
         }
 
-        internal RsaSecurityKey RsaSecurityKey { get; }
+        public RsaSecurityKey RsaSecurityKey { get; }
 
         internal RsaEncryptorConfiguration Configuration { get; }
 

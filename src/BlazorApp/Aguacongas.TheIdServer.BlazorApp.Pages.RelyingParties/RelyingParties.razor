@@ -1,0 +1,44 @@
+﻿@page "/relyingparties"
+@inherits EntitiesModel<Entity.RelyingParty>
+
+<div class="row sticky-top bg-light">
+    <div class="col">
+        <PageListHeader Name="@Localizer["Relying parties"]" Url="relyingparty" ExportRequest="@ExportRequest" ExportDisabled="@ExportDisabled" />
+    </div>
+    <div class="col">
+        <Filter TermChanged="OnFilterChanged" />
+    </div>
+    <EntitiesGrid Items="EntityList" TableClass="table mb-0">
+        <TableHeader>
+            <th><SelectAll GridState="GridState" /></th>
+            <th class="w-25" scope="col">
+                <SortableHeader Property="Id"
+                                Text="@Localizer["id"]"
+                                GridState="GridState" />
+            </th>
+            <th class="w-75" scope="col">
+                <SortableHeader Property="Description"
+                                Text="@Localizer["description"]"
+                                GridState="GridState" />
+            </th>
+        </TableHeader>
+    </EntitiesGrid>
+</div>
+@if (EntityList == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="row">
+        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
+            <RowTemplate>
+                <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
+                    <td class="w-25" @onclick="() => OnRowClicked(item)">@item.Id</td>
+                    <td class="w-75" @onclick="() => OnRowClicked(item)">@item.Description</td>
+                </SelectableItem>
+            </RowTemplate>
+        </EntitiesGrid>
+    </div>
+}
+

@@ -71,6 +71,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<IdentityLocalizedResource> IdentityLocalizedResources { get; set; }
 
+        public virtual DbSet<RelyingParty> RelyingParties { get; set; }
+
+        public virtual DbSet<RelyingPartyClaimMapping> RelyingPartyClaimMappings { get; set; }
+
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected override void OnModelCreating(ModelBuilder modelBuilder)

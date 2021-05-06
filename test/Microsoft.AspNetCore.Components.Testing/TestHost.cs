@@ -76,7 +76,11 @@ namespace Microsoft.AspNetCore.Components.Testing
         public async Task WaitForNextRenderAsync(Func<Task> trigger = null)
         {
             var task = Renderer.NextRender;
-            await trigger?.Invoke();
+            if (trigger != null)
+            {
+                await trigger.Invoke();
+            }
+            
             if (Debugger.IsAttached)
             {
                 task.Wait();

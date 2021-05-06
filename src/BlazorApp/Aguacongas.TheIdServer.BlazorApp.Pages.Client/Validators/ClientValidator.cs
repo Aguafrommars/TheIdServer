@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Linq;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
@@ -19,6 +20,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         public ClientValidator(Client client, IStringLocalizer localizer)
         {
             RuleFor(m => m.Id).NotEmpty().WithMessage(localizer["The id is required."]);
+            RuleFor(m => m.Id).Must(id => Uri.TryCreate(id, UriKind.Absolute, out Uri _))
+                .WithMessage(localizer["The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed)."])
+                .When(m => m.ProtocolType == "wsfed");
             RuleFor(m => m.ClientClaimsPrefix).MaximumLength(250).WithMessage(localizer["The claim prefix cannot exceed 250 char."]);
             RuleFor(m => m.PairWiseSubjectSalt).MaximumLength(250).WithMessage(localizer["The subject salt cannot exceed 250 char."]);
             RuleFor(m => m.UserCodeType).MaximumLength(100).WithMessage(localizer["The type of user code cannot exceed 100 char."]);
@@ -48,7 +52,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
                 .Where(m => m.GrantType != null)
                 .SetValidator(new ClientGrantTypeValidator(client, localizer));
             RuleFor(m => m.AllowedGrantTypes).Must(g => g.Any(g => !string.IsNullOrEmpty(g.GrantType)))
-                .WithMessage(localizer["The client should contain at least one grant type."]);
+                .WithMessage(localizer["The client should contain at least one grant type."])
+                .When(m => m.ProtocolType == "oidc");
+            RuleFor(m => m.RelyingPartyId).NotEmpty()
+                .WithMessage(localizer["The relying party is required."])
+                .When(m => m.ProtocolType == "wsfed");
             RuleForEach(m => m.RedirectUris).SetValidator(new ClientRedirectUriValidator(client, localizer));
             RuleForEach(m => m.ClientSecrets).SetValidator(new ClientSecretValidator(client, localizer));
             RuleForEach(m => m.Properties).SetValidator(new ClientPropertyValidator(client, localizer));

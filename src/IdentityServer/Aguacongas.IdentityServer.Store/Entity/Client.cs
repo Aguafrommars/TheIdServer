@@ -332,6 +332,44 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool NonEditable { get; set; }
 
         /// <summary>
+        /// Gets or sets the policy URI.
+        /// </summary>
+        /// <value>
+        /// The policy URI.
+        /// </value>
+        public string PolicyUri { get; set; }
+        /// <summary>
+        /// Gets or sets the tos URI.
+        /// </summary>
+        /// <value>
+        /// The tos URI.
+        /// </value>
+        public string TosUri { get; set; }
+        /// <summary>
+        /// Gets or sets the registration token.
+        /// </summary>
+        /// <value>
+        /// The registration token.
+        /// </value>
+        public Guid? RegistrationToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the relying party identifier.
+        /// </summary>
+        /// <value>
+        /// The relying party identifier.
+        /// </value>
+        public string RelyingPartyId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the relying.
+        /// </summary>
+        /// <value>
+        /// The relying.
+        /// </value>
+        public virtual RelyingParty RelyingParty { get; set; }
+
+        /// <summary>
         /// Gets or sets the identity provider restrictions.
         /// </summary>
         /// <value>
@@ -410,27 +448,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
-        /// <summary>
-        /// Gets or sets the policy URI.
-        /// </summary>
-        /// <value>
-        /// The policy URI.
-        /// </value>
-        public string PolicyUri { get; set; }
-        /// <summary>
-        /// Gets or sets the tos URI.
-        /// </summary>
-        /// <value>
-        /// The tos URI.
-        /// </value>
-        public string TosUri { get; set; }
-        /// <summary>
-        /// Gets or sets the registration token.
-        /// </summary>
-        /// <value>
-        /// The registration token.
-        /// </value>
-        public Guid? RegistrationToken { get; set; }
+       
 
         /// <summary>
         /// Clones this instance.

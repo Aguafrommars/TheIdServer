@@ -163,7 +163,9 @@ namespace Aguacongas.TheIdServer
                     var settings = options.SerializerSettings;
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
+                })
+                .AddIdentityServerWsFederation();
+
             ConfigureDynamicProviderManager(mvcBuilder, isProxy);
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();

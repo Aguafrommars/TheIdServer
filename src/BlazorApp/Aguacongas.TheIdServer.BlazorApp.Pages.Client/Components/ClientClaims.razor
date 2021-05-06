@@ -37,24 +37,24 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
-@if (Collection.Any())
+@if (Model.ProtocolType == "oidc" && Collection.Any())
 {
-<div class="col">
-    <div class="form-group row">
-        <label class="col-2 col-form-label" for="clientUri">
-            @Localizer["claims prefix"]
-        </label>
-        <div class="col-lg-10 col-sm-12">
-            <div class="row col-4">
-                <AuthorizeText Id="clientUri" Placeholder="@Localizer["prefix"]" @bind-Value="@Model.ClientClaimsPrefix" MaxLength="250" />
+    <div class="col">
+        <div class="form-group row">
+            <label class="col-2 col-form-label" for="clientUri">
+                @Localizer["claims prefix"]
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <div class="row col-4">
+                    <AuthorizeText Id="clientUri" Placeholder="@Localizer["prefix"]" @bind-Value="@Model.ClientClaimsPrefix" MaxLength="250" />
+                </div>
+            </div>
+            <label class="col-2 col-form-label">
+            </label>
+            <div class="col-lg-10 col-sm-12">
+                <AuthorizeCheckbox Label="@Localizer["always send claims"]" @bind-Value="@Model.AlwaysSendClientClaims" />
             </div>
         </div>
-        <label class="col-2 col-form-label">
-        </label>
-        <div class="col-lg-10 col-sm-12">
-            <AuthorizeCheckbox Label="@Localizer["always send claims"]" @bind-Value="@Model.AlwaysSendClientClaims" />
-        </div>
-    </div>
     </div>
 }
 

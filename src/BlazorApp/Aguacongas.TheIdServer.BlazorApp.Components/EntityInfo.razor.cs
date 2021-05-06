@@ -29,7 +29,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                 .Replace("protectresource", "api")
                 .Replace("apiscope", "scope")
                 .Replace("identityresource", "identity")
-                .Replace("externalprovider", "provider");
+                .Replace("externalprovider", "provider")
+                .Replace("relyingparty", "relying party");
             _entityType = Localizer[entityTypeName];
         }
 

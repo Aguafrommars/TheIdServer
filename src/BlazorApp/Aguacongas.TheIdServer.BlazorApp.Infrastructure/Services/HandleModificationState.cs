@@ -102,7 +102,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             {
                 _logger.LogDebug($"Add update modification for entity {entityType.Name} {entity.Id}");
                 modifications.Add(entity, ModificationKind.Update);
-            }
+                OnStateChange?.Invoke(ModificationKind.Update, entity);
+            }            
         }
     }
 }

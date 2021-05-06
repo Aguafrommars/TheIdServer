@@ -31,4 +31,10 @@
 		<ProjectReference Include="..\WebAssembly.Net.Http\WebAssembly.Net.Http.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="test.crt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

@@ -1,198 +1,212 @@
 ﻿@inject IStringLocalizerAsync<ClientTokens> Localizer
-<div class="form-group row">
-    <label class="col col-form-label">
-    </label>
-    <div class="col-lg-8 col-sm-12">
-        <AuthorizeCheckbox Name="show-all" Label="@Localizer["show all options"]" @bind-Value="@_showAllOptions" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col col-form-label pt-0" for="access-token-type">
-        @Localizer["access token type"]
-    </label>
-    <div class="col-lg-8 col-sm-12">
-        <AuthorizeView Policy="Is4-Writer">
-            <Authorized Context="accessTokenType">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="access-token-type"
-                           value="0"
-                           checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Jwt)"
-                           @onchange="@(() => SetTokenType(Models.AccessTokenType.Jwt))" />
-                    <label class="form-check-label" for="jwt">JWT</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="access-token-type"
-                           value="1"
-                           checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Reference)"
-                           @onchange="@(() => SetTokenType(Models.AccessTokenType.Reference))" />
-                    <label class="form-check-label" for="reference">Reference</label>
-                </div>
-            </Authorized>
-            <NotAuthorized Context="accessTokenType">
-                @(((Models.AccessTokenType)Model.AccessTokenType).ToString())
-            </NotAuthorized>
-        </AuthorizeView>
-    </div>
-</div>
-@if (_showAllOptions || Model.IsAuthorizationCodeClient())
+@if (Model.ProtocolType == "oidc")
 {
     <div class="form-group row">
         <label class="col col-form-label">
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizeCheckbox Name="require-pkce" Label="@Localizer["require PKCE"]" @bind-Value="@Model.RequirePkce" />
+            <AuthorizeCheckbox Name="show-all" Label="@Localizer["show all options"]" @bind-Value="@_showAllOptions" />
         </div>
     </div>
     <div class="form-group row">
-        <label class="col col-form-label">
+        <label class="col col-form-label pt-0" for="access-token-type">
+            @Localizer["access token type"]
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizeCheckbox Name="allow-plain-text-pkce" Label="@Localizer["allow plain text PKCE"]" @bind-Value="@Model.AllowPlainTextPkce" />
+            <AuthorizeView Policy="Is4-Writer">
+                <Authorized Context="accessTokenType">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access-token-type"
+                               value="0"
+                               checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Jwt)"
+                               @onchange="@(() => SetTokenType(Models.AccessTokenType.Jwt))" />
+                        <label class="form-check-label" for="jwt">JWT</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="access-token-type"
+                               value="1"
+                               checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Reference)"
+                               @onchange="@(() => SetTokenType(Models.AccessTokenType.Reference))" />
+                        <label class="form-check-label" for="reference">Reference</label>
+                    </div>
+                </Authorized>
+                <NotAuthorized Context="accessTokenType">
+                    @(((Models.AccessTokenType)Model.AccessTokenType).ToString())
+                </NotAuthorized>
+            </AuthorizeView>       
         </div>
     </div>
-}
-<div class="form-group row">
-    <label class="col col-form-label" for="access-token">
-        @Localizer["access token lifetime"]
-    </label>
-    <div class="col-lg-8 col-sm-12">
-        <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" TokenValueChanged="TokenChanded" />
-        <div>
-            <AuthorizeCheckbox Name="include-jwt-id" Label="@Localizer["include JWT id"]" @bind-Value="@Model.IncludeJwtId" />
+    if ((_showAllOptions || Model.IsAuthorizationCodeClient()))
+    {
+        <div class="form-group row">
+            <label class="col col-form-label">
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizeCheckbox Name="require-pkce" Label="@Localizer["require PKCE"]" @bind-Value="@Model.RequirePkce" />
+            </div>
         </div>
-        @if (_showAllOptions || Model.IsSpaClient())
-        {
+        <div class="form-group row">
+            <label class="col col-form-label">
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizeCheckbox Name="allow-plain-text-pkce" Label="@Localizer["allow plain text PKCE"]" @bind-Value="@Model.AllowPlainTextPkce" />
+            </div>
+        </div>
+    }
+    <div class="form-group row">
+        <label class="col col-form-label" for="access-token">
+            @Localizer["access token lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizedToken Name="access-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.AccessTokenLifetime" TokenValueChanged="TokenChanded" />
             <div>
-                <AuthorizeCheckbox Name="allow-access-token-via-browser" Label="@Localizer["allow access tokens via browser"]" @bind-Value="@Model.AllowAccessTokensViaBrowser" />
+                <AuthorizeCheckbox Name="include-jwt-id" Label="@Localizer["include JWT id"]" @bind-Value="@Model.IncludeJwtId" />
+            </div>
+            @if (_showAllOptions || Model.IsSpaClient())
+            {
+                <div>
+                    <AuthorizeCheckbox Name="allow-access-token-via-browser" Label="@Localizer["allow access tokens via browser"]" @bind-Value="@Model.AllowAccessTokensViaBrowser" />
+                </div>
+            }
+        </div>
+    </div>
+    @if (_showAllOptions || Model.HasUser())
+    {
+        <div class="form-group row">
+            <label class="col col-form-label" for="id-token">
+                @Localizer["id token lifetime"]
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
+                <div>
+                    <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label" for="salt">
+                @Localizer["pairwise subject salt"]
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
+            </div>
+        </div>
+    }
+    @if (_showAllOptions || Model.CanUseRefreshToken())
+    {
+        <div class="form-group row">
+            <label class="col col-form-label pt-0" for="refesh-token-usage">
+                @Localizer["refresh token usage"]
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizeView Policy="Is4-Writer">
+                    <Authorized Context="refreshTokenUsage">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                   value="0"
+                                   checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
+                                   @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
+                            <label class="form-check-label" for="jwt">@Localizer["Re use"]</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="refresh-token-usage"
+                                   value="1"
+                                   checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
+                                   @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
+                            <label class="form-check-label" for="reference">@Localizer["One time only"]</label>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized Context="refreshTokenUsage">
+                        @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col col-form-label pt-0" for="refesh-token-expiration">
+                @Localizer["refresh token expiration"]
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizeView Policy="Is4-Writer">
+                    <Authorized Context="refreshTokenExpiration">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="refresh-token-expiration"
+                                    value="0"
+                                    checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
+                                    @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
+                            <label class="form-check-label" for="jwt">@Localizer["Sliding"]</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="refresh-token-expiration"
+                                    value="1"
+                                    checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
+                                    @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
+                            <label class="form-check-label" for="reference">@Localizer["Absolute"]</label>
+    </div>
+                    </Authorized>
+                    <NotAuthorized Context="refreshTokenUsage">
+                        @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+        @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
+        {
+            <div class="form-group row">
+                <label class="col col-form-label" for="refresh-token">
+                    @Localizer["absolute refresh token lifetime"]
+                </label>
+                <div class="col-lg-8 col-sm-12">
+                    <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
+                    <div>
+                        <AuthorizeCheckbox Name="update-access-token" Label="@Localizer["update access token on refresh"]" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                    </div>
+                </div>
+            </div> 
+        }
+        else
+        {
+            <div class="form-group row">
+                <label class="col col-form-label" for="refresh-token">
+                    @Localizer["sliding refresh token lifetime"]
+                </label>
+                <div class="col-lg-8 col-sm-12">
+                    <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
+                    <div>
+                        <AuthorizeCheckbox Name="update-access-token" Label="@Localizer["update access token on refresh"]" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
+                    </div>
+                </div>
             </div>
         }
+    }
+    <div class="form-group row">
+        <label class="col col-form-label" for="sso-lifetime">
+            @Localizer["sso lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" TokenValueChanged="TokenChanded" />
+        </div>
     </div>
-</div>
-@if (_showAllOptions || Model.HasUser())
+    @if (_showAllOptions || Model.IsDevice())
+    {
+        <div class="form-group row">
+            <label class="col col-form-label" for="device-flow-lifetime">
+                @Localizer["device flow request lifetime"]
+            </label>
+            <div class="col-lg-8 col-sm-12">
+                <AuthorizedToken Name="device-flow-lifetime" QuickValues="_deviceCodeLifetimeQuickValues" @bind-Value="@Model.DeviceCodeLifetime" />
+            </div>
+        </div>
+    }
+}
+else
 {
     <div class="form-group row">
         <label class="col col-form-label" for="id-token">
-            @Localizer["id token lifetime"]
+            @Localizer["lifetime"]
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
-            <div>
-                <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
-            </div>
+            <AuthorizedToken Name="id-token" QuickValues="_accessTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
         </div>
-    </div>
-    <div class="form-group row">
-        <label class="col col-form-label" for="salt">
-            @Localizer["pairwise subject salt"]
-        </label>
-        <div class="col-lg-8 col-sm-12">
-            <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
-        </div>
-    </div>
-}
-@if (_showAllOptions || Model.CanUseRefreshToken())
-{
-    <div class="form-group row">
-        <label class="col col-form-label pt-0" for="refesh-token-usage">
-            @Localizer["refresh token usage"]
-        </label>
-        <div class="col-lg-8 col-sm-12">
-            <AuthorizeView Policy="Is4-Writer">
-                <Authorized Context="refreshTokenUsage">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="refresh-token-usage"
-                               value="0"
-                               checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
-                               @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
-                        <label class="form-check-label" for="jwt">@Localizer["Re use"]</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="refresh-token-usage"
-                               value="1"
-                               checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
-                               @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
-                        <label class="form-check-label" for="reference">@Localizer["One time only"]</label>
-</div>
-                </Authorized>
-                <NotAuthorized Context="refreshTokenUsage">
-                    @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="col col-form-label pt-0" for="refesh-token-expiration">
-            @Localizer["refresh token expiration"]
-        </label>
-        <div class="col-lg-8 col-sm-12">
-            <AuthorizeView Policy="Is4-Writer">
-                <Authorized Context="refreshTokenExpiration">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="refresh-token-expiration"
-                                value="0"
-                                checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
-                                @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
-                        <label class="form-check-label" for="jwt">@Localizer["Sliding"]</label>
-</div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="refresh-token-expiration"
-                                value="1"
-                                checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
-                                @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
-                        <label class="form-check-label" for="reference">@Localizer["Absolute"]</label>
-</div>
-                </Authorized>
-                <NotAuthorized Context="refreshTokenUsage">
-                    @(((Models.RefreshTokenUsage)Model.RefreshTokenUsage).ToString())
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
-    </div>
-    @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
-    {
-        <div class="form-group row">
-            <label class="col col-form-label" for="refresh-token">
-                @Localizer["absolute refresh token lifetime"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="refresh-token" QuickValues="_absoluteRefreshTokenQuickValues" @bind-Value="@Model.AbsoluteRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
-                <div>
-                    <AuthorizeCheckbox Name="update-access-token" Label="@Localizer["update access token on refresh"]" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
-                </div>
-            </div>
-        </div> 
-    }
-    else
-    {
-        <div class="form-group row">
-            <label class="col col-form-label" for="refresh-token">
-                @Localizer["sliding refresh token lifetime"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="refresh-token" QuickValues="_slidingRefreshTokenQuickValues" @bind-Value="@Model.SlidingRefreshTokenLifetime" TokenValueChanged="TokenChanded" />
-                <div>
-                    <AuthorizeCheckbox Name="update-access-token" Label="@Localizer["update access token on refresh"]" @bind-Value="@Model.UpdateAccessTokenClaimsOnRefresh" />
-                </div>
-            </div>
-        </div>
-    }
-}
-<div class="form-group row">
-    <label class="col col-form-label" for="sso-lifetime">
-        @Localizer["sso lifetime"]
-    </label>
-    <div class="col-lg-8 col-sm-12">
-        <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" TokenValueChanged="TokenChanded" />
-    </div>
-</div>
-@if (_showAllOptions || Model.IsDevice())
-{
-    <div class="form-group row">
-        <label class="col col-form-label" for="device-flow-lifetime">
-            @Localizer["device flow request lifetime"]
-        </label>
-        <div class="col-lg-8 col-sm-12">
-            <AuthorizedToken Name="device-flow-lifetime" QuickValues="_deviceCodeLifetimeQuickValues" @bind-Value="@Model.DeviceCodeLifetime" />
-        </div>
-    </div>
+    </div>    
 }

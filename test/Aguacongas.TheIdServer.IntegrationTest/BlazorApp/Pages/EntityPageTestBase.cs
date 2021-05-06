@@ -66,7 +66,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string id,
             out TestHost host,
             out RenderedComponent<App> component,
-            out MockHttpMessageHandler mockHttp)
+            out MockHttpMessageHandler mockHttp,
+            bool useJsRuntime = false)
         {
             TestUtils.CreateTestHost(userName,
                 new Claim[] 
@@ -79,7 +80,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Fixture.TestOutputHelper,
                 out host,
                 out component,
-                out mockHttp);
+                out mockHttp,
+                useJsRuntime);
             _host = host;
         }
 

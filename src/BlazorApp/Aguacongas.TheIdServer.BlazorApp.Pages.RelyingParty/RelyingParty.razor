@@ -1,0 +1,142 @@
+﻿@using Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.Components
+
+@page "/relyingparty"
+@page "/relyingparty/{id}"
+
+@inherits EntityModel<Entity.RelyingParty>
+@inject System.Net.Http.IHttpClientFactory _factory
+
+@if (Model == null)
+{
+    <PageLoading />
+}
+else
+{
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <CascadingValue Value="HandleModificationState">
+            <div class="row bg-light sticky-top">
+                <div class="col">
+                    @if (IsNew)
+                    {
+                        <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
+                    }
+                    else
+                    {
+                        <h3>@Id</h3>
+                    }
+                </div>
+                <div>
+                    @if (!NonEditable)
+                    {
+                        <SaveButton />
+                        @if (!IsNew)
+                        {
+                            <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        }
+                    }
+                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                </div>
+                <div class="col">
+                    <Filter CssClass="mt-1" />
+                </div>
+                <div class="w-100"></div>
+                <div class="col">
+                    <ul class="list-inline text-lowercase">
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("mappings")' @onclick:preventDefault>@Localizer["claims mapping"]</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-100"></div>
+                <FluentValidationValidator />
+                <ValidationSummary class="col" />
+            </div>
+            <div class="entity-details">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col col-form-label" for="descriptiom">
+                                @Localizer["decription"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["descriptiom"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                                @Localizer["token type"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.TokenType" Values="TOKENTYPELIST" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                                @Localizer["signature algorithm"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SignatureAlgorithm" Values="SIGNATUREALGORITHMLIST" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                                @Localizer["signature digest"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.DigestAlgorithm" Values="DIGESTLIST" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                                @Localizer["name id format"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SamlNameIdentifierFormat" Values="NAMEIDENTIFIERFORMATLIST" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col col-form-label">
+                                @Localizer["encryption certificate"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">                                
+                                <div class="row">
+                                    <div class="col form-control-plaintext">
+                                        @if (_thumbprint != null)
+                                        {
+                                            foreach(var s in _thumbprint)
+                                            {
+                                                <div>@s</div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <InputFile OnChange="@SetCertificateAsync" accept=".cer,.pem,.p7b" />
+                                        }
+                                    </div>
+                                    <div class="col-1">
+                                        @if (Model.EncryptionCertificate != null)
+                                        {
+                                            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="@RemoveCertificate">
+                                                <span class="oi oi-trash"></span>
+                                            </AuthorizeButton>                                    
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="mappings" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Claim mappings"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ClaimMappings Collection="@Model.ClaimMappings" />
+                    </div>
+                </div>
+            </div>
+        </CascadingValue>
+    </EditForm>
+}
