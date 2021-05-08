@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
             return value == Value ? "active" : null;
         }
 
-        private async Task SetSelectValue(string value)
+        private void SetSelectValue(string value)
         {
             CurrentValue = value;
         }
