@@ -104,4 +104,5 @@
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

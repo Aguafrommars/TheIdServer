@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer
 {
@@ -39,9 +40,7 @@ namespace Aguacongas.TheIdServer
         }
 
         public static IEnumerable<ApiScope> GetApiScopes(IConfiguration configuration)
-        {
-            return configuration.GetSection("InitialData:ApiScopes").Get<IEnumerable<ApiScope>>() ?? Array.Empty<ApiScope>();
-        }
+        => configuration.GetSection("InitialData:ApiScopes").Get<IEnumerable<ApiScope>>() ?? Array.Empty<ApiScope>();
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
@@ -55,5 +54,8 @@ namespace Aguacongas.TheIdServer
                 yield return client;
             }
         }
+
+        public static IEnumerable<Entity.RelyingParty> GetRelyingParties(IConfiguration configuration)
+        => configuration.GetSection("InitialData:RelyingParties").Get<IEnumerable<Entity.RelyingParty>>() ?? Array.Empty<Entity.RelyingParty>();
     }
 }

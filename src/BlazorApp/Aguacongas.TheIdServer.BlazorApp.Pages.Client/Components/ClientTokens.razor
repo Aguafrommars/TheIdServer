@@ -20,14 +20,14 @@
                                value="0"
                                checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Jwt)"
                                @onchange="@(() => SetTokenType(Models.AccessTokenType.Jwt))" />
-                        <label class="form-check-label" for="jwt">JWT</label>
+                        <label class="form-check-label" for="jwt" @onclick="@(() => SetTokenType(Models.AccessTokenType.Jwt))">JWT</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="access-token-type"
                                value="1"
                                checked="@(Model.AccessTokenType == (int)Models.AccessTokenType.Reference)"
                                @onchange="@(() => SetTokenType(Models.AccessTokenType.Reference))" />
-                        <label class="form-check-label" for="reference">Reference</label>
+                        <label class="form-check-label" for="reference" @onclick="@(() => SetTokenType(Models.AccessTokenType.Reference))">Reference</label>
                     </div>
                 </Authorized>
                 <NotAuthorized Context="accessTokenType">
@@ -106,14 +106,14 @@
                                    value="0"
                                    checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
                                    @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
-                            <label class="form-check-label" for="jwt">@Localizer["Re use"]</label>
+                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)">@Localizer["Re use"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
                                    value="1"
                                    checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
                                    @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
-                            <label class="form-check-label" for="reference">@Localizer["One time only"]</label>
+                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)">@Localizer["One time only"]</label>
                         </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">
@@ -134,14 +134,14 @@
                                     value="0"
                                     checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
                                     @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
-                            <label class="form-check-label" for="jwt">@Localizer["Sliding"]</label>
+                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)">@Localizer["Sliding"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"
                                     value="1"
                                     checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
                                     @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
-                            <label class="form-check-label" for="reference">@Localizer["Absolute"]</label>
+                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)">@Localizer["Absolute"]</label>
     </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">
@@ -194,7 +194,7 @@
                 @Localizer["device flow request lifetime"]
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="device-flow-lifetime" QuickValues="_deviceCodeLifetimeQuickValues" @bind-Value="@Model.DeviceCodeLifetime" />
+                <AuthorizedToken Name="device-flow-lifetime" QuickValues="_deviceCodeLifetimeQuickValues" @bind-Value="@Model.DeviceCodeLifetime" TokenValueChanged="TokenChanded" />
             </div>
         </div>
     }

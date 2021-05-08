@@ -189,5 +189,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
             HandleModificationState.EntityUpdated(Model);
             StateHasChanged();
         }
+
+        private Entity.RelyingPartyClaimMapping CreateMapping()
+        {
+            return new Entity.RelyingPartyClaimMapping
+            {
+                RelyingPartyId = Model.Id
+            };
+        }
     }
 }
