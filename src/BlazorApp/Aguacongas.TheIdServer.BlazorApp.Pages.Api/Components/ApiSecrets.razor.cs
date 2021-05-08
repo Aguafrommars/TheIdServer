@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api.Components
     {
         private IEnumerable<ApiSecret> Secrets => Collection.Where(s => (s.Description != null && s.Description.Contains(HandleModificationState.FilterTerm)) || (s.Type != null && s.Type.Contains(HandleModificationState.FilterTerm)));
 
-        private void GenerateSecret(ApiSecret secret)
+        private static void GenerateSecret(ApiSecret secret)
         {
             secret.Value = Guid.NewGuid().ToString();
         }
