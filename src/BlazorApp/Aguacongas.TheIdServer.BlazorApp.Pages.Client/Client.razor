@@ -100,14 +100,14 @@ else
                                                 value="0"
                                                 checked="@(Model.ProtocolType == OIDC)"
                                                 @onchange="@(() => SetProtcolType(OIDC))" />
-                                        <label class="form-check-label" for="oidc">OIDC</label>
+                                        <label class="form-check-label" for="oidc" @onclick="@(() => SetProtcolType(OIDC))">OIDC</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="protocol-type"
                                                 value="1"
                                                 checked="@(Model.ProtocolType == WSFED)"
                                                 @onchange="@(() => SetProtcolType(WSFED))" />
-                                        <label class="form-check-label" for="wsfed">WS-Federation</label>
+                                        <label class="form-check-label" for="wsfed" @onclick="@(() => SetProtcolType(WSFED))">WS-Federation</label>
                                     </div>
                                 }
                                 else if (Model.ProtocolType == OIDC)

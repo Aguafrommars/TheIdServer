@@ -123,10 +123,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
         {
             if (entity is entity.Role role)
             {
-                return base.DeleteAsync(typeof(entity.UserRole), new entity.UserRole
-                {
-                    Id = $"{Model.Id}@{role.Id}"
-                });
+                return base.DeleteAsync(typeof(entity.UserRole), Model.UserRoles.First(r => r.RoleId == role.Id));
             }
             return base.DeleteAsync(entityType, entity);
         }

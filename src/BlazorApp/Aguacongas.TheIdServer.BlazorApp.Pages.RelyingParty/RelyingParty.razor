@@ -59,7 +59,7 @@ else
                                 @Localizer["decription"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["descriptiom"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                                <AuthorizeTextArea Id="descriptiom" Placeholder="@Localizer["descriptiom"]" @bind-Value="@Model.Description" MaxLength="2000" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -67,7 +67,7 @@ else
                                 @Localizer["token type"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.TokenType" Values="TOKENTYPELIST" />
+                                <AuthorizeDropDownButton @bind-Value="@Model.TokenType" Values="TOKENTYPELIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -75,7 +75,7 @@ else
                                 @Localizer["signature algorithm"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SignatureAlgorithm" Values="SIGNATUREALGORITHMLIST" />
+                                <AuthorizeDropDownButton @bind-Value="@Model.SignatureAlgorithm" Values="SIGNATUREALGORITHMLIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -83,7 +83,7 @@ else
                                 @Localizer["signature digest"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.DigestAlgorithm" Values="DIGESTLIST" />
+                                <AuthorizeDropDownButton @bind-Value="@Model.DigestAlgorithm" Values="DIGESTLIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -91,7 +91,7 @@ else
                                 @Localizer["name id format"]
                             </label>
                             <div class="col-lg-10 col-sm-12">
-                                <AuthorizeDropDownButton @bind-SelectedValue="@Model.SamlNameIdentifierFormat" Values="NAMEIDENTIFIERFORMATLIST" />
+                                <AuthorizeDropDownButton @bind-Value="@Model.SamlNameIdentifierFormat" Values="NAMEIDENTIFIERFORMATLIST" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -128,9 +128,7 @@ else
                 </div>
                 <div id="mappings" class="card mb-3">
                     <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["Claim mappings"]</h5>
-                        </div>
+                        <EntitySubGridTitle Text="Claims mappings" Collection="@Model.ClaimMappings" CreateModel="@CreateMapping" />
                     </div>
                     <div class="card-body">
                         <ClaimMappings Collection="@Model.ClaimMappings" />

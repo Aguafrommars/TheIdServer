@@ -553,6 +553,11 @@ namespace Aguacongas.TheIdServer
 
         private static void SeedRelyingPartyClaimMappings(IAdminStore<Entity.RelyingPartyClaimMapping> relyingPartyClaimMappingStore, Entity.RelyingParty relyingParty)
         {
+            if (relyingParty.ClaimMappings == null)
+            {
+                return;
+            }
+
             foreach(var mapping in relyingParty.ClaimMappings)
             {
                 relyingPartyClaimMappingStore.CreateAsync(new Entity.RelyingPartyClaimMapping

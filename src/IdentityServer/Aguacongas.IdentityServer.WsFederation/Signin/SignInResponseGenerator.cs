@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Xml;
+using ClaimProperties = Microsoft.IdentityModel.Tokens.Saml.ClaimProperties;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {
@@ -111,9 +112,11 @@ namespace Aguacongas.IdentityServer.WsFederation
             // map outbound claims
             var relyParty = result.RelyingParty;
             var nameid = new Claim(ClaimTypes.NameIdentifier, result.User.GetSubjectId());
-            nameid.Properties[Microsoft.IdentityModel.Tokens.Saml.ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
+            nameid.Properties[ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
 
-            var outboundClaims = new List<Claim> { nameid };
+            var name = new Claim(ClaimTypes.Name, result.User.Identity.Name);
+
+            var outboundClaims = new List<Claim> { nameid, name };
             outboundClaims.AddRange(client.Claims.Select(c => new Claim(c.Type, c.Value, c.ValueType)));
             
             var mapping = relyParty.ClaimMapping;
@@ -121,16 +124,10 @@ namespace Aguacongas.IdentityServer.WsFederation
             {
                 if (mapping.ContainsKey(claim.Type))
                 {
-                    var outboundClaim = new Claim(mapping[claim.Type], claim.Value);
-                    if (outboundClaim.Type == ClaimTypes.NameIdentifier)
-                    {
-                        outboundClaim.Properties[Microsoft.IdentityModel.Tokens.Saml.ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
-                        outboundClaims.RemoveAll(c => c.Type == ClaimTypes.NameIdentifier); //remove previesly added nameid claim
-                    }
-
-                    outboundClaims.Add(outboundClaim);
+                    AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
-                else if (relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
+                else if (relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11 &&
+                    claim.Type != JwtClaimTypes.Name)
                 {
                     outboundClaims.Add(claim);
                 }
@@ -163,6 +160,22 @@ namespace Aguacongas.IdentityServer.WsFederation
             outboundClaims.Add(new Claim(ClaimTypes.AuthenticationInstant, XmlConvert.ToString(DateTime.UtcNow, "yyyy-MM-ddTHH:mm:ss.fffZ"), ClaimValueTypes.DateTime));
 
             return new ClaimsIdentity(outboundClaims, "theidserver");
+        }
+
+        private static void AddMappedClaim(Stores.RelyingParty relyParty, List<Claim> outboundClaims, IDictionary<string, string> mapping, Claim claim)
+        {
+            var outboundClaim = new Claim(mapping[claim.Type], claim.Value);
+            if (outboundClaim.Type == ClaimTypes.NameIdentifier)
+            {
+                outboundClaim.Properties[ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
+                outboundClaims.RemoveAll(c => c.Type == ClaimTypes.NameIdentifier); //remove previesly added nameid claim
+            }
+            if (outboundClaim.Type == ClaimTypes.Name)
+            {
+                outboundClaims.RemoveAll(c => c.Type == ClaimTypes.Name); //remove previesly added name claim
+            }
+
+            outboundClaims.Add(outboundClaim);
         }
 
         private async Task<SecurityToken> CreateSecurityTokenAsync(SignInValidationResult result, ClaimsIdentity outgoingSubject)

@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,22 +18,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         [Parameter]
         public IEnumerable<string> Values { get; set; }
 
-        [Parameter]
-        public string SelectedValue { get; set; }
-
-        [Parameter]
-        public EventCallback<string> SelectedValueChanged { get; set; }
-
         private string GetActiveClass(string value)
         {
-            return value == SelectedValue ? "active" : null;
+            return value == Value ? "active" : null;
         }
 
         private async Task SetSelectValue(string value)
         {
-            SelectedValue = value;
-            await SelectedValueChanged.InvokeAsync(value).ConfigureAwait(false);
-            StateHasChanged();
+            CurrentValue = value;
         }
     }
 }

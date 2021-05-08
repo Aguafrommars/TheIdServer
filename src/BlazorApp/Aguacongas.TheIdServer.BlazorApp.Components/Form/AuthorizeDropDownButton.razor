@@ -1,8 +1,9 @@
-﻿<AuthorizeView Policy="Is4-Writer">
+﻿@inherits InputText
+<AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <div id="@Id" class="btn-group">
             <button class="btn dropdown-toggle @CssSubClass" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                @SelectedValue
+                @Value
             </button>
             <div class="dropdown-menu">
                 @foreach (var value in Values)
@@ -14,7 +15,7 @@
     </Authorized>
     <NotAuthorized>
         <div id="@Id" class="col-form-label">
-            @SelectedValue
+            @Value
         </div>
     </NotAuthorized>
 </AuthorizeView>
