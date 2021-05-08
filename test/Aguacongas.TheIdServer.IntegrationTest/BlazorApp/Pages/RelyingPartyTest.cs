@@ -126,7 +126,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForLoaded(host, component);
 
-            var input = component.Find("#descriptiom");
+            var input = component.Find("#description");
 
             Assert.NotNull(input);
 
@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     Description = relyingPartyId,
                     ClaimMappings = new List<RelyingPartyClaimMapping>
                     {
-                        new RelyingPartyClaimMapping { Id = GenerateId(), FromClaimType = "filtered", ToClaimType = "filtered" }
+                        new RelyingPartyClaimMapping { Id = GenerateId(), FromClaimType = "filtered", ToClaimType = "urn:filtered" }
                     },
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     EncryptionCertificate = certificate,
