@@ -109,27 +109,20 @@ namespace Aguacongas.IdentityServer.WsFederation
 
             await _profile.GetProfileDataAsync(ctx).ConfigureAwait(false);
 
+            ctx.IssuedClaims.AddRange(client.Claims.Select(c => new Claim(c.Type, c.Value, c.ValueType)));
             // map outbound claims
             var relyParty = result.RelyingParty;
+            var mapping = relyParty.ClaimMapping;
+
             var nameid = new Claim(ClaimTypes.NameIdentifier, result.User.GetSubjectId());
             nameid.Properties[ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
 
-            var name = new Claim(ClaimTypes.Name, result.User.Identity.Name);
-
-            var outboundClaims = new List<Claim> { nameid, name };
-            outboundClaims.AddRange(client.Claims.Select(c => new Claim(c.Type, c.Value, c.ValueType)));
-            
-            var mapping = relyParty.ClaimMapping;
+            var outboundClaims = new List<Claim> { nameid };
             foreach (var claim in ctx.IssuedClaims)
             {
                 if (mapping.ContainsKey(claim.Type))
                 {
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
-                }
-                else if (relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11 &&
-                    claim.Type != JwtClaimTypes.Name)
-                {
-                    outboundClaims.Add(claim);
                 }
                 else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _))
                 {
@@ -137,7 +130,7 @@ namespace Aguacongas.IdentityServer.WsFederation
                 }
                 else
                 {
-                    _logger.LogInformation("No explicit claim type mapping for {claimType} configured. Saml11 requires a URI claim type. Skipping.", claim.Type);
+                    _logger.LogInformation("No explicit claim type mapping for {claimType} configured. Saml requires a URI claim type. Skipping.", claim.Type);
                 }
             }
 

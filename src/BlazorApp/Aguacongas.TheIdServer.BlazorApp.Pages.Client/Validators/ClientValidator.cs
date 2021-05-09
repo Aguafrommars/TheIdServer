@@ -60,6 +60,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.RedirectUris).SetValidator(new ClientRedirectUriValidator(client, localizer));
             RuleForEach(m => m.ClientSecrets).SetValidator(new ClientSecretValidator(client, localizer));
             RuleForEach(m => m.Properties).SetValidator(new ClientPropertyValidator(client, localizer));
+            RuleForEach(m => m.ClientClaims)
+                .SetValidator(new ClientClaimValidator(client, localizer));
             RuleForEach(m => m.AllowedScopes)
                 .Where(m => m.Scope != null)
                 .SetValidator(new ClientScopeValidator(client, localizer));
