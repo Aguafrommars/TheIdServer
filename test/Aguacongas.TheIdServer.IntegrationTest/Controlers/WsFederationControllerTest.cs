@@ -559,7 +559,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 {
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
-                    new Claim("https://exemple.com", Guid.NewGuid().ToString()),
+                    new Claim("exemple.com", Guid.NewGuid().ToString()),
                 })
                 .Returns(Task.CompletedTask);
 

@@ -124,7 +124,7 @@ namespace Aguacongas.IdentityServer.WsFederation
                 {
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
-                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _))
+                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) || relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
                 {
                     outboundClaims.Add(claim);
                 }
