@@ -14,7 +14,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.FromClaimType).NotEmpty().WithMessage(localizer["The from claim type is required."]);
             RuleFor(m => m.ToClaimType).NotEmpty().WithMessage(localizer["The to claim type is required."]);
             RuleFor(m => m.ToClaimType).Must(v => Uri.TryCreate(v, UriKind.Absolute, out Uri _))
-                .WithMessage(localizer["The to claim type must be an URI."]);
+                .WithMessage(localizer["The to claim type must be an URI."])
+                .When(m => relyingParty.TokenType == "urn:oasis:names:tc:SAML:1.0:assertion");
             RuleFor(m => m.FromClaimType).IsUnique(relyingParty.ClaimMappings).WithMessage(localizer["The from claim type must be unique."]);
         }
     }

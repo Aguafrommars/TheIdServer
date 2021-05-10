@@ -41,6 +41,7 @@ Choose your favorite:
 * [Apis management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/API.md)
 * [Api Scopes management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SCOPE.md)
 * [Identities management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/IDENTITY.md)
+* [Relying parties management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/RELYING-PARTY.md)
 * [External providers management](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PROVIDER.md)
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
 * [Export/import configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/EXPORT_IMPORT.md)
