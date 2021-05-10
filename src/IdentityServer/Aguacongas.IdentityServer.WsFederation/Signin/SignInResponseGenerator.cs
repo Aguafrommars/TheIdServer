@@ -27,6 +27,7 @@ namespace Aguacongas.IdentityServer.WsFederation
     /// </summary>
     public class SignInResponseGenerator : ISignInResponseGenerator
     {
+        private static IEnumerable<string> AllClaimTypes { get;} = typeof(ClaimValueTypes).GetFields().Select(f => f.GetValue(null) as string);
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IProfileService _profile;
         private readonly ISigningCredentialStore _keys;
@@ -124,7 +125,8 @@ namespace Aguacongas.IdentityServer.WsFederation
                 {
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
-                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) || relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
+                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) ||
+                    relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
                 {
                     outboundClaims.Add(claim);
                 }
@@ -157,7 +159,7 @@ namespace Aguacongas.IdentityServer.WsFederation
 
         private static void AddMappedClaim(Stores.RelyingParty relyParty, List<Claim> outboundClaims, IDictionary<string, string> mapping, Claim claim)
         {
-            var outboundClaim = new Claim(mapping[claim.Type], claim.Value);
+            var outboundClaim = new Claim(mapping[claim.Type], claim.Value, claim.ValueType);
             if (outboundClaim.Type == ClaimTypes.NameIdentifier)
             {
                 outboundClaim.Properties[ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
