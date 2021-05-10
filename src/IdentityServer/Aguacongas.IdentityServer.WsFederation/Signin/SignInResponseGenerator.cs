@@ -124,7 +124,8 @@ namespace Aguacongas.IdentityServer.WsFederation
                 {
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
-                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _))
+                else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) ||
+                    relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
                 {
                     outboundClaims.Add(claim);
                 }
@@ -157,7 +158,7 @@ namespace Aguacongas.IdentityServer.WsFederation
 
         private static void AddMappedClaim(Stores.RelyingParty relyParty, List<Claim> outboundClaims, IDictionary<string, string> mapping, Claim claim)
         {
-            var outboundClaim = new Claim(mapping[claim.Type], claim.Value);
+            var outboundClaim = new Claim(mapping[claim.Type], claim.Value, claim.ValueType);
             if (outboundClaim.Type == ClaimTypes.NameIdentifier)
             {
                 outboundClaim.Properties[ClaimProperties.SamlNameIdentifierFormat] = relyParty.SamlNameIdentifierFormat;
