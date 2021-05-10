@@ -27,6 +27,7 @@ namespace Aguacongas.IdentityServer.WsFederation
     /// </summary>
     public class SignInResponseGenerator : ISignInResponseGenerator
     {
+        private static IEnumerable<string> AllClaimTypes { get;} = typeof(ClaimValueTypes).GetFields().Select(f => f.GetValue(null) as string);
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IProfileService _profile;
         private readonly ISigningCredentialStore _keys;
