@@ -67,7 +67,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         {
             var queryString = request.QueryString;
 
-            var user = await _userSession.GetUserAsync();
+            var user = await _userSession.GetUserAsync().ConfigureAwait(false);
             var message = WsFederationMessage.FromQueryString(queryString.ToString());
 
             if (message.IsSignInMessage)
@@ -95,7 +95,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             }
 
             // validate request
-            var result = await _signinValidator.ValidateAsync(signin, user);
+            var result = await _signinValidator.ValidateAsync(signin, user).ConfigureAwait(false);
 
             if (result.IsError)
             {
@@ -116,7 +116,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             {
                 // create protocol response
                 var responseMessage = await _generator.GenerateResponseAsync(result).ConfigureAwait(false);
-                await _userSession.AddClientIdAsync(result.Client.ClientId);
+                await _userSession.AddClientIdAsync(result.Client.ClientId).ConfigureAwait(false);
 
                 return new SignInResult(responseMessage);
             }
