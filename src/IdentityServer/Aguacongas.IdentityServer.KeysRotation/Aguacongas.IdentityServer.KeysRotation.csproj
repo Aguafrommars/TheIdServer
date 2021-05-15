@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.0" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
         <PackageReference Include="IdentityModel" Version="5.1.0" />
         <PackageReference Include="IdentityServer4" Version="4.1.2" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.6" />
