@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -49,6 +50,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         private void OnProviderValueChanged(Entity.ClientIdpRestriction restriction)
         {
+            restriction.Id = Guid.NewGuid().ToString();
             Model.IdentityProviderRestrictions.Add(restriction);
             _provider = new Entity.ClientIdpRestriction();
             HandleModificationState.EntityCreated(restriction);
