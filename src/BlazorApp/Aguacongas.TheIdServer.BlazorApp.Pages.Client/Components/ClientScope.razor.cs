@@ -16,19 +16,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
     public partial class ClientScope
     {
         private bool _isReadOnly;
+        private string _href;
 
         [Parameter]
         public entity.Client Model { get; set; }
 
-        private static readonly ScopeComparer _comparer = new ScopeComparer();
+        private static readonly ScopeComparer _comparer = new();
         private IEnumerable<Scope> _filterScopes;
-        private readonly PageRequest _idPageRequest = new PageRequest
+        private readonly PageRequest _idPageRequest = new()
         {
             Select = $"{nameof(entity.IdentityResource.Id)},{nameof(entity.IdentityResource.DisplayName)}",
             Expand = nameof(entity.IdentityResource.Resources),
             Take = 5
         };
-        private readonly PageRequest _scopeRequest = new PageRequest
+        private readonly PageRequest _scopeRequest = new()
         {
             Select = $"{nameof(entity.ApiScope.Id)},{nameof(entity.ApiScope.DisplayName)}",
             Expand = nameof(entity.ApiScope.Resources),
@@ -39,10 +40,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         protected override string PropertyName => "Scope";
 
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
-            base.OnParametersSet();
+            await base.OnParametersSetAsync().ConfigureAwait(false);
             _isReadOnly = Entity.Id != null;
+            if (_isReadOnly)
+            {
+                await SetHrefAsync().ConfigureAwait(false);
+            }
         }
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
@@ -54,12 +59,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
             var culture = CultureInfo.CurrentCulture.Name;
             _filterScopes = identityResponse.Items.Select(i => new Scope
-                {
-                    Value = i.Id,
-                    Description = i.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
+            {
+                Value = i.Id,
+                Description = i.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
                         ?? i.DisplayName,
-                    IsIdentity = true
-                })
+                IsIdentity = true
+            })
                 .Union(apiScopeResponse.Items.Select(s => new Scope
                 {
                     Value = s.Id,
@@ -89,6 +94,30 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             public int GetHashCode(Scope obj)
             {
                 return -1;
+            }
+        }
+
+        private async Task SetHrefAsync()
+        {
+            var identityResponse = await _identityStore.GetAsync(new PageRequest
+            {
+                Filter = $"{nameof(entity.IdentityResource.Id)} eq '{Entity.Scope}'",
+                Take = 0
+            }).ConfigureAwait(false);
+            if (identityResponse.Count != 0)
+            {
+                _href = $"/identityresource/{Entity.Scope}";
+                return;
+            }
+
+            var apiScopeResponse = await _apiScopeStore.GetAsync(new PageRequest
+            {
+                Filter = $"{nameof(entity.ApiScope.Id)} eq '{Entity.Scope}'",
+                Take = 0
+            }).ConfigureAwait(false);
+            if (apiScopeResponse.Count != 0)
+            {
+                _href = $"/apiscope/{Entity.Scope}";
             }
         }
     }

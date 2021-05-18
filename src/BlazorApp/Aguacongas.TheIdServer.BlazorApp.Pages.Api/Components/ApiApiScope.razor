@@ -4,7 +4,7 @@
 @if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control @FieldClass" disabled>@Entity.ApiScopeId</div>
+        <a class="form-control @FieldClass" href="/apiscope/@Entity.ApiScopeId" >@Entity.ApiScopeId</a>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>

@@ -5,7 +5,7 @@
 @if (IsReadOnly)
 {
     <div class="input-group input-group-sm mb-3">
-        <div class="form-control" disabled>@_providerName</div>
+        <a href="/externalprovider/@Entity.Provider" class="form-control" disabled>@_providerName</a>
         <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
             <span class="input-group-text oi oi-trash" />
         </div>
