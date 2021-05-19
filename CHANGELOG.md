@@ -1,3 +1,71 @@
+# [3.0.0](https://github.com/Aguafrommars/TheIdServer/compare/2.3.0...3.0.0) (2021-05-19)
+
+
+### Bug Fixes
+
+* login & register link invisible on mobilde ([aa454a9](https://github.com/Aguafrommars/TheIdServer/commit/aa454a97c85f9136bd7a88909bf7237b93d5ecbb)), closes [#424](https://github.com/Aguafrommars/TheIdServer/issues/424)
+* refresh keys page crash ([a9ceab4](https://github.com/Aguafrommars/TheIdServer/commit/a9ceab43f72d62f269c70a60c109d17b4276b1a4))
+* rewrite custom property validators ([5f53795](https://github.com/Aguafrommars/TheIdServer/commit/5f53795f4f5423d62c9f1bb8e3daf4f1a028b632)), closes [#425](https://github.com/Aguafrommars/TheIdServer/issues/425)
+* **ravendb:** service  collection methods typo ([8927bff](https://github.com/Aguafrommars/TheIdServer/commit/8927bffd896584e0bb824266588c11e6d91d293d))
+* update packages ([55b3a32](https://github.com/Aguafrommars/TheIdServer/commit/55b3a32e2cca181490177589673ec91f2775dc2e))
+* update packages ([895dbb6](https://github.com/Aguafrommars/TheIdServer/commit/895dbb6d7f0001c9af4cb0d92dae7ffc7ce2d900))
+* update packages ([3e5c783](https://github.com/Aguafrommars/TheIdServer/commit/3e5c783b76432fb639e8e814c8a300a73a805a4a))
+* update packages ([6c8a3dc](https://github.com/Aguafrommars/TheIdServer/commit/6c8a3dc57e29b7e135776cb6cb24533097c63691))
+* update packages ([6d569a5](https://github.com/Aguafrommars/TheIdServer/commit/6d569a5bd232398be062847039853b8abe8ca0fa))
+* update packages ([cdf8b1e](https://github.com/Aguafrommars/TheIdServer/commit/cdf8b1e9ce0fc0963029f5ae83892d69c7d88963))
+* update packages ([1c7e28d](https://github.com/Aguafrommars/TheIdServer/commit/1c7e28d35ff11ec7cae09ae545007d56e63c5463))
+* update packages ([dd986bd](https://github.com/Aguafrommars/TheIdServer/commit/dd986bd5c0f5596c593b44484893d02347869d59))
+* update packages ([b24007c](https://github.com/Aguafrommars/TheIdServer/commit/b24007c7e272cf316bbafe197032aa9d10f9423a))
+* update packages ([04907c9](https://github.com/Aguafrommars/TheIdServer/commit/04907c964c3a5dea8176730bd2b12ce7315c9417))
+* update packages ([10014f2](https://github.com/Aguafrommars/TheIdServer/commit/10014f2293124ac35c98e37f4d7c18f44e7d7d50))
+* update packages ([edf46a9](https://github.com/Aguafrommars/TheIdServer/commit/edf46a952f67f2f71b5fde0e5d1f96554a6c0c6a))
+* update packages ([79701ac](https://github.com/Aguafrommars/TheIdServer/commit/79701ac60d12c73def0609be423852975325eb70))
+* update packages ([a17e623](https://github.com/Aguafrommars/TheIdServer/commit/a17e623f1e795a2bbdc0e8c60ef1cb1f60faa908))
+* update packages ([cdf7b42](https://github.com/Aguafrommars/TheIdServer/commit/cdf7b4288ba20695c141278306192ec54d1a17de))
+* update packages ([bb26f09](https://github.com/Aguafrommars/TheIdServer/commit/bb26f09aef7e88f542ea9c5799424c40ea8969cf))
+* update packages ([2df723d](https://github.com/Aguafrommars/TheIdServer/commit/2df723d29d9a026e5ce65f0ce56f37f386288be5))
+* update packages ([39e7bd0](https://github.com/Aguafrommars/TheIdServer/commit/39e7bd0f8d305e915a10b65ec9c3ab9f007b331c))
+* update packages ([f3d7f1f](https://github.com/Aguafrommars/TheIdServer/commit/f3d7f1fcc4b929ede9b342e49cf53d7fcc0576df))
+
+
+### Code Refactoring
+
+* remove  useless IdentityProvider entity ([ed9858c](https://github.com/Aguafrommars/TheIdServer/commit/ed9858cbb149dcf4f9a4165d954065959d4988da))
+* **ravendb:** remove useless generic signature ([daf03c5](https://github.com/Aguafrommars/TheIdServer/commit/daf03c522822a91bd130fcd4a591268180c8987f))
+* **ravendb:** remove useless stores ([5513561](https://github.com/Aguafrommars/TheIdServer/commit/5513561559de68744cefeaa477c92c52a18be205))
+* rules checkers stores ([f4737eb](https://github.com/Aguafrommars/TheIdServer/commit/f4737ebe0993d9d4d53715d2e2128fbf51082da3))
+
+
+### Features
+
+* **adminui:** generate shared secret ([1700835](https://github.com/Aguafrommars/TheIdServer/commit/17008352dfd91e89ade806fe698080a8eea31aac))
+* **adminui:** improve navigation ([72d61ad](https://github.com/Aguafrommars/TheIdServer/commit/72d61add099977a58c16b1a08348d4f27baf280b))
+* mongodb ([b1b1906](https://github.com/Aguafrommars/TheIdServer/commit/b1b19060bef52838ce7545babcb68d1ac0d7b921))
+* ws-federation client managemrnt ([5833048](https://github.com/Aguafrommars/TheIdServer/commit/58330483f762c681935fd16b615515f8cc15b720))
+* ws-federation server ([04a826f](https://github.com/Aguafrommars/TheIdServer/commit/04a826f1cea1db73e9535f497168da9e6ca53c7f)), closes [#404](https://github.com/Aguafrommars/TheIdServer/issues/404)
+
+
+### Performance Improvements
+
+* cache requests results by scope ([2fa6e37](https://github.com/Aguafrommars/TheIdServer/commit/2fa6e371a910b266c583ff6907b2a9587bcab7bb))
+* improve is4 stores ([6ce0269](https://github.com/Aguafrommars/TheIdServer/commit/6ce0269c021c9e902558bd395a5eed9d18ebcbc5))
+
+
+* refactor(EF)!: remove useless specialized stores ([3b48e80](https://github.com/Aguafrommars/TheIdServer/commit/3b48e801096ff1d126d9c3308e615013c1e8e616))
+
+
+### BREAKING CHANGES
+
+* invert packages dependencies between
+Aguacongas.IdentityServer and Aguacongas.TheIdServer.Authentication and
+Aguacongas.TheIdServer.Identity
+* **ravendb:** remove ravendb useless stores
+* EF SchemeDefinition doesn't exist any more. ExtenalProvider
+is used instead. The DB schema changes
+* Useless IdentityProvider entity removed
+* **ravendb:** remove useless generic signature for PersistKeysToRavenDb
+methods extensions
+
 # [2.3.0](https://github.com/Aguafrommars/TheIdServer/compare/2.2.0...2.3.0) (2021-04-07)
 
 
