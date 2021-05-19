@@ -171,6 +171,36 @@ And **RavenDbOptions** to define the RavenDb options.
 ```
 > The server support RavenDb 4.1 and above. 
 
+### Using MongoDb
+
+Use **DbType** to the define the RavenDb database engine.
+
+```json
+"DbType": "MongoDb"
+```
+
+And **ConnectionStrings:DefaultConnection** to define the connection string.
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "mongodb+srv://theidserver:theidserverpwd@cluster0.fvkfz.mongodb.net/TheIdServer?retryWrites=true&w=majority"
+}
+```
+
+> We cannot used another database than the default database defined in the connection string.
+
+> As no `DbContext` will be registered, you cannot store signing keys in EF but you can choose the `MongoDb` storage kind (see [Configure signin keys](#configure-signing-key)):
+```json
+"IdentityServer": {
+  "Key": {
+    "StorageKind": "MongoDb"
+  }
+},
+"DataProtectionOptions": {
+  "StorageKind": "MongoDb"
+}
+```
+
 ### Using the API
 
 ![public-private.svg](../../doc/assets/public-pribate.png)
@@ -454,7 +484,7 @@ Default configuration:
 
 ## Configure Signing Key
 
-### Keys rotatation (remanded)
+### Keys rotatation (recommanded)
 
 TheIdServer can be configured with a keys rotation mechanism instead of a single key.  
 Read [Keys rotation](../../doc/KEYS_ROTATION.md) to know how to configure it.
