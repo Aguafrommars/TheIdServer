@@ -49,7 +49,7 @@ Choose your favorite:
 
 ### Server
 
-* [OpenID/Connect](https://openid.net/connect/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server
+* [OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server
 * [Large choice of database](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Aguacongas.TheIdServer/README.md#using-entity-framework-core)
 * [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-the-provider-hub)
 * [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#using-the-api)
