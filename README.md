@@ -1,6 +1,6 @@
 # TheIdServer
 
-[OpenID/Connect](https://openid.net/connect/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server based on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
+[OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server based on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/)
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
