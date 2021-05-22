@@ -22,7 +22,7 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.11.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.11.1" />
 	</ItemGroup>
 
 	<ItemGroup>
