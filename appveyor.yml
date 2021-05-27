@@ -22,6 +22,7 @@ init:
 install:
   - ps: Install-Product node ''
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
+  - ps: .\dotnet-install.ps1 -Version 5.0.300
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
