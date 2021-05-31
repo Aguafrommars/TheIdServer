@@ -23,6 +23,7 @@
 	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	  <Content Include="THIRD-PARTY-NOTICES">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
 	  </Content>
 	</ItemGroup>
 
