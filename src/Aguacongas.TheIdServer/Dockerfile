@@ -1,11 +1,13 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS sdk
+RUN dotnet workload install microsoft-net-sdk-blazorwebassembly-aot
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM sdk AS build
 WORKDIR /src
 COPY ["src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj", "src/Aguacongas.TheIdServer/"]
 COPY ["src/Aguacongas.TheIdServer.Identity/Aguacongas.TheIdServer.Identity.csproj", "src/Aguacongas.TheIdServer.Identity/"]
@@ -49,8 +51,7 @@ COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.User/Aguacongas.TheI
 COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.Users/Aguacongas.TheIdServer.BlazorApp.Pages.Users.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.Users/"]
 COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties/"]
 COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty/"]
-RUN dotnet restore "src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj"
-RUN dotnet workload install microsoft-net-sdk-blazorwebassembly-aot
+RUN dotnet restore "src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj" -v n
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer"
 RUN dotnet build "Aguacongas.TheIdServer.csproj" -c Release -o /app/build
