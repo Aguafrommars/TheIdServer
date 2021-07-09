@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-namespace Aguacongas.TheIdServer.BlazorApp.Shared
+namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class NavMenu
     {

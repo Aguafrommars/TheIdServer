@@ -1,15 +1,20 @@
-﻿@inherits LayoutComponentBase
+﻿@inject Notifier _notifier;
+@inject IStringLocalizerAsync<MainLayout> Localizer
 
-<div class="sidebar">
-	<NavMenu />
+@inherits LayoutComponentBase
+
+<div class="sidebar bg-light">
+    <NavMenu />
 </div>
 
-<div class="main">
-	<div class="top-row px-4">
-		<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-	</div>
+<div class="main bg-light mb-2">
+    <div class="top-row px-4 auth">
+        <EntityInfo />
+        <LoginDisplay />
+    </div>
 
-	<div class="content px-4">
-		@Body
-	</div>
+    <div class="content px-4">
+        @Body
+    </div>
 </div>
+<Toaster />
