@@ -23,11 +23,11 @@
         <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
         <PackageReference Include="IdentityModel" Version="5.1.0" />
         <PackageReference Include="IdentityServer4" Version="4.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.9" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
         <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.0" />
