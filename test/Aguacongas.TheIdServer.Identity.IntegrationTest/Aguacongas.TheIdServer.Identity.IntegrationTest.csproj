@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.9" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.9" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
