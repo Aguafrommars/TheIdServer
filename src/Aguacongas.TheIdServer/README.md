@@ -95,6 +95,22 @@ And the favicon is *wwwroot/favicon.ico*.
 
 By replacing those files you can redefined the site style by yours.
 
+## Configure ASP.Net Core Identity options
+
+The section **IdentityOptions** is binded to the class [`Microsoft.AspNetCore.Identity.IdentityOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identityoptions).  
+So you can set any ASP.Net Core Identity options you want from configuration
+
+```json
+"IdentityOptions": {
+  "User": {
+    "AllowedUserNameCharacters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ "
+  },
+  "SignIn": {
+    "RequireConfirmedAccount": true
+  }
+}
+```
+
 ## Configure IdentityServer4
 
 The section **IdentityServerOptions** is binded to the class [`IdentityServer4.Configuration.IdentityServerOptions`](http://docs.identityserver.io/en/latest/reference/options.html).  
