@@ -129,20 +129,18 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.RefreshToken>, CacheAdminStore<AdminStore<Entity.RefreshToken>, Entity.RefreshToken>>()
                 .AddTransient<IAdminStore<Entity.OneTimeToken>, CacheAdminStore<AdminStore<Entity.OneTimeToken>, Entity.OneTimeToken>>()
                 .AddTransient<IAdminStore<Entity.UserConsent>, CacheAdminStore<AdminStore<Entity.UserConsent>, Entity.UserConsent>>()
-                .AddTransient<IAdminStore<Entity.User>, CheckIdentityRulesUserStore<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>>()
+                .AddTransient<IAdminStore<Entity.User>, CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
                 .AddTransient<IAdminStore<Entity.UserLogin>, CacheAdminStore<UserLoginStore, Entity.UserLogin>>()
                 .AddTransient<IAdminStore<Entity.UserClaim>, CacheAdminStore<UserClaimStore, Entity.UserClaim>>()
                 .AddTransient<IAdminStore<Entity.UserRole>, CacheAdminStore<UserRoleStore, Entity.UserRole>>()
                 .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
-                .AddTransient<IAdminStore<Entity.Role>, CheckIdentityRulesRoleStore<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>>()
+                .AddTransient<IAdminStore<Entity.Role>, CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
                 .AddTransient<IAdminStore<Entity.RoleClaim>, CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>()
                 .AddTransient<IAdminStore<Entity.RelyingParty>, CacheAdminStore<AdminStore<Entity.RelyingParty>, Entity.RelyingParty>>()
                 .AddTransient<IAdminStore<Entity.RelyingPartyClaimMapping>, CacheAdminStore<RelyingPartyClaimMappingStore, Entity.RelyingPartyClaimMapping>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
-                .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>()
-                .AddRulesCheckStores<CacheAdminStore<AdminStore<Entity.User>, Entity.User>, CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>();
-                
+                .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>();                
         }
     }
 }

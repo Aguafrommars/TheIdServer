@@ -42,8 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddConfigurationStores()
-                .AddOperationalStores()
-                .AddRulesCheckStores<CacheAdminStore<AdminStore<User>, User>, CacheAdminStore<AdminStore<Role>, Role>>();
+                .AddOperationalStores();
 
             return services;
         }
