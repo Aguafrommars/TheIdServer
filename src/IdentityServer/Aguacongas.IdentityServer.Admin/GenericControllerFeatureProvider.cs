@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -29,7 +30,8 @@ namespace Aguacongas.IdentityServer.Admin
         /// </remarks>
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
-            var entyTypeList = Utils.GetEntityTypeList();
+            var entyTypeList = Utils.GetEntityTypeList()
+                .Where(e => e != typeof(User) || e!= typeof(Role));
             // This is designed to run after the default ControllerTypeProvider, 
             // so the list of 'real' controllers has already been populated.
             foreach (var entityType in entyTypeList)
