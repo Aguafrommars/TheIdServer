@@ -40,8 +40,9 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
                 return NotFound(_localizer["Unable to load user with ID '{0}'.", userId]);
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var decodedArray = WebEncoders.Base64UrlDecode(code);
+            var decoded = Encoding.UTF8.GetString(decodedArray);
+            var result = await _userManager.ConfirmEmailAsync(user, decoded);
             StatusMessage = result.Succeeded ? _localizer["Thank you for confirming your email."] : _localizer["Error confirming your email."];
             return Page();
         }

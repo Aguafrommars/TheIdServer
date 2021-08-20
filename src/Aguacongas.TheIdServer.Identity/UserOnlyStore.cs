@@ -354,7 +354,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             foreach (var login in response.Items)
             {
-                await _loginStore.DeleteAsync($"{login.UserId}@{login.LoginProvider}@{login.ProviderKey}", cancellationToken).ConfigureAwait(false);
+                await _loginStore.DeleteAsync(login.Id, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -613,7 +613,9 @@ namespace Aguacongas.TheIdServer.Identity
         {
             foreach (var token in tokens)
             {
-                await _tokenStore.CreateAsync(token.ToEntity(), cancellationToken).ConfigureAwait(false);
+                var entity = token.ToEntity();
+                await _tokenStore.DeleteAsync(entity.Id, cancellationToken).ConfigureAwait(false);
+                await _tokenStore.CreateAsync(entity, cancellationToken).ConfigureAwait(false);
             }
         }
 

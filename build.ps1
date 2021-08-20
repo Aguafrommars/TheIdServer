@@ -23,7 +23,7 @@ dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings --filter FullyQualifiedName!~Pages & FullyQualifiedName!~UserStore"
 
 dotnet build -c Release -v q
-dotnet test -c Release --no-build --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings --filter "FullyQualifiedName!~Aguacongas.TheIdServer.Identity.IntegrationTest" -v q
+dotnet test -c Release --no-build --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings -v q
 
 if ($LASTEXITCODE -ne 0) {
 	$result = $LASTEXITCODE

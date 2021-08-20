@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class CheckIdentityRulesRoleStore<TStore> : IAdminStore<Role> where TStore: IAdminStore<Role>
+    public class CheckIdentityRulesRoleStore<TStore> : IAdminStore<Role> where TStore : IAdminStore<Role>
     {
         private readonly TStore _parent;
         private readonly RoleManager<IdentityRole> _manager;
@@ -27,11 +27,11 @@ namespace Aguacongas.IdentityServer.Store
             entity.Id = role.Id;
             return entity;
         }
-        
-                
+
+
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         => await CreateAsync(entity as Role, cancellationToken).ConfigureAwait(false);
-        
+
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var role = await _manager.FindByIdAsync(id).ConfigureAwait(false);
@@ -70,10 +70,10 @@ namespace Aguacongas.IdentityServer.Store
         private static IdentityRole CreateRole(Role entity)
         => new()
         {
-                Id = entity.Id,
-                ConcurrencyStamp = entity.ConcurrencyStamp,
-                Name = entity.Name,
-                NormalizedName = entity.Name
-            };        
+            Id = entity.Id,
+            ConcurrencyStamp = entity.ConcurrencyStamp,
+            Name = entity.Name,
+            NormalizedName = entity.Name
+        };
     }
 }

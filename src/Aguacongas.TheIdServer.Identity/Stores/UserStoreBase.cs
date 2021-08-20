@@ -696,7 +696,6 @@ namespace Aguacongas.TheIdServer.Identity
             ThrowIfDisposed();
             AssertNotNull(user, nameof(user));
 
-
             var tokens = await GetUserTokensAsync(user, cancellationToken)
                 .ConfigureAwait(false);
             var token = tokens.SingleOrDefault(t => t.LoginProvider == loginProvider && t.Name == name);        
