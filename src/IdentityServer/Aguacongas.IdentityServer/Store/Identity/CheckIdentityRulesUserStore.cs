@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.Store
             NormalizedEmail = entity.NormalizedEmail,
             NormalizedUserName = entity.NormalizedUserName,
             LockoutEnabled = entity.LockoutEnabled,
-            LockoutEnd = entity.LockoutEnd,
+            LockoutEnd = entity.LockoutEnd == DateTime.MinValue ? null : entity.LockoutEnd,
             PhoneNumber = entity.PhoneNumber,
             PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
             PasswordHash = entity.PasswordHash,
