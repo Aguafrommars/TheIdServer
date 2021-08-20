@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29230.47
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DF545B54-78FB-42D0-A842-A1490A579B37}"
 EndProject
@@ -68,8 +68,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.Test", "test\Aguacongas.TheIdServer.Identity.Test\Aguacongas.TheIdServer.Identity.Test.csproj", "{87F13507-EAE4-456D-BBE3-2D2C94C3356A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication", "src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj", "{9F64CDFF-6347-4F62-B74F-C6CA2743E667}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication.IntegrationTest", "test\Aguacongas.TheIdServer.Authentication..Integration.Test\Aguacongas.TheIdServer.Authentication.IntegrationTest.csproj", "{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Test", "test\Aguacongas.TheIdServer.Test\Aguacongas.TheIdServer.Test.csproj", "{34B6748E-64C1-46A3-AABE-56E215204542}"
 EndProject
@@ -196,6 +194,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty", "src\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj", "{5DD4CFFB-D038-4E12-AA1E-B190699C273D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.WsFederationSample", "sample\Aguacongas.TheIdServer.WsFederationSample\Aguacongas.TheIdServer.WsFederationSample.csproj", "{5E930A54-0AA1-4053-AFBD-319914929634}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication.IntegrationTest", "test\Aguacongas.TheIdServer.Authentication.Integration.Test\Aguacongas.TheIdServer.Authentication.IntegrationTest.csproj", "{90D12D21-99C3-405A-9524-C8628D711FCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -543,18 +543,6 @@ Global
 		{9F64CDFF-6347-4F62-B74F-C6CA2743E667}.Release|x64.Build.0 = Release|Any CPU
 		{9F64CDFF-6347-4F62-B74F-C6CA2743E667}.Release|x86.ActiveCfg = Release|Any CPU
 		{9F64CDFF-6347-4F62-B74F-C6CA2743E667}.Release|x86.Build.0 = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|x64.Build.0 = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Debug|x86.Build.0 = Debug|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x64.ActiveCfg = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x64.Build.0 = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x86.ActiveCfg = Release|Any CPU
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB}.Release|x86.Build.0 = Release|Any CPU
 		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34B6748E-64C1-46A3-AABE-56E215204542}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -1083,6 +1071,18 @@ Global
 		{5E930A54-0AA1-4053-AFBD-319914929634}.Release|x64.Build.0 = Release|Any CPU
 		{5E930A54-0AA1-4053-AFBD-319914929634}.Release|x86.ActiveCfg = Release|Any CPU
 		{5E930A54-0AA1-4053-AFBD-319914929634}.Release|x86.Build.0 = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|x64.Build.0 = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Debug|x86.Build.0 = Debug|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|x64.ActiveCfg = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|x64.Build.0 = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|x86.ActiveCfg = Release|Any CPU
+		{90D12D21-99C3-405A-9524-C8628D711FCC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1118,7 +1118,6 @@ Global
 		{1FC45D3A-B43E-4688-94DD-2F34A6C60496} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{87F13507-EAE4-456D-BBE3-2D2C94C3356A} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{9F64CDFF-6347-4F62-B74F-C6CA2743E667} = {DF545B54-78FB-42D0-A842-A1490A579B37}
-		{7F9CAFD6-D361-4CB8-A6E1-7F1D0BEE4AEB} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{34B6748E-64C1-46A3-AABE-56E215204542} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{8A3B91E5-02A3-42F0-B2E7-E419B5086FFA} = {DF545B54-78FB-42D0-A842-A1490A579B37}
 		{C2806393-D1EB-4DDE-8A4B-AA65014B8D08} = {8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}
@@ -1166,6 +1165,7 @@ Global
 		{F8C34BAD-9874-430D-BE30-2639DA637B6D} = {8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}
 		{5DD4CFFB-D038-4E12-AA1E-B190699C273D} = {8A3B91E5-02A3-42F0-B2E7-E419B5086FFA}
 		{5E930A54-0AA1-4053-AFBD-319914929634} = {98BBB159-779B-497B-927B-723592E84860}
+		{90D12D21-99C3-405A-9524-C8628D711FCC} = {DE50F426-4409-4573-8502-93364ED12E0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}
