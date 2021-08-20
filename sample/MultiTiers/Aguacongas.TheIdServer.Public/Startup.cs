@@ -51,11 +51,13 @@ namespace Aguacongas.TheIdServer
 
             services.AddIdentityProviderStore()
                 .AddConfigurationHttpStores(configureOptions)
-                .AddOperationalHttpStores()
+                .AddOperationalStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
-                .AddTheIdServerStores(configureOptions)
+                .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
+
+            services.AddConfigurationHttpStores(configureOptions);
 
             var identityBuilder = services.AddClaimsProviders(Configuration)
                  .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
@@ -112,8 +114,7 @@ namespace Aguacongas.TheIdServer
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
-            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                    .AddTheIdServerHttpStore();
+            mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
             services.AddDatabaseDeveloperPageExceptionFilter()
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));

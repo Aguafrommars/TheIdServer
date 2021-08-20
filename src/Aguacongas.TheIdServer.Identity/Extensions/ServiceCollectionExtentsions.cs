@@ -18,12 +18,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 var userStoreType = typeof(UserStore<,>).MakeGenericType(userType, roleType);
                 var roleStoreType = typeof(RoleStore<>).MakeGenericType(roleType);
 
-                services.TryAddTransient(typeof(UserOnlyStore<>)
+                services.TryAddScoped(typeof(UserOnlyStore<>)
                     .MakeGenericType(userType),
                         provider => provider.CreateUserOnlyStore(userOnlyStoreType));
-                services.TryAddTransient(typeof(IUserStore<>).MakeGenericType(userType),
+                services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(userType),
                     provider => provider.CreateUserStore(userOnlyStoreType, userStoreType));
-                services.TryAddTransient(typeof(IRoleStore<>).MakeGenericType(roleType),
+                services.TryAddScoped(typeof(IRoleStore<>).MakeGenericType(roleType),
                         provider => provider.CreateRoleStore(roleStoreType));
             }
             else

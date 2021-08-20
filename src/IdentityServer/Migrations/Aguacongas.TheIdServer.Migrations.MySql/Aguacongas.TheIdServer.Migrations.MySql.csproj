@@ -23,12 +23,13 @@
       <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
       <Content Include="THIRD-PARTY-NOTICES">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	<CopyToPublishDirectory>Never</CopyToPublishDirectory>
       </Content>
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.6" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.9" />
 	</ItemGroup>
 	
 	<ItemGroup>

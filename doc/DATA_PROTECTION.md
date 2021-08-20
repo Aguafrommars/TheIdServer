@@ -83,6 +83,14 @@ For *EntityFramework* storage king, keys are store in the **DataProtectionKeys**
 
 For *RavenDb* storage king, keys are store in the **DataProtectionKeys** document of RavenDb database
 
+### MongoDb
+
+```js
+  "StorageKind": "MongoDb"
+```
+
+For *MongoDb* storage king, keys are store in the **DataProtectionKeys** collection of MongoDb database
+
 ### Registry
 Only applies to Windows deployments.
 
