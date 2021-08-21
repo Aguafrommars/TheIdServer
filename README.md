@@ -68,7 +68,13 @@ Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/m
 
 ## Build from source
 
-You can build the solution with Visual Studio or use the `dotnet build` command.
+You can build the solution with Visual Studio or use the `dotnet build` command.  
+To build docker images launch at solution root: 
+
+```bash
+docker build -t aguacongas/theidserver:dev -f "./src/Aguacongas.TheIdServer/Dockerfile" .
+docker build -t aguacongas/theidserverapp:dev -f "./src/Aguacongas.TheIdServer.BlazorApp/Dockerfile" .
+```
 
 ## Contribute
 
