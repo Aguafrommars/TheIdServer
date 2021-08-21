@@ -16,7 +16,6 @@
 		<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
-		<DockerfileRunArguments>--network agua</DockerfileRunArguments>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
