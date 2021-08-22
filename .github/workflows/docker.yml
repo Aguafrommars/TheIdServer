@@ -16,7 +16,7 @@ on:
     - release/*
     - preview/*
   
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   docker:
