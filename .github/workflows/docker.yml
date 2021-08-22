@@ -9,11 +9,13 @@ on:
     - main
     - release/*
     - preview/*
-  pull_request
+    
+  pull_request:
     branches:
     - main
     - release/*
     - preview/*
+  
   workflow_dispatch
 
 jobs:
