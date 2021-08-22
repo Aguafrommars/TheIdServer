@@ -16,4 +16,3 @@ if ($LASTEXITCODE -ne 0) {
 7z a $path\artifacts\build\Aguacongas.TheIdServer.$env:version.zip $path\artifacts\Aguacongas.TheIdServer
 
 7z a $path\artifacts\build\Aguacongas.TheIdServer.BlazorApp$env:version.zip $path\artifacts\Aguacongas.TheIdServer.BlazorApp
-

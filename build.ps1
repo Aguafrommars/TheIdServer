@@ -42,5 +42,3 @@ ReportGenerator\tools\netcoreapp3.0\ReportGenerator.exe "-reports:$merge" "-targ
 dotnet sonarscanner end -d:sonar.login=$env:sonarqube
 
 exit $result
-
-  
