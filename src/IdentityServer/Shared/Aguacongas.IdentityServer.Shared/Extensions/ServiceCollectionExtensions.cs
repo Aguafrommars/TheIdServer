@@ -7,9 +7,15 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Identity;
 using Aguacongas.TheIdServer.Models;
+#if DUENDE
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
+using Duende.IdentityServer.Stores.Serialization;
+#else
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+#endif
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;

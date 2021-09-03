@@ -1,7 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using AutoMapper.Internal;
+#if DUENDE
+using Duende.IdentityServer.Models;
+#else
 using IdentityServer4.Models;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Globalization;

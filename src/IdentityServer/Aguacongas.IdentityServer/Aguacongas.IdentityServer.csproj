@@ -28,8 +28,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq" Version="1.4.3" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
+		<PackageReference Include="IdentityModel" Version="5.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />

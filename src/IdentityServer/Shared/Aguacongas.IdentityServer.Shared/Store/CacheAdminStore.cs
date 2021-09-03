@@ -1,7 +1,13 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
+#if DUENDE
+using Duende.IdentityServer.Extensions;
+using Configuration = Duende.IdentityServer.Configuration;
+#else
 using IdentityServer4.Extensions;
+using Configuration = IdentityServer4.Configuration;
+#endif
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -17,13 +23,13 @@ namespace Aguacongas.IdentityServer.Store
         private readonly IFlushableCache<TEntity> _entityCache;
         private readonly IFlushableCache<PageResponse<TEntity>> _responseCache;
         private readonly ILogger<CacheAdminStore<TStore, TEntity>> _logger;
-        private readonly IdentityServer4.Configuration.IdentityServerOptions _options;
+        private readonly Configuration.IdentityServerOptions _options;
 
         public CacheAdminStore(TStore parent,
             IFlushableCache<TEntity> entityCache,
             IFlushableCache<PageResponse<TEntity>> responseCache,
             ILogger<CacheAdminStore<TStore, TEntity>> logger, 
-            IdentityServer4.Configuration.IdentityServerOptions options)
+            Configuration.IdentityServerOptions options)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _entityCache = entityCache ?? throw new ArgumentNullException(nameof(entityCache));

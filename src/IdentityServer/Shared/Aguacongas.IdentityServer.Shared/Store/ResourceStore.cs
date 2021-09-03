@@ -1,12 +1,17 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
+#if DUENDE
+using Duende.IdentityServer.Stores;
+using Models = Duende.IdentityServer.Models;
+#else
 using IdentityServer4.Stores;
+using Models = IdentityServer4.Models;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Models = IdentityServer4.Models;
 
 namespace Aguacongas.IdentityServer.Store
 {
