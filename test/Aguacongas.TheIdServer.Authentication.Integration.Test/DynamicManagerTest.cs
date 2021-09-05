@@ -25,7 +25,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
         {
             var httpClient = _fixture.Sut.CreateClient();
             httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "/api");
-            builder.Services.AddIdentityServer4AdminHttpStores(p =>
+            builder.Services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
             });

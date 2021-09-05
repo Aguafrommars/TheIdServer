@@ -40,8 +40,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
-  </ItemGroup>
-
 </Project>

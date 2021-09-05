@@ -63,7 +63,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             });
 
             services.AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
-                .AddIdentityServer4AdminHttpStores(p =>
+                .AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));
                 })

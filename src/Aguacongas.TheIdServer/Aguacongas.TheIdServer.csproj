@@ -16,6 +16,7 @@
 		<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
@@ -25,23 +26,10 @@
 		<NoWarn>1701;1702;CA1416</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Content Remove="compilerconfig.json" />
-	</ItemGroup>
-	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="compilerconfig.json" />
-	</ItemGroup>
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="compilerconfig.json" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.4.1" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
-		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
@@ -62,9 +50,6 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Page Include="Pages\_Host.cshtml" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
@@ -81,27 +66,26 @@
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.SqlServer\Aguacongas.TheIdServer.Migrations.SqlServer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Update="wwwroot\favicon.ico">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
+		<Content Update="wwwroot\favicon.ico">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="cluster.admin.client.certificate.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="idsrvtest.pfx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="TheIdServer.crt">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="theidserver.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="cluster.admin.client.certificate.pfx">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="idsrvtest.pfx">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="TheIdServer.crt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="theidserver.pfx">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

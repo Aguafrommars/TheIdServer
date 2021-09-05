@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
             var services = new ServiceCollection().AddLogging();
             
             var wrapper = new RavenDbTestDriverWrapper();
-            services.AddIdentityServer4AdminRavenDbStores()
+            services.AddTheIdServerRavenDbStores()
                 .AddLogging()
                 .Configure<MemoryCacheOptions>(options => { })
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
             var services = new ServiceCollection().AddLogging();
 
             var wrapper = new RavenDbTestDriverWrapper();
-            services.AddIdentityServer4AdminRavenDbStores(p => new RavenDbTestDriverWrapper().GetDocumentStore())
+            services.AddTheIdServerRavenDbStores(p => new RavenDbTestDriverWrapper().GetDocumentStore())
                 .AddLogging()
                 .Configure<MemoryCacheOptions>(options => { })
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })

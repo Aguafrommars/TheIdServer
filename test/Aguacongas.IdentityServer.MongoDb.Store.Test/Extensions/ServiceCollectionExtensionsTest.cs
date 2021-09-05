@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.Extensions
         {
             var services = new ServiceCollection().AddLogging();
 
-            services.AddIdentityServer4AdminMongoDbStores("mongodb://localhost/test")
+            services.AddTheIdServerMongoDbStores("mongodb://localhost/test")
                 .AddLogging()
                 .Configure<MemoryCacheOptions>(options => { })
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })
@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.Extensions
 
             var connectionString = "mongodb://localhost/test";
             var uri = new Uri(connectionString);
-            services.AddIdentityServer4AdminMongoDbStores(p => p.GetRequiredService<IMongoDatabase>())
+            services.AddTheIdServerMongoDbStores(p => p.GetRequiredService<IMongoDatabase>())
                 .AddLogging()
                 .Configure<MemoryCacheOptions>(options => { })
                 .Configure<IdentityServer4.Configuration.IdentityServerOptions>(options => { })

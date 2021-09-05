@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
@@ -94,7 +94,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
@@ -131,7 +131,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
@@ -163,7 +163,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
@@ -210,7 +210,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
@@ -233,7 +233,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
             var provider = services
-                .AddIdentityServer4AdminMongoDbStores(p => _database)
+                .AddTheIdServerMongoDbStores(p => _database)
                 .BuildServiceProvider();
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();

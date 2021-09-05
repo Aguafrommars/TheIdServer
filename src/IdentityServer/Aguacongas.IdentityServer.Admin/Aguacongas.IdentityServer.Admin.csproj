@@ -3,12 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
-        <Description>Expose OData controllers to manage IdentityServer4.</Description>
+        <Description>Expose OData controllers to manage TheIdServer.</Description>
         <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.Admin</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>theidserver;identityserver4;administration</PackageTags>
+        <PackageTags>theidserver;administration</PackageTags>
         <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageIcon>package-icon.png</PackageIcon>
@@ -28,8 +28,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Community.OData.Linq.Json" Version="1.4.3" />		
-		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
+		<PackageReference Include="Community.OData.Linq.Json" Version="1.4.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
 		<PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.9" />

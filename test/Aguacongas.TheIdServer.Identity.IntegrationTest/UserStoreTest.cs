@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                 p => p.CreateUserStore(userOnlyStoreType, userStoreType));
             var httpClient = _fixture.Sut.CreateClient();
             httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "/api");
-            services.AddIdentityServer4AdminHttpStores(p =>
+            services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
             }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
@@ -72,7 +72,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                 p => p.CreateRoleStore(roleStoreType));
             var httpClient = _fixture.Sut.CreateClient();
             httpClient.BaseAddress = new Uri(httpClient.BaseAddress, "/api"); 
-            services.AddIdentityServer4AdminHttpStores(p =>
+            services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
             }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));

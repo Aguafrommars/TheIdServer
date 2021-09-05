@@ -15,6 +15,14 @@
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Absractions\IFlushableCache.cs" Link="Absractions\IFlushableCache.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Absractions\IProvideClaims.cs" Link="Absractions\IProvideClaims.cs" />

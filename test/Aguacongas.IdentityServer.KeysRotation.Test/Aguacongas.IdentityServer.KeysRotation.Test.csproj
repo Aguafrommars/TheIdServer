@@ -23,9 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
-		<ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
-		<ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
+		<ProjectReference Include="..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.Admin.IS4\Aguacongas.IdentityServer.Admin.IS4.csproj" />
+		<ProjectReference Include="..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj" />
+		<ProjectReference Include="..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.KeysRotation.IS4\Aguacongas.IdentityServer.KeysRotation.IS4.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

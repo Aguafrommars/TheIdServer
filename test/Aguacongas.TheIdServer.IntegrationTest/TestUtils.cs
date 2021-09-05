@@ -151,7 +151,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         configure.AddProvider(new TestLoggerProvider(testOutputHelper));
                     })
                     .AddTransient(p => sut.CreateHandler())
-                    .AddIdentityServer4AdminHttpStores(p =>
+                    .AddAdminHttpStores(p =>
                     {
                         var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
                             p.GetRequiredService<NavigationManager>())

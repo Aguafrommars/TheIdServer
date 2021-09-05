@@ -10,13 +10,28 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
-    class ExternalProviderFilter : IAsyncResultFilter
+    /// <summary>
+    ///    
+    /// </summary>
+    public class ExternalProviderFilter : IAsyncResultFilter
     {
         private readonly IAuthenticationSchemeOptionsSerializer _serializer;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serializer"></param>
         public ExternalProviderFilter(IAuthenticationSchemeOptionsSerializer serializer)
         {
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
             var result = context.Result as ObjectResult;

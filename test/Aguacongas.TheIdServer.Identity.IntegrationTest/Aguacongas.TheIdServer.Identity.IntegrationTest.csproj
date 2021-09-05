@@ -37,7 +37,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
-    <ProjectReference Include="..\..\src\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
   </ItemGroup>
 
 </Project>

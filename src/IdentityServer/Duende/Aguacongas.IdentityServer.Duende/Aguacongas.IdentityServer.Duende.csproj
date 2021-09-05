@@ -3,12 +3,13 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
+		<Description>TheIdServer base classes for Duende.IdentityServer.</Description>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4</PackageTags>
+		<PackageTags>theidserver;duede.identityserver</PackageTags>
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>

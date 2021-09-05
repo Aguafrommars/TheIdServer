@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
-    <ProjectReference Include="..\..\src\IdentityServer\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
+    <ProjectReference Include="..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj" />
   </ItemGroup>
 
 </Project>

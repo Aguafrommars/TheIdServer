@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
-    class ActionsFilter : IActionFilter
+    public class ActionsFilter : IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {

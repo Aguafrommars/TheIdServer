@@ -34,8 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
-                .AddIdentityServer4AdminHttpStores(getHttpClient)
-                .AddConfigurationStores();
+                .AddAdminHttpStores(getHttpClient);
         }
 
         /// <summary>
