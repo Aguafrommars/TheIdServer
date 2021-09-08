@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
 {
     public class TheIdServerTestFixture
     {
-        private readonly TestLoggerProvider _testLoggerProvider = new TestLoggerProvider();
+        private readonly TestLoggerProvider _testLoggerProvider = new();
         /// <summary>
         /// Gets the system under test
         /// </summary>

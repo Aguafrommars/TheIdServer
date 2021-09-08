@@ -66,12 +66,6 @@
 		<ProjectReference Include="..\IdentityServer\Migrations\Aguacongas.TheIdServer.Migrations.SqlServer\Aguacongas.TheIdServer.Migrations.SqlServer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Update="wwwroot\favicon.ico">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-	<ItemGroup>
 		<None Update="cluster.admin.client.certificate.pfx">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.Areas.Identity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Builder;
@@ -51,7 +52,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .ReadFrom.Configuration(hostingContext.Configuration))
                 .ConfigureAppConfiguration(builder =>
                 {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     if (configurationOverrides != null)
                     {
@@ -98,6 +99,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     }
                     startup.Configure(builder);
                 });
+
+            new IdentityHostingStartup().Configure(webHostBuilder);
 
             var testServer = new TestServer(webHostBuilder);
 

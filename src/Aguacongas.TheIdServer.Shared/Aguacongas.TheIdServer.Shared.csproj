@@ -14,6 +14,9 @@
 		<None Include="**\*.cshtml" />
 	</ItemGroup>
 	<ItemGroup>
+		<Content Remove="**\*.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
 		<EmbeddedResource Remove="obj\**" />
 		<None Remove="obj\**" />
 	</ItemGroup>

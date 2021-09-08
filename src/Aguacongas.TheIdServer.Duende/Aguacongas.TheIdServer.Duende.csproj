@@ -16,8 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Grants.cshtml.cs" />
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Boot.cs" Link="Boot.cs" />
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\IdentityServerBuilderExtensions.cs" Link="Extensions\IdentityServerBuilderExtensions.cs" />
@@ -53,37 +58,39 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\Aguacongas.TheIdServer.Shared\appsettings.Development.json" Link="appsettings.Development.json" />
-    <Content Include="..\Aguacongas.TheIdServer.Shared\appsettings.json" Link="appsettings.json" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json" Link="compilerconfig.json" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\libman.json" Link="libman.json" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\ScaffoldingReadMe.txt" Link="ScaffoldingReadMe.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Grants.cshtml" Link="Areas\Identity\Pages\Account\Grants.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewImports.cshtml" Link="Areas\Identity\Pages\_ViewImports.cshtml" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewStart.cshtml" Link="Areas\Identity\Pages\_ViewStart.cshtml" />
     <None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
     <None Include="..\Aguacongas.TheIdServer.Shared\README.md" Link="README.md" />
     <None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
     <None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Account\LoggedOut.cshtml" Link="Views\Account\LoggedOut.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Login.cshtml" Link="Views\Account\Login.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Logout.cshtml" Link="Views\Account\Logout.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Consent\Index.cshtml" Link="Views\Consent\Index.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Device\Success.cshtml" Link="Views\Device\Success.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeCapture.cshtml" Link="Views\Device\UserCodeCapture.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeConfirmation.cshtml" Link="Views\Device\UserCodeConfirmation.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Diagnostics\Index.cshtml" Link="Views\Diagnostics\Index.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Error.cshtml" Link="Views\Shared\Error.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Redirect.cshtml" Link="Views\Shared\Redirect.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_Layout.cshtml" Link="Views\Shared\_Layout.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_LoginPartial.cshtml" Link="Views\Shared\_LoginPartial.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ScopeListItem.cshtml" Link="Views\Shared\_ScopeListItem.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ValidationSummary.cshtml" Link="Views\Shared\_ValidationSummary.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewImports.cshtml" Link="Views\_ViewImports.cshtml" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewStart.cshtml" Link="Views\_ViewStart.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\LoggedOut.cshtml" Link="Views\Account\LoggedOut.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Login.cshtml" Link="Views\Account\Login.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Logout.cshtml" Link="Views\Account\Logout.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Consent\Index.cshtml" Link="Views\Consent\Index.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\Success.cshtml" Link="Views\Device\Success.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeCapture.cshtml" Link="Views\Device\UserCodeCapture.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeConfirmation.cshtml" Link="Views\Device\UserCodeConfirmation.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Diagnostics\Index.cshtml" Link="Views\Diagnostics\Index.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Error.cshtml" Link="Views\Shared\Error.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Redirect.cshtml" Link="Views\Shared\Redirect.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_Layout.cshtml" Link="Views\Shared\_Layout.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_LoginPartial.cshtml" Link="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ScopeListItem.cshtml" Link="Views\Shared\_ScopeListItem.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ValidationSummary.cshtml" Link="Views\Shared\_ValidationSummary.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewImports.cshtml" Link="Views\_ViewImports.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewStart.cshtml" Link="Views\_ViewStart.cshtml" />
+    <None Include="appsettings.Development.json" />
+    <None Include="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -91,7 +98,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Pages\Account\" />
+    <Folder Include="Areas\Identity\Pages\Account\Manage\" />
     <Folder Include="Extensions\" />
     <Folder Include="Quickstart\Account\" />
     <Folder Include="Quickstart\Consent\" />
@@ -102,7 +109,6 @@
     <Folder Include="Views\Consent\" />
     <Folder Include="Views\Device\" />
     <Folder Include="Views\Diagnostics\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
 
   <ItemGroup>

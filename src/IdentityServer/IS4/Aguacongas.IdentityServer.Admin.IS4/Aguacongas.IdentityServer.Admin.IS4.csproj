@@ -20,6 +20,7 @@
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Extensions\MvcBuilderExtensions.cs" Link="Extensions\MvcBuilderExtensions.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\GenericControllerFeatureProvider.cs" Link="GenericControllerFeatureProvider.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Models\ClientRegisteration.cs" Link="Models\ClientRegisteration.cs" />
+	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\RegisterController.cs" Link="RegisterController.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ClientRegisterationConverter.cs" Link="Services\ClientRegisterationConverter.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CustomJwtRequestValidator.cs" Link="Services\CustomJwtRequestValidator.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\IRegisterClientService.cs" Link="Services\IRegisterClientService.cs" />

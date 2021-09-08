@@ -79,6 +79,7 @@ namespace Aguacongas.TheIdServer
 
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
                 .AddIdentityProviderStore()
+                .AddConfigurationStores()
                 .AddOperationalStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => Configuration.GetSection(nameof(IdentityOptions)).Bind(options))
@@ -87,7 +88,7 @@ namespace Aguacongas.TheIdServer
 
             if (isProxy)
             {
-                services.AddConfigurationHttpStores(configureOptions);
+                services.AddAdminHttpStores(configureOptions);
             }
             else
             {

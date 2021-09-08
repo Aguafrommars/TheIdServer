@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                     .ReadFrom.Configuration(hostingContext.Configuration))
                 .ConfigureAppConfiguration(builder =>
                 {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer\appsettings.json"));
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     if (configurationOverrides != null)
                     {

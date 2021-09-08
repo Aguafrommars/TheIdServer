@@ -1,9 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Areas.Identity;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,11 +34,17 @@ namespace Aguacongas.TheIdServer
             await host.RunAsync().ConfigureAwait(false);
         }
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        private static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>()
-                    .UseSerilog((hostingContext, configuration) =>
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseSetting(
+                            WebHostDefaults.HostingStartupAssembliesKey,
+                            typeof(IdentityHostingStartup).Assembly.FullName)
+                        .UseStartup<Startup>();
+                })
+                .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration));
         }
     }
