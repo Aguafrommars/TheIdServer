@@ -6,4 +6,5 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.Duende")]
 
 // for unit testing
-[assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.Test")]
+[assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.IS4.Test")]
+[assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.Duende.Test")]

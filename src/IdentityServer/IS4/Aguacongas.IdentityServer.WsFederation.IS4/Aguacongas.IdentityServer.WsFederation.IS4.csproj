@@ -26,6 +26,7 @@
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\ISignInValidator.cs" Link="Validation\ISignInValidator.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\SignInValidationResult.cs" Link="Validation\SignInValidationResult.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\SignInValidator.cs" Link="Validation\SignInValidator.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationController.cs" Link="WsFederationController.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationEndSessionRequestValidator.cs" Link="WsFederationEndSessionRequestValidator.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationService.cs" Link="WsFederationService.cs" />
   </ItemGroup>

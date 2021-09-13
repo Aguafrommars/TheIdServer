@@ -2,4 +2,4 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.Test")]
+[assembly: InternalsVisibleTo("Aguacongas.IdentityServer.KeysRotation.IS4.Test")]

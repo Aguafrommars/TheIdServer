@@ -4,7 +4,6 @@ using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.Extensions;
-using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;

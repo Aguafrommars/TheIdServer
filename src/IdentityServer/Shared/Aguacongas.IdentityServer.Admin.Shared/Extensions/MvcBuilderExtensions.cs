@@ -125,6 +125,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             builder.AddApplicationPart(assembly)
+                .AddApplicationPart(typeof(GenericApiController<>).Assembly)
                 .ConfigureApplicationPartManager(apm =>
                     apm.FeatureProviders.Add(new GenericControllerFeatureProvider()));
 

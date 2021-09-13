@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The services.</param>
         /// <param name="optionsAction">The options action.</param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection AddTheIdServerAdminEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
             AddStoresForContext(services, typeof(ApplicationDbContext));
             return services.AddDbContext<ApplicationDbContext>(optionsAction);
@@ -29,16 +29,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddConfigurationEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
-            AddStoresForContext(services, typeof(ConfigurationDbContext));            
-            return services.AddDbContext<ConfigurationDbContext>(optionsAction)
-                .AddConfigurationStores();
+            AddStoresForContext(services, typeof(ConfigurationDbContext));
+            return services.AddDbContext<ConfigurationDbContext>(optionsAction);
         }
 
         public static IServiceCollection AddOperationalEntityFrameworkStores(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
         {
             AddStoresForContext(services, typeof(OperationalDbContext));
-            return services.AddDbContext<OperationalDbContext>(optionsAction)
-                .AddOperationalStores();
+            return services.AddDbContext<OperationalDbContext>(optionsAction);
         }
 
         private static void AddStoresForContext(IServiceCollection services, Type dbContextType)

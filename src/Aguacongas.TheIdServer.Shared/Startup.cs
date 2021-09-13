@@ -156,7 +156,6 @@ namespace Aguacongas.TheIdServer
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerAuthenticationOptions(options));
 
-
             var mvcBuilder = services.Configure<SendGridOptions>(Configuration)
                 .AddLocalization()
                 .AddControllersWithViews(options =>
@@ -455,7 +454,7 @@ namespace Aguacongas.TheIdServer
             }
             else
             {
-                services.AddIdentityServer4AdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
+                services.AddTheIdServerAdminEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddConfigurationEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration))
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(Configuration));
             }

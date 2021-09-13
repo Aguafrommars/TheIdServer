@@ -69,8 +69,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 .GetAsync($"claimsprovider?resourceName={resource.Name}&userId={subject.GetSubjectId()}&clientId={client.ClientId}&caller={caller}&providerTypeName={providerTypeName}")
                 .ConfigureAwait(false);
 
-            response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
             var page = JsonSerializer.Deserialize<PageResponse<Entity.UserClaim>>(content, _jsonSerializerOptions);
 

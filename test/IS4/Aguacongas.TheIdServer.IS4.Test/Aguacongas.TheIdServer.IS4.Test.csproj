@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\DbContextOptionsBuilderExtensionsTest.cs" Link="DbContextOptionsBuilderExtensionsTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\ExternalClaimsTransformerTest.cs" Link="ExternalClaimsTransformerTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\Services\KeyStoreTest.cs" Link="Services\KeyStoreTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\StartupTest.cs" Link="StartupTest.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.1.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.IS4\Aguacongas.TheIdServer.IS4.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="theidserver.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

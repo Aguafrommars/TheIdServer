@@ -187,7 +187,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var match = list.FirstOrDefault(x => x.ClientId == other.ClientId);
                 if (match != null)
                 {
-                    match.Scopes = match.Scopes.Union(other.Scopes).Distinct();
+                    match.Scopes = (match.Scopes ?? Array.Empty<string>()).Union(other.Scopes ?? Array.Empty<string>()).Distinct();
 
                     if (match.CreationTime > other.CreationTime)
                     {
