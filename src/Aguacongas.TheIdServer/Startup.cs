@@ -345,7 +345,6 @@ namespace Aguacongas.TheIdServer
             {
                 OnMessageReceived = context =>
                 {
-                    var events = new JwtBearerEvents();
                     var request = context.HttpContext.Request;
                     var path = request.Path;
                     var accessToken = TokenRetrieval.FromQueryString()(request);
