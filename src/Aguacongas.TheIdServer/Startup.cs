@@ -7,6 +7,7 @@ using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
@@ -359,7 +360,7 @@ namespace Aguacongas.TheIdServer
                         context.Token = request.HttpContext
                             .RequestServices
                             .GetRequiredService<IRetrieveOneTimeToken>()
-                            .GetOneTimeToken(oneTimeToken);
+                            .ConsumeOneTimeToken(oneTimeToken);
                         return Task.CompletedTask;
                     }
                     context.Token = TokenRetrieval.FromAuthorizationHeader()(request);
@@ -370,13 +371,21 @@ namespace Aguacongas.TheIdServer
             options.ForwardDefaultSelector = context =>
             {
                 var request = context.Request;
-                var token = TokenRetrieval.FromQueryString("otk")(request) ?? TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
+                var token = TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
                 if (string.IsNullOrEmpty(token))
                 {
-                    return null;
+                    var otk = TokenRetrieval.FromQueryString("otk")(request);
+                    if (otk == null)
+                    {
+                        return null;
+                    }
+                    token = request.HttpContext
+                            .RequestServices
+                            .GetRequiredService<IRetrieveOneTimeToken>()
+                            .GetOneTimeToken(otk);
                 }
 
-                if (!token.Contains("."))
+                if (token?.Contains(".") == false)
                 {
                     return "introspection";
                 }
@@ -404,7 +413,7 @@ namespace Aguacongas.TheIdServer
                     return request.HttpContext
                         .RequestServices
                         .GetRequiredService<IRetrieveOneTimeToken>()
-                        .GetOneTimeToken(oneTimeToken);
+                        .ConsumeOneTimeToken(oneTimeToken);
                 }
                 return TokenRetrieval.FromAuthorizationHeader()(request);
             }
