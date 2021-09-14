@@ -351,6 +351,7 @@ namespace Aguacongas.TheIdServer
                 };
             }
             options.Audience = Configuration["ApiAuthentication:ApiName"];
+
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
