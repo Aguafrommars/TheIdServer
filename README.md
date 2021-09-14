@@ -4,11 +4,8 @@
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver)
- [![][Docker Cloud Build Status]][Docker url] [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
-
-[Docker Cloud Build Status]: https://img.shields.io/docker/cloud/build/aguacongas/theidserver?logo=docker
-[Docker url]: https://hub.docker.com/repository/docker/aguacongas/theidserver
+[![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver) [[![Docker](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml/badge.svg)](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml)]
+  [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
 
 
 ### [Try it now at https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/)
@@ -68,7 +65,13 @@ Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/m
 
 ## Build from source
 
-You can build the solution with Visual Studio or use the `dotnet build` command.
+You can build the solution with Visual Studio or use the `dotnet build` command.  
+To build docker images launch at solution root: 
+
+```bash
+docker build -t aguacongas/theidserver:dev -f "./src/Aguacongas.TheIdServer/Dockerfile" .
+docker build -t aguacongas/theidserverapp:dev -f "./src/Aguacongas.TheIdServer.BlazorApp/Dockerfile" .
+```
 
 ## Contribute
 
