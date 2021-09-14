@@ -370,7 +370,7 @@ namespace Aguacongas.TheIdServer
             options.ForwardDefaultSelector = context =>
             {
                 var request = context.Request;
-                var token = TokenRetrieval.FromQueryString("otk")(request) ?? TokenRetrieval.FromAuthorizationHeader()(request);
+                var token = TokenRetrieval.FromQueryString("otk")(request) ?? TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
                 if (string.IsNullOrEmpty(token))
                 {
                     return null;
