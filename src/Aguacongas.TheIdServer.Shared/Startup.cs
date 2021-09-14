@@ -7,6 +7,7 @@ using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
@@ -370,7 +371,7 @@ namespace Aguacongas.TheIdServer
                         context.Token = request.HttpContext
                             .RequestServices
                             .GetRequiredService<IRetrieveOneTimeToken>()
-                            .GetOneTimeToken(oneTimeToken);
+                            .ConsumeOneTimeToken(oneTimeToken);
                         return Task.CompletedTask;
                     }
                     context.Token = TokenRetrieval.FromAuthorizationHeader()(request);
@@ -389,18 +390,13 @@ namespace Aguacongas.TheIdServer
                     {
                         return null;
                     }
-                    var result = request.HttpContext
+                    token = request.HttpContext
                             .RequestServices
-                            .GetRequiredService<IAdminStore<OneTimeToken>>()
-                            .GetAsync(otk, new GetRequest()).GetAwaiter().GetResult();
-                    if (result?.Data == null)
-                    {
-                        return null;
-                    }
-                    token = result.Data;
+                            .GetRequiredService<IRetrieveOneTimeToken>()
+                            .GetOneTimeToken(otk);
                 }
 
-                if (!token.Contains("."))
+                if (token?.Contains(".") == false)
                 {
                     return "introspection";
                 }
@@ -428,7 +424,7 @@ namespace Aguacongas.TheIdServer
                     return request.HttpContext
                         .RequestServices
                         .GetRequiredService<IRetrieveOneTimeToken>()
-                        .GetOneTimeToken(oneTimeToken);
+                        .ConsumeOneTimeToken(oneTimeToken);
                 }
                 return TokenRetrieval.FromAuthorizationHeader()(request);
             }
