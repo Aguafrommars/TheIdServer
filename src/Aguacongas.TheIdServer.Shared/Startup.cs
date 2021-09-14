@@ -373,19 +373,14 @@ namespace Aguacongas.TheIdServer
 
             options.ForwardDefaultSelector = context =>
             {
-                var authHeader = context.Request.Headers[HttpRequestHeader.Authorization.ToString()];
-                if (string.IsNullOrEmpty(authHeader))
+                var request = context.Request;
+                var token = TokenRetrieval.FromQueryString("otk")(request) ?? TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
+                if (string.IsNullOrEmpty(token))
                 {
                     return null;
                 }
 
-                var parts = authHeader.First().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length != 2)
-                {
-                    return null;
-                }
-
-                if (!parts[1].Contains("."))
+                if (!token.Contains("."))
                 {
                     return "introspection";
                 }
