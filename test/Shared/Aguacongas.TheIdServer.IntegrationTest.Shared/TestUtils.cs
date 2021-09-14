@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +44,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
         public static TestServer CreateTestServer(
                     Action<IServiceCollection> configureServices = null,
-                    IEnumerable<KeyValuePair<string, string>> configurationOverrides = null)
+                    IEnumerable<KeyValuePair<string, string>> configurationOverrides = null,
+                    Action<IEndpointRouteBuilder, bool> configureEndpoints = null)
         {
             Startup startup = null;
             var webHostBuilder = new WebHostBuilder()
@@ -101,6 +103,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                             // silent
                         }
                     }
+
+                    startup.ConfigureEndpoints = configureEndpoints ?? startup.ConfigureEndpoints;
                     startup.Configure(builder);
                 });
 
@@ -258,7 +262,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     {
                         Expires = DateTimeOffset.Now.AddDays(1),
                         GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
-                        Value = "test"
                     },
                     "http://exemple.com"));
             }

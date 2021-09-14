@@ -53,6 +53,8 @@ using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.Routing;
+using Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer
 {
@@ -62,6 +64,18 @@ namespace Aguacongas.TheIdServer
         public IWebHostEnvironment Environment { get; }
 
         public DbTypes DbType { get; }
+
+        public Action<IEndpointRouteBuilder, bool> ConfigureEndpoints { get; set; } = (endpoints, isProxy) =>
+        {
+            endpoints.MapRazorPages();
+            endpoints.MapDefaultControllerRoute();
+            if (!isProxy)
+            {
+                endpoints.MapHub<ProviderHub>("/providerhub");
+            }
+
+            endpoints.MapFallbackToPage("/_Host");
+        };
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -270,6 +284,7 @@ namespace Aguacongas.TheIdServer
                 app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
+            
             app
                 .UseAuthorization()
                 .Use((context, next) =>
@@ -283,19 +298,10 @@ namespace Aguacongas.TheIdServer
                     remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
                     return next();
                 })
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapRazorPages();
-                    endpoints.MapDefaultControllerRoute();
-                    if (!isProxy)
-                    {
-                        endpoints.MapHub<ProviderHub>("/providerhub");
-                    }
-
-                    endpoints.MapFallbackToPage("/_Host");
-                });
-
+                .UseEndpoints(endpoints => ConfigureEndpoints(endpoints, isProxy));
+#if !DUENDE
             app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+#endif
         }
 
         private void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy)
@@ -374,10 +380,23 @@ namespace Aguacongas.TheIdServer
             options.ForwardDefaultSelector = context =>
             {
                 var request = context.Request;
-                var token = TokenRetrieval.FromQueryString("otk")(request) ?? TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
+                var token = TokenRetrieval.FromAuthorizationHeader()(request) ?? TokenRetrieval.FromQueryString()(request);
                 if (string.IsNullOrEmpty(token))
                 {
-                    return null;
+                    var otk = TokenRetrieval.FromQueryString("otk")(request);
+                    if (otk == null)
+                    {
+                        return null;
+                    }
+                    var result = request.HttpContext
+                            .RequestServices
+                            .GetRequiredService<IAdminStore<OneTimeToken>>()
+                            .GetAsync(otk, new GetRequest()).GetAwaiter().GetResult();
+                    if (result?.Data == null)
+                    {
+                        return null;
+                    }
+                    token = result.Data;
                 }
 
                 if (!token.Contains("."))

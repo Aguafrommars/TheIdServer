@@ -6,9 +6,11 @@ using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.AspNetCore.TestHost;
@@ -66,7 +68,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 services.AddTransient(p => server.CreateClient());
                 services.RemoveAll<HttpClientHandler>();
                 services.AddTransient<HttpClientHandler>(p => new MockHttpClientHandler(p.GetRequiredService<HttpClient>()));
-            }, configuration);
+            }, configuration, (endpoints, isProxy) =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapDefaultControllerRoute();
+                if (!isProxy)
+                {
+                    endpoints.MapHub<ProviderHub>("/providerhub");
+                }
+            });
 
             server.CreateWebSocketClient();
 
