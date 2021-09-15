@@ -33,10 +33,10 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.9" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.9" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.9" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.10" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
 	</ItemGroup>
 
