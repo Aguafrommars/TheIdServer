@@ -31,21 +31,18 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
-        private readonly IClientStore _clientStore;
         private readonly ILogger<LoginWith2faModel> _logger;
         private readonly IStringLocalizer _localizer;
 
         public LoginWith2faModel(SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IEventService events,
-            IClientStore clientStore,
             ILogger<LoginWith2faModel> logger,
             IStringLocalizer<LoginWith2faModel> localizer)
         {
             _signInManager = signInManager;
             _interaction = interaction;
             _events = events;
-            _clientStore = clientStore;
             _logger = logger;
             _localizer = localizer;
         }

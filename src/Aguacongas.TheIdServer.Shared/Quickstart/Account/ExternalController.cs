@@ -37,7 +37,6 @@ namespace Aguacongas.TheIdServer.UI
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clientStore;
         private readonly IEventService _events;
         private readonly IOptions<AccountOptions> _options;
         private readonly ILogger<ExternalController> _logger;
@@ -46,7 +45,6 @@ namespace Aguacongas.TheIdServer.UI
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
-            IClientStore clientStore,
             IEventService events,
             IOptions<AccountOptions> options,
             ILogger<ExternalController> logger)
@@ -54,7 +52,6 @@ namespace Aguacongas.TheIdServer.UI
             _userManager = userManager;
             _signInManager = signInManager;
             _interaction = interaction;
-            _clientStore = clientStore;
             _events = events;
             _options = options;
             _logger = logger;
@@ -304,7 +301,7 @@ namespace Aguacongas.TheIdServer.UI
         }
 
 
-        private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
+        private static void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out

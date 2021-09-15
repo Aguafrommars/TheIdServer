@@ -184,11 +184,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
                 HandleModificationState.EntityUpdated(Model);
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
-            catch (CryptographicException e)
+            catch (CryptographicException)
             {
                 _thumbprint = new[] { Localizer["Invalid file"].Value };
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
-                return;
             }
         }
 
