@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
 #if DUENDE
@@ -11,6 +12,7 @@ using Duende.IdentityServer.Validation;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 #endif
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,6 +38,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Services
 #else
                 ["ConnectionStrings:DefaultConnection"] = "Data Source = (LocalDb)\\MSSQLLocalDB; database = TheIdServer.Test.Services.IS4; trusted_connection = yes; "
 #endif
+            }, configureEndpoints: (endpoints, isProxy) =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapDefaultControllerRoute();
+                if (!isProxy)
+                {
+                    endpoints.MapHub<ProviderHub>("/providerhub");
+                }
             });
             var provider = server.Host.Services;
 

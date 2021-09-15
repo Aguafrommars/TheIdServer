@@ -100,6 +100,7 @@ namespace Aguacongas.TheIdServer.Test
             Assert.NotNull(hubLifetimeManager);
         }
 
+#if !DUENDE
         [Fact]
         public void Configure_should_configure_initial_data()
         {
@@ -166,6 +167,7 @@ namespace Aguacongas.TheIdServer.Test
 
             storeMock.Verify();
         }
+#endif
 
         [Theory]
         [InlineData(DbTypes.InMemory)]

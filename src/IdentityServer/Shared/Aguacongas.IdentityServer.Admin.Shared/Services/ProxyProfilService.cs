@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="ProfileService{TUser}" />
     public class ProxyProfilService<TUser> : ProfileService<TUser> where TUser : class
     {
-        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };

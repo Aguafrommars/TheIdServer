@@ -47,7 +47,6 @@
 
 	<ItemGroup>
 		<Folder Include="Absractions\" />
-		<Folder Include="Store\" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -7,7 +7,6 @@ using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
@@ -20,6 +19,7 @@ using IdentityModel.AspNetCore.OAuth2Introspection;
 using Aguacongas.TheIdServer.UI;
 #if DUENDE
 using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Hosting;
 #else
 using IdentityServer4.Services;
 #endif
@@ -49,13 +49,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Routing;
-using Aguacongas.IdentityServer.Store.Entity;
+
 
 namespace Aguacongas.TheIdServer
 {
@@ -120,10 +119,27 @@ namespace Aguacongas.TheIdServer
                 .Configure<SiteOptions>(Configuration.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
+#if DUENDE
+                .Configure<IdentityServerOptions>(Configuration.GetSection(nameof(IdentityServerOptions)))
+                .AddIdentityServerBuilder()
+                .AddRequiredPlatformServices()
+                .AddCookieAuthentication()
+                .AddCoreServices()
+                .AddDefaultEndpoints()
+                .AddPluggableServices()
+                .AddKeyManagement()
+                .AddValidators()
+                .AddResponseGenerators()
+                .AddDefaultSecretParsers()
+                .AddDefaultSecretValidators()
+                .AddInMemoryPersistedGrants()
+#else
                 .AddIdentityServer(Configuration.GetSection(nameof(IdentityServerOptions)))
+#endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
                 .ConfigureKey(Configuration.GetSection("IdentityServer:Key"));
+
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
 
@@ -278,7 +294,17 @@ namespace Aguacongas.TheIdServer
                 .UseBlazorFrameworkFiles()
                 .UseStaticFiles()
                 .UseRouting()
+#if DUENDE
+                .UseMiddleware<BaseUrlMiddleware>()
+                .ConfigureCors();
+
+            new IdentityServerMiddlewareOptions().AuthenticationMiddleware(app);
+
+            app.UseMiddleware<MutualTlsEndpointMiddleware>()
+                .UseMiddleware<IdentityServerMiddleware>();
+#else
                 .UseIdentityServer();
+#endif
 
             if (!isProxy)
             {
@@ -300,9 +326,8 @@ namespace Aguacongas.TheIdServer
                     return next();
                 })
                 .UseEndpoints(endpoints => ConfigureEndpoints(endpoints, isProxy));
-#if !DUENDE
+
             app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
-#endif
         }
 
         private void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy)
