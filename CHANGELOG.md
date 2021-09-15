@@ -1,3 +1,14 @@
+## [3.0.2](https://github.com/Aguafrommars/TheIdServer/compare/3.0.1...3.0.2) (2021-09-14)
+
+
+### Bug Fixes
+
+* export doesn't work with ref token ([bc56a1c](https://github.com/Aguafrommars/TheIdServer/commit/bc56a1c6d941217cb9285b6309163a141445cd4d))
+* update packages ([f7ba226](https://github.com/Aguafrommars/TheIdServer/commit/f7ba226a75f2e7b14a947f9632c4596ddd2a1094))
+* update packages ([a246efd](https://github.com/Aguafrommars/TheIdServer/commit/a246efd67b16dc4c5aebae4b4f1a9a4b320558ba))
+* update packages ([6705ed2](https://github.com/Aguafrommars/TheIdServer/commit/6705ed2cc3cb3cefb39cce11e455998ea5ba7864))
+* update packages ([81874f3](https://github.com/Aguafrommars/TheIdServer/commit/81874f3390395714e94ad75f3b222640e3d2987e))
+
 ## [3.0.1](https://github.com/Aguafrommars/TheIdServer/compare/3.0.0...3.0.1) (2021-08-21)
 
 
