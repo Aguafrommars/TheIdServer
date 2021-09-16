@@ -1,8 +1,10 @@
-# TheIdServer Web Server project
+# TheIdServer Duende Web Server project
+
+This version of TheIdServer use [Duende IdentityServer](https://duendesoftware.com/products/identityserver), for a commercial use you need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing).  
 
 The server obtains configuration from *appsettings.json*, *appsettings.{Environment}.json*, command-line arguments, or environment variables.
 
-Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1) for more information.
+Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) for more information.
 
 ## Installation
 
@@ -14,8 +16,10 @@ The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) He
 
 ``` bash
 helm repo add aguafrommars https://aguafrommars.github.io/helm
-helm install aguafrommars theidserver --set theidserver.mysql.db.password=my-P@ssword
+helm install aguafrommars theidserver --set theidserver.mysql.db.password=my-P@ssword --set image.repository=aguacongas/theidserver.duende
 ```
+
+> By default the helm char install the IS4 version, to install the Duende version your need to set `image.repository=aguacongas/theidserver.duende`.
 
 #### Upgrade
 
@@ -23,17 +27,19 @@ Follow upgrades intstructions in the [chart readme](https://github.com/Aguafromm
 
 ### From Docker
 
-A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver) is available on Docker Hub.
+A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver.duende) is available on Docker Hub.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a private Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile.Duende-private*](../../sample/MultiTiers/Aguacongas.TheIdServer.Private/Dockerfile.Duende-private) demonstrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a private Linux server container.
 
-[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a public Linux server container.
+[*sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile.Duende-public*](../../sample/MultiTiers/Aguacongas.TheIdServer.Public/Dockerfile.Duende-public) illustrates how to create an image from the [server image](https://hub.docker.com/r/aguacongas/theidserver) to run a public Linux server container.
 
-Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1) to set up the HTTPS certificate.
+Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https) to set up the HTTPS certificate.
 
 #### Kubernetes sample
 
 [/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to set up a solution with Kubernetes.
+
+> The sample use the IS4 version but you just need to use `aguacongas/theidserver.duende` as docker image in the deployement file.
 
 ### From dotnet new template
 
@@ -62,18 +68,21 @@ Running 'dotnet restore' on TheIdServer\TheIdServer.sln...
   Restored C:\Projects\Perso\Templates\artifacts\TheIdServer\test\TheIdServer.IntegrationTest\TheIdServer.IntegrationTest.csproj (in 2.04 sec).
 Restore succeeded.
 ```
+> The template use IS4 version  but you just need to remplace IS4 by Duende in package reference to use the Duende version.
 
 ### From NuGet Packages
 
 If you need more customization, you can use published NuGet packages.
 [sample/MultiTiers](sample/MultiTiers) contains a sample to build server and API from NuGet packages.
 
+> The sample use IS4 version but you just need to remplace IS4 by Duende in package reference to use the Duende version.
+
 ### From Github Release
 
 Choose your release in the [list of releases](https://github.com/Aguafrommars/TheIdServer/releases) and download the server zip.   
 Unzip in the destination of your choice. Unzip in the destination of your choice. As with any ASP.NET Core web site, it can run in IIS or as a stand-alone server using your chosen platform.
 
-Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1) for more information.
+Read [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/) for more information.
 
 ## Configure data protection
 
@@ -111,10 +120,10 @@ So you can set any ASP.Net Core Identity options you want from configuration
 }
 ```
 
-## Configure IdentityServer4
+## Configure Duende IdentityServer
 
-The section **IdentityServerOptions** is binded to the class [`IdentityServer4.Configuration.IdentityServerOptions`](http://docs.identityserver.io/en/latest/reference/options.html).  
-So you can set any IdentityServer4 options you want from configuration
+The section **IdentityServerOptions** is binded to the class [`Duende.IdentityServer.Configuration.IdentityServerOptions`](https://docs.duendesoftware.com/identityserver/v5/reference/options/).  
+So you can set any Duende IdentityServer options you want from configuration (but key management options).
 
 ```json
 "IdentityServerOptions": {
@@ -252,14 +261,14 @@ Defines how to authenticate the public server on private server API.
 
 #### SignalR
 
-Defines the [SignalR client](https://docs.microsoft.com/en-us/aspnet/core/signalr/dotnet-client?view=aspnetcore-3.1&tabs=visual-studio) configuration.  
+Defines the [SignalR client](https://docs.microsoft.com/en-us/aspnet/core/signalr/dotnet-client&tabs=visual-studio) configuration.  
 This client is used to update the external provider configuration of a running instance. When an external provider configuration changes, the API sends a SignalR notification to inform other running instances.  
 
 For more information, read [Load balancing scenario](https://github.com/Aguafrommars/DymamicAuthProviders/wiki/Load-balancing-scenario).
 
 The SignalR hub accepts requests at */providerhub* and supports the [MessagePack](https://msgpack.org/index.html) protocol.
 
-For more information, read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol?view=aspnetcore-3.1).
+For more information, read [Use MessagePack Hub Protocol in SignalR for ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/signalr/messagepackhubprotocol).
 
 ### Database migration and data seeding
 
@@ -528,7 +537,7 @@ Read [Keys rotation](../../doc/KEYS_ROTATION.md) to know how to configure it.
 
 ### From store
 
-Read [Example: Deploy to Azure Websites](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-3.1#example-deploy-to-azure-websites)
+Read [Example: Deploy to Azure Websites](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization#example-deploy-to-azure-websites)
 
 ## Configure the Email service
 
@@ -650,7 +659,7 @@ If you use a self-signed certificate, you can disable strict-SSL by settings **D
 
 ### Configure Forwarded Headers
 
-The section **ForwardedHeadersOptions** is bound to the class [`Microsoft.AspNetCore.Builder.ForwardedHeadersOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions?view=aspnetcore-3.1).  
+The section **ForwardedHeadersOptions** is bound to the class [`Microsoft.AspNetCore.Builder.ForwardedHeadersOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.forwardedheadersoptions).  
 
 ```json
 "ForwardedHeadersOptions": {
@@ -689,7 +698,7 @@ The **SignalR** section defines the configuration for both the SignalR hub and t
 }
 ```
 
-If needed, the hub can use a [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1). **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configures the backplane.  
+If needed, the hub can use a [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane). **SignalR:RedisConnectionString** and **SignalR:RedisOptions** configures the backplane.  
 **SignalR:RedisOptions** is bound to an instance of [`Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0) at startup.
 
 ## Configure logs
@@ -824,10 +833,10 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 
 ## Additional resources
 
-* [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/?view=aspnetcore-3.1)
+* [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
 * [DymamicAuthProviders](https://github.com/Aguafrommars/DymamicAuthProviders)
-* [Set up a Redis backplane for ASP.NET Core SignalR scale-out](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-3.1)
+* [Set up a Redis backplane for ASP.NET Core SignalR scale-out](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane)
 * [Microsoft.AspNetCore.SignalR.StackExchangeRedis.RedisOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.signalr.stackexchangeredis.redisoptions?view=aspnetcore-3.0)
 * [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md)
-* [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-3.1)
+* [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)

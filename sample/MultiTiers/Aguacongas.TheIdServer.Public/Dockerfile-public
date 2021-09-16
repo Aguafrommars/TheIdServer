@@ -6,7 +6,7 @@
 # This commande expose ports 5000 and 5443, so the server can be accessed through thoose ports. 
 
 # From the latest CI sever image build
-FROM aguacongas/theidserver:1.0.0 as base
+FROM aguacongas/theidserver:next as base
 EXPOSE 5000
 EXPOSE 5443
 
