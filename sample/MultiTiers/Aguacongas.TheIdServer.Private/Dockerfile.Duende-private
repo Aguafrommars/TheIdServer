@@ -6,7 +6,7 @@
 # This command does not expose port, so the server can be access by containers in the same network only.
 
 # From the latest CI sever image build
-FROM aguacongas/theidserver:next as base
+FROM aguacongas/theidserver.duende:next as base
 EXPOSE 443
 
 # Copy the developer self signed certificate (https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-3.1&tabs=visual-studio#trust-https-certificate-from-windows-subsystem-for-linux)

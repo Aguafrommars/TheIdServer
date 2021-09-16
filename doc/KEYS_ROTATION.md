@@ -1,6 +1,6 @@
 # Keys rotation
 
-The *IdentityServer:Key* section configure the [IdentityServer4 signing key](https://identityserver4.readthedocs.io/en/latest/topics/crypto.html?highlight=siging%20key#token-signing-and-validation/) using [Aguacongas.IdentityServer.KeysRotation](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#aguacongasidentityserverkeysrotation).  
+The *IdentityServer:Key* section configure the [signing key](https://identityserver4.readthedocs.io/en/latest/topics/crypto.html?highlight=siging%20key#token-signing-and-validation/) using [Aguacongas.IdentityServer.KeysRotation](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#aguacongasidentityserverkeysrotation).  
 To use the keys rotation mechanism, the *Type* must be **KeysRotation**.
 
 **minimum configuration sample**

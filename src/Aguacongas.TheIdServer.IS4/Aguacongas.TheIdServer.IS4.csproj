@@ -55,7 +55,6 @@
     <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewImports.cshtml" Link="Areas\Identity\Pages\_ViewImports.cshtml" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml" />
     <None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
-    <None Include="..\Aguacongas.TheIdServer.Shared\README.md" Link="README.md" />
     <None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
     <None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
