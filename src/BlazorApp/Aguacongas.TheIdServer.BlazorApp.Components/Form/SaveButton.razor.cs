@@ -41,7 +41,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components.Form
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)
         {
             _disabled = false;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         private void EditContext_OnValidationRequested(object sender, ValidationRequestedEventArgs e)

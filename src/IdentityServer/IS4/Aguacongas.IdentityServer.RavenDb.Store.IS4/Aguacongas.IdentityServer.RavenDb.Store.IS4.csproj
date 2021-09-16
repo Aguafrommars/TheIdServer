@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	  <Authors>Olivier Lefebvre</Authors>
+	  <Description>IdentityServer4 RavenDb stores implementation for TheIdServer.</Description>
+	  <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+	  <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>theidserver;identityserver4;administration;ravendb</PackageTags>
+	  <PackageIcon>package-icon.png</PackageIcon>
+	  <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Shared\DynamicAuthenticationBuilderExtensions.cs" Link="DynamicAuthenticationBuilderExtensions.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Shared\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Aguacongas.IdentityServer.RavenDb.Store\Aguacongas.IdentityServer.RavenDb.Store.csproj" />
+    <ProjectReference Include="..\Aguacongas.IdentityServer.IS4\Aguacongas.IdentityServer.IS4.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,123 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>51a7f0be-96e4-42d5-ad09-37e9adabfff6</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Boot.cs" Link="Boot.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\IdentityServerBuilderExtensions.cs" Link="Extensions\IdentityServerBuilderExtensions.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Program.cs" Link="Program.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\AccountController.cs" Link="Quickstart\Account\AccountController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\AccountOptions.cs" Link="Quickstart\Account\AccountOptions.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\ExternalController.cs" Link="Quickstart\Account\ExternalController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\ExternalProvider.cs" Link="Quickstart\Account\ExternalProvider.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\InvalidReturnUrlException.cs" Link="Quickstart\Account\InvalidReturnUrlException.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\LoggedOutViewModel.cs" Link="Quickstart\Account\LoggedOutViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\LoginInputModel.cs" Link="Quickstart\Account\LoginInputModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\LoginViewModel.cs" Link="Quickstart\Account\LoginViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\LogoutInputModel.cs" Link="Quickstart\Account\LogoutInputModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\LogoutViewModel.cs" Link="Quickstart\Account\LogoutViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\RedirectViewModel.cs" Link="Quickstart\Account\RedirectViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ConsentController.cs" Link="Quickstart\Consent\ConsentController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ConsentInputModel.cs" Link="Quickstart\Consent\ConsentInputModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ConsentOptions.cs" Link="Quickstart\Consent\ConsentOptions.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ConsentViewModel.cs" Link="Quickstart\Consent\ConsentViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ProcessConsentResult.cs" Link="Quickstart\Consent\ProcessConsentResult.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Consent\ScopeViewModel.cs" Link="Quickstart\Consent\ScopeViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Device\DeviceAuthorizationInputModel.cs" Link="Quickstart\Device\DeviceAuthorizationInputModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Device\DeviceAuthorizationViewModel.cs" Link="Quickstart\Device\DeviceAuthorizationViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Device\DeviceController.cs" Link="Quickstart\Device\DeviceController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Diagnostics\DiagnosticsController.cs" Link="Quickstart\Diagnostics\DiagnosticsController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Diagnostics\DiagnosticsViewModel.cs" Link="Quickstart\Diagnostics\DiagnosticsViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Extensions.cs" Link="Quickstart\Extensions.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Home\ErrorViewModel.cs" Link="Quickstart\Home\ErrorViewModel.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Home\HomeController.cs" Link="Quickstart\Home\HomeController.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\SecurityHeadersAttribute.cs" Link="Quickstart\SecurityHeadersAttribute.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\SeedData.cs" Link="SeedData.cs" />
+    <Compile Include="..\Aguacongas.TheIdServer.Shared\Startup.cs" Link="Startup.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json" Link="compilerconfig.json" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\libman.json" Link="libman.json" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\ScaffoldingReadMe.txt" Link="ScaffoldingReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewImports.cshtml" Link="Areas\Identity\Pages\_ViewImports.cshtml" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewStart.cshtml" Link="Areas\Identity\Pages\_ViewStart.cshtml" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\README.md" Link="README.md" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
+    <None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\LoggedOut.cshtml" Link="Views\Account\LoggedOut.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Login.cshtml" Link="Views\Account\Login.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Logout.cshtml" Link="Views\Account\Logout.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Consent\Index.cshtml" Link="Views\Consent\Index.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\Success.cshtml" Link="Views\Device\Success.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeCapture.cshtml" Link="Views\Device\UserCodeCapture.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Device\UserCodeConfirmation.cshtml" Link="Views\Device\UserCodeConfirmation.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Diagnostics\Index.cshtml" Link="Views\Diagnostics\Index.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Error.cshtml" Link="Views\Shared\Error.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\Redirect.cshtml" Link="Views\Shared\Redirect.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_Layout.cshtml" Link="Views\Shared\_Layout.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_LoginPartial.cshtml" Link="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ScopeListItem.cshtml" Link="Views\Shared\_ScopeListItem.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Shared\_ValidationSummary.cshtml" Link="Views\Shared\_ValidationSummary.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewImports.cshtml" Link="Views\_ViewImports.cshtml" />
+    <Content Include="..\Aguacongas.TheIdServer.Shared\Views\_ViewStart.cshtml" Link="Views\_ViewStart.cshtml" />
+    <None Include="appsettings.Development.json" />
+    <None Include="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Pages\Account\Manage\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Quickstart\Account\" />
+    <Folder Include="Quickstart\Consent\" />
+    <Folder Include="Quickstart\Device\" />
+    <Folder Include="Quickstart\Diagnostics\" />
+    <Folder Include="Quickstart\Home\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\Consent\" />
+    <Folder Include="Views\Device\" />
+    <Folder Include="Views\Diagnostics\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
+    <ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Admin.Duende\Aguacongas.IdentityServer.Admin.Duende.csproj" />
+    <ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj" />
+    <ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.MongoDb.Store.Duende\Aguacongas.IdentityServer.MongoDb.Store.Duende.csproj" />
+    <ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
+    <ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.WsFederation.Duende\Aguacongas.IdentityServer.WsFederation.Duende.csproj" />
+  </ItemGroup>
+
+</Project>

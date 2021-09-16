@@ -1,0 +1,114 @@
+@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) 2021 @Olivier Lefebvre
+*@
+@inject IViewLocalizer Localizer
+
+@model Aguacongas.IdentityServer.UI.Device.DeviceAuthorizationViewModel
+
+<div class="page-header">
+    <div class="row page-header">
+        <div class="col-sm-10">
+            @if (Model.ClientLogoUrl != null)
+            {
+                <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="logo"></div>
+            }
+            <h1>
+                @Localizer["{0} <small>is requesting your permission</small>", @Model.ClientName]
+            </h1>
+        </div>
+    </div>
+
+    @if (Model.ConfirmUserCode)
+    {
+        <div class="row">
+            <div class="col-sm-8">
+                <p>
+                    @Localizer["Please confirm that the authorization request quotes the code: \"{0}\".", Model.UserCode]
+                </p>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-sm-8">
+            <partial name="_ValidationSummary" />
+
+            <form asp-action="Callback" class="consent-form">
+                <input asp-for="UserCode" type="hidden" value="@Model.UserCode" />
+
+                <div>@Localizer["Uncheck the permissions you do not wish to grant."]</div>
+
+                @if (Model.IdentityScopes.Any())
+                {
+                    <div class="panel panel-default consent-buttons">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-user"></span>
+                            @Localizer["Personal Information"]
+                        </div>
+                        <ul class="list-group">
+                            @foreach (var scope in Model.IdentityScopes)
+                            {
+                                <partial name="_ScopeListItem" model="@scope" />
+                            }
+                        </ul>
+                    </div>
+                }
+
+                @if (Model.ApiScopes.Any())
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-tasks"></span>
+                            @Localizer["Application Access"]
+                        </div>
+                        <ul class="list-group">
+                            @foreach (var scope in Model.ApiScopes)
+                            {
+                                <partial name="_ScopeListItem" model="scope" />
+                            }
+                        </ul>
+                    </div>
+                }
+
+                @if (Model.AllowRememberConsent)
+                {
+                    <div class="consent-remember">
+                        <label>
+                            <input class="consent-scopecheck" asp-for="RememberConsent" />
+                            <strong>@Localizer["Remember My Decision"]</strong>
+                        </label>
+                    </div>
+                }
+
+                <div class="consent-buttons">
+                    <button name="button" value="yes" class="btn btn-primary" autofocus>@Localizer["Yes, Allow"]</button>
+                    <button name="button" value="no" class="btn">@Localizer["No, Do Not Allow"]</button>
+                    @if (Model.ClientUrl != null)
+                    {
+                        <a class="pull-right btn btn-default" target="_blank" href="@Model.ClientUrl" rel="noopener noreferrer">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            <strong>@Model.ClientName</strong>
+                        </a>
+                    }
+                </div>
+                <div class="consent-buttons">
+                    @if (Model.PolicyUrl != null)
+                    {
+                        <div>
+                            <a target="_blank" href="@Model.PolicyUrl" rel="noopener noreferrer">
+                                @Localizer["Policy"]
+                            </a>
+                        </div>
+                    }
+                    @if (Model.TosUrl != null)
+                    {
+                        <a target="_blank" href="@Model.TosUrl" rel="noopener noreferrer">
+                            @Localizer["Terms of service"]
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

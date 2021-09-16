@@ -3,12 +3,13 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
+		<Description>TheIdServer bases classes</Description>
 		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
 		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4</PackageTags>
+		<PackageTags>theidserver</PackageTags>
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
@@ -23,13 +24,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Store\CacheAdminStore.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="Community.OData.Linq" Version="1.4.3" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
+		<PackageReference Include="IdentityModel" Version="5.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
@@ -47,6 +52,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
+		<None Include="Store\CacheAdminStore.cs" />
 	</ItemGroup>
 
 </Project>

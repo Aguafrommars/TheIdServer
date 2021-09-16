@@ -9,8 +9,15 @@ using System.Net;
 
 namespace Aguacongas.IdentityServer.Admin.Filters
 {
-    class ActionsFilter : IActionFilter
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ActionsFilter : IActionFilter
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public void OnActionExecuted(ActionExecutedContext context)
         {
             var controlerType = context.Controller.GetType();
@@ -31,7 +38,7 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 return;
             }
 
-            if (!(context.Result is ObjectResult objectResult))
+            if (context.Result is not ObjectResult objectResult)
             {
                 return;
             }
@@ -60,6 +67,10 @@ namespace Aguacongas.IdentityServer.Admin.Filters
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public void OnActionExecuting(ActionExecutingContext context)
         {
             var controlerType = context.Controller.GetType();

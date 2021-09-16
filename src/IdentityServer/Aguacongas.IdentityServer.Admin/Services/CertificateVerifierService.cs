@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Abstractions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -23,7 +24,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             using var ms = new MemoryStream();
             await certificateContent.CopyToAsync(ms).ConfigureAwait(false);
-            var certificate = new X509Certificate2(ms.ToArray());
+            return Verify(ms);
+        }
+
+        [SecuritySafeCritical]
+        private static IEnumerable<string> Verify(MemoryStream ms)
+        {
+            using var certificate = new X509Certificate2(ms.ToArray());
             if (!certificate.Verify())
             {
                 using var chain = new X509Chain();

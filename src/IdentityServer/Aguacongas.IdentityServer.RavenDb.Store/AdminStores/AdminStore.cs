@@ -97,7 +97,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             await OnDeleteEntityAsync(entity, cancellationToken).ConfigureAwait(false);
 
             await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} deleted", entity.Id);
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -116,7 +116,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
 
             await _session.StoreAsync(entity, $"{_entitybasePath}{entity.Id}", cancellationToken).ConfigureAwait(false);
             await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} created", entity.Id);
             return entity;
         }
 
@@ -142,7 +142,7 @@ namespace Aguacongas.IdentityServer.RavenDb.Store
             entity.Copy(storedEntity);
 
             await _session.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} updated", entity.Id);
             return entity;
         }
 

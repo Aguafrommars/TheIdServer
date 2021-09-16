@@ -3,12 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
-        <Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
+        <Description>EF Core stores implementation for TheIdServer.</Description>
         <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>theidserver;identityserver4;administration</PackageTags>
+        <PackageTags>theidserver;ef;administration</PackageTags>
         <PackageIcon>package-icon.png</PackageIcon>
         <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
     </PropertyGroup>
@@ -26,7 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     </ItemGroup>
 
     <ItemGroup>

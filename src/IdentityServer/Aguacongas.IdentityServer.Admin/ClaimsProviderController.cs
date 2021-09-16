@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="providerTypeName">Name of the provider type.</param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = "Is4-Reader")]
+        [Authorize(Policy = SharedConstants.READER)]
         public Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName)
             => _proxyClaimsProvider.GetAsync(resourceName, userId, clientId, caller, providerTypeName);
     }

@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+        public static IServiceCollection AddAdminHttpStores(this IServiceCollection services,
             Action<IdentityServerOptions> configureOptions)
         {
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .ConfigurePrimaryHttpMessageHandler((p => p.GetRequiredService<HttpClientHandler>()))
                 .AddHttpMessageHandler<OAuthDelegatingHandler>();
 
-            return services.AddConfigurationHttpStores(p => p.CreateApiHttpClient(options), configureOptions);
+            return services.AddAdminHttpStores(p => p.CreateApiHttpClient(options), configureOptions);
         }
 
         /// <summary>
@@ -27,15 +27,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>
-        public static IServiceCollection AddConfigurationHttpStores(this IServiceCollection services,
+        public static IServiceCollection AddAdminHttpStores(this IServiceCollection services,
         Func<IServiceProvider, Task<HttpClient>> getHttpClient,
         Action<IdentityServerOptions> configureOptions)
         {
             getHttpClient = getHttpClient ?? throw new ArgumentNullException(nameof(getHttpClient));
             configureOptions = configureOptions ?? throw new ArgumentNullException(nameof(configureOptions));
             return services.Configure(configureOptions)
-                .AddIdentityServer4AdminHttpStores(getHttpClient)
-                .AddConfigurationStores();
+                .AddAdminHttpStores(getHttpClient);
         }
 
         /// <summary>

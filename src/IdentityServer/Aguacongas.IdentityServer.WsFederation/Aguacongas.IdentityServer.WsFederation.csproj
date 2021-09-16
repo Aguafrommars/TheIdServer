@@ -3,12 +3,12 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
-		<Description>Add WS-Federation controller ot your IdentityServer4 server.</Description>
+		<Description>WS-Federation controller base classes.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.WsFederation</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;ws-federation</PackageTags>
+		<PackageTags>theidserver;ws-federation</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
@@ -20,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.12.2" />
 	</ItemGroup>
@@ -31,5 +30,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Validation\" />
 	</ItemGroup>
 </Project>

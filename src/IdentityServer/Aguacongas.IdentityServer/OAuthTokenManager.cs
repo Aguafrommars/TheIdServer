@@ -21,8 +21,8 @@ namespace Aguacongas.IdentityServer
     {
         private readonly HttpClient _httpClient;
         private readonly IOptions<T> _options;
-        private readonly object _syncObject = new object();
-        private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
+        private readonly object _syncObject = new();
+        private readonly ManualResetEvent _resetEvent = new(true);
         private DiscoveryDocumentResponse _discoveryResponse;
         private DateTime _expiration;
         private AuthenticationHeaderValue _accessToken;

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -167,19 +168,27 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
         {
             var client = _factory.CreateClient("oidc");
             using var putContent = new ByteArrayContent(content);
-            var response = await client.PutAsync("api/certificate", putContent).ConfigureAwait(false);
+            try
+            {
+                var response = await client.PutAsync("api/certificate", putContent).ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
+                {
+                    _thumbprint = new[] { Localizer["Invalid file"].Value };
+                    await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+                    return;
+                }
+
+                Model.EncryptionCertificate = content;
+                _thumbprint = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(await response.Content.ReadAsStreamAsync()).ConfigureAwait(false);
+                HandleModificationState.EntityUpdated(Model);
+                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+            }
+            catch (CryptographicException)
             {
                 _thumbprint = new[] { Localizer["Invalid file"].Value };
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
-                return;
             }
-
-            Model.EncryptionCertificate = content;
-            _thumbprint = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(await response.Content.ReadAsStreamAsync()).ConfigureAwait(false);
-            HandleModificationState.EntityUpdated(Model);
-            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
         private void RemoveCertificate()
