@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
     </ItemGroup>
 
     <ItemGroup>
