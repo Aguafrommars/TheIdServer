@@ -4,13 +4,14 @@
         <TargetFramework>net5.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Description>TheIdServer signing keys rotation.</Description>
-        <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+        <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;signing keys rotation</PackageTags>
         <PackageIcon>package-icon.png</PackageIcon>
-        <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>

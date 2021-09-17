@@ -1,5 +1,7 @@
 ﻿# Aguacongas.IdentityServer.KeysRotation
 
+> This package depends on [Duende.IdentityServer](https://www.nuget.org/packages/Duende.IdentityServer). You'll need to acquire a license for a commercial use.
+
 This library adapts [ASP.NET Core Data Protection](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-3.1) key management system to a signing keys rotation provider for [Duende IdentityServer](https://duendesoftware.com/products/identityserver).
 
 ## Setup

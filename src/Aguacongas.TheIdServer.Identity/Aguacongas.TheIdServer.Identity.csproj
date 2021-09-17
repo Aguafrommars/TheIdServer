@@ -3,8 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
       <Authors>Olivier Lefebvre</Authors>
-      <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-      <PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+      <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	  
       <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Identity</PackageProjectUrl>
       <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
       <RepositoryType>git</RepositoryType>

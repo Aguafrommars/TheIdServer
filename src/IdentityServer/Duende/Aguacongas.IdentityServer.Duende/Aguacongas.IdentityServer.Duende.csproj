@@ -4,12 +4,13 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer base classes for Duende.IdentityServer.</Description>
-		<Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
-		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;duede.identityserver</PackageTags>
+		
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
@@ -58,6 +59,10 @@
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="10.1.1" />
 	  <PackageReference Include="Duende.IdentityServer" Version="5.2.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 </Project>

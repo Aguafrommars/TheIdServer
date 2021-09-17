@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFramework>net5.0</TargetFramework>
 	  <Authors>Olivier Lefebvre</Authors>
 	  <Description>Duende.IdentityServer EF Core stores implementation for TheIdServer.</Description>
-	  <Copyright>Copyright (c) 2020 @Olivier Lefebvre</Copyright>
+	  <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
 	  <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <PackageTags>theidserver;duende.identityserver;ef;administration</PackageTags>
+	  <PackageTags>theidserver;duende.identityserver;ef;administration</PackageTags>	  
 	  <PackageIcon>package-icon.png</PackageIcon>
-	  <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +22,9 @@
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.Duende\Aguacongas.IdentityServer.Duende.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 
 </Project>
