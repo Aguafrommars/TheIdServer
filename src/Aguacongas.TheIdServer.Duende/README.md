@@ -1,6 +1,6 @@
 # TheIdServer Duende Web Server project
 
-This version of TheIdServer use [Duende IdentityServer](https://duendesoftware.com/products/identityserver), for a commercial use you need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing).  
+> This version of TheIdServer use [Duende IdentityServer](https://duendesoftware.com/products/identityserver), for a commercial use you need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing).  
 
 The server obtains configuration from *appsettings.json*, *appsettings.{Environment}.json*, command-line arguments, or environment variables.
 
