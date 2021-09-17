@@ -10,7 +10,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;administration;ravendb</PackageTags>
 		<PackageIcon>package-icon.png</PackageIcon>
-		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

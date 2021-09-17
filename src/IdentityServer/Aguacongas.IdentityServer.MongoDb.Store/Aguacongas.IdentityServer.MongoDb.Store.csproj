@@ -10,7 +10,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;administration;mongodb</PackageTags>
 		<PackageIcon>package-icon.png</PackageIcon>
-		<PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		
 		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
