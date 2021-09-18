@@ -7,7 +7,8 @@ on:
   # Triggers the workflow on push or pull request events
   push:
     branches: [ master, preview/*, release/* ]
-  pull_request:
+    tags: [ '*' ]
+  pull_request: 
     branches: [ master, preview/*, release/* ]
   
   # Allows you to run this workflow manually from the Actions tab
@@ -36,7 +37,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:next
+          tags: aguacongas/theidserver.duende:${{ github.event.release.tag_name }}
       -
         name: Build and push TheIdServer
         id: docker_build_theidserver
@@ -44,7 +45,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver.duende:next
+          tags: aguacongas/theidserver:${{ github.event.release.tag_name }}
       -
         name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
@@ -52,5 +53,4 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:next
-          
+          tags: aguacongas/theidserverapp:${{ github.event.release.tag_name }}          
