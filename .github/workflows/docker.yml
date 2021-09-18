@@ -39,7 +39,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:{{ steps.get_version.outputs.version }}
+          tags: aguacongas/theidserver.duende:${{ steps.get_version.outputs.version }}
       -
         name: Build and push TheIdServer
         id: docker_build_theidserver
@@ -47,7 +47,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver:{{ steps.get_version.outputs.version }}
+          tags: aguacongas/theidserver:${{ steps.get_version.outputs.version }}
       -
         name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
@@ -55,5 +55,5 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:{{ steps.get_version.outputs.version }}
+          tags: aguacongas/theidserverapp:${{ steps.get_version.outputs.version }}
           
