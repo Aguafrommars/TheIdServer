@@ -18,8 +18,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - id: get_version
-        uses: battila7/get-version-action@v2
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -39,7 +37,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:${{ steps.get_version.outputs.version }}
+          tags: aguacongas/theidserver.duende:${{ github.event.release.tag_name || 'next' }}
       -
         name: Build and push TheIdServer
         id: docker_build_theidserver
@@ -47,7 +45,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver:${{ steps.get_version.outputs.version }}
+          tags: aguacongas/theidserver:${{ github.event.release.tag_name || 'next' }}
       -
         name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
@@ -55,5 +53,4 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:${{ steps.get_version.outputs.version }}
-          
+          tags: aguacongas/theidserverapp:${{ github.event.release.tag_name || 'next' }}
