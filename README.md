@@ -71,7 +71,8 @@ You can build the solution with Visual Studio or use the `dotnet build` command.
 To build docker images launch at solution root: 
 
 ```bash
-docker build -t aguacongas/theidserver:dev -f "./src/Aguacongas.TheIdServer/Dockerfile" .
+docker build -t aguacongas/theidserver:dev -f "./src/Aguacongas.TheIdServer.IS4/Dockerfile" .
+docker build -t aguacongas/theidserver.duende:dev -f "./src/Aguacongas.TheIdServer.Duende/Dockerfile" .
 docker build -t aguacongas/theidserverapp:dev -f "./src/Aguacongas.TheIdServer.BlazorApp/Dockerfile" .
 ```
 
