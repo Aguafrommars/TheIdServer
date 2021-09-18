@@ -7,7 +7,8 @@ on:
   # Triggers the workflow on push or pull request events
   push:
     branches: [ master, preview/*, release/* ]
-  pull_request:
+    tags: [ '*' ]
+  pull_request: 
     branches: [ master, preview/*, release/* ]
   
   # Allows you to run this workflow manually from the Actions tab
@@ -17,6 +18,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - id: get_version
+        uses: battila7/get-version-action@v2
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -36,7 +39,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:next
+          tags: aguacongas/theidserver.duende:{{ steps.get_version.outputs.version }}
       -
         name: Build and push TheIdServer
         id: docker_build_theidserver
@@ -44,7 +47,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver.duende:next
+          tags: aguacongas/theidserver:{{ steps.get_version.outputs.version }}
       -
         name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
@@ -52,5 +55,5 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:next
+          tags: aguacongas/theidserverapp:{{ steps.get_version.outputs.version }}
           
