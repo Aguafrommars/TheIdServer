@@ -37,7 +37,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:${{ github.event.release.tag_name }}
+          tags: aguacongas/theidserver.duende:${{ github.event.release.tag_name || 'next' }}
       -
         name: Build and push TheIdServer
         id: docker_build_theidserver
@@ -45,7 +45,7 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver:${{ github.event.release.tag_name }}
+          tags: aguacongas/theidserver:${{ github.event.release.tag_name || 'next' }}
       -
         name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
@@ -53,4 +53,4 @@ jobs:
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:${{ github.event.release.tag_name }}          
+          tags: aguacongas/theidserverapp:${{ github.event.release.tag_name || 'next' }}
