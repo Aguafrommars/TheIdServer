@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Expose OData controllers to manage TheIdServer for Duende.IdentityServer.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -47,7 +47,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.2.2" />
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.0.0-preview.1" />
 	</ItemGroup>
 
 	<ItemGroup>

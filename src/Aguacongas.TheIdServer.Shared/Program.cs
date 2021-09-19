@@ -13,7 +13,7 @@ namespace Aguacongas.TheIdServer
 {
     public static class Program
     {
-        public static async Task StartAsync(string[] args)
+        public static async Task Main(string[] args)
         {
             var seed = args.Any(x => x == "/seed");
             if (seed)
