@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,7 +40,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Send an email using SendGrid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITER)]
         public Task SendEmail([FromBody] Email email)
              => _sender.SendEmailAsync(email);
     }

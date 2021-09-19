@@ -48,7 +48,8 @@ namespace Aguacongas.TheIdServer
             
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
-                .AddIdentityServer4AdminEntityFrameworkStores()
+                .AddIdentityServer4AdminEntityFrameworkStores(options =>
+                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddOperationalEntityFrameworkStores(options =>
@@ -97,8 +98,7 @@ namespace Aguacongas.TheIdServer
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>()
-                .AddTheIdServerStore();
+                .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
             services.AddDatabaseDeveloperPageExceptionFilter()
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));

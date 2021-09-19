@@ -1,0 +1,9 @@
+{
+  "issuer": "https://theidserver-duende.herokuapp.com",
+  "jwks_uri": "https://theidserver-duende.herokuapp.com/.well-known/openid-configuration/jwks",
+  "authorization_endpoint": "https://theidserver-duende.herokuapp.com/connect/authorize",
+  "token_endpoint": "https://theidserver-duende.herokuapp.com/connect/token",
+  "userinfo_endpoint": "https://theidserver-duende.herokuapp.com/connect/userinfo",
+  "end_session_endpoint": "https://theidserver-duende.herokuapp.com/connect/endsession",
+  "check_session_iframe": "https://theidserver-duende.herokuapp.com/connect/checksession"
+}

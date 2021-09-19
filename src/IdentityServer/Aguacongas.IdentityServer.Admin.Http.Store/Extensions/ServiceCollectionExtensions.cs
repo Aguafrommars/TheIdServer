@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddIdentityServer4AdminHttpStores(this IServiceCollection services, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
+        public static IServiceCollection AddAdminHttpStores(this IServiceCollection services, Func<IServiceProvider, Task<HttpClient>> getHttpClient)
         {
             var entityTypeList = GetEntityTypes();
 

@@ -42,7 +42,8 @@ namespace Aguacongas.TheIdServer.Api
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
-                .AddIdentityServer4AdminEntityFrameworkStores()
+                .AddIdentityServer4AdminEntityFrameworkStores(options =>
+                    options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddOperationalEntityFrameworkStores(options =>
@@ -94,7 +95,6 @@ namespace Aguacongas.TheIdServer.Api
                     options.LegacyAudienceValidation = true;
                 })
                 .AddDynamic<SchemeDefinition>()
-                .AddTheIdServerEntityFrameworkStore()
                 .AddGoogle()
                 .AddFacebook()
                 .AddOpenIdConnect()

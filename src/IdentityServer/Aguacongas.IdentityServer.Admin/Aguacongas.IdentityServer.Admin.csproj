@@ -3,13 +3,13 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
-        <Description>Expose OData controllers to manage IdentityServer4.</Description>
+        <Description>Expose OData controllers to manage TheIdServer.</Description>
         <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.Admin</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>theidserver;identityserver4;administration</PackageTags>
-        <PackageLicense>https://github.com/aguacongas/TheIdServer/blob/master/LICENSE</PackageLicense>
+        <PackageTags>theidserver;administration</PackageTags>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageIcon>package-icon.png</PackageIcon>
     </PropertyGroup>

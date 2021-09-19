@@ -63,7 +63,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
             _context.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} deleted", entity.Id);
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -79,7 +79,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             }
             await _context.AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} created", entity.Id);
             return entity;
         }
 
@@ -107,7 +107,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             entity.Copy(storedEntity);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} updated", entity.Id);
             return entity;
         }
 

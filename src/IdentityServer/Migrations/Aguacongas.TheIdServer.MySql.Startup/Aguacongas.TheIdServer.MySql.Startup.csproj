@@ -7,12 +7,11 @@
 		<StartupObject>Aguacongas.TheIdServer.MySql.Program</StartupObject>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
-		<PackageLicense>https://raw.githubusercontent.com/Aguafrommars/TheIdServer/master/LICENSE</PackageLicense>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;mysql</PackageTags>
-		<Description>Startup project to generate migration code for MySql.</Description>
+    <IsPackable>false</IsPackable>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

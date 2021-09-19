@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\AuthorizationCodeStoreTest.cs" Link="AuthorizationCodeStoreTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\CorsPolicyServiceTest.cs" Link="CorsPolicyServiceTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\DeviceFlowStoreTest.cs" Link="DeviceFlowStoreTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+	  <PackageReference Include="xunit" Version="2.4.1" />
+	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="coverlet.collector" Version="3.1.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,6 @@
 # TheIdServer Admin Application
 
-This project is the [Blazor Web Assembly](https//blazor.net) application to manage an [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/) instance.
+This project is the [Blazor Web Assembly](https//blazor.net) application to manage a TheIdServer instance.
 
 ## Installation
 ### From Docker
@@ -131,10 +131,10 @@ This endpoint should return an HTML fragment.
 
 ```html
 <p>
-    This application manage your <a href="https://identityserver4.readthedocs.io/en/latest/">IdentityServer4</a>.
+    This application manage your <a href="https://github.com/Aguafrommars/TheIdServer#readme/">TheIdServer</a>.
 </p>
 <p>
-    Visit the <a href="https://github.com/aguacongas/TheIdServer">github site</a> for doc, source code and issue tracking.
+    Visit the <a href="https://github.com/aguacongas/TheIdServer#readme">github site</a> for doc, source code and issue tracking.
 </p>
 <p>
     If you have trouble with login, disable Chromium cookies-without-same-site-must-be-secure flag.<br />

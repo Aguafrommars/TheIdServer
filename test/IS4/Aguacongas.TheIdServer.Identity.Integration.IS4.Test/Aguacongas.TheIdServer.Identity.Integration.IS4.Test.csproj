@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestRole.cs" Link="TestRole.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUser.cs" Link="TestUser.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUserService.cs" Link="TestUserService.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUtils.cs" Link="TestUtils.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TheIdServerTestFixture.cs" Link="TheIdServerTestFixture.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\UserStoreTest.cs" Link="UserStoreTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.10" />
+	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.10" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+	  <PackageReference Include="Moq" Version="4.16.1" />
+	  <PackageReference Include="xunit" Version="2.4.1" />
+	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="coverlet.collector" Version="3.1.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
+    <ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.IS4\Aguacongas.TheIdServer.IS4.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.Test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

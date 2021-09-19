@@ -21,6 +21,7 @@ init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
+  - ps: .\dotnet-install.ps1 -Version 5.0.302
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
   - ps: .\dotnet-install.ps1 -Version 5.0.300
   - ps: dotnet tool install --global GitVersion.Tool

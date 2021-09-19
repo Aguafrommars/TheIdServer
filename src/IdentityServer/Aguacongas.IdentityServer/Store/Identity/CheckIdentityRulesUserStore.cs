@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class CheckIdentityRulesUserStore<TStore> : IAdminStore<User> where TStore: IAdminStore<User>
+    public class CheckIdentityRulesUserStore<TStore> : IAdminStore<User> where TStore : IAdminStore<User>
     {
         private readonly TStore _parent;
         private readonly UserManager<ApplicationUser> _manager;
@@ -24,7 +24,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             var user = CreateUser(entity);
             IdentityResult result;
-            if (!string .IsNullOrEmpty(entity.Password))
+            if (!string.IsNullOrEmpty(entity.Password))
             {
                 result = await _manager.CreateAsync(user, entity.Password).ConfigureAwait(false);
             }
@@ -38,10 +38,10 @@ namespace Aguacongas.IdentityServer.Store
             return entity;
         }
 
-                
+
         public async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)
         => await CreateAsync(entity as User, cancellationToken).ConfigureAwait(false);
-        
+
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var user = await _manager.FindByIdAsync(id).ConfigureAwait(false);
@@ -80,21 +80,21 @@ namespace Aguacongas.IdentityServer.Store
         private static ApplicationUser CreateUser(User entity)
         => new()
         {
-                Id = entity.Id,
-                AccessFailedCount = entity.AccessFailedCount,
-                ConcurrencyStamp = entity.ConcurrencyStamp,
-                Email = entity.Email,
-                EmailConfirmed = entity.EmailConfirmed,
-                NormalizedEmail = entity.NormalizedEmail,
-                NormalizedUserName = entity.NormalizedUserName,
-                LockoutEnabled = entity.LockoutEnabled,
-                LockoutEnd = entity.LockoutEnd,
-                PhoneNumber = entity.PhoneNumber,
-                PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
-                PasswordHash = entity.PasswordHash,
-                SecurityStamp = entity.SecurityStamp,
-                TwoFactorEnabled = entity.TwoFactorEnabled,
-                UserName = entity.UserName
-            };        
+            Id = entity.Id,
+            AccessFailedCount = entity.AccessFailedCount,
+            ConcurrencyStamp = entity.ConcurrencyStamp,
+            Email = entity.Email,
+            EmailConfirmed = entity.EmailConfirmed,
+            NormalizedEmail = entity.NormalizedEmail,
+            NormalizedUserName = entity.NormalizedUserName,
+            LockoutEnabled = entity.LockoutEnabled,
+            LockoutEnd = entity.LockoutEnd == DateTime.MinValue ? null : entity.LockoutEnd,
+            PhoneNumber = entity.PhoneNumber,
+            PhoneNumberConfirmed = entity.PhoneNumberConfirmed,
+            PasswordHash = entity.PasswordHash,
+            SecurityStamp = entity.SecurityStamp,
+            TwoFactorEnabled = entity.TwoFactorEnabled,
+            UserName = entity.UserName
+        };
     }
 }

@@ -26,11 +26,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         }
 
         /// <summary>
-        /// Gets the one time token.
+        /// Gets and consume the one time token.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public string GetOneTimeToken(string id)
+        public string ConsumeOneTimeToken(string id)
         {
             var token = _store.GetAsync(id, new GetRequest()).GetAwaiter().GetResult();
             if (token == null)
@@ -39,6 +39,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             _store.DeleteAsync(id).GetAwaiter().GetResult();
             return token.Data;
+        }
+
+        /// <summary>
+        /// Gets the one time token, but don't consume it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string GetOneTimeToken(string id)
+        {
+            var token = _store.GetAsync(id, new GetRequest()).GetAwaiter().GetResult();
+            return token?.Data;
         }
     }
 }
