@@ -58,6 +58,7 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/Aguacongas.Ide
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
+RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.Duende"
