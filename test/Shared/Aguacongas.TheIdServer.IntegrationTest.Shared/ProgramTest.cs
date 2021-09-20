@@ -25,7 +25,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             using var is4DbContext1 = scope1.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             is4DbContext1.Database.EnsureDeleted();
 
-            await Program.StartAsync(new string[]
+            await Program.Main(new string[]
             {
                 "--ConnectionStrings:DefaultConnection",
                 connectionString,

@@ -50,14 +50,13 @@ namespace Aguacongas.TheIdServer
             services.AddTransient<HttpClientHandler>();
 
             services.AddIdentityProviderStore()
-                .AddConfigurationHttpStores(configureOptions)
+                .AddConfigurationStores()                
+                .AddAdminHttpStores(configureOptions)
                 .AddOperationalStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => options.SignIn.RequireConfirmedAccount = Configuration.GetValue<bool>("SignInOptions:RequireConfirmedAccount"))
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
-
-            services.AddConfigurationHttpStores(configureOptions);
 
             var identityBuilder = services.AddClaimsProviders(Configuration)
                  .Configure<ForwardedHeadersOptions>(Configuration.GetSection(nameof(ForwardedHeadersOptions)))
