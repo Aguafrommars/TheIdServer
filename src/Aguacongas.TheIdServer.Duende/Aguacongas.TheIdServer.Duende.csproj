@@ -18,7 +18,6 @@
 	<ItemGroup>
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
-		<Compile Include="..\Aguacongas.TheIdServer.Shared\Boot.cs" Link="Boot.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\IdentityServerBuilderExtensions.cs" Link="Extensions\IdentityServerBuilderExtensions.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Program.cs" Link="Program.cs" />
