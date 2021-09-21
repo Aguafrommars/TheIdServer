@@ -1,3 +1,29 @@
+# [4.0.0](https://github.com/Aguafrommars/TheIdServer/compare/3.0.3...4.0.0) (2021-09-21)
+
+
+### Bug Fixes
+
+* update packages ([51035e9](https://github.com/Aguafrommars/TheIdServer/commit/51035e99843796fb9d24a8d25fc5f77ff4506225))
+* update packages ([570e7ef](https://github.com/Aguafrommars/TheIdServer/commit/570e7efed51b3616947c8750e24478a7a85721d7))
+* update packages ([672bcd4](https://github.com/Aguafrommars/TheIdServer/commit/672bcd472868a2fbf1a7f90fb8b2e855e48574df))
+
+
+### Code Refactoring
+
+* :art: move code into shared projects ([4640601](https://github.com/Aguafrommars/TheIdServer/commit/46406019fcc23e66c70077b0483386634e05c7c8))
+* move code into shared projects ([8de1ddb](https://github.com/Aguafrommars/TheIdServer/commit/8de1ddbe02cd895ce9a15cc614b586d846b445c9))
+
+
+### Features
+
+* support duende ([1f75a01](https://github.com/Aguafrommars/TheIdServer/commit/1f75a01aa19f2848ad46837444935160f25ee06d))
+
+
+### BREAKING CHANGES
+
+* Duende IdentityServer
+* Duende IdentitiyServer
+
 ## [3.0.2](https://github.com/Aguafrommars/TheIdServer/compare/3.0.1...3.0.2) (2021-09-14)
 
 
