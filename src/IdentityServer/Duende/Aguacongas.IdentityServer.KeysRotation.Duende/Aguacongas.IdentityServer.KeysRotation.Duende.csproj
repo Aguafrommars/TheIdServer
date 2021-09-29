@@ -48,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer" Version="5.2.2" />
+		<PackageReference Include="Duende.IdentityServer" Version="5.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>
