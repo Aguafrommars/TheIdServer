@@ -1,3 +1,17 @@
+## [4.0.1](https://github.com/Aguafrommars/TheIdServer/compare/4.0.0...4.0.1) (2021-10-09)
+
+
+### Bug Fixes
+
+* grants page not display for duende ([3a7d689](https://github.com/Aguafrommars/TheIdServer/commit/3a7d689f97a1295f9ae54150dfaf9d82b42d7d97))
+* update packages ([a4c3658](https://github.com/Aguafrommars/TheIdServer/commit/a4c3658a90e1c73b84a5129ca5ef96c9fc548c8f))
+* update packages ([d5a4efa](https://github.com/Aguafrommars/TheIdServer/commit/d5a4efa151c9aab0b0e94a2e92caf3f0d6c012eb))
+* update packages ([6a05c5c](https://github.com/Aguafrommars/TheIdServer/commit/6a05c5c3e6508e87dc953aef2888d6543ef1f742))
+* update packages ([be20622](https://github.com/Aguafrommars/TheIdServer/commit/be2062244706fabb784ffdb3c7d5f1cb47a17f9c))
+* update packages ([90b6679](https://github.com/Aguafrommars/TheIdServer/commit/90b667917a331a0fb01ab51af4cd5cf27098687c))
+* update packages ([610a967](https://github.com/Aguafrommars/TheIdServer/commit/610a96714bec1d284ebbce85f02d84637b1df576))
+* update packages ([1a3c156](https://github.com/Aguafrommars/TheIdServer/commit/1a3c156b4e119d54227d02bd5e6d1ef66ada9ee3))
+
 # [4.0.0](https://github.com/Aguafrommars/TheIdServer/compare/3.0.3...4.0.0) (2021-09-21)
 
 
