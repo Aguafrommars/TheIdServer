@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string relyingPartyId = await CreateEntity(await File.ReadAllBytesAsync("test.crt").ConfigureAwait(false));
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 relyingPartyId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -56,7 +56,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string relyingPartyId = await CreateEntity(null);
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 relyingPartyId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -88,7 +88,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string relyingPartyId = await CreateEntity(null);
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 relyingPartyId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -118,7 +118,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string relyingPartyId = await CreateEntity(null);
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 relyingPartyId,
                 out TestHost host,
                 out RenderedComponent<App> component,

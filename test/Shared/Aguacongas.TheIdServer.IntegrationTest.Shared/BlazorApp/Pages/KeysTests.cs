@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
+using IdentityModel;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
@@ -32,7 +33,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task DataProtectionRevokeClick_should_revoke_key()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out RenderedComponent<App> component,
                 out TestHost host);
 
@@ -84,7 +85,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out RenderedComponent<App> component,
                 out TestHost host);
 
@@ -126,8 +127,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER),
-                    new Claim("role", role)
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Role, role)
                 },
                 $"http://exemple.com/keys",
                 Fixture.Sut,

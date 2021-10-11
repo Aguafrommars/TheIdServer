@@ -1,11 +1,13 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
+using Aguacongas.IdentityServer.Store;
 #if DUENDE
 using Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Models;
 #endif
+using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -32,7 +34,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             var sut = TestUtils.CreateTestServer(configurationOverrides: configuration);
 
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[] 
+                    { 
+                        new Claim("role", "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 
@@ -158,7 +164,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[] 
+                    {
+                        new Claim("role", "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 
@@ -563,7 +573,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[] 
+                    { 
+                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 
@@ -669,7 +683,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[] 
+                    { 
+                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 
@@ -870,7 +888,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[]
+                    { 
+                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 
@@ -977,7 +999,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] { new Claim("role", "Is4-Writer") });
+                    .SetTestUser(true, new Claim[] 
+                    { 
+                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
 
             var client = sut.CreateClient();
 

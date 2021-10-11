@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <returns></returns>
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $).")]
-        [Authorize(Policy = SharedConstants.READER)]
+        [Authorize(Policy = SharedConstants.READERPOLICY)]
         public Task<PageResponse<ExternalProviderKind>> GetAsync(PageRequest request)
             => _store.GetAsync(request);
     }

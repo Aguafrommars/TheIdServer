@@ -1,6 +1,7 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Test;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,8 +60,9 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                 });
         }
 
@@ -79,8 +81,9 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                 });
         }
 

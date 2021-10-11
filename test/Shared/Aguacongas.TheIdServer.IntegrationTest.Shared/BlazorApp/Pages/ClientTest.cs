@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -66,7 +66,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -117,7 +117,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -173,7 +173,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -223,7 +223,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -265,7 +265,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -295,7 +295,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -333,7 +333,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -357,7 +357,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("authorization_code");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -381,7 +381,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("implicit");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -405,7 +405,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("urn:ietf:params:oauth:grant-type:device_code");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -429,7 +429,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("client_credentials");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -447,7 +447,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("password");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -465,7 +465,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var clientId = await CreateClient("custom");
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -490,7 +490,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = await CreateClient();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -522,7 +522,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string clientId = GenerateId();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -577,7 +577,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient("authorization_code");
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 clientId,
                 out TestHost host,
                 out RenderedComponent<App> component,

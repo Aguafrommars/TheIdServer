@@ -10,15 +10,30 @@ namespace Aguacongas.IdentityServer.Store
         /// <summary>
         /// The writer
         /// </summary>
-        public const string WRITER = "Is4-Writer";
+        public const string WRITERPOLICY = "Is4-Writer";
         /// <summary>
         /// The reader
         /// </summary>
-        public const string READER = "Is4-Reader";
+        public const string READERPOLICY = "Is4-Reader";
 
         /// <summary>
         /// The registration
         /// </summary>
-        public const string REGISTRATION = "Is4-Registration";
+        public const string REGISTRATIONPOLICY = "Is4-Registration";
+
+        /// <summary>
+        /// The registration
+        /// </summary>
+        public const string TOKENPOLICY = "Is4-Token";
+
+        /// <summary>
+        /// The admon scope
+        /// </summary>
+        public const string ADMINSCOPE = "theidserveradminapi";
+
+        /// <summary>
+        /// The token scope
+        /// </summary>
+        public const string TOKENSCOPES = "theidservertokenapi";
     }
 }

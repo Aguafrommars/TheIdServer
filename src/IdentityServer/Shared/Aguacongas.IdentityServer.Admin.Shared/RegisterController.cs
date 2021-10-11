@@ -47,7 +47,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="clientId">The client id</param>
         /// <returns></returns>
         [HttpGet("{clientId}")]
-        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [Authorize(Policy = SharedConstants.REGISTRATIONPOLICY)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public Task<ClientRegisteration> GetAsync(string clientId)
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="registeration">The registeration.</param>
         /// <returns></returns>
         [HttpPut("{clientId}")]
-        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [Authorize(Policy = SharedConstants.REGISTRATIONPOLICY)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public Task<ClientRegisteration> UpdateAsync(string clientId, [FromBody] ClientRegisteration registeration)
@@ -72,7 +72,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="clientId">The client id</param>
         /// <returns></returns>
         [HttpDelete("{clientId}")]
-        [Authorize(Policy = SharedConstants.REGISTRATION)]
+        [Authorize(Policy = SharedConstants.REGISTRATIONPOLICY)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public Task DeleteAsync(string clientId)
             => _registerClientService.DeleteRegistrationAsync(clientId);

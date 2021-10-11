@@ -6,6 +6,7 @@ using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.Store;
 #if DUENDE
 using Duende.IdentityServer.Services;
 #else
@@ -66,6 +67,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRetrieveOneTimeToken, OneTimeTokenService>()
                 .AddTransient<IImportService, ImportService>()
                 .AddTransient<ICertificateVerifierService, CertificateVerifierService>()
+                .AddTransient<ICreatePersonalAccessToken, CreatePersonalAccessTokenService>()
                 .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>
@@ -101,7 +103,9 @@ namespace Microsoft.Extensions.DependencyInjection
                         Flows = new NSwag.OpenApiOAuthFlows(),
                         Scopes = new Dictionary<string, string>
                         {
-                            [apiName] = "Api full access"
+                            [apiName] = "Api access",
+                            [SharedConstants.ADMINSCOPE] = "Admin scope access",
+                            [SharedConstants.TOKENSCOPES] = "Token scope access"
                         },
                         Description = "IdentityServer4",
                         Name = "IdentityServer4",
