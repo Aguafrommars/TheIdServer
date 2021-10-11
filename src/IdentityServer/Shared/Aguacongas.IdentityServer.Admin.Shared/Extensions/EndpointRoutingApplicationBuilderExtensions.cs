@@ -155,15 +155,17 @@ namespace Microsoft.AspNetCore.Builder
             if ((path.StartsWithSegments("/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
                             path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
                             path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) &&
-                            request.Method == HttpMethods.Get &&
-                            !context.User.IsInRole(SharedConstants.READER))
+                            !context.User.IsInRole(SharedConstants.READERPOLICY) &&
+                            !context.User.HasClaim(c => c.Type == JwtClaimTypes.Role && c.Value == SharedConstants.ADMINSCOPE) &&
+                            request.Method == HttpMethods.Get)
             {
                 // by-pass security for localized resource read
                 context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
                             new Claim(JwtClaimTypes.Name, "AnonymousReader"),
-                            new Claim("role", SharedConstants.READER)
-                }, "by-pass", JwtClaimTypes.Name, "role"));
+                            new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                            new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                }, "by-pass", JwtClaimTypes.Name, JwtClaimTypes.Role));
             }
         }
 
@@ -200,7 +202,7 @@ namespace Microsoft.AspNetCore.Builder
                     context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                     {
                                 new Claim(JwtClaimTypes.Name, client?.Id ?? "not found"),
-                                new Claim("role", SharedConstants.REGISTRATION)
+                                new Claim("role", SharedConstants.REGISTRATIONPOLICY)
                     }, "registration", JwtClaimTypes.Name, "role"));
                     return true;
                 }

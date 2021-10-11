@@ -75,9 +75,10 @@ namespace Aguacongas.IdentityServer.Admin.Filters
         {
             var controlerType = context.Controller.GetType();
             if (!controlerType.FullName
-                .StartsWith("Aguacongas.IdentityServer.Admin.GenericApiController",
+                    .StartsWith("Aguacongas.IdentityServer.Admin",
                     StringComparison.Ordinal))
             {
+                // not my business
                 return;
             }
 

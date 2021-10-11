@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER)
+                    new Claim("role", SharedConstants.READERPOLICY)
                 },
                 $"http://exemple.com/clients",
                 _fixture.Sut,

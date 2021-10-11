@@ -59,8 +59,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim("role", SharedConstants.WRITERPOLICY),
+                    new Claim("role", SharedConstants.READERPOLICY)
                 });
         }
 
@@ -79,8 +79,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim("role", SharedConstants.WRITERPOLICY),
+                    new Claim("role", SharedConstants.READERPOLICY)
                 });
         }
 

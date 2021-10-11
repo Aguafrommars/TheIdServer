@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task DataProtectionRevokeClick_should_revoke_key()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out RenderedComponent<App> component,
                 out TestHost host);
 
@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out RenderedComponent<App> component,
                 out TestHost host);
 
@@ -126,7 +126,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER),
+                    new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role)
                 },
                 $"http://exemple.com/keys",
