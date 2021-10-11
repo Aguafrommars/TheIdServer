@@ -90,7 +90,8 @@ namespace Aguacongas.IdentityServer.Admin.Filters
 
             var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
             if (actionDescriptor.ActionName == "Update" &&
-                context.ActionArguments["entity"] is IEntityId entity &&
+                context.ActionArguments.TryGetValue("entity", out object actionArgument) &&
+                actionArgument is IEntityId  entity &&
                 entity.Id != context.ActionArguments["id"] as string)
             {
                 context.Result = new BadRequestObjectResult(new ValidationProblemDetails

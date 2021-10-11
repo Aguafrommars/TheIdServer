@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
+using IdentityModel;
 using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.EntityFrameworkCore;
 using RichardSzalay.MockHttp;
@@ -126,8 +127,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READERPOLICY),
-                    new Claim("role", role)
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Role, role)
                 },
                 $"http://exemple.com/keys",
                 Fixture.Sut,

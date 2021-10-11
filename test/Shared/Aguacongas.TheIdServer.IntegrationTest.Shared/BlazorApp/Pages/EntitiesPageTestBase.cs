@@ -266,6 +266,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
                     new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())

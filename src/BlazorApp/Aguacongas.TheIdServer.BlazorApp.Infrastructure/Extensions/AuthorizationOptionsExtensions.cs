@@ -19,7 +19,6 @@ namespace Microsoft.AspNetCore.Authorization
                     context.User.IsInRole(SharedConstants.READERPOLICY)));
             options.AddPolicy(SharedConstants.REGISTRATIONPOLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
-                    (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
                     context.User.IsInRole(SharedConstants.REGISTRATIONPOLICY)));
             options.AddPolicy(SharedConstants.TOKENPOLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&

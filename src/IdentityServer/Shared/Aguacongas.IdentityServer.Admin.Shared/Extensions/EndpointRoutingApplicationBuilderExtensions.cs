@@ -202,7 +202,7 @@ namespace Microsoft.AspNetCore.Builder
                     context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                     {
                                 new Claim(JwtClaimTypes.Name, client?.Id ?? "not found"),
-                                new Claim("role", SharedConstants.REGISTRATIONPOLICY)
+                                new Claim(JwtClaimTypes.Role, SharedConstants.REGISTRATIONPOLICY)
                     }, "registration", JwtClaimTypes.Name, "role"));
                     return true;
                 }
