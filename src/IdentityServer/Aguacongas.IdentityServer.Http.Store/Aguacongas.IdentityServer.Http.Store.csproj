@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel" Version="5.1.0" />
+		<PackageReference Include="IdentityModel" Version="5.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
 	</ItemGroup>
 
@@ -36,7 +36,7 @@
 		<ProjectReference Include="..\Aguacongas.IdentityServer\Aguacongas.IdentityServer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath=""/>
+    <None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 </Project>
