@@ -9,8 +9,7 @@
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;ef;administration</PackageTags>
-		<PackageIcon>package-icon.png</PackageIcon>
-		
+		<PackageIcon>package-icon.png</PackageIcon>		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 

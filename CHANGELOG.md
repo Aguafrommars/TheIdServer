@@ -1,3 +1,58 @@
+# [4.1.0](https://github.com/Aguafrommars/TheIdServer/compare/4.0.1...4.1.0) (2021-10-13)
+
+
+### Bug Fixes
+
+* missing auth code setting ([9e8d7b1](https://github.com/Aguafrommars/TheIdServer/commit/9e8d7b1457f80fa481382238cd76c2afe35f69e4))
+* update packages ([5b11c9a](https://github.com/Aguafrommars/TheIdServer/commit/5b11c9a3a91e7c65219b936f52f5989f17e8b4b1))
+* update packages ([364f3b4](https://github.com/Aguafrommars/TheIdServer/commit/364f3b48da79a4455926c32f7fa427ecb2bc97f6))
+* update packages ([4067a10](https://github.com/Aguafrommars/TheIdServer/commit/4067a10665021dadd0d1d318ba3ddbd98ef06adb))
+
+
+### Features
+
+* create PAT ([d24976f](https://github.com/Aguafrommars/TheIdServer/commit/d24976f8e40f441061ee80aa2c14959b9e55ccba))
+
+## [4.0.1](https://github.com/Aguafrommars/TheIdServer/compare/4.0.0...4.0.1) (2021-10-09)
+
+
+### Bug Fixes
+
+* grants page not display for duende ([3a7d689](https://github.com/Aguafrommars/TheIdServer/commit/3a7d689f97a1295f9ae54150dfaf9d82b42d7d97))
+* update packages ([a4c3658](https://github.com/Aguafrommars/TheIdServer/commit/a4c3658a90e1c73b84a5129ca5ef96c9fc548c8f))
+* update packages ([d5a4efa](https://github.com/Aguafrommars/TheIdServer/commit/d5a4efa151c9aab0b0e94a2e92caf3f0d6c012eb))
+* update packages ([6a05c5c](https://github.com/Aguafrommars/TheIdServer/commit/6a05c5c3e6508e87dc953aef2888d6543ef1f742))
+* update packages ([be20622](https://github.com/Aguafrommars/TheIdServer/commit/be2062244706fabb784ffdb3c7d5f1cb47a17f9c))
+* update packages ([90b6679](https://github.com/Aguafrommars/TheIdServer/commit/90b667917a331a0fb01ab51af4cd5cf27098687c))
+* update packages ([610a967](https://github.com/Aguafrommars/TheIdServer/commit/610a96714bec1d284ebbce85f02d84637b1df576))
+* update packages ([1a3c156](https://github.com/Aguafrommars/TheIdServer/commit/1a3c156b4e119d54227d02bd5e6d1ef66ada9ee3))
+
+# [4.0.0](https://github.com/Aguafrommars/TheIdServer/compare/3.0.3...4.0.0) (2021-09-21)
+
+
+### Bug Fixes
+
+* update packages ([51035e9](https://github.com/Aguafrommars/TheIdServer/commit/51035e99843796fb9d24a8d25fc5f77ff4506225))
+* update packages ([570e7ef](https://github.com/Aguafrommars/TheIdServer/commit/570e7efed51b3616947c8750e24478a7a85721d7))
+* update packages ([672bcd4](https://github.com/Aguafrommars/TheIdServer/commit/672bcd472868a2fbf1a7f90fb8b2e855e48574df))
+
+
+### Code Refactoring
+
+* :art: move code into shared projects ([4640601](https://github.com/Aguafrommars/TheIdServer/commit/46406019fcc23e66c70077b0483386634e05c7c8))
+* move code into shared projects ([8de1ddb](https://github.com/Aguafrommars/TheIdServer/commit/8de1ddbe02cd895ce9a15cc614b586d846b445c9))
+
+
+### Features
+
+* support duende ([1f75a01](https://github.com/Aguafrommars/TheIdServer/commit/1f75a01aa19f2848ad46837444935160f25ee06d))
+
+
+### BREAKING CHANGES
+
+* Duende IdentityServer
+* Duende IdentitiyServer
+
 ## [3.0.2](https://github.com/Aguafrommars/TheIdServer/compare/3.0.1...3.0.2) (2021-09-14)
 
 

@@ -8,7 +8,7 @@
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;administration</PackageTags>
+		<PackageTags>theidserver;identityserver4;duende-identityserver;administration</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

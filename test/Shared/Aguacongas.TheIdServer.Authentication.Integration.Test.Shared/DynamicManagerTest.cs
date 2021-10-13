@@ -3,6 +3,7 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.AspNetCore.Authentication.TestBase;
 using Aguacongas.IdentityServer.Store;
+using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Security.Claims;
@@ -33,8 +34,9 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                 });
 
             return builder.AddTheIdServerStore();

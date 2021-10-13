@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void WhenNonWriter_should_disable_inputs()
         {
             CreateTestHost("Bob Smith",
-                SharedConstants.READER,
+                SharedConstants.READERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -50,7 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void WhenWriter_should_enable_inputs()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -72,7 +72,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[] 
                 {
-                    new Claim("role", SharedConstants.READER),
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
+                    new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role) 
                 },
                 $"http://exemple.com/{Entity}/{id}",

@@ -37,19 +37,19 @@ Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft
 
 ### From dotnet new template
 
-The template [TheIdServer.Template](https://github.com/Aguafrommars/Templates) can be use to setup a TheIdServer solution.
+The template [TheIdServer.IS4.Template](https://github.com/Aguafrommars/Templates) can be use to setup a TheIdServer solution.
 
 #### Install
 
 ```bash
-dotnet new -i TheIdServer.Template
+dotnet new -i TheIdServer.IS4.Template
 ```
 
 #### Use
 
 ```bash
-> dotnet new tis -o TheIdServer
-The template "TheIdServer" was created successfully.
+> dotnet new tisis4 -o TheIdServer
+The template "TheIdServer.IS4" was created successfully.
 
 Processing post-creation actions...
 Running 'dotnet restore' on TheIdServer\TheIdServer.sln...

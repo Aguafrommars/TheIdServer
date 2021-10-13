@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string identityId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 identityId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -108,7 +108,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string identityId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 identityId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -138,7 +138,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string identityId = await CreateEntity();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 identityId,
                 out TestHost host,
                 out RenderedComponent<App> component,

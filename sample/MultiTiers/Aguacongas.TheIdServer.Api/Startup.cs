@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdServer.Api
 
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString))
-                .AddIdentityServer4AdminEntityFrameworkStores(options =>
+                .AddTheIdServerAdminEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))

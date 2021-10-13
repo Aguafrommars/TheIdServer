@@ -181,7 +181,7 @@ namespace Aguacongas.TheIdServer
 
             services.Configure<ExternalLoginOptions>(Configuration.GetSection("Google"))
                 .AddAuthorization(options =>
-                    options.AddIdentityServerPolicies())
+                    options.AddIdentityServerPolicies(true))
                 .AddAuthentication()
                 .AddJwtBearer("Bearer", options => ConfigureIdentityServerAuthenticationOptions(options))
                 // reference tokens
@@ -378,7 +378,6 @@ namespace Aguacongas.TheIdServer
                 };
             }
             options.Audience = Configuration["ApiAuthentication:ApiName"];
-
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>

@@ -257,25 +257,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Test.Shared", "test\Shared\Aguacongas.TheIdServer.Test.Shared\Aguacongas.TheIdServer.Test.Shared.csproj", "{21FD10C3-3660-4729-9A70-E82699BB41B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test\Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test.csproj", "{9D21E6D9-A8D8-4D47-B445-DB352CF99936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test\Aguacongas.IdentityServer.EntityFramework.Store.IS4.Test.csproj", "{9D21E6D9-A8D8-4D47-B445-DB352CF99936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.Http.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.Http.Store.IS4.Test\Aguacongas.IdentityServer.Http.Store.IS4.Test.csproj", "{64575302-7B16-4D72-843F-A21974019E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.Http.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.Http.Store.IS4.Test\Aguacongas.IdentityServer.Http.Store.IS4.Test.csproj", "{64575302-7B16-4D72-843F-A21974019E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.KeysRotation.IS4.Test", "test\IS4\Aguacongas.IdentityServer.KeysRotation.IS4.Test\Aguacongas.IdentityServer.KeysRotation.IS4.Test.csproj", "{1A5F6B6A-7A69-4DD8-B876-533289BB77AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.KeysRotation.IS4.Test", "test\IS4\Aguacongas.IdentityServer.KeysRotation.IS4.Test\Aguacongas.IdentityServer.KeysRotation.IS4.Test.csproj", "{1A5F6B6A-7A69-4DD8-B876-533289BB77AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.MongoDb.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.MongoDb.Store.IS4.Test\Aguacongas.IdentityServer.MongoDb.Store.IS4.Test.csproj", "{D40F44AE-6E5F-4539-8F2F-B6195E990999}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.MongoDb.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.MongoDb.Store.IS4.Test\Aguacongas.IdentityServer.MongoDb.Store.IS4.Test.csproj", "{D40F44AE-6E5F-4539-8F2F-B6195E990999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.IdentityServer.RavenDb.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.RavenDb.Store.IS4.Test\Aguacongas.IdentityServer.RavenDb.Store.IS4.Test.csproj", "{245A35B5-5F00-4DD6-B234-ACEAD8ABC1B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.RavenDb.Store.IS4.Test", "test\IS4\Aguacongas.IdentityServer.RavenDb.Store.IS4.Test\Aguacongas.IdentityServer.RavenDb.Store.IS4.Test.csproj", "{245A35B5-5F00-4DD6-B234-ACEAD8ABC1B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Authentication.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Authentication.Integration.IS4.Test\Aguacongas.TheIdServer.Authentication.Integration.IS4.Test.csproj", "{9F47A8BC-AE06-4C67-84DA-839A56DF90E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Authentication.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Authentication.Integration.IS4.Test\Aguacongas.TheIdServer.Authentication.Integration.IS4.Test.csproj", "{9F47A8BC-AE06-4C67-84DA-839A56DF90E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Identity.Integration.IS4.Test\Aguacongas.TheIdServer.Identity.Integration.IS4.Test.csproj", "{510BCD40-F459-46C6-BDA9-55218E8F8331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Identity.Integration.IS4.Test\Aguacongas.TheIdServer.Identity.Integration.IS4.Test.csproj", "{510BCD40-F459-46C6-BDA9-55218E8F8331}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Identity.IS4.Test\Aguacongas.TheIdServer.Identity.IS4.Test.csproj", "{015BCB1C-12AC-4EB0-9F5C-A71967930E80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Identity.IS4.Test\Aguacongas.TheIdServer.Identity.IS4.Test.csproj", "{015BCB1C-12AC-4EB0-9F5C-A71967930E80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Integration.IS4.Test\Aguacongas.TheIdServer.Integration.IS4.Test.csproj", "{30B5D50F-471E-4915-A85D-7722C890CE10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Integration.IS4.Test", "test\IS4\Aguacongas.TheIdServer.Integration.IS4.Test\Aguacongas.TheIdServer.Integration.IS4.Test.csproj", "{30B5D50F-471E-4915-A85D-7722C890CE10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.IS4.Test", "test\IS4\Aguacongas.TheIdServer.IS4.Test\Aguacongas.TheIdServer.IS4.Test.csproj", "{84E4DB36-5174-4F98-B5D0-362ADECEF70D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.IS4.Test", "test\IS4\Aguacongas.TheIdServer.IS4.Test\Aguacongas.TheIdServer.IS4.Test.csproj", "{84E4DB36-5174-4F98-B5D0-362ADECEF70D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.Admin.IS4.Test", "test\IS4\Aguacongas.IdentityServer.Admin.IS4.Test\Aguacongas.IdentityServer.Admin.IS4.Test.csproj", "{9D75BFC4-C846-4018-9F35-9AB3DCF85BEA}"
 EndProject

@@ -8,7 +8,7 @@
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;administration</PackageTags>
+		<PackageTags>theidserver;identityserver4;duende-identityserver;administration</PackageTags>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		
@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel" Version="5.1.0" />
+		<PackageReference Include="IdentityModel" Version="5.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-rc.1.21451.13" />
 	</ItemGroup>
 

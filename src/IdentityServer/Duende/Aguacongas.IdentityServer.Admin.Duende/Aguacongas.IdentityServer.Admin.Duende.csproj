@@ -30,6 +30,7 @@
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Models\ClientRegisteration.cs" Link="Models\ClientRegisteration.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\RegisterController.cs" Link="RegisterController.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ClientRegisterationConverter.cs" Link="Services\ClientRegisterationConverter.cs" />
+	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CreatePersonalAccessTokenService.cs" Link="Services\CreatePersonalAccessTokenService.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CustomJwtRequestValidator.cs" Link="Services\CustomJwtRequestValidator.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\IRegisterClientService.cs" Link="Services\IRegisterClientService.cs" />
 	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\PersistedGrantService.cs" Link="Services\PersistedGrantService.cs" />
@@ -53,7 +54,6 @@
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Models\" />
-	  <Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>

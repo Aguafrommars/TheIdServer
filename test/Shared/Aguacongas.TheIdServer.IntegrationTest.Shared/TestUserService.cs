@@ -1,5 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Store;
+using IdentityModel;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;

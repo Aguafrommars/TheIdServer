@@ -81,11 +81,14 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 {
                     var factory = p.GetRequiredService<IHttpClientFactory>();
                     return new ReadOnlyLocalizedResourceStore(new AdminStore<Entity.LocalizedResource>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.LocalizedResource>>>()));
-                }).AddTransient<IReadOnlyCultureStore>(p =>
+                })
+                .AddTransient<IReadOnlyCultureStore>(p =>
                 {
                     var factory = p.GetRequiredService<IHttpClientFactory>();
                     return new ReadOnlyCultureStore(new AdminStore<Entity.Culture>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>()));
-                }).AddHttpClient("localizer").ConfigureHttpClient(httpClient =>
+                })
+                .AddHttpClient("localizer")
+                .ConfigureHttpClient(httpClient =>
                 {
                     var apiUri = new Uri(settings.ApiBaseUrl);
                     httpClient.BaseAddress = apiUri;

@@ -10,7 +10,7 @@
 		
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
+		<PackageTags>theidserver;identityserver4;duende-identityserveroidc;oauth;identity,authentication;security</PackageTags>
 		<Description>TheIdServer administration application models, services, validators and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+		<PackageReference Include="IdentityModel" Version="5.1.1" />
         <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0-rc.1.21452.15" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0-rc.1.21452.15" />

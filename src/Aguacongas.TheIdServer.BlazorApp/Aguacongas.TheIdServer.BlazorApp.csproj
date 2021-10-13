@@ -5,12 +5,12 @@
         <Authors>Olivier Lefebvre</Authors>
         <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		
+		<IsPackable>true</IsPackable>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
         <PackageIcon>package-icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>theidserver;identityserver4;oidc;oauth;identity,authentication;security</PackageTags>
+        <PackageTags>theidserver;identityserver4;duende-identityserver;oidc;oauth;identity,authentication;security</PackageTags>
         <Description>TheIdServer administration application.</Description>
         <RazorLangVersion>3.0</RazorLangVersion>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
