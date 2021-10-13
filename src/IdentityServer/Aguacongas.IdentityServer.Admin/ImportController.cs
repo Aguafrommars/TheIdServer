@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPost()]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task<ImportResult> ImportAsync()
             => _service.ImportAsync(HttpContext.Request.Form.Files);
             

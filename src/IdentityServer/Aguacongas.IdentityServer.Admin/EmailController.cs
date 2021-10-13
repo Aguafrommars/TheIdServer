@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Send an email using SendGrid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task SendEmail([FromBody] Email email)
              => _sender.SendEmailAsync(email);
     }

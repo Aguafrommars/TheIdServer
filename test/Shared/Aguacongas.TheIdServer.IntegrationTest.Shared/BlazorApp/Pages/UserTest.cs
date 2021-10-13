@@ -383,7 +383,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClicked_create_new_user()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -486,7 +486,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var result = await manager.AddToRoleAsync(user, "filtered");
             Assert.True(result.Succeeded);
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 userId,
                 out TestHost host,
                 out RenderedComponent<App> component,

@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public void HandleFileSelected_should_report_importation_result()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out RenderedComponent<App> component);
 
             WaitForLoaded(component);
@@ -48,7 +48,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER),
+                    new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role)
                 },
                 $"http://exemple.com/import",

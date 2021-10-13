@@ -47,7 +47,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [Authorize(Policy = SharedConstants.READER)]
+        [Authorize(Policy = SharedConstants.READERPOLICY)]
         public Task<T> GetAsync(string id, GetRequest request) 
             => _store.GetAsync(id, request);
 
@@ -59,7 +59,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <response code="200">Returns a page of entites.</response>
         [HttpGet]
         [Description("Search entities using OData style query string (wihtout $)")]
-        [Authorize(Policy = SharedConstants.READER)]
+        [Authorize(Policy = SharedConstants.READERPOLICY)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public Task<PageResponse<T>> FindAsync(PageRequest request) 
@@ -76,7 +76,7 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Creates an entity")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task<T> CreateAsync([FromBody] T entity)
             => _store.CreateAsync(entity);
 
@@ -94,7 +94,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.Conflict)]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
 #pragma warning disable IDE0060 // Remove unused parameter. The id is used in ActionsFilter, id and entity.Id MUST match. 
         public Task<T> UpdateAsync(string id, [FromBody] T entity)
 #pragma warning restore IDE0060 // Remove unused parameter
@@ -110,7 +110,7 @@ namespace Aguacongas.IdentityServer.Admin
         [HttpDelete("{id}")]
         [Description("Deletes an entity")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task DeleteAsync(string id)
             => _store.DeleteAsync(id);
     }

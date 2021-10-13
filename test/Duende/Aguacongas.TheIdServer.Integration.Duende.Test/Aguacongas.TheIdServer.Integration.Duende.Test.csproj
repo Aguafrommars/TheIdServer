@@ -38,6 +38,7 @@
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Shared\MainLayoutTest.cs" Link="BlazorApp\Shared\MainLayoutTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\RegisterControllerTest.cs" Link="Controlers\RegisterControllerTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\TokenControllerTest.cs" Link="Controlers\TokenControllerTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controlers\WsFederationControllerTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\ProgramTest.cs" Link="ProgramTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\SchemeChangeSubscriberTest.cs" Link="SchemeChangeSubscriberTest.cs" />
@@ -55,11 +56,11 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.10" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.10" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.10" />
-	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.10" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.11" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.11" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.11" />
+	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.11" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.11" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
 	  <PackageReference Include="Moq" Version="4.16.1" />
 	  <PackageReference Include="xunit" Version="2.4.1" />

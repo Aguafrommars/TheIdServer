@@ -38,7 +38,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = SharedConstants.READER)]
+        [Authorize(Policy = SharedConstants.READERPOLICY)]
         public PageResponse<Key> Get()
             => _wrapper.GetAllKeys();
 
@@ -48,7 +48,7 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="id"> The id of the key to revoke.</param>
         /// <param name="reason">An optional human-readable reason for revocation.</param>
         [HttpDelete("{id}")]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task RevokeKey(Guid id, string reason)
             =>  _wrapper.RevokeKey(id, reason);
     }

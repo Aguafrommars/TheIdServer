@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClick_should_create_provider()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClick_should_update_provider()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 "Google",
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -118,7 +118,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string providerId = await CreateProvider();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 providerId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -148,7 +148,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var providerId = await CreateProvider();
             CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
+                         SharedConstants.WRITERPOLICY,
                          providerId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -194,7 +194,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var providerId = await CreateProvider();
             CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
+                         SharedConstants.WRITERPOLICY,
                          providerId,
                          out TestHost host,
                          out RenderedComponent<App> component,
@@ -232,7 +232,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
 
             CreateTestHost("Alice Smith",
-                         SharedConstants.WRITER,
+                         SharedConstants.WRITERPOLICY,
                          providerId,
                          out TestHost host,
                          out RenderedComponent<App> component,

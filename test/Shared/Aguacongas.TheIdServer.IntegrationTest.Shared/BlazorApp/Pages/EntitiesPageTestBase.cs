@@ -38,7 +38,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -134,7 +134,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -164,7 +164,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -210,7 +210,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await PopulateList();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 out TestHost host,
                 out RenderedComponent<App> component,
                 out MockHttpMessageHandler mockHttp);
@@ -266,7 +266,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             TestUtils.CreateTestHost(userName,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER),
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
+                    new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())
                 },

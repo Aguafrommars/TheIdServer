@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -59,7 +59,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClick_should_create_role()
         {
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 null,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -94,7 +94,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -125,7 +125,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -178,7 +178,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
@@ -219,7 +219,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string roleId = await CreateRole();
 
             CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
+                SharedConstants.WRITERPOLICY,
                 roleId,
                 out TestHost host,
                 out RenderedComponent<App> component,
