@@ -1,3 +1,18 @@
+# [4.1.0](https://github.com/Aguafrommars/TheIdServer/compare/4.0.1...4.1.0) (2021-10-13)
+
+
+### Bug Fixes
+
+* missing auth code setting ([9e8d7b1](https://github.com/Aguafrommars/TheIdServer/commit/9e8d7b1457f80fa481382238cd76c2afe35f69e4))
+* update packages ([5b11c9a](https://github.com/Aguafrommars/TheIdServer/commit/5b11c9a3a91e7c65219b936f52f5989f17e8b4b1))
+* update packages ([364f3b4](https://github.com/Aguafrommars/TheIdServer/commit/364f3b48da79a4455926c32f7fa427ecb2bc97f6))
+* update packages ([4067a10](https://github.com/Aguafrommars/TheIdServer/commit/4067a10665021dadd0d1d318ba3ddbd98ef06adb))
+
+
+### Features
+
+* create PAT ([d24976f](https://github.com/Aguafrommars/TheIdServer/commit/d24976f8e40f441061ee80aa2c14959b9e55ccba))
+
 ## [4.0.1](https://github.com/Aguafrommars/TheIdServer/compare/4.0.0...4.0.1) (2021-10-09)
 
 
