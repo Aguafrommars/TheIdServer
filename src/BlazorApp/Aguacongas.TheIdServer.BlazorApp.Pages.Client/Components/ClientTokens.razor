@@ -38,20 +38,20 @@
     </div>
     if ((_showAllOptions || Model.IsAuthorizationCodeClient()))
     {
-        <div class="form-group row">
-            <label class="col col-form-label">
-            </label>
-            <div class="col-lg-8 col-sm-12">
+    <div class="form-group row">
+        <label class="col col-form-label" for="access-token">
+            @Localizer["authorization code lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizedToken Name="authorization-code-lifetime" QuickValues="_idTokenQuickValues" @bind-Value="@Model.AuthorizationCodeLifetime" TokenValueChanged="TokenChanded" />
+            <div>
                 <AuthorizeCheckbox Name="require-pkce" Label="@Localizer["require PKCE"]" @bind-Value="@Model.RequirePkce" />
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="col col-form-label">
-            </label>
-            <div class="col-lg-8 col-sm-12">
+            <div>
                 <AuthorizeCheckbox Name="allow-plain-text-pkce" Label="@Localizer["allow plain text PKCE"]" @bind-Value="@Model.AllowPlainTextPkce" />
             </div>
         </div>
+    </div>
     }
     <div class="form-group row">
         <label class="col col-form-label" for="access-token">

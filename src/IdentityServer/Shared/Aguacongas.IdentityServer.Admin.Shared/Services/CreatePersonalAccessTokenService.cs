@@ -137,7 +137,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 throw new InvalidOperationException($"Client not found for client id '{clientId}'.");
             }
 
-            var apiList = await _resourceStore.FindApiResourcesByNameAsync(apis).ConfigureAwait(false);
+            var apiList = await _resourceStore.FindApiScopesByNameAsync(apis).ConfigureAwait(false);
             foreach (var api in apis)
             {
                 if (!apiList.Any(a => a.Name == api))
