@@ -25,11 +25,11 @@
     <ItemGroup>
 		<PackageReference Include="IdentityModel" Version="5.1.1" />
         <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0-rc.1.21452.15" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0-rc.1.21452.15" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-rc.1.21451.13" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0-rc.1.21452.15" />
-        <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.12.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0-rc.2.21480.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0-rc.2.21480.10" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-rc.2.21480.5" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0-rc.2.21480.10" />
+        <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.13.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
     <ItemGroup>
