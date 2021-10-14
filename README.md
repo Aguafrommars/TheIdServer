@@ -57,6 +57,7 @@ Choose your favorite:
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 * [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-token-cleaner)
 * [Keys rotation](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/KEYS_ROTATION.md)
+* [Create Personal Access Token](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PAT.md)
 
 ## Setup
 
