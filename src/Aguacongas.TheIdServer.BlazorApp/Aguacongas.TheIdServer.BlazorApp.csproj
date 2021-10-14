@@ -12,9 +12,10 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;identityserver4;duende-identityserver;oidc;oauth;identity,authentication;security</PackageTags>
         <Description>TheIdServer administration application.</Description>
-        <RazorLangVersion>3.0</RazorLangVersion>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-        <RunAOTCompilation>true</RunAOTCompilation>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RunAOTCompilation>true</RunAOTCompilation>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
