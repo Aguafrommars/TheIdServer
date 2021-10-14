@@ -5,8 +5,8 @@ The client must has access to the scope **theidservertokenapi** to call this API
 
 ![Pat-Scope](assets/PAT-scope.jpeg)
 
-The API takes a json payload contening the PAT lifetime in days, a flag indicatiing if it's a reference token, the list of API the client want to create a PAT, the list of claim and the list of scope to include in the PAT, and return the PAT.  
-The client must have access to all scopes and APIs it request. Claims are copied from the token used to call the API.
+The API takes a json payload contening the PAT lifetime in days, a flag indicatiing if it's a reference token, the list of API the client want to create a PAT for, the list of claim and the list of scope to include in the PAT, and returns the PAT.  
+The client must have access to all scopes and APIs it requests. Claims are copied from the token used to call the API.
 
 ![PAT-api](assets/PAT-api.jpeg)
 
