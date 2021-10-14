@@ -71,15 +71,15 @@ namespace Aguacongas.TheIdServer.Api
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(SharedConstants.WRITER, policy =>
+                options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                 {
                     policy.RequireAssertion(context =>
-                       context.User.IsInRole(SharedConstants.WRITER));
+                       context.User.IsInRole(SharedConstants.WRITERPOLICY));
                 });
-                options.AddPolicy(SharedConstants.READER, policy =>
+                options.AddPolicy(SharedConstants.READERPOLICY, policy =>
                 {
                     policy.RequireAssertion(context =>
-                       context.User.IsInRole(SharedConstants.READER));
+                       context.User.IsInRole(SharedConstants.READERPOLICY));
                 });
             })
                 .AddAuthentication("Bearer")
