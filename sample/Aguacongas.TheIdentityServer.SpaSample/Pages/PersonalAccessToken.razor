@@ -1,0 +1,53 @@
+﻿@using System.Text.Json
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+@page "/pat"
+
+@inject IHttpClientFactory _httpClientFactory
+
+<h3>Personal Access Token (PAT)</h3>
+
+<div>
+    <input id="reference" class=form-check-input type="checkbox" @bind="IsReferenceToken" /> 
+    <label class="form-check-label" for="reference" @onclick="Togle">
+        Reference Token
+    </label>
+</div>
+
+<button @onclick="GenerateAsync" >Generate</button>
+<div>
+    @Token
+</div>
+@code {
+    private bool IsReferenceToken { get; set; }
+    private string Token { get; set; }
+
+    private async Task GenerateAsync()
+    {
+        var httpClient = _httpClientFactory.CreateClient("TokenApi");
+
+        var response = await httpClient.PostAsJsonAsync("api/token/pat", new
+        {
+            IsReferenceToken = IsReferenceToken,
+            LifetimeDays = 1,
+            Apis = new []
+            {
+                "api1"
+            },
+            Scopes = new []
+            {
+                "api1"
+            }
+        }, default);
+
+        Token = await JsonSerializer.DeserializeAsync<string>(await response.Content.ReadAsStreamAsync());
+    }
+
+    private Task Togle()
+    {
+        IsReferenceToken = !IsReferenceToken;
+        return Task.CompletedTask;
+    }
+}

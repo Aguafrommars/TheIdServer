@@ -11,7 +11,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// <summary>
     /// Personal access token controller
     /// </summary>
-    /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
+    /// <seealso cref="Controller" />
     [Produces("application/json")]
     [Route("[controller]")]
     [Authorize(SharedConstants.TOKENPOLICY)]
@@ -30,7 +30,7 @@ namespace Aguacongas.IdentityServer.Admin
         }
 
         /// <summary>
-        /// Creates the asynchronous.
+        /// Creates a Personnal Access Token (PAT) for the current user and calling app.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
