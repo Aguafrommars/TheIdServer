@@ -8,12 +8,12 @@ namespace Microsoft.AspNetCore.Authorization
     {
         public static void AddIdentityServerPolicies(this AuthorizationOptions options)
         {
-            options.AddPolicy(SharedConstants.WRITER, policy =>
+            options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                    policy.RequireAssertion(context =>
-                       context.User.IsInRole(SharedConstants.WRITER)));
-            options.AddPolicy(SharedConstants.READER, policy =>
+                       context.User.IsInRole(SharedConstants.WRITERPOLICY)));
+            options.AddPolicy(SharedConstants.READERPOLICY, policy =>
                policy.RequireAssertion(context =>
-                   context.User.IsInRole(SharedConstants.READER)));
+                   context.User.IsInRole(SharedConstants.READERPOLICY)));
         }
     }
 }
