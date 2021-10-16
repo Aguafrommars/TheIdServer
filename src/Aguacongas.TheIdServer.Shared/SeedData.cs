@@ -136,7 +136,7 @@ namespace Aguacongas.TheIdServer
                 culture = new Entity.Culture
                 {
                     Id = "fr",
-                    Resources = Array.Empty<Entity.LocalizedResource>()
+                    Resources = new List<Entity.LocalizedResource>()
                 };
                 cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
             }
@@ -145,11 +145,12 @@ namespace Aguacongas.TheIdServer
                 culture = culturePage.Items.First();
             }
 
-            var exsitings = culture.Resources;
+            var exsitings = culture.Resources.ToList();
             var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText("Localization-fr.json"), new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
+
             foreach (var resource in resources)
             {
                 if (!exsitings.Any(r => r.Key == resource.Key))
