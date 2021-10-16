@@ -18,7 +18,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
+                        <AuthorizeText Id="name" Placeholder="@Localizer["identity id"]" @bind-Value="@Model.Id" />
                     }
                     else
                     {
@@ -128,7 +128,7 @@ else
                 </div>
                 <div id="mappings" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="Claims mappings" Collection="@Model.ClaimMappings" CreateModel="@CreateMapping" />
+                        <EntitySubGridTitle Text="@Localizer["Claims mapping"]" Collection="@Model.ClaimMappings" CreateModel="@CreateMapping" />
                     </div>
                     <div class="card-body">
                         <ClaimMappings Collection="@Model.ClaimMappings" />
