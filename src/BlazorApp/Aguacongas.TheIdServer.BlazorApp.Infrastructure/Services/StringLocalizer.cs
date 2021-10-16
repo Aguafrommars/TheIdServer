@@ -151,7 +151,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 KeyValuePairs[resource.Key] = new LocalizedString(resource.Key, resource.Value ?? resource.Key, resource.Value == null);
             }
 
-            ResourceReady();
+            ResourceReady?.Invoke();
         }
 
         private void SetResource(string name, Task<LocalizedString> task)
