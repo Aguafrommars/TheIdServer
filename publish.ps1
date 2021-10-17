@@ -21,3 +21,17 @@ if ($LASTEXITCODE -ne 0) {
 7z a $path\artifacts\build\Aguacongas.TheIdServer.IS4.$env:version.zip $path\artifacts\Aguacongas.TheIdServer.IS4
 7z a $path\artifacts\build\Aguacongas.TheIdServer.Duende.$env:version.zip $path\artifacts\Aguacongas.TheIdServer.Duende
 7z a $path\artifacts\build\Aguacongas.TheIdServer.BlazorApp$env:version.zip $path\artifacts\Aguacongas.TheIdServer.BlazorApp
+
+docker login -u aguacongas -p $env:DOCKER_PWD
+
+docker pull aguacongas/theidserver:next
+docker tag aguacongas/theidserver:next aguacongas/theidserver:$env:Version
+docker push aguacongas/theidserver:$env:Version
+
+docker pull aguacongas/theidserver.duende:next
+docker tag aguacongas/theidserver.duende:next aguacongas/theidserver.duende:$env:Version
+docker push aguacongas/theidserver.duende:$env:Version
+
+docker pull aguacongas/theidserverapp:next
+docker tag aguacongas/theidserverapp:next aguacongas/theidserverapp:$env:Version
+docker push aguacongas/theidserverapp:$env:Version
