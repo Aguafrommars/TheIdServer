@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Localization-fr.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
     <Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />
@@ -56,6 +60,9 @@
     <None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
     <None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
     <None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
+    <None Include="Localization-fr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\LoggedOut.cshtml" Link="Views\Account\LoggedOut.cshtml" />
     <Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Login.cshtml" Link="Views\Account\Login.cshtml" />
