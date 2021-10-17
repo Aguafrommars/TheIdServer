@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/Aguafrommars/TheIdServer/compare/4.1.0...4.2.0) (2021-10-17)
+
+
+### Features
+
+* seed localization ([5bdf818](https://github.com/Aguafrommars/TheIdServer/commit/5bdf818f3f400154ca42ad9721f564b2d485b979)), closes [#566](https://github.com/Aguafrommars/TheIdServer/issues/566)
+
 # [4.1.0](https://github.com/Aguafrommars/TheIdServer/compare/4.0.1...4.1.0) (2021-10-13)
 
 
