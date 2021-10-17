@@ -122,12 +122,22 @@ namespace Aguacongas.TheIdServer
 
         private static void SeedLocalization(IConfiguration configuration, IServiceProvider provider)
         {
+            var cultureFiles = Directory.EnumerateFiles(".", "Localization-*.json");
+            foreach (var file in cultureFiles)
+            {
+                SeedCultureFile(provider, file);
+            }
+        }
+
+        private static void SeedCultureFile(IServiceProvider provider, string file)
+        {
+            var cultureName = Path.GetFileNameWithoutExtension(file).Split("-")[1];
             var cultureStore = provider.GetRequiredService<IAdminStore<Entity.Culture>>();
             var localizedResouceStore = provider.GetRequiredService<IAdminStore<Entity.LocalizedResource>>();
 
             var culturePage = cultureStore.GetAsync(new PageRequest
             {
-                Filter = "Id eq 'fr'",
+                Filter = $"Id eq '{cultureName}'",
                 Expand = "Resources"
             }).GetAwaiter().GetResult();
             Entity.Culture culture;
@@ -135,8 +145,8 @@ namespace Aguacongas.TheIdServer
             {
                 culture = new Entity.Culture
                 {
-                    Id = "fr",
-                    Resources = Array.Empty<Entity.LocalizedResource>()
+                    Id = cultureName,
+                    Resources = new List<Entity.LocalizedResource>()
                 };
                 cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
             }
@@ -145,11 +155,12 @@ namespace Aguacongas.TheIdServer
                 culture = culturePage.Items.First();
             }
 
-            var exsitings = culture.Resources;
-            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText("Localization-fr.json"), new JsonSerializerOptions
+            var exsitings = culture.Resources.ToList();
+            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
+
             foreach (var resource in resources)
             {
                 if (!exsitings.Any(r => r.Key == resource.Key))

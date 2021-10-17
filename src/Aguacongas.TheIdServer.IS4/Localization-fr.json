@@ -8,6 +8,14 @@
     "value": "{0} <small>demande votre autorisation</small>"
   },
   {
+    "key": "'{0}' cannot be added to a client with grant type '{1}'.",
+    "value": "'{0}' ne peut pas être ajouté à un client avec le type d'octroi '{1}'."
+  },
+  {
+    "key": "{0} is not a valid uri.",
+    "value": "{0} n'est pas un uri valide."
+  },
+  {
     "key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
     "value": "2fa a été désactivé. Vous pouvez réactiver 2fa lorsque vous configurez une application d'authentification"
   },
@@ -84,6 +92,10 @@
     "value": "toujours envoyer des réclamations"
   },
   {
+    "key": "An url cannot exceed 2000 char.",
+    "value": "Une URL ne peut pas dépasser 2000 caractères."
+  },
+  {
     "key": "api",
     "value": "api"
   },
@@ -116,12 +128,28 @@
     "value": "Associez votre compte {0}."
   },
   {
+    "key": "Authentication in progress",
+    "value": "Authentification en cours"
+  },
+  {
     "key": "Authenticator app",
     "value": "Application d'authentification"
   },
   {
+    "key": "Authenticator code",
+    "value": "Code d'authentification"
+  },
+  {
     "key": "authority",
     "value": "autorité"
+  },
+  {
+    "key": "Authority is required.",
+    "value": "L'autorité est requise."
+  },
+  {
+    "key": "Authority must be a valid uir.",
+    "value": "L'autorité doit être un uir valide."
   },
   {
     "key": "authorization code lifetime",
@@ -130,6 +158,14 @@
   {
     "key": "authorization endpoint",
     "value": "point de terminaison d'autorisation"
+  },
+  {
+    "key": "Authorization endpoint is required.",
+    "value": "Le point de terminaison d'autorisation est requis."
+  },
+  {
+    "key": "Authorization endpoint must be a valid uri.",
+    "value": "Le point de terminaison d'autorisation doit être une URI valide."
   },
   {
     "key": "back channel logout uri",
@@ -168,16 +204,20 @@
     "value": "type de réclamation"
   },
   {
-    "key": "claims",
-    "value": "réclamations"
-  },
-  {
     "key": "Claims",
     "value": "Réclamations"
   },
   {
+    "key": "claims",
+    "value": "réclamations"
+  },
+  {
     "key": "claims mapping",
     "value": "cartographie des revendications"
+  },
+  {
+    "key": "Claims mapping",
+    "value": "Cartographie des revendications"
   },
   {
     "key": "claims prefix",
@@ -186,6 +226,10 @@
   {
     "key": "claims transformations",
     "value": "transformations de revendications"
+  },
+  {
+    "key": "Claims transformations",
+    "value": "Transformations des reclamations"
   },
   {
     "key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
@@ -200,12 +244,20 @@
     "value": "identité du client"
   },
   {
+    "key": "Client Id is required.",
+    "value": "L'ID client est requis."
+  },
+  {
     "key": "client name",
     "value": "Nom du client"
   },
   {
     "key": "client secret",
     "value": "secret client"
+  },
+  {
+    "key": "Client Secret is required.",
+    "value": "Le secret client est requis."
   },
   {
     "key": "client uri",
@@ -240,6 +292,14 @@
     "value": "Confirmer le changement d'e-mail"
   },
   {
+    "key": "Confirm new password",
+    "value": "Confirmer le nouveau mot de passe"
+  },
+  {
+    "key": "Confirm password",
+    "value": "Confirmez le mot de passe"
+  },
+  {
     "key": "Confirm your email",
     "value": "confirmez votre email"
   },
@@ -252,6 +312,10 @@
     "value": "consentement"
   },
   {
+    "key": "Consent",
+    "value": "Consentement"
+  },
+  {
     "key": "consent lifetime",
     "value": "durée de vie du consentement"
   },
@@ -260,12 +324,24 @@
     "value": "consentements"
   },
   {
+    "key": "Consents",
+    "value": "Consentements"
+  },
+  {
     "key": "consumer key",
     "value": "La clé du consommateur"
   },
   {
+    "key": "Consumer Key is required.",
+    "value": "La clé du consommateur est requise."
+  },
+  {
     "key": "consumer secret",
     "value": "secret du consommateur"
+  },
+  {
+    "key": "Consumer Secret is required.",
+    "value": "Le secret du consommateur est requis."
   },
   {
     "key": "cors",
@@ -294,6 +370,10 @@
   {
     "key": "Cultures",
     "value": "Cultures"
+  },
+  {
+    "key": "Current password",
+    "value": "Mot de passe actuel"
   },
   {
     "key": "data",
@@ -374,6 +454,10 @@
   {
     "key": "Editing the profile is not supported.",
     "value": "La modification du profil n'est pas prise en charge."
+  },
+  {
+    "key": "Email",
+    "value": "E-mail"
   },
   {
     "key": "email",
@@ -472,6 +556,10 @@
     "value": "connexions externes"
   },
   {
+    "key": "External logins",
+    "value": "Connexions externes"
+  },
+  {
     "key": "external logins tokens",
     "value": "jetons de connexion externes"
   },
@@ -534,6 +622,10 @@
   {
     "key": "grant types",
     "value": "types de subventions"
+  },
+  {
+    "key": "Grant types",
+    "value": "Types de subventions"
   },
   {
     "key": "Grants",
@@ -704,12 +796,32 @@
     "value": "adresse de métadonnées"
   },
   {
+    "key": "Metadata address is required.",
+    "value": "L'adresse de métadonnées est requise."
+  },
+  {
+    "key": "Metadata address must be a valid HTTPS url when 'required https metadata is true'.",
+    "value": "L'adresse de métadonnées doit être une URL HTTPS valide lorsque « les métadonnées https requises sont vraies »."
+  },
+  {
+    "key": "Metadata address must be a valid uri.",
+    "value": "L'adresse de métadonnées doit être un uri valide."
+  },
+  {
     "key": "name",
     "value": "Nom"
   },
   {
     "key": "name id format",
     "value": "format d'identifiant de nom"
+  },
+  {
+    "key": "New email",
+    "value": "Nouvel e-mail"
+  },
+  {
+    "key": "New password",
+    "value": "Nouveau mot de passe"
   },
   {
     "key": "No changes",
@@ -758,6 +870,10 @@
   {
     "key": "phone number",
     "value": "numéro de téléphone"
+  },
+  {
+    "key": "Phone number",
+    "value": "Numéro de téléphone"
   },
   {
     "key": "phone number confirmed",
@@ -852,6 +968,10 @@
     "value": "raison"
   },
   {
+    "key": "Recovery Code",
+    "value": "Code de récupération"
+  },
+  {
     "key": "Recovery code verification",
     "value": "Vérification du code de récupération"
   },
@@ -866,6 +986,10 @@
   {
     "key": "redirect uri",
     "value": "uri de redirection"
+  },
+  {
+    "key": "Reference tokens",
+    "value": "Jetons de référence"
   },
   {
     "key": "reference tokens",
@@ -924,11 +1048,19 @@
     "value": "Se souvenir de ma connexion"
   },
   {
+    "key": "Remember this machine",
+    "value": "Souviens-toi de cette machine"
+  },
+  {
     "key": "remenber consent",
     "value": "se souvenir du consentement"
   },
   {
     "key": "remote sign-out path ",
+    "value": "chemin de déconnexion à distance"
+  },
+  {
+    "key": "remote sign-out path",
     "value": "chemin de déconnexion à distance"
   },
   {
@@ -1048,6 +1180,14 @@
     "value": "portées"
   },
   {
+    "key": "Scopes",
+    "value": "Portées"
+  },
+  {
+    "key": "Scopes must be unique.",
+    "value": "Les étendues doivent être uniques."
+  },
+  {
     "key": "secrets",
     "value": "secrets"
   },
@@ -1104,11 +1244,11 @@
     "value": "Signature"
   },
   {
-    "key": "sign-out scheme",
+    "key": "sign-out scheme ",
     "value": "schéma de déconnexion"
   },
   {
-    "key": "sign-out scheme ",
+    "key": "sign-out scheme",
     "value": "schéma de déconnexion"
   },
   {
@@ -1168,8 +1308,128 @@
     "value": "Merci d'avoir confirmé votre changement d'adresse e-mail."
   },
   {
+    "key": "The {0} must be at least {2} and at max {1} characters long.",
+    "value": "Le {0} doit comporter au moins {2} et au maximum {1} caractères."
+  },
+  {
+    "key": "The api property key cannot exceed 250 chars.",
+    "value": "La clé de propriété de l'API ne peut pas dépasser 250 caractères."
+  },
+  {
+    "key": "The api property key is required.",
+    "value": "La clé de propriété de l'API est requise."
+  },
+  {
+    "key": "The api property key must be unique.",
+    "value": "La clé de propriété de l'API doit être unique."
+  },
+  {
+    "key": "The api property value cannot exceed 2000 chars.",
+    "value": "La valeur de la propriété api ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The api property value is required.",
+    "value": "La valeur de la propriété api est obligatoire."
+  },
+  {
+    "key": "The back channel logout url cannot exceed 2000 char.",
+    "value": "L'URL de déconnexion du canal arrière ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The back channel logout url is required.",
+    "value": "L'URL de déconnexion du canal arrière est requise."
+  },
+  {
+    "key": "The back logout url is not valid.",
+    "value": "L'URL de déconnexion arrière n'est pas valide."
+  },
+  {
+    "key": "The claim prefix cannot exceed 250 char.",
+    "value": "Le préfixe de revendication ne peut pas dépasser 250 caractères."
+  },
+  {
+    "key": "The claim type cannot exceed 2000 chars.",
+    "value": "Le type de revendication ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The claim type cannot exceed 250 chars.",
+    "value": "Le type de revendication ne peut pas dépasser 250 caractères."
+  },
+  {
+    "key": "The claim type is required.",
+    "value": "Le type de réclamation est obligatoire."
+  },
+  {
+    "key": "The claim type must be unique.",
+    "value": "Le type de revendication doit être unique."
+  },
+  {
+    "key": "The claim value cannot exceed 2000 chars.",
+    "value": "La valeur de la réclamation ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The claim value is required.",
+    "value": "La valeur de la réclamation est requise."
+  },
+  {
+    "key": "The client property key cannot exceed 250 chars.",
+    "value": "La clé de propriété du client ne peut pas dépasser 250 caractères."
+  },
+  {
+    "key": "The client property key is required.",
+    "value": "La clé de propriété du client est requise."
+  },
+  {
+    "key": "The client property key must be unique.",
+    "value": "La clé de propriété du client doit être unique."
+  },
+  {
+    "key": "The client property value cannot exceed 2000 chars.",
+    "value": "La valeur de la propriété client ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The client property value is required.",
+    "value": "La valeur de la propriété client est obligatoire."
+  },
+  {
+    "key": "The client should contain at least one grant type.",
+    "value": "Le client doit contenir au moins un type de subvention."
+  },
+  {
+    "key": "The culture is required.",
+    "value": "La culture s'impose."
+  },
+  {
+    "key": "The culture must be unique.",
+    "value": "La culture doit être unique."
+  },
+  {
     "key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
     "value": "Le navigateur actuel a été oublié. Lorsque vous vous reconnecterez à partir de ce navigateur, vous serez invité à saisir votre code 2fa."
+  },
+  {
+    "key": "The description cannot exceed 200 chars.",
+    "value": "La description ne peut pas dépasser 200 caractères."
+  },
+  {
+    "key": "The description cannot exceed 2000 chars.",
+    "value": "La description ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The description canoot exceed 1000 char.",
+    "value": "La description ne peut pas dépasser 1000 car."
+  },
+  {
+    "key": "The digest algorithm is required",
+    "value": "L'algorithme de condensé est requis"
+  },
+  {
+    "key": "The display name cannot exceed 200 chars.",
+    "value": "Le nom d'affichage ne peut pas dépasser 200 caractères."
+  },
+  {
+    "key": "The display name is required.",
+    "value": "Le nom d'affichage est obligatoire."
   },
   {
     "key": "The external login was added.",
@@ -1186,6 +1446,214 @@
   {
     "key": "The external login was removed.",
     "value": "La connexion externe a été supprimée."
+  },
+  {
+    "key": "The from claim tyoe is required.",
+    "value": "Le montant de la réclamation est requis."
+  },
+  {
+    "key": "The from claim type is required.",
+    "value": "Le type de revendication de est requis."
+  },
+  {
+    "key": "The from claim type must be unique.",
+    "value": "Le type de revendication de doit être unique."
+  },
+  {
+    "key": "The front channel logout url cannot exceed 2000 char.",
+    "value": "L'URL de déconnexion du canal avant ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The front channel logout url is not valid.",
+    "value": "L'URL de déconnexion du canal frontal n'est pas valide."
+  },
+  {
+    "key": "The front channel logout url is required.",
+    "value": "L'URL de déconnexion du canal avant est requise."
+  },
+  {
+    "key": "The grant type cannot contains space.",
+    "value": "Le type de subvention ne peut pas contenir d'espace."
+  },
+  {
+    "key": "The grant type must be unique.",
+    "value": "Le type de subvention doit être unique."
+  },
+  {
+    "key": "The id is required.",
+    "value": "L'identifiant est requis."
+  },
+  {
+    "key": "The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed).",
+    "value": "L'id doit être un URI lorsque le protocole est WS-Federation. (ex : urne:wsfed)."
+  },
+  {
+    "key": "The identity claim type cannot exceed 2000 chars.",
+    "value": "Le type de revendication d'identité ne peut pas dépasser 2 000 caractères."
+  },
+  {
+    "key": "The identity claim type is required.",
+    "value": "Le type de revendication d'identité est requis."
+  },
+  {
+    "key": "The identity claim type must be unique.",
+    "value": "Le type de revendication d'identité doit être unique."
+  },
+  {
+    "key": "The identity property key cannot exceed 250 chars.",
+    "value": "La clé de propriété d'identité ne peut pas dépasser 250 caractères."
+  },
+  {
+    "key": "The identity property key is required.",
+    "value": "La clé de propriété d'identité est requise."
+  },
+  {
+    "key": "The identity property key must be unique.",
+    "value": "La clé de propriété d'identité doit être unique."
+  },
+  {
+    "key": "The identity property value cannot exceed 2000 chars.",
+    "value": "La valeur de la propriété d'identité ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The identity property value is required.",
+    "value": "La valeur de la propriété d'identité est obligatoire."
+  },
+  {
+    "key": "The identity should provide at least one claim.",
+    "value": "L'identité doit fournir au moins une revendication."
+  },
+  {
+    "key": "The key is required.",
+    "value": "La clé est requise."
+  },
+  {
+    "key": "The key must be unique.",
+    "value": "La clé doit être unique."
+  },
+  {
+    "key": "The kind of provider is required.",
+    "value": "Le type de fournisseur est requis."
+  },
+  {
+    "key": "The logo url cannot exceed 2000 char.",
+    "value": "L'URL du logo ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The logo url is not valid.",
+    "value": "L'url du logo n'est pas valide."
+  },
+  {
+    "key": "The name cannot exceed 200 char.",
+    "value": "Le nom ne peut pas dépasser 200 caractères."
+  },
+  {
+    "key": "The name cannot exceed 200 chars.",
+    "value": "Le nom ne peut pas dépasser 200 caractères."
+  },
+  {
+    "key": "The name identifier is required",
+    "value": "L'identifiant du nom est obligatoire"
+  },
+  {
+    "key": "The name is required",
+    "value": "Le nom est obligatoire"
+  },
+  {
+    "key": "The name is required.",
+    "value": "Le nom est obligatoire."
+  },
+  {
+    "key": "The new password and confirmation password do not match.",
+    "value": "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas."
+  },
+  {
+    "key": "The password and confirmation password do not match.",
+    "value": "Le mot de passe et le mot de passe de confirmation ne correspondent pas."
+  },
+  {
+    "key": "The policy url cannot exceed 2000 char.",
+    "value": "L'URL de la politique ne peut pas dépasser 2 000 caractères."
+  },
+  {
+    "key": "The policy url is not valid.",
+    "value": "L'URL de la politique n'est pas valide."
+  },
+  {
+    "key": "The relying party is required.",
+    "value": "La partie utilisatrice est requise."
+  },
+  {
+    "key": "The role must be unique",
+    "value": "Le rôle doit être unique"
+  },
+  {
+    "key": "The role name is required",
+    "value": "Le nom du rôle est requis"
+  },
+  {
+    "key": "The secret type is required.",
+    "value": "Le type de secret est requis."
+  },
+  {
+    "key": "The secret value is required.",
+    "value": "La valeur secrète est obligatoire."
+  },
+  {
+    "key": "The sheme is required.",
+    "value": "Le schéma est requis."
+  },
+  {
+    "key": "The subject salt cannot exceed 250 char.",
+    "value": "Le sel en question ne peut pas dépasser 250 char."
+  },
+  {
+    "key": "The terms of service url cannot exceed 2000 char.",
+    "value": "L'URL des conditions d'utilisation ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The terms of service url is not valid.",
+    "value": "L'URL des conditions d'utilisation n'est pas valide."
+  },
+  {
+    "key": "The to claim tyoe is required.",
+    "value": "Le droit de réclamation est obligatoire."
+  },
+  {
+    "key": "The to claim type is required.",
+    "value": "Le type de réclamation est requis."
+  },
+  {
+    "key": "The to claim type must be an URI.",
+    "value": "Le type à réclamer doit être un URI."
+  },
+  {
+    "key": "The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second",
+    "value": "L'expression du jeton ne correspond pas à un format valide. Vous pouvez utiliser les formes d.hh:mm:ss, hh.mm:ss, mm:ss, un nombre de jours (365j), un nombre d'heures (12h), un nombre de minutes (30m), un nombre de seconde"
+  },
+  {
+    "key": "The token type is required",
+    "value": "Le type de jeton est requis"
+  },
+  {
+    "key": "The type of protocol cannot exceed 200 char.",
+    "value": "Le type de protocole ne peut pas dépasser 200 caractères."
+  },
+  {
+    "key": "The type of protocol is required",
+    "value": "Le type de protocole est requis"
+  },
+  {
+    "key": "The type of user code cannot exceed 100 char.",
+    "value": "Le type de code utilisateur ne peut pas dépasser 100 caractères."
+  },
+  {
+    "key": "The url cannot exceed 2000 char.",
+    "value": "L'URL ne peut pas dépasser 2000 caractères."
+  },
+  {
+    "key": "The url is not valid.",
+    "value": "L'url n'est pas valide."
   },
   {
     "key": "There are no login schemes configured for this client.",
@@ -1216,12 +1684,24 @@
     "value": "Pour utiliser une application d'authentification, procédez comme suit :"
   },
   {
+    "key": "Token endpoint is required.",
+    "value": "Le point de terminaison du jeton est requis."
+  },
+  {
+    "key": "Token endpoint must be a valid uri.",
+    "value": "Le point de terminaison du jeton doit être un uri valide."
+  },
+  {
     "key": "token enpoint",
     "value": "point de jeton"
   },
   {
     "key": "token type",
     "value": "type de jeton"
+  },
+  {
+    "key": "Tokens",
+    "value": "Jetons"
   },
   {
     "key": "tokens",
@@ -1268,6 +1748,10 @@
     "value": "uri"
   },
   {
+    "key": "Uri must be unique.",
+    "value": "Uri doit être unique."
+  },
+  {
     "key": "urls",
     "value": "URL"
   },
@@ -1288,12 +1772,24 @@
     "value": "Utilisateur"
   },
   {
+    "key": "user",
+    "value": "utilisateur"
+  },
+  {
     "key": "User Code",
     "value": "Code d'utilisateur"
   },
   {
     "key": "user enpoint",
     "value": "point d'utilisateur"
+  },
+  {
+    "key": "User information endpoint is required.",
+    "value": "Le point de terminaison des informations utilisateur est requis."
+  },
+  {
+    "key": "User information endpoint must be a valid uri.",
+    "value": "Le point de terminaison des informations utilisateur doit être un uri valide."
   },
   {
     "key": "user name",
@@ -1342,6 +1838,10 @@
   {
     "key": "wtrealm ",
     "value": "wtrealm "
+  },
+  {
+    "key": "Wtrealm is required.",
+    "value": "Wtrealm est requis."
   },
   {
     "key": "Yes",
@@ -1450,457 +1950,5 @@
   {
     "key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
     "value": "Vous vous êtes bien authentifié avec <strong>{0}</strong>. Veuillez entrer une adresse e-mail pour ce site ci-dessous et cliquez sur le bouton S'inscrire pour terminer la connexion."
-  },
-  {
-    "key": "Authenticator code",
-    "value": "Code d'authentification"
-  },
-  {
-    "key": "Confirm new password",
-    "value": "Confirmer le nouveau mot de passe"
-  },
-  {
-    "key": "Confirm password",
-    "value": "Confirmez le mot de passe"
-  },
-  {
-    "key": "Current password",
-    "value": "Mot de passe actuel"
-  },
-  {
-    "key": "Email",
-    "value": "E-mail"
-  },
-  {
-    "key": "New email",
-    "value": "Nouvel e-mail"
-  },
-  {
-    "key": "New password",
-    "value": "Nouveau mot de passe"
-  },
-  {
-    "key": "Phone number",
-    "value": "Numéro de téléphone"
-  },
-  {
-    "key": "Recovery Code",
-    "value": "Code de récupération"
-  },
-  {
-    "key": "Remember this machine",
-    "value": "Souviens-toi de cette machine"
-  },
-  {
-    "key": "The new password and confirmation password do not match.",
-    "value": "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas."
-  },
-  {
-    "key": "The password and confirmation password do not match.",
-    "value": "Le mot de passe et le mot de passe de confirmation ne correspondent pas."
-  },
-  {
-    "key": "The {0} must be at least {2} and at max {1} characters long.",
-    "value": "Le {0} doit comporter au moins {2} et au maximum {1} caractères."
-  },
-  {
-    "key": "The name is required.",
-    "value": "Le nom est obligatoire."
-  },
-  {
-    "key": "'{0}' cannot be added to a client with grant type '{1}'.",
-    "value": "'{0}' ne peut pas être ajouté à un client avec le type d'octroi '{1}'."
-  },
-  {
-    "key": "Metadata address must be a valid HTTPS url when 'required https metadata is true'.",
-    "value": "L'adresse de métadonnées doit être une URL HTTPS valide lorsque « les métadonnées https requises sont vraies »."
-  },
-  {
-    "key": "The back channel logout url is required.",
-    "value": "L'URL de déconnexion du canal arrière est requise."
-  },
-  {
-    "key": "The client should contain at least one grant type.",
-    "value": "Le client doit contenir au moins un type de subvention."
-  },
-  {
-    "key": "The front channel logout url is required.",
-    "value": "L'URL de déconnexion du canal avant est requise."
-  },
-  {
-    "key": "The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed).",
-    "value": "L'id doit être un URI lorsque le protocole est WS-Federation. (ex : urne:wsfed)."
-  },
-  {
-    "key": "The identity should provide at least one claim.",
-    "value": "L'identité doit fournir au moins une revendication."
-  },
-  {
-    "key": "The relying party is required.",
-    "value": "La partie utilisatrice est requise."
-  },
-  {
-    "key": "The to claim type must be an URI.",
-    "value": "Le type à réclamer doit être un URI."
-  },
-  {
-    "key": "The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second",
-    "value": "L'expression du jeton ne correspond pas à un format valide. Vous pouvez utiliser les formes d.hh:mm:ss, hh.mm:ss, mm:ss, un nombre de jours (365j), un nombre d'heures (12h), un nombre de minutes (30m), un nombre de seconde"
-  },
-  {
-    "key": "Client Id is required.",
-    "value": "L'ID client est requis."
-  },
-  {
-    "key": "Client Secret is required.",
-    "value": "Le secret client est requis."
-  },
-  {
-    "key": "Authority is required.",
-    "value": "L'autorité est requise."
-  },
-  {
-    "key": "Authority must be a valid uir.",
-    "value": "L'autorité doit être un uir valide."
-  },
-  {
-    "key": "Authorization endpoint is required.",
-    "value": "Le point de terminaison d'autorisation est requis."
-  },
-  {
-    "key": "Authorization endpoint must be a valid uri.",
-    "value": "Le point de terminaison d'autorisation doit être une URI valide."
-  },
-  {
-    "key": "The back channel logout url cannot exceed 2000 char.",
-    "value": "L'URL de déconnexion du canal arrière ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The back logout url is not valid.",
-    "value": "L'URL de déconnexion arrière n'est pas valide."
-  },
-  {
-    "key": "The claim type cannot exceed 250 chars.",
-    "value": "Le type de revendication ne peut pas dépasser 250 caractères."
-  },
-  {
-    "key": "The claim type is required.",
-    "value": "Le type de réclamation est obligatoire."
-  },
-  {
-    "key": "The claim value is required.",
-    "value": "La valeur de la réclamation est requise."
-  },
-  {
-    "key": "The claim prefix cannot exceed 250 char.",
-    "value": "Le préfixe de revendication ne peut pas dépasser 250 caractères."
-  },
-  {
-    "key": "The name cannot exceed 200 char.",
-    "value": "Le nom ne peut pas dépasser 200 caractères."
-  },
-  {
-    "key": "The url cannot exceed 2000 char.",
-    "value": "L'URL ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The url is not valid.",
-    "value": "L'url n'est pas valide."
-  },
-  {
-    "key": "Consumer Key is required.",
-    "value": "La clé du consommateur est requise."
-  },
-  {
-    "key": "Consumer Secret is required.",
-    "value": "Le secret du consommateur est requis."
-  },
-  {
-    "key": "The culture must be unique.",
-    "value": "La culture doit être unique."
-  },
-  {
-    "key": "The culture is required.",
-    "value": "La culture s'impose."
-  },
-  {
-    "key": "The description cannot exceed 200 chars.",
-    "value": "La description ne peut pas dépasser 200 caractères."
-  },
-  {
-    "key": "The description canoot exceed 1000 char.",
-    "value": "La description ne peut pas dépasser 1000 car."
-  },
-  {
-    "key": "The description cannot exceed 2000 chars.",
-    "value": "La description ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The digest algorithm is required",
-    "value": "L'algorithme de condensé est requis"
-  },
-  {
-    "key": "The display name cannot exceed 200 chars.",
-    "value": "Le nom d'affichage ne peut pas dépasser 200 caractères."
-  },
-  {
-    "key": "The name cannot exceed 200 chars.",
-    "value": "Le nom ne peut pas dépasser 200 caractères."
-  },
-  {
-    "key": "The display name is required.",
-    "value": "Le nom d'affichage est obligatoire."
-  },
-  {
-    "key": "The from claim type must be unique.",
-    "value": "Le type de revendication de doit être unique."
-  },
-  {
-    "key": "The from claim tyoe is required.",
-    "value": "Le montant de la réclamation est requis."
-  },
-  {
-    "key": "The from claim type is required.",
-    "value": "Le type de revendication de est requis."
-  },
-  {
-    "key": "The front channel logout url cannot exceed 2000 char.",
-    "value": "L'URL de déconnexion du canal avant ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The front channel logout url is not valid.",
-    "value": "L'URL de déconnexion du canal frontal n'est pas valide."
-  },
-  {
-    "key": "The grant type must be unique.",
-    "value": "Le type de subvention doit être unique."
-  },
-  {
-    "key": "The grant type cannot contains space.",
-    "value": "Le type de subvention ne peut pas contenir d'espace."
-  },
-  {
-    "key": "The id is required.",
-    "value": "L'identifiant est requis."
-  },
-  {
-    "key": "The sheme is required.",
-    "value": "Le schéma est requis."
-  },
-  {
-    "key": "The api property key must be unique.",
-    "value": "La clé de propriété de l'API doit être unique."
-  },
-  {
-    "key": "The client property key must be unique.",
-    "value": "La clé de propriété du client doit être unique."
-  },
-  {
-    "key": "The key must be unique.",
-    "value": "La clé doit être unique."
-  },
-  {
-    "key": "The identity property key must be unique.",
-    "value": "La clé de propriété d'identité doit être unique."
-  },
-  {
-    "key": "The api property key cannot exceed 250 chars.",
-    "value": "La clé de propriété de l'API ne peut pas dépasser 250 caractères."
-  },
-  {
-    "key": "The client property key cannot exceed 250 chars.",
-    "value": "La clé de propriété du client ne peut pas dépasser 250 caractères."
-  },
-  {
-    "key": "The identity property key cannot exceed 250 chars.",
-    "value": "La clé de propriété d'identité ne peut pas dépasser 250 caractères."
-  },
-  {
-    "key": "The api property key is required.",
-    "value": "La clé de propriété de l'API est requise."
-  },
-  {
-    "key": "The client property key is required.",
-    "value": "La clé de propriété du client est requise."
-  },
-  {
-    "key": "The identity property key is required.",
-    "value": "La clé de propriété d'identité est requise."
-  },
-  {
-    "key": "The key is required.",
-    "value": "La clé est requise."
-  },
-  {
-    "key": "The kind of provider is required.",
-    "value": "Le type de fournisseur est requis."
-  },
-  {
-    "key": "The logo url cannot exceed 2000 char.",
-    "value": "L'URL du logo ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The logo url is not valid.",
-    "value": "L'url du logo n'est pas valide."
-  },
-  {
-    "key": "Metadata address is required.",
-    "value": "L'adresse de métadonnées est requise."
-  },
-  {
-    "key": "Metadata address must be a valid uri.",
-    "value": "L'adresse de métadonnées doit être un uri valide."
-  },
-  {
-    "key": "The role must be unique",
-    "value": "Le rôle doit être unique"
-  },
-  {
-    "key": "The role name is required",
-    "value": "Le nom du rôle est requis"
-  },
-  {
-    "key": "The subject salt cannot exceed 250 char.",
-    "value": "Le sel en question ne peut pas dépasser 250 char."
-  },
-  {
-    "key": "The policy url cannot exceed 2000 char.",
-    "value": "L'URL de la politique ne peut pas dépasser 2 000 caractères."
-  },
-  {
-    "key": "The policy url is not valid.",
-    "value": "L'URL de la politique n'est pas valide."
-  },
-  {
-    "key": "The type of protocol cannot exceed 200 char.",
-    "value": "Le type de protocole ne peut pas dépasser 200 caractères."
-  },
-  {
-    "key": "The type of protocol is required",
-    "value": "Le type de protocole est requis"
-  },
-  {
-    "key": "The name identifier is required",
-    "value": "L'identifiant du nom est obligatoire"
-  },
-  {
-    "key": "Scopes must be unique.",
-    "value": "Les étendues doivent être uniques."
-  },
-  {
-    "key": "The to claim tyoe is required.",
-    "value": "Le droit de réclamation est obligatoire."
-  },
-  {
-    "key": "The to claim type is required.",
-    "value": "Le type de réclamation est requis."
-  },
-  {
-    "key": "Token endpoint is required.",
-    "value": "Le point de terminaison du jeton est requis."
-  },
-  {
-    "key": "Token endpoint must be a valid uri.",
-    "value": "Le point de terminaison du jeton doit être un uri valide."
-  },
-  {
-    "key": "The token type is required",
-    "value": "Le type de jeton est requis"
-  },
-  {
-    "key": "The terms of service url cannot exceed 2000 char.",
-    "value": "L'URL des conditions d'utilisation ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The terms of service url is not valid.",
-    "value": "L'URL des conditions d'utilisation n'est pas valide."
-  },
-  {
-    "key": "The claim type must be unique.",
-    "value": "Le type de revendication doit être unique."
-  },
-  {
-    "key": "The identity claim type must be unique.",
-    "value": "Le type de revendication d'identité doit être unique."
-  },
-  {
-    "key": "The claim type cannot exceed 2000 chars.",
-    "value": "Le type de revendication ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The identity claim type cannot exceed 2000 chars.",
-    "value": "Le type de revendication d'identité ne peut pas dépasser 2 000 caractères."
-  },
-  {
-    "key": "The identity claim type is required.",
-    "value": "Le type de revendication d'identité est requis."
-  },
-  {
-    "key": "The secret type is required.",
-    "value": "Le type de secret est requis."
-  },
-  {
-    "key": "Uri must be unique.",
-    "value": "Uri doit être unique."
-  },
-  {
-    "key": "An url cannot exceed 2000 char.",
-    "value": "Une URL ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The type of user code cannot exceed 100 char.",
-    "value": "Le type de code utilisateur ne peut pas dépasser 100 caractères."
-  },
-  {
-    "key": "User information endpoint is required.",
-    "value": "Le point de terminaison des informations utilisateur est requis."
-  },
-  {
-    "key": "User information endpoint must be a valid uri.",
-    "value": "Le point de terminaison des informations utilisateur doit être un uri valide."
-  },
-  {
-    "key": "The name is required",
-    "value": "Le nom est obligatoire"
-  },
-  {
-    "key": "The api property value cannot exceed 2000 chars.",
-    "value": "La valeur de la propriété api ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The claim value cannot exceed 2000 chars.",
-    "value": "La valeur de la réclamation ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The client property value cannot exceed 2000 chars.",
-    "value": "La valeur de la propriété client ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The identity property value cannot exceed 2000 chars.",
-    "value": "La valeur de la propriété d'identité ne peut pas dépasser 2000 caractères."
-  },
-  {
-    "key": "The api property value is required.",
-    "value": "La valeur de la propriété api est obligatoire."
-  },
-  {
-    "key": "The client property value is required.",
-    "value": "La valeur de la propriété client est obligatoire."
-  },
-  {
-    "key": "The identity property value is required.",
-    "value": "La valeur de la propriété d'identité est obligatoire."
-  },
-  {
-    "key": "The secret value is required.",
-    "value": "La valeur secrète est obligatoire."
-  },
-  {
-    "key": "{0} is not a valid uri.",
-    "value": "{0} n'est pas un uri valide."
-  },
-  {
-    "key": "Wtrealm is required.",
-    "value": "Wtrealm est requis."
   }
 ]

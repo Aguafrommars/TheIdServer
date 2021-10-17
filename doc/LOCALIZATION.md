@@ -14,13 +14,36 @@ You provide translations for each English string resource used by the server or 
 
 ![culture](assets/culture.png)  
 
-The application doesn't provide a list of keys, but instead, a warning log is written each time a key is not found for a specific culture.
+A warning log is written each time a key is not found for a specific culture.
 
 In the browser console for application resources
 ![app key not found sample](assets/app-localized-key-not-found.png)  
 
 In the server log for server resources
 ![server key not found sample](assets/server-localized-key-not-found.png)  
+
+The list of keys and a sample of translatation can be found in [Localization-fr.json](../src/Aguacongas.TheIdServer.Duende/Localization-fr.json).
+
+### Seedind
+
+Files named *Localization-{culture id}}.json* at the server root level will be loaded in the database at startup if the **Seed** option is set.
+They must follow the same structure than [Localization-fr.json](../src/Aguacongas.TheIdServer.Duende/Localization-fr.json): an array of key/value pair.
+
+```json
+[
+  {
+    "key": "(required)",
+    "value": "(obligatoire)"
+  },
+  {
+    "key": "{0} <small>is requesting your permission</small>",
+    "value": "{0} <small>demande votre autorisation</small>"
+  },
+...
+]
+```
+
+The cultire id must be a valid culture id supported by the .NET framework.
 
 ## Clients, APIs, and Identities
 
