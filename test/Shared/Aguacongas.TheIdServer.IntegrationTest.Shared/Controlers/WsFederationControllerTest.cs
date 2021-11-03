@@ -112,7 +112,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             await context.Clients.AddAsync(new Client
             {
                 Id = clientId,
-                Enabled = true
+                Enabled = true,
+                ProtocolType = "oidc"
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 

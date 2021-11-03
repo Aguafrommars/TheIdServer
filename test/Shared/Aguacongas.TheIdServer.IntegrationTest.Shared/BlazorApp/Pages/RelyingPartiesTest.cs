@@ -24,7 +24,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 context.RelyingParties.Add(new RelyingParty
                 {
                     Id = GenerateId(),
-                    Description = "filtered"
+                    Description = "filtered",
+                    TokenType = GenerateId(),
+                    DigestAlgorithm = GenerateId(),
+                    SignatureAlgorithm = GenerateId()
                 });
 
                 return context.SaveChangesAsync();
