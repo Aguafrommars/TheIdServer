@@ -4,15 +4,17 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<UserSecretsId>51a7f0be-96e4-42d5-ad09-37e9adabfff6</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\..</DockerfileContext>
+		<DockerfileContext>..\..</DockerfileContext>		
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -93,6 +95,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0-rc.2.21511.1" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -70,15 +70,25 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                     })
                 } }
             });
-            refreshTokenStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Entity.RefreshToken>
+#if DUENDE
+            var refreshToken = new RefreshToken();
+            refreshToken.SetAccessToken(new Token
             {
-                Items = new[] { new Entity.RefreshToken(){
-                    Data = serializer.Serialize(new RefreshToken{
+                Claims = Array.Empty<Claim>()
+            });
+#else
+            var refreshToken = new RefreshToken
+            {
                         AccessToken = new Token
                         {
                             Claims = Array.Empty<Claim>()
                         }
-                    })
+            };
+#endif
+            refreshTokenStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Entity.RefreshToken>
+            {
+                Items = new[] { new Entity.RefreshToken(){
+                    Data = serializer.Serialize(refreshToken)
                 } }
             });
             referenceTokenStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Entity.ReferenceToken>

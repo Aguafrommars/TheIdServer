@@ -17,6 +17,13 @@
 	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;NU1603</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;NU1603</NoWarn>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.2.0" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="4.2.0" />

@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -167,6 +168,7 @@ namespace Aguacongas.TheIdServer.UI
             return Redirect(returnUrl);
         }
 
+        [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "used only on windows")]
         private async Task<IActionResult> ProcessWindowsLoginAsync(string returnUrl)
         {
             var settings = _options.Value;

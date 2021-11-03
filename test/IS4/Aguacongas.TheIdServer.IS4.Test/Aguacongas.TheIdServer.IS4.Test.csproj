@@ -6,6 +6,14 @@
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;EF1001</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;EF1001</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\DbContextOptionsBuilderExtensionsTest.cs" Link="DbContextOptionsBuilderExtensionsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\ExternalClaimsTransformerTest.cs" Link="ExternalClaimsTransformerTest.cs" />

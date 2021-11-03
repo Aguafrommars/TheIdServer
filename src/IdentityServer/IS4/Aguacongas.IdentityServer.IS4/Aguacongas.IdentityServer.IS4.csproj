@@ -14,6 +14,7 @@
 		<PackageIcon>package-icon.png</PackageIcon>
 		
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
+		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
