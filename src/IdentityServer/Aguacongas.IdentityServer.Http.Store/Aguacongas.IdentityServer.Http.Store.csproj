@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel" Version="5.1.1" />
+		<PackageReference Include="IdentityModel" Version="5.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-rc.2.21480.5" />
 	</ItemGroup>
 

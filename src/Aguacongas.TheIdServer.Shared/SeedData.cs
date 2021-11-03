@@ -11,9 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
@@ -116,6 +117,58 @@ namespace Aguacongas.TheIdServer
             SeedApiScopes(configuration, provider);
             SeedApis(configuration, provider);
             SeedRelyingParties(configuration, provider);
+            SeedLocalization(configuration, provider);
+        }
+
+        private static void SeedLocalization(IConfiguration configuration, IServiceProvider provider)
+        {
+            var cultureFiles = Directory.EnumerateFiles(".", "Localization-*.json");
+            foreach (var file in cultureFiles)
+            {
+                SeedCultureFile(provider, file);
+            }
+        }
+
+        private static void SeedCultureFile(IServiceProvider provider, string file)
+        {
+            var cultureName = Path.GetFileNameWithoutExtension(file).Split("-")[1];
+            var cultureStore = provider.GetRequiredService<IAdminStore<Entity.Culture>>();
+            var localizedResouceStore = provider.GetRequiredService<IAdminStore<Entity.LocalizedResource>>();
+
+            var culturePage = cultureStore.GetAsync(new PageRequest
+            {
+                Filter = $"Id eq '{cultureName}'",
+                Expand = "Resources"
+            }).GetAwaiter().GetResult();
+            Entity.Culture culture;
+            if (culturePage.Count == 0)
+            {
+                culture = new Entity.Culture
+                {
+                    Id = cultureName,
+                    Resources = new List<Entity.LocalizedResource>()
+                };
+                cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
+            }
+            else
+            {
+                culture = culturePage.Items.First();
+            }
+
+            var exsitings = culture.Resources.ToList();
+            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            foreach (var resource in resources)
+            {
+                if (!exsitings.Any(r => r.Key == resource.Key))
+                {
+                    resource.CultureId = culture.Id;
+                    localizedResouceStore.CreateAsync(resource).GetAwaiter().GetResult();
+                }
+            }
         }
 
         private static void SeedApis(IConfiguration configuration, IServiceProvider provider)
