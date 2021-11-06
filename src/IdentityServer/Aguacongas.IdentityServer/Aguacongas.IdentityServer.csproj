@@ -43,7 +43,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.0-rc.2.21480.10" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.0-rc.2.21480.10" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.0-rc.2.21480.10" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
 	</ItemGroup>
 
 	<ItemGroup>
