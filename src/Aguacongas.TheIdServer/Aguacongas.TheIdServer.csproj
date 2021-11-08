@@ -31,12 +31,12 @@
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.5.0" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" PrivateAssets="All" />
