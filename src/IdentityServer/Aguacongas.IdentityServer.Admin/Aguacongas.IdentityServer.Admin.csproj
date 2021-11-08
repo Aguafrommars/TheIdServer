@@ -29,7 +29,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq.Json" Version="1.4.3" />		
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />		
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />		
+		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
 		<PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
