@@ -55,11 +55,17 @@ namespace Aguacongas.IdentityServer.Store
         }
 
         public Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+#if DUENDE
+        => _entityCache.GetOrAddAsync($"{id}_{request?.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(id, request, cancellationToken));
+#else
         => _entityCache.GetAsync($"{id}_{request?.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(id, request, cancellationToken), _logger);
-
+#endif
         public Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+ #if DUENDE
+        => _responseCache.GetOrAddAsync($"{request.Filter}_{request.Skip}_{request.Take}_{request.OrderBy}_{request.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(request, cancellationToken));
+#else
         => _responseCache.GetAsync($"{request.Filter}_{request.Skip}_{request.Take}_{request.OrderBy}_{request.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(request, cancellationToken), _logger);
-
+#endif
         public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             var result = await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
