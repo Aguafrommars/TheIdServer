@@ -53,6 +53,34 @@ namespace Aguacongas.IdentityServer.Store
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        ///  the cached data based upon a key index. If the item is not found, the get
+        ///     function is used to obtain the item and populate the cache.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="duration">The duration.</param>
+        /// <param name="get">The function to obtain the item.</param>
+        /// <returns>The cached item.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task<T> GetOrAddAsync(string key, TimeSpan duration, Func<Task<T>> get)
+        => _cache.GetOrCreateAsync(key, entry =>
+        {
+            entry.SetAbsoluteExpiration(duration);
+            return get();
+        });
+
+        /// <summary>
+        /// Removes the cached data based upon a key index.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task RemoveAsync(string key)
+        {
+            _cache.Remove(key);
+            return Task.CompletedTask;
+        }
+
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
