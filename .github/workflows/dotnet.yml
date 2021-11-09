@@ -7,10 +7,16 @@ on:
     branches: [ master ]
 
 jobs:
+  docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Create mongo Docker container
+      uses: DigiPie/mongo-action@v1.0.1
+      
   build:
-
     runs-on: windows-latest
-
+    
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -27,8 +33,6 @@ jobs:
       run: redis-64\tools\redis-server.exe --service-start
     - name: Install WASM tools
       run: dotnet workload install wasm-tools
-    - name: Create mongo Docker container
-      uses: DigiPie/mongo-action@v1.0.1
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
