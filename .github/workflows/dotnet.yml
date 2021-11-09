@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -17,8 +17,18 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.5
+    - name: Install Redis
+      run: nuget install redis-64 -excludeversion
+    - name: Setup Redis service
+      run: redis-64\tools\redis-server.exe --service-install
+    - name: Start Redis service
+      run: redis-64\tools\redis-server.exe --service-start
     - name: Install WASM tools
       run: dotnet workload install wasm-tools
+    - name: Create mongo Docker container
+      uses: DigiPie/mongo-action@v1.0.1
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
