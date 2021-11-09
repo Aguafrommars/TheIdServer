@@ -38,6 +38,12 @@ jobs:
       run: redis-64\tools\redis-server.exe --service-start
     - name: Install WASM tools
       run: dotnet workload install wasm-tools
+    - name: Scan code
+      uses: vtex/action-sonarqube@main
+      with:
+        githubToken: ${{ secrets.PAT }}
+        host: https://sonarcloud.io
+        token: ${{ secrets.SQToken }} # Variable set in the Github Secrets
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
