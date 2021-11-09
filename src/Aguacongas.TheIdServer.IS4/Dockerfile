@@ -58,6 +58,8 @@ COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/Agu
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/"]
 COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/"]
 COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/Aguacongas.IdentityServer.WsFederation.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/"]
+RUN apt-get update -y
+RUN apt-get install -y python3
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.IS4/Aguacongas.TheIdServer.IS4.csproj"
 COPY . .

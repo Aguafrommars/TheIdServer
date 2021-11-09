@@ -1,5 +1,4 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -58,6 +57,8 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/Aguacongas.Ide
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
+RUN apt-get update -y
+RUN apt-get install -y python3
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
