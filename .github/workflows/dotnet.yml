@@ -41,7 +41,7 @@ jobs:
     - name: Install Sonar Scanner
       run: dotnet tool install --global dotnet-sonarscanner
     - name: Start Sonar Scanner
-      run: dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=${{ secrets.SQToken }
+      run: dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=${{ secrets.SQToken }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -49,4 +49,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Stop Sonar Scanner
-      run: dotnet sonarscanner end -d:sonar.login=${{ secrets.SQToken }
+      run: dotnet sonarscanner end -d:sonar.login=${{ secrets.SQToken }}
