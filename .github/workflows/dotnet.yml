@@ -20,11 +20,11 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
+    - name: Setup .NET 5.0.x
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Setup .NET
+    - name: Setup .NET 6.0.x
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
@@ -38,15 +38,15 @@ jobs:
       run: redis-64\tools\redis-server.exe --service-start
     - name: Install WASM tools
       run: dotnet workload install wasm-tools
-    - name: Scan code
-      uses: vtex/action-sonarqube@main
-      with:
-        githubToken: ${{ secrets.PAT }}
-        host: https://sonarcloud.io
-        token: ${{ secrets.SQToken }} # Variable set in the Github Secrets
+    - name: Install Sonar Scanner
+      run: dotnet tool install --global dotnet-sonarscanner
+    - name: Start Sonar Scanner
+      run: dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.url=https://sonarcloud.io -d:sonar.login=${{ secrets.SQToken }
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Stop Sonar Scanner
+      run: dotnet sonarscanner end -d:sonar.login=${{ secrets.SQToken }
