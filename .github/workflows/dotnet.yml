@@ -8,7 +8,6 @@ on:
 
 jobs:
   setup:
-    needs: setup
     runs-on: ubuntu-latest
     
     steps:
@@ -16,6 +15,7 @@ jobs:
       uses: DigiPie/mongo-action@v1.0.1
       
   build:
+    needs: setup
     runs-on: windows-latest
     
     steps:
