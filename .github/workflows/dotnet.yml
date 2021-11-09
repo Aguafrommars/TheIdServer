@@ -47,6 +47,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --blame
+      run: dotnet test --no-build --verbosity normal --blame --blame-hang-timeout 5m
     - name: Stop Sonar Scanner
       run: dotnet sonarscanner end -d:sonar.login=${{ secrets.SQToken }}

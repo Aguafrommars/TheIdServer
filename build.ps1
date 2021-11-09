@@ -23,7 +23,7 @@ dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.
 
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings --filter FullyQualifiedName!~MongoDb"
 
-dotnet test -c Release --blame --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings --filter "FullyQualifiedName!~MongoDb" -v q
+dotnet test -c Release --blame --blame-hang-timeout 5m --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings --filter "FullyQualifiedName!~MongoDb" -v q
 
 if ($LASTEXITCODE -ne 0) {
 	$result = $LASTEXITCODE
