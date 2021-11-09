@@ -56,7 +56,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
@@ -77,7 +78,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
