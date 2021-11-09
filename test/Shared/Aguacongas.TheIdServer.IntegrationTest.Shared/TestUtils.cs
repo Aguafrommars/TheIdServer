@@ -157,10 +157,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
                 services
-                    .AddLogging(configure =>
-                    {
-                        configure.AddProvider(new TestLoggerProvider(testOutputHelper));
-                    })
                     .AddTransient(p => sut.CreateHandler())
                     .AddAdminHttpStores(p =>
                     {
