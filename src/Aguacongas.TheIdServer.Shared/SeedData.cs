@@ -148,7 +148,14 @@ namespace Aguacongas.TheIdServer
                     Id = cultureName,
                     Resources = new List<Entity.LocalizedResource>()
                 };
-                cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
+                try
+                {
+                    cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // key already exists
+                }
             }
             else
             {
@@ -166,7 +173,14 @@ namespace Aguacongas.TheIdServer
                 if (!exsitings.Any(r => r.Key == resource.Key))
                 {
                     resource.CultureId = culture.Id;
-                    localizedResouceStore.CreateAsync(resource).GetAwaiter().GetResult();
+                    try
+                    {
+                        localizedResouceStore.CreateAsync(resource).GetAwaiter().GetResult();
+                    }
+                    catch (ArgumentException)
+                    {
+                        // key already exists
+                    }
                 }
             }
         }
