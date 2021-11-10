@@ -35,9 +35,9 @@ install:
   - ps: ./appveyorinit.ps1
 build_script:
   - ps: ./build.ps1
-test_script:
-  - cmd: publish.cmd
 artifacts:
+  - path: test/**/*.dmp
+    name: dump
   - path: artifacts/**/*.nupkg
     name: nuget
   - path: artifacts/**/*.zip
