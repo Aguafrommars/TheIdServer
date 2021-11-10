@@ -19,13 +19,11 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
-        private readonly ITestOutputHelper _testOutputHelper;
 
         public UserStoreTest(ITestOutputHelper testOutputHelper, TheIdServerTestFixture fixture)
         {
             _fixture = fixture;
             fixture.TestOutputHelper = testOutputHelper;
-            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
