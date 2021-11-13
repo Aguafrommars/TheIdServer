@@ -138,7 +138,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             authContext.SetClaims(claims.ToArray());
             authContext.SetPolicies(claims.Where(c => c.Type == "role").Select(c => c.Value).ToArray());
 
-            var navigationInterceptionMock = new Mock<INavigationInterception>();
             var localizerMock = new Mock<ISharedStringLocalizerAsync>();
             localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => new LocalizedString(key, key));
             localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => new LocalizedString(key, string.Format(key, p)));
@@ -170,8 +169,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     };
                     return Task.FromResult(client);
                 })
-                .AddScoped(p => navigationInterceptionMock.Object)
-                .AddScoped(p => navigationInterceptionMock)
                 .AddScoped(p => new Settings
                 {
                     ApiBaseUrl = appConfiguration["ApiBaseUrl"],

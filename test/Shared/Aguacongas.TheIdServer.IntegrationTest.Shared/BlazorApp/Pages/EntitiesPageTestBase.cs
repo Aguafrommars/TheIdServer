@@ -241,15 +241,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             return _fixture.DbActionAsync(action);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (disposing)
-            {
-                _fixture.Dispose();
-            }            
-        }
-
         protected static string GenerateId() => Guid.NewGuid().ToString();
     }
 }
