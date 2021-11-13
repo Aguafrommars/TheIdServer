@@ -135,6 +135,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             navigationManager.NavigateTo($"keys");
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                Fixture.Dispose();
+            }
+        }
         protected static IElement WaitForNode(IRenderedComponent<page> component, string cssSelector)
         {
             component.WaitForElement(cssSelector);
