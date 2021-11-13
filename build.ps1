@@ -37,7 +37,7 @@ Get-ChildItem -rec `
 	$merge = "$path;$merge"
 }
 Write-Host $merge
-ReportGenerator\tools\net6.0\ReportGenerator.exe "-reports:$merge" "-targetdir:coverage" "-reporttypes:SonarQube"
+ReportGenerator\tools\net5.0\ReportGenerator.exe "-reports:$merge" "-targetdir:coverage" "-reporttypes:SonarQube"
 	
 dotnet sonarscanner end -d:sonar.login=$env:sonarqube
 
