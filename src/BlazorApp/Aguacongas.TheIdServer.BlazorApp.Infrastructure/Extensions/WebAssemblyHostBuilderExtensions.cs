@@ -26,6 +26,16 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             var configuration = builder.Configuration;
             var settings = configuration.Get<Settings>();
             ConfigureLogging(builder.Logging, settings);
+            builder.Services
+                .AddOptions()
+                .AddOidcAuthentication(options =>
+                {
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    configuration.Bind("ProviderOptions", options.ProviderOptions);
+                })
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+
             ConfigureServices(builder.Services, configuration, settings, builder.HostEnvironment.BaseAddress);
             return builder;
         }
@@ -46,23 +56,13 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings, string baseAddress)
         {
-            services
-                .AddOptions()
-                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
-                .AddOidcAuthentication(options =>
+            services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
+                .AddAuthorizationCore(options =>
                 {
-                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
-                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
-                    configuration.Bind("ProviderOptions", options.ProviderOptions);
-                })
-                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+                    options.AddIdentityServerPolicies();
+                });
 
-            services.AddAuthorizationCore(options =>
-            {
-                options.AddIdentityServerPolicies();
-            });
-
-            services.AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
+            services.AddScoped(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));

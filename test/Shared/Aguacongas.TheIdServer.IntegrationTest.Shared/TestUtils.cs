@@ -4,11 +4,12 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Areas.Identity;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -23,7 +24,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
 using Moq;
-using RichardSzalay.MockHttp;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -115,100 +115,87 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             return testServer;
         }
 
-        public static void CreateTestHost(string userName,
+        public static void CreateTestHost<T>(string userName,
             IEnumerable<Claim> claims,
-            string url,
             TestServer sut,
-            ITestOutputHelper testOutputHelper,
-            out TestHost host,
-            out RenderedComponent<blazorApp.App> component,
-            out MockHttpMessageHandler mockHttp,
-            bool useJsRuntime = false)
+            TestContext testContext,
+            out IRenderedComponent<T> component,
+            params ComponentParameter[] parameters) where T : IComponent
         {
-            CreateTestHost(userName, claims, url, sut, testOutputHelper, out host, out mockHttp, useJsRuntime);
-            component = host.AddComponent<blazorApp.App>();
+            CreateTestHost(userName, claims, sut, testContext);
+            component = testContext.RenderComponent<T>(parameters);
         }
 
         public static void CreateTestHost(string userName,
             IEnumerable<Claim> claims,
-            string url,
-            TestServer sut,
-            ITestOutputHelper testOutputHelper,
-            out TestHost host,
-            out MockHttpMessageHandler mockHttp,
-            bool useJsRuntime = false)
+            TestServer sut, 
+            TestContext testContext)
         {
+            testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+
+            var authContext = testContext.AddTestAuthorization();
+            authContext.SetAuthorized(userName);
+            authContext.SetClaims(claims.ToArray());
+            authContext.SetPolicies(claims.Where(c => c.Type == "role").Select(c => c.Value).ToArray());
+
             var navigationInterceptionMock = new Mock<INavigationInterception>();
-            host = new TestHost();
-            var httpMock = host.AddMockHttp();
-            mockHttp = httpMock;
             var localizerMock = new Mock<ISharedStringLocalizerAsync>();
             localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => new LocalizedString(key, key));
             localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => new LocalizedString(key, string.Format(key, p)));
 
-            host.ConfigureServices(services =>
-            {
-                var httpClient = sut.CreateClient();
-                var appConfiguration = CreateApplicationConfiguration(httpClient);
+            var services = testContext.Services;
+            var httpClient = sut.CreateClient();
+            var appConfiguration = CreateApplicationConfiguration(httpClient);
 
-                WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>(), httpClient.BaseAddress.ToString());
+            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>(), httpClient.BaseAddress.ToString());
 
-                sut.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
+            sut.Services.GetRequiredService<TestUserService>()
+                .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
-                services
-                    .AddTransient(p => sut.CreateHandler())
-                    .AddAdminHttpStores(p =>
-                    {
-                        var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
-                            p.GetRequiredService<NavigationManager>())
-                        {
-                            InnerHandler = sut.CreateHandler()
-                        })
-                        {
-                            BaseAddress = new Uri(httpClient.BaseAddress, "api")
-                        };
-                        return Task.FromResult(client);
-                    })
-                    .AddSingleton(p => new TestNavigationManager(uri: url))
-                    .AddSingleton<NavigationManager>(p => p.GetRequiredService<TestNavigationManager>())
-                    .AddSingleton(navigationInterceptionMock.Object)
-                    .AddSingleton(navigationInterceptionMock)
-                    .AddSingleton(p => new Settings
-                    {
-                        ApiBaseUrl = appConfiguration["ApiBaseUrl"]
-                    })
-                    .AddSingleton(localizerMock.Object)
-                    .AddSingleton(localizerMock)
-                    .AddTransient(p => new HttpClient(sut.CreateHandler()))
-                    .AddSingleton<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
-                    .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
-                    .AddSingleton<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
-                    .AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
-                    .AddSingleton(p => new FakeAuthenticationStateProvider(
-                        userName,
-                        claims))
-                    .AddScoped<LazyAssemblyLoader>()
-                    .AddHttpClient("oidc")
-                    .ConfigureHttpClient(httpClient =>
-                    {
-                        var apiUri = new Uri(httpClient.BaseAddress, "api");
-                        httpClient.BaseAddress = apiUri;
-                    })
-                    .AddHttpMessageHandler(() => new FakeDelegatingHandler(sut.CreateHandler()));
-
-                if (useJsRuntime)
+            services.Configure<RemoteAuthenticationOptions<OidcProviderOptions>>(options => {
+                    appConfiguration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    appConfiguration.GetSection("UserOptions").Bind(options.UserOptions);
+                    appConfiguration.Bind("ProviderOptions", options.ProviderOptions);
+                })
+                .AddTransient(p => sut.CreateHandler())
+                .AddAdminHttpStores(p =>
                 {
-                    services.AddSingleton(new JSRuntimeImpl())
-                        .AddSingleton<IJSRuntime>(p => p.GetRequiredService<JSRuntimeImpl>());
-                }
-                else
+                    var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
+                        p.GetRequiredService<NavigationManager>())
+                    {
+                        InnerHandler = sut.CreateHandler()
+                    })
+                    {
+                        BaseAddress = new Uri(httpClient.BaseAddress, "api")
+                    };
+                    return Task.FromResult(client);
+                })
+                .AddScoped(p => navigationInterceptionMock.Object)
+                .AddScoped(p => navigationInterceptionMock)
+                .AddScoped(p => new Settings
                 {
-                    var jsRuntimeMock = new Mock<IJSRuntime>();
-                    services.AddSingleton(jsRuntimeMock)
-                        .AddSingleton(jsRuntimeMock.Object);
-                }
-            });
+                    ApiBaseUrl = appConfiguration["ApiBaseUrl"],
+                    WelcomeContenUrl = "http://localhost/api/welcomefragment"
+                })
+                .AddScoped(p => localizerMock.Object)
+                .AddScoped(p => localizerMock)
+                .AddTransient(p => new HttpClient(sut.CreateHandler()))
+                .AddTransient<BaseAddressAuthorizationMessageHandler>()
+                .AddScoped<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
+                .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
+                .AddScoped<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
+                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
+                .AddScoped(p => new FakeAuthenticationStateProvider(
+                    userName,
+                    claims))
+                .AddScoped<LazyAssemblyLoader>()
+                .AddHttpClient("oidc")
+                .ConfigureHttpClient(httpClient =>
+                {
+                    var apiUri = new Uri(httpClient.BaseAddress, "api");
+                    httpClient.BaseAddress = apiUri;
+                })
+                .AddHttpMessageHandler(() => new FakeDelegatingHandler(sut.CreateHandler()));
         }
 
         public static IConfigurationRoot CreateApplicationConfiguration(HttpClient httpClient)
@@ -360,6 +347,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     class JSRuntimeImpl : JSRuntime
     {
         public ManualResetEvent Called { get; } = new ManualResetEvent(false);
+
         protected override void BeginInvokeJS(long taskId, string identifier, string argsJson)
         {
             Called.Set();

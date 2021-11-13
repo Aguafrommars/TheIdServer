@@ -1,14 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp;
+using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
-using Moq;
-using RichardSzalay.MockHttp;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -19,7 +17,7 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase<TEntity> : IDisposable
+    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext where TComponent: IComponent
     {
         private readonly ApiFixture _fixture;
 
@@ -39,43 +37,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            host.WaitForContains(component, "filtered");
+                out IRenderedComponent<TComponent> component);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            host.WaitForNextRender(async () => {
-                await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
-                {
-                    Value = GenerateId()
-                }).ConfigureAwait(false);
-                // cancel previous search
-                await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
-                {
-                    Value = GenerateId()
-                }).ConfigureAwait(false);
-
-                await Task.Delay(500).ConfigureAwait(false);
-            });
-
-
-            string markup;
-#pragma warning disable S1121 // Assignments should not be made from within sub-expressions
-            while ((markup = component.GetMarkup()).Contains("filtered"))
-#pragma warning restore S1121 // Assignments should not be made from within sub-expressions
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
-                host.WaitForNextRender();
-            }
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+            // cancel previous search
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
 
+            await Task.Delay(500).ConfigureAwait(false);
 
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
@@ -85,11 +65,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                out IRenderedComponent<TComponent> component);
 
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
@@ -98,35 +74,29 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+            await selectAll.ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
 
             button = component.Find("button.btn-secondary");
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
 
             Assert.NotNull(button);
 
-            var provider = host.ServiceProvider;
-            var runtime = provider.GetRequiredService<Mock<IJSRuntime>>();
-            string calledUrl = null;
-            Task<HttpResponseMessage> calledTask = null;
-            runtime.Setup(m => m.InvokeAsync<object>("open", It.IsAny<object[]>()))
-                .Callback<string, object[]>((m, p) => {
-                    calledUrl = p[0].ToString();
-                    calledTask = provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
-                    })
-                .Returns(new ValueTask<object>(calledTask));
+            var invocationHanlder = JSInterop.SetupVoid("open", i => true).SetVoidResult();
             
-            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
-            Assert.NotNull(calledUrl);
-            var response = await calledTask.ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            Assert.Single(invocationHanlder.Invocations);
+            var calledUrl = invocationHanlder.Invocations.First().Arguments[0] as string;
 
             var testUserService = _fixture.Sut.Services.GetRequiredService<TestUserService>();
             testUserService.User = null;
-            response = await provider.GetRequiredService<HttpClient>().GetAsync(calledUrl);
+            var response = await Services.GetRequiredService<HttpClient>().GetAsync(calledUrl);
             Assert.False(response.IsSuccessStatusCode);
         }
+
 
         [Fact]
         public async Task OnRowClicked_should_navigate_to_entity_page()
@@ -135,27 +105,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<TComponent> component);
 
-            var markup = WaitForLoaded(host, component);
-
-            Assert.Contains("filtered", markup);
+            Assert.Contains("filtered", component.Markup);
 
             var tdList = component.FindAll(".table-hover tr td").ToArray();
 
-            var navigationManager = host.ServiceProvider.GetRequiredService<TestNavigationManager>();
-            bool called = false;
-            navigationManager.OnNavigateToCore = (uri, forceload) =>
-            {
-                called = true;
-                Assert.Contains(typeof(TEntity).Name.ToLower(), uri);
-            };
+            var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
 
-            await host.WaitForNextRenderAsync(() => tdList[1].ClickAsync());
+            await tdList[1].ClickAsync(new MouseEventArgs());
 
-            Assert.True(called);
+            Assert.Contains(typeof(TEntity).Name.ToLower(), navigationManager.Uri);
         }
 
         [Fact]
@@ -165,19 +125,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<TComponent> component);
 
-            var markup = WaitForLoaded(host, component);
-
-            Assert.Contains("filtered", markup);
+            Assert.Contains("filtered", component.Markup);
 
             var th = component.Find(".table.mb-0 th div");
 
             Assert.NotNull(th);
 
-            await host.WaitForNextRenderAsync(() => th.ClickAsync());
+            await th.ClickAsync(new MouseEventArgs());
 
             var arrow = component.Find(".oi-arrow-bottom");
 
@@ -187,7 +143,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            await host.WaitForNextRenderAsync(() => th.ClickAsync());
+            await th.ClickAsync(new MouseEventArgs());
 
             arrow = component.Find(".oi-arrow-top");
 
@@ -197,7 +153,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            await host.WaitForNextRenderAsync(() => th.ClickAsync());
+            await th.ClickAsync(new MouseEventArgs());
 
             arrow = component.Find(".oi-arrow-");
 
@@ -211,30 +167,30 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            var markup = WaitForLoaded(host, component);
-
-            Assert.Contains("filtered", markup);
+                out IRenderedComponent<TComponent> component);
 
             var selectAll = component.Find(".table.mb-0 th input");
 
             Assert.NotNull(selectAll);
 
-            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(true));
+            await selectAll.ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
 
             var selected = component.Find(".table.table-hover td input");
 
             Assert.NotNull(selected);
             Assert.Contains(selected.Attributes, a => a.Name == "checked");
 
-            selectAll = selectAll = component.Find(".table.mb-0 th input");
+            selectAll = component.Find(".table.mb-0 th input");
 
             Assert.NotNull(selectAll);
 
-            await host.WaitForNextRenderAsync(() => selectAll.ChangeAsync(false));
+            await selectAll.ChangeAsync(new ChangeEventArgs
+            {
+                Value = false
+            }).ConfigureAwait(false);
 
             selected = component.Find(".table.table-hover td input");
 
@@ -244,7 +200,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
 
-            await host.WaitForNextRenderAsync(() => selected.ChangeAsync(true));
+            await selectAll.ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
 
             selected = component.Find(".table.table-hover td input");
 
@@ -259,9 +218,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected void CreateTestHost(string userName,
             string role,
-            out TestHost host,
-            out RenderedComponent<App> component,
-            out MockHttpMessageHandler mockHttp)
+            out IRenderedComponent<TComponent> component)
         {
             TestUtils.CreateTestHost(userName,
                 new Claim[]
@@ -271,13 +228,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())
                 },
-                $"http://exemple.com/{Entities}",
                 _fixture.Sut,
-                _fixture.TestOutputHelper,
-                out host,
-                out component,
-                out mockHttp);
-            _host = host;
+                this,
+                out component);
+
+            var c = component;
+            c.WaitForState(() => !c.Markup.Contains("Loading..."));
         }
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
@@ -286,44 +242,5 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
-
-        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            var markup = component.GetMarkup();
-
-            while (!markup.Contains("filtered"))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            return markup;
-        }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-        private TestHost _host;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _host?.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

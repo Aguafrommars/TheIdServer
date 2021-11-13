@@ -10,9 +10,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
     {
         public Func<Notification, Task> Show { get; set; }
 
-        public Task NotifyAsync(Notification notification)
+        public async Task NotifyAsync(Notification notification)
         {
-            return Show?.Invoke(notification);
+            if (Show != null)
+            {
+                await Show.Invoke(notification).ConfigureAwait(false);
+            }
         }
     }
 }

@@ -44,7 +44,6 @@
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\SchemeChangeSubscriberTest.cs" Link="SchemeChangeSubscriberTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Services\ProxyProfilServiceTest.cs" Link="Services\ProxyProfilServiceTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestHostExtensions.cs" Link="TestHostExtensions.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestUserService.cs" Link="TestUserService.cs" />
@@ -52,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="bunit" Version="1.3.42" />
 	  <PackageReference Include="coverlet.collector" Version="3.1.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -80,7 +80,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.Duende\Aguacongas.TheIdServer.Duende.csproj" />
     <ProjectReference Include="..\..\..\src\IdentityServer\Aguacongas.IdentityServer.Http.Store\Aguacongas.IdentityServer.Http.Store.csproj" />
-    <ProjectReference Include="..\..\Microsoft.AspNetCore.Components.Testing\Microsoft.AspNetCore.Components.Testing.csproj" />
     <ProjectReference Include="..\..\WebAssembly.Net.Http\WebAssembly.Net.Http.csproj" />
   </ItemGroup>
 

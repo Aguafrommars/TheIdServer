@@ -2,10 +2,12 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
-using HtmlAgilityPack;
-using Microsoft.AspNetCore.Components.Testing;
+using AngleSharp.Dom;
+using Bunit;
+using Bunit.TestDoubles;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using RichardSzalay.MockHttp;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntityPageTestBase : IDisposable
+    public abstract class EntityPageTestBase<T> : TestContext where T: IComponent
     {
         public abstract string Entity { get; }
 
@@ -35,11 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Bob Smith",
                 SharedConstants.READERPOLICY,
                 null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                out IRenderedComponent<T> component);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -52,9 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<T> component);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -64,10 +60,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         protected void CreateTestHost(string userName,
             string role,
             string id,
-            out TestHost host,
-            out RenderedComponent<App> component,
-            out MockHttpMessageHandler mockHttp,
-            bool useJsRuntime = false)
+            out IRenderedComponent<T> component)
         {
             TestUtils.CreateTestHost(userName,
                 new Claim[] 
@@ -76,14 +69,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role) 
                 },
-                $"http://exemple.com/{Entity}/{id}",
                 Fixture.Sut,
-                Fixture.TestOutputHelper,
-                out host,
+                this,
                 out component,
-                out mockHttp,
-                useJsRuntime);
-            _host = host;
+                ComponentParameter.CreateParameter("Id", id));
+            var c = component;
+            c.WaitForState(() => !c.Markup.Contains("Loading..."));
         }
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
@@ -93,78 +84,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected static string GenerateId() => Guid.NewGuid().ToString();
 
-        protected static void WaitForSavedToast(TestHost host, RenderedComponent<App> component)
-        {
-            WaitForToast("Saved", host, component);
-        }
 
-        protected static void WaitForDeletedToast(TestHost host, RenderedComponent<App> component)
-        {
-            WaitForToast("Deleted", host, component);
-        }
+        protected static IElement WaitForNode(IRenderedComponent<T> component, string cssSelector)
+        => component.WaitForElement(cssSelector);
 
-        protected static void WaitForToast(string text, TestHost host, RenderedComponent<App> component)
-        {
-            var toasts = component.FindAll(".toast-body.text-success");
-            while (!toasts.Any(t => t.InnerText.Contains(text)))
-            {
-                host.WaitForNextRender();
-                toasts = component.FindAll(".toast-body.text-success");
-            }
-        }
-
-        protected static string WaitForLoaded(TestHost host, RenderedComponent<App> component)
-        {
-            var markup = component.GetMarkup();
-
-            while (markup.Contains("Authentication in progress") || markup.Contains("Loading..."))
-            {
-                host.WaitForNextRender();
-                markup = component.GetMarkup();
-            }
-
-            return markup;
-        }
-
-        protected static HtmlNode WaitForNode(TestHost host, RenderedComponent<App> component, string selector)
-        {
-            return host.WaitForNode(component, selector);
-        }
-
-        protected static ICollection<HtmlNode> WaitForAllNodes(TestHost host, RenderedComponent<App> component, string selector)
-        {
-            return host.WaitForAllNodes(component, selector);
-        }
-
-
-        protected static string WaitForContains(TestHost host, RenderedComponent<App> component, string term)
-        {
-            return host.WaitForContains(component, term);
-        }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-        private TestHost _host;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _host?.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
+        protected static List<IElement> WaitForAllNodes(IRenderedComponent<T> component, string cssSelector)
+        => component.WaitForElements(cssSelector).ToList();
     }
 }
