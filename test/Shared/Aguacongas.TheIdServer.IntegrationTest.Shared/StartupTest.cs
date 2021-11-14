@@ -35,11 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             using var sut = new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     builder.AddInMemoryCollection(new Dictionary<string, string>
                     {
@@ -80,11 +76,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             using var sut = new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     builder.AddInMemoryCollection(new Dictionary<string, string>
                     {

@@ -17,6 +17,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Validation\**" />
+	  <EmbeddedResource Remove="Validation\**" />
+	  <None Remove="Validation\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
@@ -31,8 +37,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Validation\" />
 	</ItemGroup>
 </Project>

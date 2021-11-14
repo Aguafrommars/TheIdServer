@@ -53,11 +53,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     .ReadFrom.Configuration(hostingContext.Configuration))
                 .ConfigureAppConfiguration(builder =>
                 {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     if (configurationOverrides != null)
                     {
