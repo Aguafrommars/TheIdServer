@@ -59,8 +59,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["Seed"] = "true"
             };
 
-            TestServer server = null;
-            server = TestUtils.CreateTestServer(services =>
+            using var server = TestUtils.CreateTestServer(services =>
             {
                 services.RemoveAll<HubHttpMessageHandlerAccessor>();
                 services.AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = new MockHttpMessageHandler(waitHandle, server.CreateHandler()) });

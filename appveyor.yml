@@ -24,13 +24,13 @@ install:
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
   - ps: .\dotnet-install.ps1 -Version 5.0.403
   - ps: dotnet tool install --global GitVersion.Tool
-  - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install
   - cmd: redis-64\tools\redis-server.exe --service-start
   - cmd: dotnet workload install wasm-tools
+  - ps: dotnet gitversion /l console /output buildserver
   - ps: ./appveyorinit.ps1
 build_script:
   - ps: ./build.ps1

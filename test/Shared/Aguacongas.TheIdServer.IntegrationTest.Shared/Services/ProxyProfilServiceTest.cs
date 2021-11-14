@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Services
         [Fact]
         public async Task GetProfileDataAsync_should_forward_request_to_webservice()
         {
-            var server = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
+            using var server = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
             {
 #if DUENDE
                 ["ConnectionStrings:DefaultConnection"] = "Data Source = (LocalDb)\\MSSQLLocalDB; database = TheIdServer.Test.Services.Duende; trusted_connection = yes; "

@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration);
 
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
@@ -162,7 +162,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task CreateAsync_should_validate_request()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     {
@@ -571,7 +571,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [InlineData("nntp://test@test.com")]
         public async Task CreateAsync_should_validate_native_redirect_uri_scheme(string redirectUri)
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
@@ -610,7 +610,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task CreateAsync_should_validate_caller()
         {
-            var sut = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
             {
                 ["DynamicClientRegistrationOptions:AllowedContacts:0:Contact"] = "test",
                 ["DynamicClientRegistrationOptions:AllowedContacts:0:AllowedHosts:0"] = "localhost",
@@ -681,7 +681,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task UpdateAsync_should_update_client()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
@@ -886,7 +886,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task GetAsync_should_return_registration()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[]
                     { 
@@ -997,7 +997,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task DeleteAsync_should_delete_client()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
             sut.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
