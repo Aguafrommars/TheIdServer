@@ -29,7 +29,6 @@ install:
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install
   - cmd: redis-64\tools\redis-server.exe --service-start
-  - cmd: dotnet workload install wasm-tools
   - ps: dotnet gitversion /l console /output buildserver
   - ps: ./appveyorinit.ps1
 build_script:
