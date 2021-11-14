@@ -70,7 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BlazorApp\Shared\" />
     <Folder Include="BlazorApp\Pages\" />
     <Folder Include="Controlers\" />
     <Folder Include="Services\" />
