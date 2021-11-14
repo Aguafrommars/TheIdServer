@@ -233,7 +233,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 out component);
 
             var c = component;
-            c.WaitForState(() => !c.Markup.Contains("Loading..."));
+            c.WaitForState(() => !c.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
         }
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
