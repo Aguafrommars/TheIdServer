@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Services
 {
+
     public class Notifier
     {
         public Func<Notification, Task> Show { get; set; }
