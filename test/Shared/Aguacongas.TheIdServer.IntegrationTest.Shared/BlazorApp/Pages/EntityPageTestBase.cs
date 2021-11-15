@@ -1,13 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp;
 using AngleSharp.Dom;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +15,7 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntityPageTestBase<T> : TestContext where T: IComponent
+    public abstract class EntityPageTestBase<TComnponent> : TestContext where TComnponent : IComponent
     {
         public abstract string Entity { get; }
 
@@ -37,7 +34,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Bob Smith",
                 SharedConstants.READERPOLICY,
                 null,
-                out IRenderedComponent<T> component);
+                out IRenderedComponent<TComnponent> component);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -50,7 +47,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 null,
-                out IRenderedComponent<T> component);
+                out IRenderedComponent<TComnponent> component);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -60,7 +57,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         protected void CreateTestHost(string userName,
             string role,
             string id,
-            out IRenderedComponent<T> component)
+            out IRenderedComponent<TComnponent> component)
         {
             TestUtils.CreateTestHost(userName,
                 new Claim[] 
@@ -77,7 +74,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             c.WaitForState(() => !c.Markup.Contains("Loading..."));
         }
 
-        protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
+        protected Task DbActionAsync<TContext>(Func<TContext, Task> action) where TContext : DbContext
         {
             return Fixture.DbActionAsync(action);
         }
@@ -85,10 +82,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         protected static string GenerateId() => Guid.NewGuid().ToString();
 
 
-        protected static IElement WaitForNode(IRenderedComponent<T> component, string cssSelector)
+        protected static IElement WaitForNode(IRenderedComponent<TComnponent> component, string cssSelector)
         => component.WaitForElement(cssSelector);
 
-        protected static List<IElement> WaitForAllNodes(IRenderedComponent<T> component, string cssSelector)
+        protected static List<IElement> WaitForAllNodes(IRenderedComponent<TComnponent> component, string cssSelector)
         => component.WaitForElements(cssSelector).ToList();
     }
 }
