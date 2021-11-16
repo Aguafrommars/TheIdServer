@@ -59,7 +59,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="10.1.1" />
-	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.2" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.3" />
 	</ItemGroup>
 
 	<ItemGroup>
