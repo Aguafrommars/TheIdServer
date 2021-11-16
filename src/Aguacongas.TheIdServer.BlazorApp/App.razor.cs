@@ -58,7 +58,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
 
         private async Task LoadAssemblyAsync(string assemblyName)
         {
-            _logger.LogDebug($"LoadAssemblyAsync {assemblyName}");
+            _logger.LogDebug("LoadAssemblyAsync {AssemblyName}", assemblyName);
             var assemblies = await _assemblyLoader.LoadAssembliesAsync(
                 new[] { assemblyName }).ConfigureAwait(false);
             _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));
