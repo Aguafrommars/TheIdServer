@@ -34,7 +34,6 @@
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ExternalProviderTest.cs" Link="BlazorApp\Pages\ExternalProviderTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\IdentitiesTest.cs" Link="BlazorApp\Pages\IdentitiesTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\IdentityTest.cs" Link="BlazorApp\Pages\IdentityTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ImportTest.cs" Link="BlazorApp\Pages\ImportTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\KeysTests.cs" Link="BlazorApp\Pages\KeysTests.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RelyingPartiesTest.cs" Link="BlazorApp\Pages\RelyingPartiesTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RelyingPartyTest.cs" Link="BlazorApp\Pages\RelyingPartyTest.cs" />

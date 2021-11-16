@@ -28,10 +28,35 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// </summary>
     public class CreatePersonalAccessTokenService : ICreatePersonalAccessToken
     {
+#if DUENDE
+        private readonly IIssuerNameService _issuerNameService;
+#endif
         private readonly ITokenService _tokenService;
         private readonly IClientStore _clientStore;
         private readonly IResourceStore _resourceStore;
 
+#if DUENDE
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreatePersonalAccessTokenService"/> class.
+        /// </summary>
+        /// <param name="issuerNameService">The <see cref="IIssuerNameService"/></param>
+        /// <param name="tokenService">The token service.</param>
+        /// <param name="clientStore">The client store.</param>
+        /// <param name="resourceStore">The resource store.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// tokenService
+        /// or
+        /// clientStore
+        /// </exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public CreatePersonalAccessTokenService(IIssuerNameService issuerNameService, ITokenService tokenService, IClientStore clientStore, IResourceStore resourceStore)
+        {
+            _issuerNameService = issuerNameService ?? throw new ArgumentNullException(nameof(issuerNameService));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
+            _resourceStore = resourceStore ?? throw new ArgumentNullException(nameof(resourceStore));
+        }
+#else
         /// <summary>
         /// Initializes a new instance of the <see cref="CreatePersonalAccessTokenService"/> class.
         /// </summary>
@@ -50,6 +75,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
             _resourceStore = resourceStore ?? throw new ArgumentNullException(nameof(resourceStore));
         }
+#endif
 
         /// <summary>
         /// Create a personal access token for the current user and client
@@ -97,7 +123,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var clientId = user.Claims.First(c => c.Type == JwtClaimTypes.ClientId).Value;
             await ValidateRequestAsync(apis, scopes, user, clientId).ConfigureAwait(false);
 
+#if DUENDE
+            var issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false);
+#else
             var issuer = context.GetIdentityServerIssuerUri();
+#endif
             var sub = user.FindFirstValue(JwtClaimTypes.Subject) ?? user.FindFirstValue("nameid");
             var userName = user.Identity.Name;
 

@@ -23,7 +23,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Fixture.TestOutputHelper = testOutputHelper;
         }
 
-        [Fact(Skip = "Do not pass any more")]
+        [Fact]
         public void HandleFileSelected_should_report_importation_result()
         {
             CreateTestHost("Alice Smith",
