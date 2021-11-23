@@ -41,8 +41,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             Sut = TestUtils.CreateTestServer(
                 services =>
                 {
-                    services.AddLogging(configure => configure.AddProvider(_testLoggerProvider))
-                    .AddSingleton<HubConnectionFactory>()
+                    services.AddSingleton<HubConnectionFactory>()
                     .AddTransient<IProviderClient, ProviderClient>()
                     .AddTheIdServerAdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))

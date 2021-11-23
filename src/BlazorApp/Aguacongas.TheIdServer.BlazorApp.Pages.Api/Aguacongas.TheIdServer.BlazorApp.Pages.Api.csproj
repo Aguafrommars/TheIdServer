@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -20,13 +20,12 @@
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

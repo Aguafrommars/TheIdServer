@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -12,8 +12,10 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;identityserver4;duende-identityserver;oidc;oauth;identity,authentication;security</PackageTags>
         <Description>TheIdServer administration application.</Description>
-        <RazorLangVersion>3.0</RazorLangVersion>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -33,8 +35,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.12" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>

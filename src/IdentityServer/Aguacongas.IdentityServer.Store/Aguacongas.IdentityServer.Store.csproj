@@ -29,7 +29,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FluentValidation" Version="10.3.4" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="6.0.0-preview.4.21253.7" />
 	</ItemGroup>
 	<ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />

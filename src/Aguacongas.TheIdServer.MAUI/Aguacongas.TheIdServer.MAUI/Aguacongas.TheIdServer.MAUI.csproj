@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<!-- iOS, Android, MacCatalyst -->
+		<TargetFrameworks>net6.0-ios;net6.0-android;net6.0-maccatalyst</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<SingleProject>true</SingleProject>
+		<RootNamespace>Aguacongas.TheIdServer.MAUI</RootNamespace>
+
+		<!-- Display name -->
+		<ApplicationTitle>Aguacongas.TheIdServer.MAUI</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.Aguacongas.TheIdServer.MAUI</ApplicationId>
+
+		<!-- Versions -->
+		<ApplicationVersion>1.0</ApplicationVersion>
+		<AndroidVersionCode>1</AndroidVersionCode>
+
+		<UseInterpreter Condition="'$(TargetFramework)' == 'net6.0-android'">True</UseInterpreter>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiImage Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" IsAppIcon="true" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="6.0.100-preview.4.*" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0-preview.4.*" />
+		<PackageReference Include="Microsoft.Maui" Version="6.0.100-preview.4.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Apis\Aguacongas.TheIdServer.BlazorApp.Pages.Apis.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Api\Aguacongas.TheIdServer.BlazorApp.Pages.Api.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Clients\Aguacongas.TheIdServer.BlazorApp.Pages.Clients.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Client\Aguacongas.TheIdServer.BlazorApp.Pages.Client.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Culture\Aguacongas.TheIdServer.BlazorApp.Pages.Culture.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identities\Aguacongas.TheIdServer.BlazorApp.Pages.Identities.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identity\Aguacongas.TheIdServer.BlazorApp.Pages.Identity.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Import\Aguacongas.TheIdServer.BlazorApp.Pages.Import.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Keys\Aguacongas.TheIdServer.BlazorApp.Pages.Keys.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Roles\Aguacongas.TheIdServer.BlazorApp.Pages.Roles.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Role\Aguacongas.TheIdServer.BlazorApp.Pages.Role.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Users\Aguacongas.TheIdServer.BlazorApp.Pages.Users.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.User\Aguacongas.TheIdServer.BlazorApp.Pages.User.csproj" />
+		<ProjectReference Include="..\..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<InvariantGlobalization Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">true</InvariantGlobalization>
+		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-ios'">iossimulator-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+		<AndroidEnvironment Include="Android\AndroidEnvironment.txt" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Shared\" />
+	</ItemGroup>
+
+</Project>

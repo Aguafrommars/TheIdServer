@@ -1,28 +1,27 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Authentication.Google;
+using AngleSharp.Dom;
+using Bunit;
+using Bunit.Extensions.WaitForHelpers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection("api collection")]
-    public class ClientTest : EntityPageTestBase
+    public class ClientTest : EntityPageTestBase<page>
     {
         public override string Entity => "client";
         public ClientTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
@@ -38,26 +37,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            host.WaitForContains(component, "filtered");
+                out IRenderedComponent<page> component);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            host.WaitForNextRender(async () => await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = clientId
-            }));
+            }).ConfigureAwait(false);
 
-            var markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
@@ -68,19 +59,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            host.WaitForContains(component, "filtered");
+                out IRenderedComponent<page> component);
 
             var header = component.Find("#urls th div");
 
             Assert.NotNull(header);
 
-            await host.WaitForNextRenderAsync(() => header.ClickAsync()).ConfigureAwait(false);
+            await header.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var urls = component.FindAll("#urls tr");
 
@@ -88,27 +73,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             header = component.Find("#urls th div");
 
-            await host.WaitForNextRenderAsync(() => header.ClickAsync()).ConfigureAwait(false);
+            await header.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             urls = component.FindAll("#urls tr");
 
-            Assert.NotEqual(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+            Assert.NotEqual(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
 
             var headers = component.FindAll("#urls th div");
 
-            await host.WaitForNextRenderAsync(() => headers.ToArray()[1].ClickAsync()).ConfigureAwait(false);
+            await headers.ToArray()[1].ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             urls = component.FindAll("#urls tr");
 
-            Assert.Equal(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+            Assert.Equal(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
 
             headers = component.FindAll("#urls th div");
 
-            await host.WaitForNextRenderAsync(() => headers.ToArray()[1].ClickAsync()).ConfigureAwait(false);
+            await headers.ToArray()[1].ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             urls = component.FindAll("#urls tr");
 
-            Assert.NotEqual(firstUrl.InnerText, urls.ToArray()[1].InnerText);
+            Assert.NotEqual(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
         }
 
         [Fact]
@@ -119,45 +104,41 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
+            var input = component.Find("#grantTypes input");
 
-            var input = WaitForNode(host, component, "#grantTypes input");
-
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }));
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }).ConfigureAwait(false);
 
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The grant type cannot contains space.", message.InnerText);
+            Assert.Contains("The grant type cannot contains space.", message.ToMarkup());
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" }));
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" }).ConfigureAwait(false);
 
             message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The grant type must be unique.", message.InnerText);
+            Assert.Contains("The grant type must be unique.", message.ToMarkup());
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
 
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }));
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }).ConfigureAwait(false);
 
             message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("&#x27;Code&#x27; cannot be added to a client with grant type &#x27;Hybrid&#x27;.", message.InnerText);
+            Assert.Contains("'Code' cannot be added to a client with grant type 'Hybrid'.", message.ToMarkup());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+            await form.SubmitAsync().ConfigureAwait(false);
         }        
 
         [Theory]
@@ -175,27 +156,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
+            
+            var input = component.Find("#access-token");
 
-            WaitForLoaded(host, component);
-
-            var input = WaitForNode(host, component, "#access-token");
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync("test test"));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "test test"
+            }).ConfigureAwait(false);
 
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.StartsWith("The token expression doesn&#x27;t match a valid format.", message.InnerText);
+            Assert.StartsWith("The token expression doesn't match a valid format.", message.InnerHtml);
 
             input = component.Find("#access-token");
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(value));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = value
+            }).ConfigureAwait(false);
 
-            message = component.Find(".validation-message");
-
-            Assert.Null(message);
+            Assert.Throws<ElementNotFoundException>(()=> component.Find(".validation-message"));
         }
 
         [Fact]
@@ -225,30 +206,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                out IRenderedComponent<page> component);
 
             var expected = 1;
-            var input = WaitForNode(host, component, "#scopes input");
+            var input = WaitForNode(component, "#scopes input");
 
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }));
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }).ConfigureAwait(false);
 
-            var nodes = host.WaitForAllNodes(component, "#scopes .dropdown-item");
+            var nodes = WaitForAllNodes(component, "#scopes .dropdown-item");
 
             Assert.Equal(expected, nodes.Count);
 
-            await host.WaitForNextRenderAsync(() => nodes.First().ClickAsync());
+            await nodes.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -267,64 +242,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
+            var button = WaitForNode(component, "#grantTypes div.select");
 
-            var button = WaitForNode(host, component, "#grantTypes div.select");
-
-            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The client should contain at least one grant type.", message.InnerText);
-        }
-
-        [Fact]
-        public async Task Add_delete_click_test()
-        {
-            string clientId = await CreateClient();
-
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            var deleteButtons = WaitForAllNodes(host, component,"span.oi-trash").ToList();
-            var addButtons = WaitForAllNodes(host, component, "button.btn.btn-sm.btn-primary.ml-md-auto").ToList();
-
-            for(int i = 0; i < addButtons.Count; i++)
-            {
-                await host.WaitForNextRenderAsync(() => addButtons[i].ClickAsync());
-                addButtons = WaitForAllNodes(host, component, "button.btn.btn-sm.btn-primary.ml-md-auto").ToList();
-            }
-
-            deleteButtons = WaitForAllNodes(host, component, "span.oi-trash").ToList();
-
-            do
-            {
-                await host.WaitForNextRenderAsync(() => deleteButtons.Last().ParentNode.ClickAsync());
-                deleteButtons = WaitForAllNodes(host, component, "span.oi-trash").ToList();
-            } while (deleteButtons.Count > 1);
-
-            var form = component.Find("form");
-
-            Assert.NotNull(form);
-
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
+            Assert.Contains("The client should contain at least one grant type.", message.ToMarkup());
         }
 
         [Fact]
@@ -335,20 +268,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
-
-            WaitForNode(host, component, "#consent");
+            WaitForNode(component, "#consent");
 
             // hybrid client should have id token input field
             Assert.NotNull(component.Find("#id-token"));
             // hybrid client should not have device flow lifetime input field
-            Assert.Null(component.Find("#device-flow-lifetime"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // hybrid client should not have require pkce check box
-            Assert.Null(component.Find("input[name=require-pkce]"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -359,18 +288,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
-
-            WaitForNode(host, component, "#consent");
+            WaitForNode(component, "#consent");
 
             // authorization code client should have id token input field
             Assert.NotNull(component.Find("#id-token"));
             // authorization code client should not have device flow lifetime input field
-            Assert.Null(component.Find("#device-flow-lifetime"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // authorization code client should have require pkce check box
             Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
@@ -383,20 +308,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
-
-            WaitForNode(host, component, "#consent");
+            WaitForNode(component, "#consent");
 
             // implicit client should have id token input field
             Assert.NotNull(component.Find("#id-token"));
             // implicit client should not have device flow lifetime input field
-            Assert.Null(component.Find("#device-flow-lifetime"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // implicit client should have require pkce check box
-            Assert.Null(component.Find("input[name=require-pkce]"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -407,20 +328,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
-
-            WaitForNode(host, component, "#consent");
+            WaitForNode(component, "#consent");
 
             // device client not should have id token input field
-            Assert.Null(component.Find("#id-token"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("#id-token"));
             // device client should have device flow lifetime input field
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // device client should have require pkce check box
-            Assert.Null(component.Find("input[name=require-pkce]"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -431,14 +348,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                out IRenderedComponent<page> component);
 
             // client credentials client should not have consent section
-            Assert.Throws<TimeoutException>(() => WaitForNode(host, component, "#consent"));
+            Assert.Throws<WaitForFailedException>(() => WaitForNode(component, "#consent"));
         }
 
         [Fact]
@@ -449,14 +362,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                out IRenderedComponent<page> component);
 
             // resource owner password client should not have consent section
-            Assert.Throws<TimeoutException>(() => WaitForNode(host, component, "#consent"));
+            Assert.Throws<WaitForFailedException>(() => WaitForNode(component, "#consent"));
         }
 
         [Fact]
@@ -467,13 +376,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
-
-            WaitForNode(host, component, "#consent");
+            WaitForNode(component, "#consent");
 
             // custom client should have id token input field
             Assert.NotNull(component.Find("#id-token"));
@@ -492,21 +397,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
+            var input = WaitForNode(component, "#delete-entity input");
 
-            var input = WaitForNode(host, component, "#delete-entity input");
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(clientId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
-
-            WaitForDeletedToast(host, component);
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -524,46 +426,47 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
+            var input = WaitForNode(component, "#grantTypes input");
 
-            var input = WaitForNode(host, component, "#grantTypes input");
+            await input.TriggerEventAsync("onfocus", new FocusEventArgs()).ConfigureAwait(false);
 
-            host.WaitForNextRender(() => input.TriggerEventAsync("onfocus", new FocusEventArgs()));
-
-            host.WaitForNoRender();
-
-            var button = WaitForNode(host, component, "#grantTypes .dropdown-item.m-0.p-0.pl-1.pr-1");
+            var button = WaitForNode(component, "#grantTypes .dropdown-item.m-0.p-0.pl-1.pr-1");
             
-            host.WaitForNextRender(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
 
-            await host.WaitForNextRenderAsync(() => idInput.ChangeAsync(clientId));
+            await idInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
 
             var nameInput = component.Find("#name");
             
             Assert.NotNull(nameInput);
-            await host.WaitForNextRenderAsync(() => nameInput.ChangeAsync(clientId));
+            await nameInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
 
-            button = WaitForNode(host, component, "#secrets button.btn-sm");
+            button = WaitForNode(component, "#secrets button.btn-sm");
 
-            host.WaitForNextRender(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var valueInput = component.Find("#secrets input[placeholder=value]");
 
-            await host.WaitForNextRenderAsync(() => valueInput.ChangeAsync(clientId));
+            await valueInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -579,22 +482,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             CreateTestHost("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                out IRenderedComponent<page> component);
 
-            WaitForLoaded(host, component);
+            var input = WaitForNode(component, "#urls input[name=\"cors\"]");
 
-            var input = WaitForNode(host, component, "#urls input[name=\"cors\"]");
-
-            host.WaitForNextRender(() => input.ChangeAsync(true));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -606,16 +506,17 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Assert.Equal("HTTP://FILTERED:80", uri.SanetizedCorsUri);
             });
 
-            input = WaitForNode(host, component, "#urls input[name=\"cors\"]");
+            input = WaitForNode(component, "#urls input[name=\"cors\"]");
 
-            host.WaitForNextRender(() => input.ChangeAsync(false));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = false
+            }).ConfigureAwait(false);
 
             form = component.Find("form");
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {

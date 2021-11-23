@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer base classes for Duende.IdentityServer.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -15,6 +15,7 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
+		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -58,7 +59,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="10.1.1" />
-	  <PackageReference Include="Duende.IdentityServer" Version="5.2.3" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.3" />
 	</ItemGroup>
 
 	<ItemGroup>

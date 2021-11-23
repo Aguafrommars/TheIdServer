@@ -22,19 +22,25 @@ namespace Aguacongas.IdentityServer.Store
         private readonly TStore _parent;
         private readonly IFlushableCache<TEntity> _entityCache;
         private readonly IFlushableCache<PageResponse<TEntity>> _responseCache;
+#if !DUENDE
         private readonly ILogger<CacheAdminStore<TStore, TEntity>> _logger;
+#endif
         private readonly Configuration.IdentityServerOptions _options;
 
         public CacheAdminStore(TStore parent,
             IFlushableCache<TEntity> entityCache,
             IFlushableCache<PageResponse<TEntity>> responseCache,
+#if !DUENDE
             ILogger<CacheAdminStore<TStore, TEntity>> logger, 
+#endif
             Configuration.IdentityServerOptions options)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _entityCache = entityCache ?? throw new ArgumentNullException(nameof(entityCache));
             _responseCache = responseCache ?? throw new ArgumentNullException(nameof(responseCache));
+#if !DUENDE
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+#endif
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -55,11 +61,17 @@ namespace Aguacongas.IdentityServer.Store
         }
 
         public Task<TEntity> GetAsync(string id, GetRequest request, CancellationToken cancellationToken = default)
+#if DUENDE
+        => _entityCache.GetOrAddAsync($"{id}_{request?.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(id, request, cancellationToken));
+#else
         => _entityCache.GetAsync($"{id}_{request?.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(id, request, cancellationToken), _logger);
-
+#endif
         public Task<PageResponse<TEntity>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
+#if DUENDE
+        => _responseCache.GetOrAddAsync($"{request.Filter}_{request.Skip}_{request.Take}_{request.OrderBy}_{request.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(request, cancellationToken));
+#else
         => _responseCache.GetAsync($"{request.Filter}_{request.Skip}_{request.Take}_{request.OrderBy}_{request.Expand}", _options.Caching.ClientStoreExpiration, () => _parent.GetAsync(request, cancellationToken), _logger);
-
+#endif
         public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             var result = await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);

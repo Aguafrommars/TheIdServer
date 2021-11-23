@@ -30,29 +30,13 @@ namespace Aguacongas.IdentityServer.Admin.Test.Extensions
         }
 
         [Fact]
-        public void AddClaimsProviders_should_not_throw_when_section_empty()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    ["ClaimsProviderOptions"] = "[]"
-                })
-                .Build();
-            var services = new ServiceCollection();
-
-            services.AddClaimsProviders(configuration);
-
-            Assert.Empty(services);
-        }
-
-        [Fact]
         public void AddClaimsProviders_should_load_claims_provider_setup_from_assembly_path()
         {
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
-                    ["ClaimsProviderOptions:[0]:AssemblyPath"] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll",
-                    ["ClaimsProviderOptions:[0]:TypeName"] = $"{typeof(ClaimsProviderSetup).FullName}"
+                    ["ClaimsProviderOptions:0:AssemblyPath"] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll",
+                    ["ClaimsProviderOptions:0:TypeName"] = $"{typeof(ClaimsProviderSetup).FullName}"
                 })
                 .Build();
             var services = new ServiceCollection();

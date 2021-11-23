@@ -29,6 +29,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
     {
         private readonly TokenValidationParameters _tokenValidationOptions;
 
+
+#pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomJwtRequestValidator" /> class.
         /// </summary>
@@ -41,12 +43,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="options">The options.</param>
         /// <param name="logger">The logger.</param>
         /// <exception cref="ArgumentNullException">tokenValidationOptions</exception>
-        public CustomJwtRequestValidator(IOptions<TokenValidationParameters> tokenValidationOptions, 
+#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
+        public CustomJwtRequestValidator(IOptions<TokenValidationParameters> tokenValidationOptions,
+#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
+#pragma warning restore CS1587 // XML comment is not placed on a valid language element
 #if DUENDE
             Duende.IdentityServer.Configuration.IdentityServerOptions options,
             IIssuerNameService issuerNameService,
 #else
+#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
             IHttpContextAccessor contextAccessor,
+#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
             IdentityServer4.Configuration.IdentityServerOptions options, 
 #endif
             ILogger<JwtRequestValidator> logger) :

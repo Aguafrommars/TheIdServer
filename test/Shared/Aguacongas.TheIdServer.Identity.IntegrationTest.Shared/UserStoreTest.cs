@@ -19,13 +19,11 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
-        private readonly ITestOutputHelper _testOutputHelper;
 
         public UserStoreTest(ITestOutputHelper testOutputHelper, TheIdServerTestFixture fixture)
         {
             _fixture = fixture;
             fixture.TestOutputHelper = testOutputHelper;
-            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -56,7 +54,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
@@ -77,7 +76,8 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
