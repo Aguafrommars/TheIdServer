@@ -21,11 +21,11 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
-		<NoWarn>1701;1702;CA1416;NU1603</NoWarn>
+		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>
-		<NoWarn>1701;1702;CA1416;NU1603</NoWarn>
+		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
@@ -37,6 +37,10 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />

@@ -74,7 +74,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="client">The client</param>
         /// <returns></returns>
 #if DUENDE
-        protected override async Task<JsonWebToken> ValidateJwtAsync(string jwtTokenString, IEnumerable<SecurityKey> keys, Client client)
+        protected override async Task<JsonWebToken> ValidateJwtAsync(JwtRequestValidationContext context, IEnumerable<SecurityKey> keys)
 #else
         protected override Task<JwtSecurityToken> ValidateJwtAsync(string jwtTokenString, IEnumerable<SecurityKey> keys, Client client)
 #endif
@@ -82,10 +82,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var tokenValidationParameters = new TokenValidationParameters
             {
                 IssuerSigningKeys = keys,
-                ValidIssuer = client.ClientId,
 #if DUENDE
+                ValidIssuer = context.Client.ClientId,
                 ValidAudience = await GetAudienceUri().ConfigureAwait(false),
 #else
+                ValidIssuer = client.ClientId,
                 ValidAudience = AudienceUri,
 #endif
                 ValidateIssuerSigningKey = _tokenValidationOptions.ValidateIssuerSigningKey,
@@ -104,7 +105,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
 
 #if DUENDE
-            var result = Handler.ValidateToken(jwtTokenString, tokenValidationParameters);
+            var result = Handler.ValidateToken(context.JwtTokenString, tokenValidationParameters);
             if (!result.IsValid)
             {
                 throw result.Exception;
