@@ -66,6 +66,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _tokenValidationOptions = tokenValidationOptions?.Value ?? throw new ArgumentNullException(nameof(tokenValidationOptions));
         }
 
+#if DUENDE
+        /// <summary>
+        /// Validates the JWT token
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="keys">The keys.</param>
+        /// <returns></returns>
+        protected override async Task<JsonWebToken> ValidateJwtAsync(JwtRequestValidationContext context, IEnumerable<SecurityKey> keys)
+#else
         /// <summary>
         /// Validates the JWT token
         /// </summary>
@@ -73,9 +82,6 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="keys">The keys</param>
         /// <param name="client">The client</param>
         /// <returns></returns>
-#if DUENDE
-        protected override async Task<JsonWebToken> ValidateJwtAsync(JwtRequestValidationContext context, IEnumerable<SecurityKey> keys)
-#else
         protected override Task<JwtSecurityToken> ValidateJwtAsync(string jwtTokenString, IEnumerable<SecurityKey> keys, Client client)
 #endif
         {

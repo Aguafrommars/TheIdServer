@@ -421,7 +421,7 @@ namespace Aguacongas.TheIdServer
                             .GetOneTimeToken(otk);
                 }
 
-                if (token?.Contains(".") == false)
+                if (token?.Contains('.') == false)
                 {
                     return "introspection";
                 }
