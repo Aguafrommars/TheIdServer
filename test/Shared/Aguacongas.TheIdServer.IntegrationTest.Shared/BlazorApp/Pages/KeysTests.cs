@@ -3,15 +3,12 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp;
 using AngleSharp.Dom;
 using Bunit;
-using Bunit.TestDoubles;
 using IdentityModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,8 +128,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Fixture.Sut,
                 this,
                 out component);
-            var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
-            navigationManager.NavigateTo($"keys");
         }
 
         protected static IElement WaitForNode(IRenderedComponent<page> component, string cssSelector)

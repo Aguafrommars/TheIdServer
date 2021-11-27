@@ -128,6 +128,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             TestContext testContext)
         {
             testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+            testContext.Services.AddScoped<JSRuntimeImpl>();
 
             var authContext = testContext.AddTestAuthorization();
             authContext.SetAuthorized(userName);
@@ -147,12 +148,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             sut.Services.GetRequiredService<TestUserService>()
                 .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
 
-            services.Configure<RemoteAuthenticationOptions<OidcProviderOptions>>(options => {
-                    appConfiguration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
-                    appConfiguration.GetSection("UserOptions").Bind(options.UserOptions);
-                    appConfiguration.Bind("ProviderOptions", options.ProviderOptions);
-                })
-                .AddTransient(p => sut.CreateHandler())
+            services.AddTransient(p => sut.CreateHandler())
                 .AddAdminHttpStores(p =>
                 {
                     var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
@@ -356,5 +352,4 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             Called.Set();
         }
     }
-
 }

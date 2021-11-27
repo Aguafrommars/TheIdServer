@@ -42,5 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             base.OnInitialized();
         }
+
+        private ICollection<TItem> GetItems => new List<TItem>(Items);
     }
 }

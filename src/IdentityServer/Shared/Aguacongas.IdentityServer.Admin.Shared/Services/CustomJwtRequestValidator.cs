@@ -66,6 +66,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _tokenValidationOptions = tokenValidationOptions?.Value ?? throw new ArgumentNullException(nameof(tokenValidationOptions));
         }
 
+#if DUENDE
+        /// <summary>
+        /// Validates the JWT token
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="keys">The keys.</param>
+        /// <returns></returns>
+        protected override async Task<JsonWebToken> ValidateJwtAsync(JwtRequestValidationContext context, IEnumerable<SecurityKey> keys)
+#else
         /// <summary>
         /// Validates the JWT token
         /// </summary>
@@ -73,19 +82,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="keys">The keys</param>
         /// <param name="client">The client</param>
         /// <returns></returns>
-#if DUENDE
-        protected override async Task<JsonWebToken> ValidateJwtAsync(string jwtTokenString, IEnumerable<SecurityKey> keys, Client client)
-#else
         protected override Task<JwtSecurityToken> ValidateJwtAsync(string jwtTokenString, IEnumerable<SecurityKey> keys, Client client)
 #endif
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
                 IssuerSigningKeys = keys,
-                ValidIssuer = client.ClientId,
 #if DUENDE
+                ValidIssuer = context.Client.ClientId,
                 ValidAudience = await GetAudienceUri().ConfigureAwait(false),
 #else
+                ValidIssuer = client.ClientId,
                 ValidAudience = AudienceUri,
 #endif
                 ValidateIssuerSigningKey = _tokenValidationOptions.ValidateIssuerSigningKey,
@@ -104,7 +111,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
 
 #if DUENDE
-            var result = Handler.ValidateToken(jwtTokenString, tokenValidationParameters);
+            var result = Handler.ValidateToken(context.JwtTokenString, tokenValidationParameters);
             if (!result.IsValid)
             {
                 throw result.Exception;

@@ -152,7 +152,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             public string Name => GenerateId();
 
-            public System.DateTimeOffset LastModified => DateTimeOffset.Now;
+            public DateTimeOffset LastModified => DateTimeOffset.Now;
 
             public long Size => 10;
 

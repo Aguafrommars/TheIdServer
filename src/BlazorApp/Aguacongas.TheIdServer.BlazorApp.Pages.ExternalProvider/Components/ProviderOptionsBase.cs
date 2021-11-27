@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.Components
             return JsonSerializer.Serialize(Model.Options);
         }
 
-        private class ExternalProviderWrapper : ExternalProviderWrapper<T>
+        private sealed class ExternalProviderWrapper : ExternalProviderWrapper<T>
         {
             public ExternalProviderWrapper(Models.ExternalProvider parent)
                 : base(parent)

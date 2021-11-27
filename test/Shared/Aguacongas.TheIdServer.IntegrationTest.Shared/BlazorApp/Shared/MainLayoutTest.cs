@@ -40,7 +40,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             var idendity = state.User.Identity as TestUtils.FakeIdendity;
             idendity.SetIsAuthenticated(false);
 
-            var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
             navigationManager.NavigateTo("clients");
 
             Assert.DoesNotContain("Clients.", component.Markup);
@@ -56,7 +56,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
                 this,
                 out IRenderedComponent<App> component);
 
-            var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
             navigationManager.NavigateTo("clients");
 
             Assert.Contains("Your are not authorized to view this page.", component.Markup);
