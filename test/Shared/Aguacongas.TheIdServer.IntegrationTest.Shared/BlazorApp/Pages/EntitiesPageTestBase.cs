@@ -111,7 +111,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var tdList = component.FindAll(".table-hover tr td").ToArray();
 
-            var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
 
             await tdList[1].ClickAsync(new MouseEventArgs());
 

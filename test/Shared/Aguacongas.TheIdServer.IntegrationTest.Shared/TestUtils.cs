@@ -128,6 +128,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             TestContext testContext)
         {
             testContext.JSInterop.Mode = JSRuntimeMode.Loose;
+            testContext.Services.AddScoped<JSRuntimeImpl>();
 
             var authContext = testContext.AddTestAuthorization();
             authContext.SetAuthorized(userName);
@@ -356,5 +357,4 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             Called.Set();
         }
     }
-
 }
