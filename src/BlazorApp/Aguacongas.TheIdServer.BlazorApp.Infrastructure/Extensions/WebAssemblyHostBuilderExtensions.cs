@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -26,16 +28,6 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             var configuration = builder.Configuration;
             var settings = configuration.Get<Settings>();
             ConfigureLogging(builder.Logging, settings);
-            builder.Services
-                .AddOptions()
-                .AddOidcAuthentication(options =>
-                {
-                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
-                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
-                    configuration.Bind("ProviderOptions", options.ProviderOptions);
-                })
-                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
-
             ConfigureServices(builder.Services, configuration, settings, builder.HostEnvironment.BaseAddress);
             return builder;
         }
@@ -57,12 +49,25 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings, string baseAddress)
         {
             services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
-                .AddAuthorizationCore(options =>
+                .AddOidcAuthentication(options =>
+                {
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    configuration.Bind("ProviderOptions", options.ProviderOptions);
+                })
+                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+
+            var postConfigurationOidc = services.First(s => s.ServiceType == typeof(IPostConfigureOptions<RemoteAuthenticationOptions<OidcProviderOptions>>));
+            
+            services.Remove(postConfigurationOidc);
+            services.Add(new ServiceDescriptor(postConfigurationOidc.ServiceType, postConfigurationOidc.ImplementationType, ServiceLifetime.Singleton));
+
+            services.AddAuthorizationCore(options =>
                 {
                     options.AddIdentityServerPolicies();
                 });
 
-            services.AddScoped(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
+            services.AddTransient(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));

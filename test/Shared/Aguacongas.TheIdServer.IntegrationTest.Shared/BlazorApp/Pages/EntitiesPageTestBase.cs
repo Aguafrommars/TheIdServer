@@ -98,7 +98,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
 
-        [Fact(Skip = "Crash oftne on CI")]
+        [Fact(Skip = "Crash often on CI")]
         public async Task OnRowClicked_should_navigate_to_entity_page()
         {
             await PopulateList();
@@ -109,9 +109,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.Contains("filtered", component.Markup);
 
-            var tdList = component.FindAll(".table-hover tr td").ToArray();
-
             var navigationManager = Services.GetRequiredService<NavigationManager>();
+
+            var tdList = component.FindAll(".table-hover tr td").ToArray();
 
             await tdList[1].ClickAsync(new MouseEventArgs());
 

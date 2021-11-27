@@ -7,6 +7,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class EntitiesGrid<TItem>
     {
+        private ICollection<TItem> _items;
+
         [Parameter]
         public bool SetKey { get; set; } = true;
 
@@ -42,5 +44,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             base.OnInitialized();
         }
+
+        private ICollection<TItem> GetItems => new List<TItem>(Items);
     }
 }
