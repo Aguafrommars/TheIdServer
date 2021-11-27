@@ -7,8 +7,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class EntitiesGrid<TItem>
     {
-        private ICollection<TItem> _items;
-
         [Parameter]
         public bool SetKey { get; set; } = true;
 
