@@ -24,7 +24,7 @@
     </TableHeader>
     <RowTemplate>
         <td>
-            <a href="@(_navigationManager.BaseUri)/client/@(token.ClientId)">@token.ClientId</a>
+            <a href="@(_navigationManager.BaseUri)client/@(token.ClientId)">@token.ClientId</a>
         </td>
         <td>
             <button type="button" class="btn btn-secondary" @onclick="() => ShowData(token)">
