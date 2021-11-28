@@ -14,7 +14,7 @@ Copyright (c) 2021 @Olivier Lefebvre
 @if (Model.CurrentLogins?.Count > 0)
 {
     <h4>@Localizer["Registered Logins"]</h4>
-    <table class="table">
+    <table class="table" summary="@Localizer["External providers table"]">
         <tbody>
             @foreach (var login in Model.CurrentLogins)
             {

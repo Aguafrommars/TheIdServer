@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Task.Delay exception: {e.Message}. Exiting.");
+                    _logger.LogError(e, "Task.Delay exception: {Message}. Exiting.", e.Message);
                     break;
                 }
 
@@ -127,7 +127,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception removing expired grants: {e.Message}");
+                _logger.LogError(e, "Exception removing expired grants: {Message}", e.Message);
 
             }
         }

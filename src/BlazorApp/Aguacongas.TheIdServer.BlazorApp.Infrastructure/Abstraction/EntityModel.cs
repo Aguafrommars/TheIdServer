@@ -317,7 +317,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
-            Logger.LogDebug($"HandleMoficationList for type {entityType.Name}");
+            Logger.LogDebug("HandleMoficationList for type {EntityTypeName}", entityType.Name);
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
             var taskList = new List<Task>(addList.Count());
             foreach (var entity in addList)
