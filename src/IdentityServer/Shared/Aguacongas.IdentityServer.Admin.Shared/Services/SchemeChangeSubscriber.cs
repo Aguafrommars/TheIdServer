@@ -66,27 +66,27 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             connection.On<string>(nameof(IProviderHub.ProviderAdded), async scheme =>
             {
-                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderAdded)}({scheme})");
+                _logger.LogInformation("SignalR notification received: {Type}({Scheme})", nameof(IProviderHub.ProviderAdded), scheme);
                 var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
                 await _manager.AddAsync(definition).ConfigureAwait(false);
             });
 
             connection.On<string>(nameof(IProviderHub.ProviderRemoved), async scheme =>
             {
-                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderRemoved)}({scheme})");
+                _logger.LogInformation("SignalR notification received: {Type}({Scheme})", nameof(IProviderHub.ProviderRemoved), scheme);
                 await _manager.RemoveAsync(scheme).ConfigureAwait(false);
             });
 
             connection.On<string>(nameof(IProviderHub.ProviderUpdated), async scheme =>
             {
-                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.ProviderUpdated)}({scheme})");
+                _logger.LogInformation("SignalR notification received: {Type}({Scheme})", nameof(IProviderHub.ProviderUpdated), scheme);
                 var definition = await _store.FindBySchemeAsync(scheme).ConfigureAwait(false);
                 await _manager.UpdateAsync(definition).ConfigureAwait(false);
             });
 
             connection.On<string, string>(nameof(IProviderHub.KeyRevoked), (kind, id) =>
             {
-                _logger.LogInformation($"SignalR notification received: {nameof(IProviderHub.KeyRevoked)}({kind}, {id})");
+                _logger.LogInformation("SignalR notification received: {Type}({Kind}, {Id})", nameof(IProviderHub.KeyRevoked), kind, id);
                 var keyId = Guid.Parse(id);
                 if (kind == nameof(IAuthenticatedEncryptorDescriptor))
                 {

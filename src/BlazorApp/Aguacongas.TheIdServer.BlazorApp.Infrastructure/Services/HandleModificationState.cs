@@ -63,13 +63,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             {
                 var modification = modifications[entity];
                 var identifiable = entity as IEntityId;
-                _logger.LogDebug($"Replace change for entity {entityType.Name} {identifiable?.Id} {modification} with {ModificationKind.Add}");
+                _logger.LogDebug("Replace change for entity {EntityTypeName} {IdentifiableId} {Modification} with {ModificationKind}", entityType.Name, identifiable?.Id, modification, ModificationKind.Add);
                 modifications[entity] = ModificationKind.Add;
                 OnStateChange?.Invoke(ModificationKind.Add, entity);
                 return;
             }
             OnStateChange?.Invoke(ModificationKind.Add, entity);
-            _logger.LogDebug($"Add created change for entity {entityType.Name}");
+            _logger.LogDebug("Add created change for entity {EntityTypeName}", entityType.Name);
         }
 
         public void EntityDeleted<TEntity>(TEntity entity) where TEntity: IEntityId
@@ -79,12 +79,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             var modifications = GetModifications(entityType);
             if (!modifications.TryAdd(entity, ModificationKind.Delete))
             {
-                _logger.LogDebug($"Remove change for entity {entityType.Name} {entity.Id}");
+                _logger.LogDebug("Remove change for entity {EntityTypeName} {EntityId}", entityType.Name, entity.Id);
                 modifications.Remove(entity);
                 OnStateChange?.Invoke(ModificationKind.Delete, entity);
                 return;
             }
-            _logger.LogDebug($"Add delete change for entity {entityType.Name} {entity.Id}");
+            _logger.LogDebug("Add delete change for entity {EntityTypeName} {EntityId}", entityType.Name, entity.Id);
             OnStateChange?.Invoke(ModificationKind.Delete, entity);
         }
 
@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
 
             if (!string.IsNullOrEmpty(entity?.Id) && !modifications.ContainsKey(entity))
             {
-                _logger.LogDebug($"Add update modification for entity {entityType.Name} {entity.Id}");
+                _logger.LogDebug("Add update modification for entity {EntityTypeName} {EntityId}", entityType.Name, entity.Id);
                 modifications.Add(entity, ModificationKind.Update);
                 OnStateChange?.Invoke(ModificationKind.Update, entity);
             }            

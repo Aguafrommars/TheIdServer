@@ -130,7 +130,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
             }
         }
 
-        private class RsaKeyParameters
+        private sealed class RsaKeyParameters
         {
             public string D { get; set; }
             public string DP { get; set; }

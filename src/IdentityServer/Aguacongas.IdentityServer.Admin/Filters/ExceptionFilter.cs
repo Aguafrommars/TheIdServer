@@ -45,9 +45,10 @@ namespace Aguacongas.IdentityServer.Admin.Filters
                 ProcessApiException(context, exception);
             }
         }
+
         private void ProcessApiException(ExceptionContext context, Exception exception)
         {
-            _logger.LogError(exception, exception.Message);
+            _logger.LogError(exception, "{Message}", exception.Message);
 
             if (exception is InvalidOperationException)
             {

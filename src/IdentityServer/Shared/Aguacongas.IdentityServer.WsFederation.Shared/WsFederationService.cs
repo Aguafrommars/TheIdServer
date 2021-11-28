@@ -131,7 +131,7 @@ namespace Aguacongas.IdentityServer.WsFederation
 
         private static string AddQueryString(string url, string query)
         {
-            if (!url.Contains("?"))
+            if (!url.Contains('?'))
             {
                 if (!query.StartsWith("?"))
                 {
