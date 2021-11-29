@@ -38,9 +38,9 @@ namespace Aguacongas.TheIdServer.Test
                 ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString(),
                 ["DbType"] = "InMemory"
             }).Build();
-            var environementMock = new Mock<IWebHostEnvironment>();
             var services = new ServiceCollection();
-            services.AddTheIdServer(configuration);
+            services.AddTransient<IConfiguration>(p => configuration)
+                .AddTheIdServer(configuration);
 
             var provider = services.BuildServiceProvider();
 
