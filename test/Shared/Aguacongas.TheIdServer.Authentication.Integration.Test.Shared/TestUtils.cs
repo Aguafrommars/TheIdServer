@@ -19,7 +19,6 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                     Action<IServiceCollection> configureServices = null,
                     IEnumerable<KeyValuePair<string, string>> configurationOverrides = null)
         {
-            Startup startup = null;
             var webHostBuilder = new WebHostBuilder()
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
@@ -39,14 +38,13 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    startup = new Startup(context.Configuration, context.HostingEnvironment);
                     configureServices?.Invoke(services);
-                    startup.ConfigureServices(services);
+                    services.AddTheIdServer(context.Configuration);
                     services.AddSingleton<TestUserService>()
-                        .AddMvc().AddApplicationPart(startup.GetType().Assembly);
+                        .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);
                 })
-                .Configure(builder =>
+                .Configure((context, builder) =>
                 {
                     builder.Use(async (context, next) =>
                     {
@@ -54,7 +52,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                         context.User = testService.User;
                         await next();
                     });
-                    startup.Configure(builder);
+                    builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
 
             var testServer = new TestServer(webHostBuilder);

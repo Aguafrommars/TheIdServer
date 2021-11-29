@@ -22,7 +22,7 @@ using MongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
-    public class StartupTest
+    public class ServiceCollectionExtensionsTest
     {
         [Fact]
         public void ConfigureService_should_configure_ravendb_services()
