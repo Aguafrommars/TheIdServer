@@ -5,6 +5,13 @@ using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+#if DUENDE
+using Duende.IdentityServer.Services;
+#else
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+#endif
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +19,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Moq;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -75,7 +81,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     builder.AddInMemoryCollection(new Dictionary<string, string>
                     {
                         ["DbType"] = DbTypes.MongoDb.ToString(),
-                        ["ConnectionStrings:DefaultConnection"] = "mongodb://localhost:27017",
+                        ["ConnectionStrings:DefaultConnection"] = "mongodb://localhost/test",
                         ["IdentityServer:Key:StorageKind"] = StorageKind.MongoDb.ToString(),
                         ["DataProtectionOptions:StorageKind"] = StorageKind.MongoDb.ToString(),
                         ["Seed"] = "false"
@@ -97,5 +103,46 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             configureManagementOptions?.Configure(managementOptions);
             Assert.IsType<MongoDb.MongoDbXmlRepository<MongoDb.DataProtectionKey>>(managementOptions.XmlRepository);
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ConfigureService_should_configure_proxy_services(bool disableStrictSll)
+        {
+            var sessionMock = new Mock<IAsyncDocumentSession>();
+            var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
+            sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
+            using var sut = new HostBuilder()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
+                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    builder.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["Proxy"] = "true",
+                        ["DisableStrictSsl"]= $"{disableStrictSll}",
+                        ["Seed"] = "false"
+                    });
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddTheIdServer(context.Configuration);
+                }).Build();
+
+            var provider = sut.Services;
+            Assert.NotNull(provider.GetService<IProfileService>());
+            Assert.NotNull(provider.GetService<IAdminStore<Client>>());
+            var postConfigureJwtBeareOpttions = provider.GetService<IPostConfigureOptions<JwtBearerOptions>>();
+            Assert.NotNull(postConfigureJwtBeareOpttions);
+            postConfigureJwtBeareOpttions?.PostConfigure("test", new JwtBearerOptions());
+
+            var postConfigureOAuth2IntrospectionOptions = provider.GetService<IPostConfigureOptions<OAuth2IntrospectionOptions>>();
+            Assert.NotNull(postConfigureOAuth2IntrospectionOptions);
+            postConfigureOAuth2IntrospectionOptions?.PostConfigure("test", new OAuth2IntrospectionOptions
+            {
+                Authority = "https://localhost"
+            });
+        }
+
     }
 }
