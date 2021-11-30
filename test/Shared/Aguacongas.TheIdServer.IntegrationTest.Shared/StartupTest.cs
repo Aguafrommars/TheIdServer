@@ -5,19 +5,19 @@ using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
-using IdentityModel.AspNetCore.OAuth2Introspection;
-#if DUENDE
-using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-#endif
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+#if DUENDE
+using Duende.IdentityServer.Services;
+#else
+using IdentityServer4.Services;
+#endif
 using Moq;
 using Raven.Client.Documents.Session;
 using System;
