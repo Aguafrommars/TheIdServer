@@ -25,6 +25,11 @@ using System.Collections.Generic;
 using System.IO;
 using Xunit;
 using MongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
+using Aguacongas.IdentityServer.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
@@ -105,9 +110,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void ConfigureService_should_configure_proxy_services(bool disableStrictSll)
+        [InlineData(true, null, null, null)]
+        [InlineData(true, null, null, "test.test")]
+        [InlineData(true, null, "test", null)]
+        [InlineData(true, null, "test", "test.test")]
+        [InlineData(true, "/providerhub", "test", null)]
+        [InlineData(true, "/providerhub", "test", "test.test")]
+        [InlineData(false, null, null, null)]
+        [InlineData(false, null, null, "test.test")]
+        [InlineData(false, null, "test", null)]
+        [InlineData(false, null, "test", "test.test")]
+        [InlineData(false, "/providerhub", "test", null)]
+        [InlineData(false, "/providerhub", "test", "test.test")]
+        public async Task ConfigureService_should_configure_proxy_services(bool disableStrictSll, string path, string otk, string token)
         {
             var sessionMock = new Mock<IAsyncDocumentSession>();
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
@@ -132,16 +147,40 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var provider = sut.Services;
             Assert.NotNull(provider.GetService<IProfileService>());
             Assert.NotNull(provider.GetService<IAdminStore<Client>>());
-            var postConfigureJwtBeareOpttions = provider.GetService<IPostConfigureOptions<JwtBearerOptions>>();
-            Assert.NotNull(postConfigureJwtBeareOpttions);
-            postConfigureJwtBeareOpttions?.PostConfigure("test", new JwtBearerOptions());
-
-            var postConfigureOAuth2IntrospectionOptions = provider.GetService<IPostConfigureOptions<OAuth2IntrospectionOptions>>();
-            Assert.NotNull(postConfigureOAuth2IntrospectionOptions);
-            postConfigureOAuth2IntrospectionOptions?.PostConfigure("test", new OAuth2IntrospectionOptions
+            var jwtBearerHandler = provider.GetService<JwtBearerHandler>();
+            Assert.NotNull(jwtBearerHandler);
+            var mockHeader = new Mock<IHeaderDictionary>();
+            var queryCollection = new QueryCollection(new Dictionary<string, StringValues>
             {
-                Authority = "https://localhost"
+                ["otk"] = otk
             });
+            var mockOneTimeTokenRetriver = new Mock<IRetrieveOneTimeToken>();
+            mockOneTimeTokenRetriver.Setup(m => m.GetOneTimeToken(It.IsAny<string>())).Returns(token);
+            var requestServices = new ServiceCollection()
+                .AddTransient(p => mockOneTimeTokenRetriver.Object)
+                .BuildServiceProvider();
+
+            var mockHttRequest = new Mock<HttpRequest>();
+            mockHttRequest.SetupGet(m => m.Headers).Returns(mockHeader.Object);
+            mockHttRequest.SetupGet(m => m.Query).Returns(queryCollection);
+            mockHttRequest.SetupGet(m => m.Path).Returns(path);
+            var mockHttpContext = new Mock<HttpContext>();
+            mockHttRequest.SetupGet(m => m.HttpContext).Returns(mockHttpContext.Object);
+            mockHttpContext.SetupGet(m => m.Request).Returns(mockHttRequest.Object);
+            mockHttpContext.SetupGet(m => m.RequestServices).Returns(requestServices);
+            if (jwtBearerHandler != null)
+            {
+                await jwtBearerHandler.InitializeAsync(new AuthenticationScheme("Bearer", null, typeof(JwtBearerHandler)), mockHttpContext.Object).ConfigureAwait(false);
+                await jwtBearerHandler.AuthenticateAsync().ConfigureAwait(false);
+            }            
+
+            var oauthIntrospectionHandler = provider.GetService<OAuth2IntrospectionHandler>();
+            Assert.NotNull(oauthIntrospectionHandler);
+            if (oauthIntrospectionHandler != null)
+            {
+                await oauthIntrospectionHandler.InitializeAsync(new AuthenticationScheme("introspection", null, typeof(OAuth2IntrospectionHandler)), mockHttpContext.Object).ConfigureAwait(false);
+                await oauthIntrospectionHandler.AuthenticateAsync().ConfigureAwait(false);
+            }
         }
 
     }
