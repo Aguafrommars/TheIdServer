@@ -27,11 +27,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         [Fact]
         public void ConfigureService_should_configure_ravendb_services()
         {
-            var documentStoreMock = new Mock<IDocumentStore>();
             var sessionMock = new Mock<IAsyncDocumentSession>();
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
-            documentStoreMock.Setup(m => m.OpenAsyncSession(It.IsAny<SessionOptions>())).Returns(sessionMock.Object);
             using var sut = new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
@@ -42,14 +40,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         ["DbType"] = DbTypes.RavenDb.ToString(),
                         ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
                         ["DataProtectionOptions:StorageKind"] = StorageKind.RavenDb.ToString(),
+                        ["RavenDbOptions:CertificatePath"] = string.Empty,
                         ["Seed"] = "false"
                     });
                 })
                 .ConfigureServices((context, services) =>
                 {                    
-                    services.AddSingleton(p => documentStoreMock.Object);
                     services.AddTheIdServer(context.Configuration);
-                    services.AddSingleton(p => documentStoreMock.Object);
                 }).Build();
                  
             var provider = sut.Services;
@@ -67,11 +64,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         [Fact]
         public void ConfigureService_should_configure_mongodb_services()
         {
-            var documentStoreMock = new Mock<IDocumentStore>();
             var sessionMock = new Mock<IAsyncDocumentSession>();
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
-            documentStoreMock.Setup(m => m.OpenAsyncSession(It.IsAny<SessionOptions>())).Returns(sessionMock.Object);
             using var sut = new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
@@ -79,7 +74,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     builder.AddInMemoryCollection(new Dictionary<string, string>
                     {
-                        ["DbType"] = DbTypes.RavenDb.ToString(),
+                        ["DbType"] = DbTypes.MongoDb.ToString(),
+                        ["ConnectionStrings:DefaultConnection"] = "mongodb://localhost:27017",
                         ["IdentityServer:Key:StorageKind"] = StorageKind.MongoDb.ToString(),
                         ["DataProtectionOptions:StorageKind"] = StorageKind.MongoDb.ToString(),
                         ["Seed"] = "false"
@@ -87,9 +83,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton(p => documentStoreMock.Object);
                     services.AddTheIdServer(context.Configuration);
-                    services.AddSingleton(p => documentStoreMock.Object);
                 }).Build();
 
             var provider = sut.Services;
