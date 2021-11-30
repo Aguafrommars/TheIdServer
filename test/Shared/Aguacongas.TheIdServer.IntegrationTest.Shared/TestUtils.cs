@@ -47,7 +47,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     IEnumerable<KeyValuePair<string, string>> configurationOverrides = null,
                     Action<IEndpointRouteBuilder, bool> configureEndpoints = null)
         {
-            Startup startup = null;
             var webHostBuilder = new WebHostBuilder()
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                     .ReadFrom.Configuration(hostingContext.Configuration))
@@ -62,15 +61,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    startup = new Startup(context.Configuration, context.HostingEnvironment);
                     configureServices?.Invoke(services);
-                    startup.ConfigureServices(services);
+                    services.AddTheIdServer(context.Configuration);
                     services.AddSingleton<TestUserService>()
                         .AddMvc()
-                        .AddApplicationPart(startup.GetType().Assembly);
+                        .AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);
                 })
-                .Configure(builder =>
+                .Configure((context, builder) =>
                 {
                     builder.Use(async (context, next) =>
                     {
@@ -100,8 +98,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         }
                     }
 
-                    startup.ConfigureEndpoints = configureEndpoints ?? startup.ConfigureEndpoints;
-                    startup.Configure(builder);
+                    builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
 
             new IdentityHostingStartup().Configure(webHostBuilder);
