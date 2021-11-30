@@ -10,6 +10,7 @@ using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Hosting;
@@ -37,12 +38,9 @@ namespace Aguacongas.TheIdServer.Test
                 ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString(),
                 ["DbType"] = "InMemory"
             }).Build();
-            var environementMock = new Mock<IWebHostEnvironment>();
-            var sut = new Startup(configuration, environementMock.Object);
-
             var services = new ServiceCollection();
-            services.AddTransient<IConfiguration>(p => configuration);
-            sut.ConfigureServices(services);
+            services.AddTransient<IConfiguration>(p => configuration)
+                .AddTheIdServer(configuration);
 
             var provider = services.BuildServiceProvider();
 
@@ -61,11 +59,10 @@ namespace Aguacongas.TheIdServer.Test
             }).Build();
 
             var environementMock = new Mock<IWebHostEnvironment>();
-            var sut = new Startup(configuration, environementMock.Object);
-
+            
             var services = new ServiceCollection();
             services.AddTransient<IConfiguration>(p => configuration);
-            sut.ConfigureServices(services);
+            services.AddTheIdServer(configuration);
 
             var provider = services.BuildServiceProvider();
 
@@ -86,11 +83,9 @@ namespace Aguacongas.TheIdServer.Test
             }).Build();
 
             var environementMock = new Mock<IWebHostEnvironment>();
-            var sut = new Startup(configuration, environementMock.Object);
-
             var services = new ServiceCollection();
             services.AddTransient<IConfiguration>(p => configuration);
-            sut.ConfigureServices(services);
+            services.AddTheIdServer(configuration);
 
             var provider = services.BuildServiceProvider();
 
@@ -116,15 +111,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -150,15 +143,14 @@ namespace Aguacongas.TheIdServer.Test
             {
                 Items = Array.Empty<Culture>()
             });
-            var sut = new Startup(configuration, environementMock.Object);
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services => 
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                     services.AddTransient(p => culturestoreMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -188,15 +180,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -219,15 +209,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -246,15 +234,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -274,15 +260,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -302,15 +286,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -330,15 +312,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -361,15 +341,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -389,15 +367,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -417,15 +393,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -446,15 +420,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -475,15 +447,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -504,15 +474,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             Assert.Throws<InvalidOperationException>(() => WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build());
@@ -532,15 +500,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -559,15 +525,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -588,15 +552,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -616,15 +578,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -645,15 +605,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -674,15 +632,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration); 
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -706,15 +662,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
@@ -736,15 +690,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             Assert.Throws<InvalidOperationException>(() => WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build());
@@ -765,15 +717,13 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
-            var sut = new Startup(configuration, environementMock.Object);
-
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    sut.ConfigureServices(services);
+                    services.AddTheIdServer(configuration);
                     services.AddTransient(p => storeMock.Object);
                 })
-                .Configure(builder => sut.Configure(builder))
+                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
