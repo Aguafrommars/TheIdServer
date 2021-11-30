@@ -46,10 +46,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     });
                 })
                 .ConfigureServices((context, services) =>
-                {
-                    var startup = new Startup(context.Configuration, null);
+                {                    
                     services.AddSingleton(p => documentStoreMock.Object);
-                    startup.ConfigureServices(services);
+                    services.AddTheIdServer(context.Configuration);
                     services.AddSingleton(p => documentStoreMock.Object);
                 }).Build();
                  
@@ -57,11 +56,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             Assert.NotNull(provider.GetService<IAdminStore<ApiClaim>>());
             var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
             var rotationOptions = new KeyRotationOptions();
-            configureRotationOptions.Configure(rotationOptions);
+            configureRotationOptions?.Configure(rotationOptions);
             Assert.IsType<RavenDbXmlRepository<KeyRotationKey>>(rotationOptions.XmlRepository);
             var configureManagementOptions = provider.GetService<IConfigureOptions<KeyManagementOptions>>();
             var managementOptions = new KeyRotationOptions();
-            configureManagementOptions.Configure(managementOptions);
+            configureManagementOptions?.Configure(managementOptions);
             Assert.IsType<RavenDbXmlRepository<DataProtectionKey>>(managementOptions.XmlRepository);
         }
 
@@ -88,9 +87,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    var startup = new Startup(context.Configuration, null);
                     services.AddSingleton(p => documentStoreMock.Object);
-                    startup.ConfigureServices(services);
+                    services.AddTheIdServer(context.Configuration);
                     services.AddSingleton(p => documentStoreMock.Object);
                 }).Build();
 
@@ -98,11 +96,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             Assert.NotNull(provider.GetService<IAdminStore<ApiClaim>>());
             var configureRotationOptions = provider.GetService<IConfigureOptions<KeyRotationOptions>>();
             var rotationOptions = new KeyRotationOptions();
-            configureRotationOptions.Configure(rotationOptions);
+            configureRotationOptions?.Configure(rotationOptions);
             Assert.IsType<MongoDb.MongoDbXmlRepository<MongoDb.KeyRotationKey>>(rotationOptions.XmlRepository);
             var configureManagementOptions = provider.GetService<IConfigureOptions<KeyManagementOptions>>();
             var managementOptions = new KeyRotationOptions();
-            configureManagementOptions.Configure(managementOptions);
+            configureManagementOptions?.Configure(managementOptions);
             Assert.IsType<MongoDb.MongoDbXmlRepository<MongoDb.DataProtectionKey>>(managementOptions.XmlRepository);
         }
     }
