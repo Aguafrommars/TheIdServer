@@ -1,8 +1,5 @@
-﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
+﻿using Aguacongas.IdentityServer.Store;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +10,19 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext where TComponent: IComponent
+    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext where TComponent : IComponent
     {
-        private readonly ApiFixture _fixture;
+        private readonly TheIdServerFactory _factory;
 
         public abstract string Entities { get; }
 
 
-        protected EntitiesPageTestBase(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        protected EntitiesPageTestBase(TheIdServerFactory factory)
         {
-            _fixture = fixture;
-            _fixture.TestOutputHelper = testOutputHelper;
+            _factory = factory;
         }
 
         [Fact]
@@ -35,9 +30,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await PopulateList();
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<TComponent> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
+
+            component.WaitForState(() => !component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -63,9 +59,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await PopulateList();
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<TComponent> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
+
+            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
 
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
@@ -85,49 +82,49 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(button);
 
             var invocationHanlder = JSInterop.SetupVoid("open", i => true).SetVoidResult();
-            
+
             await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             Assert.Single(invocationHanlder.Invocations);
             var calledUrl = invocationHanlder.Invocations.First().Arguments[0] as string;
 
-            var testUserService = _fixture.Sut.Services.GetRequiredService<TestUserService>();
+            var testUserService = _factory.Services.GetRequiredService<TestUserService>();
             testUserService.User = null;
             var response = await Services.GetRequiredService<HttpClient>().GetAsync(calledUrl);
             Assert.False(response.IsSuccessStatusCode);
         }
 
 
-        [Fact(Skip = "Crash often on CI")]
+        [Fact]
         public async Task OnRowClicked_should_navigate_to_entity_page()
         {
             await PopulateList();
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<TComponent> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
-            Assert.Contains("filtered", component.Markup);
+            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
 
             var navigationManager = Services.GetRequiredService<NavigationManager>();
 
-            var tdList = component.FindAll(".table-hover tr td").ToArray();
+            var tdList = component.FindAll(".table-hover tr td");
 
-            await tdList[1].ClickAsync(new MouseEventArgs());
+            Assert.NotEmpty(tdList);
+
+            await tdList[tdList.Count - 1].ClickAsync(new MouseEventArgs());
 
             Assert.Contains(typeof(TEntity).Name.ToLower(), navigationManager.Uri);
         }
 
-        [Fact(Skip = "Crash often on CI")]
+        [Fact]
         public async Task OnHeaderClicked_should_sort_grid()
         {
             await PopulateList();
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<TComponent> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
-            Assert.Contains("filtered", component.Markup);
+            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
 
             var th = component.Find(".table.mb-0 th div");
 
@@ -165,9 +162,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await PopulateList();
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<TComponent> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
+
+            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
 
             var selectAll = component.Find(".table.mb-0 th input");
 
@@ -216,11 +214,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected abstract Task PopulateList();
 
-        protected void CreateTestHost(string userName,
-            string role,
-            out IRenderedComponent<TComponent> component)
+        protected IRenderedComponent<TComponent> CreateComponent(string userName,
+            string role)
         {
-            TestUtils.CreateTestHost(userName,
+            _factory.ConfigureTestContext(userName,
                 new Claim[]
                 {
                     new Claim("scope", SharedConstants.ADMINSCOPE),
@@ -228,17 +225,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())
                 },
-                _fixture.Sut,
-                this,
-                out component);
+                this);
 
-            var c = component;
-            c.WaitForState(() => !c.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            var component = RenderComponent<TComponent>();
+            component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            return component;
         }
 
         protected Task DbActionAsync<T>(Func<T, Task> action) where T : DbContext
         {
-            return _fixture.DbActionAsync(action);
+            return _factory.DbActionAsync(action);
         }
 
         protected static string GenerateId() => Guid.NewGuid().ToString();

@@ -16,11 +16,11 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ApiScopeTest : EntityPageTestBase<page>
     {
         public override string Entity => "apiscope";
-        public ApiScopeTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public ApiScopeTest(TheIdServerFactory factory):base(factory)
         {
         }
 
@@ -29,10 +29,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiScopeId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiScopeId,
-                out IRenderedComponent<page> component);
+                apiScopeId);
 
             var addButton = component.Find("#btnAddDisplayName");
 
@@ -100,10 +99,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiScopeId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiScopeId,
-                out IRenderedComponent<page> component);
+                apiScopeId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -122,10 +120,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string identityId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId,
-                out IRenderedComponent<page> component);
+                identityId);
 
             var input = component.Find("#displayName");
 

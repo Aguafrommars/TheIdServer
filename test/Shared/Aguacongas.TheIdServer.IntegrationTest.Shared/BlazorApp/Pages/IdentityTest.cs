@@ -17,11 +17,11 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Identity.Identity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class IdentityTest : EntityPageTestBase<page>
     {
         public override string Entity => "identityresource";
-        public IdentityTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public IdentityTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -30,10 +30,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string identityId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId,
-                out IRenderedComponent<page> component);
+                identityId);
 
             var addButton = component.Find("#btnAddDisplayName");
 
@@ -101,10 +100,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string identityId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId,
-                out IRenderedComponent<page> component);
+                identityId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -123,10 +121,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string identityId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId,
-                out IRenderedComponent<page> component);
+                identityId);
 
             var input = component.Find("#displayName");
 

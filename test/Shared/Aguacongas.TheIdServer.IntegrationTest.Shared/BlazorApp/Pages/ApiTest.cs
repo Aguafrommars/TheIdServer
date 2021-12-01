@@ -19,11 +19,11 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ApiTest : EntityPageTestBase<page>
     {
         public override string Entity => "protectresource";
-        public ApiTest(ApiFixture fixture, ITestOutputHelper testOutputHelper) : base(fixture, testOutputHelper)
+        public ApiTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -32,10 +32,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out IRenderedComponent<page> component);
+                apiId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -54,10 +53,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out IRenderedComponent<page> component);
+                apiId);
 
             var input = component.Find("#displayName");
 
@@ -87,10 +85,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = GenerateId();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             var input = component.Find("#name");
 
@@ -126,10 +123,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out IRenderedComponent<page> component);
+                apiId);
 
             var input = component.Find("#delete-entity input");
 
@@ -152,24 +148,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public void DisposeTest()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             component.Dispose();
 
             Assert.Throws<ComponentDisposedException>(()=> component.Markup);
         }
 
-        [Fact(Skip = "fail")]
+        [Fact]
         public async Task ClickSecretsButtons_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out IRenderedComponent<page> component);
+                         apiId);
 
             component.WaitForElements("#secrets button");
             var buttons = component.FindAll("#secrets button").ToList();            
@@ -182,49 +176,33 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
-            while (buttons.Count == expected)
-            {
-                component.WaitForElements("#secrets button");
-                buttons = component.FindAll("#secrets button")
-                    .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
-            }
-
             Assert.NotEqual(expected, buttons.Count);
 
             await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
-
-            buttons = component.FindAll("#secrets button")
-                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
-
-            while(buttons.Count != expected)
-            {
-                component.WaitForElements("#secrets button");
-                buttons = component.FindAll("#secrets button")
-                    .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
-            }
-            Assert.Equal(expected, buttons.Count);
         }
 
-        [Fact(Skip = "fail")]
+        [Fact]
         public async Task ClickPropertiesButtons_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out IRenderedComponent<page> component);
+                         apiId);
 
-            var buttons = component.WaitForElements("#properties button").ToList();
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
-            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
+            var buttons = component.WaitForElements("#properties button")
+                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
-            var expected = buttons.Count;
+            var notExpected = buttons.Count;
             await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
-            Assert.NotEqual(expected, buttons.Count);
+            Assert.NotEqual(notExpected, buttons.Count);
+
+            var expected = buttons.Count - 1;
 
             await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
@@ -238,10 +216,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task ClickAddRemoveClaims_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out IRenderedComponent<page> component);
+                         apiId);
 
             var input = component.Find("#claims input.new-claim");
 

@@ -9,12 +9,12 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.RelyingPartie
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class RelyingPartiesTest : EntitiesPageTestBase<RelyingParty, page>
     {
         public override string Entities => "relyingparties";
-        public RelyingPartiesTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
-            : base (fixture, testOutputHelper)
+        public RelyingPartiesTest(TheIdServerFactory factory)
+            : base(factory)
         {
         }
 

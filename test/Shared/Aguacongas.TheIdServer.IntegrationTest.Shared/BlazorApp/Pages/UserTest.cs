@@ -22,12 +22,12 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.User.User;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class UserTest : EntityPageTestBase<page>
     {
         public override string Entity => "user";
 
-        public UserTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public UserTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -37,6 +37,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var userId = tuple.Item1;
             var component = tuple.Item2;
+
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             var filterInput = WaitForNode(component, "input[placeholder=\"filter\"]");
 
@@ -54,6 +56,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var userId = tuple.Item1;
             var component = tuple.Item2;
+
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -91,6 +95,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
+            component.WaitForState(() => component.Markup.Contains("filtered"));
+
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
                 var login = await context.UserLogins.FirstOrDefaultAsync(t => t.UserId == userId);
@@ -126,6 +132,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var userId = tuple.Item1;
             var component = tuple.Item2;
+
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<OperationalDbContext>(async context =>
             {
@@ -163,6 +171,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
+            component.WaitForState(() => component.Markup.Contains("filtered"));
+
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
                 var role = await context.UserRoles.FirstOrDefaultAsync(t => t.UserId == userId);
@@ -197,6 +207,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var tuple = await SetupPage();
             var component = tuple.Item2;
+            
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             var roleId = GenerateId();
             await DbActionAsync<ApplicationDbContext>(context =>
@@ -251,6 +263,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
+            component.WaitForState(() => component.Markup.Contains("filtered"));
+
             var addButton = WaitForNode(component, "#claims button");
 
             Assert.NotNull(addButton);
@@ -291,15 +305,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        [Fact(Skip = "fail")]
+        [Fact]
         public async Task UpdateUserClaim_should_update_claim()
         {
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            var rows = WaitForAllNodes(component, "#claims tr");
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
-            var lastRow = rows.Last();
+            var rows = WaitForAllNodes(component, "#claims tr td");
+
+            var lastRow = rows.Last().ParentElement;
+
+            Assert.NotNull(lastRow);
+            
+            if(lastRow is null)
+            {
+                return;
+            }
+
             var inputList = lastRow.QuerySelectorAll("input");
 
             Assert.NotEmpty(inputList);
@@ -323,13 +347,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        [Fact(Skip = "fail")]
+        [Fact]
         public async Task DeleteUserClaim_should_remove_claim_from_user()
         {
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            var button = WaitForNode(component, "#claims tr button");
+            component.WaitForState(() => component.Markup.Contains("filtered"));
+
+            var button = WaitForNode(component, "#claims tr td button");
 
             Assert.NotNull(button);
 
@@ -352,10 +378,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClicked_create_new_user()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             var input = WaitForNode(component, "#name");
 
@@ -379,6 +404,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
+            component.WaitForState(() => component.Markup.Contains("filtered"));
+
             var input = WaitForNode(component, "#email");
 
             var expected = "test@exemple.com";
@@ -395,7 +422,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Id == tuple.Item1);
-                Assert.Equal(expected, user.Email);
+                Assert.Equal(expected, user?.Email);
             });
         }
 
@@ -405,6 +432,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var userId = tuple.Item1;
             var component = tuple.Item2;
+
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             var input = component.Find("#delete-entity input");
 
@@ -427,7 +456,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = GenerateId();
             await CreateTestEntity(userId);
 
-            var roleManager = Fixture.Sut.Host.Services.GetRequiredService<RoleManager<IdentityRole>>();
+            using var scope = Factory.Services.CreateScope();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var role = await roleManager.FindByNameAsync("filtered");
             if (role == null)
             {
@@ -437,14 +467,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 });
                 Assert.True(roleResult.Succeeded);
             }
-            var manager = Fixture.Sut.Host.Services.GetRequiredService<UserManager<ApplicationUser>>();
+            var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = await manager.FindByIdAsync(userId);
             var result = await manager.AddToRoleAsync(user, "filtered");
             Assert.True(result.Succeeded);
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                userId,
-                out IRenderedComponent<page> component);
+                userId);
 
             return new Tuple<string, IRenderedComponent<page>>(userId, component);
         }

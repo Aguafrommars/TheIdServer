@@ -1,7 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
-using IdentityModel;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +10,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 {
     class TestUserService
     {
-        public ClaimsPrincipal User { get; set; }
+        public ClaimsPrincipal? User { get; set; }
 
-        public void SetTestUser(bool isAuthenticated = true, IEnumerable<Claim> claims = null)
+        public void SetTestUser(bool isAuthenticated = true, IEnumerable<Claim>? claims = null)
         {
             var identityMock = new Mock<IIdentity>();
             if (isAuthenticated)

@@ -9,7 +9,6 @@ using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -34,156 +33,11 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit.Abstractions;
-using blazorApp = Aguacongas.TheIdServer.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
     public static class TestUtils
     {
-
-        public static TestServer CreateTestServer(
-                    Action<IServiceCollection> configureServices = null,
-                    IEnumerable<KeyValuePair<string, string>> configurationOverrides = null,
-                    Action<IEndpointRouteBuilder, bool> configureEndpoints = null)
-        {
-            var webHostBuilder = new WebHostBuilder()
-                .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
-                    .ReadFrom.Configuration(hostingContext.Configuration))
-                .ConfigureAppConfiguration(builder =>
-                {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    if (configurationOverrides != null)
-                    {
-                        builder.AddInMemoryCollection(configurationOverrides);
-                    }
-                })
-                .ConfigureServices((context, services) =>
-                {
-                    configureServices?.Invoke(services);
-                    services.AddTheIdServer(context.Configuration);
-                    services.AddSingleton<TestUserService>()
-                        .AddMvc()
-                        .AddApplicationPart(typeof(Config).Assembly);
-                    configureServices?.Invoke(services);
-                })
-                .Configure((context, builder) =>
-                {
-                    builder.Use(async (context, next) =>
-                    {
-                        var testService = context.RequestServices.GetRequiredService<TestUserService>();
-                        context.User = testService.User;
-                        await next();
-                    });
-
-                    using var scope = builder.ApplicationServices.CreateScope();
-                    var dbContext = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-                    if (dbContext != null && !dbContext.Providers.Any(p => p.Id == "Google"))
-                    {
-                        dbContext.Providers.Add(new ExternalProvider
-                        {
-                            Id = "Google",
-                            DisplayName = "Google",
-                            SerializedHandlerType = "{\"Name\":\"Microsoft.AspNetCore.Authentication.Google.GoogleHandler\"}",
-                            SerializedOptions = "{\"ClientId\":\"818322595124-h0nd8080luc71ba2i19a5kigackfm8me.apps.googleusercontent.com\",\"ClientSecret\":\"ac_tx-O9XvZGNRi4HYfPerx2\",\"AuthorizationEndpoint\":\"https://accounts.google.com/o/oauth2/v2/auth\",\"TokenEndpoint\":\"https://oauth2.googleapis.com/token\",\"UserInformationEndpoint\":\"https://www.googleapis.com/oauth2/v2/userinfo\",\"Events\":{},\"ClaimActions\":[{\"JsonKey\":\"id\",\"ClaimType\":\"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"JsonKey\":\"name\",\"ClaimType\":\"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"JsonKey\":\"given_name\",\"ClaimType\":\"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"JsonKey\":\"family_name\",\"ClaimType\":\"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"JsonKey\":\"link\",\"ClaimType\":\"urn:google:profile\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"JsonKey\":\"email\",\"ClaimType\":\"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress\",\"ValueType\":\"http://www.w3.org/2001/XMLSchema#string\"}],\"Scope\":[\"openid\",\"profile\",\"email\"],\"BackchannelTimeout\":\"00:01:00\",\"Backchannel\":{\"DefaultRequestHeaders\":[{\"Key\":\"User-Agent\",\"Value\":[\"Microsoft\",\"ASP.NET\",\"Core\",\"OAuth\",\"handler\"]}],\"DefaultRequestVersion\":\"1.1\",\"Timeout\":\"00:01:00\",\"MaxResponseContentBufferSize\":10485760},\"CallbackPath\":\"/signin-Google\",\"ReturnUrlParameter\":\"ReturnUrl\",\"SignInScheme\":\"Identity.External\",\"RemoteAuthenticationTimeout\":\"00:15:00\",\"CorrelationCookie\":{\"Name\":\".AspNetCore.Correlation.\",\"HttpOnly\":true,\"IsEssential\":true}}"
-                        });
-                        try
-                        {
-                            dbContext.SaveChanges();
-                        }
-                        catch
-                        {
-                            // silent
-                        }
-                    }
-
-                    builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
-                });
-
-            new IdentityHostingStartup().Configure(webHostBuilder);
-
-            var testServer = new TestServer(webHostBuilder);
-
-            return testServer;
-        }
-
-        public static void CreateTestHost<T>(string userName,
-            IEnumerable<Claim> claims,
-            TestServer sut,
-            TestContext testContext,
-            out IRenderedComponent<T> component,
-            params ComponentParameter[] parameters) where T : IComponent
-        {
-            CreateTestHost(userName, claims, sut, testContext);
-            component = testContext.RenderComponent<T>(parameters);
-        }
-
-        public static void CreateTestHost(string userName,
-            IEnumerable<Claim> claims,
-            TestServer sut, 
-            TestContext testContext)
-        {
-            testContext.JSInterop.Mode = JSRuntimeMode.Loose;
-            testContext.Services.AddScoped<JSRuntimeImpl>();
-
-            var authContext = testContext.AddTestAuthorization();
-            authContext.SetAuthorized(userName);
-            authContext.SetClaims(claims.ToArray());
-            authContext.SetPolicies(claims.Where(c => c.Type == "role").Select(c => c.Value).ToArray());
-
-            var localizerMock = new Mock<ISharedStringLocalizerAsync>();
-            localizerMock.Setup(m => m[It.IsAny<string>()]).Returns((string key) => new LocalizedString(key, key));
-            localizerMock.Setup(m => m[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] p) => new LocalizedString(key, string.Format(key, p)));
-
-            var services = testContext.Services;
-            var httpClient = sut.CreateClient();
-            var appConfiguration = CreateApplicationConfiguration(httpClient);
-
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>(), httpClient.BaseAddress.ToString());
-
-            sut.Services.GetRequiredService<TestUserService>()
-                .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
-
-            services.AddTransient(p => sut.CreateHandler())
-                .AddAdminHttpStores(p =>
-                {
-                    var client = new HttpClient(new BaseAddressAuthorizationMessageHandler(p.GetRequiredService<IAccessTokenProvider>(),
-                        p.GetRequiredService<NavigationManager>())
-                    {
-                        InnerHandler = sut.CreateHandler()
-                    })
-                    {
-                        BaseAddress = new Uri(httpClient.BaseAddress, "api")
-                    };
-                    return Task.FromResult(client);
-                })
-                .AddScoped(p => new Settings
-                {
-                    ApiBaseUrl = appConfiguration["ApiBaseUrl"],
-                    WelcomeContenUrl = "http://localhost/api/welcomefragment"
-                })
-                .AddScoped(p => localizerMock.Object)
-                .AddScoped(p => localizerMock)
-                .AddTransient(p => new HttpClient(sut.CreateHandler()))
-                .AddTransient<BaseAddressAuthorizationMessageHandler>()
-                .AddScoped<SignOutSessionStateManager, FakeSignOutSessionStateManager>()
-                .AddSingleton<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
-                .AddScoped<IAccessTokenProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
-                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<FakeAuthenticationStateProvider>())
-                .AddScoped(p => new FakeAuthenticationStateProvider(
-                    userName,
-                    claims))
-                .AddScoped<LazyAssemblyLoader>()
-                .AddHttpClient("oidc")
-                .ConfigureHttpClient(httpClient =>
-                {
-                    var apiUri = new Uri(httpClient.BaseAddress, "api");
-                    httpClient.BaseAddress = apiUri;
-                })
-                .AddHttpMessageHandler(() => new FakeDelegatingHandler(sut.CreateHandler()));
-        }
-
         public static IConfigurationRoot CreateApplicationConfiguration(HttpClient httpClient)
         {
             var appConfigurationDictionary = new Dictionary<string, string>
@@ -285,7 +139,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             public override string Name => _userName;
         }
 
-        class FakeSignOutSessionStateManager : SignOutSessionStateManager
+        public class FakeSignOutSessionStateManager : SignOutSessionStateManager
         {
             public FakeSignOutSessionStateManager(IJSRuntime jsRuntime) : base(jsRuntime)
             { }
@@ -301,7 +155,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             }
         }
 
-        class FakeDelegatingHandler : DelegatingHandler
+        public class FakeDelegatingHandler : DelegatingHandler
         {
             private readonly HttpMessageHandler _handler;
 

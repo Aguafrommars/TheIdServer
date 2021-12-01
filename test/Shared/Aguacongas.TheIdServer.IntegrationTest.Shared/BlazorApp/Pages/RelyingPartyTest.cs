@@ -22,11 +22,11 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class RelyingPartyTest : EntityPageTestBase<page>
     {
         public override string Entity => "relyingparty";
-        public RelyingPartyTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public RelyingPartyTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -35,10 +35,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(await File.ReadAllBytesAsync("test.crt").ConfigureAwait(false));
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out IRenderedComponent<page> component);
+                relyingPartyId);
 
             Assert.Contains("A certificate chain processed", component.Markup);
         }
@@ -48,10 +47,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out IRenderedComponent<page> component);
+                relyingPartyId);
 
             var inputFile = component.FindComponent<InputFile>();
             await component.InvokeAsync(()=> inputFile.Instance.OnChange.InvokeAsync(new InputFileChangeEventArgs(new List<IBrowserFile>
@@ -71,10 +69,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out IRenderedComponent<page> component);
+                relyingPartyId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -93,10 +90,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out IRenderedComponent<page> component);
+                relyingPartyId);
 
             var input = component.Find("#description");
 

@@ -17,12 +17,12 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class RoleTest : EntityPageTestBase<page>
     {
         public override string Entity => "role";
 
-        public RoleTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public RoleTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -31,10 +31,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out IRenderedComponent<page> component);
+                roleId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -51,10 +50,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_create_role()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             var input = WaitForNode(component, "#name");
 
@@ -83,10 +81,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out IRenderedComponent<page> component);
+                roleId);
 
             var input = WaitForNode(component, "#delete-entity input");
 
@@ -111,10 +108,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out IRenderedComponent<page> component);
+                roleId);
 
             var addButton = WaitForNode(component, "#claims button");
 
@@ -159,15 +155,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        [Fact(Skip = "fail")]
+        [Fact]
         public async Task UpdateRoleClaim_should_update_claim()
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out IRenderedComponent<page> component);
+                roleId);
+
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
             var rows = WaitForAllNodes(component, "#claims tr");
 
@@ -202,10 +199,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out IRenderedComponent<page> component);
+                roleId);
 
             var button = WaitForNode(component, "#claims tr button");
 

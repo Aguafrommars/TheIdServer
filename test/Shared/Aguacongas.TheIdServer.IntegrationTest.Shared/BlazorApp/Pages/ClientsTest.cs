@@ -9,12 +9,12 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Clients.Clients;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class CientsTest : EntitiesPageTestBase<Client, page>
     {
         public override string Entities => "clients";
-        public CientsTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
-            : base (fixture, testOutputHelper)
+        public CientsTest(TheIdServerFactory factory)
+            : base(factory)
         {
         }
 
