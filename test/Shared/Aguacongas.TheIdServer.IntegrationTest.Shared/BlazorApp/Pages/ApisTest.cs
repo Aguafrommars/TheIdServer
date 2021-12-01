@@ -3,10 +3,13 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Abstractions;
 using page = Aguacongas.TheIdServer.BlazorApp.Pages.Apis.Apis;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
+    [Collection(BlazorAppCollection.Name)]
     public class ApisTest : EntitiesPageTestBase<ProtectResource, page>
     {
         public override string Entities => "apis";
