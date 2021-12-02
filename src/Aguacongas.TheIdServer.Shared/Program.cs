@@ -1,31 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Admin.Services;
-using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer;
-using Aguacongas.TheIdServer.Admin.Hubs;
-using Aguacongas.TheIdServer.Authentication;
-using Aguacongas.TheIdServer.BlazorApp.Models;
-using Aguacongas.TheIdServer.Data;
-using Aguacongas.TheIdServer.Models;
-#if DUENDE
-using Duende.IdentityServer.Hosting;
-#endif
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Serilog;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);

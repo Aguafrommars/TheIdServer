@@ -1,57 +1,69 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Import;
 using Bunit;
-using Bunit.TestDoubles;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop.Infrastructure;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ImportTest : TestContext
     {
-        public ApiFixture Fixture { get; }
+        public TheIdServerFactory Factory { get; }
 
-        public ImportTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        public ImportTest(TheIdServerFactory factory)
         {
-            Fixture = fixture;
-            Fixture.TestOutputHelper = testOutputHelper;
+            Factory = factory;
         }
 
-        [Fact(Skip = "Dosn't wotk any more")]
-        public void HandleFileSelected_should_report_importation_result()
+        [Fact]
+        public async Task HandleFileSelected_should_report_importation_result()
         {
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<Import> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
-            var jsRuntime = Services.GetRequiredService<JSRuntimeImpl>();
-            DotNetDispatcher.BeginInvokeDotNet(jsRuntime, new DotNetInvocationInfo(null, "NotifyChange", 1, default), "[[{ \"name\": \"test.json\" }]]");
+            var fileMock = new Mock<IBrowserFile>();
+            fileMock.SetupGet(m => m.Name).Returns("test.json");
+            fileMock.SetupGet(m => m.ContentType).Returns("application/json");
+            fileMock.Setup(m => m.OpenReadStream(It.IsAny<long>(), It.IsAny<CancellationToken>())).Returns(new MemoryStream(Encoding.UTF8.GetBytes("{}")));
+            var inputFile = component.FindComponent<InputFile>();
+            await inputFile.InvokeAsync(() => inputFile.Instance.OnChange.InvokeAsync(new InputFileChangeEventArgs(new List<IBrowserFile>
+            {
+                fileMock.Object
+            })));
 
             component.WaitForState(() => component.Markup.Contains("text-success"));
             Assert.Contains("text-success", component.Markup);
         }
 
-        private void CreateTestHost(string userName,
-           string role,
-           out IRenderedComponent<Import> component)
+        private IRenderedComponent<Import> CreateComponent(string userName,
+            string role)
         {
-            TestUtils.CreateTestHost(userName,
-                new Claim[]
-                {
+            Factory.ConfigureTestContext(userName,
+               new Claim[]
+               {
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
                     new Claim("role", SharedConstants.READERPOLICY),
-                    new Claim("role", role)
-                },
-                Fixture.Sut,
-                this,
-                out component);
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
+               },
+               this);
+
+            var component = RenderComponent<Import>();
+            component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            return component;
         }
     }
 }

@@ -9,13 +9,13 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Roles.Roles;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class RolesTest : EntitiesPageTestBase<Role, page>
     {
         public override string Entities => "roles";
 
-        public RolesTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
-            :base(fixture, testOutputHelper)
+        public RolesTest(TheIdServerFactory factory)
+            : base(factory)
         {
         }
 

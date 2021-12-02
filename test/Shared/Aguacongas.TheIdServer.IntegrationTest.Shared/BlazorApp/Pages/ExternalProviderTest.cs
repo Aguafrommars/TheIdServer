@@ -15,10 +15,10 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.ExternalPro
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ExternalProviderTest : EntityPageTestBase<page>
     {
-        public ExternalProviderTest(ApiFixture fixture, ITestOutputHelper testOutputHelper) : base(fixture, testOutputHelper)
+        public ExternalProviderTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -27,10 +27,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_create_provider()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             WaitForNode(component, "option");
 
@@ -93,10 +92,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_update_provider()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                "Google",
-                out IRenderedComponent<page> component);
+                "Google");
 
             var input = WaitForNode(component, "#displayName");
 
@@ -124,10 +122,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string providerId = await CreateProvider();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                providerId,
-                out IRenderedComponent<page> component);
+                providerId);
 
             var input = WaitForNode(component, "#delete-entity input");
 
@@ -151,10 +148,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task ClickTransformationButtons_should_not_throw()
         {
             var providerId = await CreateProvider();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         providerId,
-                         out IRenderedComponent<page> component);
+                         providerId);
 
             var buttons = WaitForAllNodes(component, "#transformations button");
 
@@ -197,10 +193,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task AddRemoveScope_should_not_throw()
         {
             var providerId = await CreateProvider();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         providerId,
-                         out IRenderedComponent<page> component);
+                         providerId);
 
             var input = WaitForNode(component, "#scope input.new-claim");
 
@@ -231,10 +226,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         providerId,
-                         out IRenderedComponent<page> component);
+                         providerId);
 
             var input = WaitForNode(component, "#require-https input");
 

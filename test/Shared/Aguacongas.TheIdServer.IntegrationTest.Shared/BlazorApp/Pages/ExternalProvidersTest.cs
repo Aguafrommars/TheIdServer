@@ -9,13 +9,13 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.ExternalPr
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ExternalProvidersTest : EntitiesPageTestBase<ExternalProvider, page>
     {
         public override string Entities => "externalproviders";
 
-        public ExternalProvidersTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
-            : base(fixture, testOutputHelper)
+        public ExternalProvidersTest(TheIdServerFactory factory)
+            : base(factory)
         {
         }
 

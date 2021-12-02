@@ -20,23 +20,21 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class KeysTests : TestContext
     {
-        public ApiFixture Fixture { get; }
+        public TheIdServerFactory Factory { get; }
 
-        public KeysTests(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        public KeysTests(TheIdServerFactory factory)
         {
-            Fixture = fixture;
-            Fixture.TestOutputHelper = testOutputHelper;
+            Factory = factory;
         }
 
         [Fact]
         public async Task DataProtectionRevokeClick_should_revoke_key()
         {
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<page> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
             var keyId = WaitForNode(component, "#data-protection-keys div.modal.fade")
                 .Attributes
@@ -55,7 +53,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var revoked = await context.DataProtectionKeys.FirstOrDefaultAsync(k => k.FriendlyName == $"revocation-{keyId}");
                 Assert.NotNull(revoked);
@@ -65,7 +63,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SigningRevokeClikc_should_revoke_key()
         {
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var id = Guid.NewGuid();
                 await context.KeyRotationKeys.AddAsync(new KeyRotationKey
@@ -90,9 +88,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITERPOLICY,
-                out IRenderedComponent<page> component);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
             var keyId = WaitForNode(component, "#signing-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
 
@@ -107,27 +104,29 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var revoked = await context.KeyRotationKeys.FirstOrDefaultAsync(k => k.FriendlyName == $"revocation-{keyId}");
                 Assert.NotNull(revoked);
             });
         }
 
-        private void CreateTestHost(string userName,
-           string role,
-           out IRenderedComponent<page> component)
+        private IRenderedComponent<page> CreateComponent(string userName,
+            string role)
         {
-            TestUtils.CreateTestHost(userName,
-                new Claim[]
-                {
-                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE),
-                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
-                    new Claim(JwtClaimTypes.Role, role)
-                },
-                Fixture.Sut,
-                this,
-                out component);
+            Factory.ConfigureTestContext(userName,
+               new Claim[]
+               {
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
+                    new Claim("role", SharedConstants.READERPOLICY),
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
+               },
+               this);
+
+            var component = RenderComponent<page>();
+            component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            return component;
         }
 
         protected static IElement WaitForNode(IRenderedComponent<page> component, string cssSelector)

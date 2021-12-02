@@ -11,7 +11,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
@@ -19,22 +18,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     {
         public abstract string Entity { get; }
 
-        public ApiFixture Fixture { get; }
+        public TheIdServerFactory Factory { get; }
 
-        protected EntityPageTestBase(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        protected EntityPageTestBase(TheIdServerFactory factory)
         {
-            Fixture = fixture;
-            Fixture.TestOutputHelper = testOutputHelper;
+            Factory = factory;
         }
-
 
         [Fact]
         public void WhenNonWriter_should_disable_inputs()
         {
-            CreateTestHost("Bob Smith",
+            var component = CreateComponent("Bob Smith",
                 SharedConstants.READERPOLICY,
-                null,
-                out IRenderedComponent<TComnponent> component);
+                null);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
@@ -44,39 +40,37 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public void WhenWriter_should_enable_inputs()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<TComnponent> component);
+                null);
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
             Assert.DoesNotContain(inputs, input => input.Attributes.Any(a => a.Name == "disabled"));
         }
 
-        protected void CreateTestHost(string userName,
+        protected IRenderedComponent<TComnponent> CreateComponent(string userName,
             string role,
-            string id,
-            out IRenderedComponent<TComnponent> component)
+            string? id)
         {
-            TestUtils.CreateTestHost(userName,
-                new Claim[] 
-                {
+            Factory.ConfigureTestContext(userName,
+               new Claim[]
+               {
                     new Claim("scope", SharedConstants.ADMINSCOPE),
                     new Claim("role", SharedConstants.READERPOLICY),
-                    new Claim("role", role) 
-                },
-                Fixture.Sut,
-                this,
-                out component,
-                ComponentParameter.CreateParameter("Id", id));
-            var c = component;
-            c.WaitForState(() => !c.Markup.Contains("Loading..."));
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
+               },
+               this);
+
+            var component = RenderComponent<TComnponent>(ComponentParameter.CreateParameter("Id", id));
+            component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            return component;
         }
 
         protected Task DbActionAsync<TContext>(Func<TContext, Task> action) where TContext : DbContext
         {
-            return Fixture.DbActionAsync(action);
+            return Factory.DbActionAsync(action);
         }
 
         protected static string GenerateId() => Guid.NewGuid().ToString();

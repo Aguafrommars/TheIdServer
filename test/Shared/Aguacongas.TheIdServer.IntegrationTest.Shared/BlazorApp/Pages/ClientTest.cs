@@ -20,11 +20,11 @@ using page = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
+    [Collection(BlazorAppCollection.Name)]
     public class ClientTest : EntityPageTestBase<page>
     {
         public override string Entity => "client";
-        public ClientTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public ClientTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -34,10 +34,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -56,10 +55,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var header = component.Find("#urls th div");
 
@@ -101,10 +99,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var input = component.Find("#grantTypes input");
 
@@ -153,10 +150,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
             
             var input = component.Find("#access-token");
 
@@ -203,10 +199,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 await c.SaveChangesAsync();
             });
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var expected = 1;
             var input = WaitForNode(component, "#scopes input");
@@ -239,10 +234,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var button = WaitForNode(component, "#grantTypes div.select");
 
@@ -265,10 +259,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             WaitForNode(component, "#consent");
 
@@ -285,10 +278,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("authorization_code");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             WaitForNode(component, "#consent");
 
@@ -305,10 +297,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("implicit");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             WaitForNode(component, "#consent");
 
@@ -325,10 +316,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("urn:ietf:params:oauth:grant-type:device_code");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             WaitForNode(component, "#consent");
 
@@ -345,10 +335,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("client_credentials");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             // client credentials client should not have consent section
             Assert.Throws<WaitForFailedException>(() => WaitForNode(component, "#consent"));
@@ -359,10 +348,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("password");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             // resource owner password client should not have consent section
             Assert.Throws<WaitForFailedException>(() => WaitForNode(component, "#consent"));
@@ -373,10 +361,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var clientId = await CreateClient("custom");
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             WaitForNode(component, "#consent");
 
@@ -394,10 +381,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = await CreateClient();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var input = WaitForNode(component, "#delete-entity input");
 
@@ -423,10 +409,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string clientId = GenerateId();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out IRenderedComponent<page> component);
+                null);
 
             var input = WaitForNode(component, "#grantTypes input");
 
@@ -479,10 +464,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task SaveClick_should_sanetize_cors_uri()
         {
             string clientId = await CreateClient("authorization_code");
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                clientId,
-                out IRenderedComponent<page> component);
+                clientId);
 
             var input = WaitForNode(component, "#urls input[name=\"cors\"]");
 
