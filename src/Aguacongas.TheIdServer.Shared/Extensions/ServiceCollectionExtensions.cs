@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
 #if DUENDE
-                .Configure<IdentityServerOptions>(configuration.GetSection(nameof(IdentityServerOptions)))
+                .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configuration.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDefaultSecretValidators()
                 .AddInMemoryPersistedGrants()
 #else
-                .AddIdentityServer(configuration.GetSection(nameof(IdentityServerOptions)))
+                .AddIdentityServer(configuration.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()

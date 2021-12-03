@@ -32,6 +32,7 @@
         <ScopeCollection Id="scope" Placeholder="@Localizer["scope"]" Collection="@Model.Options.Scope" />
     </div>
 </div>
+<RemoteOptionsProperties />
 <div class="form-group row">
     <label class="col col-form-label" for="usePKCE">
     </label>
@@ -39,10 +40,4 @@
         <AuthorizeCheckbox Name="usePKCE" Label="@Localizer["use PKCE"]" @bind-Value="@Model.Options.UsePkce" />
     </div>
 </div>
-<div class="form-group row">
-    <label class="col col-form-label" for="saveTokens">
-    </label>
-    <div class="col-lg-10 col-sm-12">
-        <AuthorizeCheckbox Name="saveTokens" Label="@Localizer["save tokens"]" @bind-Value="@Model.Options.SaveTokens" />
-    </div>
-</div>
+

@@ -1,0 +1,33 @@
+﻿@inject IStringLocalizerAsync<RemoteOptionsProperties> Localizer
+
+<div class="form-group row">
+    <label class="col col-form-label" for="callbackPath">
+        @Localizer["sign-in path"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="callbackPath" Placeholder="@($"/sign-{Model.Id}")" @bind-Value="@Model.Options.CallbackPath" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="accessDeniedPath">
+        @Localizer["access denied path"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="accessDeniedPath" Placeholder="/access-denied" @bind-Value="@Model.Options.AccessDeniedPath" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="returnUrlParameter">
+        @Localizer["return url parameter"]
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeText Id="returnUrlParameter" Placeholder="ReturnUrl" @bind-Value="@Model.Options.ReturnUrlParameter" />
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col col-form-label" for="saveTokens">
+    </label>
+    <div class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="saveTokens" Label="@Localizer["save tokens"]" @bind-Value="@Model.Options.SaveTokens" />
+    </div>
+</div>
