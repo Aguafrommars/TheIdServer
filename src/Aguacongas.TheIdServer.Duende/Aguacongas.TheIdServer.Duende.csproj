@@ -95,16 +95,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
-		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.0.1" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.0.1" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" PrivateAssets="All" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="Areas\Identity\Pages\Account\Manage\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Quickstart\Account\" />
