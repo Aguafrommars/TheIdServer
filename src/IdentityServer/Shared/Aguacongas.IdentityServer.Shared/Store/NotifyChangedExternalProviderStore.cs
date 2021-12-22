@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.Store
         public async Task<ExternalProvider> CreateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
         {
             await _manager.AddAsync(CreateSchemeDefinition(entity), cancellationToken).ConfigureAwait(false);
-
+            await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
             await _providerClient.ProviderAddedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             return entity;
         }
@@ -56,6 +56,7 @@ namespace Aguacongas.IdentityServer.Store
         public async Task<ExternalProvider> UpdateAsync(ExternalProvider entity, CancellationToken cancellationToken = default)
         {
             await _manager.UpdateAsync(CreateSchemeDefinition(entity), cancellationToken).ConfigureAwait(false);
+            await _parent.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
             await _providerClient.ProviderUpdatedAsync(entity.Id, cancellationToken).ConfigureAwait(false);
             return entity;
         }
