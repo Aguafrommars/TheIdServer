@@ -34,7 +34,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="Community.OData.Linq" Version="1.4.3" />
+		<PackageReference Include="Community.OData.Linq" Version="2.0.0" />
 		<PackageReference Include="IdentityModel" Version="5.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
