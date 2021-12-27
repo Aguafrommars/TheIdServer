@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
-        <PackageReference Include="IdentityModel" Version="5.2.0" />
+        <PackageReference Include="IdentityModel" Version="6.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.1" />
