@@ -203,7 +203,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureIdentityServerJwtBearerOptions(JwtBearerOptions options, IConfiguration configuration)
+        private static void ConfigureIdentityServerJwtBearerOptions(AspNetCore.Authentication.JwtBearer.JwtBearerOptions options, IConfiguration configuration)
         {
             configuration.GetSection("ApiAuthentication").Bind(options);
             if (configuration.GetValue<bool>("DisableStrictSsl"))
@@ -351,7 +351,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var dataprotectionSection = configuration.GetSection(nameof(DataProtectionOptions));
             if (dataprotectionSection != null)
             {
-                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(configuration.GetSection(nameof(DataProtectionOptions)));
+                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
             }
         }
     }

@@ -1,21 +1,5 @@
-﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
-using StackExchange.Redis;
-
-namespace Aguacongas.TheIdServer.Models
+﻿namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public enum StorageKind
-    {
-        None,
-        EntityFramework,
-        Redis,
-        AzureStorage,
-        FileSystem,
-        Registry,
-        RavenDb,
-        MongoDb
-    }
-
     public enum KeyProtectionKind
     {
         None,
@@ -23,16 +7,6 @@ namespace Aguacongas.TheIdServer.Models
         WindowsDpApi,
         X509,
         WindowsDpApiNg
-    }
-    public class DataProtectionOptions : Microsoft.AspNetCore.DataProtection.DataProtectionOptions
-    {
-        public StorageKind StorageKind { get; set; }
-
-        public string StorageConnectionString { get; set; }
-
-        public KeyProtectionOptions KeyProtectionOptions { get; set; }
-
-        public RedisKey RedisKey { get; set; } = "DataProtection-Keys";
     }
 
     public class KeyProtectionOptions
