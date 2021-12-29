@@ -19,6 +19,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <typeparam name="TUser">The type of the user.</typeparam>
     public class ExternalClaimsTransformer<TUser> where TUser : IdentityUser, new()
     {
+        private static readonly List<string> _userIdClaimTypes = new List<string>
+        {
+            JwtClaimTypes.Subject,
+            ClaimTypes.NameIdentifier,
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]
+        };
+
         private readonly UserManager<TUser> _userManager;
         private readonly IAdminStore<ExternalClaimTransformation> _claimTransformationStore;
         private readonly IAdminStore<ExternalProvider> _externalProviderStore;
@@ -84,6 +91,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
             if (externalProvider.StoreClaims)
             {
                 await StoreClaims(externalUser, provider, claims).ConfigureAwait(false);
+                // We store only user id claims to reduce the session cookie size to the minimum.
+                // That's avoid request header too large exception.
+                var newUserClaims = claims.Where(c => _userIdClaimTypes.Contains(c.Type)).Distinct().ToList();
+
+                return new ClaimsPrincipal(new ClaimsIdentity(newUserClaims, provider));
             }
 
             return new ClaimsPrincipal(new ClaimsIdentity(claims, provider));

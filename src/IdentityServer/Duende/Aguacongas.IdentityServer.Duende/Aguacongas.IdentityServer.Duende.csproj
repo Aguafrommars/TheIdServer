@@ -58,8 +58,7 @@
 		<None Include="package-icon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="AutoMapper" Version="10.1.1" />
-	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.4" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0-preview.6" />
 	</ItemGroup>
 
 	<ItemGroup>

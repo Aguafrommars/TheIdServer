@@ -4,12 +4,12 @@
 <EntitiesGrid Items="@Claims" TableClass="table table-hover" Context="claim">
     <TableHeader>
         <th scope="col">
-            <SortableHeader Property="Type"
+            <SortableHeader Property="ClaimType"
                             Text="@Localizer["type"]"
                             GridState="GridState" />
         </th>
         <th scope="col">
-            <SortableHeader Property="Value"
+            <SortableHeader Property="ClaimValue"
                             Text="@Localizer["value"]"
                             GridState="GridState" />
         </th>
