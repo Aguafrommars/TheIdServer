@@ -2,7 +2,7 @@
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class AccountOptions
+    public class AccountConfiguration
     {
         public bool AllowLocalLogin { get; set; } = true;
         public bool AllowRememberLogin { get; set; } = true;

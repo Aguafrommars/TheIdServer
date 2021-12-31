@@ -23,7 +23,7 @@
         KeysRotation
     }
 
-    public class IdentityServerDataProtectionOptions : DataProtectionOptionsBase
+    public class IdentityServerDataProtectionConfiguration : DataProtectionConfigurationBase
     {
 
         public KeyKinds Type { get; set; }

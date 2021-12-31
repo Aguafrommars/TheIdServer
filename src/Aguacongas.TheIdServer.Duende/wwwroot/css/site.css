@@ -1,7 +1,4 @@
-﻿body {
-  margin-top: 65px;
-}
-.navbar-header {
+﻿.navbar-header {
   position: relative;
   top: -4px;
 }
@@ -9,7 +6,12 @@
   position: relative;
   top: -2px;
   display: inline;
-  height: 32px;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
 }
 .icon {
   position: relative;

@@ -24,6 +24,14 @@ namespace Microsoft.AspNetCore.Authorization
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
                     context.User.HasClaim(c => c.Type == JwtClaimTypes.ClientId) &&
                     context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.TOKENSCOPES)));
+            options.AddPolicy(SharedConstants.DYNAMIC_CONFIGURATION_WRITTER_POLICY, policy =>
+                   policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
+                    (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
+                    context.User.IsInRole(SharedConstants.WRITERPOLICY)));
+            options.AddPolicy(SharedConstants.DYNAMIC_CONFIGURATION_READER_POLICY, policy =>
+                   policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
+                    (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
+                    context.User.IsInRole(SharedConstants.READERPOLICY)));
         }
     }
 }

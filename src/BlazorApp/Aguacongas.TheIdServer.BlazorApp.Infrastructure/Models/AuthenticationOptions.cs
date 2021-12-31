@@ -17,17 +17,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         /// <summary>
         /// Sets the cookie lifetime (only effective if the IdentityServer-provided cookie handler is used)
         /// </summary>
-        public TimeSpan CookieLifetime { get; set; }
+        public TimeSpan CookieLifetime { get; set; } = TimeSpan.FromHours(10);
 
         /// <summary>
         /// Specified if the cookie should be sliding or not (only effective if the built-in cookie middleware is used)
         /// </summary>
-        public bool CookieSlidingExpiration { get; set; } = false;
+        public bool CookieSlidingExpiration { get; set; }
 
         /// <summary>
         /// Specifies the SameSite mode for the internal authentication and temp cookie
         /// </summary>
-        public SameSiteMode CookieSameSiteMode { get; set; }
+        public SameSiteMode CookieSameSiteMode { get; set; } = SameSiteMode.None;
 
         /// <summary>
         /// Indicates if user must be authenticated to accept parameters to end session endpoint. Defaults to false.
@@ -40,7 +40,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         /// <summary>
         /// Gets or sets the name of the cookie used for the check session endpoint.
         /// </summary>
-        public string CheckSessionCookieName { get; set; }
+        public string CheckSessionCookieName { get; set; } = "idsrv.session";
 
         /// <summary>
         /// Gets or sets the domain of the cookie used for the check session endpoint. Defaults to null.
@@ -50,11 +50,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         /// <summary>
         /// Gets or sets the SameSite mode of the cookie used for the check session endpoint. Defaults to SameSiteMode.None.
         /// </summary>
-        public SameSiteMode CheckSessionCookieSameSiteMode { get; set; }
+        public SameSiteMode CheckSessionCookieSameSiteMode { get; set; } = SameSiteMode.None;
 
         /// <summary>
         /// If set, will require frame-src CSP headers being emitting on the end session callback endpoint which renders iframes to clients for front-channel signout notification.
         /// </summary>
-        public bool RequireCspFrameSrcForSignout { get; set; }
+        public bool RequireCspFrameSrcForSignout { get; set; } = true;
     }
 }

@@ -28,6 +28,7 @@
 		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="1.0.0" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.5.0" />

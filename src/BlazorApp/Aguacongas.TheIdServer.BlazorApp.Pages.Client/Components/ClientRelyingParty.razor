@@ -3,7 +3,7 @@
 
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
-        <div id="@Id" @key="@Entity" class="input-group input-group-sm mb-3" data-toggle="dropdown">
+        <div id="@Id" @key="@Entity" class="input-group input-group-sm mb-3" data-bs-toggle="dropdown">
             <input type="text" class="form-control new-claim" placeholder="@Localizer["relying party"]" value="@CurrentValue"
                     @oninput="OnInputChanged" @onfocus="Filter" />
         </div>

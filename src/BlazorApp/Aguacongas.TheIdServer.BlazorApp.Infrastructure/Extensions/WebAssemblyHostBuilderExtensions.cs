@@ -57,7 +57,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 
-            services.AddConfigurationService(configuration.GetSection(""));
+            services.AddConfigurationService(configuration.GetSection("settingsOptions"))
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             var postConfigurationOidc = services.First(s => s.ServiceType == typeof(IPostConfigureOptions<RemoteAuthenticationOptions<OidcProviderOptions>>));
             

@@ -21,7 +21,7 @@
         /// <summary>
         /// Gets or sets the minimum CSP level.
         /// </summary>
-        public CspLevel Level { get; set; }
+        public CspLevel Level { get; set; } = CspLevel.Two;
 
         /// <summary>
         /// Gets or sets a value indicating whether the deprected X-Content-Security-Policy header should be added.

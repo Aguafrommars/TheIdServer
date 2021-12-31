@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizerAsync<OAuthOptionsProperties> Localizer
 
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="authorizationEndpoint">
         @Localizer["authorization endpoint"]
     </label>
@@ -8,7 +8,7 @@
         <AuthorizeText Id="authorizationEndpoint" Placeholder="https://acme.com/authorize" @bind-Value="@Model.Options.AuthorizationEndpoint" />
     </div>
 </div>
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="tokenEndpoint">
         @Localizer["token enpoint"]
     </label>
@@ -16,7 +16,7 @@
         <AuthorizeText Id="tokenEndpoint" Placeholder="https://acme.com/token" @bind-Value="@Model.Options.TokenEndpoint" />
     </div>
 </div>
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="userEndpoint">
         @Localizer["user enpoint"]
     </label>
@@ -24,7 +24,7 @@
         <AuthorizeText Id="userEndpoint" Placeholder="https://acme.com/user" @bind-Value="@Model.Options.UserInformationEndpoint" />
     </div>
 </div>
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="scope">
         @Localizer["scopes"]
     </label>
@@ -33,7 +33,7 @@
     </div>
 </div>
 <RemoteOptionsProperties />
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="usePKCE">
     </label>
     <div class="col-lg-10 col-sm-12">

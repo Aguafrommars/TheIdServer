@@ -13,7 +13,7 @@
         /// <summary>
         /// Specifies the name of the authentication handler for X.509 client certificates
         /// </summary>
-        public string ClientCertificateAuthenticationScheme { get; set; }
+        public string ClientCertificateAuthenticationScheme { get; set; } = "Certificate";
 
         /// <summary>
         /// Specifies a separate domain to run the MTLS endpoints on.

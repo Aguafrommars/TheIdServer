@@ -44,11 +44,11 @@ Copyright (c) 2021 @Olivier Lefebvre
     if (Model.IsMachineRemembered)
     {
         <form method="post" style="display: inline-block">
-            <button type="submit" class="btn btn-default">@Localizer["Forget this browser"]</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Forget this browser"]</button>
         </form>
     }
-    <a asp-page="./Disable2fa" class="btn btn-default">Disable 2FA</a>
-    <a asp-page="./GenerateRecoveryCodes" class="btn btn-default">
+    <a asp-page="./Disable2fa" class="btn btn-secondary">Disable 2FA</a>
+    <a asp-page="./GenerateRecoveryCodes" class="btn btn-secondary">
         @Localizer["Reset recovery codes"]
     </a>
 }
@@ -56,12 +56,12 @@ Copyright (c) 2021 @Olivier Lefebvre
 <h5>@Localizer["Authenticator app"]</h5>
 @if (!Model.HasAuthenticator)
 {
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-default">@Localizer["Add authenticator app"]</a>
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-secondary">@Localizer["Add authenticator app"]</a>
 }
 else
 {
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-default">@Localizer["Setup authenticator app"]</a>
-    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-default">@Localizer["Reset authenticator app"]</a>
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-secondary">@Localizer["Setup authenticator app"]</a>
+    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-secondary">@Localizer["Reset authenticator app"]</a>
 }
 
 

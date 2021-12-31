@@ -8,6 +8,6 @@
         /// <summary>
         /// Data protect the persisted grants "data" column.
         /// </summary>
-        public bool DataProtectData { get; set; }
+        public bool DataProtectData { get; set; } = true;
     }
 }

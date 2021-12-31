@@ -11,7 +11,7 @@
         /// <value>
         /// The default type of the user code.
         /// </value>
-        public string DefaultUserCodeType { get; set; }
+        public string DefaultUserCodeType { get; set; } = "Numeric";
 
         /// <summary>
         /// Gets or sets the polling interval in seconds.

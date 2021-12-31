@@ -22,6 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\IdentityHostingStartup.cs" Link="Areas\Identity\IdentityHostingStartup.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />

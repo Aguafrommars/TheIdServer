@@ -3,12 +3,13 @@ Project: Aguafrommars/TheIdServer
 Copyright (c) 2021 @Olivier Lefebvre
 *@
 @model string
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer 
 
 @if (!String.IsNullOrEmpty(Model))
 {
     var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
     <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@Localizer["Close"]"></button>
         @Model
     </div>
 }

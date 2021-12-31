@@ -1,29 +1,26 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
     public class ServerConfig
     {
-        public SiteOptions SiteOptions { get; set; }
+        public SiteConfiguration SiteOptions { get; set; }
 
         public IdentityOptions IdentityOptions { get; set; }
 
-        public IdentityServerOptions IdentityServerOptions { get; set; }
+        public IdentityServerConfiguration IdentityServerOptions { get; set; }
 
-        public AccountOptions AccountOptions { get; set; }
+        public AccountConfiguration AccountOptions { get; set; }
 
-        public IdentityServerDataProtectionOptions IdentityServer { get; set; }
+        public IdentityServerDataProtectionConfiguration IdentityServer { get; set; }
 
-        public DataProtectionOptions DataProtectionOptions { get; set; }
+        public DataProtectionConfiguration DataProtectionOptions { get; set; }
 
         public bool DisableTokenCleanup { get; set; }
 
-        public bool TokenCleanupInterval { get; set; }
+        public TimeSpan? TokenCleanupInterval { get; set; }
 
         public string AuthenticatorIssuer { get; set; }
 

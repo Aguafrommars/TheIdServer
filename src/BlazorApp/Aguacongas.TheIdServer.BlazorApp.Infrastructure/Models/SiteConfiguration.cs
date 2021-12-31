@@ -1,6 +1,6 @@
 ﻿namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class SiteOptions
+    public class SiteConfiguration
     {
         public string Name { get; set; }
     }

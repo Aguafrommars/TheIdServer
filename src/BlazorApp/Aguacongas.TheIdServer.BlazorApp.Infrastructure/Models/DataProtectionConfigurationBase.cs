@@ -12,7 +12,7 @@
         MongoDb
     }
 
-    public class DataProtectionOptionsBase
+    public class DataProtectionConfigurationBase
     {
         //
         // Summary:
@@ -30,7 +30,7 @@
 
         public string StorageConnectionString { get; set; }
 
-        public string RedisKey { get; set; }
+        public string RedisKey { get; set; } = "DataProtection-Keys";
 
         public KeyProtectionOptions KeyProtectionOptions { get; set; }
 

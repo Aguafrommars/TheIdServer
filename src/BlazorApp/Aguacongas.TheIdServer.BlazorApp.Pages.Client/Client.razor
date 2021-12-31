@@ -23,7 +23,7 @@ else
                         <h3>@Id</h3>
                     }
                 </div>
-                <div>
+                <div class="col">
                     @if (!NonEditable)
                     {
                         <SaveButton />
@@ -88,7 +88,7 @@ else
             <div class="entity-details">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="form-group row">
+                        <div class="mb-1 row">
                             <label class="col col-form-label">
                                 @Localizer["protocol type"]
                             </label>
@@ -120,14 +120,14 @@ else
                                 }
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="mb-1 row">
                             <label class="col col-form-label">
                             </label>
                             <div class="col-lg-10 col-sm-12">
                                 <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="mb-1 row">
                             <label class="col col-form-label" for="name">
                                 @Localizer["name"]
                             </label>
@@ -141,7 +141,7 @@ else
                             </div>
                         </div>
                         <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName" />
-                        <div class="form-group row">
+                        <div class="mb-1 row">
                             <label class="col col-form-label" for="description">
                                 @Localizer["description"]
                             </label>
@@ -155,7 +155,7 @@ else
                             </div>
                         </div>
                         <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
-                        <div class="form-group row">
+                        <div class="mb-1 row">
                             <label class="col col-form-label" for="front-channel-logout-uri">
                                 @Localizer["front channel logout uri"]
                             </label>
@@ -166,7 +166,7 @@ else
                         </div>
                         @if (Model.ProtocolType == OIDC)
                         {
-                            <div class="form-group row">
+                            <div class="mb-1 row">
                                 <label class="col col-form-label" for="back-channel-logout-uri">
                                     @Localizer["back channel logout uri"]
                                 </label>
@@ -178,7 +178,7 @@ else
                         }
                         else
                         {
-                            <div class="form-group row">
+                            <div class="mb-1 row">
                                 <label class="col col-form-label" for="relying-party">
                                     @Localizer["relying party"]
                                 </label>
