@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
+using Aguacongas.DynamicConfiguration.Razor.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
@@ -102,6 +103,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     var apiUri = new Uri(httpClient.BaseAddress ?? new Uri(string.Empty), "api");
                     httpClient.BaseAddress = apiUri;
                 })
+                .AddHttpMessageHandler(() => new TestUtils.FakeDelegatingHandler(Server.CreateHandler()));
+
+            services.AddHttpClient(nameof(ConfigurationService))
                 .AddHttpMessageHandler(() => new TestUtils.FakeDelegatingHandler(Server.CreateHandler()));
         }
 

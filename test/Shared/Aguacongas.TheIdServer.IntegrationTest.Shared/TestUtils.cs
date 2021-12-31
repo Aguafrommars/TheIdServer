@@ -52,7 +52,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["ProviderOptions:PostLogoutRedirectUri"] = new Uri(httpClient.BaseAddress, "authentication/logout-callback").ToString(),
                 ["ProviderOptions:RedirectUri"] = new Uri(httpClient.BaseAddress, "authentication/login-callback").ToString(),
                 ["ProviderOptions:ResponseType"] = "code",
-                ["WelcomeContenUrl"] = "/welcome-fragment.html"
+                ["WelcomeContenUrl"] = "/welcome-fragment.html",
+                ["SettingsOptions:TypeName"] = "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
+                ["SettingsOptions:ApiUrl"] = new Uri(httpClient.BaseAddress, "api/api/configuration").ToString(),
             };
             var appConfiguration = new ConfigurationBuilder().AddInMemoryCollection(appConfigurationDictionary).Build();
             return appConfiguration;

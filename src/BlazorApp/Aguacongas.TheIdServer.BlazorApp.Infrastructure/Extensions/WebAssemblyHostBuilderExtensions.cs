@@ -17,7 +17,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-
+using dn = Aguacongas.DynamicConfiguration.Razor.Services;
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
@@ -57,7 +57,9 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 
-            services.AddConfigurationService(configuration.GetSection("settingsOptions"))
+            services.AddScoped<dn.ConfigurationService>()
+                .AddScoped<dn.IConfigurationService, ConfigurationService>()
+                .AddConfigurationService(configuration.GetSection("settingsOptions"))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             var postConfigurationOidc = services.First(s => s.ServiceType == typeof(IPostConfigureOptions<RemoteAuthenticationOptions<OidcProviderOptions>>));
