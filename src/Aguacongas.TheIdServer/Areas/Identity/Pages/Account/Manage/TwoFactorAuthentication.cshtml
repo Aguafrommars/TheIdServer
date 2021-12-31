@@ -56,11 +56,11 @@ Copyright (c) 2021 @Olivier Lefebvre
 <h5>@Localizer["Authenticator app"]</h5>
 @if (!Model.HasAuthenticator)
 {
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-secondary">@Localizer["Add authenticator app"]</a>
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Add authenticator app"]</a>
 }
 else
 {
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-secondary">@Localizer["Setup authenticator app"]</a>
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Setup authenticator app"]</a>
     <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-secondary">@Localizer["Reset authenticator app"]</a>
 }
 

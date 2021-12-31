@@ -25,8 +25,8 @@ Copyright (c) 2021 @Olivier Lefebvre
         @if (Model.RequirePassword)
         {
             <div class="form-floating">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                <label asp-for="Input.Password" class="form-label"></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }
