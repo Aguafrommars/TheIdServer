@@ -41,46 +41,47 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using System.Linq;
+using Aguacongas.DynamicConfiguration.Redis;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddTheIdServer(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddTheIdServer(this IServiceCollection services, ConfigurationManager configurationManager)
         {
-            var isProxy = configuration.GetValue<bool>("Proxy");
-            var dbType = configuration.GetValue<DbTypes>("DbType");
+            var isProxy = configurationManager.GetValue<bool>("Proxy");
+            var dbType = configurationManager.GetValue<DbTypes>("DbType");
 
             services.AddTransient<ISchemeChangeSubscriber, SchemeChangeSubscriber<SchemeDefinition>>()
                 .AddIdentityProviderStore()
                 .AddConfigurationStores()
                 .AddOperationalStores()
                 .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+                    options => configurationManager.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
 
             if (isProxy)
             {
-                services.AddAdminHttpStores(options => configuration.GetSection("PrivateServerAuthentication").Bind(options));
+                services.AddAdminHttpStores(options => configurationManager.GetSection("PrivateServerAuthentication").Bind(options));
             }
             else
             {
-                AddDefaultServices(services, configuration, dbType);
+                AddDefaultServices(services, configurationManager, dbType);
             }
 
-            ConfigureDataProtection(services, configuration);
+            ConfigureDataProtection(services, configurationManager);
 
-            var identityServerBuilder = services.AddClaimsProviders(configuration)
-                .Configure<ForwardedHeadersOptions>(configuration.GetSection(nameof(ForwardedHeadersOptions)))
-                .Configure<AccountOptions>(configuration.GetSection(nameof(AccountOptions)))
-                .Configure<DynamicClientRegistrationOptions>(configuration.GetSection(nameof(DynamicClientRegistrationOptions)))
-                .Configure<TokenValidationParameters>(configuration.GetSection(nameof(TokenValidationParameters)))
-                .Configure<SiteOptions>(configuration.GetSection(nameof(SiteOptions)))
+            var identityServerBuilder = services.AddClaimsProviders(configurationManager)
+                .Configure<ForwardedHeadersOptions>(configurationManager.GetSection(nameof(ForwardedHeadersOptions)))
+                .Configure<AccountOptions>(configurationManager.GetSection(nameof(AccountOptions)))
+                .Configure<DynamicClientRegistrationOptions>(configurationManager.GetSection(nameof(DynamicClientRegistrationOptions)))
+                .Configure<TokenValidationParameters>(configurationManager.GetSection(nameof(TokenValidationParameters)))
+                .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
 #if DUENDE
-                .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configuration.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
+                .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -94,11 +95,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDefaultSecretValidators()
                 .AddInMemoryPersistedGrants()
 #else
-                .AddIdentityServer(configuration.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
+                .AddIdentityServer(configurationManager.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
-                .ConfigureKey(configuration.GetSection("IdentityServer:Key"));
+                .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
@@ -119,16 +120,16 @@ namespace Microsoft.Extensions.DependencyInjection
             else
             {
                 identityServerBuilder.AddProfileService<ProfileService<ApplicationUser>>();
-                if (!configuration.GetValue<bool>("DisableTokenCleanup"))
+                if (!configurationManager.GetValue<bool>("DisableTokenCleanup"))
                 {
-                    identityServerBuilder.AddTokenCleaner(configuration.GetValue<TimeSpan?>("TokenCleanupInterval") ?? TimeSpan.FromMinutes(1));
+                    identityServerBuilder.AddTokenCleaner(configurationManager.GetValue<TimeSpan?>("TokenCleanupInterval") ?? TimeSpan.FromMinutes(1));
                 }
             }
 
             services.AddTransient(p =>
             {
                 var handler = new HttpClientHandler();
-                if (configuration.GetValue<bool>("DisableStrictSsl"))
+                if (configurationManager.GetValue<bool>("DisableStrictSsl"))
                 {
 #pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
                     handler.ServerCertificateCustomValidationCallback = (message, cert, chain, policy) => true;
@@ -139,15 +140,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
-            services.Configure<ExternalLoginOptions>(configuration.GetSection("Google"))
+            services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies(true))
                 .AddAuthentication()
-                .AddJwtBearer("Bearer", options => ConfigureIdentityServerJwtBearerOptions(options, configuration))
+                .AddJwtBearer("Bearer", options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
-                .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configuration));
+                .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
 
-            var mvcBuilder = services.Configure<SendGridOptions>(configuration)
+            var mvcBuilder = services.Configure<SendGridOptions>(configurationManager)
                 .AddLocalization()
                 .AddControllersWithViews(options =>
                     options.AddIdentityServerAdminFilters())
@@ -163,9 +164,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddIdentityServerWsFederation();
 
             ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
+            ConfigureDynamicConfiguration(mvcBuilder, configurationManager);
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
-            services.Configure<HostModelOptions>(configuration.GetSection(nameof(HostModelOptions)))
+            services.Configure<HostModelOptions>(configurationManager.GetSection(nameof(HostModelOptions)))
                  .AddScoped<LazyAssemblyLoader>()
                  .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
                  .AddScoped<SignOutSessionStateManager>()
@@ -178,10 +180,29 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
                  .AddAdminApplication(new Settings())
                  .AddDatabaseDeveloperPageExceptionFilter()
-                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"))
-                 .AddConfigurationWebAPI(configuration, options => options.Provider = configuration.Providers.First());
+                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
             return services;
+        }
+
+        private static void ConfigureDynamicConfiguration(IMvcBuilder mvcBuilder, ConfigurationManager configurationManager)
+        {
+            var redisOptions = new RedisConfigurationOptions();
+            configurationManager.GetSection(nameof(RedisConfigurationOptions)).Bind(redisOptions);
+            if (!string.IsNullOrEmpty(redisOptions.ConnectionString))
+            {
+                configurationManager.AddRedis(redisOptions);
+            }
+
+            var configurationRoot = configurationManager as IConfigurationRoot;
+
+            var dynamicConfiguratioProviderType = configurationManager.GetValue<string>("DynamicConfigurationOptions:ProviderType");
+            if (!string.IsNullOrEmpty(dynamicConfiguratioProviderType))
+            {
+                var providerType = Type.GetType(dynamicConfiguratioProviderType, true);
+                var provider = configurationRoot.Providers.First(p => p.GetType() == providerType);
+                mvcBuilder.AddConfigurationWebAPI(configurationRoot, options => options.Provider = provider);
+            }
         }
 
         private static void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy, DbTypes dbType)
