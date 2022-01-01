@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Authorization
         {
             options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
-                    (!checkAdminsScope || context.User.HasClaim(c =>  c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
+                    (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
                     context.User.IsInRole(SharedConstants.WRITERPOLICY)));
             options.AddPolicy(SharedConstants.READERPOLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
@@ -24,6 +24,11 @@ namespace Microsoft.AspNetCore.Authorization
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
                     context.User.HasClaim(c => c.Type == JwtClaimTypes.ClientId) &&
                     context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.TOKENSCOPES)));
+            AddSettingsPolicies(options, checkAdminsScope, showSettings);
+        }
+
+        private static void AddSettingsPolicies(AuthorizationOptions options, bool checkAdminsScope, bool showSettings)
+        {
             options.AddPolicy(SharedConstants.DYNAMIC_CONFIGURATION_WRITTER_POLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
                     (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
@@ -33,7 +38,7 @@ namespace Microsoft.AspNetCore.Authorization
                     (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
                     context.User.IsInRole(SharedConstants.READERPOLICY)));
             options.AddPolicy("Read-Settings", policy =>
-               policy.RequireAssertion(context =>  showSettings &&
+               policy.RequireAssertion(context => showSettings &&
                 context.User.Identity.IsAuthenticated &&
                 context.User.IsInRole(SharedConstants.READERPOLICY)));
         }
