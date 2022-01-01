@@ -24,7 +24,7 @@
         // Remarks:
         //     If two different applications need to share protected payloads, they should ensure
         //     that this property is set to the same value across both applications.
-        public string? ApplicationDiscriminator { get; set; }
+        public string ApplicationDiscriminator { get; set; }
 
         public StorageKind StorageKind { get; set; }
 

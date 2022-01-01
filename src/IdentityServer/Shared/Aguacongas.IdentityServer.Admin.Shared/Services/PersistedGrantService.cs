@@ -236,7 +236,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             catch(CryptographicException ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, "{Message}", ex.Message);
                 return new Grant
                 {
                     ClientId = grant.ClientId,
