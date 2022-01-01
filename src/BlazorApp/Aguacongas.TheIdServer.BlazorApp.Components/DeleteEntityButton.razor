@@ -3,7 +3,7 @@
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-entity">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-entity">
             <span class="oi oi-trash"></span>
             @Localizer["Delete"]
         </button>
@@ -14,8 +14,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="delete-modal-header">@Localizer["Remove"]</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="@Localizer["Close"]">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="@Localizer["Close"]">
                         </button>
                     </div>
                     <div class="modal-body">

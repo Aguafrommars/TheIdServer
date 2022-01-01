@@ -17,22 +17,22 @@ Copyright (c) 2021 @Olivier Lefebvre
             <h4>@Localizer["Create a new account."]</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-floating">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-floating">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-floating">
                 <label asp-for="Input.ConfirmPassword"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">@Localizer["Register"]</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Register"]</button>
         </form>
     </div>
     @if ((Model.ExternalLogins?.Count ?? 0) > 0)
@@ -46,7 +46,7 @@ Copyright (c) 2021 @Olivier Lefebvre
                         <p>
                             @foreach (var provider in Model.ExternalLogins)
                             {
-                                <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="@Localizer["Log in using your {0} account", provider.DisplayName]">@provider.DisplayName</button>
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@Localizer["Log in using your {0} account", provider.DisplayName]">@provider.DisplayName</button>
                             }
                         </p>
                     </div>

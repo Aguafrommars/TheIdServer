@@ -58,6 +58,7 @@
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj" />
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Roles\Aguacongas.TheIdServer.BlazorApp.Pages.Roles.csproj" />
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Role\Aguacongas.TheIdServer.BlazorApp.Pages.Role.csproj" />
+      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Settings\Aguacongas.TheIdServer.BlazorApp.Pages.Settings.csproj" />
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Users\Aguacongas.TheIdServer.BlazorApp.Pages.Users.csproj" />
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.User\Aguacongas.TheIdServer.BlazorApp.Pages.User.csproj" />
       <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
@@ -84,6 +85,7 @@
         <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Users.dll" />
         <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.dll" />
         <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.dll" />
+		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Settings.dll" />
     </ItemGroup>
     <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />

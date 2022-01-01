@@ -35,5 +35,14 @@ namespace Aguacongas.IdentityServer.Store
         /// The token scope
         /// </summary>
         public const string TOKENSCOPES = "theidservertokenapi";
+
+        /// <summary>
+        /// Defines the dynamic configuration reader authorization policy
+        /// </summary>
+        public const string DYNAMIC_CONFIGURATION_READER_POLICY = "DynamicConfigurationReaderPolicy";
+        /// <summary>
+        /// Defines the dynamic configuration writter authorization policy
+        /// </summary>
+        public const string DYNAMIC_CONFIGURATION_WRITTER_POLICY = "DynamicConfigurationWritterPolicy";
     }
 }

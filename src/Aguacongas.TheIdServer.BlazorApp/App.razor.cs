@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
@@ -30,7 +26,8 @@ namespace Aguacongas.TheIdServer.BlazorApp
             "Role",
             "User",
             "RelyingParties",
-            "RelyingParty"
+            "RelyingParty",
+            "Settings"
         };
 
         private Task OnNavigateAsync(NavigationContext args)

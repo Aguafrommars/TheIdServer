@@ -30,6 +30,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RelyingPartyTest.cs" Link="BlazorApp\Pages\RelyingPartyTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RolesTest.cs" Link="BlazorApp\Pages\RolesTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RoleTest.cs" Link="BlazorApp\Pages\RoleTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\SettingsTest.cs" Link="BlazorApp\Pages\SettingsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UsersTest.cs" Link="BlazorApp\Pages\UsersTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />

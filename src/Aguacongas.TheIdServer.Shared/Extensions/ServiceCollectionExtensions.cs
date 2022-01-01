@@ -40,12 +40,13 @@ using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddTheIdServer(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddTheIdServer(this IServiceCollection services, IConfigurationRoot configuration)
         {
             var isProxy = configuration.GetValue<bool>("Proxy");
             var dbType = configuration.GetValue<DbTypes>("DbType");
@@ -177,7 +178,8 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
                  .AddAdminApplication(new Settings())
                  .AddDatabaseDeveloperPageExceptionFilter()
-                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"))
+                 .AddConfigurationWebAPI(configuration, options => options.Provider = configuration.Providers.First());
 
             return services;
         }
@@ -203,7 +205,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureIdentityServerJwtBearerOptions(JwtBearerOptions options, IConfiguration configuration)
+        private static void ConfigureIdentityServerJwtBearerOptions(AspNetCore.Authentication.JwtBearer.JwtBearerOptions options, IConfiguration configuration)
         {
             configuration.GetSection("ApiAuthentication").Bind(options);
             if (configuration.GetValue<bool>("DisableStrictSsl"))
@@ -351,7 +353,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var dataprotectionSection = configuration.GetSection(nameof(DataProtectionOptions));
             if (dataprotectionSection != null)
             {
-                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(configuration.GetSection(nameof(DataProtectionOptions)));
+                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
             }
         }
     }

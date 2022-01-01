@@ -5,7 +5,6 @@ using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
 using AngleSharp.Dom;
 using Bunit;
-using IdentityModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 using page = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
