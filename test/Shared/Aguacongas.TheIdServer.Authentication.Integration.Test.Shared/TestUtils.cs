@@ -23,23 +23,22 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                     .ReadFrom.Configuration(hostingContext.Configuration))
-                .ConfigureAppConfiguration(builder =>
-                {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    if (configurationOverrides != null)
-                    {
-                        builder.AddInMemoryCollection(configurationOverrides);
-                    }
-                })
                 .ConfigureServices((context, services) =>
                 {
+                    var configurationManager = new ConfigurationManager();
+#if DUENDE
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
+#else
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
+#endif
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    if (configurationManager != null)
+                    {
+                        configurationManager.AddInMemoryCollection(configurationOverrides);
+                    }
+
                     configureServices?.Invoke(services);
-                    services.AddTheIdServer(context.Configuration as ConfigurationManager);
+                    services.AddTheIdServer(configurationManager);
                     services.AddSingleton<TestUserService>()
                         .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);
