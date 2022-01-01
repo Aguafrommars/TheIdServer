@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     var isProxy = configuration.GetValue<bool>("Proxy");
                     var dbType = configuration.GetValue<DbTypes>("DbType");
 
-                    services.AddTheIdServer(configuration as IConfigurationRoot);
+                    services.AddTheIdServer(configuration as ConfigurationManager);
                     services.AddSingleton<TestUserService>()
                         .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);

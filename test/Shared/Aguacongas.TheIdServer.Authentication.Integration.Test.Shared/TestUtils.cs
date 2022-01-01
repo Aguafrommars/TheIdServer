@@ -39,7 +39,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                 .ConfigureServices((context, services) =>
                 {
                     configureServices?.Invoke(services);
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(context.Configuration as ConfigurationManager);
                     services.AddSingleton<TestUserService>()
                         .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);

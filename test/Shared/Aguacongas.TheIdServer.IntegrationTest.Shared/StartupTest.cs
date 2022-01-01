@@ -57,7 +57,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {                    
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(context.Configuration as ConfigurationManager);
                 }).Build();
                  
             var provider = sut.Services;
@@ -94,7 +94,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(context.Configuration as ConfigurationManager);
                 }).Build();
 
             var provider = sut.Services;
@@ -141,7 +141,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(context.Configuration as ConfigurationManager);
                 }).Build();
 
             var provider = sut.Services;
