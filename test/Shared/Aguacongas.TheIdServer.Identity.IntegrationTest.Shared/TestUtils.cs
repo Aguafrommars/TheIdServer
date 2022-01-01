@@ -24,27 +24,26 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                     .ReadFrom.Configuration(hostingContext.Configuration))
-                .ConfigureAppConfiguration(builder =>
-                {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    if (configurationOverrides != null)
-                    {
-                        builder.AddInMemoryCollection(configurationOverrides);
-                    }
-                })
                 .ConfigureServices((context, services) =>
                 {
                     configureServices?.Invoke(services);
-                    var configuration = context.Configuration;
-                    var isProxy = configuration.GetValue<bool>("Proxy");
-                    var dbType = configuration.GetValue<DbTypes>("DbType");
 
-                    services.AddTheIdServer(configuration as IConfigurationRoot);
+                    var configurationManager = new ConfigurationManager();
+#if DUENDE
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
+#else
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
+#endif
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    if (configurationOverrides != null)
+                    {
+                        configurationManager.AddInMemoryCollection(configurationOverrides);
+                    }
+
+                    var isProxy = configurationManager.GetValue<bool>("Proxy");
+                    var dbType = configurationManager.GetValue<DbTypes>("DbType");
+
+                    services.AddTheIdServer(configurationManager);
                     services.AddSingleton<TestUserService>()
                         .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);

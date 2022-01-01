@@ -42,11 +42,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
             using var sut = new HostBuilder()
-                .ConfigureAppConfiguration(builder =>
+                .ConfigureServices((context, services) =>
                 {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    builder.AddInMemoryCollection(new Dictionary<string, string>
+                    var configurationManager = new ConfigurationManager();
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    configurationManager.AddInMemoryCollection(new Dictionary<string, string>
                     {
                         ["DbType"] = DbTypes.RavenDb.ToString(),
                         ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
@@ -54,10 +55,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         ["RavenDbOptions:CertificatePath"] = string.Empty,
                         ["Seed"] = "false"
                     });
-                })
-                .ConfigureServices((context, services) =>
-                {                    
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(configurationManager);
                 }).Build();
                  
             var provider = sut.Services;
@@ -79,11 +77,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
             using var sut = new HostBuilder()
-                .ConfigureAppConfiguration(builder =>
+                .ConfigureServices((context, services) =>
                 {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    builder.AddInMemoryCollection(new Dictionary<string, string>
+                    var configurationManager = new ConfigurationManager();
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    configurationManager.AddInMemoryCollection(new Dictionary<string, string>
                     {
                         ["DbType"] = DbTypes.MongoDb.ToString(),
                         ["ConnectionStrings:DefaultConnection"] = "mongodb://localhost/test",
@@ -91,10 +90,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         ["DataProtectionOptions:StorageKind"] = StorageKind.MongoDb.ToString(),
                         ["Seed"] = "false"
                     });
-                })
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    services.AddTheIdServer(configurationManager);
                 }).Build();
 
             var provider = sut.Services;
@@ -128,20 +124,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
             sessionMock.SetupGet(m => m.Advanced).Returns(advancedMock.Object);
             using var sut = new HostBuilder()
-                .ConfigureAppConfiguration(builder =>
-                {
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    builder.AddInMemoryCollection(new Dictionary<string, string>
-                    {
-                        ["Proxy"] = "true",
-                        ["DisableStrictSsl"]= $"{disableStrictSll}",
-                        ["Seed"] = "false"
-                    });
-                })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTheIdServer(context.Configuration as IConfigurationRoot);
+                    var configurationMAnager = new ConfigurationManager();
+                    configurationMAnager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
+                    configurationMAnager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    configurationMAnager.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["Proxy"] = "true",
+                        ["DisableStrictSsl"] = $"{disableStrictSll}",
+                        ["Seed"] = "false"
+                    });
+                    services.AddTheIdServer(configurationMAnager);
                 }).Build();
 
             var provider = sut.Services;
