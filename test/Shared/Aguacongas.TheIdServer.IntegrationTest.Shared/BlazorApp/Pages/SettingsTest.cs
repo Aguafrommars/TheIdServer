@@ -2,14 +2,9 @@
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Bunit;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using page = Aguacongas.TheIdServer.BlazorApp.Pages.Settings.Settings;

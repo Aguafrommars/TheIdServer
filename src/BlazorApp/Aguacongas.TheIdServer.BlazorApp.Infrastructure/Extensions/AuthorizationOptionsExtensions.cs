@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Authorization
 {
     public static class AuthorizationOptionsExtensions
     {
-        public static void AddIdentityServerPolicies(this AuthorizationOptions options, bool checkAdminsScope = false)
+        public static void AddIdentityServerPolicies(this AuthorizationOptions options, bool checkAdminsScope = false, bool showSettings = false)
         {
             options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
@@ -32,6 +32,10 @@ namespace Microsoft.AspNetCore.Authorization
                    policy.RequireAssertion(context => context.User.Identity.IsAuthenticated &&
                     (!checkAdminsScope || context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == SharedConstants.ADMINSCOPE)) &&
                     context.User.IsInRole(SharedConstants.READERPOLICY)));
+            options.AddPolicy("Read-Settings", policy =>
+               policy.RequireAssertion(context =>  showSettings &&
+                context.User.Identity.IsAuthenticated &&
+                context.User.IsInRole(SharedConstants.READERPOLICY)));
         }
     }
 }

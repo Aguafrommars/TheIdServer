@@ -57,7 +57,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 
-            services.AddScoped<dn.ConfigurationService>()
+            services.Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
+                .AddScoped<dn.ConfigurationService>()
                 .AddScoped<dn.IConfigurationService, ConfigurationService>()
                 .AddConfigurationService(configuration.GetSection("settingsOptions"))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
@@ -68,9 +69,9 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             services.Add(new ServiceDescriptor(postConfigurationOidc.ServiceType, postConfigurationOidc.ImplementationType, ServiceLifetime.Singleton));
 
             services.AddAuthorizationCore(options =>
-                {
-                    options.AddIdentityServerPolicies();
-                });
+            {
+                options.AddIdentityServerPolicies(showSettings: configuration.GetValue<bool>($"{nameof(MenuOptions)}:{nameof(MenuOptions.ShowSettings)}"));
+            });
 
             services.AddTransient(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddAdminHttpStores(p =>

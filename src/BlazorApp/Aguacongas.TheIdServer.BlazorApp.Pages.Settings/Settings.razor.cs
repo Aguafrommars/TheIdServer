@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Settings
 {
-    [Authorize(Policy = "Is4-Reader")]
+    [Authorize(Policy = "Read-Settings")]
     public partial class Settings
     {
         [Parameter]
