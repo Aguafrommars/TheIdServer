@@ -28,7 +28,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Community.OData.Linq.Json" Version="2.0.0" />		
+		<PackageReference Include="Community.OData.Linq.Json" Version="2.1.0" />		
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />		
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />		
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
