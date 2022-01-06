@@ -1,9 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-using AutoMapper.Internal;
+using Aguacongas.IdentityServer.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 
 namespace Aguacongas.TheIdServer.Data

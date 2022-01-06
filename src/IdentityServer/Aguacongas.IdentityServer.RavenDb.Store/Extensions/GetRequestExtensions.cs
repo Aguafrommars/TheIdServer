@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using AutoMapper.Internal;
+using Aguacongas.IdentityServer.Extensions;
 using Community.OData.Linq;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;

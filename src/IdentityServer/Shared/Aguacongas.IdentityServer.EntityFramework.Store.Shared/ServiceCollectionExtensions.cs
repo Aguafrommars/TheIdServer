@@ -4,7 +4,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
-using AutoMapper.Internal;
+using Aguacongas.IdentityServer.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
