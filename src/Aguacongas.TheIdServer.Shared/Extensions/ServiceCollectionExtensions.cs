@@ -13,6 +13,7 @@ using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 #if DUENDE
+using Aguacongas.IdentityServer.Services;
 using Duende.IdentityServer.Services;
 #else
 using IdentityServer4.Services;
@@ -94,6 +95,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
                 .AddInMemoryPersistedGrants()
+                .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
 #else
                 .AddIdentityServer(configurationManager.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
 #endif

@@ -51,6 +51,9 @@ else
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#refresh-tokens" @onclick='() => ScrollTo("refresh-tokens")' @onclick:preventDefault>@Localizer["refresh tokens"]</a>
                         </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#ciba-requests" @onclick='() => ScrollTo("ciba-requests")' @onclick:preventDefault>@Localizer["ciba requests"]</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="w-100"></div>
@@ -195,6 +198,16 @@ else
                     </div>
                     <div class="card-body">
                         <RefreshToken Collection="@Model.RefreshTokens" />
+                    </div>
+                </div>
+                <div id="ciba-requests" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Backchannel login requests"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <BackChannelAuthenticationRequest Collection="@Model.BackChannelAuthenticationRequests" />
                     </div>
                 </div>
             </div>

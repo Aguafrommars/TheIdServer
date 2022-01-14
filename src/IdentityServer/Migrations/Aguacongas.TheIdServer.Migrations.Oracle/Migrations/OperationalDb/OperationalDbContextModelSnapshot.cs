@@ -171,6 +171,39 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
                     b.ToTable("ReferenceTokens");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.BackChannelAuthenticationRequest", b =>
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar2(450)");
+
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasColumnType("nclob");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("timestamp");
+
+                b.Property<string>("Data")
+                    .HasColumnType("nclob");
+
+                b.Property<DateTime?>("Expiration")
+                    .HasColumnType("timestamp");
+
+                b.Property<DateTime?>("ModifiedAt")
+                    .HasColumnType("timestamp");
+
+                b.Property<string>("SessionId")
+                    .HasColumnType("nclob");
+
+                b.Property<string>("UserId")
+                    .HasColumnType("nvarchar2(200)")
+                    .HasMaxLength(200);
+
+                b.HasKey("Id");
+
+                b.ToTable("BackChannelAuthenticationRequest");
+            });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RefreshToken", b =>
                 {
                     b.Property<string>("Id")

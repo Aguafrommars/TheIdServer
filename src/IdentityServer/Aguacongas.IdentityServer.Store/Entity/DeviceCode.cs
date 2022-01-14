@@ -72,6 +72,24 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string Data { get; set; }
 
         /// <summary>
+        /// Gets the description the user assigned to the device being authorized.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        [MaxLength(200)]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the session identifier.
+        /// </summary>
+        /// <value>
+        /// The session identifier.
+        /// </value>
+        [MaxLength(100)]
+        public string SessionId { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>

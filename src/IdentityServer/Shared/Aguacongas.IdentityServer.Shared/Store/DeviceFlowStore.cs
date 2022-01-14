@@ -5,11 +5,11 @@ using IdentityModel;
 #if DUENDE
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-using Models = Duende.IdentityServer.Models;
+using models = Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Models = IdentityServer4.Models;
+using models = IdentityServer4.Models;
 #endif
 using System;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Store
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
-        public async Task<Models.DeviceCode> FindByDeviceCodeAsync(string deviceCode)
+        public async Task<models.DeviceCode> FindByDeviceCodeAsync(string deviceCode)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
 
@@ -47,7 +47,7 @@ namespace Aguacongas.IdentityServer.Store
             return null;
         }
 
-        public async Task<Models.DeviceCode> FindByUserCodeAsync(string userCode)
+        public async Task<models.DeviceCode> FindByUserCodeAsync(string userCode)
         {
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
 
@@ -82,7 +82,7 @@ namespace Aguacongas.IdentityServer.Store
             }
         }
 
-        public Task StoreDeviceAuthorizationAsync(string deviceCode, string userCode, Models.DeviceCode data)
+        public Task StoreDeviceAuthorizationAsync(string deviceCode, string userCode, models.DeviceCode data)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
@@ -101,7 +101,7 @@ namespace Aguacongas.IdentityServer.Store
             return _store.CreateAsync(entity);
         }
 
-        public async Task UpdateByUserCodeAsync(string userCode, Models.DeviceCode data)
+        public async Task UpdateByUserCodeAsync(string userCode, models.DeviceCode data)
         {
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
             data = data ?? throw new ArgumentNullException(nameof(data));
@@ -124,11 +124,11 @@ namespace Aguacongas.IdentityServer.Store
             throw new InvalidOperationException($"Device code for {userCode} not found");         
         }
 
-        private Models.DeviceCode ToModel(DeviceCode entity)
+        private models.DeviceCode ToModel(DeviceCode entity)
         {
             if (entity != null)
             {
-                return _serializer.Deserialize<Models.DeviceCode>(entity.Data);
+                return _serializer.Deserialize<models.DeviceCode>(entity.Data);
             }
 
             return null;

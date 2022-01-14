@@ -121,6 +121,11 @@
         public IdentityServerLoggingOptions Logging { get; set; } = new IdentityServerLoggingOptions();
 
         /// <summary>
+        /// Gets or sets the CIBA options.
+        /// </summary>
+        public CibaOptions Ciba { get; set; } = new CibaOptions();
+
+        /// <summary>
         /// Gets or sets the mutual TLS options.
         /// </summary>
         public MutualTlsOptions MutualTls { get; set; } = new MutualTlsOptions();

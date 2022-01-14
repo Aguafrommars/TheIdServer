@@ -5,7 +5,7 @@ Copyright (c) 2021 @Olivier Lefebvre
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IViewLocalizer Localizer
 
-@{
+@{    
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
@@ -19,4 +19,8 @@ Copyright (c) 2021 @Olivier Lefebvre
     <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" asp-page="./TwoFactorAuthentication">@Localizer["Two-factor authentication"]</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-page="./PersonalData">@Localizer["Personal data"]</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.GrantsNavClass(ViewContext)" asp-page="./Grants">@Localizer["Grants"]</a></li>
+    @if (!Url.Page("./Ciba").StartsWith("/?page"))
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.CibaNavClass(ViewContext)" asp-page="./Ciba">@Localizer["Backchannel Login Requests"]</a></li>
+    }
 </ul>

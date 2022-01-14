@@ -1,0 +1,46 @@
+﻿@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) 2022 @Olivier Lefebvre
+*@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
+@inject IViewLocalizer Localizer
+@model CibaModel
+@{
+    ViewData["Title"] = Localizer["Pending Backchannel Login Requests"];
+    ViewData["ActivePage"] = ManageNavPages.Ciba;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+@if (Model.Logins.Any() == true)
+{
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th>@Localizer["Id"]</th>
+                <th>@Localizer["Client Id"]</th>
+                <th>@Localizer["Binding Message"]</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var login in Model.Logins)
+            {
+                <tr>
+                    <td>@login.InternalId</td>
+                    <td>@login.Client.ClientId</td>
+                    <td>@login.BindingMessage</td>
+                    <td>
+                        <a asp-controller="Ciba" asp-action="Consent" asp-route-id="@login.InternalId" class="btn btn-primary">@Localizer["Process"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>@Localizer["No Pending Login Requests"]</div>
+}

@@ -19,6 +19,8 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
         public static string Grants => "Grants";
 
+        public static string Ciba => "Ciba";
+
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
@@ -34,6 +36,8 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 
         public static string GrantsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Grants);
+
+        public static string CibaNavClass(ViewContext viewContext) => PageNavClass(viewContext, Ciba);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {

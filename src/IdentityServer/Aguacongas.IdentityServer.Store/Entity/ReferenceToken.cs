@@ -9,7 +9,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
     /// Define a reference token
     /// </summary>
     /// <seealso cref="IGrant" />
-    public class ReferenceToken : IGrant, IUserSubEntity
+    public class ReferenceToken : IGrant, IUserSubEntity, IClientSubEntity
     {
         /// <summary>
         /// Gets or sets the identifier.

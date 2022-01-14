@@ -49,7 +49,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
 
         public static bool HasUser(this IdentityServer.Store.Entity.Client client)
         {
-            return CanHandlePostLogout(client);
+            return CanHandlePostLogout(client) || client.AllowedGrantTypes.Any(g => g.GrantType == "urn:openid:params:grant-type:ciba");
         }
 
         public static bool IsDevice(this IdentityServer.Store.Entity.Client client)

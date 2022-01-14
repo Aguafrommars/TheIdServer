@@ -96,9 +96,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Areas\Identity\Pages\Account\Manage\" />
 		<Folder Include="Extensions\" />
-		<Folder Include="Quickstart\Account\" />
 		<Folder Include="Quickstart\Consent\" />
 		<Folder Include="Quickstart\Device\" />
 		<Folder Include="Quickstart\Diagnostics\" />
