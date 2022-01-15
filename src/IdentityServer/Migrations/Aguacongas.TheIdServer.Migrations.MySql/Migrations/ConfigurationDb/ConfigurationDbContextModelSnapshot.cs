@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
@@ -14,8 +16,8 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.5");
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -346,6 +348,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
 
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("int");
+
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
@@ -406,6 +411,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
 
                     b.Property<string>("PolicyUri")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
@@ -726,7 +734,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 2, 789, DateTimeKind.Utc).AddTicks(6339)
+                            CreatedAt = new DateTime(2022, 1, 15, 10, 10, 23, 375, DateTimeKind.Utc).AddTicks(4005)
                         });
                 });
 
@@ -1315,9 +1323,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
                 {
-                    b.Navigation("Apis");
-
                     b.Navigation("ApiScopeClaims");
+
+                    b.Navigation("Apis");
 
                     b.Navigation("Properties");
 

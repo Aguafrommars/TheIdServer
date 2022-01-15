@@ -58,6 +58,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             ["10:00"] = TimeSpan.FromMinutes(10)
         };
 
+        private readonly Dictionary<string, TimeSpan?> _cibaLifetimeQuickValues = new Dictionary<string, TimeSpan?>
+        {
+            ["05:00"] = TimeSpan.FromMinutes(5),
+            ["10:00"] = TimeSpan.FromMinutes(10)
+        };
+
+        private readonly Dictionary<string, TimeSpan?> _pollingIntervalQuickValues = new Dictionary<string, TimeSpan?>
+        {
+            ["00:05"] = TimeSpan.FromSeconds(5),
+            ["00:10"] = TimeSpan.FromSeconds(10)
+        };
+
         [Parameter]
         public Entity.Client Model { get; set; }
 
