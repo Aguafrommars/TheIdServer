@@ -25,7 +25,7 @@ namespace Aguacongas.IdentityServer.Services
             IOptions<BackchannelAuthenticationUserNotificationServiceOptions> options)
         {
             _nameService = nameService ?? throw new ArgumentNullException(nameof(nameService));
-            _localizer = localizer ?? throw new ArgumentException(nameof(localizer));
+            _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }

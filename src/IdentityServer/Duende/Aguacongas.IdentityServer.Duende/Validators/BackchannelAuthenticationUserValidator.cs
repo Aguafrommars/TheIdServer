@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.Validators
                 };
             }
 
-            var user = userValidatorContext.LoginHint is not null ? 
+            var user = userValidatorContext.LoginHint is not null ?
                 await _userManager.FindByNameAsync(userValidatorContext.LoginHint).ConfigureAwait(false) :
                 await _userManager.FindByIdAsync(sub).ConfigureAwait(false);
 
