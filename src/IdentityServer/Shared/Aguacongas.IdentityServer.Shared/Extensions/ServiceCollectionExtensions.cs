@@ -110,20 +110,15 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static Type GetBackchannelAuthenticationUserNotificationServiceType(BackchannelAuthenticationUserNotificationServiceOptions settings)
         {
-            Type serviceType;
             if (!string.IsNullOrEmpty(settings.AssemblyPath))
             {
 #pragma warning disable S3885 // "Assembly.Load" should be used
                 var assembly = Assembly.LoadFrom(settings.AssemblyPath);
 #pragma warning restore S3885 // "Assembly.Load" should be used
-                serviceType = assembly.GetType(settings.ServiceType, true);
+                return assembly.GetType(settings.ServiceType, true);
             }
-            else
-            {
-                serviceType = Type.GetType(settings.ServiceType, true);
-            }
-
-            return serviceType;
+            
+            return Type.GetType(settings.ServiceType, true);
         }
 #endif
     }

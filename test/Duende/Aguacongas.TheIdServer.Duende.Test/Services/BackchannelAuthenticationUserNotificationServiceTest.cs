@@ -63,6 +63,7 @@ namespace Aguacongas.TheIdServer.Duende.Test.Services
                 },
                 Subject = new ClaimsPrincipal(new ClaimsIdentity(new [] { new Claim(JwtClaimTypes.Email, "aguacongas@gmail.com") })),
                 InternalId = Guid.NewGuid().ToString(),
+                BindingMessage = bindinMessage
             }).ConfigureAwait(false);
         }
     }
