@@ -17,12 +17,13 @@ Copyright (c) 2022 @Olivier Lefebvre
 @if (Model.Logins.Any() == true)
 {
     <table class="table table-bordered table-striped table-sm">
+        <caption>@Localizer["Pending Backchannel Login Requests"]</caption>
         <thead>
             <tr>
-                <th>@Localizer["Id"]</th>
-                <th>@Localizer["Client Id"]</th>
-                <th>@Localizer["Binding Message"]</th>
-                <th></th>
+                <th scope="col">@Localizer["Id"]</th>
+                <th scope="col">@Localizer["Client Id"]</th>
+                <th scope="col">@Localizer["Binding Message"]</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>

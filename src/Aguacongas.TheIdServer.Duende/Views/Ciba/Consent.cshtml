@@ -10,7 +10,7 @@ Copyright (c) 2022 @Olivier Lefebvre
     <div class="lead">
         @if (Model.ClientLogoUrl != null)
         {
-            <div class="client-logo"><img src="@Model.ClientLogoUrl"></div>
+            <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="client logo"></div>
         }
         <h1>
             @Html.Raw(string.Format(Localizer["{0} <small class=\"text-muted\">is requesting your permission</small>"].Value, Model.ClientName))
