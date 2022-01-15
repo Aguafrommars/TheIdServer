@@ -45,10 +45,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Validators\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.Duende\Aguacongas.TheIdServer.Duende.csproj" />
 	</ItemGroup>
 
