@@ -12,9 +12,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class TokensGrid<T> where T: IGrant
     {
-        private IEnumerable<T> Tokens => Collection.Where(t => t.ClientId.Contains(HandleModificationState.FilterTerm) || t.Data.Contains(HandleModificationState.FilterTerm));
+        private IEnumerable<T> Tokens => Collection?.Where(t => t.ClientId.Contains(HandleModificationState.FilterTerm) || t.Data.Contains(HandleModificationState.FilterTerm));
 
-        private readonly JsonSerializerSettings _serializerOptions = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _serializerOptions = new()
         {
             Formatting = Formatting.Indented,
         };

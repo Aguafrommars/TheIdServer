@@ -91,7 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         if (parameterType == typeof(HttpClient))
                         {
                             var factory = p.GetRequiredService<IHttpClientFactory>();
-                            arguments[i] = factory.CreateClient(settings.HttpClientName);
+                            arguments[i] = factory.CreateClient(settings.HttpClientName ?? "ciba");
                             continue;
                         }
                         arguments[i] = p.GetRequiredService(parameterType);
@@ -101,7 +101,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddTransient<IBackchannelAuthenticationUserValidator, BackchannelAuthenticationUserValidator>()
                 .AddTransient<OAuthDelegatingHandler<BackchannelAuthenticationUserNotificationServiceOptions>>()
-                .AddHttpClient(configuration.GetValue<string>("HttpClientName"))
+                .AddHttpClient(configuration.GetValue<string>("HttpClientName") ?? "ciba")
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
                 .AddHttpMessageHandler<OAuthDelegatingHandler<BackchannelAuthenticationUserNotificationServiceOptions>>();
 
