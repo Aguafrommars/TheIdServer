@@ -357,6 +357,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
+        public async Task Ciba_client_should_have_ciba_lifetime()
+        {
+            var clientId = await CreateClient("urn:openid:params:grant-type:ciba");
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            WaitForNode(component, "#ciba-lifetime");
+
+            // ciba client should have polling interval input field
+            Assert.NotNull(component.Find("#polling-interval"));
+        }
+
+
+        [Fact]
         public async Task Custom_client_should_not_have_consent()
         {
             var clientId = await CreateClient("custom");

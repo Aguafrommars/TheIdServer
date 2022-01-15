@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
@@ -15,9 +17,10 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -348,6 +351,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("int");
+
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -408,6 +414,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.Property<string>("PolicyUri")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
@@ -728,7 +737,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 52, 422, DateTimeKind.Utc).AddTicks(8130)
+                            CreatedAt = new DateTime(2022, 1, 15, 10, 11, 36, 949, DateTimeKind.Utc).AddTicks(2767)
                         });
                 });
 
@@ -1318,9 +1327,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
                 {
-                    b.Navigation("Apis");
-
                     b.Navigation("ApiScopeClaims");
+
+                    b.Navigation("Apis");
 
                     b.Navigation("Properties");
 

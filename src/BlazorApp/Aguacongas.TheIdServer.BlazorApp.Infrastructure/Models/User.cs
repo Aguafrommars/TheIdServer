@@ -20,6 +20,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public List<Entity.ReferenceToken> ReferenceTokens { get; set; }
         public List<Entity.RefreshToken> RefreshTokens { get; set; }
 
+        public List<Entity.BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
+
         public new User Clone()
         {
             return MemberwiseClone() as User;

@@ -134,13 +134,6 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        // If account confirmation is required, we need to show the link if we don't have a real email sender
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
-                        }
-
-                        await _signInManager.SignInAsync(user, isPersistent: false);
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -152,6 +145,14 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
 
                         await _emailSender.SendEmailAsync(Input.Email, _localizer["Confirm your email"],
                             _localizer["Please confirm your account by <a href='{0}'>clicking here</a>.", HtmlEncoder.Default.Encode(callbackUrl)]);
+
+                        // If account confirmation is required
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                        }
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
 
                         return LocalRedirect(returnUrl);
                     }

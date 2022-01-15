@@ -42,14 +42,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
         {
             return (client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
                     g.GrantType == "hybrid" ||
-                    g.GrantType == "password") ||
+                    g.GrantType == "password" ||
+                    g.GrantType == "urn:openid:params:grant-type:ciba") ||
                 client.HasCustomGrantType()) &&
                 client.AllowOfflineAccess;
         }
 
+        public static bool IsCiba(this IdentityServer.Store.Entity.Client client)
+        {
+            return client.AllowedGrantTypes.Any(g => g.GrantType == "urn:openid:params:grant-type:ciba");
+        }
+
         public static bool HasUser(this IdentityServer.Store.Entity.Client client)
         {
-            return CanHandlePostLogout(client);
+            return CanHandlePostLogout(client) || client.IsCiba();
         }
 
         public static bool IsDevice(this IdentityServer.Store.Entity.Client client)

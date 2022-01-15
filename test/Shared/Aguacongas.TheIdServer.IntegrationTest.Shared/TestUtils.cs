@@ -1,29 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.TheIdServer.Areas.Identity;
-using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
-using Aguacongas.TheIdServer.BlazorApp.Models;
-using Bunit;
-using Bunit.TestDoubles;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Components.WebAssembly.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
-using Moq;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;

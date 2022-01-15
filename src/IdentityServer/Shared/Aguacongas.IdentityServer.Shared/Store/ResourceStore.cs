@@ -3,10 +3,10 @@
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.Stores;
-using Models = Duende.IdentityServer.Models;
+using models = Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Stores;
-using Models = IdentityServer4.Models;
+using models = IdentityServer4.Models;
 #endif
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="apiResourceNames">The name.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
+        public async Task<IEnumerable<models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
             var filter = string.Join(" or ", apiResourceNames.Select(s => $"{nameof(ProtectResource.Id)} eq '{s}'"));
             var response = await _apiStore.GetAsync(new PageRequest
@@ -60,7 +60,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiApiScope.ApiScopeId)} eq '{s}'"));
             var apiIdListResponse = await _apiApiScopeStore.GetAsync(new PageRequest
@@ -84,7 +84,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
         {
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiScope.Id)} eq '{s}'"));
             var response = await _apiScopeStore.GetAsync(new PageRequest
@@ -100,7 +100,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(IdentityResource.Id)} eq '{s}'"));
             var response = await _identityStore.GetAsync(new PageRequest
@@ -116,9 +116,9 @@ namespace Aguacongas.IdentityServer.Store
         /// Gets all resources.
         /// </summary>
         /// <returns></returns>
-        public async Task<Models.Resources> GetAllResourcesAsync()
+        public async Task<models.Resources> GetAllResourcesAsync()
         {
-            return new Models.Resources
+            return new models.Resources
             {
                 ApiResources = (await _apiStore.GetAsync(new PageRequest
                 {
