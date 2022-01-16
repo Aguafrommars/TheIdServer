@@ -105,12 +105,6 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
             return View(viewModel);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> All()
-        {
-            return View(await _interaction.GetPendingLoginRequestsForCurrentUserAsync().ConfigureAwait(false));
-        }
-
         private ViewModel BuildViewModelAsync(BackchannelUserLoginRequest request, string id, InputModel model = null)
         {
             if (request is null)
