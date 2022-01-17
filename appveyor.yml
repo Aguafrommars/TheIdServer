@@ -33,6 +33,8 @@ install:
   - ps: ./appveyorinit.ps1
 build_script:
   - ps: ./build.ps1
+test_script:
+  - ps: ./publish.ps1
 artifacts:
   - path: test/**/*.dmp
     name: dump
