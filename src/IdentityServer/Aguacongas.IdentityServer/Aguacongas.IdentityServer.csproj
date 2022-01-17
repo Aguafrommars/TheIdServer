@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer bases classes</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -33,17 +33,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="Community.OData.Linq" Version="1.4.3" />
-		<PackageReference Include="IdentityModel" Version="5.2.0" />
+		<PackageReference Include="Community.OData.Linq" Version="2.1.0" />
+		<PackageReference Include="IdentityModel" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.11" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.11" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.11" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.13.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
 	</ItemGroup>
 
 	<ItemGroup>

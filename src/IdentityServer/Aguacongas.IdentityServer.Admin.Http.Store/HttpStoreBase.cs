@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
     {
         protected JsonSerializerOptions JsonSerializerOptions { get; } = new JsonSerializerOptions
         {
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             IgnoreReadOnlyProperties = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };

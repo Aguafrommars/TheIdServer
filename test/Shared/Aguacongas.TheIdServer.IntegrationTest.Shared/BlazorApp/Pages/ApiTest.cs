@@ -4,24 +4,26 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
+using Bunit;
+using Bunit.Rendering;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
-    public class ApiTest : EntityPageTestBase
+    [Collection(BlazorAppCollection.Name)]
+    public class ApiTest : EntityPageTestBase<page>
     {
         public override string Entity => "protectresource";
-        public ApiTest(ApiFixture fixture, ITestOutputHelper testOutputHelper) : base(fixture, testOutputHelper)
+        public ApiTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -30,31 +32,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-#pragma warning disable S1854 // Unused assignments should be removed
-            string markup = WaitForLoaded(host, component);
-#pragma warning restore S1854 // Unused assignments should be removed
-
-            WaitForContains(host, component, "filtered");
+                apiId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = apiId
-            }));
+            }).ConfigureAwait(false);
 
-            markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
@@ -62,31 +53,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                apiId);
 
-            WaitForLoaded(host, component);
-
-            var input = host.WaitForNode(component, "#displayName");
+            var input = component.Find("#displayName");
 
             var expected = GenerateId();
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(expected));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
-            var markup = component.GetMarkup();
-
-            Assert.Contains(expected, markup);
+            Assert.Contains(expected, component.Markup);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -100,32 +85,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             var apiId = GenerateId();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                null);
 
-            WaitForLoaded(host, component);
+            var input = component.Find("#name");
 
-            var input = WaitForNode(host, component, "#name");
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = apiId
+            }).ConfigureAwait(false);
 
             input = component.Find("#displayName");
 
             Assert.NotNull(input);
 
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = apiId
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -139,24 +123,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiId = await CreateApi();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                apiId);
 
-            WaitForLoaded(host, component);
+            var input = component.Find("#delete-entity input");
 
-            var input = WaitForNode(host, component, "#delete-entity input");
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(apiId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = apiId
+            }).ConfigureAwait(false);
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
-
-            WaitForDeletedToast(host, component);
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -168,106 +148,66 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public void DisposeTest()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                null);
 
-            WaitForLoaded(host, component);
+            component.Dispose();
 
-            host.Dispose();
-
-            string markup = null;
-            try
-            {
-                markup = component.GetMarkup();
-            }
-            catch(ArgumentException)
-            {
-                // silent catch
-            }
-
-            Assert.Null(markup);
-            
+            Assert.Throws<ComponentDisposedException>(()=> component.Markup);
         }
 
         [Fact]
         public async Task ClickSecretsButtons_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
+                         apiId);
 
-            WaitForLoaded(host, component);
+            component.WaitForElements("#secrets button");
+            var buttons = component.FindAll("#secrets button").ToList();            
 
-            var buttons = WaitForAllNodes(host, component, "#secrets button");            
-
-            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             var expected = buttons.Count;
-            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
+            await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#secrets button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            while (buttons.Count == expected)
-            {
-                host.WaitForNextRender();
-                buttons = component.FindAll("#secrets button")
-                    .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-            }
+                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
-
-            buttons = component.FindAll("#secrets button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            while(buttons.Count != expected)
-            {
-                host.WaitForNextRender();
-                buttons = component.FindAll("#secrets button")
-                    .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-            }
-            Assert.Equal(expected, buttons.Count);
+            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task ClickPropertiesButtons_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
+                         apiId);
 
-            WaitForLoaded(host, component);
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
-            var buttons = WaitForAllNodes(host, component, "#properties button");
+            var buttons = component.WaitForElements("#properties button")
+                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
-            buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
-
-            var expected = buttons.Count;
-            await host.WaitForNextRenderAsync(() => buttons.First().ClickAsync());
+            var notExpected = buttons.Count;
+            await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#properties button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
-            Assert.NotEqual(expected, buttons.Count);
+            Assert.NotEqual(notExpected, buttons.Count);
 
-            await host.WaitForNextRenderAsync(() => buttons.Last().ClickAsync());
+            var expected = buttons.Count - 1;
+
+            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#properties button")
-                .Where(b => b.Attributes.Any(a => a.Name == "onclick")).ToList();
+                .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             Assert.Equal(expected, buttons.Count);
         }
@@ -276,35 +216,26 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         public async Task ClickAddRemoveClaims_should_not_throw()
         {
             var apiId = await CreateApi();
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                          SharedConstants.WRITERPOLICY,
-                         apiId,
-                         out TestHost host,
-                         out RenderedComponent<App> component,
-                         out MockHttpMessageHandler mockHttp);
+                         apiId);
 
-            WaitForLoaded(host, component);
+            var input = component.Find("#claims input.new-claim");
 
-            var input = WaitForNode(host, component, "#claims input.new-claim");
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }).ConfigureAwait(false);
 
-            await host.WaitForNextRenderAsync(() => input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }));
-
+            component.WaitForElement("#claims button.dropdown-item");
             var button = component.Find("#claims button.dropdown-item");
-            while (button == null)
-            {
-                host.WaitForNextRender();
-                button = component.Find("#claims button.dropdown-item");
-            }
 
             Assert.NotNull(button);
 
-            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var divs = component.FindAll("#claims div.select");
 
             Assert.NotEmpty(divs);
 
-            await host.WaitForNextRenderAsync(() => divs.Last().ClickAsync());
+            await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
         }
 
         private async Task<string> CreateApi()

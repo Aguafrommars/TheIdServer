@@ -24,7 +24,7 @@
     </TableHeader>
     <RowTemplate>
         <td>
-            <a href="@(_navigationManager.BaseUri)/client/@(token.ClientId)">@token.ClientId</a>
+            <a href="@(_navigationManager.BaseUri)client/@(token.ClientId)">@token.ClientId</a>
         </td>
         <td>
             <button type="button" class="btn btn-secondary" @onclick="() => ShowData(token)">
@@ -41,13 +41,12 @@
         </td>
     </RowTemplate>
 </EntitiesGrid>
-<div class="modal fade" id="token-data" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="token-data" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header" aria-hidden="true" data-bs-backdrop="false">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="delete-modal-header">Token</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="@Localizer["Close"]">
                 </button>
             </div>
             <div class="modal-body">

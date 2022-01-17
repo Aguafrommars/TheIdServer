@@ -1,6 +1,6 @@
 ﻿@inherits ProviderOptionsBase<MicrosoftAccountOptions>
 
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="clientId">
         @Localizer["client id"]
     </label>
@@ -8,7 +8,7 @@
         <AuthorizeText Id="clientId" Placeholder="@Localizer["client id"]" @bind-Value="@Model.Options.ClientId" />
     </div>
 </div>
-<div class="form-group row">
+<div class="mb-1 row">
     <label class="col col-form-label" for="clientSecret">
         @Localizer["client secret"]
     </label>

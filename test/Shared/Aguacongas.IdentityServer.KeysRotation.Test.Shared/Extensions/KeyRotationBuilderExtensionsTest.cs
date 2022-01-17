@@ -270,7 +270,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         {
             var builder = new ServiceCollection()
                 .AddKeysRotation()
+#pragma warning disable SYSLIB0026 // Type or member is obsolete
                 .ProtectKeysWithAzureKeyVault("test", "test", new X509Certificate2());
+#pragma warning restore SYSLIB0026 // Type or member is obsolete
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
 

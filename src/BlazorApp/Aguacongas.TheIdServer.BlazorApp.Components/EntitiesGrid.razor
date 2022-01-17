@@ -17,17 +17,15 @@
             {
                 @if (SetKey)
                 {
-                    @foreach (var item in Items)
-                    {
-                        <tr @key="@item" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
-                    }
+                    <Virtualize Items="@GetItems">
+                        <tr @key="@context" class="@RowClass" @onclick="() => RowClicked.InvokeAsync(context)">@RowTemplate(context)</tr>
+                    </Virtualize>
                 }
                 else
                 {
-                    @foreach (var item in Items)
-                    {
-                        <tr class="@RowClass" @onclick="() => RowClicked.InvokeAsync(item)">@RowTemplate(item)</tr>
-                    }
+                    <Virtualize Items="@GetItems">
+                        <tr class="@RowClass" @onclick="() => RowClicked.InvokeAsync(context)">@RowTemplate(context)</tr>
+                    </Virtualize>
                 }
             }
             else

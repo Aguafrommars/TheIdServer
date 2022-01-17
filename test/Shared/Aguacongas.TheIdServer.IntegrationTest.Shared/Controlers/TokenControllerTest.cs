@@ -22,7 +22,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.Controlers
         [Fact]
         public async Task CreatePersonalAccessTokenAsync_should_create_PAT()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
 
             var sub = Guid.NewGuid().ToString();
             var role = Guid.NewGuid().ToString();
@@ -68,7 +68,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.Controlers
         [Fact]
         public async Task CreatePersonalAccessTokenAsync_should_return_bad_request_when_client_not_exist()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
 
             var sub = Guid.NewGuid().ToString();
             var role = Guid.NewGuid().ToString();
@@ -107,7 +107,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.Controlers
         [Fact]
         public async Task CreatePersonalAccessTokenAsync_should_return_bad_request_when_scope_not_allowed()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
 
             var sub = Guid.NewGuid().ToString();
             var role = Guid.NewGuid().ToString();
@@ -146,7 +146,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.Controlers
         [Fact]
         public async Task CreatePersonalAccessTokenAsync_should_return_bad_request_when_api_not_exists()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
 
             var sub = Guid.NewGuid().ToString();
             var role = Guid.NewGuid().ToString();
@@ -185,7 +185,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.Controlers
         [Fact]
         public async Task CreatePersonalAccessTokenAsync_should_return_bad_request_when_apis_is_null()
         {
-            var sut = TestUtils.CreateTestServer();
+            using var sut = TestUtils.CreateTestServer();
 
             var sub = Guid.NewGuid().ToString();
             var role = Guid.NewGuid().ToString();

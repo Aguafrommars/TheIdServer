@@ -3,7 +3,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
+namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 {
     public partial class AddRelyingPartyDescription : Migration
     {

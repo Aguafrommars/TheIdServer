@@ -31,6 +31,7 @@ namespace Aguacongas.TheIdServer.Models
         public string StorageConnectionString { get; set; }
 
         public KeyProtectionOptions KeyProtectionOptions { get; set; }
+
         public RedisKey RedisKey { get; set; } = "DataProtection-Keys";
     }
 

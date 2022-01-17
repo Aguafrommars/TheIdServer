@@ -4,28 +4,29 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
+using Bunit;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop.Infrastructure;
-using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
-    public class RelyingPartyTest : EntityPageTestBase
+    [Collection(BlazorAppCollection.Name)]
+    public class RelyingPartyTest : EntityPageTestBase<page>
     {
         public override string Entity => "relyingparty";
-        public RelyingPartyTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public RelyingPartyTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -34,20 +35,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(await File.ReadAllBytesAsync("test.crt").ConfigureAwait(false));
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
+                relyingPartyId);
 
-            WaitForLoaded(host, component);
-
-            WaitForContains(host, component, "A certificate chain processed");
-
-            string markup = component.GetMarkup();
-
-            Assert.Contains("A certificate chain processed", markup);
+            Assert.Contains("A certificate chain processed", component.Markup);
         }
 
         [Fact]
@@ -55,31 +47,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _,
-                true);
+                relyingPartyId);
 
-            var jsRuntime = host.ServiceProvider.GetRequiredService<JSRuntimeImpl>();
+            var inputFile = component.FindComponent<InputFile>();
+            await component.InvokeAsync(()=> inputFile.Instance.OnChange.InvokeAsync(new InputFileChangeEventArgs(new List<IBrowserFile>
+            {
+                new FakeBrowserFile()
+            })).ConfigureAwait(false)).ConfigureAwait(false);
 
-            WaitForLoaded(host, component);
+            DotNetDispatcher.BeginInvokeDotNet(new JSRuntimeImpl(), new DotNetInvocationInfo(null, "NotifyChange", 1, default), "[[{ \"name\": \"test.crt\" }]]");
 
-            WaitForContains(host, component, "filtered");
+            component.WaitForState(() => component.Markup.Contains("Invalid file"));
 
-            jsRuntime.Called.WaitOne();
-
-            await Task.Delay(100).ConfigureAwait(false);
-
-            DotNetDispatcher.BeginInvokeDotNet(jsRuntime, new DotNetInvocationInfo(null, "NotifyChange", 1, default), "[[{ \"name\": \"test.crt\" }]]");
-
-            host.WaitForNextRender();
-
-            string markup = component.GetMarkup();
-
-            Assert.Contains("Invalid file", markup);
+            Assert.Contains("Invalid file", component.Markup);
         }
 
         [Fact]
@@ -87,29 +69,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            WaitForContains(host, component, "filtered");
+                relyingPartyId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = relyingPartyId
-            }));
+            }).ConfigureAwait(false);
 
-            string markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
@@ -117,33 +90,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string relyingPartyId = await CreateEntity(null);
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                relyingPartyId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                relyingPartyId);
 
             var input = component.Find("#description");
 
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(expected));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
-            var markup = component.GetMarkup();
-
-            Assert.Contains(expected, markup);
+            Assert.Contains(expected, component.Markup);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -175,6 +142,22 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 return context.SaveChangesAsync();
             });
             return relyingPartyId;
+        }
+
+        class FakeBrowserFile : IBrowserFile
+        {
+            public string Name => GenerateId();
+
+            public DateTimeOffset LastModified => DateTimeOffset.Now;
+
+            public long Size => 10;
+
+            public string ContentType => "application/pdf";
+
+            public Stream OpenReadStream(long maxAllowedSize = 512000, CancellationToken cancellationToken = default)
+            {
+                return new MemoryStream(10);
+            }
         }
     }
 }

@@ -5,11 +5,11 @@ using IdentityModel;
 #if DUENDE
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-using Models = Duende.IdentityServer.Models;
+using models = Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using Models = IdentityServer4.Models;
+using models = IdentityServer4.Models;
 #endif
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,26 +18,26 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, Models.AuthorizationCode>, IAuthorizationCodeStore
+    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, models.AuthorizationCode>, IAuthorizationCodeStore
     {
         public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store, 
             IPersistentGrantSerializer serializer) : base(store, serializer)
         {
         }
 
-        public Task<Models.AuthorizationCode> GetAuthorizationCodeAsync(string code)
+        public Task<models.AuthorizationCode> GetAuthorizationCodeAsync(string code)
             => GetAsync(code);
 
         public Task RemoveAuthorizationCodeAsync(string code)
             => RemoveAsync(code);
 
-        public Task<string> StoreAuthorizationCodeAsync(Models.AuthorizationCode code)
+        public Task<string> StoreAuthorizationCodeAsync(models.AuthorizationCode code)
             => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
 
-        protected override string GetClientId(Models.AuthorizationCode dto)
+        protected override string GetClientId(models.AuthorizationCode dto)
             => dto?.ClientId;
 
-        protected override string GetSubjectId(Models.AuthorizationCode dto)
+        protected override string GetSubjectId(models.AuthorizationCode dto)
         {
             var subject = dto?.Subject;
             if (subject == null)

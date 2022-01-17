@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-
+using dn = Aguacongas.DynamicConfiguration.Razor.Services;
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
@@ -46,9 +48,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings, string baseAddress)
         {
-            services
-                .AddOptions()
-                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
+            services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
                 .AddOidcAuthentication(options =>
                 {
                     configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
@@ -57,12 +57,23 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 
+            services.Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
+                .AddScoped<dn.ConfigurationService>()
+                .AddScoped<dn.IConfigurationService, ConfigurationService>()
+                .AddConfigurationService(configuration.GetSection("settingsOptions"))
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+            var postConfigurationOidc = services.First(s => s.ServiceType == typeof(IPostConfigureOptions<RemoteAuthenticationOptions<OidcProviderOptions>>));
+            
+            services.Remove(postConfigurationOidc);
+            services.Add(new ServiceDescriptor(postConfigurationOidc.ServiceType, postConfigurationOidc.ImplementationType, ServiceLifetime.Singleton));
+
             services.AddAuthorizationCore(options =>
             {
-                options.AddIdentityServerPolicies();
+                options.AddIdentityServerPolicies(showSettings: configuration.GetValue<bool>($"{nameof(MenuOptions)}:{nameof(MenuOptions.ShowSettings)}"));
             });
 
-            services.AddSingleton(new HttpClient { BaseAddress = new Uri(baseAddress) })
+            services.AddTransient(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
                 .AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));

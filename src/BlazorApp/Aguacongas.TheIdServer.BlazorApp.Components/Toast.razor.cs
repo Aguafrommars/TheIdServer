@@ -21,6 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
             await _jsRuntime.InvokeVoidAsync("bootstrapInteropt.showToast",
                 Notification.Id, DotNetObjectReference.Create(this));
         }

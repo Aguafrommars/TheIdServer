@@ -13,10 +13,10 @@ Copyright (c) 2021 @Olivier Lefebvre
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li class="nav-item">
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@Localizer["Hello {0}!", UserManager.GetUserName(User)]</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">@Localizer["Logout"]</button>
             </li>
         </ul>
@@ -25,7 +25,7 @@ Copyright (c) 2021 @Olivier Lefebvre
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a></li>
+        <li class="nav-item"><a asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a></li>
+        <li class="nav-item"><a asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a></li>
     </ul>
 }

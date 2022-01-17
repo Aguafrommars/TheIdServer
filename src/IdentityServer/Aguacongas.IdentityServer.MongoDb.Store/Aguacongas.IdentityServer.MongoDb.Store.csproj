@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>MongoDb stores implementation for TheIdServer.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="2.13.2" />
+		<PackageReference Include="MongoDB.Driver" Version="2.14.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />

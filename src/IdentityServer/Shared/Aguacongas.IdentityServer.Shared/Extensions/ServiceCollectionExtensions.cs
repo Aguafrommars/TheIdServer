@@ -3,25 +3,25 @@
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Authentication;
-using Aguacongas.TheIdServer.Identity;
-using Aguacongas.TheIdServer.Models;
 #if DUENDE
+using Aguacongas.IdentityServer.Services;
+using Aguacongas.IdentityServer.Validators;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
+using Duende.IdentityServer.Validation;
 #else
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 #endif
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using System;
 using System.Net.Http;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -66,7 +66,60 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
+#if DUENDE
+                .AddTransient<IBackChannelAuthenticationRequestStore, BackChannelAuthenticationRequestStore>()
+#endif
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
         }
+
+#if DUENDE
+        public static IServiceCollection AddCibaServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<BackchannelAuthenticationUserNotificationServiceOptions>(configuration)
+                .AddSingleton<OAuthTokenManager<BackchannelAuthenticationUserNotificationServiceOptions>>()                
+                .AddTransient(p =>
+                {
+                    var settings = p.GetRequiredService<IOptions<BackchannelAuthenticationUserNotificationServiceOptions>>().Value;
+
+                    var serviceType = GetBackchannelAuthenticationUserNotificationServiceType(settings);
+                    var constructor = serviceType.GetConstructors()[0];
+                    var parameters = constructor.GetParameters();
+                    var arguments = new object[parameters.Length];
+                    for (var i = 0; i < parameters.Length; i++)
+                    {
+                        var parameterType = parameters[i].ParameterType;
+                        if (parameterType == typeof(HttpClient))
+                        {
+                            var factory = p.GetRequiredService<IHttpClientFactory>();
+                            arguments[i] = factory.CreateClient(settings.HttpClientName ?? "ciba");
+                            continue;
+                        }
+                        arguments[i] = p.GetRequiredService(parameterType);
+                    }
+
+                    return constructor.Invoke(arguments) as IBackchannelAuthenticationUserNotificationService;
+                })
+                .AddTransient<IBackchannelAuthenticationUserValidator, BackchannelAuthenticationUserValidator>()
+                .AddTransient<OAuthDelegatingHandler<BackchannelAuthenticationUserNotificationServiceOptions>>()
+                .AddHttpClient(configuration.GetValue<string>("HttpClientName") ?? "ciba")
+                .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>())
+                .AddHttpMessageHandler<OAuthDelegatingHandler<BackchannelAuthenticationUserNotificationServiceOptions>>();
+
+            return services;
+        }
+
+        private static Type GetBackchannelAuthenticationUserNotificationServiceType(BackchannelAuthenticationUserNotificationServiceOptions settings)
+        {
+            if (!string.IsNullOrEmpty(settings.AssemblyPath))
+            {
+#pragma warning disable S3885 // "Assembly.Load" should be used
+                var assembly = Assembly.LoadFrom(settings.AssemblyPath);
+#pragma warning restore S3885 // "Assembly.Load" should be used
+                return assembly.GetType(settings.ServiceType, true);
+            }
+            
+            return Type.GetType(settings.ServiceType, true);
+        }
+#endif
     }
 }

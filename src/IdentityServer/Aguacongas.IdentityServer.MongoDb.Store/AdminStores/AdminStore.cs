@@ -2,7 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using AutoMapper.Internal;
+using Aguacongas.IdentityServer.Extensions;
 using Community.OData.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -115,7 +115,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
                 await session.CommitTransactionAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            _logger.LogInformation("Entity {EntityId} deleted", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} deleted", entity.Id);
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -132,7 +132,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
 
             await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            _logger.LogInformation("Entity {EntityId} created", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} created", entity.Id);
             return entity;
         }
 
@@ -166,7 +166,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
             }
 
             await _collection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id), storedEntity, cancellationToken: cancellationToken).ConfigureAwait(false);
-            _logger.LogInformation("Entity {EntityId} updated", entity.Id, entity);
+            _logger.LogInformation("Entity {EntityId} updated", entity.Id);
             return entity;
         }
 

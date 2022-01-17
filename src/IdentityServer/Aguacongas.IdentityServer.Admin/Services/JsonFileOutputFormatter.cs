@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }, ArrayPool<char>.Shared, mvcOptions)
+            }, ArrayPool<char>.Shared, mvcOptions, null)
         {
             SerializerSettings.Converters.Add(new MetadataJsonConverter(SerializerSettings));
             SupportedMediaTypes.Clear();

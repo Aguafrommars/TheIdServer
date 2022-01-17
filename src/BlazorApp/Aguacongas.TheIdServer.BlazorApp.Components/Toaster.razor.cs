@@ -11,10 +11,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override void OnInitialized()
         {
-            _notifier.Show = async notification =>
+            _notifier.Show = notification =>
             {
                 _notifications.Add(notification);
-                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+                return InvokeAsync(StateHasChanged);
             };
         }
 

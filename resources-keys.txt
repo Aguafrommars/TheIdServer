@@ -1,0 +1,488 @@
+(required)
+{0} <small>is requesting your permission</small>
+'{0}' cannot be added to a client with grant type '{1}'.
+{0} is not a valid uri.
+2fa has been disabled. You can reenable 2fa when you setup an authenticator app
+About
+Absolute
+absolute refresh token lifetime
+Access Denied
+access failed count
+access token lifetime
+access token type
+access type
+activation
+Add
+Add another service to log in.
+Add authenticator app
+allow access tokens via browser
+allow offline access
+allow plain text PKCE
+allow unsolicited logins
+always include user claims in id token
+always send claims
+An url cannot exceed 2000 char.
+api
+API Grants
+api id
+Apis
+app id
+app secret
+Application Access
+Associate your {0} account.
+Authentication in progress
+Authenticator app
+Authenticator code
+authority
+Authority is required.
+Authority must be a valid uir.
+authorization code lifetime
+authorization endpoint
+Authorization endpoint is required.
+Authorization endpoint must be a valid uri.
+back channel logout uri
+back channel logout uri required
+Below is the list of applications you have given access to and the names of the resources they have access to.
+Cancel
+Change email
+Change password
+Change your account settings
+Checking login state...
+claim type
+Claims
+claims
+claims mapping
+Claims mapping
+claims prefix
+claims transformations
+Claims transformations
+Click <a class="PostLogoutRedirectUri" href="{0}">here</a> to return to the <span>{1}</span> application.
+Client Application Access
+client id
+Client Id is required.
+client name
+client secret
+Client Secret is required.
+client uri
+Clients
+Close
+Code
+Completing login...
+Configure authenticator app
+Confirm email
+Confirm email change
+Confirm new password
+Confirm password
+Confirm your email
+Confirmation link to change email sent. Please check your email.
+consent
+Consent
+consent lifetime
+consents
+Consents
+consumer key
+Consumer Key is required.
+consumer secret
+Consumer Secret is required.
+cors
+Create a new account.
+create at
+Created:
+creation
+culture
+Cultures
+Current password
+data
+Data Protection
+decription
+Delete
+Delete data and close my account
+Delete Personal Data
+Deleted
+Deleting this data will permanently remove your account, and this cannot be recovered.
+description
+device flow request lifetime
+Disable 2FA
+disable telemetry
+Disable two-factor authentication (2FA)
+Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href="{0}">reset your authenticator keys.</a>
+display name
+Don't have access to your authenticator device? You can <a href="{0}">log in with a recovery code</a>.
+Download
+Download a two-factor authenticator app like Microsoft Authenticator for <a href="{0}">Windows Phone</a>, <a href="{1}">Android</a> and <a href="{2}">iOS</a> or Google Authenticator for <a href="{3}">Android</a> and <a href="{4}">iOS</a>.
+Download Your Data
+Editing the profile is not supported.
+Email
+email
+email confirmed
+emphasize
+enable local login
+enabled
+encryption certificate
+Enter your email.
+Entities created
+Entities updated
+Error
+Error changing email.
+Error changing user name.
+Error confirming your email.
+Error from external provider: {0}
+Error loading external login information during confirmation.
+Error loading external login information.
+Error when trying to revoke the key.
+expiration
+expire at
+Expires:
+export
+External Login
+External login tokens
+external logins
+External logins
+external logins tokens
+External provider restrictions
+field
+fields
+filter
+Forget this browser
+Forgot password confirmation
+Forgot your password?
+from claim type
+front channel logout uri
+front channel logout uri required
+Generate Recovery Codes
+Generate two-factor authentication (2FA) recovery codes
+Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href="{0}">reset your authenticator keys.</a>
+grant type
+grant types
+Grant types
+Grants
+Hello {0}!
+Hello, {0}!
+Home
+id
+id token lifetime
+Identities
+identity
+Identity Grants
+idp restrictions
+If you lose your device and don't have the recovery codes you will lose access to your account.
+If you reset your authenticator key your authenticator app will not work until you reconfigure it.
+Import
+include JWT id
+Incorrect password.
+Invalid authenticator code.
+Invalid file
+Invalid login request
+Invalid recovery code entered.
+issuer
+key
+Keys
+lifetime
+Loading...
+Local Login
+localized description
+localized display name
+lockout enabled
+lockout end
+Log in
+Log in using your {0} account
+Log out
+Login
+Login form
+logo uri
+Logout
+Logout form
+Manage Email
+Manage your account
+Manage your external logins
+map default outbound JWT claim types
+metadata address
+Metadata address is required.
+Metadata address must be a valid HTTPS url when 'required https metadata is true'.
+Metadata address must be a valid uri.
+name
+name id format
+New email
+New password
+No changes
+No, Do Not Allow
+Nothing here.
+Once complete, you may close this tab
+Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.
+One time only
+pairwise subject salt
+Password
+password
+Personal data
+Personal Information
+phone number
+Phone number
+phone number confirmed
+Please check your email to confirm your account.
+Please check your email to reset your password.
+Please confirm that the authorization request quotes the code: "{0}".
+Please confirm your account by <a href='{0}'>clicking here</a>.
+Please enter the code displayed on your device
+Please reset your password by <a href='{0}'>clicking here</a>.
+Policy
+policy uri
+post logout
+prefix
+Processing logout callback...
+Processing logout...
+Profile
+prompt
+properties
+Properties
+protocol type
+provider
+Providers
+Put these codes in a safe place.
+Re use
+reason
+Recovery Code
+Recovery code verification
+Recovery codes
+redirect
+redirect uri
+Reference tokens
+reference tokens
+refresh on issuer key not found
+refresh token expiration
+refresh token usage
+Refresh tokens
+refresh tokens
+Register
+Register confirmation
+Registered Logins
+Registration is not supported.
+Relying parties
+relying party
+Remember My Decision
+Remember My Login
+Remember this machine
+remenber consent
+remote sign-out path 
+remote sign-out path
+Remove
+require consent
+require https metadata
+require PKCE
+require secret
+required
+Reset authenticator app
+Reset authenticator key
+Reset Password
+Reset recovery codes
+resource
+Resources
+response mode
+response type
+retrieve user details
+Retype the "{0}" if you are sure to delete it.
+Retype the "{0}" if you are sure to revoke it.
+Revoke
+Revoke Access
+Revoked
+role
+roles
+Save
+save tokens
+Saved
+Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.
+scheme
+scope
+scopes
+Scopes
+Scopes must be unique.
+secrets
+Select a kind of provider...
+send app secret proof
+Send verification email
+Set password
+Set your password
+Setup authenticator app
+show all options
+show in discovery document
+signature algorithm
+signature digest
+signed-out callback path
+signed-out redirect uri
+Signing
+sign-out scheme 
+sign-out scheme
+sign-out wreply 
+skip unrecognized requests
+Sliding
+sliding refresh token lifetime
+Sorry, there was an error
+Sorry, there's nothing at this address.
+sso lifetime
+store claims
+Submit
+Success
+Supported cultures
+Terms of service
+terms of service uri
+Thank you for confirming your email change.
+The {0} must be at least {2} and at max {1} characters long.
+The api property key cannot exceed 250 chars.
+The api property key is required.
+The api property key must be unique.
+The api property value cannot exceed 2000 chars.
+The api property value is required.
+The back channel logout url cannot exceed 2000 char.
+The back channel logout url is required.
+The back logout url is not valid.
+The claim prefix cannot exceed 250 char.
+The claim type cannot exceed 2000 chars.
+The claim type cannot exceed 250 chars.
+The claim type is required.
+The claim type must be unique.
+The claim value cannot exceed 2000 chars.
+The claim value is required.
+The client property key cannot exceed 250 chars.
+The client property key is required.
+The client property key must be unique.
+The client property value cannot exceed 2000 chars.
+The client property value is required.
+The client should contain at least one grant type.
+The culture is required.
+The culture must be unique.
+The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.
+The description cannot exceed 200 chars.
+The description cannot exceed 2000 chars.
+The description canoot exceed 1000 char.
+The digest algorithm is required
+The display name cannot exceed 200 chars.
+The display name is required.
+The external login was added.
+The external login was not added. External logins can only be associated with one account.
+The external login was not removed.
+The external login was removed.
+The from claim tyoe is required.
+The from claim type is required.
+The from claim type must be unique.
+The front channel logout url cannot exceed 2000 char.
+The front channel logout url is not valid.
+The front channel logout url is required.
+The grant type cannot contains space.
+The grant type must be unique.
+The id is required.
+The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed).
+The identity claim type cannot exceed 2000 chars.
+The identity claim type is required.
+The identity claim type must be unique.
+The identity property key cannot exceed 250 chars.
+The identity property key is required.
+The identity property key must be unique.
+The identity property value cannot exceed 2000 chars.
+The identity property value is required.
+The identity should provide at least one claim.
+The key is required.
+The key must be unique.
+The kind of provider is required.
+The logo url cannot exceed 2000 char.
+The logo url is not valid.
+The name cannot exceed 200 char.
+The name cannot exceed 200 chars.
+The name identifier is required
+The name is required
+The name is required.
+The new password and confirmation password do not match.
+The password and confirmation password do not match.
+The policy url cannot exceed 2000 char.
+The policy url is not valid.
+The relying party is required.
+The role must be unique
+The role name is required
+The secret type is required.
+The secret value is required.
+The sheme is required.
+The subject salt cannot exceed 250 char.
+The terms of service url cannot exceed 2000 char.
+The terms of service url is not valid.
+The to claim tyoe is required.
+The to claim type is required.
+The to claim type must be an URI.
+The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second
+The token type is required
+The type of protocol cannot exceed 200 char.
+The type of protocol is required
+The type of user code cannot exceed 100 char.
+The url cannot exceed 2000 char.
+The url is not valid.
+There are no login schemes configured for this client.
+There was an error trying to log you in: '{0}'
+There was an error trying to log you out: '{0}'
+This action only disables 2FA.
+This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.
+to claim type
+To use an authenticator app go through the following steps:
+Token endpoint is required.
+Token endpoint must be a valid uri.
+token enpoint
+token type
+Tokens
+tokens
+two factor enabled
+Two-factor authentication
+Two-factor authentication (2FA)
+type
+Unable to load user with ID '{0}'.
+Uncheck the permissions you do not wish to grant.
+Unexpected error when trying to set phone number.
+update access token on refresh
+Update password
+uri
+Uri must be unique.
+urls
+Use another service to register.
+use PKCE
+use token lifetime
+User
+user
+User Code
+user enpoint
+User information endpoint is required.
+User information endpoint must be a valid uri.
+user name
+Username
+Users
+value
+Verification Code
+Verification code is invalid.
+Verification email sent. Please check your email.
+Verify
+Welcome
+Would you like to logout of {0}?
+wreply 
+wtrealm 
+Wtrealm is required.
+Yes
+Yes, Allow
+You are logged out.
+You are not authorize to import data.
+You are now being returned to the application.
+You are now logged out
+You are revoking the key currently in use. Be sure what you're doing.
+You can <a href="{0}">generate a new set of recovery codes</a>.
+You do not have a local username/password for this site. Add a local account so you can log in without an external login.
+You do not have access to that resource.
+You have 1 recovery code left.
+You have generated new recovery codes.
+You have no recovery codes left.
+You have not given access to any applications
+You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.
+You have successfully authorized the device
+You must <a href="{0}">generate a new set of recovery codes</a> before you can log in with a recovery code.
+You should <a href="{0}">generate a new set of recovery codes</a>
+Your account contains personal data that you have given us. This page allows you to download or delete that data.
+Your authenticator app has been verified.
+Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.
+Your email is unchanged.
+Your login is protected with an authenticator app. Enter your authenticator code below.
+Your password has been changed.
+Your password has been set.
+Your profile has been updated
+You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.

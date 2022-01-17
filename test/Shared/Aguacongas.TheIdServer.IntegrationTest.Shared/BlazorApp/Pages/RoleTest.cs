@@ -4,24 +4,25 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
+using Bunit;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using RichardSzalay.MockHttp;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
-    public class RoleTest : EntityPageTestBase
+    [Collection(BlazorAppCollection.Name)]
+    public class RoleTest : EntityPageTestBase<page>
     {
         public override string Entity => "role";
 
-        public RoleTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public RoleTest(TheIdServerFactory factory) : base(factory)
         {
         }
 
@@ -30,55 +31,42 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            WaitForContains(host, component, "filtered");
+                roleId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = roleId
-            }));
+            }).ConfigureAwait(false);
 
-            var markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
         public async Task SaveClick_should_create_role()
         {
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                null,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                null);
 
-            WaitForLoaded(host, component);
-
-            var input = WaitForNode(host, component, "#name");
+            var input = WaitForNode(component, "#name");
 
             var roleName = GenerateId();
 
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(roleName));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = roleName
+            }).ConfigureAwait(false);
             
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -93,24 +81,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                roleId);
 
-            WaitForLoaded(host, component);
+            var input = WaitForNode(component, "#delete-entity input");
 
-            var input = WaitForNode(host, component, "#delete-entity input");
-
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(roleId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = roleId
+            }).ConfigureAwait(false);
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
-
-            WaitForDeletedToast(host, component);
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -124,44 +108,43 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                roleId);
 
-            WaitForLoaded(host, component);
+            var addButton = WaitForNode(component, "#claims button");
 
-            var addButton = WaitForNode(host, component, "#claims button");
-
-            await host.WaitForNextRenderAsync(() => addButton.ClickAsync());
+            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var rows = component.FindAll("#claims tr");
 
             Assert.NotNull(rows);
 
             var lastRow = rows.Last();
-            var inputList = lastRow.Descendants("input");
+            var inputList = lastRow.QuerySelectorAll("input");
 
             Assert.NotEmpty(inputList);
 
             var expected = GenerateId();
-            await host.WaitForNextRenderAsync(() => inputList.First().ChangeAsync(expected));
+            await inputList.First().ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
             rows = component.FindAll("#claims tr");
             lastRow = rows.Last();
-            inputList = lastRow.Descendants("input");
+            inputList = lastRow.QuerySelectorAll("input");
 
-            await host.WaitForNextRenderAsync(() => inputList.Last().ChangeAsync(expected));
+            await inputList.Last().ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -177,33 +160,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                roleId);
 
-            WaitForLoaded(host, component);
+            component.WaitForState(() => component.Markup.Contains("filtered"));
 
-            var rows = WaitForAllNodes(host, component, "#claims tr");
+            var rows = WaitForAllNodes(component, "#claims tr");
 
             var lastRow = rows.Last();
-            var inputList = lastRow.Descendants("input");
+            var inputList = lastRow.QuerySelectorAll("input");
 
             Assert.NotEmpty(inputList);
 
             var expected = GenerateId();
 
-            await host.WaitForNextRenderAsync(() => inputList.Last().ChangeAsync(expected));
+            await inputList.Last().ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -218,26 +199,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string roleId = await CreateRole();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                roleId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
+                roleId);
 
-            WaitForLoaded(host, component);
+            var button = WaitForNode(component, "#claims tr button");
 
-            var button = WaitForNode(host, component, "#claims tr button");
-
-            await host.WaitForNextRenderAsync(() => button.ClickAsync());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {

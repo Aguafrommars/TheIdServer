@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @inherits AutoCompleteModel<CultureInfo>
 
-<div id="@Id" class="input-group" data-toggle="dropdown">
+<div id="@Id" class="input-group" data-bs-toggle="dropdown">
     <input type="text" @key="@Entity" class="form-control @FieldClass" placeholder="@Localizer["culture"]" value="@CurrentValue"
             @oninput="OnInputChanged" @onfocus="Filter" />
 </div>

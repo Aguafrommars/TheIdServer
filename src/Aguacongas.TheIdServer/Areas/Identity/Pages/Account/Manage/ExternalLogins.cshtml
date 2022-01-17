@@ -27,7 +27,7 @@ Copyright (c) 2021 @Olivier Lefebvre
                                 <div>
                                     <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
                                     <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
-                                    <button type="submit" class="btn btn-default" title="@Localizer["Remove this {0} login from your account", login.ProviderDisplayName]">@Localizer["Remove"]</button>
+                                    <button type="submit" class="btn btn-secondary" title="@Localizer["Remove this {0} login from your account", login.ProviderDisplayName]">@Localizer["Remove"]</button>
                                 </div>
                             </form>
                         }
@@ -50,7 +50,7 @@ Copyright (c) 2021 @Olivier Lefebvre
             <p>
                 @foreach (var provider in Model.OtherLogins)
                 {
-                    <button id="link-login-button" type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="@Localizer["Log in using your {0} account", provider.DisplayName]">@provider.DisplayName</button>
+                    <button id="link-login-button" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@Localizer["Log in using your {0} account", provider.DisplayName]">@provider.DisplayName</button>
                 }
             </p>
         </div>

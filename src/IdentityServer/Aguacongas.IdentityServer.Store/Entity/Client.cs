@@ -362,6 +362,17 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public string RelyingPartyId { get; set; }
 
         /// <summary>
+        /// Gets or sets the backchannel authentication request lifetime in seconds.
+        /// </summary>
+        public int? CibaLifetime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the backchannel polling interval in seconds.
+        /// </summary>
+        public int? PollingInterval { get; set; }
+
+
+        /// <summary>
         /// Gets or sets the relying.
         /// </summary>
         /// <value>

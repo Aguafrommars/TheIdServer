@@ -2,13 +2,9 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {

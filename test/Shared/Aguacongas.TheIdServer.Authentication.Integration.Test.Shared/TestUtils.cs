@@ -19,34 +19,31 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                     Action<IServiceCollection> configureServices = null,
                     IEnumerable<KeyValuePair<string, string>> configurationOverrides = null)
         {
-            Startup startup = null;
             var webHostBuilder = new WebHostBuilder()
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                     .ReadFrom.Configuration(hostingContext.Configuration))
-                .ConfigureAppConfiguration(builder =>
-                {
-#if DUENDE
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
-                    builder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    if (configurationOverrides != null)
-                    {
-                        builder.AddInMemoryCollection(configurationOverrides);
-                    }
-                })
                 .ConfigureServices((context, services) =>
                 {
-                    startup = new Startup(context.Configuration, context.HostingEnvironment);
+                    var configurationManager = new ConfigurationManager();
+#if DUENDE
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
+#else
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
+#endif
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                    if (configurationManager != null)
+                    {
+                        configurationManager.AddInMemoryCollection(configurationOverrides);
+                    }
+
                     configureServices?.Invoke(services);
-                    startup.ConfigureServices(services);
+                    services.AddTheIdServer(configurationManager);
                     services.AddSingleton<TestUserService>()
-                        .AddMvc().AddApplicationPart(startup.GetType().Assembly);
+                        .AddMvc().AddApplicationPart(typeof(Config).Assembly);
                     configureServices?.Invoke(services);
                 })
-                .Configure(builder =>
+                .Configure((context, builder) =>
                 {
                     builder.Use(async (context, next) =>
                     {
@@ -54,7 +51,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                         context.User = testService.User;
                         await next();
                     });
-                    startup.Configure(builder);
+                    builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
 
             var testServer = new TestServer(webHostBuilder);

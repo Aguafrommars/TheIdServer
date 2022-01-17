@@ -117,7 +117,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 catch(Exception e)
                 {
                     // Failed to connect, trying again in 5000 ms.
-                    _logger.LogError(e, e.Message);
+                    _logger.LogError(e, "{Message}", e.Message);
                     await Task.Delay(5000, cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -160,6 +160,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public async ValueTask DisposeAsync()
         {
             await DisposeAsync(disposing: true).ConfigureAwait(false);
+            GC.SuppressFinalize(this);
         }
     }
 }

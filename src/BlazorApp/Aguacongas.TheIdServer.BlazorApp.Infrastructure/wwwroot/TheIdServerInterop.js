@@ -23,15 +23,14 @@
 window.browserInteropt = {
     scrollTo: (id, offset) => {
         const element = document.getElementById(id);
-        const y = element.getBoundingClientRect().top + window.pageYOffset;
+        const y = element.getBoundingClientRect().top + window.scrollY;
         offset = offset || 0;
         window.scrollTo({ top: y + offset, behavior: 'smooth' });
     },
     preventEnterKeyPress: (id, dotnetHelper) => {
         const element = document.getElementById(id);
-        element.onkeypress = e => {
-            var key = e.charCode || e.keyCode || 0;
-            if (key === 13) {
+        element.onkeydown = e => {
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 dotnetHelper.invokeMethodAsync('EnterKeyPressed', id)
                     .then(_ => { /* invoke it */ });

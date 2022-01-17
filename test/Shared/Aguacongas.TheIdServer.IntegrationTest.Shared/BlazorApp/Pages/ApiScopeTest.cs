@@ -3,24 +3,24 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
+using Bunit;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Testing;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using RichardSzalay.MockHttp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
-    public class ApiScopeTest : EntityPageTestBase
+    [Collection(BlazorAppCollection.Name)]
+    public class ApiScopeTest : EntityPageTestBase<page>
     {
         public override string Entity => "apiscope";
-        public ApiScopeTest(ApiFixture fixture, ITestOutputHelper testOutputHelper):base(fixture, testOutputHelper)
+        public ApiScopeTest(TheIdServerFactory factory):base(factory)
         {
         }
 
@@ -29,20 +29,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiScopeId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiScopeId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                apiScopeId);
 
             var addButton = component.Find("#btnAddDisplayName");
 
             Assert.NotNull(addButton);
 
-            await host.WaitForNextRenderAsync(() => addButton.ClickAsync());
+            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -50,18 +45,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en" }));
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en" }).ConfigureAwait(false);
 
-            var dropDownItem = WaitForNode(host, component, "button.dropdown-item");
+            var dropDownItem = component.Find("button.dropdown-item");
             Assert.NotNull(dropDownItem);
 
-            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var addDescriptionButton = component.Find("#btnAddDescription");
 
             Assert.NotNull(addButton);
 
-            await host.WaitForNextRenderAsync(() => addDescriptionButton.ClickAsync());
+            await addDescriptionButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -69,13 +64,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }));
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
 
             var items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -83,21 +78,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            await host.WaitForNextRenderAsync(() => cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }));
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
 
             items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            await host.WaitForNextRenderAsync(() => dropDownItem.ClickAsync());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
         }
 
 
@@ -106,29 +99,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string apiScopeId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                apiScopeId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
-
-            WaitForContains(host, component, "filtered");
+                apiScopeId);
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
             Assert.NotNull(filterInput);
 
-            await host.WaitForNextRenderAsync(() => filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = apiScopeId
-            }));
+            }).ConfigureAwait(false);
 
-            string markup = component.GetMarkup();
-
-            Assert.DoesNotContain("filtered", markup);
+            Assert.DoesNotContain("filtered", component.Markup);
         }
 
         [Fact]
@@ -136,33 +120,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             string identityId = await CreateEntity();
 
-            CreateTestHost("Alice Smith",
+            var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler mockHttp);
-
-            WaitForLoaded(host, component);
+                identityId);
 
             var input = component.Find("#displayName");
 
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(expected));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = expected
+            }).ConfigureAwait(false);
 
-            var markup = component.GetMarkup();
-
-            Assert.Contains(expected, markup);
+            Assert.Contains(expected, component.Markup);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await host.WaitForNextRenderAsync(() => form.SubmitAsync());
-
-            WaitForSavedToast(host, component);
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {

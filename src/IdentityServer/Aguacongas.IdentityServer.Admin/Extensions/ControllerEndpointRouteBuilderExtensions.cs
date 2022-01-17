@@ -2,6 +2,7 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin;
 using Microsoft.AspNetCore.Routing;
+using System.Linq;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -18,9 +19,9 @@ namespace Microsoft.AspNetCore.Builder
         public static IEndpointRouteBuilder MapAdminApiControllers(this IEndpointRouteBuilder endpoints)
         {
             var entyTypeList = Utils.GetEntityTypeList();
-            foreach(var entityType in entyTypeList)
+            foreach(var name in entyTypeList.Select(e => e.Name))
             {
-                endpoints.MapControllerRoute(entityType.Name, $"{entityType.Name}");
+                endpoints.MapControllerRoute(name, $"{name}");
             }
             endpoints.MapControllerRoute("IdentityProvider", "IdentityProvider");
             return endpoints;
