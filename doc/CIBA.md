@@ -76,7 +76,7 @@ The DI will try to load the assembly and create an object with the first constru
 ## Sample
 
 * Configure an application *ciba* with *Ciba* grant type in your server.  
-![ciba client](assets/ciba-client.jpeg)  
+![ciba client](assets/Ciba-client.jpeg)  
 * Update the alice user Email with your Email.
 ![alice email](assets/alice-email.jpeg)    
 * Launch the sample [CIBA application sample](../sample/Aguacongas.TheIdServer.CibaSample).  
