@@ -3,18 +3,17 @@
 <AuthorizeView Policy="Is4-Writer">
     <Authorized>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#revoke-entity-@Key.Id">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#revoke-entity-@Key.Id">
             <span class="oi oi-trash"></span>
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="revoke-entity-@Key.Id" tabindex="-1" role="dialog" aria-labelledby="revoke-modal-header" aria-hidden="true" data-backdrop="false">
+        <div class="modal fade" id="revoke-entity-@Key.Id" tabindex="-1" role="dialog" aria-labelledby="revoke-modal-header" aria-hidden="true" data-bs-backdrop="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title">@Localizer["Revoke"]</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="@Localizer["Close"]">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="@Localizer["Close"]">
                         </button>
                     </div>
                     <div class="modal-body">

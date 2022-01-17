@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>WS-Federation controller base classes.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -17,12 +17,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Validation\**" />
+	  <EmbeddedResource Remove="Validation\**" />
+	  <None Remove="Validation\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.12.2" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.15.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,8 +37,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Validation\" />
 	</ItemGroup>
 </Project>

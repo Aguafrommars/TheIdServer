@@ -1,6 +1,7 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Test;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,13 +19,11 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
-        private readonly ITestOutputHelper _testOutputHelper;
 
         public UserStoreTest(ITestOutputHelper testOutputHelper, TheIdServerTestFixture fixture)
         {
             _fixture = fixture;
             fixture.TestOutputHelper = testOutputHelper;
-            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -55,12 +54,14 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                 });
         }
 
@@ -75,12 +76,14 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
             services.AddAdminHttpStores(p =>
             {
                 return Task.FromResult(httpClient);
-            }).AddLogging(options => options.AddProvider(_fixture.LoggerProvider));
+            });
+
             _fixture.Sut.Services.GetRequiredService<TestUserService>().SetTestUser(true,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.WRITER),
-                    new Claim("role", SharedConstants.READER)
+                    new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                    new Claim(JwtClaimTypes.Role, SharedConstants.READERPOLICY),
+                    new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                 });
         }
 

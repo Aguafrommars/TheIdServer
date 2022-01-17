@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Aguacongas.TheIdServer.MySql</RootNamespace>
         <Authors>Olivier Lefebvre</Authors>
         <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -16,29 +16,29 @@
         <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
-    <ItemGroup>
-      <None Remove="THIRD-PARTY-NOTICES" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-      <Content Include="THIRD-PARTY-NOTICES">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      </Content>
-    </ItemGroup>
+	<ItemGroup>
+		<None Remove="THIRD-PARTY-NOTICES" />
+	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.10" />
+		<AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+		<Content Include="THIRD-PARTY-NOTICES">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
-	
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="package-icon.png" Pack="true" PackagePath="" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 
 </Project>

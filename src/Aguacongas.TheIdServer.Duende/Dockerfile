@@ -1,33 +1,30 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj", "src/Aguacongas.TheIdServer.Duende/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.Admin.IS4/Aguacongas.IdentityServer.Admin.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.Admin.IS4/"]
-COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin/Aguacongas.IdentityServer.Admin.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Admin.Duende/Aguacongas.IdentityServer.Admin.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.Admin.Duende/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.KeysRotation.Duende/Aguacongas.IdentityServer.KeysRotation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.KeysRotation.Duende/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.KeysRotation/Aguacongas.IdentityServer.KeysRotation.csproj", "src/IdentityServer/Aguacongas.IdentityServer.KeysRotation/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin/Aguacongas.IdentityServer.Admin.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer/Aguacongas.IdentityServer.csproj", "src/IdentityServer/Aguacongas.IdentityServer/"]
 COPY ["src/Aguacongas.TheIdServer.Authentication/Aguacongas.TheIdServer.Authentication.csproj", "src/Aguacongas.TheIdServer.Authentication/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.Store/Aguacongas.IdentityServer.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Store/"]
 COPY ["src/Aguacongas.TheIdServer.Identity/Aguacongas.TheIdServer.Identity.csproj", "src/Aguacongas.TheIdServer.Identity/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.KeysRotation.IS4/Aguacongas.IdentityServer.KeysRotation.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.KeysRotation.IS4/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.IS4/Aguacongas.IdentityServer.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.IS4/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.MongoDb.Store.IS4/Aguacongas.IdentityServer.MongoDb.Store.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.MongoDb.Store.IS4/"]
-COPY ["src/IdentityServer/Aguacongas.IdentityServer.MongoDb.Store/Aguacongas.IdentityServer.MongoDb.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.MongoDb.Store/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.RavenDb.Store.IS4/Aguacongas.IdentityServer.RavenDb.Store.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.RavenDb.Store.IS4/"]
-COPY ["src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/Aguacongas.IdentityServer.RavenDb.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Duende/Aguacongas.IdentityServer.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.Duende/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.EntityFramework.Store.Duende/Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.EntityFramework.Store.Duende/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/Aguacongas.IdentityServer.EntityFramework.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/"]
 COPY ["src/Aguacongas.TheIdServer/Aguacongas.TheIdServer.csproj", "src/Aguacongas.TheIdServer/"]
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Sqlite/Aguacongas.TheIdServer.Migrations.Sqlite.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Sqlite/"]
-COPY ["src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/Aguacongas.IdentityServer.EntityFramework.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.Http.Store/Aguacongas.IdentityServer.Http.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Http.Store/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.Admin.Http.Store/Aguacongas.IdentityServer.Admin.Http.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.Admin.Http.Store/"]
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.SqlServer/Aguacongas.TheIdServer.Migrations.SqlServer.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.SqlServer/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.MongoDb.Store/Aguacongas.IdentityServer.MongoDb.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.MongoDb.Store/"]
 COPY ["src/IdentityServer/Aguacongas.IdentityServer.WsFederation/Aguacongas.IdentityServer.WsFederation.csproj", "src/IdentityServer/Aguacongas.IdentityServer.WsFederation/"]
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj", "src/Aguacongas.TheIdServer.BlazorApp/"]
 COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope/Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.csproj", "src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope/"]
@@ -56,8 +53,13 @@ COPY ["src/BlazorApp/Aguacongas.TheIdServer.BlazorApp.Pages.Users/Aguacongas.The
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Oracle/Aguacongas.TheIdServer.Migrations.Oracle.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.Oracle/"]
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/Aguacongas.TheIdServer.Migrations.MySql.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/"]
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/"]
-COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/Aguacongas.IdentityServer.WsFederation.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/"]
+COPY ["src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/Aguacongas.IdentityServer.RavenDb.Store.csproj", "src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/"]
+COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
+RUN apt-get update -y
+RUN apt-get install -y python3
+RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.Duende"

@@ -19,7 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
 
         protected override bool NonEditable => false;
 
-        protected override string BackUrl => "providers";
+        protected override string BackUrl => "externalproviders";
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {

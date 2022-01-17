@@ -88,7 +88,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Task.Delay exception: {e.Message}. Exiting.");
+                    _logger.LogError(e, "Task.Delay exception: {Message}. Exiting.", e.Message);
                     break;
                 }
 
@@ -120,6 +120,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var referenceTokenStore = service.GetRequiredService<IAdminStore<ReferenceToken>>();
                 var referenceTokenResponse = await referenceTokenStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
                 await RemoveExpiredTokensAsync(referenceTokenStore, referenceTokenResponse.Items, cancellationToken).ConfigureAwait(false);
+
+                var deviveCodeStore = service.GetRequiredService<IAdminStore<DeviceCode>>();
+                var deviveCodeStoreResponse = await deviveCodeStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(deviveCodeStore, deviveCodeStoreResponse.Items, cancellationToken).ConfigureAwait(false);
+
+                var backChannelAuthenticationRequestStore = service.GetRequiredService<IAdminStore<BackChannelAuthenticationRequest>>();
+                var backChannelAuthenticationRequestResponse = await backChannelAuthenticationRequestStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(backChannelAuthenticationRequestStore, backChannelAuthenticationRequestResponse.Items, cancellationToken).ConfigureAwait(false);
             }
             catch (TaskCanceledException)
             {
@@ -127,12 +135,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception removing expired grants: {e.Message}");
-
+                _logger.LogError(e, "Exception removing expired grants: {Message}", e.Message);
             }
         }
 
-        private static async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IGrant> items, CancellationToken cancellationToken)
+        private static async Task RemoveExpiredTokensAsync(IAdminStore store, IEnumerable<IAuditable> items, CancellationToken cancellationToken)
         {
             foreach (var token in items)
             {

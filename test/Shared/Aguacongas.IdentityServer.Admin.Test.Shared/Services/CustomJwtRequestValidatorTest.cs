@@ -78,8 +78,15 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var jwtString = "eyJhbGciOiJub25lIn0.eyJzY29wZSI6Im9wZW5pZCIsInJlc3BvbnNlX3R5cGUiOiJjb2RlIiwicmVkaXJlY3RfdXJpIjoiaHR0cHM6XC9cL3d3dy5jZXJ0aWZpY2F0aW9uLm9wZW5pZC5uZXRcL3Rlc3RcL2FcL3RoZWlkc2VydmVyXC9jYWxsYmFjayIsInN0YXRlIjoiRXBTcFc3clVmciIsIm5vbmNlIjoiaU5Ia3gyT3ltOSIsImNsaWVudF9pZCI6ImVjZjk1Y2Q3LWI4NDQtNGNkZS05OWE4LTc2N2EyNDNmOTZjYiJ9.";
 
+#if DUENDE
+            var result = await sut.ValidateAsync(new JwtRequestValidationContext
+            {
+                Client = client,
+                JwtTokenString = jwtString,
+            });
+#else
             var result = await sut.ValidateAsync(client, jwtString);
-
+#endif
             Assert.True(result.IsError);
 
             tokenValidationParameters.ValidateIssuerSigningKey = tokenValidationParameters.ValidateIssuer
@@ -90,13 +97,29 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 = tokenValidationParameters.RequireExpirationTime
                 = false;
 
+#if DUENDE
+            result = await sut.ValidateAsync(new JwtRequestValidationContext
+            {
+                Client = client,
+                JwtTokenString = jwtString,
+            });
+#else
             result = await sut.ValidateAsync(client, jwtString);
+#endif
 
             Assert.False(result.IsError);
 
             options.StrictJarValidation = true;
 
+#if DUENDE
+            result = await sut.ValidateAsync(new JwtRequestValidationContext
+            {
+                Client = client,
+                JwtTokenString = jwtString,
+            });
+#else
             result = await sut.ValidateAsync(client, jwtString);
+#endif
 
             Assert.True(result.IsError);
         }

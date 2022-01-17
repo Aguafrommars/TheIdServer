@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
@@ -13,8 +15,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -345,6 +346,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(250)
                         .HasColumnType("TEXT");
@@ -405,6 +409,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
                     b.Property<string>("PolicyUri")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
@@ -725,7 +732,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 38, 537, DateTimeKind.Utc).AddTicks(8840)
+                            CreatedAt = new DateTime(2022, 1, 15, 10, 11, 22, 359, DateTimeKind.Utc).AddTicks(3759)
                         });
                 });
 
@@ -1314,9 +1321,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
                 {
-                    b.Navigation("Apis");
-
                     b.Navigation("ApiScopeClaims");
+
+                    b.Navigation("Apis");
 
                     b.Navigation("Properties");
 

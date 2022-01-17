@@ -1,26 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<UserSecretsId>51a7f0be-96e4-42d5-ad09-37e9adabfff6</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\..</DockerfileContext>
+		<DockerfileContext>..\..</DockerfileContext>		
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="Localization-fr.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\IdentityHostingStartup.cs" Link="Areas\Identity\IdentityHostingStartup.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml.cs" />
-		<Compile Include="..\Aguacongas.TheIdServer.Shared\Boot.cs" Link="Boot.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Config.cs" Link="Config.cs" />
+		<Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\ApplicationBuilderExtensions.cs" Link="Extensions\ApplicationBuilderExtensions.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\IdentityServerBuilderExtensions.cs" Link="Extensions\IdentityServerBuilderExtensions.cs" />
+		<Compile Include="..\Aguacongas.TheIdServer.Shared\Extensions\ServiceCollectionExtensions.cs" Link="Extensions\ServiceCollectionExtensions.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Program.cs" Link="Program.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\AccountController.cs" Link="Quickstart\Account\AccountController.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Account\AccountOptions.cs" Link="Quickstart\Account\AccountOptions.cs" />
@@ -49,7 +57,6 @@
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\Home\HomeController.cs" Link="Quickstart\Home\HomeController.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\Quickstart\SecurityHeadersAttribute.cs" Link="Quickstart\SecurityHeadersAttribute.cs" />
 		<Compile Include="..\Aguacongas.TheIdServer.Shared\SeedData.cs" Link="SeedData.cs" />
-		<Compile Include="..\Aguacongas.TheIdServer.Shared\Startup.cs" Link="Startup.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,11 +68,14 @@
 	<ItemGroup>
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\LoginWith2fa.cshtml" Link="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewImports.cshtml" Link="Areas\Identity\Pages\_ViewImports.cshtml" />
-		<None Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml" />
+		<Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\Account\Manage\Grants.cshtml" Link="Areas\Identity\Pages\Account\Manage\Grants.cshtml" />
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewStart.cshtml" Link="Areas\Identity\Pages\_ViewStart.cshtml" />
 		<None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
 		<None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
 		<None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
+		<None Include="Localization-fr.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\AccessDenied.cshtml" Link="Views\Account\AccessDenied.cshtml" />
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\LoggedOut.cshtml" Link="Views\Account\LoggedOut.cshtml" />
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Views\Account\Login.cshtml" Link="Views\Account\Login.cshtml" />
@@ -86,13 +96,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Areas\Identity\Pages\Account\Manage\" />
 		<Folder Include="Extensions\" />
-		<Folder Include="Quickstart\Account\" />
 		<Folder Include="Quickstart\Consent\" />
 		<Folder Include="Quickstart\Device\" />
 		<Folder Include="Quickstart\Diagnostics\" />
@@ -104,6 +108,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Admin.Duende\Aguacongas.IdentityServer.Admin.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj" />

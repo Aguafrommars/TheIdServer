@@ -2,10 +2,10 @@
 // Copyright (c) 2021 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp;
+using Bunit;
+using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using RichardSzalay.MockHttp;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,15 +16,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
 {
     [Collection("api collection")]
 
-    public class MainLayoutTest : IDisposable
+    public class MainLayoutTest : TestContext
     {
         private readonly ApiFixture _fixture;
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public MainLayoutTest(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+     
+        public MainLayoutTest(ApiFixture fixture)
         {
             _fixture = fixture;
-            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -33,22 +31,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             TestUtils.CreateTestHost(
                 "test",
                 Array.Empty<Claim>(),
-                "http://exemple.com/clients",
                 _fixture.Sut,
-                _testOutputHelper,
-                out TestHost host,
-                out MockHttpMessageHandler mockHttp);
-            var serviceProvider = host.ServiceProvider;
-            
-            var provider = serviceProvider.GetRequiredService<AuthenticationStateProvider>();
+                this,
+                out IRenderedComponent<App> component);
+
+            var provider = Services.GetRequiredService<AuthenticationStateProvider>();
             var state = await provider.GetAuthenticationStateAsync();
             var idendity = state.User.Identity as TestUtils.FakeIdendity;
             idendity.SetIsAuthenticated(false);
 
-            var component = host.AddComponent<App>();
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
+            navigationManager.NavigateTo("clients");
 
-            var markup = component.GetMarkup();
-            Assert.DoesNotContain("Clients.", markup);
+            Assert.DoesNotContain("Clients.", component.Markup);
         }
 
         [Fact]
@@ -57,70 +52,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Shared
             TestUtils.CreateTestHost(
                 "test",
                 Array.Empty<Claim>(),
-                "http://exemple.com/clients",
                 _fixture.Sut,
-                _testOutputHelper,
-                out TestHost host,
-                out MockHttpMessageHandler _);
+                this,
+                out IRenderedComponent<App> component);
 
-            var component = host.AddComponent<App>();
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
+            navigationManager.NavigateTo("clients");
 
-            var markup = component.GetMarkup();
-            Assert.Contains("Your are not authorized to view this page.", markup);
+            Assert.Contains("Your are not authorized to view this page.", component.Markup);
         }
 
         [Fact]
         public void WhenAuthorized_should_display_welcome_message()
         {
             var expected = "Bob Smith";
-            var component = CreateComponent(expected);
-
-            var markup = component.GetMarkup();
-            Assert.Contains(expected, markup);
-        }
-
-        private RenderedComponent<App> CreateComponent(string userName)
-        {
-            TestUtils.CreateTestHost(userName,
+            TestUtils.CreateTestHost(
+                expected,
                 new Claim[]
                 {
-                    new Claim("role", SharedConstants.READER)
+                    new Claim("role", SharedConstants.READERPOLICY)
                 },
-                $"http://exemple.com/clients",
                 _fixture.Sut,
-                _fixture.TestOutputHelper,
-                out TestHost host,
-                out RenderedComponent<App> component,
-                out MockHttpMessageHandler _);
-            _host = host;
+                this,
+                out IRenderedComponent<App> component);
 
-            return component;
+            Assert.Contains(expected, component.Markup);
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-        private TestHost _host;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _host?.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

@@ -70,7 +70,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
                 case KeyKinds.Development:
                     var developmentKeyPath = Path.Combine(Directory.GetCurrentDirectory(), key.FilePath ?? DefaultTempKeyRelativePath);
                     var createIfMissing = key.Persisted ?? true;
-                    _logger.LogInformation($"Loading development key at '{developmentKeyPath}'.");
+                    _logger.LogInformation("Loading development key at '{DevelopmentKeyPath}'.", developmentKeyPath);
                     var developmentKey = new RsaSecurityKey(SigningKeysLoader.LoadDevelopment(developmentKeyPath, createIfMissing))
                     {
                         KeyId = "Development"
@@ -79,14 +79,14 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
                 case KeyKinds.File:
                     var pfxPath = Path.Combine(Directory.GetCurrentDirectory(), key.FilePath);
                     var storageFlags = GetStorageFlags(key);
-                    _logger.LogInformation($"Loading certificate file at '{pfxPath}' with storage flags '{key.StorageFlags}'.");
+                    _logger.LogInformation("Loading certificate file at '{PfxPath}' with storage flags '{KeyStorageFlags}'.", pfxPath, key.StorageFlags);
                     return new SigningCredentials(new X509SecurityKey(SigningKeysLoader.LoadFromFile(pfxPath, key.Password, storageFlags)), "RS256");
                 case KeyKinds.Store:
                     if (!key.StoreLocation.HasValue)
                     {
                         throw new InvalidOperationException($"Invalid certificate store location '{key.StoreLocation}'.");
                     }
-                    _logger.LogInformation($"Loading certificate with subject '{key.Name}' in '{key.StoreLocation}\\{key.StoreName}'.");
+                    _logger.LogInformation("Loading certificate with subject '{KeyName}' in '{KeyStoreLocation}\\{KeyStoreName}'.", key.Name, key.StoreLocation, key.StoreName);
                     return new SigningCredentials(new X509SecurityKey(SigningKeysLoader.LoadFromStoreCert(key.Name, key.StoreName, key.StoreLocation.Value, GetCurrentTime())), "RS256");
                 case null:
                     throw new InvalidOperationException($"Key type not specified.");

@@ -37,19 +37,19 @@ Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft
 
 ### From dotnet new template
 
-The template [TheIdServer.Template](https://github.com/Aguafrommars/Templates) can be use to setup a TheIdServer solution.
+The template [TheIdServer.IS4.Template](https://github.com/Aguafrommars/Templates) can be use to setup a TheIdServer solution.
 
 #### Install
 
 ```bash
-dotnet new -i TheIdServer.Template
+dotnet new -i TheIdServer.IS4.Template
 ```
 
 #### Use
 
 ```bash
-> dotnet new tis -o TheIdServer
-The template "TheIdServer" was created successfully.
+> dotnet new tisis4 -o TheIdServer
+The template "TheIdServer.IS4" was created successfully.
 
 Processing post-creation actions...
 Running 'dotnet restore' on TheIdServer\TheIdServer.sln...
@@ -822,6 +822,27 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 > },
 > ```
 
+## Use the client to override the default configuration
+
+The server and the blazor app integrate [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration). Most of the configuration can be ovveriden using the blazor app.
+
+Use **DynamicConfigurationOptions** to define the dynamic configuration provider.
+
+```json
+"DynamicConfigurationOptions": {
+  "ProviderType": "Aguacongas.DynamicConfiguration.Redis.RedisConfigurationProvider, Aguacongas.DynamicConfiguration.Redis"
+}
+```
+Use **RedisConfigurationOptions** section to configure the Redis db.
+
+```json
+"RedisConfigurationOptions": {
+  "ConnectionString": "localhost",
+  "HashKey": "Aguacongas.TheIdServer.Duende",
+  "Channel": "Aguacongas.TheIdServer.Duende.Channel"
+}
+```
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
@@ -831,3 +852,4 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 * [Serilog.Settings.Configuration](https://github.com/serilog/serilog-settings-configuration/blob/dev/README.md)
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
+* [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration)

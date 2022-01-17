@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
@@ -15,9 +17,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -33,10 +36,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -57,10 +60,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -85,14 +88,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ResourceKind")
                         .HasColumnType("integer");
@@ -117,7 +120,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -125,7 +128,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .HasMaxLength(2000)
@@ -145,7 +148,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -163,7 +166,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Required")
                         .HasColumnType("boolean");
@@ -186,10 +189,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -214,14 +217,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ResourceKind")
                         .HasColumnType("integer");
@@ -246,7 +249,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -254,7 +257,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .HasMaxLength(2000)
@@ -278,17 +281,17 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -348,6 +351,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ClientClaimsPrefix")
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
@@ -364,7 +370,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -397,7 +403,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("boolean");
@@ -408,6 +414,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
                     b.Property<string>("PolicyUri")
                         .HasColumnType("text");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
@@ -468,10 +477,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -498,7 +507,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GrantType")
                         .IsRequired()
@@ -506,7 +515,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -526,10 +535,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Provider")
                         .IsRequired()
@@ -554,14 +563,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ResourceKind")
                         .HasColumnType("integer");
@@ -586,7 +595,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -594,7 +603,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .HasMaxLength(2000)
@@ -618,10 +627,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -646,17 +655,17 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -684,13 +693,13 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Kind")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SanetizedCorsUri")
                         .HasMaxLength(2000)
@@ -715,10 +724,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -728,7 +737,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2021, 5, 3, 16, 17, 25, 819, DateTimeKind.Utc).AddTicks(8476)
+                            CreatedAt = new DateTime(2022, 1, 15, 10, 11, 3, 458, DateTimeKind.Utc).AddTicks(8268)
                         });
                 });
 
@@ -741,14 +750,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FromClaimType")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Scheme")
                         .IsRequired()
@@ -773,7 +782,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnName("Scheme");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("text");
@@ -782,7 +791,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SerializedHandlerType")
                         .HasColumnType("text");
@@ -804,14 +813,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Type")
                         .HasMaxLength(250)
@@ -831,7 +840,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
@@ -842,7 +851,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ResourceKind")
                         .HasColumnType("integer");
@@ -863,7 +872,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
@@ -875,7 +884,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("character varying(250)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .HasMaxLength(2000)
@@ -895,7 +904,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -912,7 +921,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("boolean");
@@ -937,7 +946,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CultureId")
                         .IsRequired()
@@ -951,7 +960,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -969,7 +978,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -984,7 +993,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("boolean");
@@ -1000,7 +1009,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -1013,7 +1022,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("bytea");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SamlNameIdentifierFormat")
                         .HasColumnType("text");
@@ -1037,14 +1046,14 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FromClaimType")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RelyingPartyId")
                         .HasColumnType("text");
@@ -1317,9 +1326,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
                 {
-                    b.Navigation("Apis");
-
                     b.Navigation("ApiScopeClaims");
+
+                    b.Navigation("Apis");
 
                     b.Navigation("Properties");
 

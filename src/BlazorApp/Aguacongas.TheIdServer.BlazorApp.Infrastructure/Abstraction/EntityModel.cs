@@ -122,11 +122,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 }).ConfigureAwait(false);
                 return;
             }
-
-            Model = Model.Clone();
-
+            
             Id = GetModelId(Model);
             IsNew = false;
+            CreateEditContext(Model.Clone());
 
             var keys = changes.Keys
                 .OrderBy(k => k, this);
@@ -141,7 +140,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
                 await Notifier.NotifyAsync(new Models.Notification
                 {
-                    Header = GetModelId(Model),
+                    Header = Id,
                     Message = Localizer["Saved"]
                 }).ConfigureAwait(false);
 
@@ -162,7 +161,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 changes.Clear();
             }
 
-            EditContext.MarkAsUnmodified();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
@@ -317,7 +315,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         private async Task HandleMoficationList(Type entityType, Dictionary<object, ModificationKind> modificationList)
         {
-            Logger.LogDebug($"HandleMoficationList for type {entityType.Name}");
+            Logger.LogDebug("HandleMoficationList for type {EntityTypeName}", entityType.Name);
             var addList = GetModifiedEntities(modificationList, ModificationKind.Add);
             var taskList = new List<Task>(addList.Count());
             foreach (var entity in addList)

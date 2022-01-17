@@ -107,7 +107,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 var localizedString = new LocalizedString(name, string.Format(value ?? name, arguments), value == null);
                 if (localizedString.ResourceNotFound && CurrentCulture.Name != "en")
                 {
-                    Logger.LogWarning($"Localized value for key '{name}' not found for culture '{CurrentCulture.Name}'");
+                    Logger.LogWarning("Localized value for key '{Name}' not found for culture '{CurrentCultureName}'", name, CurrentCulture.Name);
                 }
                 return localizedString;
             }
@@ -151,7 +151,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
                 KeyValuePairs[resource.Key] = new LocalizedString(resource.Key, resource.Value ?? resource.Key, resource.Value == null);
             }
 
-            ResourceReady();
+            ResourceReady?.Invoke();
         }
 
         private void SetResource(string name, Task<LocalizedString> task)

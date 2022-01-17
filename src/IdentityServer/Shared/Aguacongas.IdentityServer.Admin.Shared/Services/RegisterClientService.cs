@@ -403,7 +403,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
-            if (!(httpContext.User?.IsInRole(SharedConstants.WRITER) ?? false))
+            if (!(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
             {
                 var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
                 if (allowedContact == null)
@@ -728,15 +728,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 return;
             }
 
-            foreach (var localizable in localizableProperties)
+            foreach (var value in localizableProperties.Select(l => l.Value))
             {
-                if (!Uri.TryCreate(localizable.Value, UriKind.Absolute, out var uri))
+                if (!Uri.TryCreate(value, UriKind.Absolute, out var uri))
                 {
-                    throw new RegistrationException(errorCode, $"{uriName} '{localizable.Value}' is not valid.");
+                    throw new RegistrationException(errorCode, $"{uriName} '{value}' is not valid.");
                 }
                 if (!redirectUriList.Any(u => u.Host == uri.Host))
                 {
-                    throw new RegistrationException(errorCode, $"{uriName} '{localizable.Value}' host doesn't match a redirect uri host.");
+                    throw new RegistrationException(errorCode, $"{uriName} '{value}' host doesn't match a redirect uri host.");
                 }
             }
         }

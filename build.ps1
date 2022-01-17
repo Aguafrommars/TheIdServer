@@ -23,7 +23,7 @@ dotnet sonarscanner begin /k:aguacongas_TheIdServer -o:aguacongas -d:sonar.host.
 
 Write-Host "dotnet test -c Release --settings coverletArgs.runsettings --filter FullyQualifiedName!~MongoDb"
 
-dotnet test -c Release --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings --filter "FullyQualifiedName!~MongoDb" -v q
+dotnet test -c Release --blame --blame-hang-timeout 5m --collect:"XPlat Code Coverage" --settings coverletArgs.runsettings --filter "FullyQualifiedName!~MongoDb" -v q
 
 if ($LASTEXITCODE -ne 0) {
 	$result = $LASTEXITCODE
@@ -37,7 +37,7 @@ Get-ChildItem -rec `
 	$merge = "$path;$merge"
 }
 Write-Host $merge
-ReportGenerator\tools\netcoreapp3.0\ReportGenerator.exe "-reports:$merge" "-targetdir:coverage" "-reporttypes:SonarQube"
+ReportGenerator\tools\net5.0\ReportGenerator.exe "-reports:$merge" "-targetdir:coverage" "-reporttypes:SonarQube"
 	
 dotnet sonarscanner end -d:sonar.login=$env:sonarqube
 

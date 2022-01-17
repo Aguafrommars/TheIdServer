@@ -481,6 +481,12 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                     b.Property<int?>("UserSsoLifetime")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Clients");

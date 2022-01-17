@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
@@ -14,6 +14,14 @@
 	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;EF1001</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;EF1001</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\DbContextOptionsBuilderExtensionsTest.cs" Link="DbContextOptionsBuilderExtensionsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\ExternalClaimsTransformerTest.cs" Link="ExternalClaimsTransformerTest.cs" />
@@ -22,8 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<PrivateAssets>all</PrivateAssets>
@@ -33,10 +42,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>

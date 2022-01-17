@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             Entity.Scope = inputValue;
         }
 
-        private class ScopeComparer : IEqualityComparer<Scope>
+        private sealed class ScopeComparer : IEqualityComparer<Scope>
         {
             public bool Equals(Scope x, Scope y)
             {

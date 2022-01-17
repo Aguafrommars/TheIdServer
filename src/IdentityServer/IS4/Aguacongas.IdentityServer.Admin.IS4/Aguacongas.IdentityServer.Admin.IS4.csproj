@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Expose OData controllers to manage TheIdServer for IdentityServer4.</Description>
 		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -13,6 +13,15 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>package-icon.png</PackageIcon>
+		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;AD0001</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;AD0001</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +32,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Models\ClientRegisteration.cs" Link="Models\ClientRegisteration.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\RegisterController.cs" Link="RegisterController.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ClientRegisterationConverter.cs" Link="Services\ClientRegisterationConverter.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CreatePersonalAccessTokenService.cs" Link="Services\CreatePersonalAccessTokenService.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CustomJwtRequestValidator.cs" Link="Services\CustomJwtRequestValidator.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\IRegisterClientService.cs" Link="Services\IRegisterClientService.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\PersistedGrantService.cs" Link="Services\PersistedGrantService.cs" />
@@ -46,7 +56,6 @@
 	<ItemGroup>
 		<Folder Include="Extensions\" />
 		<Folder Include="Models\" />
-		<Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>

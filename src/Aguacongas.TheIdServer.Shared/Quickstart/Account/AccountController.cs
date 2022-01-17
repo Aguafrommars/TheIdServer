@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
@@ -358,7 +359,13 @@ namespace Aguacongas.TheIdServer.UI
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
                 {
+#if DUENDE
+                    var provider = HttpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+                    var handler = await provider.GetHandlerAsync(HttpContext, idp); 
+                    var providerSupportsSignout = handler is IAuthenticationSignOutHandler;
+#else
                     var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp).ConfigureAwait(false);
+#endif
                     if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)

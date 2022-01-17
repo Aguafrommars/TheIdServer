@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
+namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
     [Migration("20200813140441_DynamicRegistration")]

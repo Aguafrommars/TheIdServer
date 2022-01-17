@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Admin.Models;
+using Aguacongas.IdentityServer.Models;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
@@ -40,8 +40,8 @@ namespace Aguacongas.IdentityServer.Admin
         [Description("Send an email using SendGrid")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-        [Authorize(Policy = SharedConstants.WRITER)]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task SendEmail([FromBody] Email email)
-             => _sender.SendEmailAsync(email);
+        => _sender.SendEmailAsync(email);
     }
 }

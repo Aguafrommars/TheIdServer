@@ -10,9 +10,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 {
     class TestUserService
     {
-        public ClaimsPrincipal User { get; set; }
+        public ClaimsPrincipal? User { get; set; }
 
-        public void SetTestUser(bool isAuthenticated = true, IEnumerable<Claim> claims = null)
+        public void SetTestUser(bool isAuthenticated = true, IEnumerable<Claim>? claims = null)
         {
             var identityMock = new Mock<IIdentity>();
             if (isAuthenticated)

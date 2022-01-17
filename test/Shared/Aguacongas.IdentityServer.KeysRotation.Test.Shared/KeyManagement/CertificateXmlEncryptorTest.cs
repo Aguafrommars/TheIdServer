@@ -17,7 +17,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         public void Constructor_should_throw_on_arguments_null()
         {
             Assert.Throws<ArgumentNullException>(() => new CertificateXmlEncryptor(null, null));
+#pragma warning disable SYSLIB0026 // Type or member is obsolete
             Assert.Throws<ArgumentNullException>(() => new CertificateXmlEncryptor(new X509Certificate2(), null));
+#pragma warning restore SYSLIB0026 // Type or member is obsolete
             Assert.Throws<ArgumentNullException>(() => new CertificateXmlEncryptor(null, null, null));
             Assert.Throws<ArgumentNullException>(() => new CertificateXmlEncryptor("test", null, null));
         }
@@ -25,7 +27,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void Encrypt_should_throw_on_argument_null()
         {
+#pragma warning disable SYSLIB0026 // Type or member is obsolete
             var sut = new CertificateXmlEncryptor(new X509Certificate2(), NullLoggerFactory.Instance);
+#pragma warning restore SYSLIB0026 // Type or member is obsolete
 
             Assert.Throws<ArgumentNullException>(() => sut.Encrypt(null));
         }

@@ -152,9 +152,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     await importer.RemoveEntitiesAsync(subEntityList, result).ConfigureAwait(false);
                 }
 
-                foreach (var entityList in subEntities)
+                foreach (var value in subEntities.Select(e => e.Value))
                 {
-                    var enumerator = entityList.Value.GetEnumerator();
+                    var enumerator = value.GetEnumerator();
                     if (!enumerator.MoveNext())
                     {
                         continue;
@@ -164,7 +164,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     var importerType = typeof(Importer<>).MakeGenericType(entityType);
                     var importer = Activator.CreateInstance(importerType, _provider) as Importer;
 
-                    await importer.AddOrUpdateSubEntitiesAsync(entityList.Value, result).ConfigureAwait(false);
+                    await importer.AddOrUpdateSubEntitiesAsync(value, result).ConfigureAwait(false);
                 }
             }
 

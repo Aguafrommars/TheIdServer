@@ -18,7 +18,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             ["hybrid"] = "Hybrid",
             ["implicit"] = "Implicit",
             ["password"] = "Resource owner password",
-            ["urn:ietf:params:oauth:grant-type:device_code"] = "Device flow"
+            ["urn:ietf:params:oauth:grant-type:device_code"] = "Device flow",
+            ["urn:openid:params:grant-type:ciba"] = "Ciba",
         };
 
         /// <summary>

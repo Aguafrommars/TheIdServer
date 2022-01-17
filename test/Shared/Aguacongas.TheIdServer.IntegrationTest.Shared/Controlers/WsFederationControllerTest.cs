@@ -50,7 +50,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var client = sut.CreateClient();
             using var response = await client.GetAsync("/wsfederation/metadata");
@@ -72,7 +72,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var client = sut.CreateClient();
             using var response = await client.GetAsync("/wsfederation");
@@ -87,7 +87,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var client = sut.CreateClient();
             using var response = await client.GetAsync("/wsfederation?wtrealm=notfound&wa=wsignin1.0");
@@ -103,7 +103,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var scope = sut.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
@@ -112,7 +112,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             await context.Clients.AddAsync(new Client
             {
                 Id = clientId,
-                Enabled = true
+                Enabled = true,
+                ProtocolType = "oidc"
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -130,7 +131,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var scope = sut.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
@@ -158,7 +159,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var scope = sut.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
@@ -194,7 +195,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 ["IdentityServer:Key:Type"] = "KeysRotation",
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             using var scope = sut.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
@@ -247,7 +248,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     "role"));
             userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
 
-            var sut = TestUtils.CreateTestServer(services =>
+            using var sut = TestUtils.CreateTestServer(services =>
             {
                 services.AddTransient(p => userSessionMock.Object);
             }, configuration, configureEndpoints: _configureEndpoints);
@@ -408,7 +409,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 })
                 .Returns(Task.CompletedTask);
 
-            var sut = TestUtils.CreateTestServer(services =>
+            using var sut = TestUtils.CreateTestServer(services =>
             {
                 services.AddTransient(p => userSessionMock.Object)
                     .AddTransient(p => profileServiceMock.Object);
@@ -582,7 +583,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 })
                 .Returns(Task.CompletedTask);
 
-            var sut = TestUtils.CreateTestServer(services =>
+            using var sut = TestUtils.CreateTestServer(services =>
             {
                 services.AddTransient(p => userSessionMock.Object)
                     .AddTransient(p => profileServiceMock.Object);
@@ -653,7 +654,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 ["Seed"] = "false"
             };
-            var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
+            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
 
             var clientId = $"urn:{Guid.NewGuid()}";
 

@@ -36,10 +36,16 @@ namespace Aguacongas.TheIdentityServer.SpaSample
             services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("ServerAPI"));
 
+            services.AddHttpClient("TokenApi")
+                .ConfigureHttpClient(client => client.BaseAddress = new Uri("https://localhost:5443/api"))
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>()
+                    .ConfigureHandler(
+                        authorizedUrls: new[] { "https://localhost:5443/api" },
+                        scopes: new[] { "theidservertokenapi" }));
 
             builder.RootComponents.Add<App>("app");
 
-            await builder.Build().RunAsync();
+            await builder.Build().RunAsync(); 
         }
     }
 }

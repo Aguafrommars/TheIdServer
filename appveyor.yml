@@ -8,23 +8,23 @@ branches:
   - /preview\/*/ 
   - /release\/*/
 image: 
-- Visual Studio 2019 Preview
+- Visual Studio 2019
 services:
   - mongodb
 environment:
-  GH_TOKEN: 
-    secure: 0NJdORJRFjpB0dwUYv7bVNsbkldkoBhnvWik/CTOwAF/k9kP+/uTWMFnDcpEpt8E
-  donetsdk: 5.0.401
+  GITHUB_TOKEN:
+    secure: aV5flJ5BOs49dlM4XRpu7t1qa+ajMD5L4hhwlBOv+zff/NlSkdnrmk5nYNsIJCdE
+  donetsdk: 6.0.101
   JAVA_HOME: C:\Program Files\Java\jdk14
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
-  - ps: .\dotnet-install.ps1 -Version 5.0.302
-  - ps: .\dotnet-install.ps1 -Version $env:donetsdk
+  - ps: .\dotnet-install.ps1 -Version 5.0.404
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
+  - ps: .\dotnet-install.ps1 -Version $env:donetsdk
   - ps: dotnet tool install --global dotnet-sonarscanner
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
@@ -33,9 +33,9 @@ install:
   - ps: ./appveyorinit.ps1
 build_script:
   - ps: ./build.ps1
-test_script:
-  - cmd: publish.cmd
 artifacts:
+  - path: test/**/*.dmp
+    name: dump
   - path: artifacts/**/*.nupkg
     name: nuget
   - path: artifacts/**/*.zip
@@ -43,7 +43,7 @@ artifacts:
 deploy:
   - provider: NuGet
     api_key:
-      secure: HBPD3UCWOLjcV92x7rGXzAoc4v6pXTY9EOrniVg3ENacY0VVx2m8nEtG4cBi+qm7
+      secure: bvkKhXIKsDM1ThfcWTbuusND0sOBiDoJGOoD2fYijGoj4C9xx22QKfR7Y9q+j7eX
     on:
       branch: 
       - /preview\/*/

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Description>EF Core stores implementation for TheIdServer.</Description>
         <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
@@ -27,8 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
             if (user.Identity.IsAuthenticated)
             {
                 var identity = user.Identity as ClaimsIdentity;
-                _logger.LogInformation($"User connected {identity.Name}");
+                _logger.LogInformation("User connected {IdentityName}", identity.Name);
                 foreach (var claim in user.Claims.ToArray())
                 {
                     var value = claim.Value;
@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdentityServer.SpaSample
                         var type = claim.Type;
                         foreach (var item in values)
                         {
-                            _logger.LogDebug($"Add {type} claim {item}");
+                            _logger.LogDebug("Add {Type} claim {Item}", type, item);
                             identity.AddClaim(new Claim(type, item));
                         }
                         identity.RemoveClaim(claim);

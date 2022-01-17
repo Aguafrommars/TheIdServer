@@ -121,9 +121,7 @@ namespace Aguacongas.IdentityServer.Store
         protected abstract string GetSubjectId(TDto dto);
 
         protected virtual Task<TEntity> GetEntityByHandle(string handle)
-        {
-            return _store.GetAsync(handle, null);
-        }
+        => _store.GetAsync(handle, null);
 
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
         {

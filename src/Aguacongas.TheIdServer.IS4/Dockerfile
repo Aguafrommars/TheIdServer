@@ -1,11 +1,11 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["src/Aguacongas.TheIdServer.IS4/Aguacongas.TheIdServer.IS4.csproj", "src/Aguacongas.TheIdServer.IS4/"]
@@ -58,6 +58,9 @@ COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.MySql/Agu
 COPY ["src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj", "src/IdentityServer/Migrations/Aguacongas.TheIdServer.Migrations.PostgreSQL/"]
 COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS4/"]
 COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/Aguacongas.IdentityServer.WsFederation.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/"]
+RUN apt-get update -y
+RUN apt-get install -y python3
+RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.IS4/Aguacongas.TheIdServer.IS4.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.IS4"

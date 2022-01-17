@@ -11,9 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
@@ -25,14 +26,9 @@ namespace Aguacongas.TheIdServer
 {
     static class SeedData
     {
-        public static void EnsureSeedData(IConfiguration configuration)
+        public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
         {            
-            var services = new ServiceCollection();
-            var startup = new Startup(configuration, null);
-            startup.ConfigureServices(services);
-
-            using var serviceProvider = services.BuildServiceProvider();
-            using var scope = serviceProvider.CreateScope();
+            using var scope = services.CreateScope();
 
             var dbType = configuration.GetValue<DbTypes>("DbType");
             if (dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
@@ -62,8 +58,8 @@ namespace Aguacongas.TheIdServer
 
             var roles = new string[]
             {
-                SharedConstants.WRITER,
-                SharedConstants.READER
+                SharedConstants.WRITERPOLICY,
+                SharedConstants.READERPOLICY
             };
             foreach (var role in roles)
             {
@@ -116,6 +112,72 @@ namespace Aguacongas.TheIdServer
             SeedApiScopes(configuration, provider);
             SeedApis(configuration, provider);
             SeedRelyingParties(configuration, provider);
+            SeedLocalization(configuration, provider);
+        }
+
+        private static void SeedLocalization(IConfiguration configuration, IServiceProvider provider)
+        {
+            var cultureFiles = Directory.EnumerateFiles(".", "Localization-*.json");
+            foreach (var file in cultureFiles)
+            {
+                SeedCultureFile(provider, file);
+            }
+        }
+
+        private static void SeedCultureFile(IServiceProvider provider, string file)
+        {
+            var cultureName = Path.GetFileNameWithoutExtension(file).Split("-")[1];
+            var cultureStore = provider.GetRequiredService<IAdminStore<Entity.Culture>>();
+            var localizedResouceStore = provider.GetRequiredService<IAdminStore<Entity.LocalizedResource>>();
+
+            var culturePage = cultureStore.GetAsync(new PageRequest
+            {
+                Filter = $"Id eq '{cultureName}'",
+                Expand = "Resources"
+            }).GetAwaiter().GetResult();
+            Entity.Culture culture;
+            if (culturePage.Count == 0)
+            {
+                culture = new Entity.Culture
+                {
+                    Id = cultureName,
+                    Resources = new List<Entity.LocalizedResource>()
+                };
+                try
+                {
+                    cultureStore.CreateAsync(culture).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // key already exists
+                }
+            }
+            else
+            {
+                culture = culturePage.Items.First();
+            }
+
+            var exsitings = culture.Resources.ToList();
+            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            foreach (var resource in resources)
+            {
+                if (!exsitings.Any(r => r.Key == resource.Key))
+                {
+                    resource.CultureId = culture.Id;
+                    try
+                    {
+                        localizedResouceStore.CreateAsync(resource).GetAwaiter().GetResult();
+                    }
+                    catch (ArgumentException)
+                    {
+                        // key already exists
+                    }
+                }
+            }
         }
 
         private static void SeedApis(IConfiguration configuration, IServiceProvider provider)
@@ -133,13 +195,20 @@ namespace Aguacongas.TheIdServer
                     continue;
                 }
 
-                apiStore.CreateAsync(new Entity.ProtectResource
+                try
                 {
-                    Description = resource.Description,
-                    DisplayName = resource.DisplayName,
-                    Enabled = resource.Enabled,
-                    Id = resource.Name,
-                }).GetAwaiter().GetResult();
+                    apiStore.CreateAsync(new Entity.ProtectResource
+                    {
+                        Description = resource.Description,
+                        DisplayName = resource.DisplayName,
+                        Enabled = resource.Enabled,
+                        Id = resource.Name,
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
                 SeedApiClaims(apiClaimStore, resource);
                 SeedApiSecrets(apiSecretStore, resource);
                 SeedApiApiScopes(apiApiScopeStore, resource);
@@ -153,13 +222,20 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var property in resource.Properties)
             {
-                apiPropertyStore.CreateAsync(new Entity.ApiProperty
+                try
                 {
-                    ApiId = resource.Name,
-                    Id = Guid.NewGuid().ToString(),
-                    Key = property.Key,
-                    Value = property.Value
-                }).GetAwaiter().GetResult();
+                    apiPropertyStore.CreateAsync(new Entity.ApiProperty
+                    {
+                        ApiId = resource.Name,
+                        Id = Guid.NewGuid().ToString(),
+                        Key = property.Key,
+                        Value = property.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -167,12 +243,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var apiScope in resource.Scopes)
             {
-                apiApiScopeStore.CreateAsync(new Entity.ApiApiScope
+                try
                 {
-                    ApiId = resource.Name,
-                    ApiScopeId = apiScope,
-                    Id = Guid.NewGuid().ToString()
-                }).GetAwaiter().GetResult();
+                    apiApiScopeStore.CreateAsync(new Entity.ApiApiScope
+                    {
+                        ApiId = resource.Name,
+                        ApiScopeId = apiScope,
+                        Id = Guid.NewGuid().ToString()
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -180,15 +263,22 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var secret in resource.ApiSecrets)
             {
-                apiSecretStore.CreateAsync(new Entity.ApiSecret
+                try
                 {
-                    ApiId = resource.Name,
-                    Expiration = secret.Expiration,
-                    Description = secret.Description,
-                    Id = Guid.NewGuid().ToString(),
-                    Type = secret.Type,
-                    Value = secret.Value
-                }).GetAwaiter().GetResult();
+                    apiSecretStore.CreateAsync(new Entity.ApiSecret
+                    {
+                        ApiId = resource.Name,
+                        Expiration = secret.Expiration,
+                        Description = secret.Description,
+                        Id = Guid.NewGuid().ToString(),
+                        Type = secret.Type,
+                        Value = secret.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -196,12 +286,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var claim in resource.UserClaims)
             {
-                apiClaimStore.CreateAsync(new Entity.ApiClaim
+                try
                 {
-                    ApiId = resource.Name,
-                    Id = Guid.NewGuid().ToString(),
-                    Type = claim
-                }).GetAwaiter().GetResult();
+                    apiClaimStore.CreateAsync(new Entity.ApiClaim
+                    {
+                        ApiId = resource.Name,
+                        Id = Guid.NewGuid().ToString(),
+                        Type = claim
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -216,17 +313,23 @@ namespace Aguacongas.TheIdServer
                 {
                     continue;
                 }
-
-                apiScopeStore.CreateAsync(new Entity.ApiScope
+                try
                 {
-                    Description = resource.Description,
-                    DisplayName = resource.DisplayName,
-                    Emphasize = resource.Emphasize,
-                    Enabled = resource.Enabled,
-                    Id = resource.Name,
-                    Required = resource.Required,
-                    ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument
-                }).GetAwaiter().GetResult();
+                    apiScopeStore.CreateAsync(new Entity.ApiScope
+                    {
+                        Description = resource.Description,
+                        DisplayName = resource.DisplayName,
+                        Emphasize = resource.Emphasize,
+                        Enabled = resource.Enabled,
+                        Id = resource.Name,
+                        Required = resource.Required,
+                        ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
 
                 SeedApiScopeClaims(apiScopeClaimStore, resource);
                 SeedApiScopeProperties(apiScopePropertyStore, resource);
@@ -239,13 +342,20 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var property in resource.Properties)
             {
-                apiScopePropertyStore.CreateAsync(new Entity.ApiScopeProperty
+                try
                 {
-                    ApiScopeId = resource.Name,
-                    Id = Guid.NewGuid().ToString(),
-                    Key = property.Key,
-                    Value = property.Value
-                }).GetAwaiter().GetResult();
+                    apiScopePropertyStore.CreateAsync(new Entity.ApiScopeProperty
+                    {
+                        ApiScopeId = resource.Name,
+                        Id = Guid.NewGuid().ToString(),
+                        Key = property.Key,
+                        Value = property.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -253,12 +363,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var claim in resource.UserClaims)
             {
-                apiScopeClaimStore.CreateAsync(new Entity.ApiScopeClaim
+                try
                 {
-                    ApiScopeId = resource.Name,
-                    Id = Guid.NewGuid().ToString(),
-                    Type = claim
-                }).GetAwaiter().GetResult();
+                    apiScopeClaimStore.CreateAsync(new Entity.ApiScopeClaim
+                    {
+                        ApiScopeId = resource.Name,
+                        Id = Guid.NewGuid().ToString(),
+                        Type = claim
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -274,16 +391,23 @@ namespace Aguacongas.TheIdServer
                     continue;
                 }
 
-                identityStore.CreateAsync(new Entity.IdentityResource
+                try
                 {
-                    Description = resource.Description,
-                    DisplayName = resource.DisplayName,
-                    Emphasize = resource.Emphasize,
-                    Enabled = resource.Enabled,
-                    Id = resource.Name,
-                    Required = resource.Required,
-                    ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument
-                }).GetAwaiter().GetResult();
+                    identityStore.CreateAsync(new Entity.IdentityResource
+                    {
+                        Description = resource.Description,
+                        DisplayName = resource.DisplayName,
+                        Emphasize = resource.Emphasize,
+                        Enabled = resource.Enabled,
+                        Id = resource.Name,
+                        Required = resource.Required,
+                        ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
                 SeedIdentityClaims(identityClaimStore, resource);
                 SeedIdentityProperties(identityPropertyStore, resource);
 
@@ -295,13 +419,21 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var property in resource.Properties)
             {
-                identityPropertyStore.CreateAsync(new Entity.IdentityProperty
+                try
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    IdentityId = resource.Name,
-                    Key = property.Key,
-                    Value = property.Value
-                }).GetAwaiter().GetResult();
+                    identityPropertyStore.CreateAsync(new Entity.IdentityProperty
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        IdentityId = resource.Name,
+                        Key = property.Key,
+                        Value = property.Value
+                    }).GetAwaiter().GetResult();
+
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -309,12 +441,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var claim in resource.UserClaims)
             {
-                identityClaimStore.CreateAsync(new Entity.IdentityClaim
+                try
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    IdentityId = resource.Name,
-                    Type = claim
-                }).GetAwaiter().GetResult();
+                    identityClaimStore.CreateAsync(new Entity.IdentityClaim
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        IdentityId = resource.Name,
+                        Type = claim
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -336,46 +475,53 @@ namespace Aguacongas.TheIdServer
                     continue;
                 }
 
-                clientStore.CreateAsync(new Entity.Client
+                try
                 {
-                    AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
-                    AccessTokenLifetime = client.AccessTokenLifetime,
-                    AccessTokenType = (int)client.AccessTokenType,
-                    AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
-                    AllowOfflineAccess = client.AllowOfflineAccess,
-                    AllowPlainTextPkce = client.AllowPlainTextPkce,
-                    AllowRememberConsent = client.AllowRememberConsent,
-                    AlwaysIncludeUserClaimsInIdToken = client.AlwaysIncludeUserClaimsInIdToken,
-                    AlwaysSendClientClaims = client.AlwaysSendClientClaims,
-                    AuthorizationCodeLifetime = client.AuthorizationCodeLifetime,
-                    BackChannelLogoutSessionRequired = client.BackChannelLogoutSessionRequired,
-                    BackChannelLogoutUri = client.BackChannelLogoutUri,
-                    ClientClaimsPrefix = client.ClientClaimsPrefix,
-                    ClientName = client.ClientName,
-                    ClientUri = client.ClientUri,
-                    ConsentLifetime = client.ConsentLifetime,
-                    Description = client.Description,
-                    DeviceCodeLifetime = client.DeviceCodeLifetime,
-                    Enabled = client.Enabled,
-                    EnableLocalLogin = client.EnableLocalLogin,
-                    FrontChannelLogoutSessionRequired = client.FrontChannelLogoutSessionRequired,
-                    FrontChannelLogoutUri = client.FrontChannelLogoutUri,
-                    Id = client.ClientId,
-                    IdentityTokenLifetime = client.IdentityTokenLifetime,
-                    IncludeJwtId = client.IncludeJwtId,
-                    LogoUri = client.LogoUri,
-                    PairWiseSubjectSalt = client.PairWiseSubjectSalt,
-                    ProtocolType = client.ProtocolType,
-                    RefreshTokenExpiration = (int)client.RefreshTokenExpiration,
-                    RefreshTokenUsage = (int)client.RefreshTokenUsage,
-                    RequireClientSecret = client.RequireClientSecret,
-                    RequireConsent = client.RequireConsent,
-                    RequirePkce = client.RequirePkce,
-                    SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
-                    UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
-                    UserCodeType = client.UserCodeType,
-                    UserSsoLifetime = client.UserSsoLifetime
-                }).GetAwaiter().GetResult();
+                    clientStore.CreateAsync(new Entity.Client
+                    {
+                        AbsoluteRefreshTokenLifetime = client.AbsoluteRefreshTokenLifetime,
+                        AccessTokenLifetime = client.AccessTokenLifetime,
+                        AccessTokenType = (int)client.AccessTokenType,
+                        AllowAccessTokensViaBrowser = client.AllowAccessTokensViaBrowser,
+                        AllowOfflineAccess = client.AllowOfflineAccess,
+                        AllowPlainTextPkce = client.AllowPlainTextPkce,
+                        AllowRememberConsent = client.AllowRememberConsent,
+                        AlwaysIncludeUserClaimsInIdToken = client.AlwaysIncludeUserClaimsInIdToken,
+                        AlwaysSendClientClaims = client.AlwaysSendClientClaims,
+                        AuthorizationCodeLifetime = client.AuthorizationCodeLifetime,
+                        BackChannelLogoutSessionRequired = client.BackChannelLogoutSessionRequired,
+                        BackChannelLogoutUri = client.BackChannelLogoutUri,
+                        ClientClaimsPrefix = client.ClientClaimsPrefix,
+                        ClientName = client.ClientName,
+                        ClientUri = client.ClientUri,
+                        ConsentLifetime = client.ConsentLifetime,
+                        Description = client.Description,
+                        DeviceCodeLifetime = client.DeviceCodeLifetime,
+                        Enabled = client.Enabled,
+                        EnableLocalLogin = client.EnableLocalLogin,
+                        FrontChannelLogoutSessionRequired = client.FrontChannelLogoutSessionRequired,
+                        FrontChannelLogoutUri = client.FrontChannelLogoutUri,
+                        Id = client.ClientId,
+                        IdentityTokenLifetime = client.IdentityTokenLifetime,
+                        IncludeJwtId = client.IncludeJwtId,
+                        LogoUri = client.LogoUri,
+                        PairWiseSubjectSalt = client.PairWiseSubjectSalt,
+                        ProtocolType = client.ProtocolType,
+                        RefreshTokenExpiration = (int)client.RefreshTokenExpiration,
+                        RefreshTokenUsage = (int)client.RefreshTokenUsage,
+                        RequireClientSecret = client.RequireClientSecret,
+                        RequireConsent = client.RequireConsent,
+                        RequirePkce = client.RequirePkce,
+                        SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
+                        UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
+                        UserCodeType = client.UserCodeType,
+                        UserSsoLifetime = client.UserSsoLifetime
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
                 SeedClientGrantType(clientGrantTypeStore, client);
                 SeedClientScopes(clientScopeStore, client);
                 SeedClientClaims(clientClaimStore, client);
@@ -442,7 +588,14 @@ namespace Aguacongas.TheIdServer
 
             foreach (var uri in uris)
             {
-                clientUriStore.CreateAsync(uri).GetAwaiter().GetResult();
+                try
+                {
+                    clientUriStore.CreateAsync(uri).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -450,13 +603,20 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var property in client.Properties)
             {
-                clientPropertyStore.CreateAsync(new Entity.ClientProperty
+                try
                 {
-                    ClientId = client.ClientId,
-                    Id = Guid.NewGuid().ToString(),
-                    Key = property.Key,
-                    Value = property.Value
-                }).GetAwaiter().GetResult();
+                    clientPropertyStore.CreateAsync(new Entity.ClientProperty
+                    {
+                        ClientId = client.ClientId,
+                        Id = Guid.NewGuid().ToString(),
+                        Key = property.Key,
+                        Value = property.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -464,12 +624,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var restriction in client.IdentityProviderRestrictions)
             {
-                clientIdpRestrictionStore.CreateAsync(new Entity.ClientIdpRestriction
+                try
                 {
-                    ClientId = client.ClientId,
-                    Id = Guid.NewGuid().ToString(),
-                    Provider = restriction
-                }).GetAwaiter().GetResult();
+                    clientIdpRestrictionStore.CreateAsync(new Entity.ClientIdpRestriction
+                    {
+                        ClientId = client.ClientId,
+                        Id = Guid.NewGuid().ToString(),
+                        Provider = restriction
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -477,15 +644,22 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var secret in client.ClientSecrets)
             {
-                clientSecretStore.CreateAsync(new Entity.ClientSecret
+                try
                 {
-                    ClientId = client.ClientId,
-                    Description = secret.Description,
-                    Expiration = secret.Expiration,
-                    Id = Guid.NewGuid().ToString(),
-                    Type = secret.Type,
-                    Value = secret.Value
-                }).GetAwaiter().GetResult();
+                    clientSecretStore.CreateAsync(new Entity.ClientSecret
+                    {
+                        ClientId = client.ClientId,
+                        Description = secret.Description,
+                        Expiration = secret.Expiration,
+                        Id = Guid.NewGuid().ToString(),
+                        Type = secret.Type,
+                        Value = secret.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -493,13 +667,20 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var claim in client.Claims)
             {
-                clientClaimStore.CreateAsync(new Entity.ClientClaim
+                try
                 {
-                    ClientId = client.ClientId,
-                    Id = Guid.NewGuid().ToString(),
-                    Type = claim.Type,
-                    Value = claim.Value
-                }).GetAwaiter().GetResult();
+                    clientClaimStore.CreateAsync(new Entity.ClientClaim
+                    {
+                        ClientId = client.ClientId,
+                        Id = Guid.NewGuid().ToString(),
+                        Type = claim.Type,
+                        Value = claim.Value
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -507,12 +688,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var clientScope in client.AllowedScopes)
             {
-                clientScopeStore.CreateAsync(new Entity.ClientScope
+                try
                 {
-                    ClientId = client.ClientId,
-                    Scope = clientScope,
-                    Id = Guid.NewGuid().ToString()
-                }).GetAwaiter().GetResult();
+                    clientScopeStore.CreateAsync(new Entity.ClientScope
+                    {
+                        ClientId = client.ClientId,
+                        Scope = clientScope,
+                        Id = Guid.NewGuid().ToString()
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -520,12 +708,19 @@ namespace Aguacongas.TheIdServer
         {
             foreach (var grantType in client.AllowedGrantTypes)
             {
-                clientGrantTypeStore.CreateAsync(new Entity.ClientGrantType
+                try
                 {
-                    ClientId = client.ClientId,
-                    GrantType = grantType,
-                    Id = Guid.NewGuid().ToString()
-                }).GetAwaiter().GetResult();
+                    clientGrantTypeStore.CreateAsync(new Entity.ClientGrantType
+                    {
+                        ClientId = client.ClientId,
+                        GrantType = grantType,
+                        Id = Guid.NewGuid().ToString()
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
@@ -541,16 +736,23 @@ namespace Aguacongas.TheIdServer
                     continue;
                 }
 
-                relyingPartyStore.CreateAsync(new Entity.RelyingParty
+                try
                 {
-                    Id = relyingParty.Id,
-                    Description = relyingParty.Description,
-                    DigestAlgorithm = relyingParty.DigestAlgorithm,
-                    EncryptionCertificate = relyingParty.EncryptionCertificate,
-                    SamlNameIdentifierFormat = relyingParty.SamlNameIdentifierFormat,
-                    SignatureAlgorithm = relyingParty.SignatureAlgorithm,
-                    TokenType = relyingParty.TokenType
-                }).GetAwaiter().GetResult();
+                    relyingPartyStore.CreateAsync(new Entity.RelyingParty
+                    {
+                        Id = relyingParty.Id,
+                        Description = relyingParty.Description,
+                        DigestAlgorithm = relyingParty.DigestAlgorithm,
+                        EncryptionCertificate = relyingParty.EncryptionCertificate,
+                        SamlNameIdentifierFormat = relyingParty.SamlNameIdentifierFormat,
+                        SignatureAlgorithm = relyingParty.SignatureAlgorithm,
+                        TokenType = relyingParty.TokenType
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
                 SeedRelyingPartyClaimMappings(relyingPartyClaimMappingStore, relyingParty);
             }
         }
@@ -564,23 +766,33 @@ namespace Aguacongas.TheIdServer
 
             foreach(var mapping in relyingParty.ClaimMappings)
             {
-                relyingPartyClaimMappingStore.CreateAsync(new Entity.RelyingPartyClaimMapping
+                try
                 {
-                    FromClaimType = mapping.FromClaimType,
-                    Id = Guid.NewGuid().ToString(),
-                    RelyingPartyId = relyingParty.Id,
-                    ToClaimType = mapping.ToClaimType
-                }).GetAwaiter().GetResult();
+                    relyingPartyClaimMappingStore.CreateAsync(new Entity.RelyingPartyClaimMapping
+                    {
+                        FromClaimType = mapping.FromClaimType,
+                        Id = Guid.NewGuid().ToString(),
+                        RelyingPartyId = relyingParty.Id,
+                        ToClaimType = mapping.ToClaimType
+                    }).GetAwaiter().GetResult();
+                }
+                catch(ArgumentException)
+                {
+                    // silent
+                }
             }
         }
 
-        [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown", Justification = "Seeding")]
         private static async Task ExcuteAndCheckResult(Func<Task<IdentityResult>> action)
         {
             var result = await action.Invoke();
             if (!result.Succeeded)
             {
-                throw new Exception(result.Errors.First().Description);
+                var error = result.Errors.First();
+                if (error.Code != "DuplicateUserName")
+                {
+                    throw new InvalidOperationException($"{error.Description} code: {error.Code}");
+                }
             }
         }
     }

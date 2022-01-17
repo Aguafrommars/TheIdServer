@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp
 {
@@ -30,12 +26,12 @@ namespace Aguacongas.TheIdServer.BlazorApp
             "Role",
             "User",
             "RelyingParties",
-            "RelyingParty"
+            "RelyingParty",
+            "Settings"
         };
 
         private Task OnNavigateAsync(NavigationContext args)
         {
-            _logger.LogDebug($"OnNavigateAsync {args.Path}");
             var path = args.Path.Split("/")[0];
             if (path == "protectresource")
             {
@@ -54,20 +50,15 @@ namespace Aguacongas.TheIdServer.BlazorApp
             }
 
             pageKind = _pageKindList.FirstOrDefault(k => path == k.ToLower());
-            if (pageKind != null)
-            {
-                return LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}.dll");
-            }
-
-            return Task.CompletedTask;
+            return pageKind != null ? LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}.dll") : Task.CompletedTask;
         }
 
         private async Task LoadAssemblyAsync(string assemblyName)
         {
-            _logger.LogDebug($"LoadAssemblyAsync {assemblyName}");
+            _logger.LogDebug("LoadAssemblyAsync {AssemblyName}", assemblyName);
             var assemblies = await _assemblyLoader.LoadAssembliesAsync(
                 new[] { assemblyName }).ConfigureAwait(false);
-            _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));            
+            _lazyLoadedAssemblies.AddRange(assemblies.Where(a => !_lazyLoadedAssemblies.Any(l => l.FullName == a.FullName)));
         }
     }
 }

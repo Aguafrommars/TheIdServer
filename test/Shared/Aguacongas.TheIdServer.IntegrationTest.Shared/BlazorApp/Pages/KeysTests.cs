@@ -3,52 +3,55 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.BlazorApp;
-using Microsoft.AspNetCore.Components.Testing;
+using AngleSharp.Dom;
+using Bunit;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using RichardSzalay.MockHttp;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
+using page = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    [Collection("api collection")]
-    public class KeysTests
+    [Collection(BlazorAppCollection.Name)]
+    public class KeysTests : TestContext
     {
-        private TestHost _host;
-        public ApiFixture Fixture { get; }
+        public TheIdServerFactory Factory { get; }
 
-        public KeysTests(ApiFixture fixture, ITestOutputHelper testOutputHelper)
+        public KeysTests(TheIdServerFactory factory)
         {
-            Fixture = fixture;
-            Fixture.TestOutputHelper = testOutputHelper;
+            Factory = factory;
         }
 
         [Fact]
         public async Task DataProtectionRevokeClick_should_revoke_key()
         {
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
-                out RenderedComponent<App> component,
-                out TestHost host);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
-            var keyId = host.WaitForNode(component, "#data-protection-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
+            var keyId = WaitForNode(component, "#data-protection-keys div.modal.fade")
+                .Attributes
+                .First(a => a.Name == "id")
+                .Value
+                .Substring("revoke-entity-".Length);
 
-            var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
+            var input = WaitForNode(component, $"#revoke-entity-{keyId} input");
 
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(keyId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = keyId
+            }).ConfigureAwait(false);
 
             var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
-            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
-            WaitForToast("Revoked", host, component);
-
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var revoked = await context.DataProtectionKeys.FirstOrDefaultAsync(k => k.FriendlyName == $"revocation-{keyId}");
                 Assert.NotNull(revoked);
@@ -58,7 +61,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SigningRevokeClikc_should_revoke_key()
         {
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var id = Guid.NewGuid();
                 await context.KeyRotationKeys.AddAsync(new KeyRotationKey
@@ -83,60 +86,58 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
 
-            CreateTestHost("Alice Smith",
-                SharedConstants.WRITER,
-                out RenderedComponent<App> component,
-                out TestHost host);
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY);
 
-            var keyId = host.WaitForNode(component, "#signing-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
+            var keyId = WaitForNode(component, "#signing-keys div.modal.fade").Attributes.First(a => a.Name == "id").Value.Substring("revoke-entity-".Length);
 
-            var input = host.WaitForNode(component, $"#revoke-entity-{keyId} input");
+            var input = WaitForNode(component, $"#revoke-entity-{keyId} input");
 
-            await host.WaitForNextRenderAsync(() => input.ChangeAsync(keyId));
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = keyId
+            }).ConfigureAwait(false);
 
             var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
-            await host.WaitForNextRenderAsync(() => confirm.ClickAsync());
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
-            WaitForToast("Revoked", host, component);
-
-            await Fixture.DbActionAsync<OperationalDbContext>(async context =>
+            await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
                 var revoked = await context.KeyRotationKeys.FirstOrDefaultAsync(k => k.FriendlyName == $"revocation-{keyId}");
                 Assert.NotNull(revoked);
             });
         }
 
-        protected static void WaitForToast(string text, TestHost host, RenderedComponent<App> component)
+        private IRenderedComponent<page> CreateComponent(string userName,
+            string role)
         {
-            var toasts = component.FindAll(".toast-body.text-success");
-            while (!toasts.Any(t => t.InnerText.Contains(text)))
-            {
-                host.WaitForNextRender();
-                toasts = component.FindAll(".toast-body.text-success");
-            }
+            Factory.ConfigureTestContext(userName,
+               new Claim[]
+               {
+                    new Claim("scope", SharedConstants.ADMINSCOPE),
+                    new Claim("role", SharedConstants.READERPOLICY),
+                    new Claim("role", role),
+                    new Claim("sub", Guid.NewGuid().ToString())
+               },
+               this);
+
+            var component = RenderComponent<page>();
+            component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
+            return component;
         }
 
-
-        private void CreateTestHost(string userName,
-           string role,
-           out RenderedComponent<App> component,
-           out TestHost host)
+        protected static IElement WaitForNode(IRenderedComponent<page> component, string cssSelector)
         {
-            TestUtils.CreateTestHost(userName,
-                new Claim[]
-                {
-                    new Claim("role", SharedConstants.READER),
-                    new Claim("role", role)
-                },
-                $"http://exemple.com/keys",
-                Fixture.Sut,
-                Fixture.TestOutputHelper,
-                out host,
-                out component,
-                out MockHttpMessageHandler _,
-                true);
-            _host = host;
+            component.WaitForElement(cssSelector);
+            return component.Find(cssSelector);
         }
+
+        protected static List<IElement> WaitForAllNodes(IRenderedComponent<page> component, string cssSelector)
+        {
+            component.WaitForElements(cssSelector);
+            return component.FindAll(cssSelector).ToList();
+        }
+
     }
 }

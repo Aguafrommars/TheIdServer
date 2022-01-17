@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2021 @Olivier Lefebvre
 #if DUENDE
-using Duende.IdentityServer.Extensions;
+using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 #else
 using IdentityServer4.Extensions;
@@ -21,6 +21,21 @@ namespace Aguacongas.IdentityServer.WsFederation
     public class MetadataResponseGenerator : IMetadataResponseGenerator
     {
         private readonly ISigningCredentialStore _keys;
+
+#if DUENDE
+        private readonly IIssuerNameService _issuerNameService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataResponseGenerator"/> class.
+        /// </summary>
+        /// <param name="issuerNameService">The <see cref="IIssuerNameService"/>.</param>
+        /// <param name="keys">The keys.</param>
+        public MetadataResponseGenerator(IIssuerNameService issuerNameService, ISigningCredentialStore keys)
+        {
+            _keys = keys;
+            _issuerNameService = issuerNameService;
+        }
+#else
         private readonly IHttpContextAccessor _contextAccessor;
 
         /// <summary>
@@ -33,7 +48,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             _keys = keys;
             _contextAccessor = contextAccessor;
         }
-
+#endif
         /// <summary>
         /// Generates the asynchronous.
         /// </summary>
@@ -44,8 +59,11 @@ namespace Aguacongas.IdentityServer.WsFederation
             var credentials = await _keys.GetSigningCredentialsAsync().ConfigureAwait(false);
             var key = credentials.Key;
             var keyInfo = new KeyInfo(key.GetX509Certificate(_keys));
-
+#if DUENDE
+            var issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false);
+#else
             var issuer = _contextAccessor.HttpContext.GetIdentityServerIssuerUri();
+#endif
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256Signature, SecurityAlgorithms.Sha256Digest);
             var config = new WsFederationConfiguration()
             {
