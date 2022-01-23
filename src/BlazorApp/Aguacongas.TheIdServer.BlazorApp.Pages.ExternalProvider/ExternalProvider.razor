@@ -54,7 +54,7 @@ else
                     <div class="card-body">
                         @if (IsNew)
                         {
-                            <div class="mb-1 row">
+                            <div class="mb-3 row">
                                 <label class="col col-form-label" for="type">
                                     @Localizer["type"]
                                 </label>
@@ -63,7 +63,7 @@ else
                                 </div>
                             </div>
                         }
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>
@@ -95,7 +95,7 @@ else
                                 <WsFederationOptionsComponent @ref="_optionsComponent" />
                                 break;
                         }
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="storeClaims">
                             </label>
                             <div class="col-lg-10 col-sm-12">
@@ -109,7 +109,7 @@ else
                         <EntitySubGridTitle Text="@Localizer["Claims transformations"]" Collection="Model.ClaimTransformations" CreateModel="CreateTransformation" />
                     </div>
                     <div class="card-body">
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <div class="col">
                                 <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="@Localizer["map default outbound JWT claim types"]" @bind-Value="@Model.MapDefaultOutboundClaimType" />
                             </div>

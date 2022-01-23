@@ -57,21 +57,21 @@ else
             <div class="entity-details">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                             </label>
                             <div class="col-lg-10 col-sm-12">
                                 <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                             </label>
                             <div class="col-lg-10 col-sm-12">
                                 <AuthorizeCheckbox Name="required" Label="@Localizer["required"]" @bind-Value="@Model.Required" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="displayName">
                                 @Localizer["display name"]
                             </label>
@@ -85,7 +85,7 @@ else
                             </div>
                         </div>
                         <IdentityResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName"></IdentityResources>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="description">
                                 @Localizer["decription"]
                             </label>

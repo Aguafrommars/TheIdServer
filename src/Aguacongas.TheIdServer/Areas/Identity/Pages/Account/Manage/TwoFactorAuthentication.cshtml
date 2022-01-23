@@ -1,6 +1,6 @@
-﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2021 @Olivier Lefebvre
+﻿@*
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2021 @Olivier Lefebvre
 *@
 @page
 @inject IViewLocalizer Localizer
@@ -44,7 +44,7 @@ Copyright (c) 2021 @Olivier Lefebvre
     if (Model.IsMachineRemembered)
     {
         <form method="post" style="display: inline-block">
-            <button type="submit" class="btn btn-primary">@Localizer["Forget this browser"]</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">@Localizer["Forget this browser"]</button>
         </form>
     }
     <a asp-page="./Disable2fa" class="btn btn-secondary">Disable 2FA</a>
@@ -54,17 +54,21 @@ Copyright (c) 2021 @Olivier Lefebvre
 }
 
 <h5>@Localizer["Authenticator app"]</h5>
-@if (!Model.HasAuthenticator)
-{
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Add authenticator app"]</a>
-}
-else
-{
-    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Setup authenticator app"]</a>
-    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-secondary">@Localizer["Reset authenticator app"]</a>
-}
+<div class="row">
+    <div class="col-md-6">
+        @if (!Model.HasAuthenticator)
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="w-100 btn btn-lg btn-primary">@Localizer["Add authenticator app"]</a>
+        }
+        else
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="w-100 btn btn-lg btn-primary">@Localizer["Setup authenticator app"]</a>
+            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="w-100 btn btn-lg btn-secondary">@Localizer["Reset authenticator app"]</a>
+        }
 
+    </div>
+</div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
