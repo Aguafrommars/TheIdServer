@@ -1,6 +1,6 @@
 ﻿@inherits ProviderOptionsBase<GoogleOptions>
 
-<div class="mb-1 row">
+<div class="mb-3 row">
     <label class="col col-form-label" for="clientId">
         @Localizer["client id"]
     </label>
@@ -8,7 +8,7 @@
         <AuthorizeText Id="clientId" Placeholder="@Localizer["client id"]" @bind-Value="@Model.Options.ClientId" />
     </div>
 </div>
-<div class="mb-1 row">
+<div class="mb-3 row">
     <label class="col col-form-label" for="clientSecret">
         @Localizer["client secret"]
     </label>
@@ -16,7 +16,7 @@
         <AuthorizeText Id="clientSecret" Placeholder="@Localizer["client secret"]" @bind-Value="@Model.Options.ClientSecret" />
     </div>
 </div>
-<div class="mb-1 row">
+<div class="mb-3 row">
     <label class="col col-form-label" for="accessType">
         @Localizer["access type"]
     </label>
