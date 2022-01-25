@@ -30,12 +30,12 @@ else
             <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
                 <input asp-for="RememberMe" type="hidden" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
+                <div class="form-floating mb-2">
                     <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
                     <label asp-for="Input.TwoFactorCode" class="form-label"></label>
                     <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group  mb-2">
                     <div class="checkbox">
                         <label asp-for="Input.RememberMachine">
                             <input asp-for="Input.RememberMachine" />

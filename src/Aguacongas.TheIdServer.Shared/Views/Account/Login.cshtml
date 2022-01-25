@@ -30,20 +30,18 @@
                                 <legend class="visually-hidden">@Localizer["Login form"]</legend>
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="form-floating">
+                                        <div class="form-floating mb-2">
                                             <input class="form-control" placeholder="@Localizer["Username"]" asp-for="Username" autofocus>
                                             <label class="form-label" asp-for="Username">@Localizer["Username"]</label>
                                         </div>
-                                        <div class="form-floating">
+                                        <div class="form-floating mb-2">
                                             <input type="password" class="form-control" placeholder="@Localizer["Password"]" asp-for="Password" autocomplete="off">
                                             <label class="form-label" asp-for="Password">@Localizer["Password"]</label>
                                         </div>
-                                        <div class="mb-3">
-                                            <button class="w-100 btn btn-lg btn-primary" name="button" value="login">
-                                                @Localizer["Login"]
-                                            </button>
-                                            <button class="w-100 btn btn-lg btn btn-secondary" name="button" value="cancel">@Localizer["Cancel"]</button>
-                                        </div>
+                                        <button class="w-100 btn btn-lg btn-primary mb-2" name="button" value="login">
+                                            @Localizer["Login"]
+                                        </button>
+                                        <button class="w-100 btn btn-lg btn btn-secondary mb-2" name="button" value="cancel">@Localizer["Cancel"]</button>
                                         @if (Model.AllowRememberLogin)
                                         {
                                             <div class="login-remember">
