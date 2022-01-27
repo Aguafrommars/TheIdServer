@@ -18,7 +18,7 @@
 
         @if (Model.EnableLocalLogin)
         {
-            <div class="col-sm-6">
+            <div class="col-sm-6 mb-2">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="panel-title">@Localizer["Local Login"]</h3>
@@ -72,7 +72,7 @@
                             @foreach (var provider in Model.VisibleExternalProviders)
                             {
                                 <li class="list-inline-item">
-                                    <a class="btn btn-lg btn-secondary"
+                                    <a class="btn btn-lg btn-secondary mb-2"
                                asp-controller="External"
                                asp-action="Challenge"
                                asp-route-provider="@provider.AuthenticationScheme"
