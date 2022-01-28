@@ -1,3 +1,17 @@
+## [4.3.1](https://github.com/Aguafrommars/TheIdServer/compare/4.3.0...4.3.1) (2022-01-28)
+
+
+### Bug Fixes
+
+* accessiblity ([25c4203](https://github.com/Aguafrommars/TheIdServer/commit/25c4203ae3a0e68eea942bd0c6f340639a279fbe))
+* add jquery unobtrusive ([b5a6b35](https://github.com/Aguafrommars/TheIdServer/commit/b5a6b350e18fef7328b83aff926b55662fa6284f))
+* update packages ([35c74c1](https://github.com/Aguafrommars/TheIdServer/commit/35c74c17ac0743d5d74d3c43987cd954ab9ec7b2))
+* update packages ([5c97c95](https://github.com/Aguafrommars/TheIdServer/commit/5c97c95e0ede48cb10710cd792866a2b30c4bcab))
+* update packages ([b885433](https://github.com/Aguafrommars/TheIdServer/commit/b885433fb8cdde955a3a4f63c1f5e18648aae260))
+* update packages ([2e8454a](https://github.com/Aguafrommars/TheIdServer/commit/2e8454a44141fe8b86c2a39a4a2bbe5419fe6616))
+* update packages ([363f5f3](https://github.com/Aguafrommars/TheIdServer/commit/363f5f3ebf73fce11176ec57f0b7ae6eeeb37746))
+* update packages ([c436b0d](https://github.com/Aguafrommars/TheIdServer/commit/c436b0db995ffe7f84337685dfad66264e4f11af))
+
 # [4.3.0](https://github.com/Aguafrommars/TheIdServer/compare/4.2.0...4.3.0) (2022-01-17)
 
 
