@@ -20,11 +20,11 @@ Copyright (c) 2021 @Olivier Lefebvre
 </div>
 
 <div>
-    <form id="delete-user" method="post" class="mb-1">
+    <form id="delete-user" method="post" class="mb-3">
         <div asp-validation-summary="All" class="text-danger"></div>
         @if (Model.RequirePassword)
         {
-            <div class="form-floating">
+            <div class="form-floating mb-2">
                 <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
                 <label asp-for="Input.Password" class="form-label"></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>

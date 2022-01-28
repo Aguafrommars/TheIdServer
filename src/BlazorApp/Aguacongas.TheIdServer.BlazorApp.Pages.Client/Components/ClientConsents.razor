@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizerAsync<ClientConsents> Localizer
-<div class="mb-1 row">
+<div class="mb-3 row">
     <label class="col col-form-label">
     </label>
     <div class="col-lg-10 col-sm-12">
@@ -8,7 +8,7 @@
 </div>
 @if (Model.RequireConsent)
 {
-<div class="mb-1 row">
+<div class="mb-3 row">
     <label class="col col-form-label" for="logoUri">
         @Localizer["logo uri"]
     </label>
@@ -22,7 +22,7 @@
     </div>
 </div>
     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.LogoUri" />
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="clientUri">
             @Localizer["client uri"]
         </label>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.ClientUri" />
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="policyUri">
             @Localizer["policy uri"]
         </label>
@@ -50,7 +50,7 @@
         </div>
     </div>
     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.PolicyUri" />
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="tostUri">
             @Localizer["terms of service uri"]
         </label>
@@ -64,7 +64,7 @@
         </div>
     </div>
     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.TosUri" />
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label">
         </label>
         <div class="col-lg-10 col-sm-12">
@@ -73,7 +73,7 @@
     </div>
     @if (Model.AllowRememberConsent)
     {
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label" for="consent-lifetime">
                 @Localizer["consent lifetime"]
             </label>

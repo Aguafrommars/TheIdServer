@@ -54,7 +54,7 @@ else
             <div class="entity-details">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="description">
                                 @Localizer["decription"]
                             </label>
@@ -62,7 +62,7 @@ else
                                 <AuthorizeTextArea Id="description" Placeholder="@Localizer["description"]" @bind-Value="@Model.Description" MaxLength="2000" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                                 @Localizer["token type"]
                             </label>
@@ -70,7 +70,7 @@ else
                                 <AuthorizeDropDownButton @bind-Value="@Model.TokenType" Values="TOKENTYPELIST" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                                 @Localizer["signature algorithm"]
                             </label>
@@ -78,7 +78,7 @@ else
                                 <AuthorizeDropDownButton @bind-Value="@Model.SignatureAlgorithm" Values="SIGNATUREALGORITHMLIST" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                                 @Localizer["signature digest"]
                             </label>
@@ -86,7 +86,7 @@ else
                                 <AuthorizeDropDownButton @bind-Value="@Model.DigestAlgorithm" Values="DIGESTLIST" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                                 @Localizer["name id format"]
                             </label>
@@ -94,7 +94,7 @@ else
                                 <AuthorizeDropDownButton @bind-Value="@Model.SamlNameIdentifierFormat" Values="NAMEIDENTIFIERFORMATLIST" />
                             </div>
                         </div>
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label">
                                 @Localizer["encryption certificate"]
                             </label>
