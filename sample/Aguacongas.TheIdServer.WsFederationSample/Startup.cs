@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.WsFederationSample
                 })
                 .AddWsFederation(options =>
                 {
-                    options.MetadataAddress = "https://localhost:5001/wsfed";
+                    options.MetadataAddress = "https://localhost:5001/wsfederation/metadata";
                     options.RequireHttpsMetadata = false;
 
                     options.Wtrealm = "urn:aspnetcorerp";
