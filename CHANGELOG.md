@@ -1,3 +1,14 @@
+## [4.3.2](https://github.com/Aguafrommars/TheIdServer/compare/4.3.1...4.3.2) (2022-02-03)
+
+
+### Bug Fixes
+
+* update packages ([bdf6f0b](https://github.com/Aguafrommars/TheIdServer/commit/bdf6f0b4851a14381aab7e0a527e28694a125b79))
+* update packages ([0ee7f55](https://github.com/Aguafrommars/TheIdServer/commit/0ee7f552c6230875e8570f817e158fc141bc452b))
+* update packages ([3638429](https://github.com/Aguafrommars/TheIdServer/commit/36384299d17e774f3f401fc28b723ba199f4bc8d))
+* update packages ([9761558](https://github.com/Aguafrommars/TheIdServer/commit/976155833ccdf623643512d0fbd7bfe6660dfe1f))
+* update packages ([46f92d8](https://github.com/Aguafrommars/TheIdServer/commit/46f92d82f063a97990c882b8934dad85ef6c7a2a))
+
 ## [4.3.1](https://github.com/Aguafrommars/TheIdServer/compare/4.3.0...4.3.1) (2022-01-28)
 
 
