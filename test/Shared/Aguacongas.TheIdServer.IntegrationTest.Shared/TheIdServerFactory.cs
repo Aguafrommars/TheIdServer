@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.DynamicConfiguration.Razor.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
@@ -62,7 +62,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var httpClient = CreateClient();
             var appConfiguration = TestUtils.CreateApplicationConfiguration(httpClient);
 
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>(), httpClient.BaseAddress?.ToString());
+            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());
 
             Services.GetRequiredService<TestUserService>()
                 .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));

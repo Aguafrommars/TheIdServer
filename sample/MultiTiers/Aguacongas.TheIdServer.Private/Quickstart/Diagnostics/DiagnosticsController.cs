@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;

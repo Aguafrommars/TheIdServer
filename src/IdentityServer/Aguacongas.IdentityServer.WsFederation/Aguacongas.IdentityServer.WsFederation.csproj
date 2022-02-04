@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>WS-Federation controller base classes.</Description>
-		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.WsFederation</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

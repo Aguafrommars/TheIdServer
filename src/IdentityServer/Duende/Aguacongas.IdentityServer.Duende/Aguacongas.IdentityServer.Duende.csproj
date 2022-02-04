@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer base classes for Duende.IdentityServer.</Description>
-		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
