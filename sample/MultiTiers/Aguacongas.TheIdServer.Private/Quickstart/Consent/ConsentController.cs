@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
