@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Aguacongas.TheIdServer.BlazorApp.Services;

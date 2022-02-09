@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Duende.IdentityServer signing keys rotation.</Description>
-		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.KeysRotation</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

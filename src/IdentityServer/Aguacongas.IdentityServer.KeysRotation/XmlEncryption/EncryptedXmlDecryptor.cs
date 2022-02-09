@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 
 // This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/DataProtection/src/XmlEncryption/EncryptedXmlDecryptor.cs
 // with:

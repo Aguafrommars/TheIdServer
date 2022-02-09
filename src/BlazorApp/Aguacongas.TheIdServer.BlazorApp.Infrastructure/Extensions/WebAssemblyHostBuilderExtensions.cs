@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
@@ -28,7 +28,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             var configuration = builder.Configuration;
             var settings = configuration.Get<Settings>();
             ConfigureLogging(builder.Logging, settings);
-            ConfigureServices(builder.Services, configuration, settings, builder.HostEnvironment.BaseAddress);
+            ConfigureServices(builder.Services, configuration, settings);
             return builder;
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             logging.SetMinimumLevel(options.Minimum);
         }
 
-        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings, string baseAddress)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
         {
             services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
                 .AddOidcAuthentication(options =>
@@ -73,8 +73,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 options.AddIdentityServerPolicies(showSettings: configuration.GetValue<bool>($"{nameof(MenuOptions)}:{nameof(MenuOptions.ShowSettings)}"));
             });
 
-            services.AddTransient(p => new HttpClient { BaseAddress = new Uri(baseAddress) })
-                .AddAdminHttpStores(p =>
+            services.AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));
                 })

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.RelyingParty;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Role;
