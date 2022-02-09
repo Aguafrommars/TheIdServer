@@ -1,6 +1,6 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2021 @Olivier Lefebvre
+Copyright (c) 2022 @Olivier Lefebvre
 *@
 @page
 @inject IViewLocalizer Localizer
@@ -16,11 +16,11 @@ Copyright (c) 2021 @Olivier Lefebvre
     <div class="col-md-6">
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
+            <div class="form-floating mb-2">
                 <input asp-for="Username" class="form-control" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-2">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>

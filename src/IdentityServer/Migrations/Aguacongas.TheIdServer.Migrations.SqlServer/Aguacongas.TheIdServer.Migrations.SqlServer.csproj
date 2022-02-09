@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Aguacongas.TheIdServer.SqlServer</RootNamespace>
         <Authors>Olivier Lefebvre</Authors>
-        <Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+        <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
     </ItemGroup>
 
     <ItemGroup>

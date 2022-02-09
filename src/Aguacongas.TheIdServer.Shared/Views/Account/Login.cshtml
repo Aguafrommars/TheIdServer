@@ -1,6 +1,6 @@
 ﻿@*
     Project: Aguafrommars/TheIdServer
-    Copyright (c) 2021 @Olivier Lefebvre
+    Copyright (c) 2022 @Olivier Lefebvre
 *@
 @inject IViewLocalizer Localizer
 
@@ -18,7 +18,7 @@
 
         @if (Model.EnableLocalLogin)
         {
-            <div class="col-sm-6">
+            <div class="col-sm-6 mb-2">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="panel-title">@Localizer["Local Login"]</h3>
@@ -30,20 +30,18 @@
                                 <legend class="visually-hidden">@Localizer["Login form"]</legend>
                                 <div class="row">
                                     <div class="col-md">
-                                        <div class="form-floating">
+                                        <div class="form-floating mb-2">
                                             <input class="form-control" placeholder="@Localizer["Username"]" asp-for="Username" autofocus>
                                             <label class="form-label" asp-for="Username">@Localizer["Username"]</label>
                                         </div>
-                                        <div class="form-floating">
+                                        <div class="form-floating mb-2">
                                             <input type="password" class="form-control" placeholder="@Localizer["Password"]" asp-for="Password" autocomplete="off">
                                             <label class="form-label" asp-for="Password">@Localizer["Password"]</label>
                                         </div>
-                                        <div class="mb-3">
-                                            <button class="w-100 btn btn-lg btn-primary" name="button" value="login">
-                                                @Localizer["Login"]
-                                            </button>
-                                            <button class="w-100 btn btn-lg btn btn-secondary" name="button" value="cancel">@Localizer["Cancel"]</button>
-                                        </div>
+                                        <button class="w-100 btn btn-lg btn-primary mb-2" name="button" value="login">
+                                            @Localizer["Login"]
+                                        </button>
+                                        <button class="w-100 btn btn-lg btn btn-secondary mb-2" name="button" value="cancel">@Localizer["Cancel"]</button>
                                         @if (Model.AllowRememberLogin)
                                         {
                                             <div class="login-remember">
@@ -74,7 +72,7 @@
                             @foreach (var provider in Model.VisibleExternalProviders)
                             {
                                 <li class="list-inline-item">
-                                    <a class="btn btn-lg btn-secondary"
+                                    <a class="btn btn-lg btn-secondary mb-2"
                                asp-controller="External"
                                asp-action="Challenge"
                                asp-route-provider="@provider.AuthenticationScheme"

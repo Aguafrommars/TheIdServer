@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.WsFederationSample
                 })
                 .AddWsFederation(options =>
                 {
-                    options.MetadataAddress = "https://localhost:5001/wsfed";
+                    options.MetadataAddress = "https://localhost:5001/wsfederation/metadata";
                     options.RequireHttpsMetadata = false;
 
                     options.Wtrealm = "urn:aspnetcorerp";

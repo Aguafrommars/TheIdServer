@@ -1,6 +1,6 @@
 ﻿@*
     Project: Aguafrommars/TheIdServer
-    Copyright (c) 2021 @Olivier Lefebvre
+    Copyright (c) 2022 @Olivier Lefebvre
 *@
 @page
 @inject IViewLocalizer Localizer
@@ -62,7 +62,7 @@
         }
         else
         {
-            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="w-100 btn btn-lg btn-primary">@Localizer["Setup authenticator app"]</a>
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="w-100 btn btn-lg btn-primary mb-2">@Localizer["Setup authenticator app"]</a>
             <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="w-100 btn btn-lg btn-secondary">@Localizer["Reset authenticator app"]</a>
         }
 

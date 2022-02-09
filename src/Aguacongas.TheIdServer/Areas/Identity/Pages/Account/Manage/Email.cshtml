@@ -1,6 +1,6 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2021 @Olivier Lefebvre
+Copyright (c) 2022 @Olivier Lefebvre
 *@
 @page
 @inject IViewLocalizer Localizer
@@ -18,7 +18,7 @@ Copyright (c) 2021 @Olivier Lefebvre
             <div asp-validation-summary="All" class="text-danger"></div>
             @if (Model.IsEmailConfirmed)
             {
-                <div class="form-floating input-group">
+                <div class="form-floating mb-2 input-group">
                     <input asp-for="Email" class="form-control" disabled />
                         <div class="input-group-append">
                             <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
@@ -28,13 +28,13 @@ Copyright (c) 2021 @Olivier Lefebvre
             }
             else
             {
-                <div class="form-floating">
+                <div class="form-floating mb-2">
                     <input asp-for="Email" class="form-control" disabled />
                     <label asp-for="Email" class="form-label"></label>
                     <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">@Localizer["Send verification email"]</button>
                 </div>
             }
-            <div class="form-floating">
+            <div class="form-floating mb-2">
                 <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" />
                 <label asp-for="Input.NewEmail" class="form-label"></label>
                 <span asp-validation-for="Input.NewEmail" class="text-danger"></span>

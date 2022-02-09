@@ -1,6 +1,6 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2021 @Olivier Lefebvre
+Copyright (c) 2022 @Olivier Lefebvre
 *@
 @page
 @inject IViewLocalizer Localizer
@@ -21,12 +21,12 @@ Copyright (c) 2021 @Olivier Lefebvre
     <div class="col-md-4">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-floating">
+            <div class="form-floating mb-2">
                 <input asp-for="Input.Email" class="form-control" autocomplete="email" />
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">@Localizer["Register"]</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">@Localizer["Register"]</button>
         </form>
     </div>
 </div>

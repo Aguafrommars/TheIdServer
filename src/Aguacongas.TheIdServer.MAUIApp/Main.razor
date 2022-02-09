@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.WebAssembly.Services
+@using Aguacongas.TheIdServer.MAUIApp.Shared
+@using Microsoft.Extensions.Logging
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="GetType().Assembly"
+            AdditionalAssemblies="@_lazyLoadedAssemblies">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+                <Authorizing>
+                    <PageLoading Information="Authentication in progress" />
+                </Authorizing>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <PageNotFound />
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
