@@ -2,18 +2,15 @@
 #if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
-using IdentityModel;
 #else
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 #endif
+using IdentityModel;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
