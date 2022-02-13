@@ -45,6 +45,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\RefreshTokenStore.cs" Link="Store\RefreshTokenStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ResourceStore.cs" Link="Store\ResourceStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\UserConsentStore.cs" Link="Store\UserConsentStore.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Validators\TokenExchangeGrantValidator.cs" Link="Validators\TokenExchangeGrantValidator.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

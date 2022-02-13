@@ -57,6 +57,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddIdentityProviderStore()
                 .AddConfigurationStores()
                 .AddOperationalStores()
+                .AddTokenExchange()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => configurationManager.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddTheIdServerStores()

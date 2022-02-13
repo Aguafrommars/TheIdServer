@@ -98,6 +98,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
             await base.GetProfileDataAsync(context).ConfigureAwait(false);
 
             context.IssuedClaims = SanetizeIssuedClaims(context.IssuedClaims);
+
+            // add actor claim if needed
+            if (context.Subject.HasClaim(c => c.Type == "amr") && context.Subject.GetAuthenticationMethod() == OidcConstants.GrantTypes.TokenExchange)
+            {
+                var act = context.Subject.FindFirst(JwtClaimTypes.Actor);
+                if (act != null)
+                {
+                    context.IssuedClaims.Add(act);
+                }
+            }
         }
 
 
