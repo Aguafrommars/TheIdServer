@@ -37,49 +37,49 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var providerName = GenerateId();
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = providerName
-            });
+            }).ConfigureAwait(false);
 
             input = WaitForNode(component, "#displayName");
 
             var displayName = GenerateId();
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = displayName
-            });
+            }).ConfigureAwait(false);
 
             input = WaitForNode(component, "#type");
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = "Google"
-            });
+            }).ConfigureAwait(false);
 
             input = WaitForNode(component, "#clientId");
 
             var clientId = GenerateId();
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            });
+            }).ConfigureAwait(false);
 
             input = WaitForNode(component, "#clientSecret");
 
             var clientSecret = GenerateId();
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientSecret
-            });
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -100,15 +100,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var displayName = GenerateId();
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = displayName
-            });
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -128,14 +128,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#delete-entity input");
 
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = providerId
-            });
+            }).ConfigureAwait(false);
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            confirm.Click(new MouseEventArgs());
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -160,28 +160,28 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var from = WaitForNode(component, "#fromClaimType");
-            from.Change(new ChangeEventArgs
+            await from.ChangeAsync(new ChangeEventArgs
             {
                 Value = "test"
-            });
+            }).ConfigureAwait(false);
 
             var to = WaitForNode(component, "#toClaimType");
-            to.Change(new ChangeEventArgs
+            await to.ChangeAsync(new ChangeEventArgs
             {
                 Value = "test"
-            });
+            }).ConfigureAwait(false);
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             buttons = component.FindAll("#transformations button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            buttons.Last().Click(new MouseEventArgs());
+            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#transformations button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
@@ -199,13 +199,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#scope input.new-claim");
 
-            input.Change(new ChangeEventArgs { Value = "name" });
+            await input.ChangeAsync(new ChangeEventArgs { Value = "name" }).ConfigureAwait(false);
 
             var divs = component.FindAll("ul.list-inline div.input-group-append.select");
 
             Assert.NotEmpty(divs);
 
-            divs.Last().Click(new MouseEventArgs());
+            await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
         }
 
         [Fact]
@@ -232,13 +232,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#require-https input");
 
-            input.Change(new ChangeEventArgs { Value = true });
+            await input.ChangeAsync(new ChangeEventArgs { Value = true }).ConfigureAwait(false);
 
             Assert.NotNull(component.Find("li.validation-message"));
 
             input = WaitForNode(component, "#require-https input");
 
-            input.Change(new ChangeEventArgs { Value = false });
+            await input.ChangeAsync(new ChangeEventArgs { Value = false }).ConfigureAwait(false);
 
             Assert.Throws<ElementNotFoundException>(() => component.Find("li.validation-message"));
         }

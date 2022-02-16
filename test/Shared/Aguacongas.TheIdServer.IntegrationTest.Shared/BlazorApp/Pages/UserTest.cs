@@ -67,13 +67,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#external-logins-tokens button[type=button]");
 
-            deleteButton.Click(new MouseEventArgs());
+            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var tokensDiv = component.Find("#external-logins-tokens");
 
@@ -105,13 +105,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#external-logins button[type=button]");
 
-            deleteButton.Click(new MouseEventArgs());
+            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var tokensDiv = component.Find("#external-logins");
 
@@ -143,13 +143,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#consents button[type=button]");
 
-            deleteButton.Click(new MouseEventArgs());
+            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var tokensDiv = component.Find("#consents");
 
@@ -181,13 +181,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#roles .input-group-append");
 
-            deleteButton.Click(new MouseEventArgs());
+            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var tokensDiv = component.Find("#roles");
 
@@ -225,16 +225,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#roles .new-claim");
 
-            input.TriggerEvent("oninput", new ChangeEventArgs
-            {
-                Value = roleId
-            });
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs
+                {
+                    Value = roleId
+                }).ConfigureAwait(false);
 
             var button = WaitForNode(component, ".dropdown-item");
 
             Assert.NotNull(button);
 
-            button.Click(new MouseEventArgs());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             Assert.Contains(roleId, component.Markup);
 
@@ -242,7 +242,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             var rolessDiv = component.Find("#roles");
 
@@ -269,7 +269,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(addButton);
 
-            addButton.Click(new MouseEventArgs());
+            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var rows = component.FindAll("#claims tr");
 
@@ -281,19 +281,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotEmpty(inputList);
 
             var expected = GenerateId();
-            inputList.First().Change(new ChangeEventArgs { Value = expected });
+            await inputList.First().ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
 
             rows = component.FindAll("#claims tr");
             lastRow = rows.Last();
             inputList = lastRow.QuerySelectorAll("input");
 
-            inputList.Last().Change(new ChangeEventArgs { Value = expected });
+            await inputList.Last().ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -330,13 +330,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var expected = GenerateId();
 
-            inputList.Last().Change(new ChangeEventArgs { Value = expected });
+            await inputList.Last().ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -359,13 +359,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(button);
 
-            button.Click(new MouseEventArgs());
+            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -385,11 +385,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var input = WaitForNode(component, "#name");
 
             var userId = GenerateId();
-            input.Change(new ChangeEventArgs { Value = userId });
+            await input.ChangeAsync(new ChangeEventArgs { Value = userId }).ConfigureAwait(false);
 
             var form = component.Find("form");
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -409,7 +409,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var input = WaitForNode(component, "#email");
 
             var expected = "test@exemple.com";
-            input.Change(new ChangeEventArgs { Value = expected });
+            await input.ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
 
             Assert.Contains(expected, component.Markup);
 
@@ -417,7 +417,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -437,11 +437,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#delete-entity input");
 
-            input.Change(new ChangeEventArgs { Value = userId });
+            await input.ChangeAsync(new ChangeEventArgs { Value = userId }).ConfigureAwait(false);
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            confirm.Click(new MouseEventArgs());
+            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {

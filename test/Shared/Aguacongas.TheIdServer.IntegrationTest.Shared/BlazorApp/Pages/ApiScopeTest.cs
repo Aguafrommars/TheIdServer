@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(addButton);
 
-            addButton.Click(new MouseEventArgs());
+            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -45,18 +45,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var cultureInput = cultureInputs.Last();
 
-            cultureInput.TriggerEvent("oninput", new ChangeEventArgs { Value = "en" });
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "en" }).ConfigureAwait(false);
 
             var dropDownItem = component.Find("button.dropdown-item");
             Assert.NotNull(dropDownItem);
 
-            dropDownItem.Click(new MouseEventArgs());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var addDescriptionButton = component.Find("#btnAddDescription");
 
             Assert.NotNull(addButton);
 
-            addDescriptionButton.Click(new MouseEventArgs());
+            await addDescriptionButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -64,13 +64,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            cultureInput.TriggerEvent("oninput", new ChangeEventArgs { Value = "fr-FR" });
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
 
             var items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            dropDownItem.Click(new MouseEventArgs());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -78,19 +78,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            cultureInput.TriggerEvent("oninput", new ChangeEventArgs { Value = "fr-FR" });
+            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
 
             items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            dropDownItem.Click(new MouseEventArgs());
+            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
         }
 
 
@@ -107,10 +107,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            filterInput.TriggerEvent("oninput", new ChangeEventArgs
+            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = apiScopeId
-            });
+            }).ConfigureAwait(false);
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -129,10 +129,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            input.Change(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = expected
-            });
+            }).ConfigureAwait(false);
 
             Assert.Contains(expected, component.Markup);
 
@@ -140,7 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            form.Submit();
+            await form.SubmitAsync().ConfigureAwait(false);
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
