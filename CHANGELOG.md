@@ -1,3 +1,36 @@
+# [4.4.0](https://github.com/Aguafrommars/TheIdServer/compare/4.3.3...4.4.0) (2022-02-13)
+
+
+### Bug Fixes
+
+* update packages ([f59f255](https://github.com/Aguafrommars/TheIdServer/commit/f59f255ad211738d12a9f42249949da1cc21101b))
+* update packages ([f011fbb](https://github.com/Aguafrommars/TheIdServer/commit/f011fbb428d339250cb017f76bedd2b2925cd35b))
+
+
+### Features
+
+* token exchange ([530a5c9](https://github.com/Aguafrommars/TheIdServer/commit/530a5c98cfc6cd2cf0600f14af6e9b0cb1e64131)), closes [#639](https://github.com/Aguafrommars/TheIdServer/issues/639)
+
+## [4.3.3](https://github.com/Aguafrommars/TheIdServer/compare/4.3.2...4.3.3) (2022-02-09)
+
+
+### Bug Fixes
+
+* update packages ([b41265d](https://github.com/Aguafrommars/TheIdServer/commit/b41265d051f82e1a13b9fd97669e45c73558473c))
+* update packages ([77a0c21](https://github.com/Aguafrommars/TheIdServer/commit/77a0c219d35f4e79c3a5d7f8115e086b9540799e))
+* update packages ([42c43be](https://github.com/Aguafrommars/TheIdServer/commit/42c43bed69c4b10b91d409089bc4888f8865d320))
+
+## [4.3.2](https://github.com/Aguafrommars/TheIdServer/compare/4.3.1...4.3.2) (2022-02-03)
+
+
+### Bug Fixes
+
+* update packages ([bdf6f0b](https://github.com/Aguafrommars/TheIdServer/commit/bdf6f0b4851a14381aab7e0a527e28694a125b79))
+* update packages ([0ee7f55](https://github.com/Aguafrommars/TheIdServer/commit/0ee7f552c6230875e8570f817e158fc141bc452b))
+* update packages ([3638429](https://github.com/Aguafrommars/TheIdServer/commit/36384299d17e774f3f401fc28b723ba199f4bc8d))
+* update packages ([9761558](https://github.com/Aguafrommars/TheIdServer/commit/976155833ccdf623643512d0fbd7bfe6660dfe1f))
+* update packages ([46f92d8](https://github.com/Aguafrommars/TheIdServer/commit/46f92d82f063a97990c882b8934dad85ef6c7a2a))
+
 ## [4.3.1](https://github.com/Aguafrommars/TheIdServer/compare/4.3.0...4.3.1) (2022-01-28)
 
 

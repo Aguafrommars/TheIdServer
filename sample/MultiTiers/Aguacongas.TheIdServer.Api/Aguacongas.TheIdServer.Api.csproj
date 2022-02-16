@@ -26,8 +26,8 @@
 		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.3.2" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="4.3.2" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.4.0" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="4.4.0" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.2" />
@@ -43,7 +43,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" PrivateAssets="All" />
 		<PackageReference Include="Serilog" Version="2.10.0" />
-		<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
