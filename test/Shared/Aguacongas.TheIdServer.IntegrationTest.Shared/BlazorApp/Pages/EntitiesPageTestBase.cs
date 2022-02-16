@@ -39,15 +39,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = GenerateId()
-            }).ConfigureAwait(false);
+            });
             // cancel previous search
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = GenerateId()
-            }).ConfigureAwait(false);
+            });
 
             await Task.Delay(500).ConfigureAwait(false);
 
@@ -71,10 +71,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            selectAll.Change(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             button = component.Find("button.btn-secondary");
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
@@ -83,7 +83,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var invocationHanlder = JSInterop.SetupVoid("open", i => true).SetVoidResult();
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            button.Click(new MouseEventArgs());
 
             Assert.Single(invocationHanlder.Invocations);
             var calledUrl = invocationHanlder.Invocations.First().Arguments[0] as string;
@@ -109,9 +109,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var tdList = component.FindAll(".table-hover tr td");
 
-            Assert.NotEmpty(tdList);
-
-            await tdList[tdList.Count - 1].ClickAsync(new MouseEventArgs());
+            Assert.NotEmpty(tdList);            
+           
+            tdList[tdList.Count - 1].Click(new MouseEventArgs());
 
             Assert.Contains(typeof(TEntity).Name.ToLower(), navigationManager.Uri);
         }
@@ -130,7 +130,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            await th.ClickAsync(new MouseEventArgs());
+            th.Click(new MouseEventArgs());
 
             var arrow = component.Find(".oi-arrow-bottom");
 
@@ -140,7 +140,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            await th.ClickAsync(new MouseEventArgs());
+            th.Click(new MouseEventArgs());
 
             arrow = component.Find(".oi-arrow-top");
 
@@ -150,7 +150,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(th);
 
-            await th.ClickAsync(new MouseEventArgs());
+            th.Click(new MouseEventArgs());
 
             arrow = component.Find(".oi-arrow-");
 
@@ -171,10 +171,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            selectAll.Change(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             var selected = component.Find(".table.table-hover td input");
 
@@ -185,10 +185,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            selectAll.Change(new ChangeEventArgs
             {
                 Value = false
-            }).ConfigureAwait(false);
+            });
 
             selected = component.Find(".table.table-hover td input");
 
@@ -198,10 +198,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            selectAll.Change(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             selected = component.Find(".table.table-hover td input");
 

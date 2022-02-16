@@ -38,7 +38,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(addButton);
 
-            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            addButton.Click(new MouseEventArgs());
 
             var cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -51,13 +51,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var dropDownItem = WaitForNode(component, "button.dropdown-item");
             Assert.NotNull(dropDownItem);
 
-            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            dropDownItem.Click(new MouseEventArgs());
 
             var addDescriptionButton = component.Find("#btnAddDescription");
 
             Assert.NotNull(addButton);
 
-            await addDescriptionButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            addDescriptionButton.Click(new MouseEventArgs());
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -65,13 +65,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
+            cultureInput.TriggerEvent("oninput", new ChangeEventArgs { Value = "fr-FR" });
 
             var items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            dropDownItem.Click(new MouseEventArgs());
 
             cultureInputs = component.FindAll("input[placeholder=\"culture\"]");
 
@@ -79,19 +79,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             cultureInput = cultureInputs.Last();
 
-            await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
+            cultureInput.TriggerEvent("oninput", new ChangeEventArgs { Value = "fr-FR" });
 
             items = component.FindAll("button.dropdown-item");
             dropDownItem = items.Last();
             Assert.NotNull(dropDownItem);
 
-            await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            dropDownItem.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
         }
 
 
@@ -108,10 +108,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = identityId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -130,10 +130,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             Assert.Contains(expected, component.Markup);
 
@@ -141,7 +141,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {

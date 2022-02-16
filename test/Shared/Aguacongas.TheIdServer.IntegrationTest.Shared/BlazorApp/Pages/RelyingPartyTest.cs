@@ -77,10 +77,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = relyingPartyId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -99,10 +99,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(input);
 
             var expected = GenerateId();
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             Assert.Contains(expected, component.Markup);
 
@@ -110,7 +110,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {

@@ -39,10 +39,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = roleId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -58,15 +58,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var roleName = GenerateId();
 
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = roleName
-            }).ConfigureAwait(false);
+            });
             
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -87,14 +87,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#delete-entity input");
 
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = roleId
-            }).ConfigureAwait(false);
+            });
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            confirm.Click(new MouseEventArgs());
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -114,7 +114,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var addButton = WaitForNode(component, "#claims button");
 
-            await addButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            addButton.Click(new MouseEventArgs());
 
             var rows = component.FindAll("#claims tr");
 
@@ -126,25 +126,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotEmpty(inputList);
 
             var expected = GenerateId();
-            await inputList.First().ChangeAsync(new ChangeEventArgs
+            inputList.First().Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             rows = component.FindAll("#claims tr");
             lastRow = rows.Last();
             inputList = lastRow.QuerySelectorAll("input");
 
-            await inputList.Last().ChangeAsync(new ChangeEventArgs
+            inputList.Last().Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -175,16 +175,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var expected = GenerateId();
 
-            await inputList.Last().ChangeAsync(new ChangeEventArgs
+            inputList.Last().Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -205,13 +205,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var button = WaitForNode(component, "#claims tr button");
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            button.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {

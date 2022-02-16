@@ -40,10 +40,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(filterInput);
 
-            await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
+            filterInput.TriggerEvent("oninput", new ChangeEventArgs
             {
                 Value = apiId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -60,10 +60,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var input = component.Find("#displayName");
 
             var expected = GenerateId();
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             Assert.Contains(expected, component.Markup);
 
@@ -71,7 +71,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -91,25 +91,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#name");
 
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = apiId
-            }).ConfigureAwait(false);
+            });
 
             input = component.Find("#displayName");
 
             Assert.NotNull(input);
 
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = apiId
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            form.Submit();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -129,14 +129,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#delete-entity input");
 
-            await input.ChangeAsync(new ChangeEventArgs
+            input.Change(new ChangeEventArgs
             {
                 Value = apiId
-            }).ConfigureAwait(false);
+            });
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            confirm.Click(new MouseEventArgs());
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -171,14 +171,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             buttons = buttons.Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             var expected = buttons.Count;
-            await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.First().Click(new MouseEventArgs());
 
             buttons = component.FindAll("#secrets button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             Assert.NotEqual(expected, buttons.Count);
 
-            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.Last().Click(new MouseEventArgs());
         }
 
         [Fact]
@@ -195,7 +195,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
 
             var notExpected = buttons.Count;
-            await buttons.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.First().Click(new MouseEventArgs());
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
@@ -204,7 +204,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var expected = buttons.Count - 1;
 
-            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.Last().Click(new MouseEventArgs());
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
@@ -222,20 +222,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#claims input.new-claim");
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "name" }).ConfigureAwait(false);
+            input.TriggerEvent("oninput", new ChangeEventArgs { Value = "name" });
 
             component.WaitForElement("#claims button.dropdown-item");
             var button = component.Find("#claims button.dropdown-item");
 
             Assert.NotNull(button);
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            button.Click(new MouseEventArgs());
 
             var divs = component.FindAll("#claims div.select");
 
             Assert.NotEmpty(divs);
 
-            await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            divs.Last().Click(new MouseEventArgs());
         }
 
         private async Task<string> CreateApi()
