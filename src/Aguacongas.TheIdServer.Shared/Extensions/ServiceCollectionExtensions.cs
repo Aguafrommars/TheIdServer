@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer;
+﻿using Aguacongas.DynamicConfiguration.Redis;
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Admin.Options;
@@ -40,9 +41,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using System.Linq;
-using Aguacongas.DynamicConfiguration.Redis;
+using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
