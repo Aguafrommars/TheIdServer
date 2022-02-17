@@ -105,7 +105,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#external-logins button[type=button]");
 
-            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            deleteButton.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 

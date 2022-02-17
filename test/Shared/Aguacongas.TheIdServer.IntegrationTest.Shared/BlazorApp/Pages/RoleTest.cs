@@ -205,7 +205,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var button = WaitForNode(component, "#claims tr button");
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            button.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 
