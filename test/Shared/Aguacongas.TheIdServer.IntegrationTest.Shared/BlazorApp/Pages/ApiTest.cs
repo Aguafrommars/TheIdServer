@@ -178,7 +178,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotEqual(expected, buttons.Count);
 
-            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.Last().Click(new MouseEventArgs());
         }
 
         [Fact]
@@ -204,7 +204,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var expected = buttons.Count - 1;
 
-            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            buttons.Last().Click(new MouseEventArgs());
 
             buttons = component.FindAll("#properties button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();

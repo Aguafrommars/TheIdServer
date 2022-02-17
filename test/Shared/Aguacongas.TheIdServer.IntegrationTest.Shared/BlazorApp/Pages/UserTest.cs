@@ -67,7 +67,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#external-logins-tokens button[type=button]");
 
-            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            deleteButton.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 
@@ -143,7 +143,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var deleteButton = WaitForNode(component, "#consents button[type=button]");
 
-            await deleteButton.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            deleteButton.Click(new MouseEventArgs());
 
             var form = component.Find("form");
 
