@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
-            confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            confirm.Click(new MouseEventArgs());
 
             await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
