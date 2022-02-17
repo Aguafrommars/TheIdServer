@@ -111,7 +111,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotEmpty(tdList);
 
-            tdList[tdList.Count - 1].Click(new MouseEventArgs());
+            await tdList[tdList.Count - 1].ClickAsync(new MouseEventArgs());
 
             Assert.Contains(typeof(TEntity).Name.ToLower(), navigationManager.Uri);
         }
