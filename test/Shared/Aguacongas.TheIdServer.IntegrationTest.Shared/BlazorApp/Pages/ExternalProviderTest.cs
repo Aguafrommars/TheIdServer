@@ -181,7 +181,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotEqual(expected, buttons.Count);
 
-            buttons.Last().Click(new MouseEventArgs());
+            await buttons.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
 
             buttons = component.FindAll("#transformations button")
                 .Where(b => b.Attributes.Any(a => a.Name == "blazor:onclick")).ToList();
