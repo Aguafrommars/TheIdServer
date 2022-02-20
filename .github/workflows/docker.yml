@@ -31,6 +31,8 @@ jobs:
       - name: Build and push TheIdServer Duende
         id: docker_build_theidserver_duende
         uses: docker/build-push-action@v2
+        env: 
+          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
@@ -50,6 +52,8 @@ jobs:
       - name: Build and push TheIdServer
         id: docker_build_theidserver
         uses: docker/build-push-action@v2
+        env: 
+          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
@@ -69,6 +73,8 @@ jobs:
       - name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
         uses: docker/build-push-action@v2
+        env: 
+          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
