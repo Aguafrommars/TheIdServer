@@ -39,3 +39,4 @@ jobs:
         run: ./update-dependencies.ps1
         env: 	
           GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
