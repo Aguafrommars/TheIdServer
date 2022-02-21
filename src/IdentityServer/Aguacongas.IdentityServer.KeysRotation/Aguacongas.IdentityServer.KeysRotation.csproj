@@ -30,7 +30,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
         <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.16.0" />
         <PackageReference Include="RavenDB.Client" Version="5.3.100" />
         <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
     </ItemGroup>

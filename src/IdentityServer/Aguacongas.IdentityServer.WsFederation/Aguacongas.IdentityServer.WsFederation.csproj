@@ -28,7 +28,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.15.1" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.16.0" />
 	</ItemGroup>
 
 	<ItemGroup>
