@@ -47,6 +47,8 @@ jobs:
         include-prerelease: true
     - name: Setup wasm tools
       run: dotnet workload install wasm-tools
+      env: 
+        GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
