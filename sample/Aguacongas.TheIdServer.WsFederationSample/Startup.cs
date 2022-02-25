@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Aguacongas.TheIdServer.WsFederationSample
 {
@@ -26,7 +27,7 @@ namespace Aguacongas.TheIdServer.WsFederationSample
                 })
                 .AddWsFederation(options =>
                 {
-                    options.MetadataAddress = "https://localhost:5001/wsfederation/metadata";
+                    options.MetadataAddress = "https://localhost:5001/wsfed";
                     options.RequireHttpsMetadata = false;
 
                     options.Wtrealm = "urn:aspnetcorerp";
