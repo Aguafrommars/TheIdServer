@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         {
             var ser = new WsFederationMetadataSerializer();
             using var ms = new MemoryStream();
-            using XmlWriter writer = new RoleSupportedClaimsWriter(XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false), _config);
+            using XmlWriter writer = new MetadataExtensionsWriter(XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false), _config);
             ser.WriteMetadata(writer, _config);
             writer.Flush();
             context.HttpContext.Response.ContentType = "application/xml";

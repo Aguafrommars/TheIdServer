@@ -9,6 +9,7 @@ using Duende.IdentityServer.Validation;
 using IdentityServer4.Validation;
 #endif
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -51,11 +52,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection AddWsFederationSevices(IServiceCollection services)
         {
+            services.TryAddTransient<IRelyingPartyStore, RelyingPartyStore>();
             return services.AddTransient<IMetadataResponseGenerator, MetadataResponseGenerator>()
                 .AddTransient<IWsFederationService, WsFederationService>()
                 .AddTransient<ISignInValidator, SignInValidator>()
                 .AddTransient<ISignInResponseGenerator, SignInResponseGenerator>()
-                .AddTransient<IRelyingPartyStore, RelyingPartyStore>()
                 .AddTransient<EndSessionRequestValidator>()
                 .AddTransient<IEndSessionRequestValidator, WsFederationEndSessionRequestValidator>();
         }

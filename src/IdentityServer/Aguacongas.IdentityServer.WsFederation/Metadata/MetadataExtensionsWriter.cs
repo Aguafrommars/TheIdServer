@@ -10,17 +10,17 @@ namespace Aguacongas.IdentityServer.WsFederation
     /// <summary>
     /// Write supported claim list
     /// </summary>
-    public class RoleSupportedClaimsWriter : DelegatingXmlDictionaryWriter
+    public class MetadataExtensionsWriter : DelegatingXmlDictionaryWriter
     {
         private static readonly string AUTH_NS = "http://docs.oasis-open.org/wsfed/authorization/200706";
         private readonly WsFederationConfiguration _configuration;
         
         /// <summary>
-        /// Initialize a new instance of <see cref="RoleSupportedClaimsWriter"/>
+        /// Initialize a new instance of <see cref="MetadataExtensionsWriter"/>
         /// </summary>
         /// <param name="xmlWriter"></param>
         /// <param name="configuration"></param>
-        public RoleSupportedClaimsWriter(XmlDictionaryWriter xmlWriter, WsFederationConfiguration configuration)
+        public MetadataExtensionsWriter(XmlDictionaryWriter xmlWriter, WsFederationConfiguration configuration)
         {
             InnerWriter = xmlWriter;
             _configuration = configuration;
@@ -33,6 +33,17 @@ namespace Aguacongas.IdentityServer.WsFederation
             {
                 WriteClaimCollection(_configuration.ClaimTypesOffered, prefix, nameof(WsFederationConfiguration.ClaimTypesOffered), @namespace);
                 WriteClaimCollection(_configuration.ClaimTypesRequested, prefix, nameof(WsFederationConfiguration.ClaimTypesRequested), @namespace);
+                if (_configuration.TokenTypesOffered is not null)
+                {
+                    InnerWriter.WriteStartElement(prefix, nameof(WsFederationConfiguration.TokenTypesOffered), @namespace);
+                    foreach (var tokenType in _configuration.TokenTypesOffered)
+                    {
+                        InnerWriter.WriteStartElement(prefix, nameof(TokenType), @namespace);
+                        InnerWriter.WriteAttributeString("Uri", tokenType.Uri);
+                        InnerWriter.WriteEndElement();
+                    }
+                    InnerWriter.WriteEndElement();
+                }
             }
 
             base.WriteStartElement(prefix, localName, @namespace);
