@@ -45,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     return;
                 }
                 o.ClaimTypesOffered = options.ClaimTypesOffered;
-                o.ClaimTypesRequested = o.ClaimTypesRequested;
+                o.ClaimTypesRequested = options.ClaimTypesRequested;
             });
             return AddWsFederationSevices(services);
         }
