@@ -37,6 +37,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\SettingsTest.cs" Link="BlazorApp\Pages\SettingsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UsersTest.cs" Link="BlazorApp\Pages\UsersTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controllers\WsFederationControllerTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
@@ -80,6 +81,7 @@
 
 	<ItemGroup>
 	  <Folder Include="BlazorApp\Pages\" />
+	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>

@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// </summary>
         /// <param name="issuerNameService">The <see cref="IIssuerNameService"/>.</param>
         /// <param name="keys">The keys.</param>
-        /// <param name="options"></param>
+        /// <param name="options">WS-Federation options</param>
         public MetadataResponseGenerator(IIssuerNameService issuerNameService, ISigningCredentialStore keys, IOptions<WsFederationOptions> options)
         {
             _keys = keys;
@@ -46,7 +46,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// </summary>
         /// <param name="contextAccessor">The context accessor.</param>
         /// <param name="keys">The keys.</param>
-        /// <param name="options"></param>
+        /// <param name="options">WS-Federation options</param>
         public MetadataResponseGenerator(IHttpContextAccessor contextAccessor, ISigningCredentialStore keys, IOptions<WsFederationOptions> options)
         {
             _keys = keys;

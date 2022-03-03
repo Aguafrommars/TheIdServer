@@ -27,11 +27,19 @@ using Xunit;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using Aguacongas.TheIdServer.Admin.Hubs;
+using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 {
+    [Collection(BlazorAppCollection.Name)]
     public class WsFederationControllerTest
     {
+        private readonly TheIdServerFactory _factory;
+        public WsFederationControllerTest(TheIdServerFactory factory)
+        {
+            _factory = factory;
+        }
+
         private readonly Action<IEndpointRouteBuilder, bool> _configureEndpoints = (endpoints, isProxy) =>
         {
             endpoints.MapRazorPages();
@@ -45,14 +53,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Metadata_should_return_metadata_document_with_key_rotation()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/wsfederation/metadata");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -67,14 +68,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_bad_request_when_request_is_bad()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/wsfederation");
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -82,14 +76,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_bad_request_when_realm_is_not_found()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/wsfederation?wtrealm=notfound&wa=wsignin1.0");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -98,14 +85,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_bad_request_when_realm_is_not_wsfed_client()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -117,7 +97,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -126,14 +106,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_bad_request_when_relyparty_is_not_found()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -145,7 +118,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -154,14 +127,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_wreply_nor_1st_redirect_uri_are_valid_uri()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -181,7 +147,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -190,14 +156,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_redirect_to_login_page_when_user_not_found_in_session()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "KeysRotation",
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -217,7 +176,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
@@ -227,11 +186,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_signin_document_when_user_found()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "Development",
-                ["Seed"] = "true"
-            };
             var userSessionMock = new Mock<IUserSession>();
             var sub = Guid.NewGuid().ToString();
             var name = Guid.NewGuid().ToString();
@@ -248,12 +202,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     "role"));
             userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
 
-            using var sut = TestUtils.CreateTestServer(services =>
-            {
-                services.AddTransient(p => userSessionMock.Object);
-            }, configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -364,7 +313,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await identityContext.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -377,11 +326,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_signin_document_with_client_claim_when_user_found()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "Development",
-                ["Seed"] = "true"
-            };
             var sub = Guid.NewGuid().ToString();
             var name = Guid.NewGuid().ToString();
             var user = new ClaimsPrincipal(
@@ -409,13 +353,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 })
                 .Returns(Task.CompletedTask);
 
-            using var sut = TestUtils.CreateTestServer(services =>
-            {
-                services.AddTransient(p => userSessionMock.Object)
-                    .AddTransient(p => profileServiceMock.Object);
-            }, configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -536,7 +474,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await identityContext.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -551,11 +489,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_return_signin_document_for_saml2_token_type_when_user_found()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["IdentityServer:Key:Type"] = "Development",
-                ["Seed"] = "true"
-            };
             var sub = Guid.NewGuid().ToString();
             var name = Guid.NewGuid().ToString();
             var user = new ClaimsPrincipal(
@@ -583,13 +516,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 })
                 .Returns(Task.CompletedTask);
 
-            using var sut = TestUtils.CreateTestServer(services =>
-            {
-                services.AddTransient(p => userSessionMock.Object)
-                    .AddTransient(p => profileServiceMock.Object);
-            }, configuration, configureEndpoints: _configureEndpoints);
-
-            using var scope = sut.Services.CreateScope();
+            using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
             var clientId = $"urn:{Guid.NewGuid()}";
@@ -635,7 +562,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await identityContext.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -650,15 +577,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task Index_should_redirect_to_logout_page_on_signout_message()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration, configureEndpoints: _configureEndpoints);
-
             var clientId = $"urn:{Guid.NewGuid()}";
 
-            using var client = sut.CreateClient();
+            using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignout1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
