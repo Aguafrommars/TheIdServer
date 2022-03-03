@@ -28,13 +28,15 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Aguacongas.TheIdServer.UI;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 {
     [Collection(BlazorAppCollection.Name)]
     public class WsFederationControllerTest
     {
-        private readonly TheIdServerFactory _factory;
+        private WebApplicationFactory<AccountController> _factory;
         public WsFederationControllerTest(TheIdServerFactory factory)
         {
             _factory = factory;
@@ -176,7 +178,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            using var client = _factory.CreateClient();
+            using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
@@ -353,6 +358,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 })
                 .Returns(Task.CompletedTask);
 
+            _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+            {
+                services.AddTransient(p => userSessionMock.Object)
+                    .AddTransient(p => profileServiceMock.Object);
+            }));
+
             using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -505,7 +516,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
             var userSessionMock = new Mock<IUserSession>();
             userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
-
             var profileServiceMock = new Mock<IProfileService>();
             profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
                 .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
@@ -515,6 +525,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                     new Claim("exemple.com", Guid.NewGuid().ToString()),
                 })
                 .Returns(Task.CompletedTask);
+
+            _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+            {
+                services.AddTransient(p => userSessionMock.Object)
+                    .AddTransient(p => profileServiceMock.Object);
+            }));
 
             using var scope = _factory.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
@@ -579,7 +595,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             var clientId = $"urn:{Guid.NewGuid()}";
 
-            using var client = _factory.CreateClient();
+            using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignout1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
