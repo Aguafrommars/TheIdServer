@@ -126,7 +126,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 })
                 .Configure((context, configureApp) =>
                 {
-                    configureApp.Use(async (context, next) =>
+                    configureApp.Use((context, next) =>
                     {
                         var testService = context.RequestServices.GetRequiredService<TestUserService>();
                         if (testService.User is not null)
@@ -134,7 +134,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                             context.User = testService.User;
                         }
                         
-                        await next();
+                        return next();
                     });
 
                     using var scope = configureApp.ApplicationServices.CreateScope();

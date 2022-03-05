@@ -10,11 +10,18 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;ws-federation</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<PackageIcon>package-icon.png</PackageIcon>
-		
+		<PackageIcon>package-icon.png</PackageIcon>		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="README.md">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Extensions\MvcBuilderExtensions.cs" Link="Extensions\MvcBuilderExtensions.cs" />

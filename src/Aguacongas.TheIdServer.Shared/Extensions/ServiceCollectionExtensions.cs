@@ -164,7 +164,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerWsFederation();
+                .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)));
 
             ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
             ConfigureDynamicConfiguration(mvcBuilder, configurationManager);

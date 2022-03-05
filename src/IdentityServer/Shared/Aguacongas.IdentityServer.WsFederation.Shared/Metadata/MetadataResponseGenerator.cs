@@ -6,9 +6,9 @@ using Duende.IdentityServer.Stores;
 #else
 using IdentityServer4.Extensions;
 using IdentityServer4.Stores;
-#endif
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Protocols.WsFederation;
+#endif
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Xml;
 using System.Threading.Tasks;
@@ -21,6 +21,7 @@ namespace Aguacongas.IdentityServer.WsFederation
     public class MetadataResponseGenerator : IMetadataResponseGenerator
     {
         private readonly ISigningCredentialStore _keys;
+        private readonly IOptions<WsFederationOptions> _options;
 
 #if DUENDE
         private readonly IIssuerNameService _issuerNameService;
@@ -30,10 +31,12 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// </summary>
         /// <param name="issuerNameService">The <see cref="IIssuerNameService"/>.</param>
         /// <param name="keys">The keys.</param>
-        public MetadataResponseGenerator(IIssuerNameService issuerNameService, ISigningCredentialStore keys)
+        /// <param name="options">WS-Federation options</param>
+        public MetadataResponseGenerator(IIssuerNameService issuerNameService, ISigningCredentialStore keys, IOptions<WsFederationOptions> options)
         {
             _keys = keys;
             _issuerNameService = issuerNameService;
+            _options = options;
         }
 #else
         private readonly IHttpContextAccessor _contextAccessor;
@@ -43,10 +46,12 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// </summary>
         /// <param name="contextAccessor">The context accessor.</param>
         /// <param name="keys">The keys.</param>
-        public MetadataResponseGenerator(IHttpContextAccessor contextAccessor, ISigningCredentialStore keys)
+        /// <param name="options">WS-Federation options</param>
+        public MetadataResponseGenerator(IHttpContextAccessor contextAccessor, ISigningCredentialStore keys, IOptions<WsFederationOptions> options)
         {
             _keys = keys;
             _contextAccessor = contextAccessor;
+            _options = options;
         }
 #endif
         /// <summary>
@@ -73,7 +78,10 @@ namespace Aguacongas.IdentityServer.WsFederation
             };
             config.SigningKeys.Add(key);
             config.KeyInfos.Add(keyInfo);
-
+            var settings = _options.Value;
+            config.ClaimTypesOffered = settings.ClaimTypesOffered;
+            config.ClaimTypesRequested = settings.ClaimTypesRequested;
+            config.TokenTypesOffered = settings.TokenTypesOffered;
             return config;
         }
     }
