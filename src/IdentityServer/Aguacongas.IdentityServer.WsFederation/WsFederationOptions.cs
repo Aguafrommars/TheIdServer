@@ -17,5 +17,19 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// Gets or sets the collection of claim type offered
         /// </summary>
         public IEnumerable<ClaimType> ClaimTypesOffered { get; set; }
+        /// <summary>
+        /// Gets or set the token type offered collection
+        /// </summary>
+        public IEnumerable<TokenType> TokenTypesOffered { get; set; } = new[]
+        {
+            new TokenType
+            {
+                Uri =  "urn:oasis:names:tc:SAML:1.0:assertion"
+            },
+            new TokenType
+            {
+                Uri =  "urn:oasis:names:tc:SAML:2.0:assertion"
+            }
+        };
     }
 }

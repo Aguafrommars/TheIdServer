@@ -81,6 +81,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             var settings = _options.Value;
             config.ClaimTypesOffered = settings.ClaimTypesOffered;
             config.ClaimTypesRequested = settings.ClaimTypesRequested;
+            config.TokenTypesOffered = settings.TokenTypesOffered;
             return config;
         }
     }
