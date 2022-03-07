@@ -66,16 +66,16 @@ namespace Aguacongas.IdentityServer.WsFederation
 
         private void WriteClaimType(ClaimType clainType)
         {
-            InnerWriter.WriteStartElement("auth", "ClaimType", AUTH_NS);
-            InnerWriter.WriteAttributeString("Uri", clainType.Uri);
-            InnerWriter.WriteAttributeString("Optional", "true");
+            InnerWriter.WriteStartElement("auth", nameof(ClaimType), AUTH_NS);
+            InnerWriter.WriteAttributeString(nameof(ClaimType.Uri), clainType.Uri);
+            InnerWriter.WriteAttributeString(nameof(ClaimType.Optional), clainType.Optional.ToString().ToLower());
             if (clainType.DisplayName is not null)
             {
-                InnerWriter.WriteElementString("DisplayName", AUTH_NS, clainType.DisplayName);
+                InnerWriter.WriteElementString(nameof(ClaimType.DisplayName), AUTH_NS, clainType.DisplayName);
             }
             if (clainType.Description is not null)
             {
-                InnerWriter.WriteElementString("Description", AUTH_NS, clainType.Description);
+                InnerWriter.WriteElementString(nameof(ClaimType.Description), AUTH_NS, clainType.Description);
             }
             InnerWriter.WriteEndElement();
         }

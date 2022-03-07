@@ -23,5 +23,9 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets  or sets the optional flag
+        /// </summary>
+        public bool Optional { get; set; } = true;
     }
 }
