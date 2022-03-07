@@ -1,13 +1,10 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+using Aguacongas.IdentityServer.WsFederation.Metadata;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using Microsoft.IdentityModel.Protocols.WsFederation;
 using System;
+using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {
@@ -18,14 +15,17 @@ namespace Aguacongas.IdentityServer.WsFederation
     public class MetadataResult : IActionResult
     {
         private readonly WsFederationConfiguration _config;
+        private readonly IMetatdataSerializer _serializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataResult"/> class.
         /// </summary>
         /// <param name="config">The configuration.</param>
-        public MetadataResult(WsFederationConfiguration config)
+        /// <param name="serializer">The metatdata serializer</param>
+        public MetadataResult(WsFederationConfiguration config, IMetatdataSerializer serializer)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         /// <summary>
@@ -37,16 +37,11 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// <returns>
         /// A task that represents the asynchronous execute operation.
         /// </returns>
-        public Task ExecuteResultAsync(ActionContext context)
+        public async Task ExecuteResultAsync(ActionContext context)
         {
-            var ser = new WsFederationMetadataSerializer();
-            using var ms = new MemoryStream();
-            using XmlWriter writer = new MetadataExtensionsWriter(XmlDictionaryWriter.CreateTextWriter(ms, Encoding.UTF8, false), _config);
-            ser.WriteMetadata(writer, _config);
-            writer.Flush();
+            var metaAsString = await _serializer.SerializeAsync(_config).ConfigureAwait(false);
             context.HttpContext.Response.ContentType = "application/xml";
-            var metaAsString = Encoding.UTF8.GetString(ms.ToArray());
-            return context.HttpContext.Response.WriteAsync(metaAsString);
+            await context.HttpContext.Response.WriteAsync(metaAsString).ConfigureAwait(false);
         }
     }
 }
