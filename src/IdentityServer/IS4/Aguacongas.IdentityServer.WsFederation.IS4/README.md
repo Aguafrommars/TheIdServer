@@ -171,6 +171,8 @@ This add the **ClaimTypesOffered** collection to the metadata document:
 
 You can also manage the `ClaimTypesRequested` and the `TokenTypesOffered` collections.
 
+You can implement your [`IMetatdataSerializer`](../../Aguacongas.IdentityServer.WsFederation/Metadata/IMetatdataSerializer.cs) if needed.
+
 ## Implement your store
 
 To access data the [`IWsFederationService`](../../Aguacongas.IdentityServer.WsFederation/IWsFederationService.cs) use a [`IRelyingPartyStore`](../../Aguacongas.IdentityServer.WsFederation/Stores/IRelyingPartyStore.cs). You can implement this interface and provide your implementation to the DI to ovveride the default [`IRelyingPartyStore`](../../Aguacongas.IdentityServer.WsFederation/Stores/IRelyingPartyStore.cs) implementation.

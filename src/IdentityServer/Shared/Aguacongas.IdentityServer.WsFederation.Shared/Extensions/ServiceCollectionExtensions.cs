@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation;
+using Aguacongas.IdentityServer.WsFederation.Metadata;
 using Aguacongas.IdentityServer.WsFederation.Stores;
 using Aguacongas.IdentityServer.WsFederation.Validation;
 #if DUENDE
@@ -54,6 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static IServiceCollection AddWsFederationSevices(IServiceCollection services)
         {
             services.TryAddTransient<IRelyingPartyStore, RelyingPartyStore>();
+            services.TryAddTransient<IMetatdataSerializer, MetadataSerializer>();
             return services.AddTransient<IMetadataResponseGenerator, MetadataResponseGenerator>()
                 .AddTransient<IWsFederationService, WsFederationService>()
                 .AddTransient<ISignInValidator, SignInValidator>()
