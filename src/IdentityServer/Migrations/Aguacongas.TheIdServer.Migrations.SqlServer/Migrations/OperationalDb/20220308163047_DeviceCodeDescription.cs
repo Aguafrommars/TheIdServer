@@ -2,23 +2,23 @@
 
 #nullable disable
 
-namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
+namespace Aguacongas.TheIdServer.SqlServer.Migrations.OperationalDb
 {
-    public partial class DeviceCodeDescrotion : Migration
+    public partial class DeviceCodeDescription : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "Description",
                 table: "DeviceCodes",
-                type: "character varying(200)",
+                type: "nvarchar(200)",
                 maxLength: 200,
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "SessionId",
                 table: "DeviceCodes",
-                type: "character varying(100)",
+                type: "nvarchar(100)",
                 maxLength: 100,
                 nullable: true);
         }

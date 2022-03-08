@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 {
-    public partial class DeviceCodeDescrotion : Migration
+    public partial class DeviceCodeDescription : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

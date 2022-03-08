@@ -2,25 +2,27 @@
 
 #nullable disable
 
-namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
+namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
 {
-    public partial class DeviceCodeDescrotion : Migration
+    public partial class DeviceCodeDescription : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "Description",
                 table: "DeviceCodes",
-                type: "TEXT",
+                type: "varchar(200)",
                 maxLength: 200,
-                nullable: true);
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<string>(
                 name: "SessionId",
                 table: "DeviceCodes",
-                type: "TEXT",
+                type: "varchar(100)",
                 maxLength: 100,
-                nullable: true);
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

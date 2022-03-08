@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.SqlServer.Migrations.OperationalDb
 {
     [DbContext(typeof(OperationalDbContext))]
-    [Migration("20220308163106_DeviceCodeDescrotion")]
-    partial class DeviceCodeDescrotion
+    [Migration("20220308163106_DeviceCodeDescription")]
+    partial class DeviceCodeDescription
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 {
     [DbContext(typeof(OperationalDbContext))]
-    [Migration("20220308163026_DeviceCodeDescrotion")]
-    public partial class DeviceCodeDescrotion : Migration
+    [Migration("20220308163026_DeviceCodeDescription")]
+    public partial class DeviceCodeDescription : Migration
 
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

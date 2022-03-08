@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
 {
     [DbContext(typeof(OperationalDbContext))]
-    [Migration("20220308163026_DeviceCodeDescrotion")]
-    partial class DeviceCodeDescrotion
+    [Migration("20220308163026_DeviceCodeDescription")]
+    partial class DeviceCodeDescription
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
