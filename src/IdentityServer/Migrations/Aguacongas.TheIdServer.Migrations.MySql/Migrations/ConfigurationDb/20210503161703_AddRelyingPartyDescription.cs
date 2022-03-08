@@ -13,8 +13,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 name: "Description",
                 table: "RelyingParties",
                 type: "longtext",
-                nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

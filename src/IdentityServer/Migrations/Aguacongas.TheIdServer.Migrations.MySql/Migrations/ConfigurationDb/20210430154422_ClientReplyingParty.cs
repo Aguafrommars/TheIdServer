@@ -13,8 +13,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 name: "RelyingPartyId",
                 table: "Clients",
                 type: "varchar(255)",
-                nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_RelyingPartyId",
