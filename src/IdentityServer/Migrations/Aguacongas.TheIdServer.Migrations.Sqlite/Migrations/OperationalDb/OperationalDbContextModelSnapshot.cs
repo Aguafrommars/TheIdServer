@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
             modelBuilder.Entity("Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore.KeyRotationKey", b =>
                 {
@@ -120,10 +120,18 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
                     b.Property<string>("Data")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SubjectId")
