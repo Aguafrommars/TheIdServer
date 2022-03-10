@@ -110,6 +110,7 @@
 		<ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
 		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.Admin.IS4\Aguacongas.IdentityServer.Admin.IS4.csproj" />
 		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4\Aguacongas.IdentityServer.EntityFramework.Store.IS4.csproj" />
+		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.KeysRotation.IS4\Aguacongas.IdentityServer.KeysRotation.IS4.csproj" />
 		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.MongoDb.Store.IS4\Aguacongas.IdentityServer.MongoDb.Store.IS4.csproj" />
 		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.RavenDb.Store.IS4\Aguacongas.IdentityServer.RavenDb.Store.IS4.csproj" />
 		<ProjectReference Include="..\IdentityServer\IS4\Aguacongas.IdentityServer.WsFederation.IS4\Aguacongas.IdentityServer.WsFederation.IS4.csproj" />
