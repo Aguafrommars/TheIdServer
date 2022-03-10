@@ -112,6 +112,7 @@
 		<ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Admin.Duende\Aguacongas.IdentityServer.Admin.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj" />
+		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.KeysRotation.Duende\Aguacongas.IdentityServer.KeysRotation.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.MongoDb.Store.Duende\Aguacongas.IdentityServer.MongoDb.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.WsFederation.Duende\Aguacongas.IdentityServer.WsFederation.Duende.csproj" />
