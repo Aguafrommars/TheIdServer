@@ -855,6 +855,29 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 }
 ```
 
+## Health check
+
+The server expose an health check enpoint you can use for docker on kubernetes at **/healthz**.
+
+The endpoit return a json reponse depending on the store kind used :
+
+```json
+{
+  "status": "Healthy",
+  "results": {
+    "ConfigurationDbContext": {
+      "status": "Healthy"
+    },
+    "OperationalDbContext": {
+      "status": "Healthy"
+    },
+    "ApplicationDbContext": {
+      "status": "Healthy"
+    }
+  }
+}
+```
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
