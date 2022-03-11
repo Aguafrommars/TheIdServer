@@ -65,7 +65,6 @@ namespace Microsoft.AspNetCore.Builder
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
-
             app.UseRequestLocalization(options =>
                 {
                     options.DefaultRequestCulture = new RequestCulture("en");

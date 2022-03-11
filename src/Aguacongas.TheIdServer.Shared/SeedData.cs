@@ -25,7 +25,7 @@ using ISModels = IdentityServer4.Models;
 #endif
 namespace Aguacongas.TheIdServer
 {
-    static class SeedData
+    public static class SeedData
     {
         public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
         {            
@@ -43,12 +43,9 @@ namespace Aguacongas.TheIdServer
                 var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 appcontext.Database.Migrate();
             }
-
-            if (configuration.GetValue<bool>("Seed"))
-            {
-                SeedUsers(scope, configuration);
-                SeedConfiguration(scope, configuration);
-            }
+            
+            SeedUsers(scope, configuration);
+            SeedConfiguration(scope, configuration);
         }
 
         public static void SeedUsers(IServiceScope scope, IConfiguration configuration)
