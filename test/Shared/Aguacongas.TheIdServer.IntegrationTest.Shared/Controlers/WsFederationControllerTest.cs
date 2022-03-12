@@ -42,16 +42,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory = factory;
         }
 
-        private readonly Action<IEndpointRouteBuilder, bool> _configureEndpoints = (endpoints, isProxy) =>
-        {
-            endpoints.MapRazorPages();
-            endpoints.MapDefaultControllerRoute();
-            if (!isProxy)
-            {
-                endpoints.MapHub<ProviderHub>("/providerhub");
-            }
-        };
-
         [Fact]
         public async Task Metadata_should_return_metadata_document_with_key_rotation()
         {

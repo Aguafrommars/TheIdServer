@@ -43,6 +43,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Linq;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.Data;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -185,6 +188,7 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddDatabaseDeveloperPageExceptionFilter()
                  .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
+            ConfigureHealthCheck(services, dbType, isProxy, configurationManager);
             return services;
         }
 
@@ -378,6 +382,47 @@ namespace Microsoft.Extensions.DependencyInjection
             if (dataprotectionSection != null)
             {
                 services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
+            }
+        }
+
+        private static void ConfigureHealthCheck(IServiceCollection services,DbTypes dbTypes, bool isProxy, IConfiguration configuration)
+        {
+            var builder = services.AddHealthChecks();
+            if (!isProxy)
+            {
+                var tags = new[] { "store" };
+                switch (dbTypes)
+                {
+                    case DbTypes.MongoDb:
+                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection"), tags: tags);
+                        break;
+                    case DbTypes.RavenDb:
+                        builder.AddRavenDB(options =>
+                        {
+                            var section = configuration.GetSection(nameof(RavenDbOptions));
+                            section.Bind(options);
+                            var path = section.GetValue<string>(nameof(RavenDbOptions.CertificatePath));
+                            if (!string.IsNullOrWhiteSpace(path))
+                            {
+                                options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));                                
+                            }
+                        }, tags: tags);
+                        break;
+                    default:
+                        builder.AddDbContextCheck<ConfigurationDbContext>(tags: tags)
+                            .AddDbContextCheck<OperationalDbContext>(tags: tags)
+                            .AddDbContextCheck<ApplicationDbContext>(tags: tags);
+                        break;
+                }
+            }
+            else
+            {
+                builder.AddAsyncCheck("api", async () =>
+                {
+                    using var client = new HttpClient();
+                    var reponse = await client.GetAsync(configuration.GetValue<string>($"{nameof(PrivateServerAuthentication)}:HeathUrl")).ConfigureAwait(false);
+                    return new HealthCheckResult(reponse.IsSuccessStatusCode ? HealthStatus.Healthy : HealthStatus.Unhealthy);
+                });
             }
         }
     }

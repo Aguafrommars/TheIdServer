@@ -13,20 +13,28 @@ using Aguacongas.TheIdServer.Models;
 using Duende.IdentityServer.Hosting;
 #endif
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -137,6 +145,11 @@ namespace Microsoft.AspNetCore.Builder
                 });
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("healthz", new HealthCheckOptions
+                {
+                    ResponseWriter = WriteHealtResponse
+                });
+
                 endpoints.MapRazorPages();
                 endpoints.MapDefaultControllerRoute();
                 if (!isProxy)
@@ -189,5 +202,60 @@ namespace Microsoft.AspNetCore.Builder
 
         }
 
+        private static Task WriteHealtResponse(HttpContext context, HealthReport healthReport)
+        {
+            context.Response.ContentType = "application/json; charset=utf-8";
+
+            var options = new JsonWriterOptions { Indented = true };
+            
+            using var memoryStream = new MemoryStream();
+            using var jsonWriter = new Utf8JsonWriter(memoryStream, options);
+            jsonWriter.WriteStartObject();
+            jsonWriter.WriteString("status", healthReport.Status.ToString());
+            jsonWriter.WriteStartObject("results");
+
+            foreach (var healthReportEntry in healthReport.Entries)
+            {
+                jsonWriter.WriteStartObject(healthReportEntry.Key);
+                var value = healthReportEntry.Value;
+
+                jsonWriter.WriteString("status", value.Status.ToString());
+
+                if (value.Description is not null)
+                {
+                    jsonWriter.WriteString("description",
+                    value.Description);
+                }
+
+                if (value.Data.Any())
+                {
+                    var serializerOptions = new JsonSerializerOptions
+                    {
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        WriteIndented = true
+                    };
+
+                    jsonWriter.WriteStartObject("data");
+
+                    foreach (var item in value.Data)
+                    {
+                        jsonWriter.WritePropertyName(item.Key);
+
+                        JsonSerializer.Serialize(jsonWriter, item.Value,
+                            item.Value?.GetType() ?? typeof(object), serializerOptions);
+                    }
+
+                    jsonWriter.WriteEndObject();
+                }
+
+                jsonWriter.WriteEndObject();
+            }
+
+            jsonWriter.WriteEndObject();
+            jsonWriter.WriteEndObject();
+            jsonWriter.Flush();
+
+            return context.Response.WriteAsync(Encoding.UTF8.GetString(memoryStream.ToArray()));
+        }
     }
 }
