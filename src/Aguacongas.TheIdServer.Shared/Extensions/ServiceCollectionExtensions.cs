@@ -402,7 +402,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             var section = configuration.GetSection(nameof(RavenDbOptions));
                             section.Bind(options);
                             var path = section.GetValue<string>(nameof(RavenDbOptions.CertificatePath));
-                            if (path is not null)
+                            if (!string.IsNullOrWhiteSpace(path))
                             {
                                 options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));                                
                             }
