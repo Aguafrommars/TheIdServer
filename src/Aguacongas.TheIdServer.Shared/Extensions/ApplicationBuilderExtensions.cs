@@ -69,14 +69,6 @@ namespace Microsoft.AspNetCore.Builder
                 }
             }
 
-            if (app is IEndpointRouteBuilder endpointRouteBuilder)
-            {
-                endpointRouteBuilder.MapHealthChecks("healthz", new HealthCheckOptions
-                {
-                    ResponseWriter = WriteHealtResponse
-                });
-            }
-
             var scope = app.ApplicationServices.CreateScope();
             var scopedProvider = scope.ServiceProvider;
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
@@ -153,6 +145,11 @@ namespace Microsoft.AspNetCore.Builder
                 });
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("healthz", new HealthCheckOptions
+                {
+                    ResponseWriter = WriteHealtResponse
+                });
+
                 endpoints.MapRazorPages();
                 endpoints.MapDefaultControllerRoute();
                 if (!isProxy)
