@@ -111,10 +111,10 @@ namespace Aguacongas.TheIdServer
             SeedApiScopes(configuration, provider);
             SeedApis(configuration, provider);
             SeedRelyingParties(configuration, provider);
-            SeedLocalization(configuration, provider);
+            SeedLocalization(provider);
         }
 
-        private static void SeedLocalization(IConfiguration configuration, IServiceProvider provider)
+        private static void SeedLocalization(IServiceProvider provider)
         {
             var cultureFiles = Directory.EnumerateFiles(".", "Localization-*.json");
             foreach (var file in cultureFiles)

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using System;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
@@ -136,18 +137,18 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
             AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
         }
 
-        private string FormatKey(string unformattedKey)
+        private static string FormatKey(string unformattedKey)
         {
             var result = new StringBuilder();
             int currentPosition = 0;
             while (currentPosition + 4 < unformattedKey.Length)
             {
-                result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
+                result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
                 currentPosition += 4;
             }
             if (currentPosition < unformattedKey.Length)
             {
-                result.Append(unformattedKey.Substring(currentPosition));
+                result.Append(unformattedKey.AsSpan(currentPosition));
             }
 
             return result.ToString().ToLowerInvariant();
