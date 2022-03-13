@@ -830,6 +830,10 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 > },
 > ```
 
+## Configure WS-Federation endpoint
+
+Read [Aguacongas.IdentityServer.WsFederation.Duende](../IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/README.md)
+
 ## Configure CIBA notification service
 
 Read [DUENDE CIBA INTEGRATION/Notification service](../../doc/CIBA.md#Notification-service)
@@ -855,11 +859,11 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 }
 ```
 
-## Health check
+## Health checks
 
-The server expose an health check enpoint you can use for docker on kubernetes at **/healthz**.
+The server expose an health checks enpoint you can use for docker on kubernetes at **/healthz**.
 
-The endpoit return a json reponse depending on the store kind used :
+The endpoit return a json reponse depending on the store kind used and redis dependencies :
 
 ```json
 {
@@ -872,6 +876,9 @@ The endpoit return a json reponse depending on the store kind used :
       "status": "Healthy"
     },
     "ApplicationDbContext": {
+      "status": "Healthy"
+    },
+    "dynamicConfigurationRedis": {
       "status": "Healthy"
     }
   }
