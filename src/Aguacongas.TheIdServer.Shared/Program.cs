@@ -34,8 +34,6 @@ if (seed)
     return;
 }
 
-var disableHttps = configuration.GetValue<bool>("DisableHttps");
-
 app.UseTheIdServer(app.Environment, configuration);
 
 app.Run();

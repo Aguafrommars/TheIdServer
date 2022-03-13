@@ -7,7 +7,6 @@ using Duende.IdentityServer.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +22,13 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
         private readonly IBackchannelAuthenticationInteractionService _interaction;
         private readonly IEventService _events;
         private readonly IStringLocalizer<CibaController> _localizer;
-        private readonly ILogger<CibaController> _logger;
-
         public CibaController(IBackchannelAuthenticationInteractionService interaction,
             IEventService events,
-            IStringLocalizer<CibaController> localizer,
-            ILogger<CibaController> logger)
+            IStringLocalizer<CibaController> localizer)
         {
             _interaction = interaction ?? throw new ArgumentNullException(nameof(interaction));
             _events = events ?? throw new ArgumentNullException(nameof(events));
             _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -70,7 +65,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
                 if (input.ScopesConsented != null && input.ScopesConsented.Any())
                 {
                     var scopes = input.ScopesConsented;
-                    if (ConsentOptions.EnableOfflineAccess == false)
+                    if (!ConsentOptions.EnableOfflineAccess)
                     {
                         scopes = scopes.Where(x => x != StandardScopes.OfflineAccess);
                     }
@@ -83,7 +78,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
 
                     // emit event
                     await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, result.ScopesValuesConsented, false))
-                        .ConfigureAwait(false); ;
+                        .ConfigureAwait(false);
                 }
                 else
                 {
@@ -95,7 +90,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
                 ModelState.AddModelError(string.Empty, ConsentOptions.InvalidSelectionErrorMessage);
             }
 
-            if (result != null)
+            if (result is not null)
             {
                 // communicate outcome of consent back to identityserver
                 await _interaction.CompleteLoginRequestAsync(result);                
@@ -145,7 +140,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
             foreach (var parsedScope in request.ValidatedResources.ParsedScopes)
             {
                 var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
-                if (apiScope != null)
+                if (apiScope is not null)
                 {
                     var scopeVm = CreateScopeViewModel(parsedScope, apiScope, model == null || model.ScopesConsented?.Contains(parsedScope.RawValue) == true);
                     scopeVm.Resources = apiResources.Where(x => x.Scopes.Contains(parsedScope.ParsedName))
@@ -159,7 +154,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
             }
             if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
             {
-                apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(StandardScopes.OfflineAccess) == true));
+                apiScopes.Add(GetOfflineAccessScope(model is null || model.ScopesConsented?.Contains(StandardScopes.OfflineAccess) == true));
             }
             vm.ApiScopes = apiScopes;
 

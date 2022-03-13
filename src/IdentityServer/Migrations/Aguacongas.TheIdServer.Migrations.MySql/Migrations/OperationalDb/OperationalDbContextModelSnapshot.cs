@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore.KeyRotationKey", b =>
@@ -122,11 +122,19 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
                     b.Property<string>("Data")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("SubjectId")
                         .HasMaxLength(200)

@@ -37,6 +37,8 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\SettingsTest.cs" Link="BlazorApp\Pages\SettingsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UsersTest.cs" Link="BlazorApp\Pages\UsersTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controllers\WsFederationControllerTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\HealthCheckTest.cs" Link="HealthCheckTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
@@ -46,13 +48,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="bunit" Version="1.4.15" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.14" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.2" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.2" />
-		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="bunit" Version="1.6.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.15" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
+		<PackageReference Include="Moq" Version="4.17.2" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<PrivateAssets>all</PrivateAssets>
@@ -80,6 +82,7 @@
 
 	<ItemGroup>
 	  <Folder Include="BlazorApp\Pages\" />
+	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>
