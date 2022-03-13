@@ -32,6 +32,7 @@
 		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="1.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.2" />
 		<PackageReference Include="AspNetCore.HealthChecks.RavenDb" Version="6.0.2" />
+		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.3" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.5.0" />
@@ -42,7 +43,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.3" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />

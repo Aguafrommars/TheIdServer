@@ -822,6 +822,10 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 > },
 > ```
 
+## Configure WS-Federation endpoint
+
+Read [Aguacongas.IdentityServer.WsFederation.ISA](../IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/README.md)
+
 ## Use the client to override the default configuration
 
 The server and the blazor app integrate [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration). Most of the configuration can be ovveriden using the blazor app.
@@ -847,7 +851,7 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 
 The server expose an health check enpoint you can use for docker on kubernetes at **/healthz**.
 
-The endpoit return a json reponse depending on the store kind used :
+The endpoit return a json reponse depending on the store kind used and redis dependencies :
 
 ```json
 {
@@ -860,6 +864,9 @@ The endpoit return a json reponse depending on the store kind used :
       "status": "Healthy"
     },
     "ApplicationDbContext": {
+      "status": "Healthy"
+    },
+    "dynamicConfigurationRedis": {
       "status": "Healthy"
     }
   }

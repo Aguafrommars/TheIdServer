@@ -188,7 +188,7 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddDatabaseDeveloperPageExceptionFilter()
                  .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
-            ConfigureHealthCheck(services, dbType, isProxy, configurationManager);
+            ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
             return services;
         }
 
@@ -385,9 +385,27 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureHealthCheck(IServiceCollection services,DbTypes dbTypes, bool isProxy, IConfiguration configuration)
+        private static void ConfigureHealthChecks(IServiceCollection services,DbTypes dbTypes, bool isProxy, IConfiguration configuration)
         {
             var builder = services.AddHealthChecks();
+            ConfigureDbHealthChecks(dbTypes, isProxy, configuration, builder);
+
+            var dynamicConfigurationRedisConnectionString = configuration.GetValue<string>($"{nameof(RedisConfigurationOptions)}:{nameof(RedisConfigurationOptions.ConnectionString)}");
+            var signalRRedisConnectionString = configuration.GetValue<string>("SignalR:RedisConnectionString");
+
+            if (!string.IsNullOrEmpty(signalRRedisConnectionString))
+            {
+                builder.AddRedis(signalRRedisConnectionString, name: "signalRRedisConnectionString");
+            }
+
+            if (!string.IsNullOrEmpty(dynamicConfigurationRedisConnectionString))
+            {
+                builder.AddRedis(dynamicConfigurationRedisConnectionString, name: "dynamicConfigurationRedis");
+            }
+        }
+
+        private static void ConfigureDbHealthChecks(DbTypes dbTypes, bool isProxy, IConfiguration configuration, IHealthChecksBuilder builder)
+        {
             if (!isProxy)
             {
                 var tags = new[] { "store" };
@@ -404,7 +422,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             var path = section.GetValue<string>(nameof(RavenDbOptions.CertificatePath));
                             if (!string.IsNullOrWhiteSpace(path))
                             {
-                                options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));                                
+                                options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));
                             }
                         }, tags: tags);
                         break;
@@ -414,16 +432,15 @@ namespace Microsoft.Extensions.DependencyInjection
                             .AddDbContextCheck<ApplicationDbContext>(tags: tags);
                         break;
                 }
+                return;
             }
-            else
+
+            builder.AddAsyncCheck("api", async () =>
             {
-                builder.AddAsyncCheck("api", async () =>
-                {
-                    using var client = new HttpClient();
-                    var reponse = await client.GetAsync(configuration.GetValue<string>($"{nameof(PrivateServerAuthentication)}:HeathUrl")).ConfigureAwait(false);
-                    return new HealthCheckResult(reponse.IsSuccessStatusCode ? HealthStatus.Healthy : HealthStatus.Unhealthy);
-                });
-            }
+                using var client = new HttpClient();
+                var reponse = await client.GetAsync(configuration.GetValue<string>($"{nameof(PrivateServerAuthentication)}:HeathUrl")).ConfigureAwait(false);
+                return new HealthCheckResult(reponse.IsSuccessStatusCode ? HealthStatus.Healthy : HealthStatus.Unhealthy);
+            });
         }
     }
 }
