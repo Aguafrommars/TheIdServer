@@ -1,3 +1,37 @@
+# [4.5.0](https://github.com/Aguafrommars/TheIdServer/compare/4.4.0...4.5.0) (2022-03-13)
+
+
+### Bug Fixes
+
+* device code migrations ([0e2fdb0](https://github.com/Aguafrommars/TheIdServer/commit/0e2fdb04f7d588e00353fdb0fdb60e8b795cd88d))
+* mysql migrations ([af28bab](https://github.com/Aguafrommars/TheIdServer/commit/af28bab7dad5d92c5fc2a8cd79bb89cfb1a8ce4c))
+* publish missing library ([1212576](https://github.com/Aguafrommars/TheIdServer/commit/1212576281a5e5e63e7a384e70d24038b1aa75bb))
+* update packages ([8f802c4](https://github.com/Aguafrommars/TheIdServer/commit/8f802c4da74fbe64701ce0bf5eac403112e4adcf))
+* update packages ([bbcdf88](https://github.com/Aguafrommars/TheIdServer/commit/bbcdf8813bdf3174f3b656ec01fc6fa707ebc3be))
+* update packages ([26c5431](https://github.com/Aguafrommars/TheIdServer/commit/26c54311b6784983b7c99c3baa30b7ec49d81a03))
+* update packages ([c8a1023](https://github.com/Aguafrommars/TheIdServer/commit/c8a102385be2c8781d50365186145f0503ccb299))
+* update packages ([10f5bae](https://github.com/Aguafrommars/TheIdServer/commit/10f5bae3d0f638b71400ea0c06e44f4746224f7a))
+* update packages ([5bdbc0f](https://github.com/Aguafrommars/TheIdServer/commit/5bdbc0fc32835f771cffda4b70d367a39c4a3fde))
+* update packages ([52c2605](https://github.com/Aguafrommars/TheIdServer/commit/52c2605e95da0fa9e9d2c4fae016e7cafd921d94))
+* update packages ([bb2e834](https://github.com/Aguafrommars/TheIdServer/commit/bb2e8347e1dafc352466ae075ba754020dfca1c5))
+* update packages ([013cc9a](https://github.com/Aguafrommars/TheIdServer/commit/013cc9a654a66611efe584774999c41b3630e4d3))
+* update packages ([28a0f4e](https://github.com/Aguafrommars/TheIdServer/commit/28a0f4ef1447dee3df93434be1ffa989fe32af99))
+* update packages ([f862787](https://github.com/Aguafrommars/TheIdServer/commit/f862787ab1973009133678ecbbdfeefdb2d9238f))
+* update packages ([e7611da](https://github.com/Aguafrommars/TheIdServer/commit/e7611da8e7851c9757ac58dc61146cbee746b033))
+
+
+### Features
+
+* health checks endpoint. ([481f285](https://github.com/Aguafrommars/TheIdServer/commit/481f28578980fbecde5f92a4db157b3d873b4e1b))
+* ws-federation metadata claims settings ([8f12d46](https://github.com/Aguafrommars/TheIdServer/commit/8f12d46b778f13ba1da327d044e48a78cabeca2c))
+
+
+### Reverts
+
+* Revert "test: workaround bunit issue" ([3884f18](https://github.com/Aguafrommars/TheIdServer/commit/3884f186f35853babad552901477d31d57fc5013))
+* Revert "test: workaround bunit issue" ([4c98c62](https://github.com/Aguafrommars/TheIdServer/commit/4c98c6286980808c60f5b87ee99634d8af3647f9))
+* Revert "test: syncho html components events" ([1a62825](https://github.com/Aguafrommars/TheIdServer/commit/1a6282583bc7b8b53b67a7743ec0e3532bdd13e1))
+
 # [4.4.0](https://github.com/Aguafrommars/TheIdServer/compare/4.3.3...4.4.0) (2022-02-13)
 
 
