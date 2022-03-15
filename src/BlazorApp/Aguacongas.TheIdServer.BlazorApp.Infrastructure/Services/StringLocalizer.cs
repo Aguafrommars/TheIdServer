@@ -101,9 +101,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
 
         protected virtual LocalizedString GetLocalizedString(string name, params object[] arguments)
         {
-            if (!KeyValuePairs.TryAdd(name, null))
+            if (!KeyValuePairs.TryAdd(name, null) && KeyValuePairs.TryGetValue(name, out LocalizedString value))
             {
-                var value = KeyValuePairs[name];
                 var localizedString = new LocalizedString(name, string.Format(value ?? name, arguments), value == null);
                 if (localizedString.ResourceNotFound && CurrentCulture.Name != "en")
                 {
