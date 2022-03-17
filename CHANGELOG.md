@@ -1,3 +1,13 @@
+## [4.5.1](https://github.com/Aguafrommars/TheIdServer/compare/4.5.0...4.5.1) (2022-03-17)
+
+
+### Bug Fixes
+
+* register form style ([daa7a8e](https://github.com/Aguafrommars/TheIdServer/commit/daa7a8e485d54dd6ee829086f1b65208bb428692))
+* update packages ([c5c5328](https://github.com/Aguafrommars/TheIdServer/commit/c5c53286f90cef05ab67f2539f9169ee77cfca12))
+* update packages ([acad175](https://github.com/Aguafrommars/TheIdServer/commit/acad1753d57e62f071a19d6306ad40cf69ba9c36))
+* update packages ([278edfa](https://github.com/Aguafrommars/TheIdServer/commit/278edfa19601ad6fbfdd3c2a89cbd9bbb8ae1cdb))
+
 # [4.5.0](https://github.com/Aguafrommars/TheIdServer/compare/4.4.0...4.5.0) (2022-03-13)
 
 
