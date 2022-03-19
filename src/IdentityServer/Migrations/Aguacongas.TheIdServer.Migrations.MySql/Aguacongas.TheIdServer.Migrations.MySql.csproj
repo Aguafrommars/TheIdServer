@@ -11,8 +11,8 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;mysql</PackageTags>
         <Description>Contains db contexts migrations code for MySql.</Description>
-		
         <PackageIcon>package-icon.png</PackageIcon>
+				
         <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
