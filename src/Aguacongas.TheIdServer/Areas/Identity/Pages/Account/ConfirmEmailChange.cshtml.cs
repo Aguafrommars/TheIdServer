@@ -44,7 +44,6 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
                 return NotFound(_localizer["Unable to load user with ID '{0}'.", userId]);
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {

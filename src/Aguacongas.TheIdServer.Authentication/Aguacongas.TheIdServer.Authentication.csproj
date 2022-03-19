@@ -13,6 +13,7 @@
         <Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
         <DebugType>Full</DebugType>
         <PackageIcon>package-icon.png</PackageIcon>
+        <IsTrimmable>true</IsTrimmable>
         <CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 

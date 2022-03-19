@@ -12,6 +12,7 @@
 		<PackageIcon>package-icon.png</PackageIcon>		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<IsTrimmable>true</IsTrimmable>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

@@ -10,8 +10,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;administration;mongodb</PackageTags>
 		<PackageIcon>package-icon.png</PackageIcon>
-		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<IsTrimmable>true</IsTrimmable>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

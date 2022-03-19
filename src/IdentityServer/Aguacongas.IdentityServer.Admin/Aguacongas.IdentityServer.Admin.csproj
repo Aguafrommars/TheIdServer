@@ -12,6 +12,7 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageIcon>package-icon.png</PackageIcon>
+        <IsTrimmable>true</IsTrimmable>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

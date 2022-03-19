@@ -12,6 +12,7 @@
       <PackageTags>theidserver;aspnetcore;identity;security</PackageTags>
       <Description>TheIdServer management application.</Description>
       <PackageIcon>package-icon.png</PackageIcon>
+      <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
