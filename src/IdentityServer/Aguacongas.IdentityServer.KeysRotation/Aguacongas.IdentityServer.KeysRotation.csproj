@@ -10,9 +10,9 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;signing keys rotation</PackageTags>
         <PackageIcon>package-icon.png</PackageIcon>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        
         <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 

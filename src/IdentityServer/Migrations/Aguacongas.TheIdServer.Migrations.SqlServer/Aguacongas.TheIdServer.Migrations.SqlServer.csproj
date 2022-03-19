@@ -10,9 +10,9 @@
         <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;sqlserver</PackageTags>
-        <Description>Contains db contexts migrations code for SqlServer.</Description>
-		
+        <Description>Contains db contexts migrations code for SqlServer.</Description>		
         <PackageIcon>package-icon.png</PackageIcon>
+        
         <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 

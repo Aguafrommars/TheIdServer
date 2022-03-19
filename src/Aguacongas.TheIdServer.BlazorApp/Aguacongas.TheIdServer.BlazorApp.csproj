@@ -15,6 +15,7 @@
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+        
 		<RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
 

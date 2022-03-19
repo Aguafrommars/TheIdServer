@@ -13,6 +13,7 @@
 		<DebugType>Full</DebugType>
 		<RootNamespace>Aguacongas.TheIdServer.BlazorApp</RootNamespace>
 		<PackageIcon>package-icon.png</PackageIcon>
+		
 		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

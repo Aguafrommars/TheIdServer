@@ -12,6 +12,7 @@
       <Description>TheIdServer administration application api scope page and components.</Description>
       <DebugType>Full</DebugType>
       <PackageIcon>package-icon.png</PackageIcon>
+      
       <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
