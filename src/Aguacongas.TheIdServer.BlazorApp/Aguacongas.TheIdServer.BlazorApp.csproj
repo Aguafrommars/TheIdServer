@@ -17,7 +17,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
         <IsTrimmable>true</IsTrimmable>
 		<RunAOTCompilation>false</RunAOTCompilation>
-		<PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
