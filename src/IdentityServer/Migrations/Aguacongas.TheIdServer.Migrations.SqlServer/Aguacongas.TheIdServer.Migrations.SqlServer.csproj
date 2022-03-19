@@ -12,7 +12,7 @@
         <PackageTags>theidserver;sqlserver</PackageTags>
         <Description>Contains db contexts migrations code for SqlServer.</Description>		
         <PackageIcon>package-icon.png</PackageIcon>
-        <IsTrimmable>true</IsTrimmable>
+        
         <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 

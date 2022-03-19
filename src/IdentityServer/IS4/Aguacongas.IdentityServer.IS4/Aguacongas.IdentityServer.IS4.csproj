@@ -13,7 +13,7 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>		
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
-		<IsTrimmable>true</IsTrimmable>
+		
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

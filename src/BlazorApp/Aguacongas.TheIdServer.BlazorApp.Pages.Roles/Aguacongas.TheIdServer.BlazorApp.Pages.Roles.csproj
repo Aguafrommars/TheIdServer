@@ -12,7 +12,7 @@
       <Description>TheIdServer administration application role list page.</Description>
       <DebugType>Full</DebugType>
       <PackageIcon>package-icon.png</PackageIcon>
-      <IsTrimmable>true</IsTrimmable>
+      
       <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 

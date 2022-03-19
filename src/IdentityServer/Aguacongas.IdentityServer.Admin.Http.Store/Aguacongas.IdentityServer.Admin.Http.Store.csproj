@@ -11,7 +11,7 @@
 		<PackageTags>theidserver;identityserver4;duende-identityserver;administration</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
 		<PackageIcon>package-icon.png</PackageIcon>
-		<IsTrimmable>true</IsTrimmable>
+		
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

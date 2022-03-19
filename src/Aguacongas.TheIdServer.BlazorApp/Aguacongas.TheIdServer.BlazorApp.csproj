@@ -15,7 +15,7 @@
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-        <IsTrimmable>true</IsTrimmable>
+        
 		<RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
 
