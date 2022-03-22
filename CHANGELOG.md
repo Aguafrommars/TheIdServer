@@ -1,3 +1,11 @@
+## [4.5.2](https://github.com/Aguafrommars/TheIdServer/compare/4.5.1...4.5.2) (2022-03-19)
+
+
+### Bug Fixes
+
+* confirm change email ([ed5ab50](https://github.com/Aguafrommars/TheIdServer/commit/ed5ab50860160af30cbae311cdb0bec044e54def))
+* update packages ([ac65237](https://github.com/Aguafrommars/TheIdServer/commit/ac6523714d76e943420b24a615873975d6b7c028))
+
 ## [4.5.1](https://github.com/Aguafrommars/TheIdServer/compare/4.5.0...4.5.1) (2022-03-17)
 
 
