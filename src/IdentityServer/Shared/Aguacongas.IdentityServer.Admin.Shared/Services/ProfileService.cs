@@ -145,7 +145,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 try
                 {
                     var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
-                    var assembly = Assembly.LoadFile(path);
+                    var assembly = Assembly.LoadFrom(path);
                     var type = assembly.GetType(providerTypeName, true);
                     provider = Activator.CreateInstance(type) as IProvideClaims;
                 }
