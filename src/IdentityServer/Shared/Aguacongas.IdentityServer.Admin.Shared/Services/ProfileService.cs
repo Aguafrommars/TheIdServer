@@ -142,12 +142,18 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             if (provider == null)
             {
-                var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
-#pragma warning disable S3885 // "Assembly.Load" should be used
-                var assembly = Assembly.LoadFrom(path);
-#pragma warning restore S3885 // "Assembly.Load" should be used
-                var type = assembly.GetType(providerTypeName);
-                provider = Activator.CreateInstance(type) as IProvideClaims;
+                try
+                {
+                    var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
+                    var assembly = Assembly.LoadFile(path);
+                    var type = assembly.GetType(providerTypeName, true);
+                    provider = Activator.CreateInstance(type) as IProvideClaims;
+                }
+                catch(Exception e)
+                {
+                    Logger.LogError(e, e.Message);
+                    return Task.FromResult(Array.Empty<Claim>().AsEnumerable());
+                }
             }
 
             return provider.ProvideClaims(subject, client, caller, resource);
