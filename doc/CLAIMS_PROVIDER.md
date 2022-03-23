@@ -8,7 +8,7 @@ If the provider is not found in the DI container and the property **ClaimProvide
 
 ## Implement
 
-Claims providers must implement the [`IProvideClaims`](./src/IdentityServer/Shared/Aguacongas.IdentityServer.Shared/Absractions/IProvideClaims.cs) interface.
+Claims providers must implement the [`IProvideClaims`](/src/IdentityServer/Shared/Aguacongas.IdentityServer.Shared/Absractions/IProvideClaims.cs) interface.
 
 **sample**
 
@@ -52,6 +52,27 @@ public class ClaimsProvidersSetup : ISetupClaimsProvider
     }
 }
 ```
+
+> To avoid `TypeLoadException` copy *Aguacongas.IdentityServer.Duende.dll* or *Aguacongas.IdentityServer.IS4.dll* from your TheIdServer installation folder and reference it in your project:
+> ```xml
+> <Project Sdk="Microsoft.NET.Sdk">
+>
+>  <PropertyGroup>
+>    <TargetFramework>net6.0</TargetFramework>
+>    <Nullable>enable</Nullable>
+>  </PropertyGroup>
+>
+>  <ItemGroup>
+>    <Reference Include="Aguacongas.IdentityServer.Duende">
+>      <HintPath>Aguacongas.IdentityServer.Duende.dll</HintPath>
+>    </Reference>
+>  </ItemGroup>
+>
+>  <ItemGroup>
+>    <PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
+>  </ItemGroup>
+> </Project>
+> ```
 
 ## Configuration
 
