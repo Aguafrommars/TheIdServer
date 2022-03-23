@@ -1,3 +1,11 @@
+## [4.5.3](https://github.com/Aguafrommars/TheIdServer/compare/4.5.2...4.5.3) (2022-03-23)
+
+
+### Bug Fixes
+
+* load custom claim provider ([f8581f0](https://github.com/Aguafrommars/TheIdServer/commit/f8581f038130a1962f8e3b87d8b66e7779d27baa))
+* update packages ([f794d6f](https://github.com/Aguafrommars/TheIdServer/commit/f794d6f8f3147d3ac92a178f40789fd45fdb0be8))
+
 ## [4.5.2](https://github.com/Aguafrommars/TheIdServer/compare/4.5.1...4.5.2) (2022-03-19)
 
 
