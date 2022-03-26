@@ -9,6 +9,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
         {
             var options = configuration.Get<OpenTelemetryOptions>();
+            if (string.IsNullOrEmpty(options?.Service?.Name))
+            {
+                return services;
+            }
             return services.AddOpenTelemetry(options);
         }
 
