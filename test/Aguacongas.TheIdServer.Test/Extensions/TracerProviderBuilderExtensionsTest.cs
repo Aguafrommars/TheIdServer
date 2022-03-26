@@ -21,10 +21,16 @@ namespace Aguacongas.TheIdServer.Test.Extensions
             using var provider = Sdk.CreateTracerProviderBuilder()
                 .AddTheIdServerTelemetry(new OpenTelemetryOptions
                 {
-                    ConsoleEnabled = true,
                     Service = new ServiceOptions
                     {
                         Name = "test"
+                    },
+                    Exporter = new ExporterOptions
+                    {
+                        Trace = new TraceOptions
+                        {
+                            ConsoleEnabled = true
+                        }
                     }
                 })
                 .Build();
@@ -44,22 +50,25 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                     },
                     Exporter = new ExporterOptions
                     {
-                        Honeycomb = new HoneycombOptions
+                        Trace = new TraceOptions
                         {
-                            ApiKey = "test"
-                        },
-                        Jaeger = new JaegerExporterOptions
-                        {
-                            AgentHost = "exemple.com",
-                            AgentPort = 443
-                        },
-                        OpenTelemetryProtocol = new OtlpExporterOptions
-                        {
-                            Endpoint = new Uri("https://exemple.com")
-                        },
-                        Zipkin = new ZipkinExporterOptions
-                        {
-                            Endpoint = new Uri("https://exemple.com")
+                            OpenTelemetryProtocol = new OtlpExporterOptions
+                            {
+                                Endpoint = new Uri("https://exemple.com")
+                            },
+                            Honeycomb = new HoneycombOptions
+                            {
+                                ApiKey = "test"
+                            },
+                            Jaeger = new JaegerExporterOptions
+                            {
+                                AgentHost = "exemple.com",
+                                AgentPort = 443
+                            },
+                            Zipkin = new ZipkinExporterOptions
+                            {
+                                Endpoint = new Uri("https://exemple.com")
+                            }
                         }
                     }
                 })

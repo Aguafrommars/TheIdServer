@@ -11,12 +11,12 @@ namespace OpenTelemetry.Trace
     {
         public static TracerProviderBuilder AddTheIdServerTelemetry(this TracerProviderBuilder builder, OpenTelemetryOptions options)
         {
-            if (options.ConsoleEnabled)
+            if (options.Exporter?.Trace?.ConsoleEnabled == true)
             {
                 builder = builder.AddConsoleExporter();
             }
 
-            return builder.AddExporters(options.Exporter)
+            return builder.AddExporters(options.Exporter?.Trace)
                 .AddSource(options.Service.Name)
                 .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(options.Service.Name,
                     options.Service.Namespace,
@@ -82,7 +82,7 @@ namespace OpenTelemetry.Trace
 
             return builder;
         }
-        private static TracerProviderBuilder AddExporters(this TracerProviderBuilder builder, ExporterOptions options)
+        private static TracerProviderBuilder AddExporters(this TracerProviderBuilder builder, TraceOptions options)
         {
             if (options is null)
             {
