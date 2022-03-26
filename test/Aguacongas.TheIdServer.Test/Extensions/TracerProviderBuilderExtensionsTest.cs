@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.Options.OpenTelemetry;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;

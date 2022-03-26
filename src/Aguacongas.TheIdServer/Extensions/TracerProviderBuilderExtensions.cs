@@ -1,4 +1,6 @@
-﻿using Aguacongas.TheIdServer.Options.OpenTelemetry;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Resources;
 using StackExchange.Redis;
@@ -105,9 +107,14 @@ namespace OpenTelemetry.Trace
                 {
                     var otlpOptions = options.OpenTelemetryProtocol;
                     o.BatchExportProcessorOptions = otlpOptions.BatchExportProcessorOptions;
+                    o.Protocol = otlpOptions.Protocol;
+                    o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
                     o.ExportProcessorType = otlpOptions.ExportProcessorType;
                     o.Endpoint = otlpOptions.Endpoint;
                     o.Headers = otlpOptions.Headers;
+                    o.PeriodicExportingMetricReaderOptions = otlpOptions.PeriodicExportingMetricReaderOptions;
+                    o.MetricReaderType = otlpOptions.MetricReaderType;
+                    o.AggregationTemporality = otlpOptions.AggregationTemporality;
                 });
             }
 
