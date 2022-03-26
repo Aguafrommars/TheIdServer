@@ -17,16 +17,22 @@ namespace Aguacongas.TheIdServer.Test.Extensions
             using var provider = Sdk.CreateMeterProviderBuilder()
                 .AddTheIdServerTelemetry(new OpenTelemetryOptions
                 {
-                    ConsoleEnabled = true,
                     Service = new ServiceOptions
                     {
                         Name = "test"
                     },
                     Exporter = new ExporterOptions
                     {
-                        OpenTelemetryProtocol = new OtlpExporterOptions
+                        Telemetry =  new TelemetryOptions
                         {
-                            Endpoint = new Uri("https://exemple.com")
+                            OpenTelemetryProtocol = new OtlpExporterOptions
+                            {
+                                Endpoint = new Uri("https://exemple.com")
+                            },
+                            Prometheus = new PrometheusExporterOptions
+                            {
+                                HttpListenerPrefixes = new string[] { "http://localhost:9090" }
+                            }
                         }
                     }
 
