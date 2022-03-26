@@ -11,11 +11,17 @@ namespace OpenTelemetry.Metrics
             builder = builder.AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation();
 
-            if (options?.Exporter?.OpenTelemetryProtocol?.Endpoint is not null)
+            var exporterOptions = options?.Exporter?.Telemetry;
+            if (exporterOptions is null)
+            {
+                return builder;
+            }
+
+            if (exporterOptions.OpenTelemetryProtocol?.Endpoint is not null)
             {
                 builder.AddOtlpExporter(o =>
                 {
-                    var otlpOptions = options.Exporter.OpenTelemetryProtocol;
+                    var otlpOptions = exporterOptions.OpenTelemetryProtocol;
                     o.BatchExportProcessorOptions = otlpOptions.BatchExportProcessorOptions;
                     o.Protocol = otlpOptions.Protocol;
                     o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
@@ -27,6 +33,19 @@ namespace OpenTelemetry.Metrics
                     o.AggregationTemporality = otlpOptions.AggregationTemporality;
                 });
             }
+
+            if (exporterOptions.Prometheus?.HttpListenerPrefixes is not null)
+            {
+                builder.AddPrometheusExporter(o =>
+                {
+                    var prometeuspOptions = exporterOptions.Prometheus;
+                    o.StartHttpListener = prometeuspOptions.StartHttpListener;
+                    o.HttpListenerPrefixes = prometeuspOptions.HttpListenerPrefixes;
+                    o.ScrapeEndpointPath = prometeuspOptions.ScrapeEndpointPath;
+                    o.ScrapeResponseCacheDurationMilliseconds = prometeuspOptions.ScrapeResponseCacheDurationMilliseconds;
+                });
+            }
+
             return builder;
         }
     }
