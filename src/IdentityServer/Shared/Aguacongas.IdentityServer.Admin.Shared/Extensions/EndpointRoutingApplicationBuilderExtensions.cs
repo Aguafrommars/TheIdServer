@@ -103,7 +103,7 @@ namespace Microsoft.AspNetCore.Builder
             var path = request.Path;
 
             if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
-                !request.PathBase.StartsWithSegments(basePath) && !path.StartsWithSegments(basePath))
+                (request.PathBase.HasValue && !request.PathBase.StartsWithSegments(basePath)) && !path.StartsWithSegments(basePath))
             {
                 await next().ConfigureAwait(false);
                 return;

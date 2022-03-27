@@ -9,6 +9,7 @@ using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Aguacongas.TheIdServer.Options.OpenTelemetry;
 #if DUENDE
 using Duende.IdentityServer.Hosting;
 #endif
@@ -92,30 +93,37 @@ namespace Microsoft.AspNetCore.Builder
                .UseStaticFiles()
                .UseIdentityServerAdminApi("/api", child =>
                {
-                    if (configuration.GetValue<bool>("EnableOpenApiDoc"))
-                    {
-                        child.UseOpenApi()
-                            .UseSwaggerUi3(options =>
-                            {
-                                var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                                options.OAuth2Client = settings.OAuth2Client;
-                            });
-                    }
-                    var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-                    if (allowedOrigin != null)
-                    {
-                        child.UseCors(configure =>
-                        {
-                            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                                .AllowAnyMethod()
-                                .AllowAnyHeader()
-                                .AllowCredentials();
-                        });
-                    }
-                })
-                .UseRouting()
+                   if (configuration.GetValue<bool>("EnableOpenApiDoc"))
+                   {
+                       child.UseOpenApi()
+                           .UseSwaggerUi3(options =>
+                           {
+                               var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                               options.OAuth2Client = settings.OAuth2Client;
+                           });
+                   }
+                   var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+                   if (allowedOrigin != null)
+                   {
+                       child.UseCors(configure =>
+                       {
+                           configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                               .AllowAnyMethod()
+                               .AllowAnyHeader()
+                               .AllowCredentials();
+                       });
+                   }
+               })
+                .UseRouting();
+
+            var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
+            if (otlpOptions?.Exporter?.Telemetry?.Prometheus?.StartHttpListener == false)
+            {
+                app.UseOpenTelemetryPrometheusScrapingEndpoint();
+            }
+
 #if DUENDE
-                .UseMiddleware<BaseUrlMiddleware>()
+            app.UseMiddleware<BaseUrlMiddleware>()
                 .ConfigureCors();
 
             new IdentityServerMiddlewareOptions().AuthenticationMiddleware(app);
@@ -123,13 +131,14 @@ namespace Microsoft.AspNetCore.Builder
             app.UseMiddleware<MutualTlsEndpointMiddleware>()
                .UseMiddleware<IdentityServerMiddleware>();
 #else
-               .UseIdentityServer();
+            app.UseIdentityServer();
 #endif
 
             if (!isProxy)
             {
-                app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
+                app.UseIdentityServerAdminAuthentication(" /providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
+
 
             app.UseAuthorization()
                 .Use((context, next) =>
