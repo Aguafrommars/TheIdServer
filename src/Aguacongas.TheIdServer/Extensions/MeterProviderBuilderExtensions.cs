@@ -17,6 +17,18 @@ namespace OpenTelemetry.Metrics
                 return builder;
             }
 
+            if (exporterOptions.Console is not null)
+            {
+                builder = builder.AddConsoleExporter((c, r) =>
+                {
+                    var consoleOptions = exporterOptions.Console;
+                    c.Targets = consoleOptions.Targets;
+                    r.PeriodicExportingMetricReaderOptions = consoleOptions.PeriodicExportingMetricReaderOptions;
+                    r.MetricReaderType = consoleOptions.MetricReaderType;
+                    r.Temporality = consoleOptions.Temporality;
+                });
+            }
+
             if (exporterOptions.OpenTelemetryProtocol?.Endpoint is not null)
             {
                 builder.AddOtlpExporter(o =>
