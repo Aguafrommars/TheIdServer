@@ -39,6 +39,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controllers\WsFederationControllerTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\HealthCheckTest.cs" Link="HealthCheckTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\PrometheusEndpointTest.cs" Link="PrometheusEndpointTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />

@@ -25,7 +25,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         {
                             Console = new ConsoleOptions(),
                             OpenTelemetryProtocol = new OtlpExporterOptions(),
-                            Prometheus = new PrometheusExporterOptions()
+                            Prometheus = new PrometheusOptions()
                         }
                     }
                 }).Build();
