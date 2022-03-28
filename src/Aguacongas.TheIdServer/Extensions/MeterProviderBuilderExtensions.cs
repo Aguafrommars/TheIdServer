@@ -46,7 +46,7 @@ namespace OpenTelemetry.Metrics
                 });
             }
 
-            if (exporterOptions.Prometheus?.HttpListenerPrefixes is not null)
+            if (exporterOptions.Prometheus is not null)
             {
                 builder.AddPrometheusExporter(o =>
                 {

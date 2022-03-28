@@ -16,13 +16,17 @@ namespace OpenTelemetry.Trace
                 builder = builder.AddConsoleExporter();
             }
 
-            return builder.AddExporters(options.Exporter?.Trace)
-                .AddSource(options.Service.Name)
-                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(options.Service.Name,
-                    options.Service.Namespace,
-                    options.Service.Version,
-                    options.Service.AutoGenerateServiceInstanceId,
-                    options.Service.InstanceId))
+            if (!string.IsNullOrEmpty(options.Service?.Name))
+            {
+                builder = builder.AddSource(options.Service.Name)
+                                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(options.Service.Name,
+                                    options.Service.Namespace,
+                                    options.Service.Version,
+                                    options.Service.AutoGenerateServiceInstanceId,
+                                    options.Service.InstanceId));
+            }
+
+            return builder.AddExporters(options.Exporter?.Trace)                
                 .AddInstrumentation(options.Instrumentation);
         }
 

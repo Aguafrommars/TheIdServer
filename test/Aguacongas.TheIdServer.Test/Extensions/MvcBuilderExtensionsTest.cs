@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                             {
                                 Endpoint = new Uri("https://exemple.com")
                             },
-                            Prometheus = new PrometheusExporterOptions
+                            Prometheus = new PrometheusOptions
                             {
                                 HttpListenerPrefixes = new string[] { "http://localhost:9090" }
                             }

@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
@@ -32,6 +33,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -75,13 +77,13 @@ namespace Microsoft.AspNetCore.Builder
             var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
             app.UseRequestLocalization(options =>
-                {
-                    options.DefaultRequestCulture = new RequestCulture("en");
-                    options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
-                    options.SupportedUICultures = options.SupportedCultures;
-                    options.FallBackToParentCultures = true;
-                    options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
-                })
+            {
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
+                options.SupportedUICultures = options.SupportedCultures;
+                options.FallBackToParentCultures = true;
+                options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
+            })
                 .UseSerilogRequestLogging();
 
             if (!disableHttps)
@@ -116,12 +118,6 @@ namespace Microsoft.AspNetCore.Builder
                })
                 .UseRouting();
 
-            var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
-            if (otlpOptions?.Exporter?.Telemetry?.Prometheus?.StartHttpListener == false)
-            {
-                app.UseOpenTelemetryPrometheusScrapingEndpoint();
-            }
-
 #if DUENDE
             app.UseMiddleware<BaseUrlMiddleware>()
                 .ConfigureCors();
@@ -139,7 +135,6 @@ namespace Microsoft.AspNetCore.Builder
                 app.UseIdentityServerAdminAuthentication(" /providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
-
             app.UseAuthorization()
                 .Use((context, next) =>
                 {
@@ -151,23 +146,51 @@ namespace Microsoft.AspNetCore.Builder
                     remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
                     remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
                     return next();
-                });
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks("healthz", new HealthCheckOptions
+                })
+                .UsePrometheus(configuration)
+                .UseEndpoints(endpoints =>
                 {
-                    ResponseWriter = WriteHealtResponse
-                });
+                    endpoints.MapHealthChecks("healthz", new HealthCheckOptions
+                    {
+                        ResponseWriter = WriteHealtResponse
+                    });
 
-                endpoints.MapRazorPages();
-                endpoints.MapDefaultControllerRoute();
-                if (!isProxy)
+                    endpoints.MapRazorPages();
+                    endpoints.MapDefaultControllerRoute();
+                    if (!isProxy)
+                    {
+                        endpoints.MapHub<ProviderHub>("/providerhub");
+                    }
+                    endpoints.MapFallbackToPage("/_Host");
+                })
+                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+
+            return app;
+        }
+
+        private static IApplicationBuilder UsePrometheus(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
+            var prometheusOtions = otlpOptions?.Exporter?.Telemetry?.Prometheus;
+            if (prometheusOtions is not null)
+            {
+                if (prometheusOtions.Protected)
                 {
-                    endpoints.MapHub<ProviderHub>("/providerhub");
+                    app.Use((context, next) =>
+                    {
+                        if (context.Request.Path.StartsWithSegments(prometheusOtions.ScrapeEndpointPath) &&
+                            context.User?.HasClaim(c => c.Value == SharedConstants.READERPOLICY && c.Type == "role") != true)
+                        {
+                            var response = context.Response;
+                            response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            return response.CompleteAsync();
+                        }
+                        return next();
+                    });
                 }
-                endpoints.MapFallbackToPage("/_Host");
-            });
-            app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+
+                app.UseOpenTelemetryPrometheusScrapingEndpoint();
+            }
 
             return app;
         }
