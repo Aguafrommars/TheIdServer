@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, OpenTelemetryOptions options)
-        => services.AddOpenTelemetryTracing(builder => builder.AddTheIdServerTelemetry(options))
-            .AddOpenTelemetryMetrics(builder => builder.AddTheIdServerTelemetry(options));
+        => services.AddOpenTelemetryTracing(builder => builder.AddTheIdServerTraces(options))
+            .AddOpenTelemetryMetrics(builder => builder.AddTheIdServerMetrics(options));
     }
 }

@@ -171,7 +171,7 @@ namespace Microsoft.AspNetCore.Builder
         private static IApplicationBuilder UsePrometheus(this IApplicationBuilder app, IConfiguration configuration)
         {
             var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
-            var prometheusOtions = otlpOptions?.Exporter?.Telemetry?.Prometheus;
+            var prometheusOtions = otlpOptions?.Metrics?.Prometheus;
             if (prometheusOtions is not null)
             {
                 if (prometheusOtions.Protected)
@@ -179,7 +179,7 @@ namespace Microsoft.AspNetCore.Builder
                     app.Use((context, next) =>
                     {
                         if (context.Request.Path.StartsWithSegments(prometheusOtions.ScrapeEndpointPath) &&
-                            context.User?.HasClaim(c => c.Value == SharedConstants.READERPOLICY && c.Type == "role") != true)
+                            context.User?.IsInRole(SharedConstants.READERPOLICY) != true)
                         {
                             var response = context.Response;
                             response.StatusCode = (int)HttpStatusCode.Unauthorized;

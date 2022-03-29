@@ -5,7 +5,7 @@ namespace Aguacongas.TheIdServer.Options.OpenTelemetry
     {
         public TraceOptions Trace { get; set; }
 
-        public TelemetryOptions Telemetry { get; set; }
+        public MetricsOptions Telemetry { get; set; }
 
         
     }

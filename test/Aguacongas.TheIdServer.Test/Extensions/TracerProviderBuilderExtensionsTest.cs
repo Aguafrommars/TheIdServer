@@ -19,18 +19,15 @@ namespace Aguacongas.TheIdServer.Test.Extensions
         public void AddTheIdServerTelemetry_should_add_console_exporter()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()
-                .AddTheIdServerTelemetry(new OpenTelemetryOptions
+                .AddTheIdServerTraces(new OpenTelemetryOptions
                 {
-                    Service = new ServiceOptions
+                    Trace = new TraceOptions
                     {
-                        Name = "test"
-                    },
-                    Exporter = new ExporterOptions
-                    {
-                        Trace = new TraceOptions
+                        Service = new ServiceOptions
                         {
-                            ConsoleEnabled = true
-                        }
+                            Name = "test"
+                        },
+                        ConsoleEnabled = true
                     }
                 })
                 .Build();
@@ -42,33 +39,26 @@ namespace Aguacongas.TheIdServer.Test.Extensions
         public void AddTheIdServerTelemetry_should_add_exporters()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()
-                .AddTheIdServerTelemetry(new OpenTelemetryOptions
+                .AddTheIdServerTraces(new OpenTelemetryOptions
                 {
-                    Service = new ServiceOptions
+                    Trace = new TraceOptions
                     {
-                        Name = "test"
-                    },
-                    Exporter = new ExporterOptions
-                    {
-                        Trace = new TraceOptions
+                        OpenTelemetryProtocol = new OtlpExporterOptions
                         {
-                            OpenTelemetryProtocol = new OtlpExporterOptions
-                            {
-                                Endpoint = new Uri("https://exemple.com")
-                            },
-                            Honeycomb = new HoneycombOptions
-                            {
-                                ApiKey = "test"
-                            },
-                            Jaeger = new JaegerExporterOptions
-                            {
-                                AgentHost = "exemple.com",
-                                AgentPort = 443
-                            },
-                            Zipkin = new ZipkinExporterOptions
-                            {
-                                Endpoint = new Uri("https://exemple.com")
-                            }
+                            Endpoint = new Uri("https://exemple.com")
+                        },
+                        Honeycomb = new HoneycombOptions
+                        {
+                            ApiKey = "test"
+                        },
+                        Jaeger = new JaegerExporterOptions
+                        {
+                            AgentHost = "exemple.com",
+                            AgentPort = 443
+                        },
+                        Zipkin = new ZipkinExporterOptions
+                        {
+                            Endpoint = new Uri("https://exemple.com")
                         }
                     }
                 })
@@ -81,36 +71,39 @@ namespace Aguacongas.TheIdServer.Test.Extensions
         public void AddTheIdServerTelemetry_should_set_up_instrumentation()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()
-                .AddTheIdServerTelemetry(new OpenTelemetryOptions
+                .AddTheIdServerTraces(new OpenTelemetryOptions
                 {
-                    Service = new ServiceOptions
+                    Trace = new TraceOptions
                     {
-                        Name = "test"
-                    },
-                    Instrumentation = new InstrumentationOptions
-                    {
-                        AspNetCore = new AspNetCoreInstrumentationOptions
+                        Service = new ServiceOptions
                         {
-                            EnableGrpcAspNetCoreSupport = true,
-                            RecordException = true
+                            Name = "test"
                         },
-                        HttpClient = new HttpClientInstrumentationOptions
+                        Instrumentation = new InstrumentationOptions
                         {
-                            RecordException = true,
-                            SetHttpFlavor = true
-                        },
-                        Redis = new RedisOptions
-                        {
-                            ConnectionString = "localhost",
-                            FlushInterval = TimeSpan.FromSeconds(1),
-                            SetVerboseDatabaseStatements = true
-                        },
-                        SqlClient = new SqlClientInstrumentationOptions
-                        {
-                            EnableConnectionLevelAttributes = true,
-                            RecordException = true,
-                            SetDbStatementForStoredProcedure = true,
-                            SetDbStatementForText = true
+                            AspNetCore = new AspNetCoreInstrumentationOptions
+                            {
+                                EnableGrpcAspNetCoreSupport = true,
+                                RecordException = true
+                            },
+                            HttpClient = new HttpClientInstrumentationOptions
+                            {
+                                RecordException = true,
+                                SetHttpFlavor = true
+                            },
+                            Redis = new RedisOptions
+                            {
+                                ConnectionString = "localhost",
+                                FlushInterval = TimeSpan.FromSeconds(1),
+                                SetVerboseDatabaseStatements = true
+                            },
+                            SqlClient = new SqlClientInstrumentationOptions
+                            {
+                                EnableConnectionLevelAttributes = true,
+                                RecordException = true,
+                                SetDbStatementForStoredProcedure = true,
+                                SetDbStatementForText = true
+                            }
                         }
                     }
                 })

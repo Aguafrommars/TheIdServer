@@ -9,25 +9,32 @@ namespace OpenTelemetry.Trace
 {
     public static class TracerProviderBuilderExtensions
     {
-        public static TracerProviderBuilder AddTheIdServerTelemetry(this TracerProviderBuilder builder, OpenTelemetryOptions options)
+        public static TracerProviderBuilder AddTheIdServerTraces(this TracerProviderBuilder builder, OpenTelemetryOptions options)
         {
-            if (options.Exporter?.Trace?.ConsoleEnabled == true)
+            var traceOptions = options.Trace;
+            if (traceOptions is null)
+            {
+                return builder; ;
+            }
+
+            if (traceOptions.ConsoleEnabled == true)
             {
                 builder = builder.AddConsoleExporter();
             }
 
-            if (!string.IsNullOrEmpty(options.Service?.Name))
-            {
-                builder = builder.AddSource(options.Service.Name)
-                                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(options.Service.Name,
-                                    options.Service.Namespace,
-                                    options.Service.Version,
-                                    options.Service.AutoGenerateServiceInstanceId,
-                                    options.Service.InstanceId));
+            var serviceOptions = traceOptions.Service;
+            if (!string.IsNullOrEmpty(serviceOptions?.Name))
+            {                
+                builder = builder.AddSource(serviceOptions.Name)
+                                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceOptions.Name,
+                                    serviceOptions.Namespace,
+                                    serviceOptions.Version,
+                                    serviceOptions.AutoGenerateServiceInstanceId,
+                                    serviceOptions.InstanceId));
             }
 
-            return builder.AddExporters(options.Exporter?.Trace)                
-                .AddInstrumentation(options.Instrumentation);
+            return builder.AddExporters(traceOptions)                
+                .AddInstrumentation(traceOptions.Instrumentation);
         }
 
         public static TracerProviderBuilder AddInstrumentation(this TracerProviderBuilder builder, InstrumentationOptions options)
