@@ -5,6 +5,10 @@ namespace Aguacongas.TheIdServer.Options.OpenTelemetry
 {
     public class TraceOptions
     {
+        public ServiceOptions Service { get; set; }
+
+        public InstrumentationOptions Instrumentation { get; set; }
+
         public bool ConsoleEnabled { get; set; }
 
         public OtlpExporterOptions OpenTelemetryProtocol { get; set; }

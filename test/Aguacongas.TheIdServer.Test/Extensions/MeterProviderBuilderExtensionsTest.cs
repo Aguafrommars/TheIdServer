@@ -14,19 +14,16 @@ namespace Aguacongas.TheIdServer.Test.Extensions
     public class MeterProviderBuilderExtensionsTest
     {
         [Fact]
-        public void AddTheIdServerTelemetry_should_add_exporters()
+        public void AddTheIdServerMetrics_should_add_exporters()
         {
             using var provider = Sdk.CreateMeterProviderBuilder()
-                .AddTheIdServerTelemetry(new OpenTelemetryOptions
+                .AddTheIdServerMetrics(new OpenTelemetryOptions
                 {
-                    Exporter = new ExporterOptions
+                    Metrics = new MetricsOptions
                     {
-                        Telemetry = new TelemetryOptions
-                        {
-                            Console = new ConsoleOptions(),
-                            OpenTelemetryProtocol = new OtlpExporterOptions(),
-                            Prometheus = new PrometheusOptions()
-                        }
+                        Console = new ConsoleOptions(),
+                        OpenTelemetryProtocol = new OtlpExporterOptions(),
+                        Prometheus = new PrometheusOptions()
                     }
                 }).Build();
 

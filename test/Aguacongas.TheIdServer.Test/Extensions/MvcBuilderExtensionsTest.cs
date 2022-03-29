@@ -12,30 +12,22 @@ namespace Aguacongas.TheIdServer.Test.Extensions
     public class MvcBuilderExtensionsTest
     {
         [Fact]
-        public void AddTheIdServerTelemetry_should_add_otlp_exporter()
+        public void AddTheIdServerMetrics_should_add_otlp_exporter()
         {
             using var provider = Sdk.CreateMeterProviderBuilder()
-                .AddTheIdServerTelemetry(new OpenTelemetryOptions
+                .AddTheIdServerMetrics(new OpenTelemetryOptions
                 {
-                    Service = new ServiceOptions
+                    Metrics = new MetricsOptions
                     {
-                        Name = "test"
-                    },
-                    Exporter = new ExporterOptions
-                    {
-                        Telemetry =  new TelemetryOptions
+                        OpenTelemetryProtocol = new OtlpExporterOptions
                         {
-                            OpenTelemetryProtocol = new OtlpExporterOptions
-                            {
-                                Endpoint = new Uri("https://exemple.com")
-                            },
-                            Prometheus = new PrometheusOptions
-                            {
-                                HttpListenerPrefixes = new string[] { "http://localhost:9090" }
-                            }
+                            Endpoint = new Uri("https://exemple.com")
+                        },
+                        Prometheus = new PrometheusOptions
+                        {
+                            HttpListenerPrefixes = new string[] { "http://localhost:9090" }
                         }
                     }
-
                 })
                 .Build();
 

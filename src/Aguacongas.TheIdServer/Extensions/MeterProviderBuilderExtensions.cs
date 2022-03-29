@@ -1,27 +1,28 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
+using Honeycomb.OpenTelemetry;
 
 namespace OpenTelemetry.Metrics
 {
     public static class MeterProviderBuilderExtensions
     {
-        public static MeterProviderBuilder AddTheIdServerTelemetry(this MeterProviderBuilder builder, OpenTelemetryOptions options)
+        public static MeterProviderBuilder AddTheIdServerMetrics(this MeterProviderBuilder builder, OpenTelemetryOptions options)
         {
             builder = builder.AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation();
 
-            var exporterOptions = options?.Exporter?.Telemetry;
-            if (exporterOptions is null)
+            var metricsOptions = options.Metrics;
+            if (metricsOptions is null)
             {
                 return builder;
             }
 
-            if (exporterOptions.Console is not null)
+            if (metricsOptions.Console is not null)
             {
                 builder = builder.AddConsoleExporter((c, r) =>
                 {
-                    var consoleOptions = exporterOptions.Console;
+                    var consoleOptions = metricsOptions.Console;
                     c.Targets = consoleOptions.Targets;
                     r.PeriodicExportingMetricReaderOptions = consoleOptions.PeriodicExportingMetricReaderOptions;
                     r.MetricReaderType = consoleOptions.MetricReaderType;
@@ -29,11 +30,11 @@ namespace OpenTelemetry.Metrics
                 });
             }
 
-            if (exporterOptions.OpenTelemetryProtocol?.Endpoint is not null)
+            if (metricsOptions.OpenTelemetryProtocol?.Endpoint is not null)
             {
                 builder.AddOtlpExporter(o =>
                 {
-                    var otlpOptions = exporterOptions.OpenTelemetryProtocol;
+                    var otlpOptions = metricsOptions.OpenTelemetryProtocol;
                     o.BatchExportProcessorOptions = otlpOptions.BatchExportProcessorOptions;
                     o.Protocol = otlpOptions.Protocol;
                     o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
@@ -46,15 +47,24 @@ namespace OpenTelemetry.Metrics
                 });
             }
 
-            if (exporterOptions.Prometheus is not null)
+            if (metricsOptions.Prometheus is not null)
             {
                 builder.AddPrometheusExporter(o =>
                 {
-                    var prometeuspOptions = exporterOptions.Prometheus;
+                    var prometeuspOptions = metricsOptions.Prometheus;
                     o.StartHttpListener = prometeuspOptions.StartHttpListener;
                     o.HttpListenerPrefixes = prometeuspOptions.HttpListenerPrefixes;
                     o.ScrapeEndpointPath = prometeuspOptions.ScrapeEndpointPath;
                     o.ScrapeResponseCacheDurationMilliseconds = prometeuspOptions.ScrapeResponseCacheDurationMilliseconds;
+                });
+            }
+
+            if (metricsOptions.Honeycomb?.ApiKey is not null)
+            {
+                builder = builder.AddHoneycomb(o =>
+                {
+                    o.FromOther(metricsOptions.Honeycomb);
+
                 });
             }
 
