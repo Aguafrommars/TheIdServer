@@ -14,10 +14,10 @@ namespace OpenTelemetry.Trace
             var traceOptions = options.Trace;
             if (traceOptions is null)
             {
-                return builder; ;
+                return builder;
             }
 
-            if (traceOptions.ConsoleEnabled == true)
+            if (traceOptions.ConsoleEnabled)
             {
                 builder = builder.AddConsoleExporter();
             }

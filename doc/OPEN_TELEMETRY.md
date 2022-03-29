@@ -330,7 +330,26 @@ You can protect the metrics endpoint if you don't want it be accessible to anoni
 }
 ```
 
-When protected the metirc endpoint can be accessed if the user has the role **Is4-Reader**.
+When protected the metirc endpoint can be accessed if the user has the role **Is4-Reader**. Setup a client_credential client with a claim of type = role and value = Is4-Reader you'll use in the prometheus job's oauth2 configuration.
+
+![PROMETHEUS.png](assets/PROMETHEUS.png)
+
+Your prometheus.yaml can look like :
+
+```yaml
+scrape_configs:
+- job_name: "theidserver"
+  scheme: "https"
+  oauth2:
+    client_id: "prometheus"
+    client_secret: "your.prometheus-client-secret"
+    token_url: "https://theidserver.myorg.com/connect/token"
+    scopes: 
+    - "theidservertokenapi"
+  static_configs:
+  - targets:
+    - "theidserver.myorg.com"
+```
 
 #### Honeycomb
 
