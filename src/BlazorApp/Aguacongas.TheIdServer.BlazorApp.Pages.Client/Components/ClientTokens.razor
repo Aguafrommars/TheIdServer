@@ -70,28 +70,25 @@
             }
         </div>
     </div>
-    @if (_showAllOptions || Model.HasUser())
-    {
-        <div class="mb-3 row">
-            <label class="col col-form-label" for="id-token">
-                @Localizer["id token lifetime"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
-                <div>
-                    <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
-                </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="id-token">
+            @Localizer["id token lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
+            <div>
+                <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
             </div>
         </div>
-        <div class="mb-3 row">
-            <label class="col col-form-label" for="salt">
-                @Localizer["pairwise subject salt"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
-            </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="salt">
+            @Localizer["pairwise subject salt"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
         </div>
-    }
+    </div>
     @if (_showAllOptions || Model.CanUseRefreshToken())
     {
         <div class="mb-3 row">
