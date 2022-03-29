@@ -885,6 +885,10 @@ The endpoit return a json reponse depending on the store kind used and redis dep
 }
 ```
 
+## Configure OpenTelemetry
+
+[Configure OpenTelemetry doc](../../doc/OPEN_TELEMETRY.md) provides details on [OpenTelemetry](https://opentelemetry.io/) configuration.
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
@@ -895,3 +899,4 @@ The endpoit return a json reponse depending on the store kind used and redis dep
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 * [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration)
+* [OpenTelemetry](https://opentelemetry.io/)
