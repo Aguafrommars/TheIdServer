@@ -1,4 +1,4 @@
-# OpenTelemetry
+# Configure OpenTelemetry
 
 TheIdServer can export [OpenTelemetry](https://opentelemetry.io/) data.  
 
