@@ -36,7 +36,7 @@
             </AuthorizeView>
         </div>
     </div>
-    if ((_showAllOptions || Model.IsAuthorizationCodeClient()))
+    if (_showAllOptions || Model.IsAuthorizationCodeClient() || Model.IsDevice())
     {
         <div class="mb-3 row">
             <label class="col col-form-label" for="access-token">
