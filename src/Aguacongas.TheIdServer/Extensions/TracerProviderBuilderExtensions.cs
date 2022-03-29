@@ -146,24 +146,7 @@ namespace OpenTelemetry.Trace
             {
                 builder = builder.AddHoneycomb(o =>
                 {
-                    var honeycombOptions = options.Honeycomb;
-                    o.ApiKey = honeycombOptions.ApiKey;
-                    o.TracesApiKey = honeycombOptions.TracesApiKey;
-                    o.MetricsApiKey = honeycombOptions.MetricsApiKey;
-                    o.Dataset = honeycombOptions.Dataset;
-                    o.TracesDataset = honeycombOptions.TracesDataset;
-                    o.MetricsDataset = honeycombOptions.MetricsDataset;
-                    o.Endpoint = honeycombOptions.Endpoint;
-                    o.TracesEndpoint = honeycombOptions.TracesEndpoint;
-                    o.MetricsEndpoint = honeycombOptions.MetricsEndpoint;
-                    o.SampleRate = honeycombOptions.SampleRate;
-                    o.ServiceName = honeycombOptions.ServiceName;
-                    o.ServiceVersion = honeycombOptions.ServiceVersion;
-                    o.InstrumentHttpClient = honeycombOptions.InstrumentHttpClient;
-                    o.InstrumentSqlClient = honeycombOptions.InstrumentSqlClient;
-                    o.InstrumentGrpcClient = honeycombOptions.InstrumentGrpcClient;
-                    o.InstrumentStackExchangeRedisClient = honeycombOptions.InstrumentStackExchangeRedisClient;
-                    o.MeterNames = honeycombOptions.MeterNames;
+                    o.FromOther(options.Honeycomb);
                 });
             }
 
