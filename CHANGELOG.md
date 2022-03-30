@@ -1,3 +1,17 @@
+# [4.6.0](https://github.com/Aguafrommars/TheIdServer/compare/4.5.3...4.6.0) (2022-03-30)
+
+
+### Bug Fixes
+
+* client page for client creds ([ad80949](https://github.com/Aguafrommars/TheIdServer/commit/ad80949984f8e2a3ce76be44e84cb6aa3afdc2b4))
+* update packages ([bcc33c8](https://github.com/Aguafrommars/TheIdServer/commit/bcc33c8a570dbfdf1175a2ef171192507c0c5b55))
+* update packages ([190ea00](https://github.com/Aguafrommars/TheIdServer/commit/190ea004875962e77fa6c885230303ad3dac7b59))
+
+
+### Features
+
+* open telemetry ([1888a8a](https://github.com/Aguafrommars/TheIdServer/commit/1888a8a80f80fee651d28732bb7593b75ce80735))
+
 ## [4.5.3](https://github.com/Aguafrommars/TheIdServer/compare/4.5.2...4.5.3) (2022-03-23)
 
 
