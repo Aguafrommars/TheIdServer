@@ -117,5 +117,4 @@
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.WsFederation.Duende\Aguacongas.IdentityServer.WsFederation.Duende.csproj" />
 	</ItemGroup>
-
 </Project>

@@ -18,10 +18,10 @@
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.5.2" />
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="4.5.2" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="4.5.2" />
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="4.5.2" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.5.3" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="4.5.3" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="4.5.3" />
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="4.5.3" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.3" />
@@ -39,7 +39,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
-		<PackageReference Include="SendGrid" Version="9.26.0" />
+		<PackageReference Include="SendGrid" Version="9.27.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" PrivateAssets="All" />
 		<PackageReference Include="Serilog" Version="2.10.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />

@@ -1,11 +1,13 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
+using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Diagnostics;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,8 @@ if (seed)
     args = args.Except(new[] { "/seed" }).ToArray();
 }
 
+services.AddOpenTelemetry(configuration.GetSection(nameof(OpenTelemetryOptions)));
+
 var app = builder.Build();
 
 if (seed)
@@ -34,6 +38,13 @@ if (seed)
     return;
 }
 
+var activitySource = new ActivitySource("TheIdServer");
+
+app.Use(async (context, next) =>
+{
+    using var activity = activitySource.StartActivity("Request");
+    await next().ConfigureAwait(false);
+});
 app.UseTheIdServer(app.Environment, configuration);
 
 app.Run();

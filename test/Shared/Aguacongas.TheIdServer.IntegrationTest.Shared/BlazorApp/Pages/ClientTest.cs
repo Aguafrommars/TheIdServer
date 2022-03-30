@@ -322,12 +322,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForNode(component, "#consent");
 
-            // device client not should have id token input field
-            Assert.Throws<ElementNotFoundException>(() => component.Find("#id-token"));
             // device client should have device flow lifetime input field
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // device client should have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]

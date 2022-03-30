@@ -62,6 +62,7 @@ Choose your favorite:
 * [Duende CIBA integration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CIBA.md)(Duende version only)
 * [Token exchange](https://datatracker.ietf.org/doc/html/rfc8693)([RFC 8693](https://datatracker.ietf.org/doc/html/rfc8693))
 * [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#health-checks)
+* [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/Aguacongas.TheIdServer/OPEN_TELEMETRY.md)
 
 ## Setup
 
