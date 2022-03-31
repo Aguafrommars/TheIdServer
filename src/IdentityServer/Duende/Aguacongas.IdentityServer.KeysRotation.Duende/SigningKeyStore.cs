@@ -26,7 +26,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
         }
 
         public Task DeleteKeyAsync(string id)
-        => Task.CompletedTask;
+        => throw new NotImplementedException();
+        
 
         public Task<IEnumerable<SerializedKey>> LoadKeysAsync()
         {
@@ -55,6 +56,6 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
         }
 
         public Task StoreKeyAsync(SerializedKey key)
-        => Task.CompletedTask;
+        => throw new NotImplementedException();
     }
 }
