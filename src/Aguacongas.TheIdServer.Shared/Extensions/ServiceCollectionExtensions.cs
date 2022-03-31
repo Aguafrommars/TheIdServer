@@ -85,9 +85,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Configure<TokenValidationParameters>(configurationManager.GetSection(nameof(TokenValidationParameters)))
                 .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
-                .AddOidcStateDataFormatterCache()
+                .AddOidcStateDataFormatterCache()                
 #if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
+                .AddSigningKeyStore()
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -106,7 +107,8 @@ namespace Microsoft.Extensions.DependencyInjection
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
-                .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
+                .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"))
+;
 
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
