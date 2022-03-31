@@ -154,12 +154,7 @@ To enable the [OTLP endpoint or Collector](https://opentelemetry.io/docs/collect
         "Endpoint": "https://exemple.com", //required
         "ExportProcessorType": "Batch",
         "Protocol": "HttpProtobuf" ,
-        "AggregationTemporality": "Cumulative",
         "TimeoutMilliseconds": 10000,
-        "MetricReaderType:": "Periodic",
-        "PeriodicExportingMetricReaderOptions": {
-          "ExportIntervalMilliseconds": 60000
-        },
         "BatchExportProcessorOptions": {
           "BatchExportProcessorOptions": 2048,
           "ScheduledDelayMilliseconds": 5000,
@@ -282,7 +277,8 @@ To enable the console exporter set `Console` node:
         "MetricReaderType": "Cumulative",
         "MetricReaderType": "Manual",
         "PeriodicExportingMetricReaderOptions": {
-          "ExportIntervalMilliseconds": 60000
+          "ExportIntervalMilliseconds": 60000,
+          "ExportTimeoutMilliseconds": 60000
         }
       }
     }
@@ -291,6 +287,34 @@ To enable the console exporter set `Console` node:
 ```
 
 `Console` is deserialized into a [`ConsoleOptions`](../src/Aguacongas.TheIdServer/Options/OpenTelemetry/ConsoleOptions.cs) instance.
+
+#### OTLP endpoint or Collector
+
+To enable the [OTLP endpoint or Collector](https://opentelemetry.io/docs/collector/getting-started/) setup the `OpenTelemetryProtocol` node:
+
+```json
+{
+  "OpenTelemetryOptions": {
+    "Metrics": {
+      "OpenTelemetryProtocol": {
+        "Endpoint": "https://exemple.com", //required
+        "ExportProcessorType": "Batch",
+        "Protocol": "HttpProtobuf" ,
+        "TimeoutMilliseconds": 10000,
+        "BatchExportProcessorOptions": {
+          "BatchExportProcessorOptions": 2048,
+          "ScheduledDelayMilliseconds": 5000,
+          "ExporterTimeoutMilliseconds": 30000,
+          "MaxExportBatchSize": 512
+        }
+      }
+    }
+  }  
+}
+```
+
+`OpenTelemetryProtocol` is deserialized into a [`OtlpExporterOptions`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/4b3ee96ffc39bc24c3b8377455b2c099bd9da6b0/src/OpenTelemetry.Exporter.OpenTelemetryProtocol/OtlpExporterOptions.cs) instance.
+
 
 #### Prometheus
 

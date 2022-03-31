@@ -24,8 +24,7 @@ namespace OpenTelemetry.Metrics
                 {
                     var consoleOptions = metricsOptions.Console;
                     c.Targets = consoleOptions.Targets;
-                    r.PeriodicExportingMetricReaderOptions = consoleOptions.PeriodicExportingMetricReaderOptions;
-                    r.MetricReaderType = consoleOptions.MetricReaderType;
+                    r.PeriodicExportingMetricReaderOptions.FromOther(consoleOptions.PeriodicExportingMetricReaderOptions);
                     r.Temporality = consoleOptions.Temporality;
                 });
             }
@@ -40,10 +39,7 @@ namespace OpenTelemetry.Metrics
                     o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
                     o.ExportProcessorType = otlpOptions.ExportProcessorType;
                     o.Endpoint = otlpOptions.Endpoint;
-                    o.Headers = otlpOptions.Headers;
-                    o.PeriodicExportingMetricReaderOptions = otlpOptions.PeriodicExportingMetricReaderOptions;
-                    o.MetricReaderType = otlpOptions.MetricReaderType;
-                    o.AggregationTemporality = otlpOptions.AggregationTemporality;
+                    o.Headers = otlpOptions.Headers;                    
                 });
             }
 

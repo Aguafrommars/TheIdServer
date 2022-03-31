@@ -122,10 +122,7 @@ namespace OpenTelemetry.Trace
                     o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
                     o.ExportProcessorType = otlpOptions.ExportProcessorType;
                     o.Endpoint = otlpOptions.Endpoint;
-                    o.Headers = otlpOptions.Headers;
-                    o.PeriodicExportingMetricReaderOptions = otlpOptions.PeriodicExportingMetricReaderOptions;
-                    o.MetricReaderType = otlpOptions.MetricReaderType;
-                    o.AggregationTemporality = otlpOptions.AggregationTemporality;
+                    o.Headers = otlpOptions.Headers;                    
                 });
             }
 
