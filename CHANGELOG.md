@@ -1,3 +1,11 @@
+## [4.6.1](https://github.com/Aguafrommars/TheIdServer/compare/4.6.0...4.6.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* invalid key on startup ([7eaf150](https://github.com/Aguafrommars/TheIdServer/commit/7eaf150fa48d6bec4a7b29574959ab7125d440d9))
+* update packages ([93c3649](https://github.com/Aguafrommars/TheIdServer/commit/93c36497ca746f9db5202f283e09d4baf1173af0))
+
 # [4.6.0](https://github.com/Aguafrommars/TheIdServer/compare/4.5.3...4.6.0) (2022-03-30)
 
 
