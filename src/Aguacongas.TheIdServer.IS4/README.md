@@ -6,6 +6,26 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ## Installation
 
+### From Terraform
+
+The [Terraform](https://terraform.io) [Helm](https://helm.sh) module [theidserver](https://registry.terraform.io/modules/Aguafrommars/theidserver/helm/latest) make the deployement of TheIdServer easy.  
+
+``` hcl
+provider "helm" {
+  kubernetes {
+    config_path = var.kubeconfig_path
+  }
+}
+
+module "theidserver" {
+  source = "Aguafrommars/theidserver/helm"
+
+  host = "theidserver.com"
+  tls_issuer_name = "letsencrypt"
+  tls_issuer_kind = "ClusterIssuer"
+}
+```
+
 ### From Helm
 
 The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) Helm chart is available in [hub.helm.sh](https://hub.helm.sh).
