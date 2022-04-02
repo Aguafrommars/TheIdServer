@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         private async Task<PageResponse<IdentityResource>> GetIdentityScopeAsync(string term, CancellationToken cancellationToken)
         {
-            if (Model.AllowedGrantTypes.All(g => g.GrantType == "client_credentials"))
+            if (Model.IsClientCredentialOnly())
             {
                 return new PageResponse<IdentityResource>
                 {
