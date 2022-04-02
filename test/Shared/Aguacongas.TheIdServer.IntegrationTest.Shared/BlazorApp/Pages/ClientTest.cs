@@ -342,6 +342,46 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
+        public async Task Credentials_client_should_not_have_identity_scopes()
+        {
+            var clientId = await CreateClient("client_credentials");
+
+            var firstId = $"t{GenerateId()}";
+            var secondId = $"t{GenerateId()}";
+            await DbActionAsync<ConfigurationDbContext>(async c =>
+            {
+                c.ApiScopes.RemoveRange(c.ApiScopes);
+                await c.ApiScopes.AddAsync(new ApiScope
+                {
+                    Id = firstId,
+                    DisplayName = firstId,
+                });
+
+                c.Identities.RemoveRange(c.Identities);
+                await c.Identities.AddAsync(new IdentityResource
+                {
+                    Id = secondId,
+                    DisplayName = secondId,
+                });
+
+                await c.SaveChangesAsync();
+            });
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            var expected = 1;
+            var input = WaitForNode(component, "#scopes input");
+
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "t" }).ConfigureAwait(false);
+
+            var nodes = WaitForAllNodes(component, "#scopes .dropdown-item");
+
+            Assert.Equal(expected, nodes.Count);
+        }
+
+        [Fact]
         public async Task Password_client_should_not_have_consent()
         {
             var clientId = await CreateClient("password");
