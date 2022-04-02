@@ -42,12 +42,13 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
         }
 
         [Fact]
-        public async Task DeleteKeyAsync_should_not_be_implemented()
+        public async Task DeleteKeyAsync_should_dont_do_anything()
         {
             var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
             var sut = new SigningKeyStore(mockKeyRingProvider.Object);
 
-            await Assert.ThrowsAsync<NotImplementedException>(() => sut.DeleteKeyAsync("tets")).ConfigureAwait(false);
+            await sut.DeleteKeyAsync("tets").ConfigureAwait(false);
+            Assert.NotNull(sut);
         }
 
         [Fact]
