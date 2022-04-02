@@ -1,3 +1,11 @@
+## [4.6.2](https://github.com/Aguafrommars/TheIdServer/compare/4.6.1...4.6.2) (2022-04-02)
+
+
+### Bug Fixes
+
+* filter identity scope out for client_creds ([2af8dee](https://github.com/Aguafrommars/TheIdServer/commit/2af8deeae6a2e459833f7ff7b64306b1766a6d41))
+* update packages ([a3022e8](https://github.com/Aguafrommars/TheIdServer/commit/a3022e862a81bd1350b7430f45750c02af47a5bf))
+
 ## [4.6.1](https://github.com/Aguafrommars/TheIdServer/compare/4.6.0...4.6.1) (2022-03-31)
 
 
