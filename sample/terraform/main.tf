@@ -1,3 +1,4 @@
+# k8s connection settings are stored in k8s_config variable in Terraform cloud
 provider "kubernetes" {
   host = var.k8s_config.host
   token = var.k8s_config.token
@@ -6,6 +7,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(var.k8s_config.cluster_ca_certificate)
 }
 
+# store mysql master config (max_connections=512)
 resource "kubernetes_config_map" "mysql_master_config" {
   metadata {
     name = "mysql-master-config"
@@ -17,6 +19,7 @@ resource "kubernetes_config_map" "mysql_master_config" {
   }
 }
 
+# store mysql secondary config (max_connections=512)
 resource "kubernetes_config_map" "mysql_scondary_config" {
   metadata {
     name = "mysql-secondary-config"
@@ -28,6 +31,7 @@ resource "kubernetes_config_map" "mysql_scondary_config" {
   }
 }
 
+# k8s connection settings are stored in k8s_config variable in Terraform cloud
 provider "helm" {
   kubernetes {
     host = var.k8s_config.host
@@ -39,11 +43,7 @@ provider "helm" {
 }
 
 locals {
-  autoscaling = {
-    enabled = true
-    maxReplicas = 3
-    targetCPUUtilizationPercentage = 80
-  }
+  # set node affinity to userpool nodes
   affinity = {
     nodeAffinity = {
       requiredDuringSchedulingIgnoredDuringExecution = {
@@ -59,6 +59,7 @@ locals {
       }
     }
   }
+  # enable wave on config change
   deploymentAnnotations = {
       "wave.pusher.com/update-on-config-change" = "true"
   }
@@ -67,41 +68,47 @@ locals {
   tls_issuer_kind = "ClusterIssuer"
   image = {
     repository = "aguacongas/theidserver.duende"
-    pullPolicy = "IfNotPresent"
+    pullPolicy = "Always"
     tag = "next"
   }
+  # SendGrid settings are store in env_settings var in Terraform cloud
   env_settings = var.env_settings
   override_settings = {
+    # set node affinity to userpool nodes
     affinity = local.affinity
     seq = {
+      # set node affinity to userpool nodes
       affinity = local.affinity
     }
     mysql = {
       primary = {
+        # set node affinity to userpool nodes
         affinity = local.affinity
+        # user custom master config (max_connections=512)
         existingConfigmap = "mysql-master-config"
       }
       secondary = {
+        # set node affinity to userpool nodes
         affinity = local.affinity
+        # user custom secondary config (max_connections=512)
         existingConfigmap = "mysql-secondary-config"
       }
     }
     redis = {
       master = {
+        # set node affinity to userpool nodes
         affinity = local.affinity
       }
       replica = {
+        # set node affinity to userpool nodes
         affinity = local.affinity
       }    
     }
+    # enable wave on config change
     deploymentAnnotations = local.deploymentAnnotations
     appSettings = {
       file = {
-        InitialData = {
-          Users = [{
-            UserName = "olivier.lefebvre@live.com"
-          }]
-        }
+        # override serilog settings
         Serilog = {
           MinimumLevel = {
             ControlledBy = "$controlSwitch"
@@ -111,6 +118,7 @@ locals {
             }
           }
         }
+        # enable honeycomb
         OpenTelemetryOptions = {
           Trace = {
             ConsoleEnabled = false
@@ -125,8 +133,10 @@ locals {
 }
 
 module "theidserver" {
-  source = "./modules/terraform-helm-theidserver"
-  chart = "C:\\Projects\\Perso\\helm\\charts\\theidserver"
+  source = "Aguafrommars/theidserver/helm"
+
+  chart_version = "4.8.0"
+
   host = local.host
   tls_issuer_name = local.tls_issuer_name
   tls_issuer_kind = local.tls_issuer_kind
