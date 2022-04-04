@@ -108,6 +108,81 @@ locals {
   wait = false
 }
 
+# Install ingress-nginx
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  version    = "4.0.19"
+  namespace  = "ingress-nginx"
+  create_namespace = true
+  
+  wait = local.wait
+}
+
+# Install cert_manager to manage TLS certificates with letsencrypt
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  version    = "1.7.2"
+  namespace  = "ingress-nginx"
+  create_namespace = true
+
+  # set {
+  #  name = "installCRDs"
+  #  value = true
+  #}
+  
+  wait = local.wait
+}
+
+# Instal wave to restart nodes on config changes
+resource "helm_release" "wave" {
+  name       = "wave"
+  repository = "https://wave-k8s.github.io/wave/"
+  chart      = "wave"
+  version    = "2.0.0"
+  namespace  = "wave"
+  create_namespace = true
+  
+  wait = local.wait
+}
+
+# creates ClusterIssuer
+resource "kubernetes_manifest" "cluster_issuer" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt"
+    }
+    spec = {
+      acme = {
+        email = "aguacongas@gamil.com"
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt-secrets"
+        }
+        solvers = [{
+          http01 = {
+            ingress = {
+              class = "nginx"    
+            }    
+          }
+        }]
+      }    
+    }
+  }  
+}
+
+# create ns
+resource "kubernetes_namespace" "theidserver_namespace" {
+  metadata {
+    name = "theidserver"
+  }  
+}
+
 # store mysql master config (max_connections=512)
 resource "kubernetes_config_map" "mysql_master_config" {
   metadata {
@@ -150,39 +225,4 @@ module "theidserver" {
   wait = local.wait
 }
 
-# Install cert_manager to manage TLS certificates with letsencrypt
-resource "helm_release" "cert_manager" {
-  name       = "cert-manager"
-  repository = "https://charts.jetstack.io"
-  chart      = "cert-manager"
-  version    = "1.7.2"
-  namespace  = "ingress-nginx"
-  create_namespace = true
-  
-  wait = local.wait
-}
-
-# Install ingress-nginx
-resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  version    = "4.0.19"
-  namespace  = "ingress-nginx"
-  create_namespace = true
-  
-  wait = local.wait
-}
-
-# Instal wave to restart nodes on config changes
-resource "helm_release" "wave" {
-  name       = "wave"
-  repository = "https://wave-k8s.github.io/wave/"
-  chart      = "wave"
-  version    = "2.0.0"
-  namespace  = "wave"
-  create_namespace = true
-  
-  wait = local.wait
-}
 
