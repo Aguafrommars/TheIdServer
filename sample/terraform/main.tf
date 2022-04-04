@@ -164,7 +164,7 @@ resource "helm_release" "cert_manager" {
 # Install ingress-nginx
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
-  repository = "https://helm.nginx.com/stable"
+  repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = "4.0.19"
   namespace  = "ingress-nginx"
