@@ -161,36 +161,6 @@ resource "helm_release" "cert_manager" {
   wait = local.wait
 }
 
-# Create the lestencrypt issuer
-resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind = "ClusterIssuer"
-    metadata = {
-      name = "letsencrypt"
-      namespace = "cert-manager"
-    }
-    spec = {
-      acme = {
-        email = "aguacongas@gmail.com"
-        privateKeySecretRef = {
-          name = "letsencrypt-secret"
-        }
-        server = "https://acme-v02.api.letsencrypt.org/directory"
-        solvers = [
-          {
-            http01 = {
-              ingress = {
-                class = "nginx"
-              }
-            }
-          },
-        ]
-      }
-    }
-  }
-}
-
 # Install ingress-nginx
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
