@@ -7,30 +7,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(var.k8s_config.cluster_ca_certificate)
 }
 
-# store mysql master config (max_connections=512)
-resource "kubernetes_config_map" "mysql_master_config" {
-  metadata {
-    name = "mysql-master-config"
-    namespace = "theidserver"
-  }
-
-  data = {
-    "my.cnf" = file("${path.module}/my-master.cnf")
-  }
-}
-
-# store mysql secondary config (max_connections=512)
-resource "kubernetes_config_map" "mysql_scondary_config" {
-  metadata {
-    name = "mysql-secondary-config"
-    namespace = "theidserver"
-  }
-
-  data = {
-    "my.cnf" = file("${path.module}/my-secondary.cnf")
-  }
-}
-
 # k8s connection settings are stored in k8s_config variable in Terraform cloud
 provider "helm" {
   kubernetes {
@@ -61,7 +37,7 @@ locals {
   }
   # enable wave on config change
   deploymentAnnotations = {
-      "wave.pusher.com/update-on-config-change" = "true"
+    "wave.pusher.com/update-on-config-change" = "true"
   }
   host = "theidserver.com"
   tls_issuer_name = "letsencrypt"
@@ -122,7 +98,7 @@ locals {
         OpenTelemetryOptions = {
           Trace = {
             ConsoleEnabled = false
-            Honeycomb = var.Honeycomb
+            Honeycomb = var.honeycomb
           }
         }
       }
@@ -132,6 +108,31 @@ locals {
   wait = false
 }
 
+# store mysql master config (max_connections=512)
+resource "kubernetes_config_map" "mysql_master_config" {
+  metadata {
+    name = "mysql-master-config"
+    namespace = "theidserver"
+  }
+
+  data = {
+    "my.cnf" = file("${path.module}/my-master.cnf")
+  }
+}
+
+# store mysql secondary config (max_connections=512)
+resource "kubernetes_config_map" "mysql_scondary_config" {
+  metadata {
+    name = "mysql-secondary-config"
+    namespace = "theidserver"
+  }
+
+  data = {
+    "my.cnf" = file("${path.module}/my-secondary.cnf")
+  }
+}
+
+# install TheIdServer cluster with MySql cluster, Redis cluster and Seq server
 module "theidserver" {
   source = "Aguafrommars/theidserver/helm"
 
@@ -148,6 +149,7 @@ module "theidserver" {
   wait = local.wait
 }
 
+# Install cert_manager to manage TLS certificates with letsencrypt
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
@@ -159,17 +161,49 @@ resource "helm_release" "cert_manager" {
   wait = local.wait
 }
 
+# Create the lestencrypt issuer
+resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt"
+      namespace = "cert-manager"
+    }
+    spec = {
+      acme = {
+        email = "aguacongas@gmail.com"
+        privateKeySecretRef = {
+          name = "letsencrypt-secret"
+        }
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        solvers = [
+          {
+            http01 = {
+              ingress = {
+                class = "nginx"
+              }
+            }
+          },
+        ]
+      }
+    }
+  }
+}
+
+# Install ingress-nginx
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://helm.nginx.com/stable"
   chart      = "ingress-nginx"
-  version    = "4.0.18"
+  version    = "4.0.19"
   namespace  = "ingress-nginx"
   create_namespace = true
   
   wait = local.wait
 }
 
+# Instal wave to restart nodes on config changes
 resource "helm_release" "wave" {
   name       = "wave"
   repository = "https://wave-k8s.github.io/wave/"
