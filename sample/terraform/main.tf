@@ -145,6 +145,7 @@ module "theidserver" {
   env_settings = local.env_settings
   override_settings = local.override_settings
   replica_count = 3
+  create_namespace = true
 
   wait = local.wait
 }
