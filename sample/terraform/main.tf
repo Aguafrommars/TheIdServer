@@ -141,7 +141,7 @@ resource "helm_release" "cert_manager" {
   create_namespace = true
 
   # uncomment it on 1st deploy
-  
+
   # set {
   #  name = "installCRDs"
   #  value = true
@@ -223,8 +223,7 @@ resource "kubernetes_config_map" "mysql_scondary_config" {
 # install TheIdServer cluster with MySql cluster, Redis cluster and Seq server
 module "theidserver" {
   source = "Aguafrommars/theidserver/helm"
-  chart = "C:\\Projects\\Perso\\helm\\charts\\theidserver"
-
+  
   host = local.host
   tls_issuer_name = local.tls_issuer_name
   tls_issuer_kind = local.tls_issuer_kind
