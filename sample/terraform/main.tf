@@ -104,6 +104,12 @@ locals {
           Trace = {
             ConsoleEnabled = false
             Honeycomb = var.honeycomb
+            Instrumentation = {
+              Redis = {
+                # enable redis telemetry
+                ConnectionString = var.redis_connectionstring
+              }
+            }
           }
         }
       }
@@ -223,7 +229,7 @@ resource "kubernetes_config_map" "mysql_scondary_config" {
 # install TheIdServer cluster with MySql cluster, Redis cluster and Seq server
 module "theidserver" {
   source = "Aguafrommars/theidserver/helm"
-  
+
   host = local.host
   tls_issuer_name = local.tls_issuer_name
   tls_issuer_kind = local.tls_issuer_kind
