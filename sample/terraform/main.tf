@@ -4,7 +4,8 @@ provider "kubernetes" {
   token = var.k8s_config.token
   client_certificate = base64decode(var.k8s_config.client_certificate)
   client_key = base64decode(var.k8s_config.client_key)
-  cluster_ca_certificate = base64decode(var.k8s_config.cluster_ca_certificate)
+  cluster_ca_certificate = var.k8s_config.cluster_ca_certificate != null ? base64decode(var.k8s_config.cluster_ca_certificate) : ""
+  insecure = var.k8s_config.insecure
 }
 
 # k8s connection settings are stored in k8s_config variable in Terraform cloud
@@ -14,7 +15,8 @@ provider "helm" {
     token = var.k8s_config.token
     client_certificate = base64decode(var.k8s_config.client_certificate)
     client_key = base64decode(var.k8s_config.client_key)
-    cluster_ca_certificate = base64decode(var.k8s_config.cluster_ca_certificate)
+    cluster_ca_certificate = var.k8s_config.cluster_ca_certificate != null ? base64decode(var.k8s_config.cluster_ca_certificate) : ""
+    insecure = var.k8s_config.insecure
   }
 }
 
@@ -57,17 +59,20 @@ locals {
       affinity = local.affinity
     }
     mysql = {
+      image = {
+        debug = true
+      }      
       primary = {
         # set node affinity to userpool nodes
         affinity = local.affinity
         # user custom master config (max_connections=512)
-        existingConfigmap = "mysql-master-config"
+        # existingConfigmap = "mysql-master-config"
       }
       secondary = {
         # set node affinity to userpool nodes
         affinity = local.affinity
         # user custom secondary config (max_connections=512)
-        existingConfigmap = "mysql-secondary-config"
+        # existingConfigmap = "mysql-secondary-config"
       }
     }
     redis = {
@@ -116,6 +121,12 @@ resource "helm_release" "nginx_ingress" {
   version    = "4.0.19"
   namespace  = "ingress-nginx"
   create_namespace = true
+
+  # enable ssl passthrough to have end-to-end encryption
+  set {
+    name = "controller.extraArgs.enable-ssl-passthrough"
+    value = true
+  }
   
   wait = local.wait
 }
@@ -129,6 +140,8 @@ resource "helm_release" "cert_manager" {
   namespace  = "ingress-nginx"
   create_namespace = true
 
+  # uncomment it on 1st deploy
+  
   # set {
   #  name = "installCRDs"
   #  value = true
@@ -210,8 +223,7 @@ resource "kubernetes_config_map" "mysql_scondary_config" {
 # install TheIdServer cluster with MySql cluster, Redis cluster and Seq server
 module "theidserver" {
   source = "Aguafrommars/theidserver/helm"
-
-  chart_version = "4.8.0"
+  chart = "C:\\Projects\\Perso\\helm\\charts\\theidserver"
 
   host = local.host
   tls_issuer_name = local.tls_issuer_name
