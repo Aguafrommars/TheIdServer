@@ -9,3 +9,7 @@ variable "k8s_config" {
 variable "honeycomb" {
   type = map(string)
 }
+
+variable "redis_connectionstring" {
+  type = string
+}
