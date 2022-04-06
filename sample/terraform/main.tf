@@ -1,3 +1,15 @@
+terraform {
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "aguafrommars"
+
+    workspaces {
+      name = "TheIdServer"
+    }
+  }
+}
+
+
 # k8s connection settings are stored in k8s_config variable in Terraform cloud
 provider "kubernetes" {
   host = var.k8s_config.host
