@@ -69,6 +69,11 @@ namespace Aguacongas.IdentityServer.Store
                 Filter = filter
             }).ConfigureAwait(false);
 
+            if (!apiIdListResponse.Items.Any())
+            {
+                return Array.Empty<models.ApiResource>();
+            }
+
             filter = string.Join(" or ", apiIdListResponse.Items.Select(i => $"{nameof(ProtectResource.Id)} eq '{i.ApiId}'"));
             var apiResposne = await _apiStore.GetAsync(new PageRequest
             {
