@@ -25,7 +25,7 @@ namespace OpenTelemetry.Metrics
                     var consoleOptions = metricsOptions.Console;
                     c.Targets = consoleOptions.Targets;
                     r.PeriodicExportingMetricReaderOptions.FromOther(consoleOptions.PeriodicExportingMetricReaderOptions);
-                    r.Temporality = consoleOptions.Temporality;
+                    r.TemporalityPreference = consoleOptions.TemporalityPreference;
                 });
             }
 
