@@ -36,7 +36,7 @@
             </AuthorizeView>
         </div>
     </div>
-    if (_showAllOptions || Model.IsAuthorizationCodeClient() || Model.IsDevice())
+    if (_showAllOptions || Model.IsWebClient())
     {
         <div class="mb-3 row">
             <label class="col col-form-label" for="access-token">
@@ -102,15 +102,15 @@
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
                            value="0"
                            checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
-                           @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
-                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)">@Localizer["Re use"]</label>
+                           @onchange="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.ReUse))" />
+                            <label class="form-check-label" for="jwt" @onclick="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.ReUse))">@Localizer["Re use"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
                            value="1"
                            checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
-                           @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
-                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)">@Localizer["One time only"]</label>
+                           @onchange="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.OneTimeOnly))" />
+                            <label class="form-check-label" for="reference" @onclick="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.OneTimeOnly))">@Localizer["One time only"]</label>
                         </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">
@@ -130,15 +130,15 @@
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"
                            value="0"
                            checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
-                           @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
-                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)">@Localizer["Sliding"]</label>
+                           @onchange="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Sliding))" />
+                            <label class="form-check-label" for="jwt" @onclick="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Sliding))">@Localizer["Sliding"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"
                            value="1"
                            checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
-                           @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
-                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)">@Localizer["Absolute"]</label>
+                           @onchange="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Absolute))" />
+                            <label class="form-check-label" for="reference" @onclick="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Absolute))">@Localizer["Absolute"]</label>
                         </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">

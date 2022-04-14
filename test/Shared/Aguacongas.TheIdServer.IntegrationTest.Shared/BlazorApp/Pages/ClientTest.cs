@@ -269,8 +269,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#id-token"));
             // hybrid client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
-            // hybrid client should not have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            // hybrid client should have require pkce check box
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -308,7 +308,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             // implicit client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // implicit client should have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -427,6 +427,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // custom client should have require pkce check box
             Assert.NotNull(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Options_clicks_should_enable_save_button()
+        {
+            var clientId = await CreateClient(allowOfflineAccess: true);
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            WaitForNode(component, "#tokens");
+
+            var optionButton = component.Find("input[name=access-token-type]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-usage]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-expiration]");
+            optionButton.Change(true);
+
+            var saveButton = component.Find("button[type=submit]");
+
+            Assert.False(saveButton.IsDisabled());
         }
 
 
@@ -567,7 +592,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        private async Task<string> CreateClient(string grantType = "hybrid")
+        private async Task<string> CreateClient(string grantType = "hybrid", bool allowOfflineAccess = false)
         {
             var clientId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
@@ -585,6 +610,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ClientScope{ Id = GenerateId(), Scope = "filtered"}
                     },
+                    AllowOfflineAccess = allowOfflineAccess,
                     RedirectUris = new List<ClientUri>
                     {
                         new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },
