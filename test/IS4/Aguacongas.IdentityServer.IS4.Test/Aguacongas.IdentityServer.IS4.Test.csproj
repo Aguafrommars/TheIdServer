@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\ResourceStoreTest.cs" Link="Store\ResourceStoreTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Validators\TokenExchangeGrantValidatorTest.cs" Link="Validators\TokenExchangeGrantValidatorTest.cs" />
 	</ItemGroup>
 
@@ -26,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Store\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
 

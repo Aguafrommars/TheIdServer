@@ -2002,5 +2002,37 @@
   {
     "key": "polling interval",
     "value": "intervalle d'interrogation"
+  },
+  {
+    "key": "Below is the list of sessions you have opened.",
+    "value": "Vous trouverez ci-dessous la liste des sessions que vous avez ouvertes."
+  },
+  {
+    "key": "Below is the list of backchannel login requests awaiting your approbation.",
+    "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
+  },
+  {
+    "key": "Below is the list of backchannel login requests awaiting your approbation.",
+    "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
+  },
+  {
+    "key": "Sessions",
+    "value": "Sessions"
+  },
+  {
+    "key": "Renewed",
+    "value": "Renouvelée"
+  },
+  {
+    "key": "Renewed",
+    "value": "Renouvelée"
+  },
+  {
+    "key": "Created",
+    "value": "Créé"
+  },
+  {
+    "key": "Expires",
+    "value": "Expire"
   }
 ]

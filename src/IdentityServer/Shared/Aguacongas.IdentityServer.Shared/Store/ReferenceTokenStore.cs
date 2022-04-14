@@ -5,6 +5,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
+using System;
 #else
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
@@ -38,5 +39,12 @@ namespace Aguacongas.IdentityServer.Store
 
         protected override string GetSubjectId(Token dto)
             => dto?.SubjectId;
+
+        protected override ReferenceToken CreateEntity(Token dto, string clientId, string subjectId, DateTime? expiration)
+        {
+            var entity = base.CreateEntity(dto, clientId, subjectId, expiration);
+            entity.SessionId = dto.SessionId;
+            return entity;
+        }
     }
 }

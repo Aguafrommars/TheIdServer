@@ -72,12 +72,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
             var backChannelAuthenticationRequestStore = GetStore<entity.BackChannelAuthenticationRequest>();
             var getBackChannelAuthenticationRequestResponse = await backChannelAuthenticationRequestStore.GetAsync(pageRequest);
 
+            var sessionStore = GetStore<entity.UserSession>();
+            var sessionstResponse = await sessionStore.GetAsync(pageRequest);
+
             model.Logins = getLoginsResponse.Items.ToList();
             model.Consents = getUserConsentsResponse.Items.ToList();
             model.Tokens = getUserTokensResponse.Items.ToList();
             model.ReferenceTokens = getReferenceTokenResponse.Items.ToList();
             model.RefreshTokens = getRefreshTokenResponse.Items.ToList();
             model.BackChannelAuthenticationRequests = getBackChannelAuthenticationRequestResponse.Items.ToList();
+            model.Sessions = sessionstResponse.Items.ToList();
 
             var userRoles = model.UserRoles;
             if (userRoles.Any())

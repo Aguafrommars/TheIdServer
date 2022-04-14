@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -369,6 +369,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("integer");
 
+                    b.Property<bool?>("CoordinateLifetimeWithUserSession")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -444,6 +447,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.Property<bool>("RequirePkce")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("RequireRequestObject")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("integer");
 
@@ -465,6 +471,33 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.HasIndex("RelyingPartyId");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientAllowedIdentityTokenSigningAlgorithm", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Algorithm")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId", "Algorithm")
+                        .IsUnique();
+
+                    b.ToTable("ClientAllowedIdentityTokenSigningAlgorithms");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
@@ -737,7 +770,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 1, 15, 10, 11, 3, 458, DateTimeKind.Utc).AddTicks(8268)
+                            CreatedAt = new DateTime(2022, 4, 12, 6, 35, 31, 147, DateTimeKind.Utc).AddTicks(1020)
                         });
                 });
 
@@ -1174,6 +1207,17 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.Navigation("RelyingParty");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientAllowedIdentityTokenSigningAlgorithm", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
+                        .WithMany("AllowedIdentityTokenSigningAlgorithms")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -1338,6 +1382,8 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
                     b.Navigation("AllowedGrantTypes");
+
+                    b.Navigation("AllowedIdentityTokenSigningAlgorithms");
 
                     b.Navigation("AllowedScopes");
 

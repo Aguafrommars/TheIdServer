@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
@@ -366,6 +366,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("CoordinateLifetimeWithUserSession")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -441,6 +444,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Property<bool>("RequirePkce")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("RequireRequestObject")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
 
@@ -462,6 +468,33 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.HasIndex("RelyingPartyId");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientAllowedIdentityTokenSigningAlgorithm", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Algorithm")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId", "Algorithm")
+                        .IsUnique();
+
+                    b.ToTable("ClientAllowedIdentityTokenSigningAlgorithms");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
@@ -734,7 +767,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 1, 15, 10, 10, 23, 375, DateTimeKind.Utc).AddTicks(4005)
+                            CreatedAt = new DateTime(2022, 4, 12, 6, 35, 13, 741, DateTimeKind.Utc).AddTicks(7642)
                         });
                 });
 
@@ -1171,6 +1204,17 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Navigation("RelyingParty");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientAllowedIdentityTokenSigningAlgorithm", b =>
+                {
+                    b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
+                        .WithMany("AllowedIdentityTokenSigningAlgorithms")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
                 {
                     b.HasOne("Aguacongas.IdentityServer.Store.Entity.Client", "Client")
@@ -1335,6 +1379,8 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
                 {
                     b.Navigation("AllowedGrantTypes");
+
+                    b.Navigation("AllowedIdentityTokenSigningAlgorithms");
 
                     b.Navigation("AllowedScopes");
 

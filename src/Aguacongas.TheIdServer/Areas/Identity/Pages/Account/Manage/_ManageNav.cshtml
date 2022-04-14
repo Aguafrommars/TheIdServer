@@ -23,4 +23,8 @@ Copyright (c) 2022 @Olivier Lefebvre
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.CibaNavClass(ViewContext)" asp-page="./Ciba">@Localizer["Backchannel Login Requests"]</a></li>
     }
+    @if (!Url.Page("./Sessions").StartsWith("/?page"))
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.SessionsNavClass(ViewContext)" asp-page="./Sessions">@Localizer["Sessions"]</a></li>
+    }
 </ul>
