@@ -89,6 +89,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             TokenChanded();
         }
 
+        private void SetRefreshTokenUsage(RefreshTokenUsage usage)
+        {
+            Model.RefreshTokenUsage = (int)usage;
+            TokenChanded();
+        }
+
+        private void SetRefreshTokenExpiration(RefreshTokenExpiration expiration)
+        {
+            Model.RefreshTokenExpiration = (int)expiration;
+            TokenChanded();
+        }
+
         private void TokenChanded()
         {
             HandleModificationState.EntityUpdated(Model);

@@ -52,7 +52,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
                 RedirectUris = new List<Entity.ClientUri>(),
                 Properties = new List<Entity.ClientProperty>(),
-                Resources = new List<Entity.ClientLocalizedResource>()
+                Resources = new List<Entity.ClientLocalizedResource>(),
+                AbsoluteRefreshTokenLifetime = 86400,
+                AccessTokenLifetime = 900,
+                IdentityTokenLifetime = 300,
+                AuthorizationCodeLifetime = 300,
+                DeviceCodeLifetime = 300,
+                SlidingRefreshTokenLifetime = 18000,
+                CibaLifetime = 300,
+                PollingInterval = 5,
+                RefreshTokenUsage = (int)RefreshTokenUsage.OneTimeOnly
             });
         }
 
