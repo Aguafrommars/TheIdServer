@@ -269,8 +269,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#id-token"));
             // hybrid client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
-            // hybrid client should not have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            // hybrid client should have require pkce check box
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -308,7 +308,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             // implicit client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // implicit client should have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
