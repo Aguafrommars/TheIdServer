@@ -1,3 +1,16 @@
+## [4.6.3](https://github.com/Aguafrommars/TheIdServer/compare/4.6.2...4.6.3) (2022-04-14)
+
+
+### Bug Fixes
+
+* find api resources by scope name ([efe6a19](https://github.com/Aguafrommars/TheIdServer/commit/efe6a19b8150f446269465ac50a53aaae0d5af60))
+* hybrid flow client ([8bb72ce](https://github.com/Aguafrommars/TheIdServer/commit/8bb72ce0fe7aee0ef6cd8236d38529e773e12f7c))
+* update packages ([c0119be](https://github.com/Aguafrommars/TheIdServer/commit/c0119be4afb435ff9e2424dcf0d70ccf64a41ff5))
+* update packages ([f82a07b](https://github.com/Aguafrommars/TheIdServer/commit/f82a07b53405000579c625b37b81458b4dc1bce1))
+* update packages ([d749a43](https://github.com/Aguafrommars/TheIdServer/commit/d749a434467c9cbc695f9aac018ead028b3fe3da))
+* update packages ([fc9faee](https://github.com/Aguafrommars/TheIdServer/commit/fc9faeeda43d11a677b9051dad17d2d12fbada04))
+* update packages ([a528018](https://github.com/Aguafrommars/TheIdServer/commit/a52801840a93a1e3a42c7933a6160fdfbd7eeacb))
+
 ## [4.6.2](https://github.com/Aguafrommars/TheIdServer/compare/4.6.1...4.6.2) (2022-04-02)
 
 
