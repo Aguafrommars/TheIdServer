@@ -232,7 +232,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             result = await sut.QuerySessionsAsync(new SessionQuery
             {
-                RequestPriorResults = ,
+                RequestPriorResults = true,
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
             }).ConfigureAwait(false);

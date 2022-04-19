@@ -123,6 +123,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<TestUserService>();
+                    services.AddControllersWithViews()
+                        .AddApplicationPart(typeof(Config).Assembly);
                 })
                 .Configure((context, configureApp) =>
                 {
