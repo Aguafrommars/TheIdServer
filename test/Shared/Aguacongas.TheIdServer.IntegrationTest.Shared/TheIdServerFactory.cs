@@ -163,6 +163,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     configureApp.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch (InvalidOperationException e) when (e.Message == "Not started. Call Start first.")
+            {
+                // silent
+            }
+        }
     }
 
     [CollectionDefinition(Name)]
