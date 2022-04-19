@@ -4,7 +4,6 @@ using Duende.IdentityServer.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,24 +26,13 @@ namespace Aguacongas.IdentityServer.Store
 
         public async Task DeleteSessionsAsync(SessionFilter filter, CancellationToken cancellationToken = default)
         {
-            const int memberCount = 2;
-            var expressionList = new List<string>(memberCount);
-            if (!string.IsNullOrEmpty(filter.SubjectId))
-            {
-                expressionList.Add($"{nameof(UserSession.UserId)} eq '{filter.SubjectId}'");
-            }            
-            if (!string.IsNullOrEmpty(filter.SessionId))
-            {
-                expressionList.Add($"{nameof(UserSession.SessionId)} eq '{filter.SessionId}'");
-            }
-            
             var pageResponse = await _store.GetAsync(new PageRequest
             {
-                Filter = string.Join(" and ", expressionList),
+                Filter = CreateODataFilterExpression(filter),
                 Select = nameof(UserSession.Id),
             }, cancellationToken).ConfigureAwait(false);
 
-            foreach(var sessionId in pageResponse.Items.Select(u => u.Id))
+            foreach (var sessionId in pageResponse.Items.Select(u => u.Id))
             {
                 await _store.DeleteAsync(sessionId, cancellationToken).ConfigureAwait(false);
             }
@@ -73,49 +61,32 @@ namespace Aguacongas.IdentityServer.Store
 
         public async Task<IReadOnlyCollection<ServerSideSession>> GetSessionsAsync(SessionFilter filter, CancellationToken cancellationToken = default)
         {
-            const int memberCount = 2;
-            var expressionList = new List<string>(memberCount);
-            if (!string.IsNullOrEmpty(filter.SubjectId))
-            {
-                expressionList.Add($"{nameof(UserSession.UserId)} eq '{filter.SubjectId}'");
-            }
-            if (!string.IsNullOrEmpty(filter.SessionId))
-            {
-                expressionList.Add($"{nameof(UserSession.SessionId)} eq '{filter.SessionId}'");
-            }
-
             var pageResponse = await _store.GetAsync(new PageRequest
             {
-                Filter = string.Join(" and ", expressionList),
+                Filter = CreateODataFilterExpression(filter),
             }, cancellationToken).ConfigureAwait(false);
 
             return pageResponse.Items.Select(s => s.ToServerSideSession()).ToArray();
         }
 
-        public async  Task<QueryResult<ServerSideSession>> QuerySessionsAsync(SessionQuery filter = null, CancellationToken cancellationToken = default)
+        public async  Task<QueryResult<ServerSideSession>> QuerySessionsAsync(SessionQuery query = null, CancellationToken cancellationToken = default)
         {
-            filter ??= new();
+            query ??= new();
 
             const int memberCount = 3;
             var expressionList = new List<string>(memberCount);
-            if (!string.IsNullOrEmpty(filter.SubjectId))
+            AddODataFilterForMember(query.SubjectId, nameof(UserSession.UserId), expressionList);
+            AddODataFilterForMember(query.SessionId, nameof(UserSession.SessionId), expressionList);
+            if (!string.IsNullOrEmpty(query.DisplayName))
             {
-                expressionList.Add($"{nameof(UserSession.UserId)} eq '{filter.SubjectId}'");
-            }
-            if (!string.IsNullOrEmpty(filter.SessionId))
-            {
-                expressionList.Add($"{nameof(UserSession.SessionId)} eq '{filter.SessionId}'");
-            }
-            if (!string.IsNullOrEmpty(filter.DisplayName))
-            {
-                expressionList.Add($"containt(tolower({nameof(UserSession.DisplayName)}), '{filter.DisplayName.ToLowerInvariant()}')");
+                expressionList.Add($"containt(tolower({nameof(UserSession.DisplayName)}), '{query.DisplayName.ToLowerInvariant()}')");
             }
             var odataFilter = string.Join(" or ", expressionList);
 
             const int takeDefault = 25;
-            var take = filter.CountRequested == 0 ? takeDefault : filter.CountRequested;
-            var initialSkip = filter.ResultsToken == null ? 0 : int.Parse(filter.ResultsToken);
-            var skip = filter.RequestPriorResults ? initialSkip - take : initialSkip;
+            var take = query.CountRequested == 0 ? takeDefault : query.CountRequested;
+            var initialSkip = query.ResultsToken == null ? 0 : int.Parse(query.ResultsToken);
+            var skip = query.RequestPriorResults ? initialSkip - take : initialSkip;
             skip = skip < 0 ? 0 : skip;
             var pageResponse = await _store.GetAsync(new PageRequest
             {
@@ -142,5 +113,23 @@ namespace Aguacongas.IdentityServer.Store
 
         public Task UpdateSessionAsync(ServerSideSession session, CancellationToken cancellationToken = default)
         => _store.UpdateAsync(session.ToUserSession(), cancellationToken);
+
+        private static string CreateODataFilterExpression(SessionFilter filter)
+        {
+            const int memberCount = 2;
+            var expressionList = new List<string>(memberCount);
+            AddODataFilterForMember(filter.SubjectId, nameof(UserSession.UserId), expressionList);
+            AddODataFilterForMember(filter.SessionId, nameof(UserSession.SessionId), expressionList);
+
+            return string.Join(" and ", expressionList);
+        }
+
+        private static void AddODataFilterForMember(string value, string name, List<string> expressionList)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                expressionList.Add($"{name} eq '{value}'");
+            }
+        }
     }
 }
