@@ -28,7 +28,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
                 Roles = new List<entity.Role>(),
                 Tokens = new List<entity.UserToken>(),
                 ReferenceTokens = new List<entity.ReferenceToken>(),
-                RefreshTokens = new List<entity.RefreshToken>()
+                RefreshTokens = new List<entity.RefreshToken>(),
+                BackChannelAuthenticationRequests = new List<entity.BackChannelAuthenticationRequest>(),
+                Sessions = new List<entity.UserSession>()
             });
         }
 
