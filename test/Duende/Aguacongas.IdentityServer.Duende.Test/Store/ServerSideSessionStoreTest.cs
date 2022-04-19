@@ -229,6 +229,21 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             Assert.Equal(pageResponse.Count, result.TotalCount);
             Assert.Equal(3, result.TotalPages);
             Assert.Equal(3, result.CurrentPage);
+
+            result = await sut.QuerySessionsAsync(new SessionQuery
+            {
+                RequestPriorResults = ,
+                CountRequested = 2,
+                ResultsToken = result.ResultsToken
+            }).ConfigureAwait(false);
+
+            storeMock.Verify();
+
+            Assert.True(result.HasNextResults);
+            Assert.True(result.HasPrevResults);
+            Assert.Equal(pageResponse.Count, result.TotalCount);
+            Assert.Equal(3, result.TotalPages);
+            Assert.Equal(2, result.CurrentPage);
         }
 
         [Fact]

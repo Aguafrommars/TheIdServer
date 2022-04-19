@@ -96,14 +96,19 @@ namespace Aguacongas.IdentityServer.Store
             }, cancellationToken).ConfigureAwait(false);
 
             var items = pageResponse.Items;
-            var skipNext = initialSkip + items.Count();
+            var skipNext = skip + items.Count();
+            if (skipNext >= pageResponse.Count)
+            {
+                skipNext = skip;
+            }
+
             var totalPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)pageResponse.Count / take);
             if (pageResponse.Count % take > 0)
             {
                 totalPage += 1;
             }
 
-            var currentPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)(initialSkip + take) / take);
+            var currentPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)(skip + take) / take);
             return new()
             {
                 CurrentPage = currentPage,
