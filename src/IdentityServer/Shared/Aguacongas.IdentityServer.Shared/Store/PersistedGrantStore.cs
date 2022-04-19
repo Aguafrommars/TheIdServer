@@ -30,7 +30,6 @@ namespace Aguacongas.IdentityServer.Store
         private readonly IAdminStore<ReferenceToken> _referenceTokenStore;
         private readonly IAdminStore<Entity.RefreshToken> _refreshTokenStore;
         private readonly IAdminStore<UserConsent> _userConsentStore;
-        private readonly IPersistentGrantSerializer _serializer;
 
         public PersistedGrantStore(
 #if DUENDE
@@ -39,8 +38,7 @@ namespace Aguacongas.IdentityServer.Store
             IAdminStore<Entity.AuthorizationCode> authorizationCodeStore,
             IAdminStore<ReferenceToken> referenceTokenStore,
             IAdminStore<Entity.RefreshToken> refreshToken,
-            IAdminStore<UserConsent> userConsentStore,
-            IPersistentGrantSerializer serializer)
+            IAdminStore<UserConsent> userConsentStore)
         {
 #if DUENDE
             _backChannelAuthenticationRequestStore = backChannelAuthenticationRequestStore ?? throw new ArgumentNullException(nameof(backChannelAuthenticationRequestStore));
@@ -49,7 +47,6 @@ namespace Aguacongas.IdentityServer.Store
             _referenceTokenStore = referenceTokenStore ?? throw new ArgumentNullException(nameof(referenceTokenStore));
             _refreshTokenStore = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
             _userConsentStore = userConsentStore ?? throw new ArgumentNullException(nameof(userConsentStore));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)

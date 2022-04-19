@@ -69,24 +69,24 @@ namespace Aguacongas.IdentityServer.Store
             return pageResponse.Items.Select(s => s.ToServerSideSession()).ToArray();
         }
 
-        public async  Task<QueryResult<ServerSideSession>> QuerySessionsAsync(SessionQuery query = null, CancellationToken cancellationToken = default)
+        public async  Task<QueryResult<ServerSideSession>> QuerySessionsAsync(SessionQuery filter = null, CancellationToken cancellationToken = default)
         {
-            query ??= new();
+            filter ??= new();
 
             const int memberCount = 3;
             var expressionList = new List<string>(memberCount);
-            AddODataFilterForMember(query.SubjectId, nameof(UserSession.UserId), expressionList);
-            AddODataFilterForMember(query.SessionId, nameof(UserSession.SessionId), expressionList);
-            if (!string.IsNullOrEmpty(query.DisplayName))
+            AddODataFilterForMember(filter.SubjectId, nameof(UserSession.UserId), expressionList);
+            AddODataFilterForMember(filter.SessionId, nameof(UserSession.SessionId), expressionList);
+            if (!string.IsNullOrEmpty(filter.DisplayName))
             {
-                expressionList.Add($"containt(tolower({nameof(UserSession.DisplayName)}), '{query.DisplayName.ToLowerInvariant()}')");
+                expressionList.Add($"containt(tolower({nameof(UserSession.DisplayName)}), '{filter.DisplayName.ToLowerInvariant()}')");
             }
             var odataFilter = string.Join(" or ", expressionList);
 
             const int takeDefault = 25;
-            var take = query.CountRequested == 0 ? takeDefault : query.CountRequested;
-            var initialSkip = query.ResultsToken == null ? 0 : int.Parse(query.ResultsToken);
-            var skip = query.RequestPriorResults ? initialSkip - take : initialSkip;
+            var take = filter.CountRequested == 0 ? takeDefault : filter.CountRequested;
+            var initialSkip = filter.ResultsToken == null ? 0 : int.Parse(filter.ResultsToken);
+            var skip = filter.RequestPriorResults ? initialSkip - take : initialSkip;
             skip = skip < 0 ? 0 : skip;
             var pageResponse = await _store.GetAsync(new PageRequest
             {
@@ -97,7 +97,12 @@ namespace Aguacongas.IdentityServer.Store
 
             var items = pageResponse.Items;
             var skipNext = initialSkip + items.Count();
-            var totalPage = pageResponse.Count == 0 ? null : 1 + (int?)Math.Floor((double)pageResponse.Count / take);
+            var totalPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)pageResponse.Count / take);
+            if (pageResponse.Count % take > 0)
+            {
+                totalPage += 1;
+            }
+
             var currentPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)(initialSkip + take) / take);
             return new()
             {
