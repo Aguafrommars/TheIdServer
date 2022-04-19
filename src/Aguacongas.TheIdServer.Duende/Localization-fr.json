@@ -2034,5 +2034,9 @@
   {
     "key": "Expires",
     "value": "Expire"
+  },
+  {
+    "key": "No session",
+    "value": "Pas de session"
   }
 ]
