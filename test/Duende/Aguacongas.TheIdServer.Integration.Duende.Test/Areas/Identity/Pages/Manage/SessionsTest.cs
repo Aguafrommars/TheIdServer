@@ -103,7 +103,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Areas.Identity.Pages.Ma
             var startIndex = content.IndexOf(match);
             startIndex += match.Length;
             var endIndex = content.IndexOf('"', startIndex);
-            return content.Substring(startIndex, endIndex - startIndex);
+            return content[startIndex..endIndex];
         }
     }
 }
