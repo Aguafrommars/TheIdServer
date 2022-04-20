@@ -39,6 +39,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api
         {
             return Task.FromResult(new ProtectResource
             {
+                Enabled = true,
                 Secrets = new List<ApiSecret>(),
                 ApiScopes = new List<ApiApiScope>(),
                 ApiClaims = new List<ApiClaim>(),

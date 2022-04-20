@@ -23,6 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
         {
             return Task.FromResult(new Entity.ApiScope
             {
+                Enabled = true,
                 ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
                 Properties = new List<Entity.ApiScopeProperty>(),
                 Resources = new List<Entity.ApiScopeLocalizedResource>()
