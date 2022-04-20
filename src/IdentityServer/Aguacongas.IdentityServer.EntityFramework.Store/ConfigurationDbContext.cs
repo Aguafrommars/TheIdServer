@@ -75,6 +75,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<RelyingPartyClaimMapping> RelyingPartyClaimMappings { get; set; }
 
+        public virtual DbSet<ClientAllowedIdentityTokenSigningAlgorithm> ClientAllowedIdentityTokenSigningAlgorithms { get; set; }
+
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -93,6 +95,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
                 .IsUnique(true);
             modelBuilder.Entity<ClientIdpRestriction>()
                 .HasIndex(e => new { e.ClientId, e.Provider })
+                .IsUnique(true);
+            modelBuilder.Entity<ClientAllowedIdentityTokenSigningAlgorithm>()
+                .HasIndex(e => new { e.ClientId, e.Algorithm })
                 .IsUnique(true);
             modelBuilder.Entity<ApiClaim>()
                 .HasIndex(e => new { e.ApiId, e.Type })

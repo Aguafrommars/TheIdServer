@@ -175,6 +175,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<UserRole> UserRoles { get; set; }
 
         /// <summary>
+        /// Gets or sets the user tokens.
+        /// </summary>
+        /// <value>
+        /// The user tokens.
+        /// </value>
+        public virtual ICollection<UserSession> UserSessions { get; set; }
+
+        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns></returns>

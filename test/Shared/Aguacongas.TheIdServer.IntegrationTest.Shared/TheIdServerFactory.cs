@@ -117,12 +117,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     webBuilder.AddInMemoryCollection(new Dictionary<string, string>
                     {
                         ["DbType"] = DbTypes.InMemory.ToString(),
-                        ["Seed"] = "false"
+                        ["Seed"] = "false",
+                        ["IdentityServerOptions:IssuerUri"] = "http://localhost"
                     });
                 })
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<TestUserService>();
+                    services.AddControllersWithViews()
+                        .AddApplicationPart(typeof(Config).Assembly);
                 })
                 .Configure((context, configureApp) =>
                 {
@@ -160,6 +163,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
                     configureApp.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch (InvalidOperationException e) when (e.Message == "Not started. Call Start first.")
+            {
+                // silent
+            }
         }
     }
 

@@ -307,7 +307,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.IdentityServer.Duende.Test", "test\Duende\Aguacongas.IdentityServer.Duende.Test\Aguacongas.IdentityServer.Duende.Test.csproj", "{76B12AC6-03A6-4619-A4B3-5BA8A02FDD6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Test", "test\Aguacongas.TheIdServer.Test\Aguacongas.TheIdServer.Test.csproj", "{0900433A-77B6-4DDC-8BF4-CEDB438313E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Test", "test\Aguacongas.TheIdServer.Test\Aguacongas.TheIdServer.Test.csproj", "{0900433A-77B6-4DDC-8BF4-CEDB438313E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
