@@ -429,6 +429,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
+        [Fact]
+        public async Task Options_clicks_should_enable_save_button()
+        {
+            var clientId = await CreateClient(allowOfflineAccess: true);
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            WaitForNode(component, "#tokens");
+
+            var optionButton = component.Find("input[name=access-token-type]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-usage]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-expiration]");
+            optionButton.Change(true);
+
+            var saveButton = component.Find("button[type=submit]");
+
+            Assert.False(saveButton.IsDisabled());
+        }
+
 
         [Fact]
         public async Task DeleteButtonClick_should_delete_client()
@@ -567,7 +592,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        private async Task<string> CreateClient(string grantType = "hybrid")
+        private async Task<string> CreateClient(string grantType = "hybrid", bool allowOfflineAccess = false)
         {
             var clientId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
@@ -585,6 +610,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ClientScope{ Id = GenerateId(), Scope = "filtered"}
                     },
+                    AllowOfflineAccess = allowOfflineAccess,
                     RedirectUris = new List<ClientUri>
                     {
                         new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },
