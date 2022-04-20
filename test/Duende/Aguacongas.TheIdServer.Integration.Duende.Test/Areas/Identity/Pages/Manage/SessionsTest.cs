@@ -27,8 +27,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Areas.Identity.Pages.Ma
         [Fact]
         public async Task OnGetAsync_should_read_user_session()
         {
+            var subjectId = Guid.NewGuid().ToString();
             var testUserService = _factory.Services.GetRequiredService<TestUserService>();
-            testUserService.SetTestUser(true, new[] { new Claim("sub", "test") });
+            testUserService.SetTestUser(true, new[] { new Claim("sub", subjectId) });
 
             using var client1 = _factory.CreateClient();
             using var response1 = await client1.GetAsync("Identity/Account/Manage/Sessions");
@@ -61,8 +62,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Areas.Identity.Pages.Ma
         [Fact]
         public async Task OnPostDeleteAsync_should_remove_user_session()
         {
+            var subjectId = Guid.NewGuid().ToString();
             var testUserService = _factory.Services.GetRequiredService<TestUserService>();
-            testUserService.SetTestUser(true, new[] { new Claim("sub", "test") });
+            testUserService.SetTestUser(true, new[] { new Claim("sub", subjectId) });
 
             using var scope = _factory.Services.CreateScope();
             var ticketService = scope.ServiceProvider.GetRequiredService<IServerSideTicketService>();
