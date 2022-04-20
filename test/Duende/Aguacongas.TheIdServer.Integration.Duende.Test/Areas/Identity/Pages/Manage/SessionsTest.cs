@@ -1,6 +1,4 @@
-﻿using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.IntegrationTest;
+﻿using Aguacongas.TheIdServer.IntegrationTest;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
