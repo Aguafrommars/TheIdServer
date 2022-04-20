@@ -10,6 +10,14 @@
     </div>
     <div class="mb-3 row">
         <label class="col col-form-label pt-0" for="access-token-type">
+            @Localizer["allowed identity token signing algorithms"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <ClientAllowedIdentityTokenSigningAlgorithms Model="Model" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label pt-0" for="access-token-type">
             @Localizer["access token type"]
         </label>
         <div class="col-lg-8 col-sm-12">

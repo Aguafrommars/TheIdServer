@@ -227,6 +227,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task AlgorithmInputChanges_should_filter_scopes_list()
+        {
+            string clientId = await CreateClient();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            var expected = 3;
+            var input = WaitForNode(component, "#tokens input.new-claim");
+
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "RS" }).ConfigureAwait(false);
+
+            var nodes = WaitForAllNodes(component, "#tokens .list-inline-item .dropdown-item");
+
+            Assert.Equal(expected, nodes.Count);
+        }
 
 
         [Fact]

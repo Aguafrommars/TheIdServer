@@ -2038,5 +2038,9 @@
   {
     "key": "No session",
     "value": "Pas de session"
+  },
+  {
+    "key": "allowed identity token signing algorithms",
+    "value": "algorithmes de signature de jeton d'identité autorisés"
   }
 ]
