@@ -117,7 +117,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                     webBuilder.AddInMemoryCollection(new Dictionary<string, string>
                     {
                         ["DbType"] = DbTypes.InMemory.ToString(),
-                        ["Seed"] = "false"
+                        ["Seed"] = "false",
+                        ["IdentityServerOptions:IssuerUri"] = "http://localhost"
                     });
                 })
                 .ConfigureServices(services =>
