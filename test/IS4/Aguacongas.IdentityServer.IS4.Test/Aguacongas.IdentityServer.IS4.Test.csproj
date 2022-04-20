@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\PersistedGrantStoreTest.cs" Link="Store\PersistedGrantStoreTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\ResourceStoreTest.cs" Link="Store\ResourceStoreTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Validators\TokenExchangeGrantValidatorTest.cs" Link="Validators\TokenExchangeGrantValidatorTest.cs" />
 	</ItemGroup>

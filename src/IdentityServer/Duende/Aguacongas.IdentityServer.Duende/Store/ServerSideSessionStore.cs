@@ -86,7 +86,7 @@ namespace Aguacongas.IdentityServer.Store
             const int takeDefault = 25;
             var take = filter.CountRequested == 0 ? takeDefault : filter.CountRequested;
             var initialSkip = filter.ResultsToken == null ? 0 : int.Parse(filter.ResultsToken);
-            var skip = filter.RequestPriorResults ? initialSkip - take : initialSkip;
+            var skip = filter.RequestPriorResults ? initialSkip - (2 * take) : initialSkip;
             skip = skip < 0 ? 0 : skip;
             var pageResponse = await _store.GetAsync(new PageRequest
             {
@@ -97,11 +97,7 @@ namespace Aguacongas.IdentityServer.Store
 
             var items = pageResponse.Items;
             var skipNext = skip + items.Count();
-            if (skipNext >= pageResponse.Count)
-            {
-                skipNext = skip;
-            }
-
+           
             var totalPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)pageResponse.Count / take);
             if (pageResponse.Count % take > 0)
             {

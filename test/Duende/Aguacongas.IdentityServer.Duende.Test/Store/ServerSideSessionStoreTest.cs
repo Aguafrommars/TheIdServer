@@ -194,8 +194,6 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 CountRequested = 2,                
             }).ConfigureAwait(false);
 
-            storeMock.Verify();
-
             Assert.True(result.HasNextResults);
             Assert.False(result.HasPrevResults);
             Assert.Equal(pageResponse.Count, result.TotalCount);
@@ -208,8 +206,6 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 ResultsToken = result.ResultsToken
             }).ConfigureAwait(false);
 
-            storeMock.Verify();
-
             Assert.True(result.HasNextResults);
             Assert.True(result.HasPrevResults);
             Assert.Equal(pageResponse.Count, result.TotalCount);
@@ -221,9 +217,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
             }).ConfigureAwait(false);
-
-            storeMock.Verify();
-
+            
             Assert.False(result.HasNextResults);
             Assert.True(result.HasPrevResults);
             Assert.Equal(pageResponse.Count, result.TotalCount);
@@ -236,14 +230,48 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
             }).ConfigureAwait(false);
-
-            storeMock.Verify();
-
+            
             Assert.True(result.HasNextResults);
             Assert.True(result.HasPrevResults);
             Assert.Equal(pageResponse.Count, result.TotalCount);
             Assert.Equal(3, result.TotalPages);
             Assert.Equal(2, result.CurrentPage);
+
+            result = await sut.QuerySessionsAsync(new SessionQuery
+            {
+                RequestPriorResults = true,
+                CountRequested = 2,
+                ResultsToken = result.ResultsToken
+            }).ConfigureAwait(false);
+            
+            Assert.True(result.HasNextResults);
+            Assert.False(result.HasPrevResults);
+            Assert.Equal(pageResponse.Count, result.TotalCount);
+            Assert.Equal(3, result.TotalPages);
+            Assert.Equal(1, result.CurrentPage);
+
+            result = await sut.QuerySessionsAsync(new SessionQuery
+            {
+                CountRequested = 1,
+                DisplayName = "test"
+            }).ConfigureAwait(false);
+
+            Assert.True(result.HasNextResults);
+            Assert.False(result.HasPrevResults);
+            Assert.Equal(pageResponse.Count, result.TotalCount);
+            Assert.Equal(5, result.TotalPages);
+            Assert.Equal(1, result.CurrentPage);
+
+            result = await sut.QuerySessionsAsync(new SessionQuery
+            {
+                CountRequested = 5
+            }).ConfigureAwait(false);
+
+            Assert.False(result.HasNextResults);
+            Assert.False(result.HasPrevResults);
+            Assert.Equal(pageResponse.Count, result.TotalCount);
+            Assert.Equal(1, result.TotalPages);
+            Assert.Equal(1, result.CurrentPage);
         }
 
         [Fact]
