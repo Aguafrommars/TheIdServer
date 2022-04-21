@@ -1,3 +1,10 @@
+## [4.6.4](https://github.com/Aguafrommars/TheIdServer/compare/4.6.3...4.6.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* reliying party encryption certificate not saved ([0f2a1f0](https://github.com/Aguafrommars/TheIdServer/commit/0f2a1f04b21cd38953edd5a027d88ca3c9c4ac1c)), closes [#726](https://github.com/Aguafrommars/TheIdServer/issues/726)
+
 ## [4.6.3](https://github.com/Aguafrommars/TheIdServer/compare/4.6.2...4.6.3) (2022-04-14)
 
 
