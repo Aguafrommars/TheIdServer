@@ -211,6 +211,13 @@
             <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" TokenValueChanged="TokenChanded" />
         </div>
     </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="coordinate-lifetime-with-user-session">
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeNullableCheckbox Name="coordinate-lifetime-with-user-session" @bind-Value="@Model.CoordinateLifetimeWithUserSession" Label="@Localizer["coordinate lifetime with user session"]" />
+        </div>
+    </div>
     @if (_showAllOptions || Model.IsDevice())
     {
         <div class="mb-3 row">
