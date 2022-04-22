@@ -21,7 +21,7 @@ init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
-  - ps: .\dotnet-install.ps1 -Channel 6.0 -Runtime dotnet -Architecture x64
+  - ps: .\dotnet-install.ps1 -Version 6.0.0 -Runtime dotnet -Architecture x64
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
