@@ -171,7 +171,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             {
                 base.Dispose(disposing);
             }
-            catch (InvalidOperationException e) when (e.Message == "Not started. Call Start first.")
+            catch
             {
                 // silent
             }
