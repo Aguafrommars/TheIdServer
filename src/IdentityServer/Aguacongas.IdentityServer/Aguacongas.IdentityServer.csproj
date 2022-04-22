@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer bases classes</Description>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -35,13 +35,10 @@
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq" Version="2.1.0" />
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.3.*" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.0-preview.3.*" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.0-preview.3.*" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.3.*" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
 	</ItemGroup>
 
