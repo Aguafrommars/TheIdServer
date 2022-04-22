@@ -2,8 +2,10 @@
 Project: Aguafrommars/TheIdServer
 Copyright (c) 2022 @Olivier Lefebvre
 *@
+@using Microsoft.Extensions.Configuration
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IViewLocalizer Localizer
+@inject IConfiguration Configuration
 
 @{    
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
@@ -23,7 +25,7 @@ Copyright (c) 2022 @Olivier Lefebvre
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.CibaNavClass(ViewContext)" asp-page="./Ciba">@Localizer["Backchannel Login Requests"]</a></li>
     }
-    @if (!Url.Page("./Sessions").StartsWith("/?page"))
+    @if (Configuration.GetValue<bool>("IdentityServerOptions:EnableServerSideSession") && !Url.Page("./Sessions").StartsWith("/?page"))
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.SessionsNavClass(ViewContext)" asp-page="./Sessions">@Localizer["Sessions"]</a></li>
     }
