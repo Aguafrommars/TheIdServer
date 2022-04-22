@@ -1,13 +1,11 @@
-﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Aguacongas.IdentityServer.WsFederation
+namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
     /// <summary>
     /// WS-Federation options
     /// </summary>
-    public class WsFederationOptions
+    public class WsFederationConfiguration
     {
         /// <summary>
         /// Gets or sets the collection of claim type requested
