@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         private readonly ISessionManagementService _sessionManagementService;
         private readonly IClientStore _clients;
 
-        public SessionModel(ISessionManagementService sessionManagementService, IClientStore clients, IPersistedGrantStore persistedGrantStore)
+        public SessionModel(ISessionManagementService sessionManagementService, IClientStore clients)
         {
             _sessionManagementService = sessionManagementService;
             _clients = clients;
