@@ -22,6 +22,7 @@ init:
 install:
   - ps: Install-Product node ''
   - ps: .\dotnet-install.ps1 -Version 6.0.4 -Runtime dotnet -Architecture x64
+  - ps: .\dotnet-install.ps1 -Version 6.0.4 -Runtime aspnetcore -Architecture x64
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
