@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.Stores;
@@ -68,6 +68,11 @@ namespace Aguacongas.IdentityServer.Store
                 Select = nameof(ApiApiScope.ApiId),
                 Filter = filter
             }).ConfigureAwait(false);
+
+            if (!apiIdListResponse.Items.Any())
+            {
+                return Array.Empty<models.ApiResource>();
+            }
 
             filter = string.Join(" or ", apiIdListResponse.Items.Select(i => $"{nameof(ProtectResource.Id)} eq '{i.ApiId}'"));
             var apiResposne = await _apiStore.GetAsync(new PageRequest

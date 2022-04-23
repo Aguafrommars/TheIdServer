@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.Models;
@@ -10,6 +10,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 #endif
+using System;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -38,5 +39,12 @@ namespace Aguacongas.IdentityServer.Store
 
         protected override string GetSubjectId(Token dto)
             => dto?.SubjectId;
+
+        protected override ReferenceToken CreateEntity(Token dto, string clientId, string subjectId, DateTime? expiration)
+        {
+            var entity = base.CreateEntity(dto, clientId, subjectId, expiration);
+            entity.SessionId = dto.SessionId;
+            return entity;
+        }
     }
 }

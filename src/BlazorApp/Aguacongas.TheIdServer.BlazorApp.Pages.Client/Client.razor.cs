@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -18,7 +18,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
         private bool _filtered;
         private bool _isWebClient;
 
-        protected override string Expand => $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)}";
+        protected override string Expand => $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)},{nameof(Entity.Client.AllowedIdentityTokenSigningAlgorithms)}";
 
         protected override bool NonEditable => false;
 
@@ -45,14 +45,26 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return Task.FromResult(new Entity.Client
             {
                 ProtocolType = "oidc",
+                Enabled = true,
+                EnableLocalLogin = true,
                 AllowedGrantTypes = new List<Entity.ClientGrantType>(),
+                AllowedIdentityTokenSigningAlgorithms = new List<Entity.ClientAllowedIdentityTokenSigningAlgorithm>(),
                 AllowedScopes = new List<Entity.ClientScope>(),
                 ClientClaims = new List<Entity.ClientClaim>(),
                 ClientSecrets = new List<Entity.ClientSecret>(),
                 IdentityProviderRestrictions = new List<Entity.ClientIdpRestriction>(),
                 RedirectUris = new List<Entity.ClientUri>(),
                 Properties = new List<Entity.ClientProperty>(),
-                Resources = new List<Entity.ClientLocalizedResource>()
+                Resources = new List<Entity.ClientLocalizedResource>(),
+                AbsoluteRefreshTokenLifetime = 86400,
+                AccessTokenLifetime = 900,
+                IdentityTokenLifetime = 300,
+                AuthorizationCodeLifetime = 300,
+                DeviceCodeLifetime = 300,
+                SlidingRefreshTokenLifetime = 18000,
+                CibaLifetime = 300,
+                PollingInterval = 5,
+                RefreshTokenUsage = (int)RefreshTokenUsage.OneTimeOnly
             });
         }
 

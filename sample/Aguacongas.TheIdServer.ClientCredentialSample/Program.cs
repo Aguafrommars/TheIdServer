@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using IdentityModel.Client;
 using System;
 using System.Net.Http;
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.ClientCredentialSample
             }            
             httpClient.SetBearerToken(tokenResponse.AccessToken);
             
-            using var apiResponse = await httpClient.GetAsync("https://localhost:5448/weatherforecast");
+            using var apiResponse = await httpClient.GetAsync("https://localhost:5443/metrics");
             var content = await apiResponse.Content.ReadAsStringAsync();
             Console.WriteLine($"Api response:\n{content}");
             apiResponse.EnsureSuccessStatusCode();

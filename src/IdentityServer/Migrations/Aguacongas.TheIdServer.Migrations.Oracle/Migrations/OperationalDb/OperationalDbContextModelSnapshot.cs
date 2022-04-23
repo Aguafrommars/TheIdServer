@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using System;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Microsoft.EntityFrameworkCore;
@@ -287,6 +287,41 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 
                     b.ToTable("DataProtectionKeys");
                 });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserSession", b =>
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar2(450)");
+
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasColumnType("nclob");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("timestamp");
+
+                b.Property<string>("Data")
+                    .HasColumnType("nclob");
+
+                b.Property<DateTime?>("Expiration")
+                    .HasColumnType("timestamp");
+
+                b.Property<DateTime?>("ModifiedAt")
+                    .HasColumnType("timestamp");
+
+                b.Property<string>("SessionId")
+                    .HasColumnType("nclob");
+
+                b.Property<string>("UserId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar2(200)")
+                    .HasMaxLength(200);
+
+                b.HasKey("Id");
+
+                b.ToTable("UserSessions");
+            });
+
 #pragma warning restore 612, 618
         }
     }

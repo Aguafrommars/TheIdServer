@@ -14,7 +14,7 @@ services:
 environment:
   GITHUB_TOKEN:
     secure: aV5flJ5BOs49dlM4XRpu7t1qa+ajMD5L4hhwlBOv+zff/NlSkdnrmk5nYNsIJCdE
-  donetsdk: 6.0.101
+  donetsdk: 6.0.202
   JAVA_HOME: C:\Program Files\Java\jdk14
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
@@ -33,6 +33,8 @@ install:
   - ps: ./appveyorinit.ps1
 build_script:
   - ps: ./build.ps1
+test_script:
+  - ps: ./publish.ps1
 artifacts:
   - path: test/**/*.dmp
     name: dump

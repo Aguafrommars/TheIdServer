@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,6 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Identity
         {
             return Task.FromResult(new IdentityResource
             {
+                Enabled = true,
                 IdentityClaims = new List<IdentityClaim>(),
                 Properties = new List<IdentityProperty>(),
                 Resources = new List<IdentityLocalizedResource>()

@@ -6,6 +6,26 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ## Installation
 
+### From Terraform
+
+The [Terraform](https://terraform.io) [Helm](https://helm.sh) module [theidserver](https://registry.terraform.io/modules/Aguafrommars/theidserver/helm/latest) make the deployement of TheIdServer easy.  
+
+``` hcl
+provider "helm" {
+  kubernetes {
+    config_path = var.kubeconfig_path
+  }
+}
+
+module "theidserver" {
+  source = "Aguafrommars/theidserver/helm"
+
+  host = "theidserver.com"
+  tls_issuer_name = "letsencrypt"
+  tls_issuer_kind = "ClusterIssuer"
+}
+```
+
 ### From Helm
 
 The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) Helm chart is available in [hub.helm.sh](https://hub.helm.sh).
@@ -822,6 +842,10 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 > },
 > ```
 
+## Configure WS-Federation endpoint
+
+Read [Aguacongas.IdentityServer.WsFederation.ISA](../IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/README.md)
+
 ## Use the client to override the default configuration
 
 The server and the blazor app integrate [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration). Most of the configuration can be ovveriden using the blazor app.
@@ -843,6 +867,37 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 }
 ```
 
+## Health check
+
+The server expose an health check enpoint you can use for docker on kubernetes at **/healthz**.
+
+The endpoit return a json reponse depending on the store kind used and redis dependencies :
+
+```json
+{
+  "status": "Healthy",
+  "results": {
+    "ConfigurationDbContext": {
+      "status": "Healthy"
+    },
+    "OperationalDbContext": {
+      "status": "Healthy"
+    },
+    "ApplicationDbContext": {
+      "status": "Healthy"
+    },
+    "dynamicConfigurationRedis": {
+      "status": "Healthy"
+    }
+  }
+}
+```
+
+## Configure OpenTelemetry
+
+[Configure OpenTelemetry doc](../../doc/OPEN_TELEMETRY.md) provides details on [OpenTelemetry](https://opentelemetry.io/) configuration.
+
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
@@ -853,3 +908,4 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 * [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration)
+* [OpenTelemetry](https://opentelemetry.io/)

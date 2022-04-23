@@ -3,7 +3,7 @@
 
 @foreach (var resource in Collection.Where(r => r.ResourceKind == ResourceKind))
 {
-    <div @key="@resource" class="mb-1 row">
+    <div @key="@resource" class="mb-3 row">
         <EntityResourceTranslatation Resource="resource" DeleteResource="OnDeleteResource" />
     </div>
 }

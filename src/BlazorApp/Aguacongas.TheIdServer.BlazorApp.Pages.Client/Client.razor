@@ -88,7 +88,7 @@ else
         <div class="entity-details">
             <div class="card mb-3">
                 <div class="card-body">
-                    <div class="mb-1 row">
+                    <div class="mb-3 row">
                         <label class="col col-form-label">
                             @Localizer["protocol type"]
                         </label>
@@ -120,14 +120,14 @@ else
                             }
                         </div>
                     </div>
-                    <div class="mb-1 row">
+                    <div class="mb-3 row">
                         <label class="col col-form-label">
                         </label>
                         <div class="col-lg-10 col-sm-12">
                             <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
                         </div>
                     </div>
-                    <div class="mb-1 row">
+                    <div class="mb-3 row">
                         <label class="col col-form-label" for="name">
                             @Localizer["name"]
                         </label>
@@ -141,7 +141,7 @@ else
                         </div>
                     </div>
                     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName" />
-                    <div class="mb-1 row">
+                    <div class="mb-3 row">
                         <label class="col col-form-label" for="description">
                             @Localizer["description"]
                         </label>
@@ -155,7 +155,7 @@ else
                         </div>
                     </div>
                     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
-                    <div class="mb-1 row">
+                    <div class="mb-3 row">
                         <label class="col col-form-label" for="front-channel-logout-uri">
                             @Localizer["front channel logout uri"]
                         </label>
@@ -166,7 +166,7 @@ else
                     </div>
                     @if (Model.ProtocolType == OIDC)
                     {
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="back-channel-logout-uri">
                                 @Localizer["back channel logout uri"]
                             </label>
@@ -178,7 +178,7 @@ else
                     }
                     else
                     {
-                        <div class="mb-1 row">
+                        <div class="mb-3 row">
                             <label class="col col-form-label" for="relying-party">
                                 @Localizer["relying party"]
                             </label>
@@ -219,16 +219,19 @@ else
             {
                 <ClientUrisPanel Model="@Model" />
             }
-            <div id="providers" class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <h5 class="col">@Localizer["External provider restrictions"]</h5>
+            @if (!Model.IsClientCredentialOnly())
+            {
+                <div id="providers" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["External provider restrictions"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ClientIdpRestrictions Model="@Model" />
                     </div>
                 </div>
-                <div class="card-body">
-                    <ClientIdpRestrictions Model="@Model" />
-                </div>
-            </div>
+            }
             <div id="scopes" class="card mb-3">
                 <div class="card-header">
                     <div class="row">

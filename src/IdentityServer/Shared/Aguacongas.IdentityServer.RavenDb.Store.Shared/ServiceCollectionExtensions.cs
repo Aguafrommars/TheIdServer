@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.RavenDb.Store;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.RelyingParty;
 using Aguacongas.IdentityServer.RavenDb.Store.AdminStores.Role;
@@ -53,6 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<ApiSecretStore>()
                 .AddTransient<AdminStore<Entity.AuthorizationCode>>()
                 .AddTransient<AdminStore<Entity.Client>>()
+                .AddTransient<ClientAllowedIdentityTokenSigningAlgorithmStore>()
                 .AddTransient<ClientClaimStore>()
                 .AddTransient<ClientGrantTypeStore>()
                 .AddTransient<ClientIdpRestrictionStore>()
@@ -84,6 +85,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<UserLoginStore>()
                 .AddTransient<UserTokenStore>()
                 .AddTransient<UserRoleStore>()
+                .AddTransient<UserSessionStore>()
                 .AddTransient<AdminStore<Entity.RelyingParty>>()
                 .AddTransient<RelyingPartyClaimMappingStore>()
                 .AddTransient<IAdminStore<Entity.ApiApiScope>, CacheAdminStore<ApiApiScopeStore, Entity.ApiApiScope>>()
@@ -97,6 +99,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.ApiSecret>, CacheAdminStore<ApiSecretStore, Entity.ApiSecret>>()
                 .AddTransient<IAdminStore<Entity.AuthorizationCode>, CacheAdminStore<AdminStore<Entity.AuthorizationCode>, Entity.AuthorizationCode>>()
                 .AddTransient<IAdminStore<Entity.Client>, CacheAdminStore<AdminStore<Entity.Client>, Entity.Client>>()
+                .AddTransient<IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm>, CacheAdminStore<ClientAllowedIdentityTokenSigningAlgorithmStore, Entity.ClientAllowedIdentityTokenSigningAlgorithm>>()
                 .AddTransient<IAdminStore<Entity.ClientClaim>, CacheAdminStore<ClientClaimStore, Entity.ClientClaim>>()
                 .AddTransient<IAdminStore<Entity.ClientGrantType>, CacheAdminStore<ClientGrantTypeStore, Entity.ClientGrantType>>()
                 .AddTransient<IAdminStore<Entity.ClientIdpRestriction>, CacheAdminStore<ClientIdpRestrictionStore, Entity.ClientIdpRestriction>>()
@@ -125,6 +128,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.UserClaim>, CacheAdminStore<UserClaimStore, Entity.UserClaim>>()
                 .AddTransient<IAdminStore<Entity.UserRole>, CacheAdminStore<UserRoleStore, Entity.UserRole>>()
                 .AddTransient<IAdminStore<Entity.UserToken>, CacheAdminStore<UserTokenStore, Entity.UserToken>>()
+                .AddTransient<IAdminStore<Entity.UserSession>, CacheAdminStore<UserSessionStore, Entity.UserSession>>()
                 .AddTransient<IAdminStore<Entity.Role>, CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
                 .AddTransient<IAdminStore<Entity.RoleClaim>, CacheAdminStore<RoleClaimStore, Entity.RoleClaim>>()
                 .AddTransient<IAdminStore<Entity.RelyingParty>, CacheAdminStore<AdminStore<Entity.RelyingParty>, Entity.RelyingParty>>()

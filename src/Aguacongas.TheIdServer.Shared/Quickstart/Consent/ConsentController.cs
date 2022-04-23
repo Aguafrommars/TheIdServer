@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 #if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
@@ -178,7 +178,7 @@ namespace Aguacongas.TheIdServer.UI
             }
             else
             {
-                _logger.LogError("No consent request matching request: {0}", returnUrl);
+                _logger.LogError("No consent request matching request: {returnUrl}", returnUrl);
             }
 
             return null;

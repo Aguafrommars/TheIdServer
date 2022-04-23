@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -173,6 +173,14 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The user roles.
         /// </value>
         public virtual ICollection<UserRole> UserRoles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user tokens.
+        /// </summary>
+        /// <value>
+        /// The user tokens.
+        /// </value>
+        public virtual ICollection<UserSession> UserSessions { get; set; }
 
         /// <summary>
         /// Clones this instance.

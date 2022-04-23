@@ -1,7 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,13 +20,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
+using Duende.IdentityServer;
 using ISModels = Duende.IdentityServer.Models;
 #else
 using ISModels = IdentityServer4.Models;
 #endif
 namespace Aguacongas.TheIdServer
 {
-    static class SeedData
+    public static class SeedData
     {
         public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
         {            
@@ -42,18 +45,16 @@ namespace Aguacongas.TheIdServer
                 var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 appcontext.Database.Migrate();
             }
-
-            if (configuration.GetValue<bool>("Seed"))
-            {
-                SeedUsers(scope, configuration);
-                SeedConfiguration(scope, configuration);
-            }
+            
+            SeedUsers(scope, configuration);
+            SeedConfiguration(scope, configuration);
         }
 
         public static void SeedUsers(IServiceScope scope, IConfiguration configuration)
         {
             var provider = scope.ServiceProvider;
-
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedUsers");
             var roleMgr = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
             var roles = new string[]
@@ -80,7 +81,7 @@ namespace Aguacongas.TheIdServer
                 var existing = userMgr.FindByNameAsync(user.UserName).GetAwaiter().GetResult();
                 if (existing != null)
                 {
-                    Console.WriteLine($"{user.UserName} already exists");
+                    logger.LogInformation("{UserName} already exists", user.UserName);
                     continue;
                 }
                 var pwd = configuration.GetValue<string>($"InitialData:Users:{index}:Password");
@@ -98,7 +99,7 @@ namespace Aguacongas.TheIdServer
                 ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList))
                     .GetAwaiter().GetResult();
 
-                Console.WriteLine($"{user.UserName} created");
+                logger.LogInformation("{UserName} created", user.UserName);
 
                 index++;
             }
@@ -112,10 +113,10 @@ namespace Aguacongas.TheIdServer
             SeedApiScopes(configuration, provider);
             SeedApis(configuration, provider);
             SeedRelyingParties(configuration, provider);
-            SeedLocalization(configuration, provider);
+            SeedLocalization(provider);
         }
 
-        private static void SeedLocalization(IConfiguration configuration, IServiceProvider provider)
+        private static void SeedLocalization(IServiceProvider provider)
         {
             var cultureFiles = Directory.EnumerateFiles(".", "Localization-*.json");
             foreach (var file in cultureFiles)
@@ -188,10 +189,14 @@ namespace Aguacongas.TheIdServer
             var apiApiScopeStore = provider.GetRequiredService<IAdminStore<Entity.ApiApiScope>>();
             var apiPropertyStore = provider.GetRequiredService<IAdminStore<Entity.ApiProperty>>();
 
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedApis");
+
             foreach (var resource in Config.GetApis(configuration))
             {
                 if (apiStore.GetAsync(resource.Name, null).GetAwaiter().GetResult() != null)
                 {
+                    logger.LogInformation("Api resource {Name} already exists", resource.Name);
                     continue;
                 }
 
@@ -214,7 +219,7 @@ namespace Aguacongas.TheIdServer
                 SeedApiApiScopes(apiApiScopeStore, resource);
                 SeedApiProperties(apiPropertyStore, resource);
                 
-                Console.WriteLine($"Add api resource {resource.DisplayName}");
+                logger.LogInformation("Add api resource {DisplayName}", resource.DisplayName);
             }
         }
 
@@ -307,10 +312,15 @@ namespace Aguacongas.TheIdServer
             var apiScopeStore = provider.GetRequiredService<IAdminStore<Entity.ApiScope>>();
             var apiScopeClaimStore = provider.GetRequiredService<IAdminStore<Entity.ApiScopeClaim>>();
             var apiScopePropertyStore = provider.GetRequiredService<IAdminStore<Entity.ApiScopeProperty>>();
+
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedApiScopes");
+
             foreach (var resource in Config.GetApiScopes(configuration))
             {
                 if (apiScopeStore.GetAsync(resource.Name, null).GetAwaiter().GetResult() != null)
                 {
+                    logger.LogInformation("Api scope {Name} already exists", resource.Name);
                     continue;
                 }
                 try
@@ -334,7 +344,7 @@ namespace Aguacongas.TheIdServer
                 SeedApiScopeClaims(apiScopeClaimStore, resource);
                 SeedApiScopeProperties(apiScopePropertyStore, resource);
 
-                Console.WriteLine($"Add api scope resource {resource.DisplayName}");
+                logger.LogInformation("Add api scope resource {DisplayName}", resource.DisplayName);
             }
         }
 
@@ -384,10 +394,15 @@ namespace Aguacongas.TheIdServer
             var identityStore = provider.GetRequiredService<IAdminStore<Entity.IdentityResource>>();
             var identityClaimStore = provider.GetRequiredService<IAdminStore<Entity.IdentityClaim>>();
             var identityPropertyStore = provider.GetRequiredService<IAdminStore<Entity.IdentityProperty>>();
+            
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedIdentities");
+
             foreach (var resource in Config.GetIdentityResources())
             {
                 if (identityStore.GetAsync(resource.Name, null).GetAwaiter().GetResult() != null)
                 {
+                    logger.LogInformation("Identity resouce {Name} already exists", resource.Name);
                     continue;
                 }
 
@@ -411,7 +426,7 @@ namespace Aguacongas.TheIdServer
                 SeedIdentityClaims(identityClaimStore, resource);
                 SeedIdentityProperties(identityPropertyStore, resource);
 
-                Console.WriteLine($"Add identity resource {resource.DisplayName}");
+                logger.LogInformation("Add identity resource {DisplayName}", resource.DisplayName);
             }
         }
 
@@ -468,10 +483,18 @@ namespace Aguacongas.TheIdServer
             var clientUriStore = provider.GetRequiredService<IAdminStore<Entity.ClientUri>>();
             var clientPropertyStore = provider.GetRequiredService<IAdminStore<Entity.ClientProperty>>();
 
+#if DUENDE
+            var clientAllowedIdentityTokenSigningAlgorithmStore = provider.GetRequiredService<IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm>>();
+#endif
+
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedClients");
+
             foreach (var client in Config.GetClients(configuration))
             {
                 if (clientStore.GetAsync(client.ClientId, null).GetAwaiter().GetResult() != null)
                 {
+                    logger.LogInformation("Client {ClientId} already exists", client.ClientId);
                     continue;
                 }
 
@@ -529,11 +552,35 @@ namespace Aguacongas.TheIdServer
                 SeedClientRestrictions(clientIdpRestrictionStore, client);
                 SeedClientProperties(clientPropertyStore, client);
                 SeedClientUris(clientUriStore, client);
+#if DUENDE
+                SeedClientAllowedIdentityTokenSigningAlgorithms(clientAllowedIdentityTokenSigningAlgorithmStore, client);
+#endif
 
-                Console.WriteLine($"Add client {client.ClientName}");
+                logger.LogInformation("Add client {ClientName}", client.ClientName);
             }
         }
 
+#if DUENDE
+        private static void SeedClientAllowedIdentityTokenSigningAlgorithms(IAdminStore<ClientAllowedIdentityTokenSigningAlgorithm> clientAllowedIdentityTokenSigningAlgorithmStore, ISModels.Client client)
+        {
+            foreach (var algorythm in client.AllowedIdentityTokenSigningAlgorithms.Where(a => IdentityServerConstants.SupportedSigningAlgorithms.Contains(a)))
+            {
+                try
+                {
+                    clientAllowedIdentityTokenSigningAlgorithmStore.CreateAsync(new ClientAllowedIdentityTokenSigningAlgorithm
+                    {
+                        ClientId = client.ClientId,
+                        Id = Guid.NewGuid().ToString(),
+                        Algorithm = algorythm
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
+            }
+        }
+#endif
         private static void SeedClientUris(IAdminStore<Entity.ClientUri> clientUriStore, ISModels.Client client)
         {
             var uris = client.RedirectUris.Select(o => new Entity.ClientUri
@@ -729,10 +776,14 @@ namespace Aguacongas.TheIdServer
             var relyingPartyStore = provider.GetRequiredService<IAdminStore<Entity.RelyingParty>>();
             var relyingPartyClaimMappingStore = provider.GetRequiredService<IAdminStore<Entity.RelyingPartyClaimMapping>>();
 
-            foreach(var relyingParty in Config.GetRelyingParties(configuration))
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("SeedRelyingParties");
+
+            foreach (var relyingParty in Config.GetRelyingParties(configuration))
             {
                 if (relyingPartyStore.GetAsync(relyingParty.Id, null).GetAwaiter().GetResult() != null)
                 {
+                    logger.LogInformation("RelyingParty {Id} already exists", relyingParty.Id);
                     continue;
                 }
 
@@ -754,6 +805,8 @@ namespace Aguacongas.TheIdServer
                     // silent
                 }
                 SeedRelyingPartyClaimMappings(relyingPartyClaimMappingStore, relyingParty);
+
+                logger.LogInformation("Add RelyingParty {Id}", relyingParty.Id);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
@@ -103,7 +103,7 @@ namespace Microsoft.AspNetCore.Builder
             var path = request.Path;
 
             if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
-                !request.PathBase.StartsWithSegments(basePath) && !path.StartsWithSegments(basePath))
+                (request.PathBase.HasValue && !request.PathBase.StartsWithSegments(basePath)) && !path.StartsWithSegments(basePath))
             {
                 await next().ConfigureAwait(false);
                 return;

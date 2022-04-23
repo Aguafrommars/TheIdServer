@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
@@ -21,6 +21,8 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
         public static string Ciba => "Ciba";
 
+        public static string Sessions => "Sessions";
+
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
@@ -38,6 +40,8 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         public static string GrantsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Grants);
 
         public static string CibaNavClass(ViewContext viewContext) => PageNavClass(viewContext, Ciba);
+
+        public static string SessionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Sessions);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {

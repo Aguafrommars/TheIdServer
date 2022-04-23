@@ -1,14 +1,22 @@
 ﻿@inject IStringLocalizerAsync<ClientTokens> Localizer
 @if (Model.ProtocolType == "oidc")
 {
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label">
         </label>
         <div class="col-lg-8 col-sm-12">
             <AuthorizeCheckbox Name="show-all" Label="@Localizer["show all options"]" @bind-Value="@_showAllOptions" />
         </div>
     </div>
-    <div class="mb-1 row">
+    <div class="mb-3 row">
+        <label class="col col-form-label pt-0" for="access-token-type">
+            @Localizer["allowed identity token signing algorithms"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <ClientAllowedIdentityTokenSigningAlgorithms Model="Model" />
+        </div>
+    </div>
+    <div class="mb-3 row">
         <label class="col col-form-label pt-0" for="access-token-type">
             @Localizer["access token type"]
         </label>
@@ -36,9 +44,9 @@
             </AuthorizeView>
         </div>
     </div>
-    if ((_showAllOptions || Model.IsAuthorizationCodeClient()))
+    if (_showAllOptions || Model.IsWebClient())
     {
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label" for="access-token">
                 @Localizer["authorization code lifetime"]
             </label>
@@ -53,7 +61,7 @@
             </div>
         </div>
     }
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="access-token">
             @Localizer["access token lifetime"]
         </label>
@@ -70,31 +78,28 @@
             }
         </div>
     </div>
-    @if (_showAllOptions || Model.HasUser())
-    {
-        <div class="mb-1 row">
-            <label class="col col-form-label" for="id-token">
-                @Localizer["id token lifetime"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
-                <div>
-                    <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
-                </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="id-token">
+            @Localizer["id token lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizedToken Name="id-token" QuickValues="_idTokenQuickValues" @bind-Value="@Model.IdentityTokenLifetime" TokenValueChanged="TokenChanded" />
+            <div>
+                <AuthorizeCheckbox Name="include-claims" Label="@Localizer["always include user claims in id token"]" @bind-Value="@Model.AlwaysIncludeUserClaimsInIdToken" />
             </div>
         </div>
-        <div class="mb-1 row">
-            <label class="col col-form-label" for="salt">
-                @Localizer["pairwise subject salt"]
-            </label>
-            <div class="col-lg-8 col-sm-12">
-                <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
-            </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="salt">
+            @Localizer["pairwise subject salt"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeText Id="salt" @bind-Value="@Model.PairWiseSubjectSalt" MaxLength="200" />
         </div>
-    }
+    </div>
     @if (_showAllOptions || Model.CanUseRefreshToken())
     {
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label pt-0" for="refesh-token-usage">
                 @Localizer["refresh token usage"]
             </label>
@@ -105,15 +110,15 @@
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
                            value="0"
                            checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.ReUse)"
-                           @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)" />
-                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.ReUse)">@Localizer["Re use"]</label>
+                           @onchange="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.ReUse))" />
+                            <label class="form-check-label" for="jwt" @onclick="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.ReUse))">@Localizer["Re use"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
                            value="1"
                            checked="@(Model.RefreshTokenUsage == (int)Models.RefreshTokenUsage.OneTimeOnly)"
-                           @onchange="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)" />
-                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenUsage = (int)Models.RefreshTokenUsage.OneTimeOnly)">@Localizer["One time only"]</label>
+                           @onchange="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.OneTimeOnly))" />
+                            <label class="form-check-label" for="reference" @onclick="@(() => SetRefreshTokenUsage(Models.RefreshTokenUsage.OneTimeOnly))">@Localizer["One time only"]</label>
                         </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">
@@ -122,7 +127,7 @@
                 </AuthorizeView>
             </div>
         </div>
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label pt-0" for="refesh-token-expiration">
                 @Localizer["refresh token expiration"]
             </label>
@@ -133,15 +138,15 @@
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"
                            value="0"
                            checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Sliding)"
-                           @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)" />
-                            <label class="form-check-label" for="jwt" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Sliding)">@Localizer["Sliding"]</label>
+                           @onchange="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Sliding))" />
+                            <label class="form-check-label" for="jwt" @onclick="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Sliding))">@Localizer["Sliding"]</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"
                            value="1"
                            checked="@(Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)"
-                           @onchange="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)" />
-                            <label class="form-check-label" for="reference" @onclick="@(() => Model.RefreshTokenExpiration = (int)Models.RefreshTokenExpiration.Absolute)">@Localizer["Absolute"]</label>
+                           @onchange="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Absolute))" />
+                            <label class="form-check-label" for="reference" @onclick="@(() => SetRefreshTokenExpiration(Models.RefreshTokenExpiration.Absolute))">@Localizer["Absolute"]</label>
                         </div>
                     </Authorized>
                     <NotAuthorized Context="refreshTokenUsage">
@@ -152,7 +157,7 @@
         </div>
         @if (Model.RefreshTokenExpiration == (int)Models.RefreshTokenExpiration.Absolute)
         {
-            <div class="mb-1 row">
+            <div class="mb-3 row">
                 <label class="col col-form-label" for="refresh-token">
                     @Localizer["absolute refresh token lifetime"]
                 </label>
@@ -166,7 +171,7 @@
         }
         else
         {
-            <div class="mb-1 row">
+            <div class="mb-3 row">
                 <label class="col col-form-label" for="refresh-token">
                     @Localizer["sliding refresh token lifetime"]
                 </label>
@@ -181,7 +186,7 @@
     }
     @if (_showAllOptions || Model.IsCiba())
     {
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label" for="ciba-lifetime">
                 @Localizer["ciba lifetime"]
             </label>
@@ -189,7 +194,7 @@
                 <AuthorizedToken Name="ciba-lifetime" QuickValues="_cibaLifetimeQuickValues" @bind-Value="@Model.CibaLifetime" TokenValueChanged="TokenChanded" />
             </div>
         </div>
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label" for="polling-interval">
                 @Localizer["polling interval"]
             </label>
@@ -198,7 +203,7 @@
             </div>
         </div>
     }
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="sso-lifetime">
             @Localizer["sso lifetime"]
         </label>
@@ -206,9 +211,16 @@
             <AuthorizedToken Name="sso-lifetime" QuickValues="_ssoLifetimeQuickValues" @bind-Value="@Model.UserSsoLifetime" TokenValueChanged="TokenChanded" />
         </div>
     </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="coordinate-lifetime-with-user-session">
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeNullableCheckbox Name="coordinate-lifetime-with-user-session" @bind-Value="@Model.CoordinateLifetimeWithUserSession" Label="@Localizer["coordinate lifetime with user session"]" />
+        </div>
+    </div>
     @if (_showAllOptions || Model.IsDevice())
     {
-        <div class="mb-1 row">
+        <div class="mb-3 row">
             <label class="col col-form-label" for="device-flow-lifetime">
                 @Localizer["device flow request lifetime"]
             </label>
@@ -220,7 +232,7 @@
 }
 else
 {
-    <div class="mb-1 row">
+    <div class="mb-3 row">
         <label class="col col-form-label" for="id-token">
             @Localizer["lifetime"]
         </label>

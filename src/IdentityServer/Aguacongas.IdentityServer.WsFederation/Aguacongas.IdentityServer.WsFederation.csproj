@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
-		<Description>WS-Federation controller base classes.</Description>
-		<Copyright>Copyright (c) 2021 @Olivier Lefebvre</Copyright>
+		<Description>WS-Federation controller classes.</Description>
+		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.WsFederation</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -14,7 +14,15 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		
 		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="README.md">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Compile Remove="Validation\**" />
@@ -28,7 +36,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.15.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.17.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,5 +45,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="package-icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="README.md">
+	    <PackagePath>\</PackagePath>
+	    <Pack>True</Pack>
+	  </None>
 	</ItemGroup>
 </Project>

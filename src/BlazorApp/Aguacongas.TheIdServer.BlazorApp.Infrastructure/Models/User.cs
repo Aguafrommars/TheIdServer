@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using System.Collections.Generic;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -17,10 +17,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public ICollection<Entity.Role> Roles { get; set; }
 
         public ICollection<Entity.UserToken> Tokens { get; set; }
-        public List<Entity.ReferenceToken> ReferenceTokens { get; set; }
-        public List<Entity.RefreshToken> RefreshTokens { get; set; }
+        public ICollection<Entity.ReferenceToken> ReferenceTokens { get; set; }
+        public ICollection<Entity.RefreshToken> RefreshTokens { get; set; }
 
-        public List<Entity.BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
+        public ICollection<Entity.BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
+
+        public ICollection<Entity.UserSession> Sessions { get; set; }
 
         public new User Clone()
         {

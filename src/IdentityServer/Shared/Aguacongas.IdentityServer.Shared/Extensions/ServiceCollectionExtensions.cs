@@ -1,7 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Shared.Validators;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 #if DUENDE
@@ -15,6 +16,7 @@ using Duende.IdentityServer.Validation;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
+using IdentityServer4.Validation;
 #endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -67,10 +69,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
 #if DUENDE
-                .AddTransient<IBackChannelAuthenticationRequestStore, BackChannelAuthenticationRequestStore>()
+                .AddTransient<BackChannelAuthenticationRequestStore>()
+                .AddTransient<IBackChannelAuthenticationRequestStore>(p => p.GetRequiredService<BackChannelAuthenticationRequestStore>())
 #endif
-                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>());
+                .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
+                .AddTransient<IPersistedGrantStore, PersistedGrantStore>();
         }
+
+        public static IServiceCollection AddTokenExchange(this IServiceCollection services)
+        => services.AddTransient<IExtensionGrantValidator, TokenExchangeGrantValidator>();
 
 #if DUENDE
         public static IServiceCollection AddCibaServices(this IServiceCollection services, IConfiguration configuration)

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityModel;
@@ -178,6 +178,63 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             await sut.GetProfileDataAsync(context);
 
             Assert.Contains(context.IssuedClaims, c => c.Type == "test");
+        }
+
+        [Fact]
+        public async Task GetProfileDataAsync_should_get_add_act_claim()
+        {
+            var services = new ServiceCollection()
+                .AddLogging()
+                .AddDbContext<IdentityDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>();
+
+            var provider = services.BuildServiceProvider();
+            var manager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
+            var user = new IdentityUser
+            {
+                UserName = "test"
+            };
+            await manager.CreateAsync(user);
+
+            var context = new ProfileDataRequestContext(new ClaimsPrincipal(new ClaimsIdentity(new Claim[] 
+            { 
+                new Claim(JwtClaimTypes.Subject, "not_found"),
+                new Claim("amr", OidcConstants.GrantTypes.TokenExchange),
+                new Claim(JwtClaimTypes.Actor, "api1")
+            })),
+                new Client(), "test",
+                new string[] { "test" })
+            {
+                RequestedResources = new ResourceValidationResult
+                {
+                    Resources = new Resources
+                    {
+                        ApiResources = new List<ApiResource>
+                        {
+                            new ApiResource
+                            {
+                                Properties = new Dictionary<string, string>
+                                {
+                                    [ProfileServiceProperties.ClaimProviderTypeKey] = typeof(ClaimsProvider).FullName,
+                                    [ProfileServiceProperties.ClaimProviderAssemblyPathKey] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll"
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            var sut = new ProfileService<IdentityUser>(provider.GetRequiredService<UserManager<IdentityUser>>(),
+                provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>(),
+                provider.GetService<IEnumerable<IProvideClaims>>(),
+                provider.GetRequiredService<ILogger<ProfileService<IdentityUser>>>());
+
+            await sut.GetProfileDataAsync(context);
+
+            Assert.Contains(context.IssuedClaims, c => c.Type == JwtClaimTypes.Actor);
         }
 
         class ClaimsProvider : IProvideClaims

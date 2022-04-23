@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
@@ -86,6 +86,18 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         private void SetTokenType(AccessTokenType accessTokenType)
         {
             Model.AccessTokenType = (int)accessTokenType;
+            TokenChanded();
+        }
+
+        private void SetRefreshTokenUsage(RefreshTokenUsage usage)
+        {
+            Model.RefreshTokenUsage = (int)usage;
+            TokenChanded();
+        }
+
+        private void SetRefreshTokenExpiration(RefreshTokenExpiration expiration)
+        {
+            Model.RefreshTokenExpiration = (int)expiration;
             TokenChanded();
         }
 

@@ -1,6 +1,6 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2021 @Olivier Lefebvre
+Copyright (c) 2022 @Olivier Lefebvre
 *@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -36,7 +36,7 @@ Copyright (c) 2021 @Olivier Lefebvre
         foreach (var grant in Model.Grants)
         {
             <div class="row grant">
-                <div class="col-sm-2">
+                <div class="col-2">
                     @if (grant.ClientLogoUrl != null)
                     {
                         <img src="@grant.ClientLogoUrl" alt="logo">
@@ -46,7 +46,7 @@ Copyright (c) 2021 @Olivier Lefebvre
                         <img src="/icons8-app-symbol-96.png" alt="logo">
                     }
                 </div>
-                <div class="col-sm-8">
+                <div class="col-7">
                     <div class="clientname">@grant.ClientName</div>
                     <div>
                         <span class="created">@Localizer["Created:"]</span> @grant.Created.ToString("yyyy-MM-dd")
@@ -82,10 +82,10 @@ Copyright (c) 2021 @Olivier Lefebvre
                         </div>
                     }
                 </div>
-                <div class="col-sm-2">
+                <div class="col">
                     <form method="post">
                         <input type="hidden" name="clientId" value="@grant.ClientId">
-                        <button class="btn btn-danger" asp-page-handler="Revoke">@Localizer["Revoke Access"]</button>
+                        <button class="btn btn-lg btn-danger" asp-page-handler="Revoke">@Localizer["Revoke Access"]</button>
                     </form>
                 </div>
             </div>

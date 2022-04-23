@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
@@ -227,6 +227,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task AlgorithmInputChanges_should_filter_scopes_list()
+        {
+            string clientId = await CreateClient();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            var expected = 3;
+            var input = WaitForNode(component, "#tokens input.new-claim");
+
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "RS" }).ConfigureAwait(false);
+
+            var nodes = WaitForAllNodes(component, "#tokens .list-inline-item .dropdown-item");
+
+            Assert.Equal(expected, nodes.Count);
+        }
 
 
         [Fact]
@@ -269,8 +287,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#id-token"));
             // hybrid client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
-            // hybrid client should not have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            // hybrid client should have require pkce check box
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -308,7 +326,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             // implicit client should not have device flow lifetime input field
             Assert.Throws<ElementNotFoundException>(() => component.Find("#device-flow-lifetime"));
             // implicit client should have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -322,12 +340,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForNode(component, "#consent");
 
-            // device client not should have id token input field
-            Assert.Throws<ElementNotFoundException>(() => component.Find("#id-token"));
             // device client should have device flow lifetime input field
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // device client should have require pkce check box
-            Assert.Throws<ElementNotFoundException>(() => component.Find("input[name=require-pkce]"));
+            Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
         [Fact]
@@ -341,6 +357,46 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             // client credentials client should not have consent section
             Assert.Throws<WaitForFailedException>(() => WaitForNode(component, "#consent"));
+        }
+
+        [Fact]
+        public async Task Credentials_client_should_not_have_identity_scopes()
+        {
+            var clientId = await CreateClient("client_credentials");
+
+            var firstId = $"t{GenerateId()}";
+            var secondId = $"t{GenerateId()}";
+            await DbActionAsync<ConfigurationDbContext>(async c =>
+            {
+                c.ApiScopes.RemoveRange(c.ApiScopes);
+                await c.ApiScopes.AddAsync(new ApiScope
+                {
+                    Id = firstId,
+                    DisplayName = firstId,
+                });
+
+                c.Identities.RemoveRange(c.Identities);
+                await c.Identities.AddAsync(new IdentityResource
+                {
+                    Id = secondId,
+                    DisplayName = secondId,
+                });
+
+                await c.SaveChangesAsync();
+            });
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            var expected = 1;
+            var input = WaitForNode(component, "#scopes input");
+
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "t" }).ConfigureAwait(false);
+
+            var nodes = WaitForAllNodes(component, "#scopes .dropdown-item");
+
+            Assert.Equal(expected, nodes.Count);
         }
 
         [Fact]
@@ -389,6 +445,31 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("#device-flow-lifetime"));
             // custom client should have require pkce check box
             Assert.NotNull(component.Find("input[name=require-pkce]"));
+        }
+
+        [Fact]
+        public async Task Options_clicks_should_enable_save_button()
+        {
+            var clientId = await CreateClient(allowOfflineAccess: true);
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId);
+
+            WaitForNode(component, "#tokens");
+
+            var optionButton = component.Find("input[name=access-token-type]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-usage]");
+            optionButton.Change(true);
+
+            optionButton = component.Find("input[name=refresh-token-expiration]");
+            optionButton.Change(true);
+
+            var saveButton = component.Find("button[type=submit]");
+
+            Assert.False(saveButton.IsDisabled());
         }
 
 
@@ -529,7 +610,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        private async Task<string> CreateClient(string grantType = "hybrid")
+        private async Task<string> CreateClient(string grantType = "hybrid", bool allowOfflineAccess = false)
         {
             var clientId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>
@@ -547,6 +628,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     {
                         new ClientScope{ Id = GenerateId(), Scope = "filtered"}
                     },
+                    AllowOfflineAccess = allowOfflineAccess,
                     RedirectUris = new List<ClientUri>
                     {
                         new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },

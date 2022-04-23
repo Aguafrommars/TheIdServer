@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.IdentityServer.Store;
@@ -7,7 +7,6 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,11 +29,50 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using Aguacongas.IdentityServer.Abstractions;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
     public class ServiceCollectionExtensionsTest
     {
+        [Fact]
+        public async Task SeedData_should_seed_data()
+        {
+            var configurationManager = new ConfigurationManager();
+            configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
+            configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+            configurationManager.AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["DbType"] = DbTypes.InMemory.ToString(),
+                ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString()
+            });
+
+            using var sut = new HostBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddTheIdServer(configurationManager);
+                }).Build();
+
+            var provider = sut.Services;
+            using var scope = provider.CreateScope();
+
+            SeedData.SeedConfiguration(scope, configurationManager);
+            SeedData.SeedUsers(scope, configurationManager);
+
+            var clientStore = scope.ServiceProvider.GetRequiredService<IAdminStore<Client>>();
+            var result = await clientStore.GetAsync("theidserveradmin", new GetRequest()).ConfigureAwait(false);
+
+            Assert.NotNull(result);
+
+            SeedData.SeedConfiguration(scope, configurationManager);
+            SeedData.SeedUsers(scope, configurationManager);
+
+            var userMgr = provider.GetRequiredService<UserManager<ApplicationUser>>();
+            var user = await userMgr.FindByNameAsync("alice").ConfigureAwait(false);
+
+            Assert.NotNull(user);
+        }
+
         [Fact]
         public void ConfigureService_should_configure_ravendb_services()
         {

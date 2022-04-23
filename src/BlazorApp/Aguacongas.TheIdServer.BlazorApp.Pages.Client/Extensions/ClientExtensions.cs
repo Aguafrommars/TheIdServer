@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using System.Linq;
 
@@ -7,6 +7,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
 {
     public static class ClientExtensions
     {
+        public static bool IsClientCredentialOnly(this IdentityServer.Store.Entity.Client client)
+        {
+            return client.AllowedGrantTypes.All(g => g.GrantType == "client_credentials");
+        }
+
         public static bool IsWebClient(this IdentityServer.Store.Entity.Client client)
         {
             return client.ProtocolType == "wsfed" ||

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +20,15 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<TwoFactorAuthenticationModel> _logger;
         private readonly IStringLocalizer _localizer;
 
         public TwoFactorAuthenticationModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<TwoFactorAuthenticationModel> logger,
             IStringLocalizer<TwoFactorAuthenticationModel> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
             _localizer = localizer;
         }
 

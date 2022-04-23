@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,6 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
             ["implicit"] = "Implicit",
             ["password"] = "Resource owner password",
             ["urn:ietf:params:oauth:grant-type:device_code"] = "Device flow",
+            ["urn:ietf:params:oauth:grant-type:token-exchange"] = "Token exchange",
             ["urn:openid:params:grant-type:ciba"] = "Ciba",
         };
 

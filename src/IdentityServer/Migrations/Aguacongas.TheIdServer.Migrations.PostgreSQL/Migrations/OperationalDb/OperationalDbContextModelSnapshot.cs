@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -127,11 +127,19 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
                     b.Property<string>("Data")
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("SubjectId")
                         .HasMaxLength(200)
@@ -244,41 +252,42 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
 
                     b.ToTable("RefreshTokens");
                 });
-
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserConsent", b =>
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserSession", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DisplayName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("Expires")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Data")
+                    b.Property<DateTime>("Renewed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Scheme")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SessionId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Ticket")
+                        .HasColumnType("text");
+
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserConstents");
-                });
+                    b.HasIndex("UserId");
 
+                    b.ToTable("UserSessions");
+                });
             modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
                 {
                     b.Property<int>("Id")

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     {
         private bool _isReadOnly;
 
-        private readonly PageRequest _pageRequest = new PageRequest
+        private readonly PageRequest _pageRequest = new()
         {
             Select = nameof(IClaimType.Type),
             Take = 5

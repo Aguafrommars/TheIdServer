@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 #if DUENDE
 using Duende.IdentityServer.Models;
 #else
@@ -108,8 +108,11 @@ namespace Aguacongas.IdentityServer.Store
                 UserCodeType = client.UserCodeType,
                 UserSsoLifetime = client.UserSsoLifetime,
 #if DUENDE
+                AllowedIdentityTokenSigningAlgorithms = client.AllowedIdentityTokenSigningAlgorithms.Select(a => a.Algorithm).ToList(),
                 CibaLifetime = client.CibaLifetime,
-                PollingInterval = client.PollingInterval                
+                CoordinateLifetimeWithUserSession = client.CoordinateLifetimeWithUserSession,
+                PollingInterval = client.PollingInterval,
+                RequireRequestObject = client.RequireRequestObject,
 #endif
             };
         }
@@ -199,8 +202,6 @@ namespace Aguacongas.IdentityServer.Store
         }
 
         private static string UriPortString(this Uri uri)
-        {
-            return uri.IsDefaultPort ? "" : $":{uri.Port}";
-        }
+        => uri.IsDefaultPort ? "" : $":{uri.Port}";
     }
 }

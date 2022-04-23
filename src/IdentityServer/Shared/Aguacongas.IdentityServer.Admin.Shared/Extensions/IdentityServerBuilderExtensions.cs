@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     var discovery = option.Discovery;
                     discovery.ExpandRelativePathsInCustomEntries = true;
-                    discovery.CustomEntries.Add("registration_endpoint", $"~{apiPath}/register");
+                    discovery.CustomEntries["registration_endpoint"] = $"~{apiPath}/register";
                 })
                 .AddTransient<IRegisterClientService, RegisterClientService>()
                 .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>();

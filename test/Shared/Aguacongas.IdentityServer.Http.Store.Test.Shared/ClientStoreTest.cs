@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Moq;
@@ -27,7 +27,10 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                     ClientSecrets = new List<ClientSecret>(0),
                     IdentityProviderRestrictions = new List<ClientIdpRestriction>(0),
                     Properties = new List<ClientProperty>(0),
-                    Resources = new List<ClientLocalizedResource>(0)
+                    Resources = new List<ClientLocalizedResource>(0),
+#if DUENDE
+                    AllowedIdentityTokenSigningAlgorithms = new List<ClientAllowedIdentityTokenSigningAlgorithm>(0)
+#endif
                 })
                 .Verifiable();
 

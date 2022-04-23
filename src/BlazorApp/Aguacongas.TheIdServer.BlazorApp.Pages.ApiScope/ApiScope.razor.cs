@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -23,6 +23,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
         {
             return Task.FromResult(new Entity.ApiScope
             {
+                Enabled = true,
                 ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
                 Properties = new List<Entity.ApiScopeProperty>(),
                 Resources = new List<Entity.ApiScopeLocalizedResource>()

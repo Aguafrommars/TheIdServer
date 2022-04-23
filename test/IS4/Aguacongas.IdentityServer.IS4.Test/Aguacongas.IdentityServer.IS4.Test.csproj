@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\PersistedGrantStoreTest.cs" Link="Store\PersistedGrantStoreTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\ResourceStoreTest.cs" Link="Store\ResourceStoreTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Validators\TokenExchangeGrantValidatorTest.cs" Link="Validators\TokenExchangeGrantValidatorTest.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Moq" Version="4.17.2" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.1.2">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Store\" />
+		<Folder Include="Validators\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.IS4\Aguacongas.IdentityServer.IS4.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -7,6 +7,7 @@ namespace Aguacongas.IdentityServer.Store
 {
     public static class EntityExtension
     {
+        private static readonly Type _byteArrayType = typeof(byte[]);
         public static bool CorsMatch(this Uri cors, Uri uri)
         {
             cors = cors ?? throw new ArgumentNullException(nameof(cors));
@@ -18,9 +19,9 @@ namespace Aguacongas.IdentityServer.Store
         }
 
         public static void Copy<TEntity>(this TEntity from, TEntity to) where TEntity : Entity.IEntityId
-        {
+        {            
             var properties = typeof(TEntity).GetProperties()
-                .Where(p => !p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)));
+                .Where(p => !p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>)) || p.PropertyType == _byteArrayType);
             foreach (var property in properties)
             {
                 property.SetValue(to, property.GetValue(from));

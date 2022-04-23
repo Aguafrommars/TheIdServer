@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using IdentityModel;
 #if DUENDE
@@ -98,6 +98,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
             await base.GetProfileDataAsync(context).ConfigureAwait(false);
 
             context.IssuedClaims = SanetizeIssuedClaims(context.IssuedClaims);
+
+            // add actor claim if needed
+            if (context.Subject.HasClaim(c => c.Type == "amr") && context.Subject.GetAuthenticationMethod() == OidcConstants.GrantTypes.TokenExchange)
+            {
+                var act = context.Subject.FindFirst(JwtClaimTypes.Actor);
+                if (act != null)
+                {
+                    context.IssuedClaims.Add(act);
+                }
+            }
         }
 
 
@@ -132,12 +142,20 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             if (provider == null)
             {
-                var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
+                try
+                {
+                    var path = resource.Properties[ProfileServiceProperties.ClaimProviderAssemblyPathKey];
 #pragma warning disable S3885 // "Assembly.Load" should be used
-                var assembly = Assembly.LoadFrom(path);
+                    var assembly = Assembly.LoadFrom(path);
 #pragma warning restore S3885 // "Assembly.Load" should be used
-                var type = assembly.GetType(providerTypeName);
-                provider = Activator.CreateInstance(type) as IProvideClaims;
+                    var type = assembly.GetType(providerTypeName, true);
+                    provider = Activator.CreateInstance(type) as IProvideClaims;
+                }
+                catch(Exception e)
+                {
+                    Logger.LogError(e, "{Message}", e.Message);
+                    return Task.FromResult(Array.Empty<Claim>().AsEnumerable());
+                }
             }
 
             return provider.ProvideClaims(subject, client, caller, resource);

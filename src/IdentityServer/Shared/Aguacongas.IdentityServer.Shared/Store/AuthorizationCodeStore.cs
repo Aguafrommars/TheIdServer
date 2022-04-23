@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
 #if DUENDE
@@ -51,6 +51,13 @@ namespace Aguacongas.IdentityServer.Store
                           throw new Exception("Unknown userid");
 
             return idClaim.Value;
+        }
+
+        protected override AuthorizationCode CreateEntity(models.AuthorizationCode dto, string clientId, string subjectId, DateTime? expiration)
+        {
+            var entitiy = base.CreateEntity(dto, clientId, subjectId, expiration);
+            entitiy.SessionId = dto.SessionId;
+            return entitiy;
         }
     }
 }

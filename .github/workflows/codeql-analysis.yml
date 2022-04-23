@@ -47,9 +47,13 @@ jobs:
         include-prerelease: true
     - name: Setup wasm tools
       run: dotnet workload install wasm-tools
+      env: 
+        GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
+      env: 
+        GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       with:
         languages: ${{ matrix.language }}
         # If you wish to specify custom queries, you can do so here or in a config file.
@@ -61,6 +65,8 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
+      env: 
+        GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl

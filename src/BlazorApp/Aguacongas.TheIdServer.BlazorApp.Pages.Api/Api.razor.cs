@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -39,6 +39,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api
         {
             return Task.FromResult(new ProtectResource
             {
+                Enabled = true,
                 Secrets = new List<ApiSecret>(),
                 ApiScopes = new List<ApiApiScope>(),
                 ApiClaims = new List<ApiClaim>(),

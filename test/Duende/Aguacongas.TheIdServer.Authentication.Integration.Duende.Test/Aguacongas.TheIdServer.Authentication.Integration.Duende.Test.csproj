@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="4.0.3" />
-	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.1" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="4.1.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.4" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 	  <PackageReference Include="xunit" Version="2.4.1" />
 	  <PackageReference Include="xunit.assert" Version="2.4.1" />
 	  <PackageReference Include="xunit.core" Version="2.4.1" />
@@ -32,7 +32,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="coverlet.collector" Version="3.1.0">
+	  <PackageReference Include="coverlet.collector" Version="3.1.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

@@ -3,16 +3,12 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using IdentityModel;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Moq;
 using RichardSzalay.MockHttp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -48,7 +44,7 @@ namespace Aguacongas.TheIdServer.Duende.Test.Services
             issuerNameServiceMock.Setup(m => m.GetCurrentAsync()).ReturnsAsync(issuer);
 
             var stringLocalizerMock = new Mock<IStringLocalizer<BackchannelAuthenticationUserNotificationService>>();
-            var options = Options.Create(new BackchannelAuthenticationUserNotificationServiceOptions
+            var options = Microsoft.Extensions.Options.Options.Create(new BackchannelAuthenticationUserNotificationServiceOptions
             {
                 ApiUrl = "https://theidserver/email"
             });

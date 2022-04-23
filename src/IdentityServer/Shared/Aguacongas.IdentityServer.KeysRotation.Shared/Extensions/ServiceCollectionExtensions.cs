@@ -1,7 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2021 @Olivier Lefebvre
+// Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 #if DUENDE
+using Aguacongas.IdentityServer.KeysRotation.Duende;
 using Duende.IdentityServer.Stores;
 #else
 using IdentityServer4.Stores;
@@ -20,6 +21,12 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+#if DUENDE
+        public static IServiceCollection AddSigningKeyStore(this IServiceCollection services)
+        {
+            return services.AddTransient<ISigningKeyStore, SigningKeyStore>();
+        }
+#endif
         /// <summary>
         /// Adds the keys rotation.
         /// </summary>

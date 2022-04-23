@@ -8,9 +8,36 @@ Read [Configuration in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/cor
 
 ## Installation
 
+### From Terraform
+
+The [Terraform](https://terraform.io) [Helm](https://helm.sh) module [theidserver](https://registry.terraform.io/modules/Aguafrommars/theidserver/helm/latest) make the deployement of TheIdServer easy.  
+To deploy the Duende version choose the [aguacongas/theidserver.duende image](https://hub.docker.com/r/aguacongas/theidserver.duende).
+
+``` hcl
+provider "helm" {
+  kubernetes {
+    config_path = var.kubeconfig_path
+  }
+}
+
+module "theidserver" {
+  source = "Aguafrommars/theidserver/helm"
+
+  host = "theidserver.com"
+  tls_issuer_name = "letsencrypt"
+  tls_issuer_kind = "ClusterIssuer"
+
+  image = {
+    repository = "aguacongas/theidserver.duende"
+    pullPolicy = "Always"
+    tag = "next"
+  }
+}
+```
+
 ### From Helm
 
-The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) Helm chart is available in [hub.helm.sh](https://hub.helm.sh).
+The [theidserver](https://hub.helm.sh/packages/helm/aguafrommars/theidserver) [Helm](https://helm.sh) chart is available in [hub.helm.sh](https://hub.helm.sh).
 
 #### Install
 
@@ -830,6 +857,10 @@ Tokens returned by request_uri parameter are validated using the rules defined i
 > },
 > ```
 
+## Configure WS-Federation endpoint
+
+Read [Aguacongas.IdentityServer.WsFederation.Duende](../IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/README.md)
+
 ## Configure CIBA notification service
 
 Read [DUENDE CIBA INTEGRATION/Notification service](../../doc/CIBA.md#Notification-service)
@@ -855,6 +886,40 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 }
 ```
 
+## Health checks
+
+The server expose an health checks enpoint you can use for docker on kubernetes at **/healthz**.
+
+The endpoit return a json reponse depending on the store kind used and redis dependencies :
+
+```json
+{
+  "status": "Healthy",
+  "results": {
+    "ConfigurationDbContext": {
+      "status": "Healthy"
+    },
+    "OperationalDbContext": {
+      "status": "Healthy"
+    },
+    "ApplicationDbContext": {
+      "status": "Healthy"
+    },
+    "dynamicConfigurationRedis": {
+      "status": "Healthy"
+    }
+  }
+}
+```
+
+## Configure OpenTelemetry
+
+[Configure OpenTelemetry doc](../../doc/OPEN_TELEMETRY.md) provides details on [OpenTelemetry](https://opentelemetry.io/) configuration.
+
+## Configure Server-side sessions
+
+Read [Server-side sessions](../../doc/SERVER_SIDE_SESSIONS.md)
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)
@@ -865,3 +930,4 @@ Use **RedisConfigurationOptions** section to configure the Redis db.
 * [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
 * [Aguafrommars/DynamicConfiguration](https://github.com/Aguafrommars/DynamicConfiguration)
+* [OpenTelemetry](https://opentelemetry.io/)

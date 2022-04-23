@@ -1,4 +1,5 @@
-﻿using Aguacongas.IdentityServer;
+﻿using Aguacongas.DynamicConfiguration.Redis;
+using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Admin.Options;
@@ -40,9 +41,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using System.Linq;
-using Aguacongas.DynamicConfiguration.Redis;
+using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.TheIdServer.Data;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -57,6 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddIdentityProviderStore()
                 .AddConfigurationStores()
                 .AddOperationalStores()
+                .AddTokenExchange()
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options => configurationManager.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddTheIdServerStores()
@@ -83,6 +87,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOidcStateDataFormatterCache()
 #if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
+                .AddSigningKeyStore()
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -103,6 +108,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDynamicClientRegistration()
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
+#if DUENDE
+            if (configurationManager.GetValue<bool>("IdentityServerOptions:EnableServerSideSession"))
+            {
+                identityServerBuilder.AddServerSideSessions<ServerSideSessionStore>();
+            }
+#endif
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
 
@@ -163,7 +174,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerWsFederation();
+                .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)));
 
             ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
             ConfigureDynamicConfiguration(mvcBuilder, configurationManager);
@@ -184,6 +195,8 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddDatabaseDeveloperPageExceptionFilter()
                  .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
+            ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
+           
             return services;
         }
 
@@ -378,6 +391,64 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
             }
+        }
+
+        private static void ConfigureHealthChecks(IServiceCollection services,DbTypes dbTypes, bool isProxy, IConfiguration configuration)
+        {
+            var builder = services.AddHealthChecks();
+            ConfigureDbHealthChecks(dbTypes, isProxy, configuration, builder);
+
+            var dynamicConfigurationRedisConnectionString = configuration.GetValue<string>($"{nameof(RedisConfigurationOptions)}:{nameof(RedisConfigurationOptions.ConnectionString)}");
+            var signalRRedisConnectionString = configuration.GetValue<string>("SignalR:RedisConnectionString");
+
+            if (!string.IsNullOrEmpty(signalRRedisConnectionString))
+            {
+                builder.AddRedis(signalRRedisConnectionString, name: "signalRRedisConnectionString");
+            }
+
+            if (!string.IsNullOrEmpty(dynamicConfigurationRedisConnectionString))
+            {
+                builder.AddRedis(dynamicConfigurationRedisConnectionString, name: "dynamicConfigurationRedis");
+            }
+        }
+
+        private static void ConfigureDbHealthChecks(DbTypes dbTypes, bool isProxy, IConfiguration configuration, IHealthChecksBuilder builder)
+        {
+            if (!isProxy)
+            {
+                var tags = new[] { "store" };
+                switch (dbTypes)
+                {
+                    case DbTypes.MongoDb:
+                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection"), tags: tags);
+                        break;
+                    case DbTypes.RavenDb:
+                        builder.AddRavenDB(options =>
+                        {
+                            var section = configuration.GetSection(nameof(RavenDbOptions));
+                            section.Bind(options);
+                            var path = section.GetValue<string>(nameof(RavenDbOptions.CertificatePath));
+                            if (!string.IsNullOrWhiteSpace(path))
+                            {
+                                options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));
+                            }
+                        }, tags: tags);
+                        break;
+                    default:
+                        builder.AddDbContextCheck<ConfigurationDbContext>(tags: tags)
+                            .AddDbContextCheck<OperationalDbContext>(tags: tags)
+                            .AddDbContextCheck<ApplicationDbContext>(tags: tags);
+                        break;
+                }
+                return;
+            }
+
+            builder.AddAsyncCheck("api", async () =>
+            {
+                using var client = new HttpClient();
+                var reponse = await client.GetAsync(configuration.GetValue<string>($"{nameof(PrivateServerAuthentication)}:HeathUrl")).ConfigureAwait(false);
+                return new HealthCheckResult(reponse.IsSuccessStatusCode ? HealthStatus.Healthy : HealthStatus.Unhealthy);
+            });
         }
     }
 }
