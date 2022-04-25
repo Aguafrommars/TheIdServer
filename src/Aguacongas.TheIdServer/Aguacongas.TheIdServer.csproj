@@ -33,7 +33,7 @@
 		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="1.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.2" />
 		<PackageReference Include="AspNetCore.HealthChecks.RavenDb" Version="6.0.2" />
-		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.3" />
+		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.6.0" />
