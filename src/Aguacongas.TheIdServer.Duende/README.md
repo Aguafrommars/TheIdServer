@@ -905,7 +905,7 @@ The endpoit return a json reponse depending on the store kind used and redis dep
     "ApplicationDbContext": {
       "status": "Healthy"
     },
-    "dynamicConfigurationRedis": {
+    "DynamicConfigurationRedis": {
       "status": "Healthy"
     }
   }
