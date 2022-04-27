@@ -95,6 +95,6 @@ https://www.certification.openid.net/plan-detail.html?plan=ZKco5LJhicIlT&public=
 
 Choose your favorite:
 
-* [github sponsor](https://github.com/sponsors/aguacongas/sponsorships?sponsor=aguacongas&tier_id=151490),
+* [github sponsor](https://github.com/sponsors/aguacongas/sponsorships?sponsor=aguacongas&tier_id=151490)
 * [issuehunts](https://issuehunt.io/r/Aguafrommars/TheIdServer/issues/170)
 * [liberapay](https://liberapay.com/aguacongas)
