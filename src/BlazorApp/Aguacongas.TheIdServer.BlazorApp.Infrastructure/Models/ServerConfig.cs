@@ -35,5 +35,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public PrivateServerAuthentication PrivateServerAuthentication { get; set; }
 
         public PrivateServerAuthentication EmailApiAuthentication { get; set; }
+
+        public OpenTelemetryConfiguration OpenTelemetryOptions { get; set; }
+
+        public WsFederationConfiguration WsFederationOptions { get; set; }
     }
 }

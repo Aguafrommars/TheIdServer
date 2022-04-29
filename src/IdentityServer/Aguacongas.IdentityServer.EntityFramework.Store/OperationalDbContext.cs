@@ -32,6 +32,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public DbSet<KeyRotationKey> KeyRotationKeys { get; set; }
 
+        public DbSet<UserSession> UserSessions { get; set; }
+
         public virtual DbSet<BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
 
         public override int SaveChanges()

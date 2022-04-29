@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     var discovery = option.Discovery;
                     discovery.ExpandRelativePathsInCustomEntries = true;
-                    discovery.CustomEntries.Add("registration_endpoint", $"~{apiPath}/register");
+                    discovery.CustomEntries["registration_endpoint"] = $"~{apiPath}/register";
                 })
                 .AddTransient<IRegisterClientService, RegisterClientService>()
                 .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>();

@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
 
             modelBuilder.Entity("Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore.KeyRotationKey", b =>
                 {
@@ -245,40 +245,43 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
 
                     b.ToTable("RefreshTokens");
                 });
-
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserConsent", b =>
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserSession", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
+                    b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Data")
+                    b.Property<DateTime?>("Expires")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("Expiration")
+                    b.Property<DateTime>("Renewed")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("ModifiedAt")
+                    b.Property<string>("Scheme")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SessionId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Ticket")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserConstents");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSessions");
                 });
+
 
             modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
                 {

@@ -1,0 +1,19 @@
+﻿<div class="row">
+    <div class="col">
+        <ul class="list-inline">
+            @foreach (var algorithm in Algorithms)
+            {
+                <li class="list-inline-item">
+                    <ClientAllowedIdentityTokenSigningAlgorithm @bind-Value="@algorithm.Algorithm" Entity="@algorithm"
+                               Model="@Model"
+                               DeleteClicked="() => OnAlgorithmDeletedClicked(algorithm)" />
+                </li>
+            }
+            <li class="list-inline-item">
+                <ClientAllowedIdentityTokenSigningAlgorithm @bind-Value="@_algorithm.Algorithm" Entity="@_algorithm"
+                           Model="@Model"
+                           EntityChanged="() => OnAlgorithmValueChanged(_algorithm)" />
+            </li>
+        </ul>
+    </div>
+</div>
