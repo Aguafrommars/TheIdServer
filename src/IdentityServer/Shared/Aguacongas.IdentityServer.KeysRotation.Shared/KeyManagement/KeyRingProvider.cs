@@ -29,9 +29,11 @@ using System.Threading;
 // namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal sealed class KeyRingProvider : ICacheableKeyRingProvider // implementation of IKeyRingProvider declaration removed
+    internal sealed class KeyRingProvider<TC, TE> : ICacheableKeyRingProvider<TC, TE> // implementation of IKeyRingProvider declaration removed
+        where TC : SigningAlgorithmConfiguration
+        where TE : ISigningAlgortithmEncryptor
     {
-        private CacheableKeyRing _cacheableKeyRing;
+        private CacheableKeyRing<TC, TE> _cacheableKeyRing;
         private readonly object _cacheableKeyRingLockObj = new();
         private readonly IDefaultKeyResolver _defaultKeyResolver;
         private readonly KeyRotationOptions _keyManagementOptions; // options change from original KeyManagementOptions
@@ -60,25 +62,38 @@ namespace Aguacongas.IdentityServer.KeysRotation
             _keyManager = keyManager;
             CacheableKeyRingProvider = this;
             _defaultKeyResolver = defaultKeyResolver;
-            _logger = loggerFactory.CreateLogger<KeyRingProvider>();
+            _logger = loggerFactory.CreateLogger<KeyRingProvider<TC, TE>>();
 
             // We will automatically refresh any unknown keys for 2 minutes see https://github.com/aspnet/AspNetCore/issues/3975
             AutoRefreshWindowEnd = DateTime.UtcNow.AddMinutes(2);
         }
 
-        internal ICacheableKeyRingProvider CacheableKeyRingProvider { get; set; }
+        public IKeyManager KeyManager => _keyManager; // add property KeyManager
+
+        public string Algorithm => ((SigningAlgorithmConfiguration) _keyManagementOptions.AuthenticatedEncryptorConfiguration).SigningAlgorithm; // add property Algorithm
+
+        internal ICacheableKeyRingProvider<TC, TE> CacheableKeyRingProvider { get; set; }
 
         internal DateTime AutoRefreshWindowEnd { get; set; }
 
-        public IKeyManager KeyManager => _keyManager; // add property KeyManager
 
         internal bool InAutoRefreshWindow() => DateTime.UtcNow < AutoRefreshWindowEnd;
 
-        private CacheableKeyRing CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)
+        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)
         {
             // Refresh the list of all keys
             var cacheExpirationToken = KeyManager.GetCacheExpirationToken();
             var allKeys = KeyManager.GetAllKeys();
+            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is RsaEncryptorConfiguration rsaConfiguration)
+            {
+                allKeys = allKeys.Where(k => k.Descriptor is RsaEncryptorDescriptor descriptor && 
+                    descriptor.Configuration.SigningAlgorithm == rsaConfiguration.SigningAlgorithm).ToArray();
+            }
+            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is ECDsaEncryptorConfiguration eCDsaEncryptorConfiguration)
+            {
+                allKeys = allKeys.Where(k => k.Descriptor is ECDsaEncryptorDescriptor descriptor &&
+                    descriptor.Configuration.SigningAlgorithm == eCDsaEncryptorConfiguration.SigningAlgorithm).ToArray();
+            }
 
             // Fetch the current default key from the list of all keys
             var defaultKeyPolicy = _defaultKeyResolver.ResolveDefaultKeyPolicy(now, allKeys);
@@ -149,7 +164,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             }
         }
 
-        private CacheableKeyRing CreateCacheableKeyRingCoreStep2(DateTimeOffset now, IKey defaultKey, IEnumerable<IKey> allKeys, CancellationToken cacheExpirationToken)
+        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCoreStep2(DateTimeOffset now, IKey defaultKey, IEnumerable<IKey> allKeys, CancellationToken cacheExpirationToken)
         {
             Debug.Assert(defaultKey != null);
 
@@ -167,12 +182,12 @@ namespace Aguacongas.IdentityServer.KeysRotation
             // servers in a cluster from trying to update the key ring simultaneously. Special case: if the default
             // key's expiration date is in the past, then we know we're using a fallback key and should disregard
             // its expiration date in favor of the next auto-refresh time.
-            return new CacheableKeyRing(
+            return new CacheableKeyRing<TC, TE>(
                 expirationToken: cacheExpirationToken,
                 expirationTime: (defaultKey.ExpirationDate <= now) ? nextAutoRefreshTime : Min(defaultKey.ExpirationDate, nextAutoRefreshTime),
                 defaultKey: defaultKey,
                 allKeys: allKeys,
-                configuration: _keyManagementOptions.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration);
+                configuration: _keyManagementOptions.AuthenticatedEncryptorConfiguration as TC);
         }
 
         public IKeyRing GetCurrentKeyRing()
@@ -190,11 +205,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
             Debug.Assert(utcNow.Kind == DateTimeKind.Utc);
 
             // Can we return the cached keyring to the caller?
-            CacheableKeyRing existingCacheableKeyRing = null;
+            CacheableKeyRing<TC, TE> existingCacheableKeyRing = null;
             if (!forceRefresh)
             {
                 existingCacheableKeyRing = Volatile.Read(ref _cacheableKeyRing);
-                if (CacheableKeyRing.IsValid(existingCacheableKeyRing, utcNow))
+                if (CacheableKeyRing<TC, TE>.IsValid(existingCacheableKeyRing, utcNow))
                 {
                     return existingCacheableKeyRing.KeyRing;
                 }
@@ -232,7 +247,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             }
         }
 
-        private IKeyRing GetCurrentKeyRingSync(DateTime utcNow, bool forceRefresh, ref CacheableKeyRing existingCacheableKeyRing)
+        private IKeyRing GetCurrentKeyRingSync(DateTime utcNow, bool forceRefresh, ref CacheableKeyRing<TC, TE> existingCacheableKeyRing)
         {
             if (!forceRefresh)
             {
@@ -240,7 +255,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 // cached keyring. But first, let's make sure that somebody didn't sneak in before
                 // us and update the keyring on our behalf.
                 existingCacheableKeyRing = Volatile.Read(ref _cacheableKeyRing);
-                if (CacheableKeyRing.IsValid(existingCacheableKeyRing, utcNow))
+                if (CacheableKeyRing<TC, TE>.IsValid(existingCacheableKeyRing, utcNow))
                 {
                     return existingCacheableKeyRing.KeyRing;
                 }
@@ -253,7 +268,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             // It's up to us to refresh the cached keyring.
             // This call is performed *under lock*.
-            CacheableKeyRing newCacheableKeyRing;
+            CacheableKeyRing<TC, TE> newCacheableKeyRing;
 
             try
             {
@@ -305,7 +320,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return (a < b) ? a : b;
         }
 
-        CacheableKeyRing ICacheableKeyRingProvider.GetCacheableKeyRing(DateTimeOffset now)
+        CacheableKeyRing<TC, TE> ICacheableKeyRingProvider<TC, TE>.GetCacheableKeyRing(DateTimeOffset now)
         {
             // the entry point allows one recursive call
             return CreateCacheableKeyRingCore(now, keyJustAdded: null);

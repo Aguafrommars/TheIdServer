@@ -1,8 +1,7 @@
 ﻿using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services.KeyManagement;
 using Duende.IdentityServer.Stores;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.KeysRotation.Duende
 {
-    internal class SigningKeyStore : ISigningKeyStore
+    internal class SigningKeyStore<TC, TE> : ISigningKeyStore
+        where TC : SigningAlgorithmConfiguration
+        where TE : ISigningAlgortithmEncryptor
     {
         static JsonSerializerOptions _settings = new JsonSerializerOptions
         {
             IncludeFields = true
         };
 
-        public ICacheableKeyRingProvider _keyringProvider;
+        public ICacheableKeyRingProvider<TC, TE> _keyringProvider;
 
-        public SigningKeyStore(ICacheableKeyRingProvider keyringProvider)
+        public SigningKeyStore(ICacheableKeyRingProvider<TC, TE> keyringProvider)
         {
             _keyringProvider = keyringProvider ?? throw new ArgumentNullException(nameof(keyringProvider));
         }
@@ -32,30 +33,64 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
         public Task<IEnumerable<SerializedKey>> LoadKeysAsync()
         {
             var keyInfos = _keyringProvider.KeyManager.GetAllKeys().Where(k => !k.IsRevoked);
+            if (typeof(TC) == typeof(RsaEncryptorConfiguration))
+            {
+                keyInfos = keyInfos.Where(k => k.Descriptor is RsaEncryptorDescriptor);
+            }
+            else
+            {
+                keyInfos = keyInfos.Where(k => k.Descriptor is ECDsaEncryptorDescriptor);
+            }
 
-            return Task.FromResult(keyInfos.Select(i => {
-                var descriptpr = i.Descriptor as RsaEncryptorDescriptor;
-                var algorythm = descriptpr.Configuration.RsaSigningAlgorithm.ToString();
-                var key = descriptpr.RsaSecurityKey;
-                var created = i.CreationDate.UtcDateTime;
-                return new SerializedKey
+            return Task.FromResult(keyInfos.Select(i =>
+            {
+                if (i.Descriptor is RsaEncryptorDescriptor rsa)
                 {
-                    Algorithm = algorythm,
-                    Created = created,
-                    Id = key.KeyId,
-                    DataProtected = false,
-                    Data = JsonSerializer.Serialize(new RsaKeyContainer
-                    {
-                        Algorithm = algorythm,
-                        Created = created,
-                        Id = key.KeyId,
-                        Parameters = key.Parameters
-                    }, _settings)
-                };
+                    return CreateRsaSinginKey(i, rsa);
+                }
+
+                return CreateEcdSingingKey(i);
             }));
         }
 
         public Task StoreKeyAsync(SerializedKey key)
         => throw new NotImplementedException();
+
+        private static SerializedKey CreateEcdSingingKey(IKey i)
+        {
+            var ecd = i.Descriptor as ECDsaEncryptorDescriptor;
+            var algorythm = ecd.Configuration.SigningAlgorithm.ToString();
+            var key = ecd.ECDsaSecurityKey;
+            var created = i.CreationDate.UtcDateTime;
+            return new SerializedKey
+            {
+                Algorithm = algorythm,
+                Created = created,
+                Id = key.KeyId,
+                DataProtected = false,
+                Data = JsonSerializer.Serialize(new EcKeyContainer(key, algorythm, created))
+            };
+        }
+
+        private static SerializedKey CreateRsaSinginKey(IKey i, RsaEncryptorDescriptor rsa)
+        {
+            var algorythm = rsa.Configuration.SigningAlgorithm.ToString();
+            var key = rsa.RsaSecurityKey;
+            var created = i.CreationDate.UtcDateTime;
+            return new SerializedKey
+            {
+                Algorithm = algorythm,
+                Created = created,
+                Id = key.KeyId,
+                DataProtected = false,
+                Data = JsonSerializer.Serialize(new RsaKeyContainer
+                {
+                    Algorithm = algorythm,
+                    Created = created,
+                    Id = key.KeyId,
+                    Parameters = key.Parameters
+                }, _settings)
+            };
+        }
     }
 }

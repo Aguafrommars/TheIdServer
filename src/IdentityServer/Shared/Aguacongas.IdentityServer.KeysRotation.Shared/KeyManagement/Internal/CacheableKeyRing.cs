@@ -19,7 +19,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// <summary>
     /// Wraps both a keyring and its expiration policy.
     /// </summary>
-    public sealed class CacheableKeyRing
+    public sealed class CacheableKeyRing<TC, TE>
+        where TC : SigningAlgorithmConfiguration
+        where TE : ISigningAlgortithmEncryptor
     {
         private readonly CancellationToken _expirationToken;
 
@@ -27,9 +29,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
             DateTimeOffset expirationTime, 
             IKey defaultKey, 
             IEnumerable<IKey> allKeys,
-            RsaEncryptorConfiguration configuration,
+            TC configuration,
             CancellationToken expirationToken) // constructor change to add a RsaEncryptorConfiguration instance
-            : this(expirationTime, keyRing: new KeyRing(defaultKey, allKeys, configuration), expirationToken)
+            : this(expirationTime, keyRing: new KeyRing<TC, TE>(defaultKey, allKeys, configuration), expirationToken)
         {
         }
 
@@ -44,7 +46,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         internal IKeyRing KeyRing { get; }
 
-        internal static bool IsValid(CacheableKeyRing keyRing, DateTime utcNow)
+        internal static bool IsValid(CacheableKeyRing<TC,TE> keyRing, DateTime utcNow)
         {
             return keyRing != null
                 && !keyRing._expirationToken.IsCancellationRequested
@@ -56,10 +58,10 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// lifetime extended 2 minutes from <paramref name="now"/>. The inner cancellation token
         /// is also disconnected.
         /// </summary>
-        internal CacheableKeyRing WithTemporaryExtendedLifetime(DateTimeOffset now)
+        internal CacheableKeyRing<TC, TE> WithTemporaryExtendedLifetime(DateTimeOffset now)
         {
             var extension = TimeSpan.FromMinutes(2);
-            return new CacheableKeyRing(now + extension, KeyRing, CancellationToken.None);
+            return new CacheableKeyRing<TC, TE>(now + extension, KeyRing, CancellationToken.None);
         }
     }
 }

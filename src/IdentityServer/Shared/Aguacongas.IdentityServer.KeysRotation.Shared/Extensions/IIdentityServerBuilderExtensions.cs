@@ -2,6 +2,11 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Microsoft.Extensions.DependencyInjection;
 using System;
+#if DUENDE
+using static Duende.IdentityServer.IdentityServerConstants;
+#else
+using static IdentityServer4.IdentityServerConstants;
+#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation.Extensions
 {
@@ -16,9 +21,33 @@ namespace Aguacongas.IdentityServer.KeysRotation.Extensions
         /// <param name="builder">The builder.</param>
         /// <param name="configureRsa">The configure RSA.</param>
         /// <returns></returns>
-        public static IKeyRotationBuilder AddKeysRotation(this IIdentityServerBuilder builder, Action<KeyRotationOptions> configureKeysRotation = null)
+        public static IKeyRotationBuilder AddKeysRotation(this IIdentityServerBuilder builder, RsaSigningAlgorithm rsaSigningAlgorithm = RsaSigningAlgorithm.RS256, Action<KeyRotationOptions> configureKeysRotation = null)
         {
-            return builder.Services.AddKeysRotation(configureKeysRotation);
+            return builder.Services.AddKeysRotation(rsaSigningAlgorithm, configureKeysRotation);
+        }
+
+        /// <summary>
+        /// Adds Rsa keys rotation.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="configureRsa">The configure RSA.</param>
+        /// <returns></returns>
+        public static IKeyRotationBuilder AddRsaKeysRotation(this IKeyRotationBuilder builder, RsaSigningAlgorithm signingAlgorithm, Action<KeyRotationOptions> configureKeysRotation = null)
+        {
+            builder.Services.AddKeysRotation<RsaEncryptorConfiguration, RsaEncryptor>(signingAlgorithm.ToString(), configureKeysRotation);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds ECDsa keys rotation.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="configureRsa">The configure RSA.</param>
+        /// <returns></returns>
+        public static IKeyRotationBuilder AddECDsaKeysRotation(this IKeyRotationBuilder builder, ECDsaSigningAlgorithm signingAlgorithm, Action<KeyRotationOptions> configureKeysRotation = null)
+        {
+            builder.Services.AddKeysRotation<ECDsaEncryptorConfiguration, ECDsaEncryptor>(signingAlgorithm.ToString(), configureKeysRotation);
+            return builder;
         }
     }
 }

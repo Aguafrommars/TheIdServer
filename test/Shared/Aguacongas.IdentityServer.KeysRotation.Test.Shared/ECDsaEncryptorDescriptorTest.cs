@@ -1,0 +1,43 @@
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2022 @Olivier Lefebvre
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Threading.Tasks;
+using Xunit;
+#if DUENDE
+using static Duende.IdentityServer.IdentityServerConstants;
+#else
+using static IdentityServer4.IdentityServerConstants;
+#endif
+
+namespace Aguacongas.IdentityServer.KeysRotation.Test
+{
+    public class ECDsaEncryptorDescriptorTest
+    {
+        [Fact]
+        public void Constructor_should_throw_on_args_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null));
+            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null, null));
+            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), null));
+        }
+        [Fact]
+        public async Task ExportToXml_should_export_key_without_ECDsa()
+        {
+            var builder = new ServiceCollection()
+                .AddKeysRotation<ECDsaEncryptorConfiguration, ECDsaEncryptor>(ECDsaSigningAlgorithm.ES256.ToString());
+
+            var provider = builder.BuildServiceProvider();
+            var keyProvider = provider.GetRequiredService<IKeyRingStore>();
+
+            var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
+
+            var sut = new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), cred.Key as ECDsaSecurityKey);
+
+            var result = sut.ExportToXml();
+
+            Assert.NotNull(result);
+        }
+    }
+}
