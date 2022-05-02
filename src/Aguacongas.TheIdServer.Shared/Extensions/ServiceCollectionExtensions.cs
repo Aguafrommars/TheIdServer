@@ -46,7 +46,6 @@ using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncr
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Aguacongas.TheIdServer.Options.OpenTelemetry;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -85,7 +84,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Configure<TokenValidationParameters>(configurationManager.GetSection(nameof(TokenValidationParameters)))
                 .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
-                .AddOidcStateDataFormatterCache()                
+                .AddOidcStateDataFormatterCache()
 #if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
                 .AddIdentityServerBuilder()
@@ -106,9 +105,14 @@ namespace Microsoft.Extensions.DependencyInjection
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
-                .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"))
-;
+                .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
+#if DUENDE
+            if (configurationManager.GetValue<bool>("IdentityServerOptions:EnableServerSideSession"))
+            {
+                identityServerBuilder.AddServerSideSessions<ServerSideSessionStore>();
+            }
+#endif
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
 

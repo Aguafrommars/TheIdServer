@@ -32,6 +32,25 @@ builder.AddSource(serviceOptions.Name)
       serviceOptions.InstanceId));
 ```
 
+### Sources
+
+The sources array can be used to add sources such as `Duende.IdentityServer.*` sources.
+
+```json
+{
+  "OpenTelemetryOptions": {
+    "Trace": {
+      "Sources": [
+        "Duende.IdentityServer.Stores",
+        "Duende.IdentityServer.Cache",
+        "Duende.IdentityServer.Services",
+        "Duende.IdentityServer.Validation"
+      ]
+    }
+  }
+}
+```
+
 ### Instrumentations
 
 TheIdServer enables instrumentation for:

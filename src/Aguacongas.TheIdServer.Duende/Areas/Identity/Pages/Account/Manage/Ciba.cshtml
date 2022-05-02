@@ -13,11 +13,11 @@ Copyright (c) 2022 @Olivier Lefebvre
 }
 
 <h4>@ViewData["Title"]</h4>
-
+<h5>@Localizer["Below is the list of backchannel login requests awaiting your approbation."]</h5>
 @if (Model.Logins.Any() == true)
 {
     <table class="table table-bordered table-striped table-sm">
-        <caption>@Localizer["Pending Backchannel Login Requests"]</caption>
+        <caption class="visually-hidden">@Localizer["Pending Backchannel Login Requests"]</caption>
         <thead>
             <tr>
                 <th scope="col">@Localizer["Id"]</th>
@@ -29,7 +29,7 @@ Copyright (c) 2022 @Olivier Lefebvre
         <tbody>
             @foreach (var login in Model.Logins)
             {
-                <tr>
+                <tr class="align-middle">
                     <td>@login.InternalId</td>
                     <td>@login.Client.ClientId</td>
                     <td>@login.BindingMessage</td>

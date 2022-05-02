@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 		<UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
@@ -18,10 +19,10 @@
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.6.2" />
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="4.6.2" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="4.6.2" />
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="4.6.2" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.6.5" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="4.6.5" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="4.6.5" />
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="4.6.5" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
@@ -38,10 +39,10 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
 		<PackageReference Include="SendGrid" Version="9.27.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" PrivateAssets="All" />
-		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog" Version="2.11.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />

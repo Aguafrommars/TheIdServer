@@ -73,6 +73,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="test.crt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

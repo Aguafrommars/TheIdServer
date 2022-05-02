@@ -13,7 +13,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     {
         private bool _isReadOnly;
 
-        private readonly PageRequest _pageRequest = new PageRequest
+        private readonly PageRequest _pageRequest = new()
         {
             Select = nameof(IClaimType.Type),
             Take = 5

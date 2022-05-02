@@ -6,6 +6,11 @@
 <EntitiesGrid Items="@Tokens" TableClass="table table-hover" Context="token">
     <TableHeader>
         <th scope="col">
+            <SortableHeader Property="SessionId"
+                            Text="@Localizer["session id"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
             <SortableHeader Property="ClientId"
                             Text="@Localizer["client id"]"
                             GridState="GridState" />
@@ -23,6 +28,9 @@
         <th></th>
     </TableHeader>
     <RowTemplate>
+        <td>
+            @token.SessionId
+        </td>
         <td>
             <a href="@(_navigationManager.BaseUri)client/@(token.ClientId)">@token.ClientId</a>
         </td>

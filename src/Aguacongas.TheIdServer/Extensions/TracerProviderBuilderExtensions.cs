@@ -22,6 +22,14 @@ namespace OpenTelemetry.Trace
                 builder = builder.AddConsoleExporter();
             }
 
+            if (traceOptions.Sources is not null)
+            {
+                foreach (var source in traceOptions.Sources)
+                {
+                    builder = builder.AddSource(source);
+                }
+            }
+
             var serviceOptions = traceOptions.Service;
             if (!string.IsNullOrEmpty(serviceOptions?.Name))
             {                
