@@ -20,8 +20,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly HubConnectionFactory _factory;
         private readonly NoPersistentDynamicManager<TSchemeDefinition> _manager;
         private readonly IDynamicProviderStore<TSchemeDefinition> _store;
-        private readonly KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> _dataProtectionKeyManagerWrapper;
-        private readonly KeyManagerWrapper<RsaEncryptorDescriptor> _signingKeyManagerWrapper;
+        private readonly KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> _wrapper;
         private readonly ILogger<SchemeChangeSubscriber<TSchemeDefinition>> _logger;
 
         /// <summary>
@@ -30,8 +29,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="factory">The factory.</param>
         /// <param name="manager">The manager.</param>
         /// <param name="store">The store.</param>
-        /// <param name="dataProtectionKeyManagerWrapper">The data protection key manager wrapper.</param>
-        /// <param name="signingKeyManagerWrapper">The signing key manager wrapper.</param>
+        /// <param name="wrapper">The key manager wrapper.</param>
         /// <param name="logger">The logger.</param>
         /// <exception cref="ArgumentNullException">factory
         /// or
@@ -41,15 +39,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public SchemeChangeSubscriber(HubConnectionFactory factory,
             NoPersistentDynamicManager<TSchemeDefinition> manager,
             IDynamicProviderStore<TSchemeDefinition> store,
-            KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> dataProtectionKeyManagerWrapper,
-            KeyManagerWrapper<RsaEncryptorDescriptor> signingKeyManagerWrapper,
+            KeyManagerWrapper<IAuthenticatedEncryptorDescriptor> wrapper,
             ILogger<SchemeChangeSubscriber<TSchemeDefinition>> logger)
         {
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _store = store ?? throw new ArgumentNullException(nameof(manager));
-            _dataProtectionKeyManagerWrapper = dataProtectionKeyManagerWrapper ?? throw new ArgumentNullException(nameof(dataProtectionKeyManagerWrapper));
-            _signingKeyManagerWrapper = signingKeyManagerWrapper ?? throw new ArgumentNullException(nameof(signingKeyManagerWrapper));
+            _wrapper = wrapper ?? throw new ArgumentNullException(nameof(wrapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -88,13 +84,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             {
                 _logger.LogInformation("SignalR notification received: {Type}({Kind}, {Id})", nameof(IProviderHub.KeyRevoked), kind, id);
                 var keyId = Guid.Parse(id);
-                if (kind == nameof(IAuthenticatedEncryptorDescriptor))
-                {
-                    _dataProtectionKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
-                    return;
-                }
-
-                _signingKeyManagerWrapper.Manager.RevokeKey(keyId, "Revoked by another instance.");
+                _wrapper.RevokeKey(keyId, "Revoked by another instance.");
             });
 
             await _factory.StartConnectionAsync(cancellationToken).ConfigureAwait(false);

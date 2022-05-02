@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             {
                 var rsa = rsaKey.Rsa ?? RSA.Create(rsaKey.Parameters);
                 var certRequest = new CertificateRequest("cn=theidserver", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                if (store is IKeyRingStores keyRingStore)
+                if (store is IKeyRingStore keyRingStore)
                 {
                     var defaultKey = keyRingStore.DefaultKey;
                     return certRequest.CreateSelfSigned(defaultKey.ActivationDate, defaultKey.ExpirationDate);                    

@@ -9,4 +9,8 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
     public class RsaEncryptorDescriptor
     {
     }
+
+    public class ECDsaEncryptorDescriptor
+    {
+    }
 }

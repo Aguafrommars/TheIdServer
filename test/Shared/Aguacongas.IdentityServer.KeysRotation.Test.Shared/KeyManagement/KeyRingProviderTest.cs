@@ -36,17 +36,17 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStores>();
+            var sut = provider.GetRequiredService<IKeyRingStore>();
 
             var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
             Assert.NotNull(cred);
 
-            sut = provider.GetRequiredService<IKeyRingStores>();
+            sut = provider.GetRequiredService<IKeyRingStore>();
             var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
@@ -59,21 +59,21 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStores>();
+            var sut = provider.GetRequiredService<IKeyRingStore>();
 
             var keys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
             Assert.NotNull(keys);
             Assert.NotEmpty(keys);
 
             var defaultKeyId = sut.DefaultKeyId;
-            var cacheableKeyRingProvider = provider.GetRequiredService<ICacheableKeyRingProvider>();
+            var cacheableKeyRingProvider = provider.GetRequiredService<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             cacheableKeyRingProvider.KeyManager.RevokeKey(defaultKeyId, "test");
-            sut = provider.GetRequiredService<IKeyRingStores>();
+            sut = provider.GetRequiredService<IKeyRingStore>();
             var newKeys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
 
             Assert.DoesNotContain(keys, k => newKeys.Any(nk => nk.Key.KeyId == k.Key.KeyId));
@@ -86,23 +86,23 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
-                .AddKeysRotation()
-                .AddRsaEncryptorConfiguration(options =>
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.PS512)
+                .AddRsaEncryptorConfiguration(IdentityServerConstants.RsaSigningAlgorithm.PS512, options =>
                 {
                     options.EncryptionAlgorithmType = typeof(RSACng);
-                    options.RsaSigningAlgorithm = IdentityServerConstants.RsaSigningAlgorithm.PS512;
+                    options.SigningAlgorithm = IdentityServerConstants.RsaSigningAlgorithm.PS512.ToString();
                     options.KeyIdSize = 256;
                 })
                 .PersistKeysToDbContext<OperationalDbContext>()
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStores>();
+            var sut = provider.GetRequiredService<IKeyRingStore>();
 
             var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
             Assert.NotNull(cred);
 
-            sut = provider.GetRequiredService<IKeyRingStores>();
+            sut = provider.GetRequiredService<IKeyRingStore>();
             var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
@@ -140,9 +140,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key1.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -178,9 +178,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key1.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             Assert.Equal(StringToDateTime("2016-03-01 00:00:00Z"), cacheableKeyRing.ExpirationTimeUtc);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -226,11 +226,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key1.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts1.Cancel();
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts2.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy", "CreateNewKey", "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -274,11 +274,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(newlyCreatedKey.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts1.Cancel();
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts2.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy", "CreateNewKey", "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -357,11 +357,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key2.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts1.Cancel();
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts2.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy", "CreateNewKey", "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -397,9 +397,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key1.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -435,9 +435,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Assert
             Assert.Equal(key1.KeyId, cacheableKeyRing.KeyRing.DefaultKeyId);
             AssertWithinJitterRange(cacheableKeyRing.ExpirationTimeUtc, now);
-            Assert.True(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.True(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             expirationCts.Cancel();
-            Assert.False(CacheableKeyRing.IsValid(cacheableKeyRing, now));
+            Assert.False(CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>.IsValid(cacheableKeyRing, now));
             Assert.Equal(new[] { "GetCacheExpirationToken", "GetAllKeys", "ResolveDefaultKeyPolicy" }, callSequence);
         }
 
@@ -447,10 +447,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Arrange
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var expectedKeyRing = new Mock<IKeyRing>().Object;
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-02 00:00:00Z"),
                     keyRing: expectedKeyRing));
@@ -474,22 +474,22 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var expectedKeyRing1 = new Mock<IKeyRing>().Object;
             var expectedKeyRing2 = new Mock<IKeyRing>().Object;
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-01 00:30:00Z"), // expire in half an hour
                     keyRing: expectedKeyRing1));
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now + TimeSpan.FromMinutes(1)))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-01 00:30:00Z"), // expire in half an hour
                     keyRing: expectedKeyRing1));
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now + TimeSpan.FromMinutes(2)))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-02 00:00:00Z"),
                     keyRing: expectedKeyRing2));
@@ -515,16 +515,16 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var expectedKeyRing1 = new Mock<IKeyRing>().Object;
             var expectedKeyRing2 = new Mock<IKeyRing>().Object;
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-01 00:30:00Z"), // expire in half an hour
                     keyRing: expectedKeyRing1));
             mockCacheableKeyRingProvider
                 .Setup(o => o.GetCacheableKeyRing(now + TimeSpan.FromHours(1)))
-                .Returns(new CacheableKeyRing(
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                     expirationToken: CancellationToken.None,
                     expirationTime: StringToDateTime("2015-03-02 00:00:00Z"),
                     keyRing: expectedKeyRing2));
@@ -547,7 +547,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             // Arrange
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var expectedKeyRing = new Mock<IKeyRing>().Object;
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             var keyRingProvider = CreateKeyRingProvider(mockCacheableKeyRingProvider.Object);
 
             // This test spawns a background thread which calls GetCurrentKeyRing then waits
@@ -569,7 +569,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                         mreBackgroundThreadHasCalledGetCurrentKeyRing.Set();
                         Assert.True(mreForegroundThreadIsCallingGetCurrentKeyRing.Wait(testTimeout), "Test timed out.");
                         SpinWait.SpinUntil(() => (foregroundThread.ThreadState & ThreadState.WaitSleepJoin) != 0, testTimeout);
-                        return new CacheableKeyRing(
+                        return new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(
                             expirationToken: CancellationToken.None,
                             expirationTime: StringToDateTime("2015-03-02 00:00:00Z"),
                             keyRing: expectedKeyRing);
@@ -598,7 +598,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var originalKeyRingTime = StringToDateTime("2015-03-01 00:00:00Z");
             var updatedKeyRing = new Mock<IKeyRing>().Object;
             var updatedKeyRingTime = StringToDateTime("2015-03-02 00:00:00Z");
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             var keyRingProvider = CreateKeyRingProvider(mockCacheableKeyRingProvider.Object);
 
             // In this test, the foreground thread acquires the critial section in GetCurrentKeyRing,
@@ -609,7 +609,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             IKeyRing keyRingReturnedToBackgroundThread = null;
 
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(originalKeyRingTime))
-                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, CancellationToken.None));
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, CancellationToken.None));
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(updatedKeyRingTime))
                 .Returns<DateTimeOffset>(dto =>
                 {
@@ -620,7 +620,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                     });
                     Assert.True(backgroundGetKeyRingTask.Wait(testTimeout), "Test timed out.");
 
-                    return new CacheableKeyRing(StringToDateTime("2015-03-03 00:00:00Z"), updatedKeyRing, CancellationToken.None);
+                    return new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(StringToDateTime("2015-03-03 00:00:00Z"), updatedKeyRing, CancellationToken.None);
                 });
 
             // Assert - underlying provider only should have been called once with the updated time (by the foreground thread)
@@ -635,17 +635,17 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var cts = new CancellationTokenSource();
-            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             var originalKeyRing = new Mock<IKeyRing>().Object;
             var originalKeyRingTime = StringToDateTime("2015-03-01 00:00:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(originalKeyRingTime))
-                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, cts.Token));
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(StringToDateTime("2015-03-02 00:00:00Z"), originalKeyRing, cts.Token));
             var throwKeyRingTime = StringToDateTime("2015-03-01 12:00:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(throwKeyRingTime)).Throws(new Exception("How exceptional."));
             var updatedKeyRing = new Mock<IKeyRing>().Object;
             var updatedKeyRingTime = StringToDateTime("2015-03-01 12:02:00Z");
             mockCacheableKeyRingProvider.Setup(o => o.GetCacheableKeyRing(updatedKeyRingTime))
-                .Returns(new CacheableKeyRing(StringToDateTime("2015-03-02 00:00:00Z"), updatedKeyRing, CancellationToken.None));
+                .Returns(new CacheableKeyRing<RsaEncryptorConfiguration, RsaEncryptor>(StringToDateTime("2015-03-02 00:00:00Z"), updatedKeyRing, CancellationToken.None));
             var keyRingProvider = CreateKeyRingProvider(mockCacheableKeyRingProvider.Object);
 
             // Act & assert
@@ -659,7 +659,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             mockCacheableKeyRingProvider.Verify(o => o.GetCacheableKeyRing(updatedKeyRingTime), Times.Once);
         }
 
-        private static ICacheableKeyRingProvider SetupCreateCacheableKeyRingTestAndCreateKeyManager(
+        private static ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor> SetupCreateCacheableKeyRingTestAndCreateKeyManager(
             IList<string> callSequence,
             IEnumerable<CancellationToken> getCacheExpirationTokenReturnValues,
             IEnumerable<IReadOnlyCollection<IKey>> getAllKeysReturnValues,
@@ -715,7 +715,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             return CreateKeyRingProvider(mockKeyManager.Object, mockDefaultKeyResolver.Object, keyManagementOptions);
         }
 
-        private static KeyRingProvider CreateKeyRingProvider(ICacheableKeyRingProvider cacheableKeyRingProvider)
+        private static KeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor> CreateKeyRingProvider(ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor> cacheableKeyRingProvider)
         {
             var mockEncryptorFactory = new Mock<IAuthenticatedEncryptorFactory>();
             mockEncryptorFactory.Setup(m => m.CreateEncryptorInstance(It.IsAny<IKey>())).Returns(new Mock<IAuthenticatedEncryptor>().Object);
@@ -725,7 +725,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             };
             options.AuthenticatedEncryptorFactories.Add(mockEncryptorFactory.Object);
 
-            return new KeyRingProvider(
+            return new KeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>(
                 keyManager: null,
                 keyManagementOptions: Options.Create(options),
                 defaultKeyResolver: null,
@@ -735,14 +735,14 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             };
         }
 
-        private static ICacheableKeyRingProvider CreateKeyRingProvider(IKeyManager keyManager, IDefaultKeyResolver defaultKeyResolver, KeyRotationOptions keyManagementOptions = null)
+        private static ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor> CreateKeyRingProvider(IKeyManager keyManager, IDefaultKeyResolver defaultKeyResolver, KeyRotationOptions keyManagementOptions = null)
         {
             var mockEncryptorFactory = new Mock<IAuthenticatedEncryptorFactory>();
             mockEncryptorFactory.Setup(m => m.CreateEncryptorInstance(It.IsAny<IKey>())).Returns(new Mock<IAuthenticatedEncryptor>().Object);
             keyManagementOptions = keyManagementOptions ?? new KeyRotationOptions();
             keyManagementOptions.AuthenticatedEncryptorFactories.Add(mockEncryptorFactory.Object);
 
-            return new KeyRingProvider(
+            return new KeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>(
                 keyManager: keyManager,
                 keyManagementOptions: Options.Create(keyManagementOptions),
                 defaultKeyResolver: defaultKeyResolver,

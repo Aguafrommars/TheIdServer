@@ -26,8 +26,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Keys
 
         private async Task GetSingingKeys()
         {
-            var signingKeysResponse = await _signingKeyStore.GetAllKeysAsync().ConfigureAwait(false);
-            _signingKeys = signingKeysResponse.Items.ToList();
+            var rsaSigningKeysResponse = await _rsaSigningKeyStore.GetAllKeysAsync().ConfigureAwait(false);
+            var ecdsaSigningKeysResponse = await _ecdsaSigningKeyStore.GetAllKeysAsync().ConfigureAwait(false);
+            _signingKeys = rsaSigningKeysResponse.Items
+                .Union(ecdsaSigningKeysResponse.Items)
+                .ToList();
         }
 
         private async Task GetDataProtectionKeys()
@@ -45,7 +48,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Keys
 
         private async Task RevokeSigningKey(Tuple<string, string> tuple)
         {
-            await RevokeKey(_signingKeyStore, tuple.Item1, tuple.Item2).ConfigureAwait(false);
+            var key = _signingKeys.First(k => k.Id == tuple.Item1);
+            if (key.Kind?.StartsWith("E") == true)
+            {
+                await RevokeKey(_ecdsaSigningKeyStore, tuple.Item1, tuple.Item2).ConfigureAwait(false);
+            }
+            else
+            {
+                await RevokeKey(_rsaSigningKeyStore, tuple.Item1, tuple.Item2).ConfigureAwait(false);
+            }
             await GetSingingKeys().ConfigureAwait(false);
         }
 

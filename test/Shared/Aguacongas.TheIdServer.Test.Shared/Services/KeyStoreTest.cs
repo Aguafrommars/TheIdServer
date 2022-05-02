@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.Test.Services
             keyManagerMock.Setup(m => m.GetAllKeys()).Returns(new List<IKey>()).Verifiable();
             var defaultResolverMock = new Mock<IDefaultKeyResolver>();
             var providerClientMock = new Mock<IProviderClient>();
-            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(keyManagerMock.Object, defaultResolverMock.Object, providerClientMock.Object);
+            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(keyManagerMock.Object, "test") }, defaultResolverMock.Object, providerClientMock.Object);
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 
@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer.Test.Services
             keyManagerMock.Setup(m => m.GetAllKeys()).Returns(new List<IKey>()).Verifiable();
             var defaultResolverMock = new Mock<IDefaultKeyResolver>();
             var providerClientMock = new Mock<IProviderClient>();
-            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(keyManagerMock.Object, defaultResolverMock.Object, providerClientMock.Object);
+            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(keyManagerMock.Object, "test") }, defaultResolverMock.Object, providerClientMock.Object);
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 

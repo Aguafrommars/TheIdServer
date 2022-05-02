@@ -1,13 +1,10 @@
-﻿using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -28,11 +25,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
                 keyMock.Object
             });
 
-            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
+            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             mockKeyRingProvider.SetupGet(m => m.KeyManager).Returns(mockKeyManager.Object);
             var services = new ServiceCollection()
                 .AddTransient(p => mockKeyRingProvider.Object)
-                .AddSigningKeyStore()
+                .AddRsaSigningKeyStore(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .BuildServiceProvider();
 
             var sut = services.GetRequiredService<ISigningKeyStore>();
@@ -44,8 +41,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
         [Fact]
         public async Task DeleteKeyAsync_should_dont_do_anything()
         {
-            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
-            var sut = new SigningKeyStore(mockKeyRingProvider.Object);
+            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
+            var sut = new SigningKeyStore<RsaEncryptorConfiguration, RsaEncryptor>(mockKeyRingProvider.Object);
 
             await sut.DeleteKeyAsync("tets").ConfigureAwait(false);
             Assert.NotNull(sut);
@@ -54,8 +51,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
         [Fact]
         public async Task StoreKeyAsync_should_not_be_implemented()
         {
-            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider>();
-            var sut = new SigningKeyStore(mockKeyRingProvider.Object);
+            var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
+            var sut = new SigningKeyStore<RsaEncryptorConfiguration, RsaEncryptor>(mockKeyRingProvider.Object);
 
             await Assert.ThrowsAsync<NotImplementedException>(() => sut.StoreKeyAsync(new SerializedKey())).ConfigureAwait(false);
         }

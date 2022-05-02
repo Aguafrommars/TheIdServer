@@ -29,11 +29,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ICacheableKeyRingProvider = Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -68,8 +68,19 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IImportService, ImportService>()
                 .AddTransient<ICertificateVerifierService, CertificateVerifierService>()
                 .AddTransient<ICreatePersonalAccessToken, CreatePersonalAccessTokenService>()
-                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(p.GetRequiredService<IKeyManager>(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
-                .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<ICacheableKeyRingProvider>()?.KeyManager ?? new NullKeyManager(), p.GetRequiredService<IDefaultKeyResolver>(), p.GetRequiredService<IProviderClient>()))
+                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(p.GetRequiredService<IKeyManager>(), "dataprotection") }, 
+                    p.GetRequiredService<IDefaultKeyResolver>(), 
+                    p.GetRequiredService<IProviderClient>()))
+                .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<IEnumerable<Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider>>()
+                        .Where(rp => rp.GetType().GenericTypeArguments[0] == typeof(RsaEncryptorConfiguration))
+                        .Select(p => new Tuple<IKeyManager, string>(p.KeyManager, p.Algorithm)),
+                    p.GetRequiredService<IDefaultKeyResolver>(),
+                    p.GetRequiredService<IProviderClient>()))
+                .AddTransient(p => new KeyManagerWrapper<ECDsaEncryptorDescriptor>(p.GetService<IEnumerable<Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider>>()
+                        .Where(rp => rp.GetType().GenericTypeArguments[0] == typeof(ECDsaEncryptorConfiguration))
+                        .Select(p => new Tuple<IKeyManager, string>(p.KeyManager, p.Algorithm)),
+                    p.GetRequiredService<IDefaultKeyResolver>(),
+                    p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>
                 {
                     config.PostProcess = document =>

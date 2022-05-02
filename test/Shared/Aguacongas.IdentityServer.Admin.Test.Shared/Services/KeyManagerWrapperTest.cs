@@ -15,8 +15,8 @@ namespace Aguacongas.IdentityServer.Admin.Services.Test
         public void Constructor_should_throw_on_args_null()
         {
             Assert.Throws<ArgumentNullException>(() => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new Mock<IKeyManager>().Object, null, null));
-            Assert.Throws<ArgumentNullException>(() => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new Mock<IKeyManager>().Object, new Mock<IDefaultKeyResolver>().Object, null));
+            Assert.Throws<ArgumentNullException>(() => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(new Mock<IKeyManager>().Object, "test") }, null, null));
+            Assert.Throws<ArgumentNullException>(() => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(new Mock<IKeyManager>().Object, "test") }, new Mock<IDefaultKeyResolver>().Object, null));
         }
     }
 }
