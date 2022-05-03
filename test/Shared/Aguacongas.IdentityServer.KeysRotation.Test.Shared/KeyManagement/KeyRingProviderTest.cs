@@ -41,12 +41,12 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStore>();
+            var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
             var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
             Assert.NotNull(cred);
 
-            sut = provider.GetRequiredService<IKeyRingStore>();
+            sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
             var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
@@ -64,7 +64,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStore>();
+            var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
             var keys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
             Assert.NotNull(keys);
@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var defaultKeyId = sut.DefaultKeyId;
             var cacheableKeyRingProvider = provider.GetRequiredService<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             cacheableKeyRingProvider.KeyManager.RevokeKey(defaultKeyId, "test");
-            sut = provider.GetRequiredService<IKeyRingStore>();
+            sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
             var newKeys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
 
             Assert.DoesNotContain(keys, k => newKeys.Any(nk => nk.Key.KeyId == k.Key.KeyId));
@@ -97,12 +97,12 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 .ProtectKeysWithCertificate(certificate);
 
             var provider = builder.Services.BuildServiceProvider();
-            var sut = provider.GetRequiredService<IKeyRingStore>();
+            var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
             var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
             Assert.NotNull(cred);
 
-            sut = provider.GetRequiredService<IKeyRingStore>();
+            sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
             var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
