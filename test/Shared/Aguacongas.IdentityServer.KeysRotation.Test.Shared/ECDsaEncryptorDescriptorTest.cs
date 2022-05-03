@@ -22,6 +22,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null, null));
             Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), null));
         }
+
         [Fact]
         public async Task ExportToXml_should_export_key_without_ECDsa()
         {
@@ -29,7 +30,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 .AddKeysRotation<ECDsaEncryptorConfiguration, ECDsaEncryptor>(ECDsaSigningAlgorithm.ES256.ToString());
 
             var provider = builder.BuildServiceProvider();
-            var keyProvider = provider.GetRequiredService<IKeyRingStore>();
+            var keyProvider = provider.GetRequiredService<IKeyRingStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>>();
 
             var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
 
