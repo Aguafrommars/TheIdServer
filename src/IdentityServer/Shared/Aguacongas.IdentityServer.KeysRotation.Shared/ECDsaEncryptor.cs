@@ -20,20 +20,19 @@ namespace Aguacongas.IdentityServer.KeysRotation
         {
             _keyDerivationKey = keyDerivationKey;
         }
-
-        public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
-        => GetSecurityKeyInfo(Enum.Parse<ECDsaSigningAlgorithm>(signingAlgorithm));
         public SigningCredentials GetSigningCredentials(string signingAlgorithm)
         => GetSigningCredentials(Enum.Parse<ECDsaSigningAlgorithm>(signingAlgorithm));
 
         public SigningCredentials GetSigningCredentials(ECDsaSigningAlgorithm rsaSigningAlgorithm)
         => new(_keyDerivationKey, rsaSigningAlgorithm.ToString());        
 
-        public SecurityKeyInfo GetSecurityKeyInfo(ECDsaSigningAlgorithm rsaSigningAlgorithm)
+        public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
+        => GetSecurityKeyInfo(Enum.Parse<ECDsaSigningAlgorithm>(signingAlgorithm));
+        public SecurityKeyInfo GetSecurityKeyInfo(ECDsaSigningAlgorithm ecdsaSigningAlgorithm)
         => new()
             {
                 Key = _keyDerivationKey,
-                SigningAlgorithm = rsaSigningAlgorithm.ToString()
+                SigningAlgorithm = ecdsaSigningAlgorithm.ToString()
             };
 
         public byte[] Decrypt(ArraySegment<byte> ciphertext, ArraySegment<byte> additionalAuthenticatedData)

@@ -21,14 +21,14 @@ namespace Aguacongas.IdentityServer.KeysRotation
             _keyDerivationKey = keyDerivationKey;        
         }
 
-        public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
-        => GetSecurityKeyInfo(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
         public SigningCredentials GetSigningCredentials(string signingAlgorithm)
         => GetSigningCredentials(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
 
         public SigningCredentials GetSigningCredentials(RsaSigningAlgorithm rsaSigningAlgorithm)
         => new(_keyDerivationKey, rsaSigningAlgorithm.ToString());
-        
+
+        public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
+        => GetSecurityKeyInfo(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
 
         public SecurityKeyInfo GetSecurityKeyInfo(RsaSigningAlgorithm rsaSigningAlgorithm)
         => new()

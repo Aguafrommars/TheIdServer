@@ -46,10 +46,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
                 });
 
             var services = serviceCollection.BuildServiceProvider();
-            var options = services.GetRequiredService<IOptions<KeyRotationOptions>>();
-            Assert.IsType<RsaEncryptorConfiguration>(options.Value.AuthenticatedEncryptorConfiguration);
-            var configuration = options.Value.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration;
-            Assert.Equal(IdentityServerConstants.RsaSigningAlgorithm.PS256.ToString(), configuration.SigningAlgorithm);
+            var keyRing = services.GetRequiredService<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
+            Assert.Equal(IdentityServerConstants.RsaSigningAlgorithm.PS256.ToString(), keyRing.Algorithm);
         }
 
         [Fact]
