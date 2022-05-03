@@ -72,128 +72,16 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public string Algorithm => ((SigningAlgorithmConfiguration) _keyManagementOptions.AuthenticatedEncryptorConfiguration).SigningAlgorithm; // add property Algorithm
 
-        internal ICacheableKeyRingProvider<TC, TE> CacheableKeyRingProvider { get; set; }
-
-        internal DateTime AutoRefreshWindowEnd { get; set; }
-
-
-        internal bool InAutoRefreshWindow() => DateTime.UtcNow < AutoRefreshWindowEnd;
-
-        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)
-        {
-            // Refresh the list of all keys
-            var cacheExpirationToken = KeyManager.GetCacheExpirationToken();
-            var allKeys = KeyManager.GetAllKeys();
-            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is RsaEncryptorConfiguration rsaConfiguration)
-            {
-                allKeys = allKeys.Where(k => k.Descriptor is RsaEncryptorDescriptor descriptor && 
-                    descriptor.Configuration.SigningAlgorithm == rsaConfiguration.SigningAlgorithm).ToArray();
-            }
-            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is ECDsaEncryptorConfiguration eCDsaEncryptorConfiguration)
-            {
-                allKeys = allKeys.Where(k => k.Descriptor is ECDsaEncryptorDescriptor descriptor &&
-                    descriptor.Configuration.SigningAlgorithm == eCDsaEncryptorConfiguration.SigningAlgorithm).ToArray();
-            }
-
-            // Fetch the current default key from the list of all keys
-            var defaultKeyPolicy = _defaultKeyResolver.ResolveDefaultKeyPolicy(now, allKeys);
-            if (!defaultKeyPolicy.ShouldGenerateNewKey)
-            {
-                if (defaultKeyPolicy.DefaultKey == null)
-                {
-                    throw new CryptographicException("Assertion failed: Expected to see a default key."); // original CryptoUtil.Fail call replaced
-                }
-                
-                return CreateCacheableKeyRingCoreStep2(now, defaultKeyPolicy.DefaultKey, allKeys, cacheExpirationToken);
-            }
-
-            _logger.LogDebug("Policy resolution states that a new key should be added to the key ring."); // original ILogger extensions calls replaced
-
-            // We shouldn't call CreateKey more than once, else we risk stack diving. This code path shouldn't
-            // get hit unless there was an ineligible key with an activation date slightly later than the one we
-            // just added. If this does happen, then we'll just use whatever key we can instead of creating
-            // new keys endlessly, eventually falling back to the one we just added if all else fails.
-            if (keyJustAdded != null)
-            {
-                var keyToUse = defaultKeyPolicy.DefaultKey ?? defaultKeyPolicy.FallbackKey ?? keyJustAdded;
-                return CreateCacheableKeyRingCoreStep2(now, keyToUse, allKeys, cacheExpirationToken);
-            }
-
-            // At this point, we know we need to generate a new key.
-
-            // We have been asked to generate a new key, but auto-generation of keys has been disabled.
-            // We need to use the fallback key or fail.
-            if (!_keyManagementOptions.AutoGenerateKeys)
-            {
-                var keyToUse = defaultKeyPolicy.DefaultKey ?? defaultKeyPolicy.FallbackKey;
-                if (keyToUse == null)
-                {
-                    _logger.LogError("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled."); // original ILogger extensions calls replaced
-                    throw new InvalidOperationException("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled.");
-                }
-                else
-                {
-                    _logger.LogWarning("Policy resolution states that a new key should be added to the key ring, but automatic generation of keys is disabled. Using fallback key {KeyId:B} with expiration {ExpirationDate:u} as default key.", 
-                        keyToUse.KeyId,
-                        keyToUse.ExpirationDate); // original ILogger extensions calls replaced
-                    return CreateCacheableKeyRingCoreStep2(now, keyToUse, allKeys, cacheExpirationToken);
-                }
-            }
-
-            if (defaultKeyPolicy.DefaultKey == null)
-            {
-                // The case where there's no default key is the easiest scenario, since it
-                // means that we need to create a new key with immediate activation.
-                var newKey = KeyManager.CreateNewKey(activationDate: now, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
-                return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
-            }
-            else
-            {
-                // If there is a default key, then the new key we generate should become active upon
-                // expiration of the default key.
-                var newActivationDate = defaultKeyPolicy.DefaultKey.ExpirationDate;
-                var newExpirationDate = defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime;
-                var keyAlreadyCreated = allKeys.FirstOrDefault(k => k.ActivationDate == newActivationDate && k.ExpirationDate == newExpirationDate && !k.IsRevoked);
-                if (keyAlreadyCreated == null)
-                {
-                    var newKey = KeyManager.CreateNewKey(activationDate: newActivationDate, expirationDate: newExpirationDate); // next key expiration date rule change to use the default key expiration date and not now
-                    return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
-                }
-                // The next key already exists. Don't need to create a new one. It can occur when the NewKeyLifetime < KeyPropagationWindow
-                return CreateCacheableKeyRingCore(now, keyJustAdded: keyAlreadyCreated); // recursively call
-            }
-        }
-
-        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCoreStep2(DateTimeOffset now, IKey defaultKey, IEnumerable<IKey> allKeys, CancellationToken cacheExpirationToken)
-        {
-            Debug.Assert(defaultKey != null);
-
-            // Invariant: our caller ensures that CreateEncryptorInstance succeeded at least once
-            Debug.Assert(defaultKey.CreateEncryptor() != null);
-
-            _logger.LogDebug("Using key {KeyId:B} as the default key.", defaultKey.KeyId); // original ILogger extensions calls replaced
-
-            var nextAutoRefreshTime = now + GetRefreshPeriodWithJitter(_keyManagementOptions.KeyRingRefreshPeriod);
-
-            // The cached keyring should expire at the earliest of (default key expiration, next auto-refresh time).
-            // Since the refresh period and safety window are not user-settable, we can guarantee that there's at
-            // least one auto-refresh between the start of the safety window and the key's expiration date.
-            // This gives us an opportunity to update the key ring before expiration, and it prevents multiple
-            // servers in a cluster from trying to update the key ring simultaneously. Special case: if the default
-            // key's expiration date is in the past, then we know we're using a fallback key and should disregard
-            // its expiration date in favor of the next auto-refresh time.
-            return new CacheableKeyRing<TC, TE>(
-                expirationToken: cacheExpirationToken,
-                expirationTime: (defaultKey.ExpirationDate <= now) ? nextAutoRefreshTime : Min(defaultKey.ExpirationDate, nextAutoRefreshTime),
-                defaultKey: defaultKey,
-                allKeys: allKeys,
-                configuration: _keyManagementOptions.AuthenticatedEncryptorConfiguration as TC);
-        }
-
         public IKeyRing GetCurrentKeyRing()
         {
             return GetCurrentKeyRingCore(DateTime.UtcNow);
         }
+
+        internal ICacheableKeyRingProvider<TC, TE> CacheableKeyRingProvider { get; set; }
+
+        internal DateTime AutoRefreshWindowEnd { get; set; }
+
+        internal bool InAutoRefreshWindow() => DateTime.UtcNow < AutoRefreshWindowEnd;
 
         internal IKeyRing RefreshCurrentKeyRing()
         {
@@ -245,6 +133,124 @@ namespace Aguacongas.IdentityServer.KeysRotation
                     Monitor.Exit(_cacheableKeyRingLockObj);
                 }
             }
+        }
+
+        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCore(DateTimeOffset now, IKey keyJustAdded)
+        {
+            // Refresh the list of all keys
+            var cacheExpirationToken = KeyManager.GetCacheExpirationToken();
+            var allKeys = GetAllKeys();
+
+            // Fetch the current default key from the list of all keys
+            var defaultKeyPolicy = _defaultKeyResolver.ResolveDefaultKeyPolicy(now, allKeys);
+            if (!defaultKeyPolicy.ShouldGenerateNewKey)
+            {
+                if (defaultKeyPolicy.DefaultKey == null)
+                {
+                    throw new CryptographicException("Assertion failed: Expected to see a default key."); // original CryptoUtil.Fail call replaced
+                }
+
+                return CreateCacheableKeyRingCoreStep2(now, defaultKeyPolicy.DefaultKey, allKeys, cacheExpirationToken);
+            }
+
+            _logger.LogDebug("Policy resolution states that a new key should be added to the key ring."); // original ILogger extensions calls replaced
+
+            // We shouldn't call CreateKey more than once, else we risk stack diving. This code path shouldn't
+            // get hit unless there was an ineligible key with an activation date slightly later than the one we
+            // just added. If this does happen, then we'll just use whatever key we can instead of creating
+            // new keys endlessly, eventually falling back to the one we just added if all else fails.
+            if (keyJustAdded != null)
+            {
+                var keyToUse = defaultKeyPolicy.DefaultKey ?? defaultKeyPolicy.FallbackKey ?? keyJustAdded;
+                return CreateCacheableKeyRingCoreStep2(now, keyToUse, allKeys, cacheExpirationToken);
+            }
+
+            // At this point, we know we need to generate a new key.
+
+            // We have been asked to generate a new key, but auto-generation of keys has been disabled.
+            // We need to use the fallback key or fail.
+            if (!_keyManagementOptions.AutoGenerateKeys)
+            {
+                var keyToUse = defaultKeyPolicy.DefaultKey ?? defaultKeyPolicy.FallbackKey;
+                if (keyToUse == null)
+                {
+                    _logger.LogError("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled."); // original ILogger extensions calls replaced
+                    throw new InvalidOperationException("The key ring does not contain a valid default key, and the key manager is configured with auto-generation of keys disabled.");
+                }
+                else
+                {
+                    _logger.LogWarning("Policy resolution states that a new key should be added to the key ring, but automatic generation of keys is disabled. Using fallback key {KeyId:B} with expiration {ExpirationDate:u} as default key.",
+                        keyToUse.KeyId,
+                        keyToUse.ExpirationDate); // original ILogger extensions calls replaced
+                    return CreateCacheableKeyRingCoreStep2(now, keyToUse, allKeys, cacheExpirationToken);
+                }
+            }
+
+            if (defaultKeyPolicy.DefaultKey == null)
+            {
+                // The case where there's no default key is the easiest scenario, since it
+                // means that we need to create a new key with immediate activation.
+                var newKey = KeyManager.CreateNewKey(activationDate: now, expirationDate: now + _keyManagementOptions.NewKeyLifetime);
+                return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
+            }
+            else
+            {
+                // If there is a default key, then the new key we generate should become active upon
+                // expiration of the default key.
+                var newActivationDate = defaultKeyPolicy.DefaultKey.ExpirationDate;
+                var newExpirationDate = defaultKeyPolicy.DefaultKey.ExpirationDate + _keyManagementOptions.NewKeyLifetime;
+                var keyAlreadyCreated = allKeys.FirstOrDefault(k => k.ActivationDate == newActivationDate && k.ExpirationDate == newExpirationDate && !k.IsRevoked);
+                if (keyAlreadyCreated == null)
+                {
+                    var newKey = KeyManager.CreateNewKey(activationDate: newActivationDate, expirationDate: newExpirationDate); // next key expiration date rule change to use the default key expiration date and not now
+                    return CreateCacheableKeyRingCore(now, keyJustAdded: newKey); // recursively call
+                }
+                // The next key already exists. Don't need to create a new one. It can occur when the NewKeyLifetime < KeyPropagationWindow
+                return CreateCacheableKeyRingCore(now, keyJustAdded: keyAlreadyCreated); // recursively call
+            }
+        }
+
+        private IReadOnlyCollection<IKey> GetAllKeys()
+        {
+            var allKeys = KeyManager.GetAllKeys();
+            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is RsaEncryptorConfiguration rsaConfiguration)
+            {
+                allKeys = allKeys.Where(k => k.Descriptor is RsaEncryptorDescriptor descriptor &&
+                    descriptor.Configuration.SigningAlgorithm == rsaConfiguration.SigningAlgorithm).ToArray();
+            }
+            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is ECDsaEncryptorConfiguration eCDsaEncryptorConfiguration)
+            {
+                allKeys = allKeys.Where(k => k.Descriptor is ECDsaEncryptorDescriptor descriptor &&
+                    descriptor.Configuration.SigningAlgorithm == eCDsaEncryptorConfiguration.SigningAlgorithm).ToArray();
+            }
+
+            return allKeys;
+        }
+
+        private CacheableKeyRing<TC, TE> CreateCacheableKeyRingCoreStep2(DateTimeOffset now, IKey defaultKey, IEnumerable<IKey> allKeys, CancellationToken cacheExpirationToken)
+        {
+            Debug.Assert(defaultKey != null);
+
+            // Invariant: our caller ensures that CreateEncryptorInstance succeeded at least once
+            Debug.Assert(defaultKey.CreateEncryptor() != null);
+
+            _logger.LogDebug("Using key {KeyId:B} as the default key.", defaultKey.KeyId); // original ILogger extensions calls replaced
+
+            var nextAutoRefreshTime = now + GetRefreshPeriodWithJitter(_keyManagementOptions.KeyRingRefreshPeriod);
+
+            // The cached keyring should expire at the earliest of (default key expiration, next auto-refresh time).
+            // Since the refresh period and safety window are not user-settable, we can guarantee that there's at
+            // least one auto-refresh between the start of the safety window and the key's expiration date.
+            // This gives us an opportunity to update the key ring before expiration, and it prevents multiple
+            // servers in a cluster from trying to update the key ring simultaneously. Special case: if the default
+            // key's expiration date is in the past, then we know we're using a fallback key and should disregard
+            // its expiration date in favor of the next auto-refresh time.
+            return new CacheableKeyRing<TC, TE>(
+                expirationToken: cacheExpirationToken,
+                expirationTime: (defaultKey.ExpirationDate <= now) ? nextAutoRefreshTime : Min(defaultKey.ExpirationDate, nextAutoRefreshTime),
+                defaultKey: defaultKey,
+                allKeys: allKeys,
+                configuration: _keyManagementOptions.AuthenticatedEncryptorConfiguration as TC);
         }
 
         private IKeyRing GetCurrentKeyRingSync(DateTime utcNow, bool forceRefresh, ref CacheableKeyRing<TC, TE> existingCacheableKeyRing)

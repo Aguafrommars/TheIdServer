@@ -64,12 +64,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="reason">The reason.</param>
         public Task RevokeKey(Guid id, string reason)
         {
-            foreach (var manager in _keyManagerList.Select(t => t.Item1))
+            foreach (var manager in _keyManagerList
+                .Where(t => t.Item1.GetAllKeys().Any(k => k.KeyId == id))
+                .Select(t => t.Item1))
             {
-                if (manager.GetAllKeys().Any(k => k.KeyId == id))
-                {
-                    manager.RevokeKey(id, reason);
-                }
+                manager.RevokeKey(id, reason);
             }
             return _providerClient.KeyRevokedAsync(typeof(T).Name, id.ToString());
         }

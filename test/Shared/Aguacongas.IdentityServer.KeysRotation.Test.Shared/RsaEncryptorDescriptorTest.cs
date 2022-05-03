@@ -23,6 +23,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             Assert.Throws<ArgumentNullException>(() => new RsaEncryptorDescriptor(null, null));
             Assert.Throws<ArgumentNullException>(() => new RsaEncryptorDescriptor(new RsaEncryptorConfiguration(), null));
         }
+
         [Fact]
         public async Task ExportToXml_should_export_key_without_Rsa()
         {
@@ -30,7 +31,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
                 .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             var provider = builder.Services.BuildServiceProvider();
-            var keyProvider = provider.GetRequiredService<IKeyRingStore>();
+            var keyProvider = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
             var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
 

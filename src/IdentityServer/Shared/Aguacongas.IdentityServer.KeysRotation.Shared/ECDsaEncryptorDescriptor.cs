@@ -92,30 +92,5 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 return AlgorithmActivator.CreateFactory<ECDsa>(configuration.EncryptionAlgorithmType);
             }
         }
-
-        /// <summary>
-        /// Contains helper methods for generating cryptographic algorithm factories.
-        /// </summary>
-        private static class AlgorithmActivator
-        {
-            /// <summary>
-            /// Creates a factory that wraps a call to <see cref="Activator.CreateInstance{T}"/>.
-            /// </summary>
-            public static Func<T> CreateFactory<T>(Type implementation)
-            {
-                return ((IActivator<T>)Activator.CreateInstance(typeof(AlgorithmActivatorCore<>).MakeGenericType(implementation))).Creator;
-            }
-
-            private interface IActivator<out T>
-            {
-                Func<T> Creator { get; }
-            }
-
-            private sealed class AlgorithmActivatorCore<T> : IActivator<T> where T : new()
-            {
-                public Func<T> Creator { get; } = Activator.CreateInstance<T>;
-            }
-        }
-
     }
 }
