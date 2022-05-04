@@ -29,10 +29,12 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
             mockKeyRingProvider.SetupGet(m => m.KeyManager).Returns(mockKeyManager.Object);
             var services = new ServiceCollection()
                 .AddTransient(p => mockKeyRingProvider.Object)
-                .AddRsaSigningKeyStore(IdentityServerConstants.RsaSigningAlgorithm.RS256)
-                .BuildServiceProvider();
+                .AddRsaSigningKeyStore(IdentityServerConstants.RsaSigningAlgorithm.RS256);
+            services.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
-            var sut = services.GetRequiredService<ISigningKeyStore>();
+            var provider = services.BuildServiceProvider();
+
+            var sut = provider.GetRequiredService<ISigningKeyStore>();
             var result = await  sut.LoadKeysAsync().ConfigureAwait(false);
 
             Assert.Single(result);
