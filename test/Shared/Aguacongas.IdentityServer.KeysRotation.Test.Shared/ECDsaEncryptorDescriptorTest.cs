@@ -1,8 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.IdentityServer.KeysRotation.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 #if DUENDE
@@ -26,10 +28,15 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [Fact]
         public async Task ExportToXml_should_export_key_without_ECDsa()
         {
-            var builder = new ServiceCollection()
-                .AddKeysRotation<ECDsaEncryptorConfiguration, ECDsaEncryptor>(ECDsaSigningAlgorithm.ES256.ToString());
+            var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempDir);
+            var services = new ServiceCollection();
+            var builder = services.AddKeysRotation(RsaSigningAlgorithm.RS256)
+                .AddECDsaKeysRotation(ECDsaSigningAlgorithm.ES256)
+                .AddECDsaEncryptorConfiguration(ECDsaSigningAlgorithm.ES256, options => { })
+                .PersistKeysToFileSystem(new DirectoryInfo(tempDir));
 
-            var provider = builder.BuildServiceProvider();
+            var provider = services.BuildServiceProvider();
             var keyProvider = provider.GetRequiredService<IKeyRingStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>>();
 
             var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);

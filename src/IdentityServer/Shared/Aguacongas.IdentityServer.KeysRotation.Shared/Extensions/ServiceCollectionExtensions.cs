@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return new KeyRotationBuilder
             {
                 Services = services
-                    .AddKeysRotation<RsaEncryptorConfiguration, RsaEncryptor>(rsaSigningAlgorithm.ToString())
+                    .AddKeysRotation<RsaEncryptorConfiguration, RsaEncryptor>(rsaSigningAlgorithm.ToString(), configureKeysRotation)
                     
             }.AddRsaEncryptorConfiguration(rsaSigningAlgorithm, options =>
             {
