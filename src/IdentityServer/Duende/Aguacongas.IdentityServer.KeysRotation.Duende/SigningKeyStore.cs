@@ -56,10 +56,10 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
         public Task StoreKeyAsync(SerializedKey key)
         => throw new NotImplementedException();
 
-        private static SerializedKey CreateEcdSingingKey(IKey i)
+        private SerializedKey CreateEcdSingingKey(IKey i)
         {
             var ecd = i.Descriptor as ECDsaEncryptorDescriptor;
-            var algorythm = ecd.Configuration.SigningAlgorithm.ToString();
+            var algorythm = ecd.Configuration.SigningAlgorithm?.ToString() ?? _keyringProvider.Algorithm;
             var key = ecd.ECDsaSecurityKey;
             var created = i.CreationDate.UtcDateTime;
             return new SerializedKey
@@ -72,9 +72,9 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
             };
         }
 
-        private static SerializedKey CreateRsaSinginKey(IKey i, RsaEncryptorDescriptor rsa)
+        private SerializedKey CreateRsaSinginKey(IKey i, RsaEncryptorDescriptor rsa)
         {
-            var algorythm = rsa.Configuration.SigningAlgorithm.ToString();
+            var algorythm = rsa.Configuration.SigningAlgorithm?.ToString() ?? _keyringProvider.Algorithm;
             var key = rsa.RsaSecurityKey;
             var created = i.CreationDate.UtcDateTime;
             return new SerializedKey

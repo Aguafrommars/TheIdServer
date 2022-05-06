@@ -41,7 +41,6 @@
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorDescriptor.cs" Link="RsaEncryptorDescriptor.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorDescriptorDeserializer.cs" Link="RsaEncryptorDescriptorDeserializer.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorFactory.cs" Link="RsaEncryptorFactory.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\SigningAlgorithmConfiguration.cs" Link="SigningAlgorithmConfiguration.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

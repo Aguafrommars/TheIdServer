@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test
         }
 
         [Fact]
-        public async Task StoreKeyAsync_should_not_be_implemented()
+        public async Task StoreKeyAsync_should_be_implemented()
         {
             var mockKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             var sut = new SigningKeyStore<RsaEncryptorConfiguration, RsaEncryptor>(mockKeyRingProvider.Object);

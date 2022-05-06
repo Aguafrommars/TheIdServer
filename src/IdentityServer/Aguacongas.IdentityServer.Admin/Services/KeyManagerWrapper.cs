@@ -20,7 +20,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <typeparam name="T"></typeparam>
     public class KeyManagerWrapper<T> where T : IAuthenticatedEncryptorDescriptor
     {
-        private readonly IEnumerable<Tuple<IKeyManager, string>> _keyManagerList;
+        private readonly IEnumerable<Tuple<IKeyManager, string, IEnumerable<IKey>>> _keyManagerList;
         private readonly IDefaultKeyResolver _defaultKeyResolver;
         private readonly IProviderClient _providerClient;
 
@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <exception cref="ArgumentNullException">keyManager
         /// or
         /// defaultKeyResolver</exception>
-        public KeyManagerWrapper(IEnumerable<Tuple<IKeyManager, string>> keyManagerList, IDefaultKeyResolver defaultKeyResolver, IProviderClient providerClient)
+        public KeyManagerWrapper(IEnumerable<Tuple<IKeyManager, string, IEnumerable<IKey>>> keyManagerList, IDefaultKeyResolver defaultKeyResolver, IProviderClient providerClient)
         {
             _keyManagerList = keyManagerList ?? throw new ArgumentNullException(nameof(keyManagerList));
             _defaultKeyResolver = defaultKeyResolver ?? throw new ArgumentNullException(nameof(defaultKeyResolver));
@@ -53,8 +53,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public PageResponse<Key> GetAllKeys()
         {
-            return _keyManagerList.SelectMany(t => t.Item1.GetAllKeys().Select(k => new Tuple<IKey, string>(k, t.Item2)))
-                .ToPageResponse(_defaultKeyResolver);
+            return new PageResponse<Key>
+            {
+                Items = _keyManagerList.SelectMany(t => t.Item3.Select(k => new Tuple<IKey, string>(k, t.Item2)).ToPageResponse(_defaultKeyResolver).Items),
+                Count = _keyManagerList.Sum(t => t.Item3.Select(k => new Tuple<IKey, string>(k, t.Item2)).ToPageResponse(_defaultKeyResolver).Count)
+            };
         }
 
         /// <summary>
@@ -72,6 +75,5 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
             return _providerClient.KeyRevokedAsync(typeof(T).Name, id.ToString());
         }
-
     }
 }

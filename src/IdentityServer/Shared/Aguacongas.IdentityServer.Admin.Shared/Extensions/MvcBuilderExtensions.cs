@@ -68,17 +68,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IImportService, ImportService>()
                 .AddTransient<ICertificateVerifierService, CertificateVerifierService>()
                 .AddTransient<ICreatePersonalAccessToken, CreatePersonalAccessTokenService>()
-                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string>(p.GetRequiredService<IKeyManager>(), "dataprotection") }, 
+                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string, IEnumerable<IKey>>(p.GetRequiredService<IKeyManager>(), "dataprotection", p.GetRequiredService<IKeyManager>().GetAllKeys()) }, 
                     p.GetRequiredService<IDefaultKeyResolver>(), 
                     p.GetRequiredService<IProviderClient>()))
                 .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<IEnumerable<Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider>>()
                         .Where(rp => rp.GetType().GenericTypeArguments[0] == typeof(RsaEncryptorConfiguration))
-                        .Select(p => new Tuple<IKeyManager, string>(p.KeyManager, p.Algorithm)),
+                        .Select(p => new Tuple<IKeyManager, string, IEnumerable<IKey>>(p.KeyManager, p.Algorithm, p.GetAllKeys())),
                     p.GetRequiredService<IDefaultKeyResolver>(),
                     p.GetRequiredService<IProviderClient>()))
                 .AddTransient(p => new KeyManagerWrapper<ECDsaEncryptorDescriptor>(p.GetService<IEnumerable<Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider>>()
                         .Where(rp => rp.GetType().GenericTypeArguments[0] == typeof(ECDsaEncryptorConfiguration))
-                        .Select(p => new Tuple<IKeyManager, string>(p.KeyManager, p.Algorithm)),
+                        .Select(p => new Tuple<IKeyManager, string, IEnumerable<IKey>>(p.KeyManager, p.Algorithm, p.GetAllKeys())),
                     p.GetRequiredService<IDefaultKeyResolver>(),
                     p.GetRequiredService<IProviderClient>()))
                 .AddSwaggerDocument(config =>

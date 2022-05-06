@@ -33,6 +33,11 @@ namespace Aguacongas.IdentityServer.KeysRotation
         /// </value>
         public TimeSpan KeyRetirement { get; set; } = TimeSpan.FromDays(180);
 
+        /// <summary>
+        /// When true, the signing algorithm is the default
+        /// </summary>
+        public bool IsDefaultSigningAlgorithm { get; set; }
+
         public override IAuthenticatedEncryptorDescriptor CreateNewDescriptor()
         {
             throw new NotImplementedException();

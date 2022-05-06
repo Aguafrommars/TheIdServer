@@ -70,6 +70,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public IKeyManager KeyManager => _keyManager; // add property KeyManager
 
+
         public string Algorithm => ((SigningAlgorithmConfiguration) _keyManagementOptions.AuthenticatedEncryptorConfiguration).SigningAlgorithm; // add property Algorithm
 
         public IKeyRing GetCurrentKeyRing()
@@ -210,18 +211,15 @@ namespace Aguacongas.IdentityServer.KeysRotation
             }
         }
 
+        IReadOnlyCollection<IKey> ICacheableKeyRingProvider.GetAllKeys() => GetAllKeys();
+
         private IReadOnlyCollection<IKey> GetAllKeys()
         {
             var allKeys = KeyManager.GetAllKeys();
-            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is RsaEncryptorConfiguration rsaConfiguration)
+            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is SigningAlgorithmConfiguration configuration)
             {
-                allKeys = allKeys.Where(k => k.Descriptor is RsaEncryptorDescriptor descriptor &&
-                    descriptor.Configuration.SigningAlgorithm == rsaConfiguration.SigningAlgorithm).ToArray();
-            }
-            if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is ECDsaEncryptorConfiguration eCDsaEncryptorConfiguration)
-            {
-                allKeys = allKeys.Where(k => k.Descriptor is ECDsaEncryptorDescriptor descriptor &&
-                    descriptor.Configuration.SigningAlgorithm == eCDsaEncryptorConfiguration.SigningAlgorithm).ToArray();
+                allKeys = allKeys.Where(k => k.Descriptor is ISigningAlgorithmDescriptor descriptor &&
+                    (descriptor.Configuration.SigningAlgorithm == configuration.SigningAlgorithm || (descriptor.Configuration.SigningAlgorithm is null && configuration.IsDefaultSigningAlgorithm))).ToArray();
             }
 
             return allKeys;
