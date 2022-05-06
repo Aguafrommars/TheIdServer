@@ -16,7 +16,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// Implements <see cref="IAuthenticatedEncryptorDescriptor"/> for <see cref="ECDsaSecurityKey"/>
     /// </summary>
     /// <seealso cref="IAuthenticatedEncryptorDescriptor" />
-    public sealed class ECDsaEncryptorDescriptor : IAuthenticatedEncryptorDescriptor
+    public sealed class ECDsaEncryptorDescriptor : IAuthenticatedEncryptorDescriptor, ISigningAlgorithmDescriptor
     {
         public ECDsaEncryptorDescriptor(ECDsaEncryptorConfiguration configuration, ECDsaSecurityKey masterKey)
         {
@@ -45,7 +45,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public ECDsaSecurityKey ECDsaSecurityKey { get; }
 
-        internal ECDsaEncryptorConfiguration Configuration { get; }
+        internal SigningAlgorithmConfiguration Configuration { get; }
+
+        SigningAlgorithmConfiguration ISigningAlgorithmDescriptor.Configuration => Configuration;
 
         public XmlSerializedDescriptorInfo ExportToXml()
         {
@@ -67,7 +69,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             var encryptionElement = new XElement("encryption",
                 new XAttribute("algorithm", Configuration.EncryptionAlgorithmType.AssemblyQualifiedName),
-                new XAttribute("keyLength", Configuration.EncryptionAlgorithmKeySize));
+                new XAttribute("keyLength", Configuration.EncryptionAlgorithmKeySize),
+                new XAttribute("signingAlrotithm", Configuration.SigningAlgorithm));
 
             var secret = new Secret(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(keyInfo)));
 
@@ -80,7 +83,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return new XmlSerializedDescriptorInfo(rootElement, typeof(ECDsaEncryptorDescriptorDeserializer));
         }
 
-        private static Func<ECDsa> GetAsymmetricBlockCipherAlgorithmFactory(ECDsaEncryptorConfiguration configuration)
+        private static Func<ECDsa> GetAsymmetricBlockCipherAlgorithmFactory(SigningAlgorithmConfiguration configuration)
         {
             // basic argument checking
             if (configuration.EncryptionAlgorithmType == typeof(ECDsa))

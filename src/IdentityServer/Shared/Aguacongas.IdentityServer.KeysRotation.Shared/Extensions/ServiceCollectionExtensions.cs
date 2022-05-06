@@ -67,6 +67,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }.AddRsaEncryptorConfiguration(rsaSigningAlgorithm, options =>
             {
                 options.SigningAlgorithm = rsaSigningAlgorithm.ToString();
+                options.IsDefaultSigningAlgorithm = true;
             });
         }
 

@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using System;
+using System.Collections.Generic;
 
 // namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement.Internal
 namespace Aguacongas.IdentityServer.KeysRotation
@@ -28,6 +29,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
     {
         string Algorithm { get; } // add Algorithm property from original file
         IKeyManager KeyManager { get; } // add KeyManager property from original file
+
         IKeyRing RefreshCurrentKeyRing(); // add RefreshCurrentKeyRing method from original file
+
+        IReadOnlyCollection<IKey> GetAllKeys();
     }
 }

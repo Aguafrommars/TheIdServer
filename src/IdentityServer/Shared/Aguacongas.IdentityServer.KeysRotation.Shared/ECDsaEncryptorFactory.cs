@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         internal ECDsaEncryptor CreateAuthenticatedEncryptorInstance(
             ECDsaSecurityKey secret,
-            ECDsaEncryptorConfiguration configuration)
+            SigningAlgorithmConfiguration configuration)
         {
             if (configuration == null)
             {
