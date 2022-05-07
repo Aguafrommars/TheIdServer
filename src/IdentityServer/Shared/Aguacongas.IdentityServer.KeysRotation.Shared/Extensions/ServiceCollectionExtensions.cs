@@ -2,7 +2,6 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 #if DUENDE
-using Aguacongas.IdentityServer.KeysRotation.Duende;
 using Duende.IdentityServer.Stores;
 using static Duende.IdentityServer.IdentityServerConstants;
 #else
@@ -25,35 +24,23 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ServiceCollectionExtensions
     {
-#if DUENDE
-        public static IServiceCollection AddECDsaSigningKeyStore(this IServiceCollection services, ECDsaSigningAlgorithm signingAlgorithm)
+        public static IServiceCollection AddECDsaAddValidationKeysStore(this IServiceCollection services, ECDsaSigningAlgorithm signingAlgorithm)
         {
-            return services.AddSigningKeyStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>(signingAlgorithm.ToString());
+            return services.AddValidattionKeysStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>(signingAlgorithm.ToString());
         }
 
-        public static IServiceCollection AddRsaSigningKeyStore(this IServiceCollection services, RsaSigningAlgorithm signingAlgorithm)
+        public static IServiceCollection AddRsaAddValidationKeysStore(this IServiceCollection services, RsaSigningAlgorithm signingAlgorithm)
         {
-            return services.AddSigningKeyStore<RsaEncryptorConfiguration, RsaEncryptor>(signingAlgorithm.ToString());
+            return services.AddValidattionKeysStore<RsaEncryptorConfiguration, RsaEncryptor>(signingAlgorithm.ToString());
         }
 
-        static IServiceCollection AddSigningKeyStore<TC, TE>(this IServiceCollection services, string signingAlgorithm)
-            where TC : SigningAlgorithmConfiguration, new()
-            where TE : ISigningAlgortithmEncryptor
-        {
-            return services.AddTransient<ISigningKeyStore>(p =>
-            {
-                var providerList = p.GetRequiredService<IEnumerable<ICacheableKeyRingProvider<TC, TE>>>();
-                return new SigningKeyStore<TC, TE>(providerList.First(rp => rp.Algorithm == signingAlgorithm));
-            });
-        }
-#endif
         /// <summary>
         /// Adds the keys rotation.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="configureKeysRotation">Action to configure keys rotation.</param>
         /// <returns></returns>
-        public static IKeyRotationBuilder AddKeysRotation(this IServiceCollection services, RsaSigningAlgorithm rsaSigningAlgorithm , Action<KeyRotationOptions> configureKeysRotation = null)
+        public static IKeyRotationBuilder AddKeysRotation(this IServiceCollection services, RsaSigningAlgorithm rsaSigningAlgorithm = RsaSigningAlgorithm.RS256, Action<KeyRotationOptions> configureKeysRotation = null)
         {
             services.AddDataProtection();
             services.TryAddEnumerable(
@@ -119,6 +106,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
         }
 
-
+        static IServiceCollection AddValidattionKeysStore<TC, TE>(this IServiceCollection services, string signingAlgorithm)
+            where TC : SigningAlgorithmConfiguration, new()
+            where TE : ISigningAlgortithmEncryptor
+        {
+            return services.AddTransient<IValidationKeysStore>(p =>
+            {
+                var providerList = p.GetRequiredService<IEnumerable<ICacheableKeyRingProvider<TC, TE>>>();
+                return new ValidattionKeysStore(providerList.First(rp => rp.Algorithm == signingAlgorithm));
+            });
+        }
     }
 }

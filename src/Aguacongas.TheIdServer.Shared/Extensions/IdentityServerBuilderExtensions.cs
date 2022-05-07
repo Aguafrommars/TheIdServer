@@ -36,9 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options => keyRotationSection?.Bind(options))
                 .AddRsaEncryptorConfiguration(defaultSigingAlgortithm, options => configuration.GetSection(nameof(RsaEncryptorConfiguration))?.Bind(options));
 
-#if DUENDE
-            identityServerBuilder.Services.AddRsaSigningKeyStore(defaultSigingAlgortithm);
-#endif
+            identityServerBuilder.Services.AddRsaAddValidationKeysStore(defaultSigingAlgortithm);
 
             var additionalKeyType = new Dictionary<string, SigningAlgorithmConfiguration>();
             var additionalSigningKeyTypeSection = configuration.GetSection("AdditionalSigningKeyType");
@@ -50,18 +48,14 @@ namespace Microsoft.Extensions.DependencyInjection
                     var ecdsa = Enum.Parse<ECDsaSigningAlgorithm>(key);
                     builder.AddECDsaKeysRotation(ecdsa, options => keyRotationSection?.Bind(options))
                         .AddECDsaEncryptorConfiguration(ecdsa, options => additionalSigningKeyTypeSection?.GetSection(key).Bind(options));
-#if DUENDE
-                    identityServerBuilder.Services.AddECDsaSigningKeyStore(ecdsa);
-#endif
+                    builder.Services.AddECDsaAddValidationKeysStore(ecdsa);
                     continue;
                 }
 
                 var rsa = Enum.Parse<RsaSigningAlgorithm>(key);
                 builder.AddRsaKeysRotation(rsa, options => keyRotationSection?.Bind(options))
                     .AddRsaEncryptorConfiguration(rsa, options => additionalSigningKeyTypeSection.GetSection(key).Bind(options));
-#if DUENDE
-                identityServerBuilder.Services.AddRsaSigningKeyStore(rsa);
-#endif
+                builder.Services.AddRsaAddValidationKeysStore(rsa);
             }
 
             var dataProtectionsOptions = configuration.Get<DataProtectionOptions>();
