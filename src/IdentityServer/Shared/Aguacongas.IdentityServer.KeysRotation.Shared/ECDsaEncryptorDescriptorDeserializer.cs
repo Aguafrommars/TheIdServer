@@ -47,6 +47,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 "nistP256" => ECCurve.NamedCurves.nistP256,
                 "nistP384" => ECCurve.NamedCurves.nistP384,
                 "nistP521" => ECCurve.NamedCurves.nistP521,
+                "ECDSA_P256" => ECCurve.NamedCurves.nistP256,
+                "ECDSA_P384" => ECCurve.NamedCurves.nistP384,
+                "ECDSA_P521" => ECCurve.NamedCurves.nistP521,
                 _ => throw new InvalidOperationException($"Invalid Curve name : {keyInfo.Curve}")
             };
 
