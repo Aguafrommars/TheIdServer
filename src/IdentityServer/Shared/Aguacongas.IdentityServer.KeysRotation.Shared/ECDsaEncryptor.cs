@@ -12,29 +12,27 @@ using System;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal class RsaEncryptor: ISigningAlgortithmEncryptor
+    internal class ECDsaEncryptor : ISigningAlgortithmEncryptor
     {
-        private readonly RsaSecurityKey _keyDerivationKey;
+        private readonly ECDsaSecurityKey _keyDerivationKey;
 
-        public RsaEncryptor(RsaSecurityKey keyDerivationKey)
+        public ECDsaEncryptor(ECDsaSecurityKey keyDerivationKey)
         {
-            _keyDerivationKey = keyDerivationKey;        
+            _keyDerivationKey = keyDerivationKey;
         }
-
         public SigningCredentials GetSigningCredentials(string signingAlgorithm)
-        => GetSigningCredentials(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
+        => GetSigningCredentials(Enum.Parse<ECDsaSigningAlgorithm>(signingAlgorithm));
 
-        public SigningCredentials GetSigningCredentials(RsaSigningAlgorithm rsaSigningAlgorithm)
-        => new(_keyDerivationKey, rsaSigningAlgorithm.ToString());
+        public SigningCredentials GetSigningCredentials(ECDsaSigningAlgorithm rsaSigningAlgorithm)
+        => new(_keyDerivationKey, rsaSigningAlgorithm.ToString());        
 
         public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
-        => GetSecurityKeyInfo(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
-
-        public SecurityKeyInfo GetSecurityKeyInfo(RsaSigningAlgorithm rsaSigningAlgorithm)
+        => GetSecurityKeyInfo(Enum.Parse<ECDsaSigningAlgorithm>(signingAlgorithm));
+        public SecurityKeyInfo GetSecurityKeyInfo(ECDsaSigningAlgorithm ecdsaSigningAlgorithm)
         => new()
             {
                 Key = _keyDerivationKey,
-                SigningAlgorithm = rsaSigningAlgorithm.ToString()
+                SigningAlgorithm = ecdsaSigningAlgorithm.ToString()
             };
 
         public byte[] Decrypt(ArraySegment<byte> ciphertext, ArraySegment<byte> additionalAuthenticatedData)

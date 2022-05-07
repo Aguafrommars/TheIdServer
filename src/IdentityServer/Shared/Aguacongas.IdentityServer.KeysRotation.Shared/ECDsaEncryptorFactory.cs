@@ -7,27 +7,27 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    public sealed class RsaEncryptorFactory : IAuthenticatedEncryptorFactory
+    public sealed class ECDsaEncryptorFactory : IAuthenticatedEncryptorFactory
     {
         private readonly ILogger _logger;
 
-        public RsaEncryptorFactory(ILoggerFactory loggerFactory)
+        public ECDsaEncryptorFactory(ILoggerFactory loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<RsaEncryptorFactory>();
+            _logger = loggerFactory.CreateLogger<ECDsaEncryptorFactory>();
         }
 
         public IAuthenticatedEncryptor CreateEncryptorInstance(IKey key)
         {
-            if (!(key.Descriptor is RsaEncryptorDescriptor descriptor))
+            if (!(key.Descriptor is ECDsaEncryptorDescriptor descriptor))
             {
                 return null;
             }
 
-            return CreateAuthenticatedEncryptorInstance(descriptor.RsaSecurityKey, descriptor.Configuration);
+            return CreateAuthenticatedEncryptorInstance(descriptor.ECDsaSecurityKey, descriptor.Configuration);
         }
 
-        internal RsaEncryptor CreateAuthenticatedEncryptorInstance(
-            RsaSecurityKey secret,
+        internal ECDsaEncryptor CreateAuthenticatedEncryptorInstance(
+            ECDsaSecurityKey secret,
             SigningAlgorithmConfiguration configuration)
         {
             if (configuration == null)
@@ -35,8 +35,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 return null;
             }
 
-            _logger.LogDebug($"Create new {nameof(RsaEncryptor)}");
-            return new RsaEncryptor(secret);
+            _logger.LogDebug($"Create new {nameof(ECDsaEncryptor)}");
+            return new ECDsaEncryptor(secret);
         }
     }
 }

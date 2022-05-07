@@ -87,7 +87,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOidcStateDataFormatterCache()
 #if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
-                .AddSigningKeyStore()
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -189,6 +188,7 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
                  .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
                  .AddTransient<JSInterop.IJSRuntime, JSRuntime>()
+                 .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>, KeyStore<ECDsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.ECDsaEncryptorDescriptor>>()
                  .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
                  .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
                  .AddAdminApplication(new Settings())

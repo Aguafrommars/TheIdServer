@@ -3,6 +3,14 @@
 <EntitiesGrid Items="@Collection" TableClass="table mb-0">
     <TableHeader>
         <th></th>
+        @if(ShowAlgorithm)
+        {
+            <th scope="col" class="w-25">
+                <SortableHeader Property="Kind"
+                                Text="@Localizer["algorithm"]"
+                                GridState="GridState" />
+            </th>
+        }
         <th scope="col" class="w-25">
             <SortableHeader Property="CreationDate"
                             Text="@Localizer["creation"]"
@@ -13,7 +21,7 @@
                             Text="@Localizer["activation"]"
                             GridState="GridState" />
         </th>
-        <th scope="col" class="w-50">
+        <th scope="col" class="w-25">
             <SortableHeader Property="ExpirationDate"
                             Text="@Localizer["expiration"]"
                             GridState="GridState" />
@@ -35,13 +43,19 @@ else
                     <h3 class="text-warning">*</h3>
                 }
             </td>
+            @if (ShowAlgorithm)
+            {
+                <td class="w-25 @GetRevokedClass(key)">
+                    @key.Kind
+                </td>
+            }
             <td class="w-25 @GetRevokedClass(key)">
                 @key.CreationDate.ToLocalTime()
             </td>
             <td class="w-25 @GetRevokedClass(key)">
                 @key.ActivationDate.ToLocalTime()
             </td>
-            <td class="w-50 @GetRevokedClass(key)">
+            <td class="w-25 @GetRevokedClass(key)">
                 @key.ExpirationDate.ToLocalTime()
             </td>
             <td>

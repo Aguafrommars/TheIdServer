@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    public sealed class RsaEncryptorDescriptorDeserializer : IAuthenticatedEncryptorDescriptorDeserializer
+    public sealed class ECDsaEncryptorDescriptorDeserializer : IAuthenticatedEncryptorDescriptorDeserializer
     {
         /// <summary>
         /// Imports the <see cref="ManagedAuthenticatedEncryptorDescriptor"/> from serialized XML.
@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             //   <masterKey>...</masterKey>
             // </descriptor>
 
-            var configuration = new RsaEncryptorConfiguration();
+            var configuration = new ECDsaEncryptorConfiguration();
 
             var encryptionElement = element.Element("encryption");
             configuration.EncryptionAlgorithmType = FriendlyNameToType((string)encryptionElement.Attribute("algorithm"));
@@ -40,12 +40,27 @@ namespace Aguacongas.IdentityServer.KeysRotation
             byte[] unprotectedSecretRawBytes = new byte[masterKey.Length];
             var segment = new ArraySegment<byte>(unprotectedSecretRawBytes);
             masterKey.WriteSecretIntoBuffer(segment);
-            var parameters = JsonConvert.DeserializeObject<RSAParameters>(Encoding.UTF8.GetString(segment.Array));
-            var key = new RsaSecurityKey(parameters)
+            var keyInfo = JsonConvert.DeserializeObject<ECDsaKeyInfo>(Encoding.UTF8.GetString(segment.Array));
+
+            var curve = keyInfo.Curve switch
+            {
+                "nistP256" => ECCurve.NamedCurves.nistP256,
+                "nistP384" => ECCurve.NamedCurves.nistP384,
+                "nistP521" => ECCurve.NamedCurves.nistP521,
+                _ => throw new InvalidOperationException("Invalid Curve name")
+            };
+
+            var parameters = new ECParameters
+            {
+                Curve = curve,
+                D = keyInfo.D,
+                Q = keyInfo.Q
+            };
+            var key = new ECDsaSecurityKey(ECDsa.Create(parameters))
             {
                 KeyId = (string)element.Element("keyId")
             };
-            return new RsaEncryptorDescriptor(configuration, key);
+            return new ECDsaEncryptorDescriptor(configuration, key);
         }
 
         // Any changes to this method should also be be reflected

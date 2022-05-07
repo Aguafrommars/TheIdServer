@@ -34,9 +34,59 @@ To use the keys rotation mechanism, the *Type* must be **KeysRotation**.
     },
     "RsaEncryptorConfiguration": {
       "EncryptionAlgorithmKeySize": 2048,
-      "RsaSigningAlgorithm": "RS256",
+      "SigningAlgorithm": "RS256"
       "KeyIdSize": 128,
       "KeyRetirement": "180.00:00:00"
+    },
+    "AdditionalSigningKeyType": {
+      "RS384": {
+        "EncryptionAlgorithmKeySize": 2048,
+        "SigningAlgorithm": "RS384"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "RS512": {
+        "EncryptionAlgorithmKeySize": 2048,
+        "SigningAlgorithm": "RS512"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "PS256": {
+        "EncryptionAlgorithmKeySize": 2048,
+        "SigningAlgorithm": "PS256"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "PS384": {
+        "EncryptionAlgorithmKeySize": 2048,
+        "SigningAlgorithm": "PS384"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "PS512": {
+        "EncryptionAlgorithmKeySize": 2048,
+        "SigningAlgorithm": "PS512"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "ES256": {
+        "EncryptionAlgorithmKeySize": 521,
+        "SigningAlgorithm": "ES256"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "ES384": {
+        "EncryptionAlgorithmKeySize": 521,
+        "SigningAlgorithm": "ES384"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      },
+      "ES512": {
+        "EncryptionAlgorithmKeySize": 521,
+        "SigningAlgorithm": "ES512"
+        "KeyIdSize": 128,
+        "KeyRetirement": "180.00:00:00"
+      }
     }
   }
 }
@@ -158,17 +208,44 @@ The section *KeyRotationOptions* congrols key rotation options. It's binded to [
     }
 ```
 
-## RSA key generation options
+## Default RSA key generation options
 
-The section *RsaEncryptorConfiguration* congrols RSA  key generation options. It's binded to [`RsaEncryptorConfiguration`](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#rsaencryptorconfiguration-properties) 
+The section *RsaEncryptorConfiguration* congrols the default RSA key generation options. It's binded to [`RsaEncryptorConfiguration`](../src/IdentityServer/Duende/Aguacongas.IdentityServer.KeysRotation.Duende#rsaencryptorconfiguration-properties) 
 
 ```js
     "RsaEncryptorConfiguration": {
       "EncryptionAlgorithmKeySize": 2048,
-      "RsaSigningAlgorithm": "RS256",
+      "SigningAlgorithm": "RS256",
       "KeyIdSize": 128,
       "KeyRetirement": "180.00:00:00"
     }
+```
+## Additional key type genration options
+
+The section *AdditionalSigningKeyType* controls additional key type generation options. It's a dictionary of ['SigningAlgorithmConfiguration`](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#signingalgorithmconfiguration-properties) indexed by signing algorithm.  
+
+> When the key start with a **E** the encryption algorithm is ECDsa else the encryption algorithm is Rsa.
+
+For exemple if you want to support **ES512** and **PS384** in addition of the default **RS256** algorithm your configuration can look like that:
+
+```js
+"IdentityServer": {
+  "Key": {
+    "Type": "KeysRotation",
+    "StorageKind": "EntityFramework",
+    "RsaEncryptorConfiguration": {
+      "SigningAlgorithm": "RS256",
+    },
+    "AdditionalSigningKeyType": {
+      "PS384": {
+        "SigningAlgorithm": "PS384"
+      },
+      "ES512": {
+        "SigningAlgorithm": "ES512"
+      }
+    }
+  }
+}
 ```
 
 ## Additional resources

@@ -10,8 +10,15 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    public interface IKeyRingStores: IKeyRing, IValidationKeysStore, ISigningCredentialStore
+    public interface IKeyRingStore: IKeyRing, IValidationKeysStore, ISigningCredentialStore
     {
         IKey DefaultKey { get;  }
+    }
+
+    public interface IKeyRingStore<TC, TE> : IKeyRingStore
+        where TC : SigningAlgorithmConfiguration
+        where TE : ISigningAlgortithmEncryptor
+    {
+        string Algorithm { get; }
     }
 }
