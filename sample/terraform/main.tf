@@ -111,6 +111,43 @@ locals {
             }
           }
         }
+        # override key management
+        IdentityServer = {
+          Key = {
+            KeyProtectionOptions = {
+              KeyProtectionKind = "X509",
+              X509CertificatePath = "/usr/local/share/ca-certificates/sk.pfx"
+            },
+            StorageKind = "EntityFramework",
+            Type = "KeysRotation"
+            AdditionalSigningKeyType = {
+              RS384 = {
+                SigningAlgorithm= "RS384"
+              },
+              RS512 = {
+                SigningAlgorithm = "RS512"
+              },
+              PS256 = {
+                SigningAlgorithm = "PS256"
+              },
+              PS384 = {
+                SigningAlgorithm = "PS384"
+              },
+              PS512 = {
+                SigningAlgorithm = "PS512"
+              },
+              ES256 = {
+                SigningAlgorithm = "ES256"
+              },
+              ES384 = {
+                SigningAlgorithm = "ES384"
+              },
+              ES512 = {
+                SigningAlgorithm = "ES512"
+              }
+            }
+          }
+        }
         # enable honeycomb
         OpenTelemetryOptions = {
           Trace = {
