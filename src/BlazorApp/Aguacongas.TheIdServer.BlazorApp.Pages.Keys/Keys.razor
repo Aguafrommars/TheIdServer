@@ -1,7 +1,8 @@
 ﻿@using Aguacongas.IdentityServer.Admin.Http.Store
 @using Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Components
 @inject IKeyStore<IAuthenticatedEncryptorDescriptor> _dataProtectionKeyStore
-@inject IKeyStore<RsaEncryptorDescriptor> _signingKeyStore
+@inject IKeyStore<RsaEncryptorDescriptor> _rsaSigningKeyStore
+@inject IKeyStore<ECDsaEncryptorDescriptor> _ecdsaSigningKeyStore
 @inject Notifier _notifier
 @inject IStringLocalizerAsync<Keys> Localizer
 
@@ -15,6 +16,6 @@
 </div>
 <span class="h5">@Localizer["Signing"]</span><span class="text-black-50"> (keys used to sign JWT tokens)</span>
 <div id="signing-keys">
-    <KeyCollection Collection="_signingKeys" RevokeClick="RevokeSigningKey" />
+    <KeyCollection Collection="_signingKeys" RevokeClick="RevokeSigningKey" ShowAlgorithm="true" />
 </div>
 

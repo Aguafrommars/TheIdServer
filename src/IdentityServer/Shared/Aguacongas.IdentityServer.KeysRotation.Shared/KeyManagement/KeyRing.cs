@@ -5,7 +5,7 @@
 // with:
 // namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement
 // interface implementation chance from orignal IKeyRing
-// add RsaEncryptorConfiguration instance in constructor
+// add T instance in constructor
 // use discard intead of unused instance
 // use inline declaration
 // use object locker instead of this
@@ -27,15 +27,17 @@ using System.Threading.Tasks;
 namespace Aguacongas.IdentityServer.KeysRotation
 {
     /// <summary>
-    /// A basic implementation of <see cref="IKeyRingStores"/>.
+    /// A basic implementation of <see cref="IKeyRingStore"/>.
     /// </summary>
-    internal sealed class KeyRing : IKeyRingStores // interface implementation chance from orignal IKeyRing
+    internal sealed class KeyRing<TC, TE> : IKeyRingStore<TC, TE> // interface implementation change from orignal IKeyRing
+        where TC : SigningAlgorithmConfiguration 
+        where TE : ISigningAlgortithmEncryptor
     {
         private readonly KeyHolder _defaultKeyHolder;
-        private readonly RsaEncryptorConfiguration _configuration;
+        private readonly TC _configuration;
         private readonly Dictionary<Guid, KeyHolder> _keyIdToKeyHolderMap;
 
-        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys, RsaEncryptorConfiguration configuration) // add RsaEncryptorConfiguration intance from orignal
+        public KeyRing(IKey defaultKey, IEnumerable<IKey> allKeys, TC configuration) // add T intance from orignal
         {
             _keyIdToKeyHolderMap = new Dictionary<Guid, KeyHolder>();
             foreach (IKey key in allKeys)
@@ -53,7 +55,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             DefaultKeyId = defaultKey.KeyId;
             _defaultKeyHolder = _keyIdToKeyHolderMap[DefaultKeyId];
-            _configuration = configuration; // add RsaEncryptorConfiguration instance from orignal
+            _configuration = configuration; // add T instance from orignal
         }
 
         public IAuthenticatedEncryptor DefaultAuthenticatedEncryptor
@@ -63,6 +65,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 return _defaultKeyHolder.GetEncryptorInstance(out _); // use discard of unused instance
             }
         }
+
+        public string Algorithm => _configuration.SigningAlgorithm;
 
         public Guid DefaultKeyId { get; }
 
@@ -77,20 +81,20 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public Task<SigningCredentials> GetSigningCredentialsAsync() // interface implementation chance from orignal IKeyRing
         {
-            if (!(_defaultKeyHolder.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor encryptor))
+            if (_defaultKeyHolder.GetEncryptorInstance(out bool isRevoked) is TE encryptor)
             {
-                throw new InvalidOperationException($"The default key is not an Rsa key. Revoked : {isRevoked}");
+                return Task.FromResult(encryptor.GetSigningCredentials(_configuration.SigningAlgorithm));
             }
-            return Task.FromResult(encryptor.GetSigningCredentials(_configuration.RsaSigningAlgorithm));
+            throw new InvalidOperationException($"The default key is not an Rsa nor an ECDsa key. Revoked : {isRevoked}");
         }
 
         public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
         {
             var signingCredentialsList = _keyIdToKeyHolderMap.Values
-                .Where(h => h.GetEncryptorInstance(out bool isRevoked) is RsaEncryptor && !isRevoked && h.Key.ExpirationDate <= DateTimeOffset.UtcNow + _configuration.KeyRetirement)
-                .Select(h => h.GetEncryptorInstance(out _) as RsaEncryptor)
+                .Where(h => h.GetEncryptorInstance(out bool isRevoked) is TC && !isRevoked && h.Key.ExpirationDate <= DateTimeOffset.UtcNow + _configuration.KeyRetirement)
+                .Select(h => (TE)h.GetEncryptorInstance(out _))
                 .Where(e => e != null)
-                .Select((RsaEncryptor e) => e.GetSecurityKeyInfo(_configuration.RsaSigningAlgorithm));
+                .Select((TE e) => e.GetSecurityKeyInfo(_configuration.SigningAlgorithm));
             return Task.FromResult(signingCredentialsList);
         }
 

@@ -13,7 +13,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public async Task GetSigningCredentialsAsync_should_verify_encryptor_type()
         {
-            var sut = new KeyRing(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
+            var sut = new KeyRing<RsaEncryptorConfiguration, RsaEncryptor>(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.GetSigningCredentialsAsync());
         }
@@ -21,7 +21,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void GetAuthenticatedEncryptorByKeyId_should_return_encryptor()
         {
-            var sut = new KeyRing(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
+            var sut = new KeyRing<RsaEncryptorConfiguration, RsaEncryptor>(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
 
             var result = sut.GetAuthenticatedEncryptorByKeyId(Guid.NewGuid(), out bool _);
 
@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void DefaultAuthenticatedEncryptor_should_return_encryptor()
         {
-            var sut = new KeyRing(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
+            var sut = new KeyRing<RsaEncryptorConfiguration, RsaEncryptor>(new Mock<IKey>().Object, new[] { new Mock<IKey>().Object }, new RsaEncryptorConfiguration());
 
             var result = sut.DefaultAuthenticatedEncryptor;
 

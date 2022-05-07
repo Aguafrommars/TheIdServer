@@ -16,7 +16,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// Implements <see cref="IAuthenticatedEncryptorDescriptor"/> for <see cref="RsaSecurityKey"/>
     /// </summary>
     /// <seealso cref="IAuthenticatedEncryptorDescriptor" />
-    public sealed class RsaEncryptorDescriptor : IAuthenticatedEncryptorDescriptor
+    public sealed class RsaEncryptorDescriptor : IAuthenticatedEncryptorDescriptor, ISigningAlgorithmDescriptor
     {
         public RsaEncryptorDescriptor(RsaEncryptorConfiguration configuration, RsaSecurityKey masterKey)
         {
@@ -45,7 +45,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public RsaSecurityKey RsaSecurityKey { get; }
 
-        internal RsaEncryptorConfiguration Configuration { get; }
+        internal SigningAlgorithmConfiguration Configuration { get; }
+
+        SigningAlgorithmConfiguration ISigningAlgorithmDescriptor.Configuration => Configuration;
 
         public XmlSerializedDescriptorInfo ExportToXml()
         {
@@ -69,7 +71,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
             var encryptionElement = new XElement("encryption",
                 new XAttribute("algorithm", Configuration.EncryptionAlgorithmType.AssemblyQualifiedName),
-                new XAttribute("keyLength", Configuration.EncryptionAlgorithmKeySize));
+                new XAttribute("keyLength", Configuration.EncryptionAlgorithmKeySize),
+                new XAttribute("signingAlrotithm", Configuration.SigningAlgorithm));
 
             var secret = new Secret(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(parameters)));
 
@@ -82,7 +85,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return new XmlSerializedDescriptorInfo(rootElement, typeof(RsaEncryptorDescriptorDeserializer));
         }
 
-        private static Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(RsaEncryptorConfiguration configuration)
+        private static Func<RSA> GetAsymmetricBlockCipherAlgorithmFactory(SigningAlgorithmConfiguration configuration)
         {
             // basic argument checking
             if (configuration.EncryptionAlgorithmType == typeof(RSA))
@@ -94,30 +97,30 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 return AlgorithmActivator.CreateFactory<RSA>(configuration.EncryptionAlgorithmType);
             }
         }
+    }
 
+    /// <summary>
+    /// Contains helper methods for generating cryptographic algorithm factories.
+    /// </summary>
+    internal static class AlgorithmActivator
+    {
         /// <summary>
-        /// Contains helper methods for generating cryptographic algorithm factories.
+        /// Creates a factory that wraps a call to <see cref="Activator.CreateInstance{T}"/>.
         /// </summary>
-        private static class AlgorithmActivator
+        public static Func<T> CreateFactory<T>(Type implementation)
         {
-            /// <summary>
-            /// Creates a factory that wraps a call to <see cref="Activator.CreateInstance{T}"/>.
-            /// </summary>
-            public static Func<T> CreateFactory<T>(Type implementation)
-            {
-                return ((IActivator<T>)Activator.CreateInstance(typeof(AlgorithmActivatorCore<>).MakeGenericType(implementation))).Creator;
-            }
-
-            private interface IActivator<out T>
-            {
-                Func<T> Creator { get; }
-            }
-
-            private sealed class AlgorithmActivatorCore<T> : IActivator<T> where T : new()
-            {
-                public Func<T> Creator { get; } = Activator.CreateInstance<T>;
-            }
+            return ((IActivator<T>)Activator.CreateInstance(typeof(AlgorithmActivatorCore<>).MakeGenericType(implementation))).Creator;
         }
 
+        private interface IActivator<out T>
+        {
+            Func<T> Creator { get; }
+        }
+
+        private sealed class AlgorithmActivatorCore<T> : IActivator<T> where T : new()
+        {
+            public Func<T> Creator { get; } = Activator.CreateInstance<T>;
+        }
     }
+
 }

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -18,23 +20,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <typeparam name="T"></typeparam>
     public class KeyManagerWrapper<T> where T : IAuthenticatedEncryptorDescriptor
     {
-        private readonly IKeyManager _keyManager;
+        private readonly IEnumerable<Tuple<IKeyManager, string, IEnumerable<IKey>>> _keyManagerList;
         private readonly IDefaultKeyResolver _defaultKeyResolver;
         private readonly IProviderClient _providerClient;
 
         /// <summary>
-        /// Gets the key manager.
-        /// </summary>
-        /// <value>
-        /// The key manager.
-        /// </value>
-        public IKeyManager Manager => _keyManager;
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="KeyManagerWrapper{T}" /> class.
         /// </summary>
-        /// <param name="keyManager">The key manager.</param>
+        /// <param name="keyManagerList">The list of key manager.</param>
         /// <param name="defaultKeyResolver">The default key resolver.</param>
         /// <param name="providerClient">The provider client.</param>
         /// <exception cref="ArgumentNullException">
@@ -47,9 +40,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <exception cref="ArgumentNullException">keyManager
         /// or
         /// defaultKeyResolver</exception>
-        public KeyManagerWrapper(IKeyManager keyManager, IDefaultKeyResolver defaultKeyResolver, IProviderClient providerClient)
+        public KeyManagerWrapper(IEnumerable<Tuple<IKeyManager, string, IEnumerable<IKey>>> keyManagerList, IDefaultKeyResolver defaultKeyResolver, IProviderClient providerClient)
         {
-            _keyManager = keyManager ?? throw new ArgumentNullException(nameof(keyManager));
+            _keyManagerList = keyManagerList ?? throw new ArgumentNullException(nameof(keyManagerList));
             _defaultKeyResolver = defaultKeyResolver ?? throw new ArgumentNullException(nameof(defaultKeyResolver));
             _providerClient = providerClient ?? throw new ArgumentNullException(nameof(providerClient));
         }
@@ -60,7 +53,11 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <returns></returns>
         public PageResponse<Key> GetAllKeys()
         {
-            return _keyManager.GetAllKeys().ToPageResponse(_defaultKeyResolver);
+            return new PageResponse<Key>
+            {
+                Items = _keyManagerList.SelectMany(t => t.Item3.Select(k => new Tuple<IKey, string>(k, t.Item2)).ToPageResponse(_defaultKeyResolver).Items),
+                Count = _keyManagerList.Sum(t => t.Item3.Select(k => new Tuple<IKey, string>(k, t.Item2)).ToPageResponse(_defaultKeyResolver).Count)
+            };
         }
 
         /// <summary>
@@ -70,9 +67,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="reason">The reason.</param>
         public Task RevokeKey(Guid id, string reason)
         {
-            _keyManager.RevokeKey(id, reason);
+            foreach (var manager in _keyManagerList
+                .Where(t => t.Item1.GetAllKeys().Any(k => k.KeyId == id))
+                .Select(t => t.Item1))
+            {
+                manager.RevokeKey(id, reason);
+            }
             return _providerClient.KeyRevokedAsync(typeof(T).Name, id.ToString());
         }
-
     }
 }
