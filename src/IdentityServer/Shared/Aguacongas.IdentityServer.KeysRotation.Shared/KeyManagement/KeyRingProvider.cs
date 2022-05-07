@@ -219,6 +219,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             if (_keyManagementOptions.AuthenticatedEncryptorConfiguration is SigningAlgorithmConfiguration configuration)
             {
                 allKeys = allKeys.Where(k => k.Descriptor is ISigningAlgorithmDescriptor descriptor && 
+                    descriptor.Configuration.EncryptionAlgorithmType == configuration.EncryptionAlgorithmType &&
                     descriptor.Configuration.EncryptionAlgorithmKeySize == configuration.EncryptionAlgorithmKeySize &&
                     (descriptor.Configuration.SigningAlgorithm == configuration.SigningAlgorithm || 
                         (descriptor.Configuration.SigningAlgorithm is null && configuration.IsDefaultSigningAlgorithm))).ToArray();
