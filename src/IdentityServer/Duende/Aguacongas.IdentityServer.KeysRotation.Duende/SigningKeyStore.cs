@@ -32,15 +32,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende
 
         public Task<IEnumerable<SerializedKey>> LoadKeysAsync()
         {
-            var keyInfos = _keyringProvider.KeyManager.GetAllKeys().Where(k => !k.IsRevoked);
-            if (typeof(TC) == typeof(RsaEncryptorConfiguration))
-            {
-                keyInfos = keyInfos.Where(k => k.Descriptor is RsaEncryptorDescriptor);
-            }
-            else
-            {
-                keyInfos = keyInfos.Where(k => k.Descriptor is ECDsaEncryptorDescriptor);
-            }
+            var keyInfos = _keyringProvider.GetAllKeys().Where(k => !k.IsRevoked);
 
             return Task.FromResult(keyInfos.Select(i =>
             {
