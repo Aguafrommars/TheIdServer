@@ -1,6 +1,7 @@
 ﻿using Aguacongas.TheIdServer.IntegrationTest;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -39,7 +40,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Areas.Identity.Pages.Ma
             Assert.Contains("No session", content1);
 
             using var scope = _factory.Services.CreateScope();
-            var ticketService = scope.ServiceProvider.GetRequiredService<IServerSideTicketService>();
+            var ticketService = scope.ServiceProvider.GetRequiredService<IServerSideTicketStore>();
             await ticketService.StoreAsync(new AuthenticationTicket(testUserService.User ?? throw new Exception(),
                 new AuthenticationProperties(new Dictionary<string, string?>
                 {
@@ -65,7 +66,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Areas.Identity.Pages.Ma
             testUserService.SetTestUser(true, new[] { new Claim("sub", subjectId) });
 
             using var scope = _factory.Services.CreateScope();
-            var ticketService = scope.ServiceProvider.GetRequiredService<IServerSideTicketService>();
+            var ticketService = scope.ServiceProvider.GetRequiredService<IServerSideTicketStore>();
             await ticketService.StoreAsync(new AuthenticationTicket(testUserService.User ?? throw new Exception(),
                 new AuthenticationProperties(new Dictionary<string, string?>
                 {
