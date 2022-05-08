@@ -2,7 +2,6 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
@@ -561,13 +560,13 @@ namespace Aguacongas.TheIdServer
         }
 
 #if DUENDE
-        private static void SeedClientAllowedIdentityTokenSigningAlgorithms(IAdminStore<ClientAllowedIdentityTokenSigningAlgorithm> clientAllowedIdentityTokenSigningAlgorithmStore, ISModels.Client client)
+        private static void SeedClientAllowedIdentityTokenSigningAlgorithms(IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm> clientAllowedIdentityTokenSigningAlgorithmStore, ISModels.Client client)
         {
             foreach (var algorythm in client.AllowedIdentityTokenSigningAlgorithms.Where(a => IdentityServerConstants.SupportedSigningAlgorithms.Contains(a)))
             {
                 try
                 {
-                    clientAllowedIdentityTokenSigningAlgorithmStore.CreateAsync(new ClientAllowedIdentityTokenSigningAlgorithm
+                    clientAllowedIdentityTokenSigningAlgorithmStore.CreateAsync(new Entity.ClientAllowedIdentityTokenSigningAlgorithm
                     {
                         ClientId = client.ClientId,
                         Id = Guid.NewGuid().ToString(),
