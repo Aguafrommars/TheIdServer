@@ -137,37 +137,43 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 {
                     break;
                 }
-                var jwk = new JsonWebKey();
-                while (reader.TokenType != JsonToken.EndObject)
-                {
-                    reader.Read();
-                    if (reader.TokenType != JsonToken.PropertyName)
-                    {
-                        continue;
-                    }
-
-                    var p = propertyList.FirstOrDefault(p => p.Name == (string)reader.Value);
-
-                    if (p == null)
-                    {
-                        continue;
-                    }
-
-                    if (reader.Value is string value && value == nameof(JsonWebKey.x5c))
-                    {
-                        var list = GetValues(reader);
-                        p.SetValue(jwk, list.ToArray());
-                        continue;
-                    }
-
-                    p.SetValue(jwk, reader.ReadAsString());
-                }
-                keys.Add(jwk);
+                keys.Add(GetJsonWebToken(reader, propertyList));
             }
             property.SetValue(existingValue, new JsonWebKeys
             {
                 Keys = keys
             });
+        }
+
+        private static JsonWebKey GetJsonWebToken(JsonReader reader, PropertyInfo[] propertyList)
+        {
+            var jwk = new JsonWebKey();
+            while (reader.TokenType != JsonToken.EndObject)
+            {
+                reader.Read();
+                if (reader.TokenType != JsonToken.PropertyName)
+                {
+                    continue;
+                }
+
+                var p = propertyList.FirstOrDefault(p => p.Name == (string)reader.Value);
+
+                if (p == null)
+                {
+                    continue;
+                }
+
+                if (reader.Value is string value && value == nameof(JsonWebKey.x5c))
+                {
+                    var list = GetValues(reader);
+                    p.SetValue(jwk, list.ToArray());
+                    continue;
+                }
+
+                p.SetValue(jwk, reader.ReadAsString());
+            }
+
+            return jwk;
         }
 
         private static List<string> GetValues(JsonReader reader)
