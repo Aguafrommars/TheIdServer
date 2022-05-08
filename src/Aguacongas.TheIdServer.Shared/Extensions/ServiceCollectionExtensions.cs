@@ -105,6 +105,7 @@ namespace Microsoft.Extensions.DependencyInjection
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
+                .AddJwtBearerClientAuthentication()
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
 #if DUENDE
