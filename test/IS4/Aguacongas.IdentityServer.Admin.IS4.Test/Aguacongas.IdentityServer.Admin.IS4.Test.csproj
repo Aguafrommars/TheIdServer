@@ -48,4 +48,10 @@
     <ProjectReference Include="..\..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.Admin.IS4\Aguacongas.IdentityServer.Admin.IS4.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="client-registration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
