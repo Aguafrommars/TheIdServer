@@ -46,7 +46,6 @@ using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncr
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Aguacongas.TheIdServer.Options.OpenTelemetry;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -13,6 +13,7 @@
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
+		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 
