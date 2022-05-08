@@ -153,6 +153,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
                         continue;
                     }
 
+                    if (reader.Value is string value && value == nameof(JsonWebKey.x5c))
+                    {
+                        var list = GetValues(reader);
+                        p.SetValue(jwk, list.ToArray());
+                        continue;
+                    }
+
                     p.SetValue(jwk, reader.ReadAsString());
                 }
                 keys.Add(jwk);
@@ -161,6 +168,22 @@ namespace Aguacongas.IdentityServer.Admin.Services
             {
                 Keys = keys
             });
+        }
+
+        private static List<string> GetValues(JsonReader reader)
+        {
+            do
+            {
+                reader.Read();
+            } while (reader.TokenType != JsonToken.String);
+
+            var list = new List<string>();
+            while (reader.TokenType == JsonToken.String)
+            {
+                list.Add(reader.ReadAsString());
+            }
+
+            return list;
         }
 
         private JObject SerializedProperties(object value)
