@@ -12,8 +12,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 #if DUENDE
+using Duende.IdentityServer.Configuration;
 using static Duende.IdentityServer.IdentityServerConstants;
 #else
+using IdentityServer4.Configuration;
 using static IdentityServer4.IdentityServerConstants;
 #endif
 
@@ -21,6 +23,29 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityServerBuilderExtensions
     {
+        public static IIdentityServerBuilder ConfigureDiscovey(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
+        {
+            identityServerBuilder.Services.Configure<IdentityServerOptions>(options =>
+            {
+                var discovery = options.Discovery;
+                var customEntriesOfStringArray = configuration.GetSection("CustomEntriesOfStringArray").Get<Dictionary<string, string[]>>() ?? new Dictionary<string, string[]>(0);
+                foreach(var entry in customEntriesOfStringArray)
+                {
+                    discovery.CustomEntries.Add(entry.Key, entry.Value);
+                }
+                var customEntriesOfString = configuration.GetSection("CustomEntriesOfString").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>(0);
+                foreach (var entry in customEntriesOfString)
+                {
+                    discovery.CustomEntries.Add(entry.Key, entry.Value);
+                }
+                var customEntriesOfBool = configuration.GetSection("CustomEntriesOfBool").Get<Dictionary<string, bool>>() ?? new Dictionary<string, bool>(0);
+                foreach (var entry in customEntriesOfBool)
+                {
+                    discovery.CustomEntries.Add(entry.Key, entry.Value);
+                }
+            });
+            return identityServerBuilder;
+        }
         public static IIdentityServerBuilder ConfigureKey(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
         {
             if (configuration.GetValue<KeyKinds>("Type") != KeyKinds.KeysRotation)
