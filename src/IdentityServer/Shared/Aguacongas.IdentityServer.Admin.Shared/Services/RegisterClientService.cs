@@ -251,23 +251,23 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     }) : new List<ClientLocalizedResource>(0))
                     .ToList(),
                 Properties = new List<ClientProperty>
-                {
-                    new ClientProperty
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "applicationType",
-                        Value = registration.ApplicationType
-                    }
-                }.Union(registration.Contacts != null ? new List<ClientProperty>
-                {
-                    new ClientProperty
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "applicationType",
+                            Value = registration.ApplicationType
+                        }
+                    }.Union(registration.Contacts != null ? new List<ClientProperty>
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "contacts",
-                        Value = string.Join("; ", registration.Contacts)
-                    }
-                } : new List<ClientProperty>(0))
-                .ToList(),
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "contacts",
+                            Value = string.Join("; ", registration.Contacts)
+                        }
+                    } : new List<ClientProperty>(0))
+                    .ToList(),
                 SlidingRefreshTokenLifetime = _defaultValues.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = _defaultValues.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = _defaultValues.UserCodeType,
