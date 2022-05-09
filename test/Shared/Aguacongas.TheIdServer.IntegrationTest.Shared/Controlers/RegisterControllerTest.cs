@@ -2,12 +2,16 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
+using Aguacongas.TheIdServer.UI;
 #if DUENDE
 using Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Models;
 #endif
 using IdentityModel;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -22,25 +26,26 @@ using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 {
+    [Collection(BlazorAppCollection.Name)]
     public class RegisterControllerTest
     {
-        [Fact(Skip = "involved in crash")]
+        private WebApplicationFactory<AccountController> _factory;
+        public RegisterControllerTest(TheIdServerFactory factory)
+        {
+            _factory = factory;
+        }
+
+        [Fact]
         public async Task CreateAsync_should_register_a_new_client()
         {
-            var configuration = new Dictionary<string, string>
-            {
-                ["Seed"] = "false"
-            };
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: configuration);
+            using var client = _factory.CreateClient();
 
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
                         new Claim("role", "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
-
-            var client = sut.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -79,7 +84,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                         e = "AQAB",
                         use = "sig",
                         alg = "RS256",
-                        n = "qBulUDaYV027shwCq82LKIevXdQL2pCwXktQgf2TT3c496pxGdRuxcN_MHGKWNOGQsDLuAVk6NjxYF95obDUFrDiugMuXrvptPrTO8dzTX83k_6ngtjOtx2UrTk_7f0EYNrusykrsB-cOvCMREsfktlsavvMKBGrzpxaHlRxcSsMxzB0dddDSlH8mxlzOGcbBuvZnbNg0EUuQC4jvM9Gy6gUEcoU0S19XnUcgwLGLPfIX2dMO4FxTAsaaTYT7msxGMBNIVUTVnL0HctYr0YVYu0hD9rePnvxJ_-OwOdxIETQlR9vp61xFr4juzyyMWTrjCACxxLm-CyEQGjwx2YZaw"
+                        n = "qBulUDaYV027shwCq82LKIevXdQL2pCwXktQgf2TT3c496pxGdRuxcN_MHGKWNOGQsDLuAVk6NjxYF95obDUFrDiugMuXrvptPrTO8dzTX83k_6ngtjOtx2UrTk_7f0EYNrusykrsB-cOvCMREsfktlsavvMKBGrzpxaHlRxcSsMxzB0dddDSlH8mxlzOGcbBuvZnbNg0EUuQC4jvM9Gy6gUEcoU0S19XnUcgwLGLPfIX2dMO4FxTAsaaTYT7msxGMBNIVUTVnL0HctYr0YVYu0hD9rePnvxJ_-OwOdxIETQlR9vp61xFr4juzyyMWTrjCACxxLm-CyEQGjwx2YZaw",
+                        x5c = new []
+                        {
+                            "MIICyTCCAbGgAwIBAgIGAYCfoKwLMA0GCSqGSIb3DQEBCwUAMBsxGTAXBgNVBAMMEG9pZGNfY2VydF9jbGllbnQwHhcNMjIwNTA3MTc0NTQ4WhcNMjMwNTA3MTc0NTQ4WjAbMRkwFwYDVQQDDBBvaWRjX2NlcnRfY2xpZW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1YSRksvd9cIrWXhtCphHTQQ0GfjTApePNUoCEPq6aXlGOV0S3NJWgbozpYfqsK6QSHRm5kUtHlM1VIFa1AXa1zwL5BKMkkbLbwEgPJEhMAt0uURn0/vu5YaiNA/gIBJstSaNJpb0dSr7/RomWa9hVU3TTaDJE9xPs/FJjaLdbKQDaITCGA7fXmrngfAGMCEfEY36TJ6heULdshKD3AbBaCc36gNLDgld8FFgBJD4Cq/ARBaumtTEfRpyEn8ryU0+J0aS8LHrFQ4vIogeAXsWmtL+tPCU5C0NbDZ6zsbE5nw6OQvTf9fAI3O5cu2XbEP4b7hEo5S0TdWS8jHCZL9WcwIDAQABoxMwETAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQA19YAQvB2nRFL1pxeo2MphARg39vgZUQ1lJW6QyvvG8tu2DaSFhzxoTrRAeJEYqc9r01k1fDVm20fD0JPN5I497JbMoqN1DLlkrLwlr8wCtYYkj5yz72st+LnB1ytTFyrjKsP3pfuwiC69E4+Vg1KyY3QgzGFrnZ5zWPvUAWLTz05CyDagMLeJiF5DZW3eN51A+muxsyRXoyI95lTNMzw7mOYEIqns0H8ZOsqRAXGkzY8Mv0IzU71IRCtuWd6JiUPKrE1JbwcYOt2WNGeQFD0qMEi7RmSBi6kVexaadIA7qAeBibSuBkj764OjG7WHd51O4ZiRDsfJGmh47yZ5dw1R"
+                        }
                     }
                 }
             };
@@ -162,15 +171,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task CreateAsync_should_validate_request()
         {
-            using var sut = TestUtils.CreateTestServer();
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     {
                         new Claim("role", "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -571,15 +579,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [InlineData("nntp://test@test.com")]
         public async Task CreateAsync_should_validate_native_redirect_uri_scheme(string redirectUri)
         {
-            using var sut = TestUtils.CreateTestServer();
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
                         new Claim(JwtClaimTypes.Role, "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -610,13 +617,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task CreateAsync_should_validate_caller()
         {
-            using var sut = TestUtils.CreateTestServer(configurationOverrides: new Dictionary<string, string>
-            {
-                ["DynamicClientRegistrationOptions:AllowedContacts:0:Contact"] = "test",
-                ["DynamicClientRegistrationOptions:AllowedContacts:0:AllowedHosts:0"] = "localhost",
-            });
-
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -629,13 +630,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://localhost"
+                    "http://www.certification.openid.net"
                 },
                 Contacts = new[]
                 {
-                    "test"
+                    "certification@oidf.org"
                 }
             };
+
+            var configuration = _factory.Services.GetRequiredService<IConfiguration>();
+            configuration["DynamicClientRegistrationOptions:Protected"] = "true";
+
+            var testUserService = _factory.Services.GetRequiredService<TestUserService>();
+            testUserService.SetTestUser(false);
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
             {
@@ -658,10 +665,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 using var response = await client.PostAsync("/api/register", request);
 
-
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
             }
-
 
             registration.Contacts = new[]
             {
@@ -681,15 +686,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task UpdateAsync_should_update_client()
         {
-            using var sut = TestUtils.CreateTestServer();
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
                         new Claim(JwtClaimTypes.Role, "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -886,15 +890,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task GetAsync_should_return_registration()
         {
-            using var sut = TestUtils.CreateTestServer();
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[]
                     { 
                         new Claim(JwtClaimTypes.Role, "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
@@ -997,15 +1000,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         [Fact]
         public async Task DeleteAsync_should_delete_client()
         {
-            using var sut = TestUtils.CreateTestServer();
-            sut.Services.GetRequiredService<TestUserService>()
+            _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
                         new Claim(JwtClaimTypes.Role, "Is4-Writer"),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
-            var client = sut.CreateClient();
+            var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {

@@ -175,7 +175,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
-            Assert.StartsWith("/Account/Login", response.Headers.Location.OriginalString);
+            Assert.StartsWith("/Account/Login".ToUpperInvariant(), response.Headers.Location.OriginalString.ToUpperInvariant());
         }
 
         [Fact]

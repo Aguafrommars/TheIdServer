@@ -106,6 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
                 .AddJwtBearerClientAuthentication()
+                .AddMutualTlsSecretValidators()
                 .ConfigureDiscovey(configurationManager.GetSection(nameof(IdentityServerOptions)))
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
