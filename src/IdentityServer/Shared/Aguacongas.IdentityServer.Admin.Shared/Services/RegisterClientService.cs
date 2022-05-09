@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -127,6 +128,32 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #endif
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
+
+            var clientCertificate = await httpContext.Connection.GetClientCertificateAsync();
+            if (clientCertificate is not null)
+            {
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+#if DUENDE
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateBase64,
+#else
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateBase64,
+#endif
+                    Value = Convert.ToBase64String(clientCertificate.Export(X509ContentType.Cert))
+                });
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+#if DUENDE
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
+#else
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
+#endif
+                    Value = clientCertificate.Thumbprint
+                });
+            }
+
             if (!sercretList.Any())
             {
                 secret = Guid.NewGuid().ToString();
