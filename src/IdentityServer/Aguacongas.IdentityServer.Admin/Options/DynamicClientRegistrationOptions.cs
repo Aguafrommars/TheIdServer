@@ -16,6 +16,11 @@ namespace Aguacongas.IdentityServer.Admin.Options
         /// The allowed contacts.
         /// </value>
         public IEnumerable<AllowedContact> AllowedContacts { get; set; }
+
+        /// <summary>
+        /// When true, only allowed contacts or authenticated user with Is4-Writer role can use the registration endpoint. Default is true.
+        /// </summary>
+        public bool Protected { get; set; } = true;
     }
 
     /// <summary>

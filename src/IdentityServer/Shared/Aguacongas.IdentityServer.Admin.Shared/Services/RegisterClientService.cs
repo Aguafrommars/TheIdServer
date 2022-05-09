@@ -110,7 +110,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
             registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
-            var secret = Guid.NewGuid().ToString();
+            string secret = null;
             
             var serializerSettings = new JsonSerializerSettings
             {
@@ -127,16 +127,20 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #endif
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
-            sercretList.Add(new ClientSecret
+            if (!sercretList.Any())
             {
-                Id = Guid.NewGuid().ToString(),
+                secret = Guid.NewGuid().ToString();
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
 #if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
 #else
                 Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
 #endif
-                Value = secret
-            });
+                    Value = secret
+                });
+            }
 
             var client = new Client
             {
@@ -274,9 +278,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 UserSsoLifetime = _defaultValues.UserSsoLifetime,
                 PolicyUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
                 TosUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
+#if DUENDE
+                CibaLifetime = _defaultValues.CibaLifetime,
+                PollingInterval = _defaultValues.PollingInterval,
+                CoordinateLifetimeWithUserSession = _defaultValues.CoordinateLifetimeWithUserSession,
+#endif
+                RegistrationToken = Guid.NewGuid()
             };
-
-            client.RegistrationToken = Guid.NewGuid();
 
             await _clientStore.CreateAsync(client).ConfigureAwait(false);
 
@@ -403,7 +411,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
-            if (!(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
+            if (_dymamicClientRegistrationOptions.Protected && !(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
             {
                 var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
                 if (allowedContact == null)
@@ -591,12 +599,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void Validate(ClientRegisteration registration, Dictionary<string, object> discovery)
         {
-            registration.GrantTypes ??= new List<string>
+            registration.GrantTypes ??= new []
             {
                 "authorization_code"
             };
+            if (!registration.GrantTypes.Any())
+            {
+                registration.GrantTypes = new[] { "authorization_code" };
+            }
 
-            if (registration.RedirectUris == null || !registration.RedirectUris.Any())
+            registration.RedirectUris ??= Array.Empty<string>();
+            if (IsWebClient(registration) && !registration.RedirectUris.Any())
             {
                 throw new RegistrationException("invalid_redirect_uri", "RedirectUri is required.");
             }
@@ -630,16 +643,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             ValidateUris(redirectUriList, registration.PolicyUris, "invalid_policy_uri", "PolicyUri");
 
-            if (registration.GrantTypes == null || !registration.GrantTypes.Any())
-            {
-                registration.GrantTypes = new[] { "authorization_code" };
-            }
             ValidateGrantType(registration.GrantTypes, discovery["grant_types_supported"] as IEnumerable<string>);
 
-            if (registration.ResponseTypes == null || !registration.ResponseTypes.Any())
-            {
-                registration.ResponseTypes = new[] { "code" };
-            }
+            registration.ResponseTypes ??= Array.Empty<string>();
 
             ValidateResponseType(registration.GrantTypes, registration.ResponseTypes, discovery["response_types_supported"] as IEnumerable<string>);
         }
@@ -739,6 +745,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     throw new RegistrationException(errorCode, $"{uriName} '{value}' host doesn't match a redirect uri host.");
                 }
             }
+        }
+
+        public static bool IsWebClient(ClientRegisteration client)
+        {
+            return client.GrantTypes.Any(g => g == "authorization_code" ||
+                    g == "hybrid" ||
+                    g == "implicit" ||
+                    g == "urn:ietf:params:oauth:grant-type:device_code");
         }
     }
 }
