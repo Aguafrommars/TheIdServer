@@ -629,11 +629,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://localhost"
+                    "http://www.certification.openid.net"
                 },
                 Contacts = new[]
                 {
-                    "test"
+                    "certification@oidf.org"
                 }
             };
 
