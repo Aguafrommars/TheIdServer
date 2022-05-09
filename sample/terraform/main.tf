@@ -101,6 +101,33 @@ locals {
     deploymentAnnotations = local.deploymentAnnotations
     appSettings = {
       file = {
+        # override identity server option
+        IdentityServerOptions = {
+          MutualTls = {
+            Enabled = true
+          }
+          EnableServerSideSession = true
+          ServerSideSessions = {
+            UserDisplayNameClaimType = "name"
+            RemoveExpiredSessions = true
+            ExpiredSessionsTriggerBackchannelLogout = true
+            RemoveExpiredSessionsFrequency = "00:10:00"
+            RemoveExpiredSessionsBatchSize = 100
+          }
+          CustomEntriesOfStringArray = {
+            token_endpoint_auth_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
+          }
+        }
         # override serilog settings
         Serilog = {
           MinimumLevel = {
