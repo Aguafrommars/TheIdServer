@@ -774,7 +774,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
-        public static bool IsWebClient(ClientRegisteration client)
+        private static bool IsWebClient(ClientRegisteration client)
         {
             return client.GrantTypes.Any(g => g == "authorization_code" ||
                     g == "hybrid" ||
