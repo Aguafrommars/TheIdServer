@@ -11,6 +11,7 @@ using IdentityServer4.Models;
 #endif
 using IdentityModel;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -637,6 +638,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 }
             };
 
+            var configuration = _factory.Services.GetRequiredService<IConfiguration>();
+            configuration["DynamicClientRegistrationOptions:Protected"] = "true";
+
+            var testUserService = _factory.Services.GetRequiredService<TestUserService>();
+            testUserService.SetTestUser(false);
+
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
             {
                 using var response = await client.PostAsync("/api/register", request);
@@ -658,10 +665,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             {
                 using var response = await client.PostAsync("/api/register", request);
 
-
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
             }
-
 
             registration.Contacts = new[]
             {
