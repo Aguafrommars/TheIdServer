@@ -126,7 +126,22 @@ locals {
               "RS384",
               "RS512"
             ]
+            backchannel_authentication_request_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
           }
+        }
+        # override dynamic client registration options
+        DynamicClientRegistrationOptions = {
+          Protected = false
         }
         # override serilog settings
         Serilog = {
