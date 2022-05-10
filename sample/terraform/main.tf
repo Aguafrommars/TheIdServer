@@ -137,6 +137,9 @@ locals {
               "RS384",
               "RS512"
             ]
+            acr_values_supported = [
+              "idp:local"
+            ]
           }
         }
         # override dynamic client registration options
