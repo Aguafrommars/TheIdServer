@@ -181,12 +181,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
             do
             {
                 reader.Read();
+            } while (reader.TokenType != JsonToken.StartArray);
+            do
+            {
+                reader.Read();
             } while (reader.TokenType != JsonToken.String);
 
             var list = new List<string>();
             while (reader.TokenType == JsonToken.String)
             {
-                list.Add(reader.ReadAsString());
+                list.Add(reader.Value as string);
+                reader.Read();
             }
 
             return list;
