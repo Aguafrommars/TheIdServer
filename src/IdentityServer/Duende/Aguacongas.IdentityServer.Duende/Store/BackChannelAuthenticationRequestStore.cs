@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             var entity = base.CreateEntity(dto, clientId, subjectId, expiration);            
             entity.Id = dto.InternalId;
-            entity.SessionId = dto.SessionId;
+            entity.SessionId = dto.SessionId ?? Guid.NewGuid().ToString();
             return entity;
         }
     }
