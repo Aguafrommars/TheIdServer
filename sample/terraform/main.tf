@@ -101,6 +101,12 @@ locals {
     deploymentAnnotations = local.deploymentAnnotations
     appSettings = {
       file = {
+        # override certificate authentication options
+        CertificateAuthenticationOptions = {
+          AllowedCertificateTypes = "All"
+          ValidateCertificateUse = false
+          ValidateValidityPeriod = false
+        }
         # override identity server option
         IdentityServerOptions = {
           MutualTls = {
