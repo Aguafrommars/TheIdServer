@@ -46,6 +46,7 @@ using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncr
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -167,7 +168,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (mutulaTlsOptions?.Enabled == true)
             {
                 // MutualTLS
-                authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme);
+                authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme, 
+                    options => configurationManager.GetSection(nameof(CertificateAuthenticationOptions)).Bind(options));
             }
                 
 
