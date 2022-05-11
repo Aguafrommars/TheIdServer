@@ -39,17 +39,17 @@
 		<PackageReference Include="Azure.Identity" Version="1.6.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="0.21.0-beta" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.5" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" PrivateAssets="All" />
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.2.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.0.0-rc9.3" />
