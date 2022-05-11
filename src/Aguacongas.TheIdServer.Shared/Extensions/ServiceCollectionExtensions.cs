@@ -155,13 +155,21 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
-            services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
+            var authenticationBuilder = services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies(true))
                 .AddAuthentication()
                 .AddJwtBearer("Bearer", options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
+
+            var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<MutualTlsOptions>();
+            if (mutulaTlsOptions.Enabled)
+            {
+                // MutualTLS
+                authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme);
+            }
+                
 
             var mvcBuilder = services.Configure<SendGridOptions>(configurationManager)
                 .AddLocalization()
