@@ -12,13 +12,11 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
             migrationBuilder.AddColumn<int>(
                 name: "CibaLifetime",
                 table: "Clients",
-                type: "int",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "PollingInterval",
                 table: "Clients",
-                type: "int",
                 nullable: true);
         }
 

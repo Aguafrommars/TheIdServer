@@ -14,6 +14,7 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

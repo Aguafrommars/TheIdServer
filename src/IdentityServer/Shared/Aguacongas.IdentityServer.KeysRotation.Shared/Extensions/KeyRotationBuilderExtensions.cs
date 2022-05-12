@@ -26,7 +26,11 @@ using Raven.Client.Documents.Session;
 using Raven.Client.Documents;
 using mongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
 using MongoDB.Driver;
-
+#if DUENDE
+using static Duende.IdentityServer.IdentityServerConstants;
+#else
+using static IdentityServer4.IdentityServerConstants;
+#endif
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class KeyRotationBuilderExtensions
@@ -35,9 +39,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Configures the key management options for the key rotation system.
         /// </summary>
         /// <param name="builder">The <see cref="IKeyRotationBuilder"/>.</param>
-        /// <param name="setupAction">An <see cref="Action{RsaEncryptorConfiguration}"/> to configure the provided <see cref="RsaEncryptorConfiguration"/>.</param>
+        /// <param name="setupAction">An <see cref="Action{ECDsaEncryptorConfiguration}"/> to configure the provided <see cref="ECDsaEncryptorConfiguration"/>.</param>
+        /// <param name="signingAlgorithm">The siging algorithm</param>
         /// <returns>A reference to the <see cref="IKeyRotationBuilder" /> after this operation has completed.</returns>
-        public static IKeyRotationBuilder AddRsaEncryptorConfiguration(this IKeyRotationBuilder builder, Action<RsaEncryptorConfiguration> setupAction)
+        public static IKeyRotationBuilder AddECDsaEncryptorConfiguration(this IKeyRotationBuilder builder, ECDsaSigningAlgorithm signingAlgorithm, Action<ECDsaEncryptorConfiguration> setupAction)
         {
             if (builder == null)
             {
@@ -53,7 +58,41 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
-                    setupAction(options.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration);
+                    if (options.AuthenticatedEncryptorConfiguration is ECDsaEncryptorConfiguration configuration && configuration.SigningAlgorithm == signingAlgorithm.ToString())
+                    {
+                        setupAction(configuration);
+                    }
+                });
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures the key management options for the key rotation system.
+        /// </summary>
+        /// <param name="builder">The <see cref="IKeyRotationBuilder"/>.</param>
+        /// <param name="setupAction">An <see cref="Action{RsaEncryptorConfiguration}"/> to configure the provided <see cref="RsaEncryptorConfiguration"/>.</param>
+        /// <returns>A reference to the <see cref="IKeyRotationBuilder" /> after this operation has completed.</returns>
+        public static IKeyRotationBuilder AddRsaEncryptorConfiguration(this IKeyRotationBuilder builder, RsaSigningAlgorithm signingAlgorithm, Action<RsaEncryptorConfiguration> setupAction)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (setupAction == null)
+            {
+                throw new ArgumentNullException(nameof(setupAction));
+            }
+
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+            {
+                return new ConfigureOptions<KeyRotationOptions>(options =>
+                {
+                    if (options.AuthenticatedEncryptorConfiguration is RsaEncryptorConfiguration configuration && configuration.SigningAlgorithm == signingAlgorithm.ToString())
+                    {
+                        setupAction(configuration);
+                    }
                 });
             });
             return builder;

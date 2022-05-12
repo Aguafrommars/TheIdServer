@@ -31,25 +31,23 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         [Fact]
         public void AddRsaEncryptorConfiguration_should_throw_ArgumentNulException_on_builder_null()
         {
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(null, null));
-            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(new KeyRotationBuilder(), null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(null, IdentityServerConstants.RsaSigningAlgorithm.RS256, null));
+            Assert.Throws<ArgumentNullException>(() => KeyRotationBuilderExtensions.AddRsaEncryptorConfiguration(new KeyRotationBuilder(), IdentityServerConstants.RsaSigningAlgorithm.RS256, null));
         }
 
         [Fact]
         public void AddRsaEncryptorConfiguration_should_configure_RsaEncryptorConfiguration()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddKeysRotation()
-                .AddRsaEncryptorConfiguration(options =>
+            serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.PS256)
+                .AddRsaEncryptorConfiguration(IdentityServerConstants.RsaSigningAlgorithm.PS256, options =>
                 {
-                    options.RsaSigningAlgorithm = IdentityServerConstants.RsaSigningAlgorithm.PS256;
+                    options.SigningAlgorithm = IdentityServerConstants.RsaSigningAlgorithm.PS256.ToString();
                 });
 
             var services = serviceCollection.BuildServiceProvider();
-            var options = services.GetRequiredService<IOptions<KeyRotationOptions>>();
-            Assert.IsType<RsaEncryptorConfiguration>(options.Value.AuthenticatedEncryptorConfiguration);
-            var configuration = options.Value.AuthenticatedEncryptorConfiguration as RsaEncryptorConfiguration;
-            Assert.Equal(IdentityServerConstants.RsaSigningAlgorithm.PS256, configuration.RsaSigningAlgorithm);
+            var keyRing = services.GetRequiredService<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
+            Assert.Equal(IdentityServerConstants.RsaSigningAlgorithm.PS256.ToString(), keyRing.Algorithm);
         }
 
         [Fact]
@@ -76,7 +74,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
-            var builder = serviceCollection.AddKeysRotation();
+            var builder = serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             // Act
             builder.PersistKeysToAzureBlobStorage(new Uri("http://exemple.com?sv=test"));
@@ -93,7 +91,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             // Arrange
             var creds = new Mock<TokenCredential>().Object;
             var serviceCollection = new ServiceCollection();
-            var builder = serviceCollection.AddKeysRotation();
+            var builder = serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             // Act
             builder.PersistKeysToAzureBlobStorage(new Uri("https://www.example.com?sv=test"), creds);
@@ -111,7 +109,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             var creds = new StorageSharedKeyCredential("test", "test");
 
             var serviceCollection = new ServiceCollection();
-            var builder = serviceCollection.AddKeysRotation();
+            var builder = serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             // Act
             builder.PersistKeysToAzureBlobStorage(new Uri("http://www.example.com?sv=test"), creds);
@@ -127,7 +125,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
-            var builder = serviceCollection.AddKeysRotation();
+            var builder = serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             // Act
             builder.PersistKeysToAzureBlobStorage("DefaultEndpointsProtocol=http;AccountName=myAccountName;AccountKey=myAccountKey", "test", "test");
@@ -144,7 +142,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             // Arrange
             var client = new BlobClient(new Uri("http://exemple.com?sv=test"));
             var serviceCollection = new ServiceCollection();
-            var builder = serviceCollection.AddKeysRotation();
+            var builder = serviceCollection.AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256);
 
             // Act
             builder.PersistKeysToAzureBlobStorage(client);
@@ -165,7 +163,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void PersistKeysToDbContext_should_add_EntityFrameworkCoreXmlRepository()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToDbContext<OperationalDbContext>();
             var provider = builder.Services.BuildServiceProvider();
             var options =  provider.GetRequiredService<IOptions<KeyRotationOptions>>();
@@ -185,7 +183,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void PersistKeysToFileSystem_should_add_FileSystemXmlRepository()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToFileSystem(new DirectoryInfo(Path.GetTempPath()));
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
@@ -208,7 +206,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void PersistKeysToStackExchangeRedis_should_add_RedisXmlRepository()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect("localhost:6379"));
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
@@ -221,7 +219,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void PersistKeysToStackExchangeRedis_should_add_RedisXmlRepository2()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToStackExchangeRedis(() => ConnectionMultiplexer.Connect("localhost:6379").GetDatabase(), "test");
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
@@ -234,7 +232,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void PersistKeysToStackExchangeRedis_should_add_RedisXmlRepository3()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect("localhost:6379"), "test");
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();
@@ -269,7 +267,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void ProtectKeysWithAzureKeyVault_should_add_AzureKeyVaultXmlEncryptor_with_cert()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
 #pragma warning disable SYSLIB0026 // Type or member is obsolete
                 .ProtectKeysWithAzureKeyVault("test", "test", new X509Certificate2());
 #pragma warning restore SYSLIB0026 // Type or member is obsolete
@@ -284,7 +282,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
         public void ProtectKeysWithAzureKeyVault_should_add_AzureKeyVaultXmlEncryptor_with_secret()
         {
             var builder = new ServiceCollection()
-                .AddKeysRotation()
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .ProtectKeysWithAzureKeyVault("test", "test", "test");
             var provider = builder.Services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<KeyRotationOptions>>();

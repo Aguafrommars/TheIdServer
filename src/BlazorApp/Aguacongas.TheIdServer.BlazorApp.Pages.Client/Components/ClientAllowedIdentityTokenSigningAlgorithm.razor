@@ -1,0 +1,33 @@
+﻿@using Aguacongas.IdentityServer.Store
+@inherits AutoCompleteModel<Entity.ClientAllowedIdentityTokenSigningAlgorithm>
+
+@if (IsReadOnly)
+{
+    <div class="input-group input-group-sm mb-3">
+        <div class="form-control @FieldClass" disabled>@Entity.Algorithm</div>
+        <div class="input-group-append select" @onclick="() => DeleteClicked.InvokeAsync(null)">
+            <span class="input-group-text oi oi-trash" />
+        </div>
+    </div>
+}
+else
+{
+    <div id="@Id" @key="@Entity" class="input-group input-group-sm mb-3" data-bs-toggle="dropdown">
+        <input type="text" class="form-control new-claim" placeholder="@Localizer["algorithm"]" value="@CurrentValue"
+           @oninput="OnInputChanged" @onfocus="Filter" />
+        <div class="input-group-append" @onclick="() => SetSelectedValue(CurrentValue)">
+            <span class="input-group-text oi oi-plus" />
+        </div>
+    </div>
+    <div class="dropdown-menu m-0">
+        @if (FilteredValues != null)
+        {
+            foreach (var algorithm in FilteredValues)
+            {
+                <button class="dropdown-item m-0 p-0 pl-1 pr-1" type="button" @onclick="() => SetSelectedValue(algorithm)">
+                    <small>@algorithm</small>
+                </button>
+            }
+        }
+    </div>
+}

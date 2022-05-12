@@ -916,6 +916,10 @@ The endpoit return a json reponse depending on the store kind used and redis dep
 
 [Configure OpenTelemetry doc](../../doc/OPEN_TELEMETRY.md) provides details on [OpenTelemetry](https://opentelemetry.io/) configuration.
 
+## Configure Server-side sessions
+
+Read [Server-side sessions](../../doc/SERVER_SIDE_SESSIONS.md)
+
 ## Additional resources
 
 * [Host and deploy ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/)

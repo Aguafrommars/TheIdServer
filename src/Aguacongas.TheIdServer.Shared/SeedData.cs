@@ -19,6 +19,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
+using Duende.IdentityServer;
 using ISModels = Duende.IdentityServer.Models;
 #else
 using ISModels = IdentityServer4.Models;
@@ -481,6 +482,10 @@ namespace Aguacongas.TheIdServer
             var clientUriStore = provider.GetRequiredService<IAdminStore<Entity.ClientUri>>();
             var clientPropertyStore = provider.GetRequiredService<IAdminStore<Entity.ClientProperty>>();
 
+#if DUENDE
+            var clientAllowedIdentityTokenSigningAlgorithmStore = provider.GetRequiredService<IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm>>();
+#endif
+
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("SeedClients");
 
@@ -546,11 +551,35 @@ namespace Aguacongas.TheIdServer
                 SeedClientRestrictions(clientIdpRestrictionStore, client);
                 SeedClientProperties(clientPropertyStore, client);
                 SeedClientUris(clientUriStore, client);
+#if DUENDE
+                SeedClientAllowedIdentityTokenSigningAlgorithms(clientAllowedIdentityTokenSigningAlgorithmStore, client);
+#endif
 
                 logger.LogInformation("Add client {ClientName}", client.ClientName);
             }
         }
 
+#if DUENDE
+        private static void SeedClientAllowedIdentityTokenSigningAlgorithms(IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm> clientAllowedIdentityTokenSigningAlgorithmStore, ISModels.Client client)
+        {
+            foreach (var algorythm in client.AllowedIdentityTokenSigningAlgorithms.Where(a => IdentityServerConstants.SupportedSigningAlgorithms.Contains(a)))
+            {
+                try
+                {
+                    clientAllowedIdentityTokenSigningAlgorithmStore.CreateAsync(new Entity.ClientAllowedIdentityTokenSigningAlgorithm
+                    {
+                        ClientId = client.ClientId,
+                        Id = Guid.NewGuid().ToString(),
+                        Algorithm = algorythm
+                    }).GetAwaiter().GetResult();
+                }
+                catch (ArgumentException)
+                {
+                    // silent
+                }
+            }
+        }
+#endif
         private static void SeedClientUris(IAdminStore<Entity.ClientUri> clientUriStore, ISModels.Client client)
         {
             var uris = client.RedirectUris.Select(o => new Entity.ClientUri

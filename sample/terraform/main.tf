@@ -101,6 +101,57 @@ locals {
     deploymentAnnotations = local.deploymentAnnotations
     appSettings = {
       file = {
+        # override certificate authentication options
+        CertificateAuthenticationOptions = {
+          AllowedCertificateTypes = "All"
+          ValidateCertificateUse = false
+          ValidateValidityPeriod = false
+        }
+        # override identity server option
+        IdentityServerOptions = {
+          MutualTls = {
+            Enabled = true
+          }
+          EnableServerSideSession = true
+          ServerSideSessions = {
+            UserDisplayNameClaimType = "name"
+            RemoveExpiredSessions = true
+            ExpiredSessionsTriggerBackchannelLogout = true
+            RemoveExpiredSessionsFrequency = "00:10:00"
+            RemoveExpiredSessionsBatchSize = 100
+          }
+          CustomEntriesOfStringArray = {
+            token_endpoint_auth_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
+            backchannel_authentication_request_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
+            acr_values_supported = [
+              "idp:local"
+            ]
+          }
+        }
+        # override dynamic client registration options
+        DynamicClientRegistrationOptions = {
+          Protected = false
+        }
         # override serilog settings
         Serilog = {
           MinimumLevel = {
@@ -108,6 +159,43 @@ locals {
             Override = {
               "Microsoft.EntityFrameworkCore" = "Warning"
               System = "Warning"
+            }
+          }
+        }
+        # override key management
+        IdentityServer = {
+          Key = {
+            KeyProtectionOptions = {
+              KeyProtectionKind = "X509",
+              X509CertificatePath = "/usr/local/share/ca-certificates/sk.pfx"
+            },
+            StorageKind = "EntityFramework",
+            Type = "KeysRotation"
+            AdditionalSigningKeyType = {
+              RS384 = {
+                SigningAlgorithm= "RS384"
+              },
+              RS512 = {
+                SigningAlgorithm = "RS512"
+              },
+              PS256 = {
+                SigningAlgorithm = "PS256"
+              },
+              PS384 = {
+                SigningAlgorithm = "PS384"
+              },
+              PS512 = {
+                SigningAlgorithm = "PS512"
+              },
+              ES256 = {
+                SigningAlgorithm = "ES256"
+              },
+              ES384 = {
+                SigningAlgorithm = "ES384"
+              },
+              ES512 = {
+                SigningAlgorithm = "ES512"
+              }
             }
           }
         }

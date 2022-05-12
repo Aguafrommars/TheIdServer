@@ -1,5 +1,7 @@
 ﻿using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Exporter;
+using System;
+using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.Options.OpenTelemetry
 {
@@ -15,6 +17,8 @@ namespace Aguacongas.TheIdServer.Options.OpenTelemetry
         public JaegerExporterOptions Jaeger { get; set; }
         public ZipkinExporterOptions Zipkin { get; set; }
         public HoneycombOptions Honeycomb { get; set; }
+
+        public IEnumerable<string> Sources { get; set; }
 
     }
 }

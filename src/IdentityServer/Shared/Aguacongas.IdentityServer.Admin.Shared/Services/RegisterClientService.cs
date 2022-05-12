@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -110,7 +111,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
             registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
-            var secret = Guid.NewGuid().ToString();
+            string secret = null;
             
             var serializerSettings = new JsonSerializerSettings
             {
@@ -127,16 +128,46 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #endif
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
-            sercretList.Add(new ClientSecret
+
+            var clientCertificate = await httpContext.Connection.GetClientCertificateAsync();
+            if (clientCertificate is not null)
             {
-                Id = Guid.NewGuid().ToString(),
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
 #if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateBase64,
+#else
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateBase64,
+#endif
+                    Value = Convert.ToBase64String(clientCertificate.Export(X509ContentType.Cert))
+                });
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+#if DUENDE
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
+#else
+                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
+#endif
+                    Value = clientCertificate.Thumbprint
+                });
+            }
+
+            if (!sercretList.Any())
+            {
+                secret = Guid.NewGuid().ToString();
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+#if DUENDE
+                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
 #else
                 Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
 #endif
-                Value = secret
-            });
+                    Value = secret
+                });
+            }
 
             var client = new Client
             {
@@ -251,32 +282,36 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     }) : new List<ClientLocalizedResource>(0))
                     .ToList(),
                 Properties = new List<ClientProperty>
-                {
-                    new ClientProperty
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "applicationType",
-                        Value = registration.ApplicationType
-                    }
-                }.Union(registration.Contacts != null ? new List<ClientProperty>
-                {
-                    new ClientProperty
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "applicationType",
+                            Value = registration.ApplicationType
+                        }
+                    }.Union(registration.Contacts != null ? new List<ClientProperty>
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "contacts",
-                        Value = string.Join("; ", registration.Contacts)
-                    }
-                } : new List<ClientProperty>(0))
-                .ToList(),
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "contacts",
+                            Value = string.Join("; ", registration.Contacts)
+                        }
+                    } : new List<ClientProperty>(0))
+                    .ToList(),
                 SlidingRefreshTokenLifetime = _defaultValues.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = _defaultValues.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = _defaultValues.UserCodeType,
                 UserSsoLifetime = _defaultValues.UserSsoLifetime,
                 PolicyUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
                 TosUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
+#if DUENDE
+                CibaLifetime = _defaultValues.CibaLifetime,
+                PollingInterval = _defaultValues.PollingInterval,
+                CoordinateLifetimeWithUserSession = _defaultValues.CoordinateLifetimeWithUserSession,
+#endif
+                RegistrationToken = Guid.NewGuid()
             };
-
-            client.RegistrationToken = Guid.NewGuid();
 
             await _clientStore.CreateAsync(client).ConfigureAwait(false);
 
@@ -403,7 +438,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
-            if (!(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
+            if (_dymamicClientRegistrationOptions.Protected && !(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
             {
                 var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
                 if (allowedContact == null)
@@ -591,12 +626,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void Validate(ClientRegisteration registration, Dictionary<string, object> discovery)
         {
-            registration.GrantTypes ??= new List<string>
+            registration.GrantTypes ??= new []
             {
                 "authorization_code"
             };
+            if (!registration.GrantTypes.Any())
+            {
+                registration.GrantTypes = new[] { "authorization_code" };
+            }
 
-            if (registration.RedirectUris == null || !registration.RedirectUris.Any())
+            registration.RedirectUris ??= Array.Empty<string>();
+            if (IsWebClient(registration) && !registration.RedirectUris.Any())
             {
                 throw new RegistrationException("invalid_redirect_uri", "RedirectUri is required.");
             }
@@ -630,16 +670,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             ValidateUris(redirectUriList, registration.PolicyUris, "invalid_policy_uri", "PolicyUri");
 
-            if (registration.GrantTypes == null || !registration.GrantTypes.Any())
-            {
-                registration.GrantTypes = new[] { "authorization_code" };
-            }
             ValidateGrantType(registration.GrantTypes, discovery["grant_types_supported"] as IEnumerable<string>);
 
-            if (registration.ResponseTypes == null || !registration.ResponseTypes.Any())
-            {
-                registration.ResponseTypes = new[] { "code" };
-            }
+            registration.ResponseTypes ??= Array.Empty<string>();
 
             ValidateResponseType(registration.GrantTypes, registration.ResponseTypes, discovery["response_types_supported"] as IEnumerable<string>);
         }
@@ -739,6 +772,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     throw new RegistrationException(errorCode, $"{uriName} '{value}' host doesn't match a redirect uri host.");
                 }
             }
+        }
+
+        private static bool IsWebClient(ClientRegisteration client)
+        {
+            return client.GrantTypes.Any(g => g == "authorization_code" ||
+                    g == "hybrid" ||
+                    g == "implicit" ||
+                    g == "urn:ietf:params:oauth:grant-type:device_code");
         }
     }
 }

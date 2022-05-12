@@ -50,7 +50,8 @@ namespace Aguacongas.IdentityServer.Admin
             var keyTypeList = new[]
             {
                 typeof(IAuthenticatedEncryptorDescriptor),
-                typeof(RsaEncryptorDescriptor)
+                typeof(RsaEncryptorDescriptor),
+                typeof(ECDsaEncryptorDescriptor)
             };
             // This is designed to run after the default ControllerTypeProvider, 
             // so the list of 'real' controllers has already been populated.

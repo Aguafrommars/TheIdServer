@@ -139,5 +139,14 @@
         /// Gets or sets the license key.
         /// </summary>
         public string LicenseKey { get; set; }
+
+        /// <summary>
+        /// Enable server-sides sessions.
+        /// </summary>
+        public bool EnableServerSideSession { get; set; }
+        /// <summary>
+        /// Options for server-side sessions.
+        /// </summary>
+        public ServerSideSessionOptions ServerSideSessions { get; set; } = new ServerSideSessionOptions();
     }
 }

@@ -1,0 +1,17 @@
+﻿@inherits NullableInputCheckbox
+<div class="form-check">
+    <AuthorizeView Policy="Is4-Writer">
+        <Authorized>
+            <NullableInputCheckbox name="@Name" class="form-check-input" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+            <label class="form-check-label" for="@Name" @onclick="Togle">
+                @Label
+            </label>
+        </Authorized>
+        <NotAuthorized>
+            <NullableInputCheckbox name="@Name" class="form-check-input" disabled ValueExpression="ValueExpression" Value="@Value" />
+            <label class="form-check-label" for="@Name">
+                @Label
+            </label>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

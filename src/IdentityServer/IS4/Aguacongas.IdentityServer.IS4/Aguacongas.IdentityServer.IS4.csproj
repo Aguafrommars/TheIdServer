@@ -40,6 +40,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\FlushableCache.cs" Link="Store\FlushableCache.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\GrantStore.cs" Link="Store\GrantStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\NotifyChangedExternalProviderStore.cs" Link="Store\NotifyChangedExternalProviderStore.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\PersistedGrantStore.cs" Link="Store\PersistedGrantStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ReferenceTokenStore.cs" Link="Store\ReferenceTokenStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\RefreshTokenStore.cs" Link="Store\RefreshTokenStore.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ResourceStore.cs" Link="Store\ResourceStore.cs" />
@@ -50,7 +51,6 @@
 	<ItemGroup>
 		<Folder Include="Absractions\" />
 		<Folder Include="Validators\" />
-		<Folder Include="Store\" />
 	</ItemGroup>
 
 	<ItemGroup>

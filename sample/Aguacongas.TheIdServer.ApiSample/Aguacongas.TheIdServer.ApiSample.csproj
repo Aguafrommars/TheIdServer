@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.ApiSample.ruleset</CodeAnalysisRuleSet>
@@ -27,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Aguacongas.TheIdServer.Sample.Shared\Aguacongas.TheIdServer.Sample.Shared.csproj" />
   </ItemGroup>
-
-
+	<ItemGroup>
+		<AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
 </Project>

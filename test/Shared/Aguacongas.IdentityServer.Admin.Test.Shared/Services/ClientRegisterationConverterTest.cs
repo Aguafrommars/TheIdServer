@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Admin.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace Aguacongas.IdentityServer.Admin.Test.Services
@@ -12,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
         [Fact]
         public void ReadJson_should_deserialize_localizable_properties()
         {
-            var serialized = "{ \"client_name#fr-FR\": \"test\", \"redirect_uris\": [\"test\"], \"application_type\": \"native\" }";
+            var serialized = File.ReadAllText("client-registration.json");
 
             var result = JsonConvert.DeserializeObject<ClientRegisteration>(serialized);
 

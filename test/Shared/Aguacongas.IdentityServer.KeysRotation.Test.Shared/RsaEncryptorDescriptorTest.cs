@@ -5,6 +5,13 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using System.IO;
+
+#if DUENDE
+using Duende.IdentityServer;
+#else
+using IdentityServer4;
+#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test
 {
@@ -17,14 +24,20 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             Assert.Throws<ArgumentNullException>(() => new RsaEncryptorDescriptor(null, null));
             Assert.Throws<ArgumentNullException>(() => new RsaEncryptorDescriptor(new RsaEncryptorConfiguration(), null));
         }
+
         [Fact]
         public async Task ExportToXml_should_export_key_without_Rsa()
         {
+            var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempDir);
+
             var builder = new ServiceCollection()
-                .AddKeysRotation();
+                .AddKeysRotation(IdentityServerConstants.RsaSigningAlgorithm.RS256)
+                .PersistKeysToFileSystem(new DirectoryInfo(tempDir));
+
 
             var provider = builder.Services.BuildServiceProvider();
-            var keyProvider = provider.GetRequiredService<IKeyRingStores>();
+            var keyProvider = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
             var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
 

@@ -22,7 +22,9 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         public void Configure(KeyRotationOptions options)
         {
-            options.AuthenticatedEncryptorFactories.Add(new RsaEncryptorFactory(_loggerFactory));
+            var factories = options.AuthenticatedEncryptorFactories;
+            factories.Add(new RsaEncryptorFactory(_loggerFactory));
+            factories.Add(new ECDsaEncryptorFactory(_loggerFactory));
         }
     }
 }
