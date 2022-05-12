@@ -1,9 +1,16 @@
-# [4.7.0](https://github.com/Aguafrommars/TheIdServer/compare/4.6.5...4.7.0) (2022-04-29)
+# [5.0.0](https://github.com/Aguafrommars/TheIdServer/compare/4.6.6...5.0.0) (2022-05-12)
 
 
 ### Bug Fixes
 
+* parse x5c property ([4a95c91](https://github.com/Aguafrommars/TheIdServer/commit/4a95c9104939ba3b7a9103b80bd582f74c7c49cb))
 * reliying party encryption certificate not saved ([dc0578b](https://github.com/Aguafrommars/TheIdServer/commit/dc0578b02e82c3cb78e39a18049999c27fef183f)), closes [#726](https://github.com/Aguafrommars/TheIdServer/issues/726)
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([#763](https://github.com/Aguafrommars/TheIdServer/issues/763)) ([1c1de90](https://github.com/Aguafrommars/TheIdServer/commit/1c1de90b1657326647aff964fe26dedcc80b7cca))
+* update packages ([2a073f9](https://github.com/Aguafrommars/TheIdServer/commit/2a073f9f0c4d690dac00911209a454301fe0bb1a))
+* update packages ([fa7dbe3](https://github.com/Aguafrommars/TheIdServer/commit/fa7dbe370b05e1c7fe520bd468d2d0837ebd3c14))
+* update packages ([f919ab1](https://github.com/Aguafrommars/TheIdServer/commit/f919ab1d324e3576fac71067be50a47ef9c9fc78))
+* update packages ([35b5a15](https://github.com/Aguafrommars/TheIdServer/commit/35b5a15ffe9d07b78c2da3358f0da05c1bb8fe8b))
+* update packages ([6020909](https://github.com/Aguafrommars/TheIdServer/commit/60209094ee3ef12ed493fb745d9987b50f694efd))
 * update packages ([6081c67](https://github.com/Aguafrommars/TheIdServer/commit/6081c679048a46d8752ca49860fb821573833560))
 * update packages ([98a0f8b](https://github.com/Aguafrommars/TheIdServer/commit/98a0f8b246ccb6118db3b8a3b836aab1737f6de2))
 * update packages ([0e0e1e7](https://github.com/Aguafrommars/TheIdServer/commit/0e0e1e720afcbd944aeed6fb47025d81bfbbad1d))
@@ -14,12 +21,35 @@
 * update packages ([2018526](https://github.com/Aguafrommars/TheIdServer/commit/20185262dc119388b9cafa421bb20d40626dfa34))
 * update packages ([94beb61](https://github.com/Aguafrommars/TheIdServer/commit/94beb614b5294d56af57debadaecb8fb72c96bdf))
 * update packages ([f87ccd7](https://github.com/Aguafrommars/TheIdServer/commit/f87ccd7b36aec8b18f5da63b86c26ac55a3856c3))
+* update packages ([#761](https://github.com/Aguafrommars/TheIdServer/issues/761)) ([625a038](https://github.com/Aguafrommars/TheIdServer/commit/625a03804e1669c2024fd34f129910642b19431e))
+
+
+### Code Refactoring
+
+* implement validation keys store ([0be4bce](https://github.com/Aguafrommars/TheIdServer/commit/0be4bce45cb11a8f1b6a462caee50137cefc0c24))
 
 
 ### Features
 
 * allowed identity token signing algorithms ([d96dd1e](https://github.com/Aguafrommars/TheIdServer/commit/d96dd1efd24ddf3a12c743165751b9ddde18eb36))
+* configure custom discovery entries ([192111f](https://github.com/Aguafrommars/TheIdServer/commit/192111f25b370b59ae729151b59a48987c6f6467))
+* enable jwt client authentification ([c9c96a8](https://github.com/Aguafrommars/TheIdServer/commit/c9c96a8bbfb0cc43e33ee4d3e25ed626c0de5809))
+* multiple singing key algorithm ([bd2d001](https://github.com/Aguafrommars/TheIdServer/commit/bd2d00168eb6965d2f591c28ff62a9814f105047))
 * server side session ([6ddb0f6](https://github.com/Aguafrommars/TheIdServer/commit/6ddb0f64cdafb0eb0c58e1ccb53c56131aa1e73c))
+* **dynamic_registration:** store client certificate on create ([21ce2a7](https://github.com/Aguafrommars/TheIdServer/commit/21ce2a7c27c342ecbd1ac7247af49c2c0b8ee6ce))
+
+
+### BREAKING CHANGES
+
+* CHANGE
+remove signing keys store
+
+## [4.6.6](https://github.com/Aguafrommars/TheIdServer/compare/4.6.5...4.6.6) (2022-05-12)
+
+
+### Bug Fixes
+
+* update packages ([#764](https://github.com/Aguafrommars/TheIdServer/issues/764)) ([c08d7b7](https://github.com/Aguafrommars/TheIdServer/commit/c08d7b789640292777f9dccad126c74907729527))
 
 ## [4.6.5](https://github.com/Aguafrommars/TheIdServer/compare/4.6.4...4.6.5) (2022-04-28)
 
