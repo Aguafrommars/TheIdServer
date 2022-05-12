@@ -1,3 +1,10 @@
+## [4.6.6](https://github.com/Aguafrommars/TheIdServer/compare/4.6.5...4.6.6) (2022-05-12)
+
+
+### Bug Fixes
+
+* update packages ([#764](https://github.com/Aguafrommars/TheIdServer/issues/764)) ([c08d7b7](https://github.com/Aguafrommars/TheIdServer/commit/c08d7b789640292777f9dccad126c74907729527))
+
 ## [4.6.5](https://github.com/Aguafrommars/TheIdServer/compare/4.6.4...4.6.5) (2022-04-28)
 
 
