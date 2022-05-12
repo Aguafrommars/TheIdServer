@@ -6,8 +6,10 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.ResponseHandling;
+using static Duende.IdentityServer.IdentityServerConstants;
 #else
 using IdentityServer4.ResponseHandling;
+using static IdentityServer4.IdentityServerConstants;
 #endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -126,11 +128,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var sercretList = jwkKeys != null ? jwkKeys.Select(k => new ClientSecret
             {
                 Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.JsonWebKey,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.JsonWebKey,
-#endif
+                Type = SecretTypes.JsonWebKey,
+
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
 
@@ -141,21 +140,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateBase64,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateBase64,
-#endif
+                    Type = SecretTypes.X509CertificateBase64,
                     Value = Convert.ToBase64String(clientCertificate.Export(X509ContentType.Cert))
                 });
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
-#endif
+                    Type = SecretTypes.X509CertificateThumbprint,
                     Value = clientCertificate.Thumbprint
                 });
             }
@@ -168,11 +159,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
-#endif
+                    Type = SecretTypes.SharedSecret,
                     Value = secret
                 });
             }
@@ -378,7 +365,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationToken = null;
             registration.RegistrationUri = null;
             registration.JwksUri = discovery["jwks_uri"].ToString();
-            var clientSecret = client.ClientSecrets.FirstOrDefault(s => s.Type == IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret);
+            var clientSecret = client.ClientSecrets.FirstOrDefault(s => s.Type == SecretTypes.SharedSecret);
             registration.ClientSecret = clientSecret?.Value;
             registration.ClientSecretExpireAt = clientSecret != null ? 0 : null;
 
