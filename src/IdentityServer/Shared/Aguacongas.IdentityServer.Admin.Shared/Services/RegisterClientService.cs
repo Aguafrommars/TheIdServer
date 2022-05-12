@@ -10,6 +10,7 @@ using Duende.IdentityServer.ResponseHandling;
 using IdentityServer4.ResponseHandling;
 #endif
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
@@ -42,6 +43,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IAdminStore<ClientProperty> _clientPropertyStore;
         private readonly IAdminStore<ClientGrantType> _clientGrantTypeStore;
         private readonly IDiscoveryResponseGenerator _discoveryResponseGenerator;
+        private readonly ILogger<RegisterClientService> _logger;
 
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
         /// <param name="identityServerOptions">The options.</param>
         /// <param name="dymamicClientRegistrationOptions">The dymamic client registration options.</param>
+        /// <param name="logger">A looger</param>
         /// <exception cref="ArgumentNullException">options
         /// or
         /// clientStore
@@ -80,7 +83,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #else
             IdentityServer4.Configuration.IdentityServerOptions identityServerOptions,
 #endif
-            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions)
+            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions,
+            ILogger<RegisterClientService> logger)
 
         {
             _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
@@ -91,6 +95,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _clientPropertyStore = clientPropertyStore ?? throw new ArgumentNullException(nameof(clientPropertyStore));
             _clientGrantTypeStore = clientGrantTypeStore ?? throw new ArgumentNullException(nameof(clientGrantTypeStore));
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -132,6 +137,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var clientCertificate = await httpContext.Connection.GetClientCertificateAsync();
             if (clientCertificate is not null)
             {
+                _logger.LogDebug("Set certificate client secret for thumbprint {Thumbtprin}", clientCertificate.Thumbprint);
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -156,6 +162,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             if (!sercretList.Any())
             {
+                _logger.LogInformation("Create, no secret received, new shared secret for client Id {ClientID}", registration.Id);
+
                 secret = Guid.NewGuid().ToString();
                 sercretList.Add(new ClientSecret
                 {
@@ -370,8 +378,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationToken = null;
             registration.RegistrationUri = null;
             registration.JwksUri = discovery["jwks_uri"].ToString();
-            registration.ClientSecret = client.ClientSecrets.FirstOrDefault()?.Value;
-            registration.ClientSecretExpireAt = client.ClientSecrets.Any() ? (int?)0 : null;
+            var clientSecret = client.ClientSecrets.FirstOrDefault(s => s.Type == IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret);
+            registration.ClientSecret = clientSecret?.Value;
+            registration.ClientSecretExpireAt = clientSecret != null ? 0 : null;
 
             return registration;
         }
