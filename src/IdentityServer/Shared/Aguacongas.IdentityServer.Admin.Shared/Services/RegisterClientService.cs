@@ -6,10 +6,13 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.ResponseHandling;
+using static Duende.IdentityServer.IdentityServerConstants;
 #else
 using IdentityServer4.ResponseHandling;
+using static IdentityServer4.IdentityServerConstants;
 #endif
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
@@ -42,6 +45,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IAdminStore<ClientProperty> _clientPropertyStore;
         private readonly IAdminStore<ClientGrantType> _clientGrantTypeStore;
         private readonly IDiscoveryResponseGenerator _discoveryResponseGenerator;
+        private readonly ILogger<RegisterClientService> _logger;
 
 
         /// <summary>
@@ -55,6 +59,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
         /// <param name="identityServerOptions">The options.</param>
         /// <param name="dymamicClientRegistrationOptions">The dymamic client registration options.</param>
+        /// <param name="logger">A looger</param>
         /// <exception cref="ArgumentNullException">options
         /// or
         /// clientStore
@@ -80,7 +85,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #else
             IdentityServer4.Configuration.IdentityServerOptions identityServerOptions,
 #endif
-            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions)
+            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions,
+            ILogger<RegisterClientService> logger)
 
         {
             _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
@@ -91,6 +97,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _clientPropertyStore = clientPropertyStore ?? throw new ArgumentNullException(nameof(clientPropertyStore));
             _clientGrantTypeStore = clientGrantTypeStore ?? throw new ArgumentNullException(nameof(clientGrantTypeStore));
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -121,50 +128,38 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var sercretList = jwkKeys != null ? jwkKeys.Select(k => new ClientSecret
             {
                 Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.JsonWebKey,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.JsonWebKey,
-#endif
+                Type = SecretTypes.JsonWebKey,
+
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
 
             var clientCertificate = await httpContext.Connection.GetClientCertificateAsync();
             if (clientCertificate is not null)
             {
+                _logger.LogDebug("Set certificate client secret for thumbprint {Thumbtprin}", clientCertificate.Thumbprint);
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateBase64,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateBase64,
-#endif
+                    Type = SecretTypes.X509CertificateBase64,
                     Value = Convert.ToBase64String(clientCertificate.Export(X509ContentType.Cert))
                 });
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.X509CertificateThumbprint,
-#endif
+                    Type = SecretTypes.X509CertificateThumbprint,
                     Value = clientCertificate.Thumbprint
                 });
             }
 
             if (!sercretList.Any())
             {
+                _logger.LogInformation("Create, no secret received, new shared secret for client Id {ClientID}", registration.Id);
+
                 secret = Guid.NewGuid().ToString();
                 sercretList.Add(new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                    Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
-#endif
+                    Type = SecretTypes.SharedSecret,
                     Value = secret
                 });
             }
@@ -370,8 +365,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationToken = null;
             registration.RegistrationUri = null;
             registration.JwksUri = discovery["jwks_uri"].ToString();
-            registration.ClientSecret = client.ClientSecrets.FirstOrDefault()?.Value;
-            registration.ClientSecretExpireAt = client.ClientSecrets.Any() ? (int?)0 : null;
+            var clientSecret = client.ClientSecrets.FirstOrDefault(s => s.Type == SecretTypes.SharedSecret);
+            registration.ClientSecret = clientSecret?.Value;
+            registration.ClientSecretExpireAt = clientSecret != null ? 0 : null;
 
             return registration;
         }
