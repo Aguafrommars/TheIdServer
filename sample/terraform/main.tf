@@ -233,6 +233,16 @@ resource "helm_release" "nginx_ingress" {
     name = "controller.extraArgs.enable-ssl-passthrough"
     value = true
   }
+
+  set {
+    name = "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream"
+    value = true
+  }
+
+  set {
+    name = "nginx.ingress.kubernetes.io/auth-tls-verify-client"
+    value = "off"
+  }
   
   wait = local.wait
 }
