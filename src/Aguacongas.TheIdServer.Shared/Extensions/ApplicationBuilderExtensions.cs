@@ -13,6 +13,9 @@ using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 #if DUENDE
 using Duende.IdentityServer.Hosting;
+using Duende.IdentityServer.Configuration;
+#else
+using IdentityServer4.Configuration;
 #endif
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -28,16 +31,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Serilog;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -118,6 +124,17 @@ namespace Microsoft.AspNetCore.Builder
                })
                 .UseRouting();
 
+            app.Use((context, next) =>
+            {
+                var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
+                if (!string.IsNullOrEmpty(certificateHeader) &&
+                    context.Request.Headers.TryGetValue(certificateHeader, out StringValues values))
+                {
+                    context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                }
+                return next();
+            });
+
 #if DUENDE
             app.UseMiddleware<BaseUrlMiddleware>()
                 .ConfigureCors();
@@ -132,7 +149,7 @@ namespace Microsoft.AspNetCore.Builder
 
             if (!isProxy)
             {
-                app.UseIdentityServerAdminAuthentication(" /providerhub", JwtBearerDefaults.AuthenticationScheme);
+                app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
             app.UseAuthorization()
