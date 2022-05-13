@@ -43,6 +43,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -129,7 +130,7 @@ namespace Microsoft.AspNetCore.Builder
                 if (!string.IsNullOrEmpty(certificateHeader) &&
                     context.Request.Headers.TryGetValue(certificateHeader, out StringValues values))
                 {
-                    context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(values.First());
+                    context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
                 }
                 return next();
             });
