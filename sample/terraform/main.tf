@@ -99,6 +99,16 @@ locals {
     }
     # enable wave on config change
     deploymentAnnotations = local.deploymentAnnotations
+
+    # ingress annotations
+    ingress = {
+      annotations = {
+        "kubernetes.io/ingress.class" = "nginx"
+        "cert-manager.io/cluster-issuer" = "letsencrypt"
+        "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream" = "true"
+        "nginx.ingress.kubernetes.io/auth-tls-verify-client" = "off"
+      }
+    }
     appSettings = {
       file = {
         # override certificate authentication options
@@ -232,18 +242,6 @@ resource "helm_release" "nginx_ingress" {
   set {
     name = "controller.extraArgs.enable-ssl-passthrough"
     value = true
-  }
-
-  # Specify that certificates are to be passed on
-  set {
-    name = "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream"
-    value = true
-  }
-
-  # Don't request client certificates and don't do client certificate verification
-  set {
-    name = "nginx.ingress.kubernetes.io/auth-tls-verify-client"
-    value = "off"
   }
   
   wait = local.wait
