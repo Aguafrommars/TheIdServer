@@ -121,6 +121,7 @@ locals {
         IdentityServerOptions = {
           MutualTls = {
             Enabled = true
+            PEMHeader = "ssl-client-cert"
           }
           EnableServerSideSession = true
           ServerSideSessions = {
