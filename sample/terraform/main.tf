@@ -106,6 +106,7 @@ locals {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt"
         "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream" = "true"
+        "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
         "nginx.ingress.kubernetes.io/auth-tls-verify-client" = "off"
       }
     }
@@ -235,7 +236,7 @@ resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
-  version    = "4.0.19"
+  version    = "4.1.1"
   namespace  = "ingress-nginx"
   create_namespace = true
 
