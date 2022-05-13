@@ -127,7 +127,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
                 if (!string.IsNullOrEmpty(certificateHeader) &&
-                    context.Request.Headers.TryGetValue(configuration.GetValue<string>(certificateHeader), out StringValues values))
+                    context.Request.Headers.TryGetValue(certificateHeader, out StringValues values))
                 {
                     context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(values.First());
                 }
