@@ -234,11 +234,13 @@ resource "helm_release" "nginx_ingress" {
     value = true
   }
 
+  # Specify that certificates are to be passed on
   set {
     name = "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream"
     value = true
   }
 
+  # Don't request client certificates and don't do client certificate verification
   set {
     name = "nginx.ingress.kubernetes.io/auth-tls-verify-client"
     value = "off"
