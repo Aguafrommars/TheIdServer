@@ -248,42 +248,6 @@ resource "helm_release" "nginx_ingress" {
   wait = local.wait
 }
 
-# Install ingress-azure
-resource "helm_release" "ingress-azure" {
-  name       = "nginx-ingress"
-  repository = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
-  chart      = "ingress-azure"
-  namespace  = "ingress-azure"
-  create_namespace = true
-
-  # enable ssl passthrough to have end-to-end encryption
-  set {
-    name = "appgw.subscriptionId"
-    value = "7cd7a404-3a0a-41bd-996b-cc3248e8c292"
-  }
-
-  set {
-    name = "appgw.resourceGroup"
-    value = "K8S"
-  }
-
-  set {
-    name = "appgw.name"
-    value = "theidserberAG"
-  }
-
-  set {
-    name = "appgw.shared"
-    value = false
-  }
-  
-  set {
-    name = "rbac.enabled"
-    value = false
-  }
-
-  wait = local.wait
-}
 
 # Install cert_manager to manage TLS certificates with letsencrypt
 resource "helm_release" "cert_manager" {
