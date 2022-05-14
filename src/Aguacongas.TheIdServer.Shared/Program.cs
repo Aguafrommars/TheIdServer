@@ -3,6 +3,8 @@
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration));
+
+builder.WebHost.ConfigureKestrel(kestrel =>
+{
+    kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.AllowCertificate);
+});
+
 
 var configuration = builder.Configuration;
 
