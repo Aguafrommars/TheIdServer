@@ -20,7 +20,7 @@ async Task<TokenResponse> RequestTokenAsync()
 
     var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
     {
-        Address = $"{Constants.Authority}/connect/mtls/token",
+        Address = $"{Constants.Authority}connect/mtls/token",
         ClientId = "mtls.client",
         Scope = "api1"
     });

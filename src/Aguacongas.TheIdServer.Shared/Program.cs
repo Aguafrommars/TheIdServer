@@ -2,6 +2,7 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
+using Duende.IdentityServer.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
@@ -17,12 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration));
 
-builder.WebHost.ConfigureKestrel(kestrel =>
-{
-    kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.AllowCertificate);
-});
-
-
 var configuration = builder.Configuration;
 
 var services = builder.Services;
@@ -36,6 +31,16 @@ if (seed)
 }
 
 services.AddOpenTelemetry(configuration.GetSection(nameof(OpenTelemetryOptions)));
+
+var mutualTlsOptions = configuration.GetSection("IdentityServerOptions:MutualTls").Get<MutualTlsOptions>();
+if (mutualTlsOptions?.Enabled == true && !seed)
+{
+    // when mutual TLS is enable the web host must receive client certificate
+    builder.WebHost.ConfigureKestrel(kestrel =>
+    {
+        kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.AllowCertificate);
+    });
+}
 
 var app = builder.Build();
 
@@ -54,5 +59,6 @@ app.Use(async (context, next) =>
     await next().ConfigureAwait(false);
 });
 app.UseTheIdServer(app.Environment, configuration);
+
 
 app.Run();
