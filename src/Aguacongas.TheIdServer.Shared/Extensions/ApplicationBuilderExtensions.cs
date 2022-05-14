@@ -44,6 +44,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -55,6 +56,33 @@ namespace Microsoft.AspNetCore.Builder
             var dbType = configuration.GetValue<DbTypes>("DbType");
 
             var disableHttps = configuration.GetValue<bool>("DisableHttps");
+
+            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("ApplicationBuilderExtensions");
+            var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
+
+            if (!string.IsNullOrEmpty(certificateHeader))
+            {
+                logger.LogDebug("Get client certificate from header {ClientCertificateHeader}", certificateHeader);
+                app.Use(async (context, next) =>
+                {
+                    var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+                    var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
+
+                    var headers = context.Request.Headers;
+                    using var scope = requestLogger.BeginScope(new Dictionary<string, object>
+                    {
+                        ["Headers"] = headers
+                    });
+
+                    if (headers.TryGetValue(certificateHeader, out StringValues values))
+                    {
+                        logger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
+                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                    }
+                    await next();
+                });
+            }
 
             app.UseForwardedHeaders();
             AddForceHttpsSchemeMiddleware(app, configuration);
@@ -123,17 +151,6 @@ namespace Microsoft.AspNetCore.Builder
                    }
                })
                 .UseRouting();
-
-            app.Use((context, next) =>
-            {
-                var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
-                if (!string.IsNullOrEmpty(certificateHeader) &&
-                    context.Request.Headers.TryGetValue(certificateHeader, out StringValues values))
-                {
-                    context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
-                }
-                return next();
-            });
 
 #if DUENDE
             app.UseMiddleware<BaseUrlMiddleware>()
