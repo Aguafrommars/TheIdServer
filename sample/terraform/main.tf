@@ -302,32 +302,6 @@ resource "helm_release" "cert_manager" {
   wait = local.wait
 }
 
-# creates ClusterIssuer
-resource "kubernetes_manifest" "cluster_issuer" {
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind = "ClusterIssuer"
-    metadata = {
-      name = "letsencrypt"
-    }
-    spec = {
-      acme = {
-        email = "aguacongas@gamil.com"
-        server = "https://acme-v02.api.letsencrypt.org/directory"
-        privateKeySecretRef = {
-          name = "letsencrypt-secrets"
-        }
-        solvers = [{
-          http01 = {
-            ingress = {
-              class = "nginx"    
-            }    
-          }
-        }]
-      }    
-    }
-  }  
-}
 
 # create ns
 resource "kubernetes_namespace" "theidserver_namespace" {
