@@ -266,17 +266,12 @@ resource "helm_release" "azure_ingress" {
 
   set {
     name = "armAuth.type"
-    value = "aadPodIdentity"
+    value = "servicePrincipal"
   }
 
   set {
-    name = "armAuth.identityResourceID"
-    value = "/subscriptions/7cd7a404-3a0a-41bd-996b-cc3248e8c292/resourcegroups/MC_K8S_AKS5F3A_WESTEUROPE/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgwContrIdentity5f3a"
-  }
-
-  set {
-    name = "armAuth.identityClientID"
-    value = "904c1efc-5405-459b-99a3-3eb45635a3b0"
+    name = "armAuth.secretJSON"
+    value = "ew0KICAiY2xpZW50SWQiOiAiNWZiZTI4YWYtMWExNC00NjIxLWI0OTUtMWFkMzFhNWYwMzM2IiwNCiAgImNsaWVudFNlY3JldCI6ICJwd0VncDVhLWc5eEhMN0hEd0RpNzhxb340U3E4aEU5U2x+IiwNCiAgInN1YnNjcmlwdGlvbklkIjogIjdjZDdhNDA0LTNhMGEtNDFiZC05OTZiLWNjMzI0OGU4YzI5MiIsDQogICJ0ZW5hbnRJZCI6ICI5YjZiNDM4Zi03MjUyLTQ0MDEtODUyZi05NTJmODYwYTA4NTkiLA0KICAiYWN0aXZlRGlyZWN0b3J5RW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tIiwNCiAgInJlc291cmNlTWFuYWdlckVuZHBvaW50VXJsIjogImh0dHBzOi8vbWFuYWdlbWVudC5henVyZS5jb20vIiwNCiAgImFjdGl2ZURpcmVjdG9yeUdyYXBoUmVzb3VyY2VJZCI6ICJodHRwczovL2dyYXBoLndpbmRvd3MubmV0LyIsDQogICJzcWxNYW5hZ2VtZW50RW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9tYW5hZ2VtZW50LmNvcmUud2luZG93cy5uZXQ6ODQ0My8iLA0KICAiZ2FsbGVyeUVuZHBvaW50VXJsIjogImh0dHBzOi8vZ2FsbGVyeS5henVyZS5jb20vIiwNCiAgIm1hbmFnZW1lbnRFbmRwb2ludFVybCI6ICJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iDQp9DQo="
   }
 
   wait = local.wait
