@@ -41,7 +41,7 @@ locals {
             key = "agentpool"
             operator = "In"
             values = [
-              "userpool"
+              "agentpool"
             ]
           }]
         }]
@@ -264,18 +264,6 @@ resource "helm_release" "cert_manager" {
   #  name = "installCRDs"
   #  value = true
   #}
-  
-  wait = local.wait
-}
-
-# Instal wave to restart nodes on config changes
-resource "helm_release" "wave" {
-  name       = "wave"
-  repository = "https://wave-k8s.github.io/wave/"
-  chart      = "wave"
-  version    = "2.0.0"
-  namespace  = "wave"
-  create_namespace = true
   
   wait = local.wait
 }
