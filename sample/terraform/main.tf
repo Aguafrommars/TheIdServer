@@ -261,7 +261,7 @@ resource "helm_release" "azure_ingress" {
 
   set {
     name = "appgw.share"
-    value = false
+    value = true
   }
 
   set {
