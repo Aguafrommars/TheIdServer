@@ -294,14 +294,40 @@ resource "helm_release" "cert_manager" {
 
   # uncomment it on 1st deploy
 
-  # set {
-  #  name = "installCRDs"
-  #  value = true
-  #}
+  set {
+    name = "installCRDs"
+    value = true
+  }
   
   wait = local.wait
 }
 
+# creates ClusterIssuer
+resource "kubernetes_manifest" "cluster_issuer" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt"
+    }
+    spec = {
+      acme = {
+        email = "aguacongas@gamil.com"
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt-secrets"
+        }
+        solvers = [{
+          http01 = {
+            ingress = {
+              class = "azure/application-gateway"    
+            }    
+          }
+        }]
+      }    
+    }
+  }  
+}
 
 # create ns
 resource "kubernetes_namespace" "theidserver_namespace" {
