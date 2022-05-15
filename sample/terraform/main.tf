@@ -236,46 +236,6 @@ resource "helm_release" "aad_pod_identity" {
   create_namespace = true
 }
 
-# Install ingress-azure
-resource "helm_release" "azure_ingress" {
-  name       = "ingress-azure"
-  repository = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
-  chart      = "ingress-azure"
-  namespace  = "ingress-azure"
-  create_namespace = true
-
-  set {
-    name = "appgw.name"
-    value = "applicationgateway5f3a"
-  }
-
-  set {
-    name = "appgw.resourceGroup"
-    value = "K8S"
-  }
-  
-  set {
-    name = "appgw.subscriptionId"
-    value = "7cd7a404-3a0a-41bd-996b-cc3248e8c292"
-  }
-
-  set {
-    name = "appgw.share"
-    value = true
-  }
-
-  set {
-    name = "armAuth.type"
-    value = "servicePrincipal"
-  }
-
-  set {
-    name = "armAuth.secretJSON"
-    value = "ew0KICAiY2xpZW50SWQiOiAiNWZiZTI4YWYtMWExNC00NjIxLWI0OTUtMWFkMzFhNWYwMzM2IiwNCiAgImNsaWVudFNlY3JldCI6ICJwd0VncDVhLWc5eEhMN0hEd0RpNzhxb340U3E4aEU5U2x+IiwNCiAgInN1YnNjcmlwdGlvbklkIjogIjdjZDdhNDA0LTNhMGEtNDFiZC05OTZiLWNjMzI0OGU4YzI5MiIsDQogICJ0ZW5hbnRJZCI6ICI5YjZiNDM4Zi03MjUyLTQ0MDEtODUyZi05NTJmODYwYTA4NTkiLA0KICAiYWN0aXZlRGlyZWN0b3J5RW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9sb2dpbi5taWNyb3NvZnRvbmxpbmUuY29tIiwNCiAgInJlc291cmNlTWFuYWdlckVuZHBvaW50VXJsIjogImh0dHBzOi8vbWFuYWdlbWVudC5henVyZS5jb20vIiwNCiAgImFjdGl2ZURpcmVjdG9yeUdyYXBoUmVzb3VyY2VJZCI6ICJodHRwczovL2dyYXBoLndpbmRvd3MubmV0LyIsDQogICJzcWxNYW5hZ2VtZW50RW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9tYW5hZ2VtZW50LmNvcmUud2luZG93cy5uZXQ6ODQ0My8iLA0KICAiZ2FsbGVyeUVuZHBvaW50VXJsIjogImh0dHBzOi8vZ2FsbGVyeS5henVyZS5jb20vIiwNCiAgIm1hbmFnZW1lbnRFbmRwb2ludFVybCI6ICJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iDQp9DQo="
-  }
-
-  wait = local.wait
-}
 
 
 # Install cert_manager to manage TLS certificates with letsencrypt
