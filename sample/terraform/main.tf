@@ -271,12 +271,12 @@ resource "helm_release" "azure_ingress" {
 
   set {
     name = "armAuth.identityResourceID"
-    value = "/subscriptions/7cd7a404-3a0a-41bd-996b-cc3248e8c292/resourceGroups/K8S/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgwContrIdentity5f3a"
+    value = "/subscriptions/7cd7a404-3a0a-41bd-996b-cc3248e8c292/resourcegroups/MC_K8S_AKS5F3A_WESTEUROPE/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgwContrIdentity5f3a"
   }
 
   set {
     name = "armAuth.identityClientID"
-    value = "b4bccab0-8a22-49b1-af1a-7473c6314d93"
+    value = "904c1efc-5405-459b-99a3-3eb45635a3b0"
   }
 
   wait = local.wait
