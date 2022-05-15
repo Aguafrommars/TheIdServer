@@ -289,7 +289,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "1.7.2"
-  namespace  = "ingress-azure"
+  namespace  = "cert-manager"
   create_namespace = true
 
   # uncomment it on 1st deploy
