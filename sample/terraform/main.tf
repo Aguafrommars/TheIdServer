@@ -102,11 +102,8 @@ locals {
     # ingress annotations
     ingress = {
       annotations = {
-        "kubernetes.io/ingress.class" = "nginx"
+        "kubernetes.io/ingress.class" = "azure/application-gateway"
         "cert-manager.io/cluster-issuer" = "letsencrypt"
-        "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream" = "true"
-        "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
-        "nginx.ingress.kubernetes.io/auth-tls-verify-client" = "off"
       }
     }
     appSettings = {
@@ -231,20 +228,43 @@ locals {
 }
 
 # Install ingress-nginx
-resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  version    = "4.1.1"
-  namespace  = "ingress-nginx"
+resource "helm_release" "azure_ingress" {
+  name       = "ingress-azure"
+  repository = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
+  chart      = "ingress-azure"
+  namespace  = "ingress-azure"
   create_namespace = true
 
-  # enable ssl passthrough to have end-to-end encryption
   set {
-    name = "controller.extraArgs.enable-ssl-passthrough"
-    value = true
+    name = "appgw.name"
+    value = "applicationgateway5f3a"
+  }
+
+  set {
+    name = "appgw.resourceGroup"
+    value = "K8S"
   }
   
+  set {
+    name = "appgw.subscriptionId"
+    value = "7cd7a404-3a0a-41bd-996b-cc3248e8c292"
+  }
+
+  set {
+    name = "armAuth.type"
+    value = "aadPodIdentity"
+  }
+
+  set {
+    name = "armAuth.identityResourceID"
+    value = "/subscriptions/7cd7a404-3a0a-41bd-996b-cc3248e8c292/resourceGroups/K8S/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgwContrIdentity5f3a"
+  }
+
+  set {
+    name = "armAuth.identityClientID"
+    value = "b4bccab0-8a22-49b1-af1a-7473c6314d93"
+  }
+
   wait = local.wait
 }
 
