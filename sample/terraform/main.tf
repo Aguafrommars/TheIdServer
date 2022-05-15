@@ -236,6 +236,51 @@ resource "helm_release" "aad_pod_identity" {
   create_namespace = true
 }
 
+# Install ingress-azure
+resource "helm_release" "azure_ingress" {
+  name       = "ingress-azure"
+  repository = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
+  chart      = "ingress-azure"
+  namespace  = "ingress-azure"
+  create_namespace = true
+
+  set {
+    name = "appgw.name"
+    value = "applicationgateway5f3a"
+  }
+
+  set {
+    name = "appgw.resourceGroup"
+    value = "K8S"
+  }
+  
+  set {
+    name = "appgw.subscriptionId"
+    value = "7cd7a404-3a0a-41bd-996b-cc3248e8c292"
+  }
+
+  set {
+    name = "appgw.share"
+    value = false
+  }
+
+  set {
+    name = "armAuth.type"
+    value = "aadPodIdentity"
+  }
+
+  set {
+    name = "armAuth.identityResourceID"
+    value = "/subscriptions/7cd7a404-3a0a-41bd-996b-cc3248e8c292/resourcegroups/MC_K8S_AKS5F3A_WESTEUROPE/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgwContrIdentity5f3a"
+  }
+
+  set {
+    name = "armAuth.identityClientID"
+    value = "904c1efc-5405-459b-99a3-3eb45635a3b0"
+  }
+
+  wait = local.wait
+}
 
 
 # Install cert_manager to manage TLS certificates with letsencrypt
