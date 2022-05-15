@@ -13,9 +13,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    ClientId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Algorithm = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
+                    Algorithm = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
