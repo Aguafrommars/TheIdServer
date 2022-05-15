@@ -227,6 +227,15 @@ locals {
   wait = false
 }
 
+# Install AAD Pod Identity
+resource "helm_release" "azure_ingress" {
+  name       = "ingress-azure"
+  repository = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts/"
+  chart      = "aad-pod-identity"
+  namespace  = "ingress-azure"
+  create_namespace = true
+}
+
 # Install ingress-nginx
 resource "helm_release" "azure_ingress" {
   name       = "ingress-azure"
@@ -248,6 +257,11 @@ resource "helm_release" "azure_ingress" {
   set {
     name = "appgw.subscriptionId"
     value = "7cd7a404-3a0a-41bd-996b-cc3248e8c292"
+  }
+
+  set {
+    name = "appgw.share"
+    value = false
   }
 
   set {
