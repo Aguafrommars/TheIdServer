@@ -68,6 +68,12 @@ locals {
     seq = {
       # set node affinity to userpool nodes
       affinity = local.affinity
+      ingress = {
+        annotations = {
+          "kubernetes.io/ingress.class" = "azure/application-gateway"
+          "cert-manager.io/cluster-issuer" = "letsencrypt"
+        }
+      }
     }
     mysql = {
       image = {
@@ -105,6 +111,12 @@ locals {
         "kubernetes.io/ingress.class" = "azure/application-gateway"
         "cert-manager.io/cluster-issuer" = "letsencrypt"
       }
+      tls = [{
+        hosts = [
+          "${format("www.%s", local.host)}"
+        ]
+        secretName = "theidserver-certs"
+      }]
     }
     appSettings = {
       file = {
