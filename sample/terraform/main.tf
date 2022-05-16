@@ -300,10 +300,10 @@ resource "helm_release" "cert_manager" {
 
   # uncomment it on 1st deploy
 
-  set {
-    name = "installCRDs"
-    value = true
-  }
+  # set {
+  #  name = "installCRDs"
+  #  value = true
+  #}
   
   wait = local.wait
 }
