@@ -289,6 +289,24 @@ resource "helm_release" "azure_ingress" {
   wait = local.wait
 }
 
+# Install cert_manager to manage TLS certificates with letsencrypt
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  version    = "1.7.2"
+  namespace  = "cert-manager"
+  create_namespace = true
+
+  # uncomment it on 1st deploy
+
+  set {
+    name = "installCRDs"
+    value = true
+  }
+  
+  wait = local.wait
+}
 
 # creates ClusterIssuer
 resource "kubernetes_manifest" "cluster_issuer" {
