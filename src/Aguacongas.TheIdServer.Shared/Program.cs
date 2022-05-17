@@ -1,8 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +32,16 @@ if (seed)
 
 services.AddOpenTelemetry(configuration.GetSection(nameof(OpenTelemetryOptions)));
 
+var mutualTlsOptions = configuration.GetSection("IdentityServerOptions:MutualTls").Get<MutualTlsOptions>();
+if (mutualTlsOptions?.Enabled == true && !seed)
+{
+    // when mutual TLS is enable the web host must receive client certificate
+    builder.WebHost.ConfigureKestrel(kestrel =>
+    {
+        kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.AllowCertificate);
+    });
+}
+
 var app = builder.Build();
 
 if (seed)
@@ -46,5 +59,6 @@ app.Use(async (context, next) =>
     await next().ConfigureAwait(false);
 });
 app.UseTheIdServer(app.Environment, configuration);
+
 
 app.Run();
