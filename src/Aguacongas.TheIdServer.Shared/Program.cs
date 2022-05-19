@@ -1,9 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
-using Duende.IdentityServer.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
@@ -13,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Diagnostics;
 using System.Linq;
+using MutualTlsOptions = Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
