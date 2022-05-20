@@ -9,6 +9,13 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "RequireRequestObject",
+                table: "Clients",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
@@ -41,6 +48,10 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
+
+            migrationBuilder.DropColumn(
+                name: "RequireRequestObject",
+                table: "Clients");
         }
     }
 }

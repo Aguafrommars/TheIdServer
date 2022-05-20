@@ -9,6 +9,12 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "RequireRequestObject",
+                table: "Clients",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithm",
                 columns: table => new
@@ -41,6 +47,10 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithm");
+
+            migrationBuilder.DropColumn(
+                name: "RequireRequestObject",
+                table: "Clients");
         }
     }
 }
