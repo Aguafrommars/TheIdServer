@@ -56,6 +56,10 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
 
             migrationBuilder.DropColumn(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients");
+
+            migrationBuilder.DropColumn(
                 name: "RequireRequestObject",
                 table: "Clients");
 
