@@ -10,6 +10,11 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients",
+                nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
                 name: "RequireRequestObject",
                 table: "Clients",
                 nullable: false,
@@ -47,6 +52,10 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithm");
+
+            migrationBuilder.DropColumn(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients");
 
             migrationBuilder.DropColumn(
                 name: "RequireRequestObject",
