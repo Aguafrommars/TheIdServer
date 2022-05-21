@@ -26,8 +26,8 @@
 		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.6.6" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="4.6.6" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="4.6.5" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="4.6.5" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.5" />
