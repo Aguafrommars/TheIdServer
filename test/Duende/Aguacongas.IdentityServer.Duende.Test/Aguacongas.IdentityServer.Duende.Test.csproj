@@ -16,13 +16,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\PersistedGrantStoreTest.cs" Link="Store\PersistedGrantStoreTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Store\ResourceStoreTest.cs" Link="Store\ResourceStoreTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Test.Shared\Validators\TokenExchangeGrantValidatorTest.cs" Link="Validators\TokenExchangeGrantValidatorTest.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="Moq" Version="4.17.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="Moq" Version="4.18.1" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -35,6 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Store\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
 

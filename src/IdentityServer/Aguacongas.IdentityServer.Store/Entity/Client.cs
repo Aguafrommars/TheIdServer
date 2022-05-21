@@ -371,6 +371,18 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </summary>
         public int? PollingInterval { get; set; }
 
+        /// <summary>
+        /// When enabled, the client's token lifetimes (e.g. refresh tokens) will be tied to the user's session lifetime.
+        /// This means when the user logs out, any revokable tokens will be removed.
+        /// If using server-side sessions, expired sessions will also remove any revokable tokens, and backchannel logout will be triggered.
+        /// This client's setting overrides the global CoordinateTokensWithUserSession configuration setting.
+        /// </summary>
+        public bool? CoordinateLifetimeWithUserSession { get; set; }
+
+        /// <summary>
+        /// Specifies whether the client must use a request object on authorize requests (defaults to <c>false</c>.)
+        /// </summary>
+        public bool RequireRequestObject { get; set; }
 
         /// <summary>
         /// Gets or sets the relying.
@@ -445,6 +457,11 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public virtual ICollection<ClientLocalizedResource> Resources { get; set; }
 
         /// <summary>
+        /// Signing algorithm for identity token. If empty, will use the server default signing algorithm.
+        /// </summary>
+        public virtual ICollection<ClientAllowedIdentityTokenSigningAlgorithm> AllowedIdentityTokenSigningAlgorithms { get; set; }
+
+        /// <summary>
         /// Gets or sets the created at.
         /// </summary>
         /// <value>
@@ -459,7 +476,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
-       
 
         /// <summary>
         /// Clones this instance.

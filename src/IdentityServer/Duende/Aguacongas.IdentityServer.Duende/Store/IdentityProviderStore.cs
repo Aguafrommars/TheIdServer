@@ -36,7 +36,6 @@ namespace Aguacongas.IdentityServer.Store
             {
                 DisplayName = provider.DisplayName,
                 Enabled = true,
-                Properties = new Dictionary<string, string>(0),
                 Scheme = scheme
             };
         }

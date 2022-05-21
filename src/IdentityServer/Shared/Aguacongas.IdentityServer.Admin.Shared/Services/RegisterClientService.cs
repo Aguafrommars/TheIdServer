@@ -6,10 +6,13 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 #if DUENDE
 using Duende.IdentityServer.ResponseHandling;
+using static Duende.IdentityServer.IdentityServerConstants;
 #else
 using IdentityServer4.ResponseHandling;
+using static IdentityServer4.IdentityServerConstants;
 #endif
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
@@ -17,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -41,6 +45,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private readonly IAdminStore<ClientProperty> _clientPropertyStore;
         private readonly IAdminStore<ClientGrantType> _clientGrantTypeStore;
         private readonly IDiscoveryResponseGenerator _discoveryResponseGenerator;
+        private readonly ILogger<RegisterClientService> _logger;
 
 
         /// <summary>
@@ -54,6 +59,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
         /// <param name="identityServerOptions">The options.</param>
         /// <param name="dymamicClientRegistrationOptions">The dymamic client registration options.</param>
+        /// <param name="logger">A looger</param>
         /// <exception cref="ArgumentNullException">options
         /// or
         /// clientStore
@@ -79,7 +85,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
 #else
             IdentityServer4.Configuration.IdentityServerOptions identityServerOptions,
 #endif
-            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions)
+            IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions,
+            ILogger<RegisterClientService> logger)
 
         {
             _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
@@ -90,6 +97,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _clientPropertyStore = clientPropertyStore ?? throw new ArgumentNullException(nameof(clientPropertyStore));
             _clientGrantTypeStore = clientGrantTypeStore ?? throw new ArgumentNullException(nameof(clientGrantTypeStore));
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -110,7 +118,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
             registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
-            var secret = Guid.NewGuid().ToString();
+            string secret = null;
             
             var serializerSettings = new JsonSerializerSettings
             {
@@ -120,23 +128,41 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var sercretList = jwkKeys != null ? jwkKeys.Select(k => new ClientSecret
             {
                 Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.JsonWebKey,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.JsonWebKey,
-#endif
+                Type = SecretTypes.JsonWebKey,
+
                 Value = JsonConvert.SerializeObject(k, serializerSettings)
             }).ToList() : new List<ClientSecret>();
-            sercretList.Add(new ClientSecret
+
+            var clientCertificate = await httpContext.Connection.GetClientCertificateAsync();
+            if (clientCertificate is not null)
             {
-                Id = Guid.NewGuid().ToString(),
-#if DUENDE
-                Type = Duende.IdentityServer.IdentityServerConstants.SecretTypes.SharedSecret,
-#else
-                Type = IdentityServer4.IdentityServerConstants.SecretTypes.SharedSecret,
-#endif
-                Value = secret
-            });
+                _logger.LogDebug("Set certificate client secret for thumbprint {Thumbtprin}", clientCertificate.Thumbprint);
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = SecretTypes.X509CertificateBase64,
+                    Value = Convert.ToBase64String(clientCertificate.Export(X509ContentType.Cert))
+                });
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = SecretTypes.X509CertificateThumbprint,
+                    Value = clientCertificate.Thumbprint
+                });
+            }
+
+            if (!sercretList.Any())
+            {
+                _logger.LogInformation("Create, no secret received, new shared secret for client Id {ClientID}", registration.Id);
+
+                secret = Guid.NewGuid().ToString();
+                sercretList.Add(new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = SecretTypes.SharedSecret,
+                    Value = secret
+                });
+            }
 
             var client = new Client
             {
@@ -251,32 +277,36 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     }) : new List<ClientLocalizedResource>(0))
                     .ToList(),
                 Properties = new List<ClientProperty>
-                {
-                    new ClientProperty
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "applicationType",
-                        Value = registration.ApplicationType
-                    }
-                }.Union(registration.Contacts != null ? new List<ClientProperty>
-                {
-                    new ClientProperty
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "applicationType",
+                            Value = registration.ApplicationType
+                        }
+                    }.Union(registration.Contacts != null ? new List<ClientProperty>
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Key = "contacts",
-                        Value = string.Join("; ", registration.Contacts)
-                    }
-                } : new List<ClientProperty>(0))
-                .ToList(),
+                        new ClientProperty
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Key = "contacts",
+                            Value = string.Join("; ", registration.Contacts)
+                        }
+                    } : new List<ClientProperty>(0))
+                    .ToList(),
                 SlidingRefreshTokenLifetime = _defaultValues.SlidingRefreshTokenLifetime,
                 UpdateAccessTokenClaimsOnRefresh = _defaultValues.UpdateAccessTokenClaimsOnRefresh,
                 UserCodeType = _defaultValues.UserCodeType,
                 UserSsoLifetime = _defaultValues.UserSsoLifetime,
                 PolicyUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
                 TosUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
+#if DUENDE
+                CibaLifetime = _defaultValues.CibaLifetime,
+                PollingInterval = _defaultValues.PollingInterval,
+                CoordinateLifetimeWithUserSession = _defaultValues.CoordinateLifetimeWithUserSession,
+#endif
+                RegistrationToken = Guid.NewGuid()
             };
-
-            client.RegistrationToken = Guid.NewGuid();
 
             await _clientStore.CreateAsync(client).ConfigureAwait(false);
 
@@ -335,8 +365,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationToken = null;
             registration.RegistrationUri = null;
             registration.JwksUri = discovery["jwks_uri"].ToString();
-            registration.ClientSecret = client.ClientSecrets.FirstOrDefault()?.Value;
-            registration.ClientSecretExpireAt = client.ClientSecrets.Any() ? (int?)0 : null;
+            var clientSecret = client.ClientSecrets.FirstOrDefault(s => s.Type == SecretTypes.SharedSecret);
+            registration.ClientSecret = clientSecret?.Value;
+            registration.ClientSecretExpireAt = clientSecret != null ? 0 : null;
 
             return registration;
         }
@@ -403,7 +434,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
-            if (!(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
+            if (_dymamicClientRegistrationOptions.Protected && !(httpContext.User?.IsInRole(SharedConstants.WRITERPOLICY) ?? false))
             {
                 var allowedContact = _dymamicClientRegistrationOptions.AllowedContacts?.FirstOrDefault(c => registration.Contacts?.Contains(c.Contact) ?? false);
                 if (allowedContact == null)
@@ -591,12 +622,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void Validate(ClientRegisteration registration, Dictionary<string, object> discovery)
         {
-            registration.GrantTypes ??= new List<string>
+            registration.GrantTypes ??= new []
             {
                 "authorization_code"
             };
+            if (!registration.GrantTypes.Any())
+            {
+                registration.GrantTypes = new[] { "authorization_code" };
+            }
 
-            if (registration.RedirectUris == null || !registration.RedirectUris.Any())
+            registration.RedirectUris ??= Array.Empty<string>();
+            if (IsWebClient(registration) && !registration.RedirectUris.Any())
             {
                 throw new RegistrationException("invalid_redirect_uri", "RedirectUri is required.");
             }
@@ -630,16 +666,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
             ValidateUris(redirectUriList, registration.PolicyUris, "invalid_policy_uri", "PolicyUri");
 
-            if (registration.GrantTypes == null || !registration.GrantTypes.Any())
-            {
-                registration.GrantTypes = new[] { "authorization_code" };
-            }
             ValidateGrantType(registration.GrantTypes, discovery["grant_types_supported"] as IEnumerable<string>);
 
-            if (registration.ResponseTypes == null || !registration.ResponseTypes.Any())
-            {
-                registration.ResponseTypes = new[] { "code" };
-            }
+            registration.ResponseTypes ??= Array.Empty<string>();
 
             ValidateResponseType(registration.GrantTypes, registration.ResponseTypes, discovery["response_types_supported"] as IEnumerable<string>);
         }
@@ -739,6 +768,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     throw new RegistrationException(errorCode, $"{uriName} '{value}' host doesn't match a redirect uri host.");
                 }
             }
+        }
+
+        private static bool IsWebClient(ClientRegisteration client)
+        {
+            return client.GrantTypes.Any(g => g == "authorization_code" ||
+                    g == "hybrid" ||
+                    g == "implicit" ||
+                    g == "urn:ietf:params:oauth:grant-type:device_code");
         }
     }
 }

@@ -1,0 +1,82 @@
+﻿@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) 2022 @Olivier Lefebvre
+*@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
+@inject IViewLocalizer Localizer
+@model SessionModel
+@{
+    ViewData["Title"] = Localizer["Sessions"];
+    ViewData["ActivePage"] = ManageNavPages.Sessions;
+}
+
+<h4>@ViewData["Title"]</h4>
+<h5>@Localizer["Below is the list of sessions you have opened."]</h5>
+@if (Model.Sessions?.Results?.Any() == true)
+{
+    <table class="table table-bordered table-striped table-sm">
+        <caption class="visually-hidden">@Localizer["Sessions"]</caption>
+        <thead>
+            <tr>
+                <th scope="col">@Localizer["Created"]</th>
+                <th scope="col">@Localizer["Renewed"]</th>
+                <th scope="col">@Localizer["Expires"]</th>
+                <th scope="col">@Localizer["Clients"]</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var session in Model.Sessions.Results)
+            {
+                <tr class="align-middle">
+                    <td>@session.Created</td>
+                    <td>@session.Renewed</td>
+                    <td>@session.Expires</td>
+                    <td>
+                        @foreach(var clientId in session.ClientIds)
+                        {
+                            <div>@(await Model.GetClientNameAsync(clientId))</div>
+                        }
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="sessionId" value="@session.SessionId">
+                            <button class="btn btn-lg btn-danger" asp-page-handler="Delete">@Localizer["Delete"]</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Sessions.TotalPages > 1)
+    {
+        <nav aria-label="@Localizer["Pagination"]">
+            <ul class="pagination pagination-lg justify-content-end">
+                <li class="page-item @Model.GetPreviousPageClass()">
+                    <a class="page-link" href="#" aria-label=""@Localizer["Previous"]">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for (var i = 1; i <= Model.Sessions.TotalPages; i++)
+            {
+            <li class="page-item @Model.GetActivePageClass(i)">
+                <a class="page-link" href="#">
+                    @i
+                </a>
+            </li>               
+            }
+            <li class="page-item @Model.GetNextPageClass()">
+                <a class="page-link" href="#" aria-label=""@Localizer["Next"]">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div>@Localizer["No session"]</div>
+}

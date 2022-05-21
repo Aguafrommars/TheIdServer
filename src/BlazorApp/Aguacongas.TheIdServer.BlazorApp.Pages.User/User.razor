@@ -46,6 +46,9 @@ else
                             <a href="@(NavigationManager.Uri)#external-logins-tokens" @onclick='() => ScrollTo("external-logins-tokens")' @onclick:preventDefault>@Localizer["external logins tokens"]</a>
                         </li>
                         <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#sessions" @onclick='() => ScrollTo("sessions")' @onclick:preventDefault>@Localizer["sessions"]</a>
+                        </li>
+                        <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#reference-tokens" @onclick='() => ScrollTo("reference-tokens")' @onclick:preventDefault>@Localizer["reference tokens"]</a>
                         </li>
                         <li class="list-inline-item">
@@ -178,6 +181,16 @@ else
                     </div>
                     <div class="card-body">
                         <UserTokens Collection="@Model.Tokens" />
+                    </div>
+                </div>
+                <div id="sessions" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Sessions"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <Sessions Collection="@Model.Sessions" />
                     </div>
                 </div>
                 <div id="reference-tokens" class="card mb-3">

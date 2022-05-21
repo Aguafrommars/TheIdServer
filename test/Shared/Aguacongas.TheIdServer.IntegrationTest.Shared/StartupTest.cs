@@ -30,11 +30,26 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using Aguacongas.IdentityServer.Abstractions;
 using Microsoft.AspNetCore.Identity;
+using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
+using System.Net.Http;
+using System.Net;
 
 namespace Aguacongas.TheIdServer.IntegrationTest
 {
     public class ServiceCollectionExtensionsTest
     {
+        [Fact]
+        public async Task Configure_should_add_get_certificate_from_header_middleware()
+        {
+            using var factory = new TheIdServerFactory();
+            using var client = factory.CreateClient();
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/connect");
+            request.Headers.Add("ssl-client-cert", Uri.EscapeDataString(File.ReadAllText("test.pem")));
+            using var response = await client.SendAsync(request).ConfigureAwait(false);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
         [Fact]
         public async Task SeedData_should_seed_data()
         {

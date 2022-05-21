@@ -20,16 +20,6 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// <summary>
         /// Gets or set the token type offered collection
         /// </summary>
-        public IEnumerable<TokenType> TokenTypesOffered { get; set; } = new[]
-        {
-            new TokenType
-            {
-                Uri =  "urn:oasis:names:tc:SAML:1.0:assertion"
-            },
-            new TokenType
-            {
-                Uri =  "urn:oasis:names:tc:SAML:2.0:assertion"
-            }
-        };
+        public IEnumerable<TokenType> TokenTypesOffered { get; set; }
     }
 }

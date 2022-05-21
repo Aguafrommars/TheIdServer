@@ -1,0 +1,84 @@
+﻿@using Microsoft.JSInterop
+@inherits  EntitesGridModel<Entity.UserSession>
+@inject IJSRuntime _jsRuntime
+
+<EntitiesGrid Items="@UserSessions" TableClass="table table-hover" Context="session">
+    <TableHeader>
+        <th scope="col">
+            <SortableHeader Property="SessionId"
+                            Text="@Localizer["id"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="DisplayName"
+                            Text="@Localizer["name"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Created"
+                            Text="@Localizer["created"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Renewed"
+                            Text="@Localizer["renewed"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Expires"
+                            Text="@Localizer["expires"]"
+                            GridState="GridState" />
+        </th>
+        <th scope="col">
+            <SortableHeader Property="Ticket"
+                            Text="@Localizer["ticket"]"
+                            GridState="GridState" />
+        </th>
+        <th></th>
+    </TableHeader>
+    <RowTemplate>
+         <td>
+            @session.SessionId
+        </td>
+        <td>
+            @session.DisplayName
+        </td>
+        <td>
+            @session.Created
+        </td>
+        <td>
+            @session.Renewed
+        </td>
+        <td>
+            @session.Expires
+        </td>
+        <td>
+            <button type="button" class="btn btn-secondary" @onclick="() => ShowData(session)">
+                <span class="oi oi-code"></span>
+            </button>
+        </td>
+        <td>
+            <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(session)">
+                <span class="oi oi-trash"></span>
+            </AuthorizeButton>
+        </td>
+    </RowTemplate>
+</EntitiesGrid>
+<div class="modal fade" id="token-data" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="delete-modal-header">Token</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="@Localizer["Close"]">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col text-monospace text-body">
+                        <small><code><pre>@_selectedData</pre></code></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -37,6 +37,7 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\SettingsTest.cs" Link="BlazorApp\Pages\SettingsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UsersTest.cs" Link="BlazorApp\Pages\UsersTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\RegisterControllerTest.cs" Link="Controllers\RegisterControllerTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controllers\WsFederationControllerTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\HealthCheckTest.cs" Link="HealthCheckTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\PrometheusEndpointTest.cs" Link="PrometheusEndpointTest.cs" />
@@ -49,13 +50,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="bunit" Version="1.7.7" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.16" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.4" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.4" />
-		<PackageReference Include="Moq" Version="4.17.2" />
+		<PackageReference Include="bunit" Version="1.8.15" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.5" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
+		<PackageReference Include="Moq" Version="4.18.1" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<PrivateAssets>all</PrivateAssets>
@@ -73,11 +74,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="test.crt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="test.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="test.pem">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 

@@ -9,7 +9,6 @@ terraform {
   }
 }
 
-
 # k8s connection settings are stored in k8s_config variable in Terraform cloud
 provider "kubernetes" {
   host = var.k8s_config.host
@@ -99,8 +98,71 @@ locals {
     }
     # enable wave on config change
     deploymentAnnotations = local.deploymentAnnotations
+
+    # ingress annotations
+    ingress = {
+      annotations = {
+        "kubernetes.io/ingress.class" = "nginx"
+        "cert-manager.io/cluster-issuer" = "letsencrypt"
+        "nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream" = "true"
+        "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
+        "nginx.ingress.kubernetes.io/auth-tls-verify-client" = "off"
+      }
+    }
     appSettings = {
       file = {
+        # override certificate authentication options
+        CertificateAuthenticationOptions = {
+          AllowedCertificateTypes = "All"
+          ValidateCertificateUse = false
+          ValidateValidityPeriod = false
+        }
+        # override identity server option
+        IdentityServerOptions = {
+          MutualTls = {
+            Enabled = true
+            PEMHeader = "ssl-client-cert"
+          }
+          EnableServerSideSession = true
+          ServerSideSessions = {
+            UserDisplayNameClaimType = "name"
+            RemoveExpiredSessions = true
+            ExpiredSessionsTriggerBackchannelLogout = true
+            RemoveExpiredSessionsFrequency = "00:10:00"
+            RemoveExpiredSessionsBatchSize = 100
+          }
+          CustomEntriesOfStringArray = {
+            token_endpoint_auth_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
+            backchannel_authentication_request_signing_alg_values_supported = [
+              "RS256",
+              "ES256",
+              "ES384",
+              "ES512",
+              "PS256",
+              "PS384",
+              "PS512",
+              "RS384",
+              "RS512"
+            ]
+            acr_values_supported = [
+              "idp:local"
+            ]
+          }
+        }
+        # override dynamic client registration options
+        DynamicClientRegistrationOptions = {
+          Protected = false
+        }
         # override serilog settings
         Serilog = {
           MinimumLevel = {
@@ -108,6 +170,43 @@ locals {
             Override = {
               "Microsoft.EntityFrameworkCore" = "Warning"
               System = "Warning"
+            }
+          }
+        }
+        # override key management
+        IdentityServer = {
+          Key = {
+            KeyProtectionOptions = {
+              KeyProtectionKind = "X509",
+              X509CertificatePath = "/usr/local/share/ca-certificates/sk.pfx"
+            },
+            StorageKind = "EntityFramework",
+            Type = "KeysRotation"
+            AdditionalSigningKeyType = {
+              RS384 = {
+                SigningAlgorithm= "RS384"
+              },
+              RS512 = {
+                SigningAlgorithm = "RS512"
+              },
+              PS256 = {
+                SigningAlgorithm = "PS256"
+              },
+              PS384 = {
+                SigningAlgorithm = "PS384"
+              },
+              PS512 = {
+                SigningAlgorithm = "PS512"
+              },
+              ES256 = {
+                SigningAlgorithm = "ES256"
+              },
+              ES384 = {
+                SigningAlgorithm = "ES384"
+              },
+              ES512 = {
+                SigningAlgorithm = "ES512"
+              }
             }
           }
         }
@@ -136,7 +235,7 @@ resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
-  version    = "4.0.19"
+  version    = "4.1.1"
   namespace  = "ingress-nginx"
   create_namespace = true
 
@@ -148,6 +247,7 @@ resource "helm_release" "nginx_ingress" {
   
   wait = local.wait
 }
+
 
 # Install cert_manager to manage TLS certificates with letsencrypt
 resource "helm_release" "cert_manager" {

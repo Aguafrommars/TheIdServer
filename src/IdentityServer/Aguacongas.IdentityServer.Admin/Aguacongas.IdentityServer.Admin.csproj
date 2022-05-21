@@ -30,21 +30,21 @@
 
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq.Json" Version="2.1.0" />		
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />		
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />		
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />		
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-		<PackageReference Include="NSwag.AspNetCore" Version="13.15.10" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.4" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.16.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="6.0.4" />
-		<PackageReference Include="SendGrid" Version="9.27.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="6.0.5" />
+		<PackageReference Include="SendGrid" Version="9.28.0" />
 	</ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
