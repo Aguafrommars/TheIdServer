@@ -1,3 +1,46 @@
+# [6.0.0](https://github.com/Aguafrommars/TheIdServer/compare/5.0.0...6.0.0) (2022-05-21)
+
+
+### Bug Fixes
+
+* foreign key constraint incompatible ([ffacaad](https://github.com/Aguafrommars/TheIdServer/commit/ffacaad5a9b81ad15ca397d5af21b06480ca73e6))
+* sql migration ([c4660a1](https://github.com/Aguafrommars/TheIdServer/commit/c4660a1395ee1cb393243b40a0069b93ae1534cb))
+* update packages ([c0cad47](https://github.com/Aguafrommars/TheIdServer/commit/c0cad47feb747bf274a46a30c2e9204ec85ce792))
+* update packages ([581e10f](https://github.com/Aguafrommars/TheIdServer/commit/581e10fc5363d60edd600009bbc5606b28563ccd))
+* update packages ([5d278e0](https://github.com/Aguafrommars/TheIdServer/commit/5d278e0344bfe8c4cf4c41ff0b043d33dd06fbcd))
+* update packages ([c442843](https://github.com/Aguafrommars/TheIdServer/commit/c4428436153f42fb99ffa4c1b072eb26f586a7d4))
+* update packages ([05454da](https://github.com/Aguafrommars/TheIdServer/commit/05454da7727cf7c5fdce5c10e87803eaffa1cb54))
+* update packages ([8ae57f1](https://github.com/Aguafrommars/TheIdServer/commit/8ae57f191c055e1759ce4689af9a2c2e67c5c07b))
+* update packages ([25a116f](https://github.com/Aguafrommars/TheIdServer/commit/25a116f6b60d15fa3bbc56a4e18b7683ea664b99))
+* update packages ([3351901](https://github.com/Aguafrommars/TheIdServer/commit/33519019c519c2851617f539372c1d14a8fd668c))
+* update packages ([f8eae43](https://github.com/Aguafrommars/TheIdServer/commit/f8eae438f4da6351313e2b58e17fbdb45b11f504))
+* update packages ([6bd869d](https://github.com/Aguafrommars/TheIdServer/commit/6bd869d276f49bedb1f0fe799c10c423a6a73760))
+* update packages ([b0c8ec5](https://github.com/Aguafrommars/TheIdServer/commit/b0c8ec5e03cc70ad67f6d25b7877c2451ecd3ca6))
+* update packages ([7752e93](https://github.com/Aguafrommars/TheIdServer/commit/7752e93f515145ea35474bd39d0b31a2ff534938))
+* ut8 char set ([97fe8ee](https://github.com/Aguafrommars/TheIdServer/commit/97fe8eec45b370fd36252427f345035f74ef479c))
+
+
+### Code Refactoring
+
+* implement validation keys store ([dd0e4fc](https://github.com/Aguafrommars/TheIdServer/commit/dd0e4fc30646b5958d456f6e23bfd3cf17383c98))
+
+
+### Features
+
+* multiple singing key algorithm ([412a881](https://github.com/Aguafrommars/TheIdServer/commit/412a8810e2211ccc06a5453906d306b64fe9d4d0))
+* retrieve client cert from header  ([#770](https://github.com/Aguafrommars/TheIdServer/issues/770)) ([fddea38](https://github.com/Aguafrommars/TheIdServer/commit/fddea380b750a47abc85a6dd63045d13a3d515cb))
+
+
+### Reverts
+
+* Revert "fix: duplicate column name 'CoordinateLifetimeWithUserSession'" ([07174cd](https://github.com/Aguafrommars/TheIdServer/commit/07174cd9b70e2d6420e8ece98f6580778065f4a3))
+
+
+### BREAKING CHANGES
+
+* CHANGE
+remove signing keys store
+
 # [5.0.0](https://github.com/Aguafrommars/TheIdServer/compare/4.6.6...5.0.0) (2022-05-12)
 
 
