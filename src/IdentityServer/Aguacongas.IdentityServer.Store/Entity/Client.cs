@@ -380,6 +380,11 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool? CoordinateLifetimeWithUserSession { get; set; }
 
         /// <summary>
+        /// Specifies whether the client must use a request object on authorize requests (defaults to <c>false</c>.)
+        /// </summary>
+        public bool RequireRequestObject { get; set; }
+
+        /// <summary>
         /// Gets or sets the relying.
         /// </summary>
         /// <value>
@@ -471,12 +476,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
-
-        /// <summary>
-        /// Specifies whether the client must use a request object on authorize requests (defaults to <c>false</c>.)
-        /// </summary>
-        public bool RequireRequestObject { get; set; }
-
 
         /// <summary>
         /// Clones this instance.
