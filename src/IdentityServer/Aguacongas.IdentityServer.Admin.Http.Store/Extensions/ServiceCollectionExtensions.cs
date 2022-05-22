@@ -30,7 +30,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>>(p => new  KeyStore<IAuthenticatedEncryptorDescriptor>(getHttpClient.Invoke(p),
                         p.GetRequiredService<ILogger<KeyStore<IAuthenticatedEncryptorDescriptor>>>()))
                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>>(p => new KeyStore<RsaEncryptorDescriptor>(getHttpClient.Invoke(p),
-                        p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()));
+                        p.GetRequiredService<ILogger<KeyStore<RsaEncryptorDescriptor>>>()))
+                .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>>(p => new KeyStore<ECDsaEncryptorDescriptor>(getHttpClient.Invoke(p),
+                        p.GetRequiredService<ILogger<KeyStore<ECDsaEncryptorDescriptor>>>()));
         }
 
         private static void AddHttpAdminStore(IServiceCollection services,

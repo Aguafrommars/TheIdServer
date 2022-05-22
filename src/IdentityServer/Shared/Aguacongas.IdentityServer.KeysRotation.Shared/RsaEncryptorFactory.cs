@@ -28,7 +28,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
 
         internal RsaEncryptor CreateAuthenticatedEncryptorInstance(
             RsaSecurityKey secret,
-            RsaEncryptorConfiguration configuration)
+            SigningAlgorithmConfiguration configuration)
         {
             if (configuration == null)
             {

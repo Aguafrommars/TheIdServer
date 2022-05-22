@@ -13,14 +13,25 @@
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using System;
+using System.Collections.Generic;
 
 // namespace change from original Microsoft.AspNetCore.DataProtection.KeyManagement.Internal
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    public interface ICacheableKeyRingProvider : IKeyRingProvider // add IKeyRingProvider interface derivation from oginal file
+    public interface ICacheableKeyRingProvider<TC, TE> : ICacheableKeyRingProvider
+        where TC : SigningAlgorithmConfiguration
+        where TE : ISigningAlgortithmEncryptor
     {
+        CacheableKeyRing<TC, TE> GetCacheableKeyRing(DateTimeOffset now);
+    }
+
+    public interface ICacheableKeyRingProvider : IKeyRingProvider
+    {
+        string Algorithm { get; } // add Algorithm property from original file
         IKeyManager KeyManager { get; } // add KeyManager property from original file
+
         IKeyRing RefreshCurrentKeyRing(); // add RefreshCurrentKeyRing method from original file
-        CacheableKeyRing GetCacheableKeyRing(DateTimeOffset now);
+
+        IReadOnlyCollection<IKey> GetAllKeys();
     }
 }

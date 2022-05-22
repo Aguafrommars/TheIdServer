@@ -1,10 +1,10 @@
-﻿using Aguacongas.IdentityServer.Store.Entity;
+﻿using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Duende.IdentityServer.Models
 {
     public static class ServerSideSessionExtensions
     {
-        public static UserSession ToUserSession(this ServerSideSession session)
+        public static Entity.UserSession ToUserSession(this ServerSideSession session)
         => new()
         {
             Created = session.Created,

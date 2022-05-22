@@ -22,16 +22,14 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 nullable: false,
                 defaultValue: false);
 
+
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Algorithm = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Id = table.Column<string>(nullable: false),
+                    ClientId = table.Column<string>(nullable: false),
+                    Algorithm = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
@@ -45,7 +43,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8mb3");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientAllowedIdentityTokenSigningAlgorithms_ClientId_Algorit~",

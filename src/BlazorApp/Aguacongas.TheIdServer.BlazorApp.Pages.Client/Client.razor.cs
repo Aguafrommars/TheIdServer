@@ -46,6 +46,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             {
                 ProtocolType = "oidc",
                 Enabled = true,
+                EnableLocalLogin = true,
                 AllowedGrantTypes = new List<Entity.ClientGrantType>(),
                 AllowedIdentityTokenSigningAlgorithms = new List<Entity.ClientAllowedIdentityTokenSigningAlgorithm>(),
                 AllowedScopes = new List<Entity.ClientScope>(),

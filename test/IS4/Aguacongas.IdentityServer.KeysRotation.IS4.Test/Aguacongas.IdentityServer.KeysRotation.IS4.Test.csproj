@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\AzureKeyVault\AzureKeyVaultXmlEncryptorTest.cs" Link="AzureKeyVault\AzureKeyVaultXmlEncryptorTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorDescriptorDeserializerTest.cs" Link="ECDsaEncryptorDescriptorDeserializerTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorDescriptorTest.cs" Link="ECDsaEncryptorDescriptorTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorFactoryTest.cs" Link="ECDsaEncryptorFactoryTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorTest.cs" Link="ECDsaEncryptorTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\EntityFrameworkCore\EntityFrameworkCoreXmlRepositoryTest.cs" Link="EntityFrameworkCore\EntityFrameworkCoreXmlRepositoryTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\Extensions\KeyRotationBuilderExtensionsTest.cs" Link="Extensions\KeyRotationBuilderExtensionsTest.cs" />
     <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\KeyManagement\CertificateXmlEncryptorTest.cs" Link="KeyManagement\CertificateXmlEncryptorTest.cs" />
@@ -25,10 +29,10 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.3.*" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-	  <PackageReference Include="Moq" Version="4.17.2" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+	  <PackageReference Include="Moq" Version="4.18.1" />
 	  <PackageReference Include="xunit" Version="2.4.1" />
-	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

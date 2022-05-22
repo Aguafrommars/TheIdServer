@@ -150,6 +150,40 @@ So you can set any IdentityServer4 options you want from configuration
 }
 ```
 
+### Mutual TLS client certificate options
+
+When Muutal TLS is enabled, you can configure the client certificate authentication options with `CertificateAuthenticationOptions` section.  
+
+```json
+"IdentityServerOptions": {
+    "MutualTls": {
+      "Enabled": true
+    }
+},
+"CertificateAuthenticationOptions": {
+  "AllowedCertificateTypes": "All",
+  "ValidateCertificateUse": false,
+  "ValidateValidityPeriod": false,
+  "RevocationMode": "NoCheck"
+}
+```
+
+### Retrieves client certificates fron HTTP request header
+
+When Mutual TLS is enabled the client certificate can be read in PEM format from request header. For exemple if you use a kubernetes NGINX ingress you can configure it to send the client certificate to the backend in the *ssl-client-cert* header.
+See [Client Certificate Authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication).
+
+To retrieve the client certificate from the request header confiure the `MutualTls` sub section like :
+
+```json
+"IdentityServerOptions": {
+    "MutualTls": {
+      "Enabled": true,
+      "PEMHeader": "ssl-client-cert"
+    }
+}
+```
+
 ## Configure stores
 
 ### Using Entity Framework Core
@@ -205,7 +239,8 @@ And **RavenDbOptions** to define the RavenDb options.
   "StorageKind": "RavenDb"
 }
 ```
-> The server support RavenDb 4.1 and above. 
+
+> The server support RavenDb 4.1 and above.  
 
 ### Using MongoDb
 
@@ -224,8 +259,8 @@ And **ConnectionStrings:DefaultConnection** to define the connection string.
 ```
 
 > We cannot used another database than the default database defined in the connection string.
+> As no `DbContext` will be registered, you cannot store signing keys in EF but you can choose the `MongoDb` storage kind (see [Configure signin keys](#configure-signing-key)):  
 
-> As no `DbContext` will be registered, you cannot store signing keys in EF but you can choose the `MongoDb` storage kind (see [Configure signin keys](#configure-signing-key)):
 ```json
 "IdentityServer": {
   "Key": {

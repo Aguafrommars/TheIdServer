@@ -1,5 +1,4 @@
 ﻿using Aguacongas.IdentityServer.Store;
-using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
 using Moq;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.Duende.Test.Store
 {
@@ -24,8 +24,8 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task CreateSessionAsync_should_fallback_to_underliying_store()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
-            storeMock.Setup(m => m.CreateAsync(It.IsAny<UserSession>(), It.IsAny<CancellationToken>())).ReturnsAsync(new UserSession()).Verifiable();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
+            storeMock.Setup(m => m.CreateAsync(It.IsAny<Entity.UserSession>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Entity.UserSession()).Verifiable();
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task DeleteSessionAsync_should_fallback_to_underliying_store()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
             storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Verifiable();
 
             var sut = new ServerSideSessionStore(storeMock.Object);
@@ -50,14 +50,14 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task DeleteSessionsAsync_should_create_odata_filter()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
             var id = Guid.NewGuid().ToString();
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<UserSession>
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<Entity.UserSession>
             {
                 Count = 1,
                 Items = new[]
                 {
-                    new UserSession
+                    new Entity.UserSession
                     {
                         Id = id
                     }
@@ -79,14 +79,14 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task GetAndRemoveExpiredSessionsAsync_should_create_odata_filter()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
             var id = Guid.NewGuid().ToString();
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<UserSession>
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<Entity.UserSession>
             {
                 Count = 1,
                 Items = new[]
                 {
-                    new UserSession
+                    new Entity.UserSession
                     {
                         Id = id,
                         UserId = id
@@ -109,9 +109,9 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         public async Task GetSessionAsync_should_fallback_to_underliying_store()
         {
             var id = Guid.NewGuid().ToString();
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
             storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new UserSession
+                .ReturnsAsync(new Entity.UserSession
                 {
                     Id = id
                 })
@@ -129,14 +129,14 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task GetSessionsAsync_should_create_odata_filter()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
             var id = Guid.NewGuid().ToString();
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<UserSession>
+            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new PageResponse<Entity.UserSession>
             {
                 Count = 1,
                 Items = new[]
                 {
-                    new UserSession
+                    new Entity.UserSession
                     {
                         Id = id,
                         UserId = id
@@ -160,19 +160,19 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task QuerySessionsAsync_should_create_odata_filter_and_create_page_result()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
 
-            var pageResponse = new PageResponse<UserSession>
+            var pageResponse = new PageResponse<Entity.UserSession>
             {
                 Count = 5,
                 Items = new[]
                 {
-                    new UserSession
+                    new Entity.UserSession
                     {
                         Id = Guid.NewGuid().ToString(),
                         UserId = Guid.NewGuid().ToString()
                     },
-                    new UserSession
+                    new Entity.UserSession
                     {
                         Id = Guid.NewGuid().ToString(),
                         UserId = Guid.NewGuid().ToString()
@@ -277,8 +277,8 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         [Fact]
         public async Task UpdateSessionAsync_should_fallback_to_underliying_store()
         {
-            var storeMock = new Mock<IAdminStore<UserSession>>();
-            storeMock.Setup(m => m.UpdateAsync(It.IsAny<UserSession>(), It.IsAny<CancellationToken>())).Verifiable();
+            var storeMock = new Mock<IAdminStore<Entity.UserSession>>();
+            storeMock.Setup(m => m.UpdateAsync(It.IsAny<Entity.UserSession>(), It.IsAny<CancellationToken>())).Verifiable();
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 

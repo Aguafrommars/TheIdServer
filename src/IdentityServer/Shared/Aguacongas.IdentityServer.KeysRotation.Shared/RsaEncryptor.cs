@@ -7,13 +7,12 @@ using static Duende.IdentityServer.IdentityServerConstants;
 using IdentityServer4.Models;
 using static IdentityServer4.IdentityServerConstants;
 #endif
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.IdentityModel.Tokens;
 using System;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {
-    internal class RsaEncryptor: IAuthenticatedEncryptor
+    internal class RsaEncryptor: ISigningAlgortithmEncryptor
     {
         private readonly RsaSecurityKey _keyDerivationKey;
 
@@ -22,19 +21,21 @@ namespace Aguacongas.IdentityServer.KeysRotation
             _keyDerivationKey = keyDerivationKey;        
         }
 
+        public SigningCredentials GetSigningCredentials(string signingAlgorithm)
+        => GetSigningCredentials(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
+
         public SigningCredentials GetSigningCredentials(RsaSigningAlgorithm rsaSigningAlgorithm)
-        {
-            return new SigningCredentials(_keyDerivationKey, rsaSigningAlgorithm.ToString());
-        }
+        => new(_keyDerivationKey, rsaSigningAlgorithm.ToString());
+
+        public SecurityKeyInfo GetSecurityKeyInfo(string signingAlgorithm)
+        => GetSecurityKeyInfo(Enum.Parse<RsaSigningAlgorithm>(signingAlgorithm));
 
         public SecurityKeyInfo GetSecurityKeyInfo(RsaSigningAlgorithm rsaSigningAlgorithm)
-        {
-            return new SecurityKeyInfo
+        => new()
             {
                 Key = _keyDerivationKey,
                 SigningAlgorithm = rsaSigningAlgorithm.ToString()
             };
-        }
 
         public byte[] Decrypt(ArraySegment<byte> ciphertext, ArraySegment<byte> additionalAuthenticatedData)
         {

@@ -63,7 +63,8 @@ Choose your favorite:
 * [Token exchange](https://datatracker.ietf.org/doc/html/rfc8693)([RFC 8693](https://datatracker.ietf.org/doc/html/rfc8693))
 * [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#health-checks)
 * [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/Aguacongas.TheIdServer/OPEN_TELEMETRY.md)
-
+* [Server side session](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER_SIDE_SESSIONS.md)(Duende version only)
+  
 ## Setup
 
 * Read the [IS4 server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.IS4/README.md) to configure IdentityServer4 version.  
@@ -95,6 +96,6 @@ https://www.certification.openid.net/plan-detail.html?plan=ZKco5LJhicIlT&public=
 
 Choose your favorite:
 
+* [github sponsor](https://github.com/sponsors/aguacongas/sponsorships?sponsor=aguacongas&tier_id=151490)
 * [issuehunts](https://issuehunt.io/r/Aguafrommars/TheIdServer/issues/170)
-* [github sponsor](https://github.com/sponsors/aguacongas),
 * [liberapay](https://liberapay.com/aguacongas)

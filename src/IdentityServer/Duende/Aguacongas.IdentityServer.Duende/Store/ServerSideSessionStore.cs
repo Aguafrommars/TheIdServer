@@ -11,9 +11,9 @@ namespace Aguacongas.IdentityServer.Store
 {
     public class ServerSideSessionStore : IServerSideSessionStore
     {
-        private readonly IAdminStore<UserSession> _store;
+        private readonly IAdminStore<Entity.UserSession> _store;
 
-        public ServerSideSessionStore(IAdminStore<UserSession> store)
+        public ServerSideSessionStore(IAdminStore<Entity.UserSession> store)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }
@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Store
             var pageResponse = await _store.GetAsync(new PageRequest
             {
                 Filter = CreateODataFilterExpression(filter),
-                Select = nameof(UserSession.Id),
+                Select = nameof(Entity.UserSession.Id),
             }, cancellationToken).ConfigureAwait(false);
 
             foreach (var sessionId in pageResponse.Items.Select(u => u.Id))
@@ -42,8 +42,8 @@ namespace Aguacongas.IdentityServer.Store
         {
             var pageResponse = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserSession.Expires)} lt {DateTime.UtcNow:o}",
-                OrderBy = nameof(UserSession.Created),
+                Filter = $"{nameof(Entity.UserSession.Expires)} lt {DateTime.UtcNow:o}",
+                OrderBy = nameof(Entity.UserSession.Created),
                 Take = count    
             }, cancellationToken).ConfigureAwait(false);
 
@@ -75,11 +75,11 @@ namespace Aguacongas.IdentityServer.Store
 
             const int memberCount = 3;
             var expressionList = new List<string>(memberCount);
-            AddODataFilterForMember(filter.SubjectId, nameof(UserSession.UserId), expressionList);
-            AddODataFilterForMember(filter.SessionId, nameof(UserSession.SessionId), expressionList);
+            AddODataFilterForMember(filter.SubjectId, nameof(Entity.UserSession.UserId), expressionList);
+            AddODataFilterForMember(filter.SessionId, nameof(Entity.UserSession.SessionId), expressionList);
             if (!string.IsNullOrEmpty(filter.DisplayName))
             {
-                expressionList.Add($"containt(tolower({nameof(UserSession.DisplayName)}), '{filter.DisplayName.ToLowerInvariant()}')");
+                expressionList.Add($"containt(tolower({nameof(Entity.UserSession.DisplayName)}), '{filter.DisplayName.ToLowerInvariant()}')");
             }
             var odataFilter = string.Join(" or ", expressionList);
 
@@ -124,8 +124,8 @@ namespace Aguacongas.IdentityServer.Store
         {
             const int memberCount = 2;
             var expressionList = new List<string>(memberCount);
-            AddODataFilterForMember(filter.SubjectId, nameof(UserSession.UserId), expressionList);
-            AddODataFilterForMember(filter.SessionId, nameof(UserSession.SessionId), expressionList);
+            AddODataFilterForMember(filter.SubjectId, nameof(Entity.UserSession.UserId), expressionList);
+            AddODataFilterForMember(filter.SessionId, nameof(Entity.UserSession.SessionId), expressionList);
 
             return string.Join(" and ", expressionList);
         }

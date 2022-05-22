@@ -46,6 +46,7 @@ using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncr
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -87,7 +88,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOidcStateDataFormatterCache()
 #if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
-                .AddSigningKeyStore()
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -106,6 +106,9 @@ namespace Microsoft.Extensions.DependencyInjection
 #endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
+                .AddJwtBearerClientAuthentication()
+                .AddMutualTlsSecretValidators()
+                .ConfigureDiscovey(configurationManager.GetSection(nameof(IdentityServerOptions)))
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
 #if DUENDE
@@ -153,13 +156,22 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
                 .ConfigurePrimaryHttpMessageHandler(p => p.GetRequiredService<HttpClientHandler>());
 
-            services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
+            var authenticationBuilder = services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies(true))
                 .AddAuthentication()
                 .AddJwtBearer("Bearer", options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
+
+            var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<MutualTlsOptions>();
+            if (mutulaTlsOptions?.Enabled == true)
+            {
+                // MutualTLS
+                authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme, 
+                    options => configurationManager.GetSection(nameof(CertificateAuthenticationOptions)).Bind(options));
+            }
+                
 
             var mvcBuilder = services.Configure<SendGridOptions>(configurationManager)
                 .AddLocalization()
@@ -189,6 +201,7 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
                  .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
                  .AddTransient<JSInterop.IJSRuntime, JSRuntime>()
+                 .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>, KeyStore<ECDsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.ECDsaEncryptorDescriptor>>()
                  .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
                  .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
                  .AddAdminApplication(new Settings())

@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store;
 using AngleSharp.Dom;
@@ -63,6 +64,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         {
             await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
+                var keyRotationAssemblyQualifiedName = typeof(RsaEncryptorDescriptorDeserializer).AssemblyQualifiedName;
+
                 var id = Guid.NewGuid();
                 await context.KeyRotationKeys.AddAsync(new KeyRotationKey
                 {
@@ -71,7 +74,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
     <creationDate>2020-10-08T07:44:21.391891Z</creationDate>
     <activationDate>2020-10-08T07:44:21.3792973Z</activationDate>
     <expirationDate>2020-10-22T07:44:21.3792973Z</expirationDate>
-    <descriptor deserializerType=""Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptorDeserializer, Aguacongas.IdentityServer.KeysRotation, Version = 1.0.0.0, Culture = neutral, PublicKeyToken = null"">
+    <descriptor deserializerType=""{keyRotationAssemblyQualifiedName}"">
         <descriptor>
             <encryption algorithm=""System.Security.Cryptography.RSA, System.Security.Cryptography.Algorithms, Version = 4.3.2.0, Culture = neutral, PublicKeyToken = b03f5f7f11d50a3a"" keyLength=""2048""/>
             <keyId>74A71DC1642A06B8A753E8FCA13EC40A</keyId>

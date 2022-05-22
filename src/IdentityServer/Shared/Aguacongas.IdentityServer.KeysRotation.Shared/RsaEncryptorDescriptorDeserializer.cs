@@ -33,7 +33,8 @@ namespace Aguacongas.IdentityServer.KeysRotation
             var encryptionElement = element.Element("encryption");
             configuration.EncryptionAlgorithmType = FriendlyNameToType((string)encryptionElement.Attribute("algorithm"));
             configuration.EncryptionAlgorithmKeySize = (int)encryptionElement.Attribute("keyLength");
-           
+            configuration.SigningAlgorithm = (string)encryptionElement.Attribute("signingAlrotithm");
+
             var masterKey = ((string)element.Element("key")).ToSecret();
 
             byte[] unprotectedSecretRawBytes = new byte[masterKey.Length];

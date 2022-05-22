@@ -23,19 +23,19 @@ namespace Aguacongas.TheIdServer.Test.Services
         }
 
         [Fact]
-        public async Task GetAllKeysAsync_should_call_wrapper_method()
+        public async Task GetAllKeysAsync_should_return_page_method()
         {
             var keyManagerMock = new Mock<IKeyManager>();
             keyManagerMock.Setup(m => m.GetAllKeys()).Returns(new List<IKey>()).Verifiable();
             var defaultResolverMock = new Mock<IDefaultKeyResolver>();
             var providerClientMock = new Mock<IProviderClient>();
-            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(keyManagerMock.Object, defaultResolverMock.Object, providerClientMock.Object);
+            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string, IEnumerable<IKey>>(keyManagerMock.Object, "test", new List<IKey>()) }, defaultResolverMock.Object, providerClientMock.Object);
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 
-            await sut.GetAllKeysAsync().ConfigureAwait(false);
+            var page = await sut.GetAllKeysAsync().ConfigureAwait(false);
 
-            keyManagerMock.Verify();
+            Assert.Empty(page.Items);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer.Test.Services
             keyManagerMock.Setup(m => m.GetAllKeys()).Returns(new List<IKey>()).Verifiable();
             var defaultResolverMock = new Mock<IDefaultKeyResolver>();
             var providerClientMock = new Mock<IProviderClient>();
-            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(keyManagerMock.Object, defaultResolverMock.Object, providerClientMock.Object);
+            var wrapper = new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string, IEnumerable<IKey>>(keyManagerMock.Object, "test", new List<IKey>()) }, defaultResolverMock.Object, providerClientMock.Object);
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 
