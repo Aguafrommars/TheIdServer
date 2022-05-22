@@ -39,6 +39,7 @@
 		<PackageReference Include="Azure.Identity" Version="1.6.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="0.21.0-beta" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.0-preview.3.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0-preview.3.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0-preview.3.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0-preview.3.*" />
