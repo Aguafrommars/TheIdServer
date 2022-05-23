@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<!-- iOS, Android, MacCatalyst -->
-		<TargetFrameworks>net6.0-ios;net6.0-android;net6.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios;net7.0-android;net7.0-maccatalyst</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<SingleProject>true</SingleProject>
 		<RootNamespace>Aguacongas.TheIdServer.MAUI</RootNamespace>
@@ -17,7 +17,7 @@
 		<ApplicationVersion>1.0</ApplicationVersion>
 		<AndroidVersionCode>1</AndroidVersionCode>
 
-		<UseInterpreter Condition="'$(TargetFramework)' == 'net6.0-android'">True</UseInterpreter>
+		<UseInterpreter Condition="'$(TargetFramework)' == 'net7.0-android'">True</UseInterpreter>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,8 +35,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="6.0.100-preview.4.*" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0-preview.4.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="7.0.0-preview.3.*" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0-preview.3.*" />
 		<PackageReference Include="Microsoft.Maui" Version="6.0.100-preview.4.*" />
 	</ItemGroup>
 
@@ -65,11 +65,11 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<InvariantGlobalization Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">true</InvariantGlobalization>
-		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-ios'">iossimulator-x64</RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
+		<InvariantGlobalization Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">true</InvariantGlobalization>
+		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-ios'">iossimulator-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net7.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
 	</PropertyGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 		<AndroidEnvironment Include="Android\AndroidEnvironment.txt" />
 	</ItemGroup>
 	<ItemGroup>
