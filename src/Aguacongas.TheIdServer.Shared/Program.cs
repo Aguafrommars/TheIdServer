@@ -38,7 +38,7 @@ if (mutualTlsOptions?.Enabled == true && !seed)
     // when mutual TLS is enable the web host must receive client certificate
     builder.WebHost.ConfigureKestrel(kestrel =>
     {
-        kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.AllowCertificate);
+        kestrel.ConfigureHttpsDefaults(https => https.ClientCertificateMode = ClientCertificateMode.DelayCertificate);
     });
 }
 
@@ -59,6 +59,5 @@ app.Use(async (context, next) =>
     await next().ConfigureAwait(false);
 });
 app.UseTheIdServer(app.Environment, configuration);
-
 
 app.Run();
