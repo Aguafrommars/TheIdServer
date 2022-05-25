@@ -5,8 +5,8 @@ skip_commits:
 branches:
   only:
   - master
-  - /preview\/*/ 
-  - /release\/*/
+  - /^preview\/\d+.\d+.\d+$/ 
+  - /^release\/\d+.\d+.\d+$/
 image: 
 - Visual Studio 2019
 services:
@@ -49,8 +49,8 @@ deploy:
       secure: bvkKhXIKsDM1ThfcWTbuusND0sOBiDoJGOoD2fYijGoj4C9xx22QKfR7Y9q+j7eX
     on:
       branch: 
-      - /preview\/*/
-      - /release\/*/
+      - /^preview\/\d+.\d+.\d+$/
+      - /^release\/\d+.\d+.\d+$/
       CI_WINDOWS: true
   - provider: GitHub
     auth_token: $(GH_TOKEN)
@@ -60,7 +60,7 @@ deploy:
     artifact: /.*\.zip/
     on:
       branch: 
-      - /preview\/*/
+      - /^preview\/\d+.\d+.\d+$/
       CI_WINDOWS: true
   - provider: GitHub
     auth_token: $(GH_TOKEN)
@@ -69,12 +69,12 @@ deploy:
     artifact: /.*\.zip/
     on:
       branch: 
-      - /release\/*/
+      - /^release\/\d+.\d+.\d+$/
       CI_WINDOWS: true
 for:
 -
   branches:
     only:
-      - /release\/*/
+      - /^release\/\d+.\d+.\d+$/
   on_success:
       - cmd: semantic-release -b %APPVEYOR_REPO_BRANCH%
