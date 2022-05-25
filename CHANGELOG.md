@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/Aguafrommars/TheIdServer/compare/6.0.0...6.0.1) (2022-05-24)
+
+
+### Bug Fixes
+
+* use delay client certificate mode ([d3ac7df](https://github.com/Aguafrommars/TheIdServer/commit/d3ac7dff0159f7e92c8bc531c6c9db2ef51723a1))
+
 # [6.0.0](https://github.com/Aguafrommars/TheIdServer/compare/5.0.0...6.0.0) (2022-05-21)
 
 
