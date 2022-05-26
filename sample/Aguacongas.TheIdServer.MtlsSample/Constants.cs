@@ -2,6 +2,6 @@
 {
     public class Constants
     {
-        public static readonly string Authority = "https://localhost:5443/";
+        public static readonly string Authority = "https://www.local.theidserver.com/";
     }
 }

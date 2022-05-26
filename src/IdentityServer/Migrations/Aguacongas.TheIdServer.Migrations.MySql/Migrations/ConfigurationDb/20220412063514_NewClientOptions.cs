@@ -9,6 +9,20 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients",
+                type: "tinyint(1)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "RequireRequestObject",
+                table: "Clients",
+                type: "tinyint(1)",
+                nullable: false,
+                defaultValue: false);
+
+
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
@@ -40,6 +54,14 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
+
+            migrationBuilder.DropColumn(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients");
+
+            migrationBuilder.DropColumn(
+                name: "RequireRequestObject",
+                table: "Clients");
         }
     }
 }
