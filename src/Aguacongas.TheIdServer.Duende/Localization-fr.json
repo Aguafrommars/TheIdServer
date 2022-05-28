@@ -2066,5 +2066,13 @@
   {
     "key": "Please click here to log in",
     "value": "Veuillez cliquer ici pour vous connecter"
+  },
+  {
+    "key": "Resend email confirmation",
+    "value": "Renvoyer la confirmation par e-mail"
+  },
+  {
+    "key": "Resend",
+    "value": "Renvoyer"
   }
 ]
