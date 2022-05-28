@@ -130,6 +130,24 @@ And the favicon is *wwwroot/favicon.ico*.
 
 By replacing those files you can redefined the site style by yours.
 
+### Configure account options
+
+The section *AccountOptions* is bound to [`AccountOptions`](../Aguacongas.TheIdServer.Shared/Quickstart/Account/AccountOptions.cs).
+
+```json
+"AccountOptions": {
+  "AllowLocalLogin": true,
+  "AllowRememberLogin": true,
+  "RememberMeLoginDuration": "30.00:00:00",
+  "ShowLogoutPrompt": true,
+  "AutomaticRedirectAfterSignOut": false,
+  "InvalidCredentialsErrorMessage": "Invalid username or password",
+  "ShowForgotPassworLink": true,
+  "ShowRegisterLink": true,
+  "ShowResendEmailConfirmationLink": true
+}
+```
+
 ## Configure ASP.Net Core Identity options
 
 The section **IdentityOptions** is binded to the class [`Microsoft.AspNetCore.Identity.IdentityOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identityoptions).  
