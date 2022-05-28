@@ -45,6 +45,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -78,7 +79,14 @@ namespace Microsoft.AspNetCore.Builder
                     if (headers.TryGetValue(certificateHeader, out StringValues values))
                     {
                         logger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
-                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                        try
+                        {
+                            context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                        }
+                        catch(CryptographicException e)
+                        {
+                            logger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
+                        }
                     }
                     await next();
                 });
