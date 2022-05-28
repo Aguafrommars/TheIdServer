@@ -2042,5 +2042,29 @@
   {
     "key": "allowed identity token signing algorithms",
     "value": "algorithmes de signature de jeton d'identité autorisés"
+  },
+  {
+    "key": "Reset password",
+    "value": "Réinitialiser le mot de passe"
+  },
+  {
+    "key": "Reset your password.",
+    "value": "Réinitialisez votre mot de passe."
+  },
+  {
+    "key": "Reset",
+    "value": "Réinitialiser"
+  },
+  {
+    "key": "Reset password confirmation",
+    "value": "Confirmation de la réinitialisation du mot de passe"
+  },
+  {
+    "key": "Your password has been reset.",
+    "value": "Votre mot de passe a été réinitialisé."
+  },
+  {
+    "key": "Please click here to log in",
+    "value": "Veuillez cliquer ici pour vous connecter"
   }
 ]

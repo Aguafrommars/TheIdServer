@@ -20,5 +20,12 @@ namespace Aguacongas.TheIdServer.UI
         public bool IncludeWindowsGroups { get; set; } = false;
 
         public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
+
+        public bool ShowForgotPassworLink { get; set; } = true;
+
+        public bool ShowRegisterLink { get; set; } = true;
+
+        public bool ShowResendEmailConfirmationLink { get; set; } = true;
+
     }
 }
