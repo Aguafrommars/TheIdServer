@@ -53,10 +53,6 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
-        public void OnGet()
-        {
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
