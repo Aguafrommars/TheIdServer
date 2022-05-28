@@ -16,5 +16,11 @@ namespace Aguacongas.TheIdServer.UI
 
         public bool IsExternalLoginOnly => !EnableLocalLogin && ExternalProviders?.Count() == 1;
         public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+
+        public bool ShowForgotPassworLink { get; set; } = true;
+
+        public bool ShowRegisterLink { get; set; } = true;
+
+        public bool ShowResendEmailConfirmationLink { get; set; } = true;
     }
 }

@@ -41,16 +41,36 @@
                                         <button class="w-100 btn btn-lg btn-primary mb-2" name="button" value="login">
                                             @Localizer["Login"]
                                         </button>
-                                        <button class="w-100 btn btn-lg btn btn-secondary mb-2" name="button" value="cancel">@Localizer["Cancel"]</button>
+                                        <button class="w-100 btn btn-lg btn btn-secondary mb-3" name="button" value="cancel">@Localizer["Cancel"]</button>
                                         @if (Model.AllowRememberLogin)
                                         {
-                                            <div class="login-remember">
+                                            <div class="login-remember mb-3">
                                                 <label asp-for="RememberLogin">
                                                     <input asp-for="RememberLogin">
                                                     <strong>@Localizer["Remember My Login"]</strong>
                                                 </label>
                                             </div>
                                         }
+                                        <div>
+                                            @if (Model.ShowForgotPassworLink)
+                                            {
+                                                <p>
+                                                    <a asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Model.ReturnUrl">Forgot your password?</a>
+                                                </p>
+                                            }
+                                            @if (Model.ShowRegisterLink)
+                                            {
+                                                <p>
+                                                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                                </p>
+                                            }
+                                            @if (Model.ShowResendEmailConfirmationLink)
+                                            {
+                                                <p>
+                                                    <a asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
+                                                </p>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
