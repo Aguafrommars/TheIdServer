@@ -55,19 +55,19 @@
                                             @if (Model.ShowForgotPassworLink)
                                             {
                                                 <p>
-                                                    <a asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Model.ReturnUrl">Forgot your password?</a>
+                                                    <a asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["Forgot your password?"]</a>
                                                 </p>
                                             }
                                             @if (Model.ShowRegisterLink)
                                             {
                                                 <p>
-                                                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                                                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["Register as a new user"]</a>
                                                 </p>
                                             }
                                             @if (Model.ShowResendEmailConfirmationLink)
                                             {
                                                 <p>
-                                                    <a asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
+                                                    <a asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">@Localizer["Resend email confirmation"]</a>
                                                 </p>
                                             }
                                         </div>
