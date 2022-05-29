@@ -42,10 +42,8 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb3");
-
-            migrationBuilder.CreateIndex(
+                });
+                migrationBuilder.CreateIndex(
                 name: "IX_ClientAllowedIdentityTokenSigningAlgorithms_ClientId_Algorit~",
                 table: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: new[] { "ClientId", "Algorithm" },

@@ -5,8 +5,8 @@ skip_commits:
 branches:
   only:
   - master
-  - /preview\/*/ 
-  - /release\/*/
+  - /^preview\/\d+.\d+.\d+$/ 
+  - /^release\/\d+.\d+.\d+$/
 image: 
 - Visual Studio 2019
 services:
@@ -14,14 +14,15 @@ services:
 environment:
   GITHUB_TOKEN:
     secure: aV5flJ5BOs49dlM4XRpu7t1qa+ajMD5L4hhwlBOv+zff/NlSkdnrmk5nYNsIJCdE
-  donetsdk: 6.0.202
+  donetsdk: 7.0.100-preview.4.22252.9
   JAVA_HOME: C:\Program Files\Java\jdk14
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
-  - ps: .\dotnet-install.ps1 -Version 5.0.404
+  - ps: .\dotnet-install.ps1 -Version 6.0.4 -Runtime dotnet -Architecture x64
+  - ps: .\dotnet-install.ps1 -Version 6.0.4 -Runtime aspnetcore -Architecture x64
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
@@ -48,8 +49,8 @@ deploy:
       secure: bvkKhXIKsDM1ThfcWTbuusND0sOBiDoJGOoD2fYijGoj4C9xx22QKfR7Y9q+j7eX
     on:
       branch: 
-      - /preview\/*/
-      - /release\/*/
+      - /^preview\/\d+.\d+.\d+$/
+      - /^release\/\d+.\d+.\d+$/
       CI_WINDOWS: true
   - provider: GitHub
     auth_token: $(GH_TOKEN)
@@ -59,7 +60,7 @@ deploy:
     artifact: /.*\.zip/
     on:
       branch: 
-      - /preview\/*/
+      - /^preview\/\d+.\d+.\d+$/
       CI_WINDOWS: true
   - provider: GitHub
     auth_token: $(GH_TOKEN)
@@ -68,12 +69,12 @@ deploy:
     artifact: /.*\.zip/
     on:
       branch: 
-      - /release\/*/
+      - /^release\/\d+.\d+.\d+$/
       CI_WINDOWS: true
 for:
 -
   branches:
     only:
-      - /release\/*/
+      - /^release\/\d+.\d+.\d+$/
   on_success:
       - cmd: semantic-release -b %APPVEYOR_REPO_BRANCH%

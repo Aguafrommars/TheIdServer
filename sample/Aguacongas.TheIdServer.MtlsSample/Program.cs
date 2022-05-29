@@ -27,7 +27,7 @@ async Task<TokenResponse> RequestTokenAsync()
 
     if (response.IsError)
     {
-        throw new Exception(response.Error);
+        throw response.Exception ?? new InvalidOperationException(response.Error);
     }
 
     return response;
