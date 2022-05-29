@@ -1986,5 +1986,13 @@
   {
     "key": "Resend",
     "value": "Renvoyer"
+  },
+  {
+    "key": "Register as a new user",
+    "value": "S'inscrire en tant que nouvel utilisateur"
+  },
+  {
+    "key": "Resend email confirmation",
+    "value": "Renvoyer la confirmation par e-mail"
   }
 ]
