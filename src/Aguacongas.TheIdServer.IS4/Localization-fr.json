@@ -1986,5 +1986,17 @@
   {
     "key": "Resend",
     "value": "Renvoyer"
+  },
+  {
+    "key": "Forgot your password?",
+    "value": "Mot de passe oublié ?"
+  },
+  {
+    "key": "Register as a new user",
+    "value": "S'inscrire en tant que nouvel utilisateur"
+  },
+  {
+    "key": "Resend email confirmation",
+    "value": "Renvoyer la confirmation par e-mail"
   }
 ]
