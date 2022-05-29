@@ -1,3 +1,16 @@
+# [6.1.0](https://github.com/Aguafrommars/TheIdServer/compare/6.0.1...6.1.0) (2022-05-29)
+
+
+### Bug Fixes
+
+* automatic redirect after logout ([bb1da51](https://github.com/Aguafrommars/TheIdServer/commit/bb1da5191b73c1d4be3c16c3e5b368835654b46d))
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([a7110d1](https://github.com/Aguafrommars/TheIdServer/commit/a7110d1d01dd459c9c60d0b585d69f41c163396f))
+
+
+### Features
+
+* login page register and pwd links ([1ee72d6](https://github.com/Aguafrommars/TheIdServer/commit/1ee72d6fa6ccde7358debefb0e7694cc2a5adae5)), closes [#790](https://github.com/Aguafrommars/TheIdServer/issues/790) [#792](https://github.com/Aguafrommars/TheIdServer/issues/792)
+
 ## [6.0.1](https://github.com/Aguafrommars/TheIdServer/compare/6.0.0...6.0.1) (2022-05-24)
 
 
