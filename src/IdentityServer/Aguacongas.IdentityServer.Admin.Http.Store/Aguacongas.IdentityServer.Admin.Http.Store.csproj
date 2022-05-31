@@ -28,10 +28,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.3.*" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.3.*" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.3.*" />
-		<PackageReference Include="System.Text.Json" Version="6.0.4" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.4.22229.4" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.4.22251.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.4.22229.4" />
+		<PackageReference Include="System.Text.Json" Version="7.0.0-preview.4.22229.4" />
 	</ItemGroup>
 
 	<ItemGroup>
