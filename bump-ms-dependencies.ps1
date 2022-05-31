@@ -80,30 +80,3 @@ if (!$updated) {
 Write-Host "dotnet build -c Release"
 dotnet build -c Release
 
-# commit changes
-Write-Host "git config user.name github-actions"
-git config user.name github-actions
-Write-Host "git config user.email github-actions@github.com"
-git config user.email github-actions@github.com
-Write-Host "git add ."
-git add .
-Write-Host "git commit -m ""fix: update packages"""
-git commit -m "fix: update packages"
-Write-Host "git push"
-
-try {
-git push
-} catch {
-
-}
-
-# Create a pull request
-$authorization = "Bearer $env:GITHUB_TOKEN"
-$createPrUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls"
-$headers = @{
-    Authorization = $authorization
-    Accept = "application/vnd.github.v3+json"
-}
-$payload = "{ ""title"": ""update packages"", ""head"": ""$src"", ""base"": ""$dest"" }"
-Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
-Invoke-WebRequest -Uri $createPrUrl -Headers $headers -Method "POST" -Body $payload
