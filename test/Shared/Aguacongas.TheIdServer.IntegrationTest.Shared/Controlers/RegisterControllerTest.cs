@@ -43,7 +43,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim("role", "Is4-Writer"),
+                        new Claim("role",SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -174,7 +174,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     {
-                        new Claim("role", "Is4-Writer"),
+                        new Claim("role", SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -582,7 +582,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -689,7 +689,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -893,7 +893,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[]
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -1003,7 +1003,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 

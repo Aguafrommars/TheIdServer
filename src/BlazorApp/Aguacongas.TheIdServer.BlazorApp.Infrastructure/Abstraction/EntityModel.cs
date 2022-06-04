@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    [Authorize(Policy = "Is4-Reader")]
+    [Authorize(Policy = SharedConstants.READERPOLICY)]
     public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, ICloneable<T>, new()
     {
         const int HEADER_HEIGHT = 95;

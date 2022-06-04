@@ -15,7 +15,7 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeView Policy="Is4-Writer">
+                        <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
                             <Authorized Context="culture">
                                 <CultureInfos @bind-Value="@Model.Id" Entity="_cultureInfo" EntityChanged="CultureSelected" />
                             </Authorized>

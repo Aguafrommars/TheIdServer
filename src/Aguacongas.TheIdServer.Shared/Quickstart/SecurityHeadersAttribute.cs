@@ -27,10 +27,7 @@ namespace Aguacongas.TheIdServer.UI
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var builder = new StringBuilder("default-src 'self'");
-#if DEBUG
-                builder.Append(" wss://localhost:44337/Aguacongas.TheIdServer.Duende/");
-#endif
-                builder.Append("; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
+                builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
                 builder.Append("style-src 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css;");
                 var autorizeScriptsUrl = new[]
                 {
@@ -44,6 +41,9 @@ namespace Aguacongas.TheIdServer.UI
                     builder.Append(' ');
                     builder.Append(url);
                 }
+#if DEBUG
+                builder.Append("; connect-src *");
+#endif
                 // also an example if you need client images to be displayed from twitter
                 // builder.Append(";img-src 'self' https://pbs.twimg.com;");
                 var csp = builder.ToString();
