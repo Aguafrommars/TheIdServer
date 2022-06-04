@@ -38,7 +38,7 @@
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.1.0" />
 		<PackageReference Include="Azure.Identity" Version="1.6.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="0.21.0-beta" />
-		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
+		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0-preview.4.22251.1" />
@@ -51,11 +51,11 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0-preview.4.22229.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0-preview.4.22259.1" PrivateAssets="All" />
-		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.2.0" />
-		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.3.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.3.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.0.0-rc9.3" />
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus" Version="1.3.0-beta.1" />
-		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.2.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.3.0" />
 		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.3" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.3" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.3" />
