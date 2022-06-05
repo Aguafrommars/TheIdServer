@@ -291,7 +291,7 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 
                 b.ToTable("DataProtectionKeys");
             });
-#pragma warning restore 612, 618        }
-        }
+#pragma warning restore 612, 618        
+        }        
     }
 }

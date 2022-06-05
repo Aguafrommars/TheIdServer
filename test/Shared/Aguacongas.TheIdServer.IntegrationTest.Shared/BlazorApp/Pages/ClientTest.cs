@@ -582,9 +582,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var client = await context.Clients.Include(c => c.RedirectUris)
                     .FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
-                var uri = client.RedirectUris.FirstOrDefault(u => (u.Kind & UriKinds.Cors) == UriKinds.Cors);
+                var uri = client?.RedirectUris.FirstOrDefault(u => (u.Kind & UriKinds.Cors) == UriKinds.Cors);
                 Assert.NotNull(uri);
-                Assert.Equal("HTTP://FILTERED:80", uri.SanetizedCorsUri);
+                Assert.Equal("HTTP://FILTERED:80", uri?.SanetizedCorsUri);
             });
 
             input = WaitForNode(component, "#urls input[name=\"cors\"]");
@@ -604,9 +604,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var client = await context.Clients.Include(c => c.RedirectUris)
                     .FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
-                var uri = client.RedirectUris.FirstOrDefault();
+                var uri = client?.RedirectUris.FirstOrDefault();
                 Assert.NotNull(uri);
-                Assert.Null(uri.SanetizedCorsUri);
+                Assert.Null(uri?.SanetizedCorsUri);
             });
         }
 

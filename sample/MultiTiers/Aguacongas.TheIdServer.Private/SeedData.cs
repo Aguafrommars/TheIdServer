@@ -20,13 +20,8 @@ namespace Aguacongas.TheIdServer
 {
     static class SeedData
     {
-        public static void EnsureSeedData(IConfiguration configuration)
+        public static void EnsureSeedData(IServiceProvider serviceProvider)
         {
-            var services = new ServiceCollection();
-            var startup = new Startup(configuration, null);
-            startup.ConfigureServices(services);
-
-            using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.CreateScope();
 
             var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();

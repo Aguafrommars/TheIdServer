@@ -114,7 +114,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             builder.ConfigureAppConfiguration(webBuilder =>
                 {
                     webBuilder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    webBuilder.AddInMemoryCollection(new Dictionary<string, string>
+                    webBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["DbType"] = DbTypes.InMemory.ToString(),
                         ["Seed"] = "false",

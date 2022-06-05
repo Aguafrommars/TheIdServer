@@ -22,6 +22,7 @@ using Moq;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 using Auth = Aguacongas.TheIdServer.Authentication;
@@ -115,6 +116,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -125,6 +127,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             host.Start();
 
@@ -148,6 +151,7 @@ namespace Aguacongas.TheIdServer.Test
             {
                 Items = Array.Empty<Culture>()
             });
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services => 
                 {
@@ -159,6 +163,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             host.Start();
 
@@ -186,6 +191,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -196,6 +202,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             if (dbTypes != DbTypes.InMemory)
             {
@@ -216,6 +223,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -226,6 +234,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -242,6 +251,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -252,6 +262,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -269,6 +280,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -279,6 +291,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -296,6 +309,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -306,6 +320,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -323,6 +338,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -333,6 +349,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -353,6 +370,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -363,6 +381,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -380,6 +399,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -390,6 +410,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -407,6 +428,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -417,6 +439,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -435,6 +458,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -445,6 +469,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -463,6 +488,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -473,6 +499,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -491,6 +518,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             Assert.Throws<InvalidOperationException>(() => WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -501,6 +529,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build());
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [Fact]
@@ -518,6 +547,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -528,6 +558,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -544,6 +575,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -554,6 +586,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -572,6 +605,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -582,6 +616,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -599,6 +634,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -609,6 +645,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -627,6 +664,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -637,6 +675,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -655,6 +694,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -665,6 +705,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -686,6 +727,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -696,6 +738,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }
@@ -715,6 +758,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             Assert.Throws<InvalidOperationException>(() => WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -725,6 +769,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build());
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [Fact]
@@ -743,6 +788,7 @@ namespace Aguacongas.TheIdServer.Test
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
             storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             using var host = WebHost.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
@@ -753,6 +799,7 @@ namespace Aguacongas.TheIdServer.Test
                 .UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration))
                 .Build();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             Assert.Null(host.Services.GetService<IXmlRepository>());
         }

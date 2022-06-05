@@ -24,10 +24,13 @@ namespace Microsoft.AspNetCore.Authorization
                    policy.RequireAuthenticatedUser()
                     .RequireClaim(JwtClaimTypes.ClientId)
                     .RequireClaim(JwtClaimTypes.Scope, SharedConstants.TOKENSCOPES));
-            AddSettingsPolicies(options, checkAdminsScope, showSettings);
+            if (showSettings)
+            {
+                AddSettingsPolicies(options, checkAdminsScope);
+            }
         }
 
-        private static void AddSettingsPolicies(AuthorizationOptions options, bool checkAdminsScope, bool showSettings)
+        private static void AddSettingsPolicies(AuthorizationOptions options, bool checkAdminsScope)
         {
             options.AddPolicy(SharedConstants.DYNAMIC_CONFIGURATION_WRITTER_POLICY, policy => policy.RequireAuthenticatedUser()
                     .RequireRole(SharedConstants.WRITERPOLICY)
