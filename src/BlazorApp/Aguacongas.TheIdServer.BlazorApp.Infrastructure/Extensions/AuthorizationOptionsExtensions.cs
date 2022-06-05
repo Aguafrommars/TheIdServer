@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Authorization
 {
     public static class AuthorizationOptionsExtensions
     {
-        public static void AddIdentityServerPolicies(this AuthorizationOptions options, bool checkAdminsScope = false, bool showSettings = false)
+        public static void AddIdentityServerPolicies(this AuthorizationOptions options, bool checkAdminsScope = false, bool showSettings = true)
         {
             options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                    policy.RequireAuthenticatedUser()

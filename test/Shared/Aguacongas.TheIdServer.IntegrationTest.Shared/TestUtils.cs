@@ -37,6 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["WelcomeContenUrl"] = "/welcome-fragment.html",
                 ["SettingsOptions:TypeName"] = "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
                 ["SettingsOptions:ApiUrl"] = new Uri(httpClient.BaseAddress, "api/api/configuration").ToString(),
+                ["MenuOptions:ShowSettings"] = "true"
             };
             var appConfiguration = new ConfigurationBuilder().AddInMemoryCollection(appConfigurationDictionary).Build();
             return appConfiguration;
