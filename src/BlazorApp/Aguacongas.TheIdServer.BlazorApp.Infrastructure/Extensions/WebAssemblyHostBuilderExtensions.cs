@@ -99,7 +99,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 });
         }
 
-        // Workaroun https://github.com/dotnet/aspnetcore/issues/41998#issuecomment-1144812047
+        // Workaround https://github.com/dotnet/aspnetcore/issues/41998#issuecomment-1144812047
         private static void SetDefaultAuthenticationOptions(RemoteAuthenticationOptions<OidcProviderOptions> options)
         {
             options.AuthenticationPaths.RemoteRegisterPath = "/identity/account/register";
