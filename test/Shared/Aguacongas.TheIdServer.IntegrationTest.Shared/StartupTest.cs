@@ -56,7 +56,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             var configurationManager = new ConfigurationManager();
             configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
             configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-            configurationManager.AddInMemoryCollection(new Dictionary<string, string>
+            configurationManager.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["DbType"] = DbTypes.InMemory.ToString(),
                 ["ConnectionStrings:DefaultConnection"] = Guid.NewGuid().ToString()
@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     var configurationManager = new ConfigurationManager();
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    configurationManager.AddInMemoryCollection(new Dictionary<string, string>
+                    configurationManager.AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["DbType"] = DbTypes.RavenDb.ToString(),
                         ["IdentityServer:Key:StorageKind"] = StorageKind.RavenDb.ToString(),
@@ -135,7 +135,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     var configurationManager = new ConfigurationManager();
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    configurationManager.AddInMemoryCollection(new Dictionary<string, string>
+                    configurationManager.AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["DbType"] = DbTypes.MongoDb.ToString(),
                         ["ConnectionStrings:DefaultConnection"] = "mongodb://localhost/test",
@@ -182,7 +182,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     var configurationMAnager = new ConfigurationManager();
                     configurationMAnager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
                     configurationMAnager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
-                    configurationMAnager.AddInMemoryCollection(new Dictionary<string, string>
+                    configurationMAnager.AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["Proxy"] = "true",
                         ["DisableStrictSsl"] = $"{disableStrictSll}",

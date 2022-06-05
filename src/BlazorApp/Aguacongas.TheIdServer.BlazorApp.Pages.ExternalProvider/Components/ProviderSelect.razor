@@ -2,7 +2,7 @@
 @inject IStringLocalizerAsync<ProviderSelect> Localizer
 @inherits InputSelect<string>
 
-<AuthorizeView Policy="Is4-Writer">
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
     <Authorized>
         <InputSelect id="@Id" class="form-control" Value="Value" ValueChanged="ValueChanged" ValueExpression="ValueExpression">
             @if (Kinds == null)

@@ -1,6 +1,6 @@
 ﻿@typeparam T
 @inject IStringLocalizerAsync<AuthorizedToken<T>> Localizer
-<AuthorizeView Policy="Is4-Writer">
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
     <Authorized>
         <div class="btn-group">
             <InputText id="@Name" class="form-control" @bind-Value="_token.ValueString" />

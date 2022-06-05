@@ -469,7 +469,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             }
             var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = await manager.FindByIdAsync(userId);
-            var result = await manager.AddToRoleAsync(user, "filtered");
+            var result = await manager.AddToRoleAsync(user!, "filtered");
             Assert.True(result.Succeeded);
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,

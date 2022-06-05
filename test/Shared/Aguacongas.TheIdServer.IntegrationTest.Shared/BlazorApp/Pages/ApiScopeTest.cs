@@ -145,7 +145,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var apiScope = await context.ApiScopes.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, apiScope.DisplayName);
+                Assert.Equal(expected, apiScope?.DisplayName);
             });
         }
 

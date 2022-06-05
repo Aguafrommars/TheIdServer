@@ -76,7 +76,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
-                Assert.Equal(expected, api.DisplayName);
+                Assert.Equal(expected, api?.DisplayName);
             });
         }
 
@@ -114,7 +114,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
-                Assert.Equal(apiId, api.DisplayName);
+                Assert.Equal(apiId, api?.DisplayName);
             });
         }
 

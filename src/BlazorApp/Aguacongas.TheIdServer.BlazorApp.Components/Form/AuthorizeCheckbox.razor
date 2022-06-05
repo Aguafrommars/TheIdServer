@@ -1,6 +1,6 @@
 ﻿@inherits InputCheckbox
 <div class="form-check">
-    <AuthorizeView Policy="Is4-Writer">
+    <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
         <Authorized>
             <InputCheckbox name="@Name" class="form-check-input" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
             <label class="form-check-label" for="@Name" @onclick="Togle">

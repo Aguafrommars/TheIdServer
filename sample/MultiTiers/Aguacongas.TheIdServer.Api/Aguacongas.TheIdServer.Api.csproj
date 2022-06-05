@@ -16,6 +16,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Data\**" />
+	  <Compile Remove="Models\**" />
+	  <Content Remove="Data\**" />
+	  <Content Remove="Models\**" />
+	  <EmbeddedResource Remove="Data\**" />
+	  <EmbeddedResource Remove="Models\**" />
+	  <None Remove="Data\**" />
+	  <None Remove="Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
@@ -29,6 +40,7 @@
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="6.1.0" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.IS4" Version="6.1.0" />
+		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="6.1.0" />
 		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0-preview.4.22251.1" />
@@ -49,9 +61,5 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Data\" />
-	  <Folder Include="Models\" />
 	</ItemGroup>
 </Project>
