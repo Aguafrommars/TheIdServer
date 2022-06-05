@@ -62,7 +62,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var httpClient = CreateClient();
             var appConfiguration = TestUtils.CreateApplicationConfiguration(httpClient);
 
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());
+            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());           
 
             Services.GetRequiredService<TestUserService>()
                 .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));

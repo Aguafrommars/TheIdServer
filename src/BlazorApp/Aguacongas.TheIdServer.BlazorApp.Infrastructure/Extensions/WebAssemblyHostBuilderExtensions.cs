@@ -47,7 +47,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
         {
-            services.Configure((Action<RemoteAuthenticationApplicationPathsOptions>)(options => configuration.GetSection("AuthenticationPaths").Bind(options)))
+            services.Configure<OidcProviderOptions>(options => configuration.Bind("ProviderOptions", options))
+                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
                 .AddOidcAuthentication(options =>
                 {
                     SetDefaultAuthenticationOptions(options);
