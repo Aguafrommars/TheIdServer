@@ -55,6 +55,55 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await input.ChangeAsync(new ChangeEventArgs
             {
+                Value = "WsFederation"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#metadataAddress");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "Windows"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "input[name=ldapEnabled]");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "Twitter"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#consumerKey");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "OpenIdConnect"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#authority");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "OAuth"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#clientSecret");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "MicrosoftAccount"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#clientId");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "Facebook"
+            }).ConfigureAwait(false);
+
+            WaitForNode(component, "#appId");
+            
+            await input.ChangeAsync(new ChangeEventArgs
+            {
                 Value = "Google"
             }).ConfigureAwait(false);
 

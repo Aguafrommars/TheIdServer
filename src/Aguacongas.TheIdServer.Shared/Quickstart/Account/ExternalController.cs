@@ -37,7 +37,6 @@ namespace Aguacongas.TheIdServer.UI
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
-        private readonly IOptions<AccountOptions> _options;
         private readonly ILogger<ExternalController> _logger;
 
         public ExternalController(
@@ -45,14 +44,12 @@ namespace Aguacongas.TheIdServer.UI
             SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IEventService events,
-            IOptions<AccountOptions> options,
             ILogger<ExternalController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _interaction = interaction;
             _events = events;
-            _options = options;
             _logger = logger;
         }
 
