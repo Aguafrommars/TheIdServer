@@ -1,0 +1,81 @@
+﻿@inherits ProviderOptionsBase<WindowsOptions>
+
+<div class="mb-3 row">
+    <label class="col col-form-label" for="persistKerberosCredentials">
+    </label>
+    <div id="require-https" class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="persistKerberosCredentials" Label="@Localizer["persist kerberos credentials"]" @bind-Value="@Model.Options.PersistKerberosCredentials" />
+    </div>
+</div>
+<div class="mb-3 row">
+    <label class="col col-form-label" for="persistNtlmCredentials">
+    </label>
+    <div id="require-https" class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="persistNtlmCredentials" Label="@Localizer["persist ntlm credentials"]" @bind-Value="@Model.Options.PersistNtlmCredentials" />
+    </div>
+</div>
+<div class="mb-3 row">
+    <label class="col col-form-label" for="ldapEnabled">
+    </label>
+    <div id="require-https" class="col-lg-10 col-sm-12">
+        <AuthorizeCheckbox Name="ldapEnabled" Label="@Localizer["enable ldap"]" @bind-Value="@Model.Options.LdapEnabled" />
+    </div>
+</div>
+
+@if (Model.Options.LdapEnabled)
+{
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="domain">
+            @Localizer["domain"]
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Id="domain" Placeholder="mydomain.com" @bind-Value="@Model.Options.Domain" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="machineAccountName">
+            @Localizer["machine account name"]
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Id="machineAccountName" Placeholder="machinename" @bind-Value="@Model.Options.MachineAccountName" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="machineAccountPassword">
+            @Localizer["machine account password"]
+        </label>
+        <div class="col-lg-10 col-sm-12">
+            <AuthorizeText Id="password" Placeholder="password" @bind-Value="@Model.Options.MachineAccountPassword" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="enableLdapClaimResolution">
+        </label>
+        <div id="require-https" class="col-lg-10 col-sm-12">
+            <AuthorizeCheckbox Name="enableLdapClaimResolution" Label="@Localizer["enable ldap claim resolution"]" @bind-Value="@Model.Options.EnableLdapClaimResolution" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="ignoreNestedGroups">
+        </label>
+        <div id="require-https" class="col-lg-10 col-sm-12">
+            <AuthorizeCheckbox Name="ignoreNestedGroups" Label="@Localizer["ignore nested groups"]" @bind-Value="@Model.Options.IgnoreNestedGroups" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="claimsCachAbsoluteExpiration">
+            @Localizer["claims cache absolute expiration"]
+        </label>
+        <div id="require-https" class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="claimsCacheAbsoluteExpiration" @bind-Value="@ClaimsCacheAbsoluteExpiration" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="claimsCacheSlidingExpiration">
+            @Localizer["claims cache sliding expiration"]
+        </label>
+        <div id="require-https" class="col-lg-10 col-sm-12">
+            <AuthorizeText Name="claimsCacheSlidingExpiration" @bind-Value="@ClaimsCacheSlidingExpiration" />
+        </div>
+    </div>
+}

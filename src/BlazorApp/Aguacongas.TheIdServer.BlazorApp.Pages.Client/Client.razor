@@ -58,7 +58,7 @@ else
                             <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
                         </li>
                     }
-                    if (!Model.IsClientCredentialOnly())
+                    @if (!Model.IsClientCredentialOnly())
                     {
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>@Localizer["idp restrictions"]</a>

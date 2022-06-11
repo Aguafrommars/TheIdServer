@@ -30,8 +30,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
                 nameof(OAuthOptions) => new OAuthOptionsValidator(_provider, _localizer).Validate(options as OAuthOptions),
                 nameof(MicrosoftAccountOptions) => new OAuthOptionsValidator(_provider, _localizer).Validate(options as OAuthOptions),
                 nameof(OpenIdConnectOptions) => new OpenIdConnectOptionsValidator(_provider, _localizer).Validate(options as OpenIdConnectOptions),
-                nameof(WsFederationOptions) => new WsFederationOptionsValidator(_provider, _localizer).Validate(options as WsFederationOptions),
                 nameof(TwitterOptions) => new TwitterOptionsValidator(_provider, _localizer).Validate(options as TwitterOptions),
+                nameof(WindowsOptions) => new WindowsOptionsValidator(_provider, _localizer).Validate(options as WindowsOptions),
+                nameof(WsFederationOptions) => new WsFederationOptionsValidator(_provider, _localizer).Validate(options as WsFederationOptions),
                 _ => base.Validate(context),
             };
         }
