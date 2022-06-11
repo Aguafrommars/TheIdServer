@@ -25,11 +25,12 @@ public class WindowsHandler : AuthenticationHandler<WindowsOptions>, IAuthentica
     }
 
     /// <inheritdoc/>
-    public async Task<bool> HandleRequestAsync()
-    {
-        await _innerHanlder.InitializeAsync(Scheme, Request.HttpContext).ConfigureAwait(false);
-        return await _innerHanlder.HandleRequestAsync().ConfigureAwait(false);
-    }
+    public Task<bool> HandleRequestAsync()
+    => _innerHanlder.HandleRequestAsync();
+
+    /// <inheritdoc/>
+    protected override Task InitializeHandlerAsync()
+    => _innerHanlder.InitializeAsync(Scheme, Request.HttpContext);
 
     /// <inheritdoc/>
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
