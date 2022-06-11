@@ -33,7 +33,105 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             WaitForNode(component, "option");
 
-            var input = WaitForNode(component, "#name");
+            var input = WaitForNode(component, "#type");
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "WsFederation"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#wreply");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "Windows"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "input[name=ldapEnabled]");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
+            input = WaitForNode(component, "#machineAccountName");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "Twitter"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#consumerKey");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "OpenIdConnect"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#authority");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "OAuth"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#clientSecret");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = "MicrosoftAccount"
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#clientId");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#name");
 
             var providerName = GenerateId();
 
@@ -51,57 +149,27 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = displayName
             }).ConfigureAwait(false);
 
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
             input = WaitForNode(component, "#type");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "WsFederation"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "#metadataAddress");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "Windows"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "input[name=ldapEnabled]");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "Twitter"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "#consumerKey");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "OpenIdConnect"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "#authority");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "OAuth"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "#clientSecret");
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = "MicrosoftAccount"
-            }).ConfigureAwait(false);
-
-            WaitForNode(component, "#clientId");
-
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = "Facebook"
             }).ConfigureAwait(false);
 
-            WaitForNode(component, "#appId");
-            
+            input = WaitForNode(component, "#appId");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+            Assert.NotNull(form);
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            input = WaitForNode(component, "#type");
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = "Google"
@@ -125,7 +193,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = clientSecret
             }).ConfigureAwait(false);
 
-            var form = component.Find("form");
+            form = component.Find("form");
             Assert.NotNull(form);
 
             await form.SubmitAsync().ConfigureAwait(false);
