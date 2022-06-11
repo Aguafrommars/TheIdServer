@@ -125,30 +125,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = "MicrosoftAccount"
             }).ConfigureAwait(false);
 
-            input = WaitForNode(component, "#clientId");
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = GenerateId()
-            }).ConfigureAwait(false);
-
-            input = WaitForNode(component, "#name");
-
-            var providerName = GenerateId();
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = providerName
-            }).ConfigureAwait(false);
-
-            input = WaitForNode(component, "#displayName");
-
-            var displayName = GenerateId();
-
-            await input.ChangeAsync(new ChangeEventArgs
-            {
-                Value = displayName
-            }).ConfigureAwait(false);
-
             form = component.Find("form");
             Assert.NotNull(form);
             await form.SubmitAsync().ConfigureAwait(false);
@@ -195,6 +171,30 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             form = component.Find("form");
             Assert.NotNull(form);
+
+            input = WaitForNode(component, "#clientId");
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = GenerateId()
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#name");
+
+            var providerName = GenerateId();
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = providerName
+            }).ConfigureAwait(false);
+
+            input = WaitForNode(component, "#displayName");
+
+            var displayName = GenerateId();
+
+            await input.ChangeAsync(new ChangeEventArgs
+            {
+                Value = displayName
+            }).ConfigureAwait(false);
 
             await form.SubmitAsync().ConfigureAwait(false);
 
