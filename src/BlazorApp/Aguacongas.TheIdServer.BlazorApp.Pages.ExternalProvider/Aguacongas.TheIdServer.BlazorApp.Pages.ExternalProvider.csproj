@@ -35,5 +35,10 @@
 	<ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="Components\WindowsOptionsComponent.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	</ItemGroup>
 
 </Project>

@@ -11,12 +11,12 @@ using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public class ExternalProvider : ExternalProvider<RemoteAuthenticationOptions>
+    public class ExternalProvider : ExternalProvider<object>
     {
 
     }
 
-    public class ExternalProvider<TOptions> : Entity.ExternalProvider, ICloneable<ExternalProvider>, IExternalProvider<TOptions> where TOptions : RemoteAuthenticationOptions
+    public class ExternalProvider<TOptions> : Entity.ExternalProvider, ICloneable<ExternalProvider>, IExternalProvider<TOptions> where TOptions : class
     {
         [JsonIgnore]
         public virtual TOptions Options { get; set; }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.Components
 {
-    public class ExternalProviderWrapper<T> : IExternalProvider<T> where T : RemoteAuthenticationOptions
+    public class ExternalProviderWrapper<T> : IExternalProvider<T> where T : class
     {
         private readonly Models.ExternalProvider _parent;
 

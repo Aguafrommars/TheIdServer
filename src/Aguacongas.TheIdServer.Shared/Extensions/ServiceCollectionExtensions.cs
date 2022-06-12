@@ -63,13 +63,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOperationalStores()
                 .AddTokenExchange()
                 .AddIdentity<ApplicationUser, IdentityRole>(
-                    options => configurationManager.GetSection(nameof(IdentityOptions)).Bind(options))
+                    options =>
+                    {
+                        configurationManager.Bind(nameof(IdentityOptions), options);
+                    })
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
 
             if (isProxy)
             {
-                services.AddAdminHttpStores(options => configurationManager.GetSection("PrivateServerAuthentication").Bind(options));
+                services.AddAdminHttpStores(options => configurationManager.Bind("PrivateServerAuthentication", options));
             }
             else
             {
@@ -169,7 +172,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 // MutualTLS
                 authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme, 
-                    options => configurationManager.GetSection(nameof(CertificateAuthenticationOptions)).Bind(options));
+                    options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
                 
 
@@ -216,7 +219,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void ConfigureDynamicConfiguration(IMvcBuilder mvcBuilder, ConfigurationManager configurationManager)
         {
             var redisOptions = new RedisConfigurationOptions();
-            configurationManager.GetSection(nameof(RedisConfigurationOptions)).Bind(redisOptions);
+            configurationManager.Bind(nameof(RedisConfigurationOptions), redisOptions);
             if (!string.IsNullOrEmpty(redisOptions.ConnectionString))
             {
                 configurationManager.AddRedis(redisOptions);
@@ -254,9 +257,9 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureIdentityServerJwtBearerOptions(AspNetCore.Authentication.JwtBearer.JwtBearerOptions options, IConfiguration configuration)
+        private static void ConfigureIdentityServerJwtBearerOptions(JwtBearerOptions options, IConfiguration configuration)
         {
-            configuration.GetSection("ApiAuthentication").Bind(options);
+            configuration.Bind("ApiAuthentication", options);
             if (configuration.GetValue<bool>("DisableStrictSsl"))
             {
                 options.BackchannelHttpHandler = new HttpClientHandler
@@ -321,7 +324,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void ConfigureIdentityServerOAuth2IntrospectionOptions(OAuth2IntrospectionOptions options, IConfiguration configuration)
         {
-            configuration.GetSection("ApiAuthentication").Bind(options);
+            configuration.Bind("ApiAuthentication", options);
             options.ClientId = configuration.GetValue<string>("ApiAuthentication:ApiName");
             options.ClientSecret = configuration.GetValue<string>("ApiAuthentication:ApiSecret");
             static string tokenRetriever(HttpRequest request)
@@ -348,12 +351,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddDefaultServices(IServiceCollection services, IConfiguration configuration, DbTypes dbType)
         {
-            services.Configure<IdentityServerOptions>(options => configuration.GetSection("ApiAuthentication").Bind(options))
+            services.Configure<IdentityServerOptions>(options => configuration.Bind("ApiAuthentication", options))
                 .AddIdentityProviderStore();
 
             if (dbType == DbTypes.RavenDb)
             {
-                services.Configure<RavenDbOptions>(options => configuration.GetSection(nameof(RavenDbOptions)).Bind(options))
+                services.Configure<RavenDbOptions>(options => configuration.Bind(nameof(RavenDbOptions), options))
                     .AddSingleton(p =>
                     {
                         var options = p.GetRequiredService<IOptions<RavenDbOptions>>().Value;
@@ -384,7 +387,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddOperationalEntityFrameworkStores(options => options.UseDatabaseFromConfiguration(configuration));
             }
 
-            var signalRBuilder = services.AddSignalR(options => configuration.GetSection("SignalR:HubOptions").Bind(options));
+            var signalRBuilder = services.AddSignalR(options => configuration.Bind("SignalR:HubOptions", options));
             if (configuration.GetValue<bool>("SignalR:UseMessagePack"))
             {
                 signalRBuilder.AddMessagePackProtocol();
@@ -393,7 +396,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var redisConnectionString = configuration.GetValue<string>("SignalR:RedisConnectionString");
             if (!string.IsNullOrEmpty(redisConnectionString))
             {
-                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => configuration.GetSection("SignalR:RedisOptions").Bind(options));
+                signalRBuilder.AddStackExchangeRedis(redisConnectionString, options => configuration.Bind("SignalR:RedisOptions", options));
             }
         }
 

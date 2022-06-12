@@ -13,6 +13,7 @@ using Duende.IdentityServer.Services;
 using IdentityServer4.Services;
 #endif
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
@@ -225,6 +226,18 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.Events = new WsFederationEvents
                     {
                         OnTicketReceived = OnTicketReceived<TUser>()
+                    };
+                }).AddWindows(options =>
+                {
+                    options.Events = new NegotiateEvents
+                    {
+                        OnAuthenticated = async context =>
+                        {
+                            using var scope = context.HttpContext.RequestServices.CreateScope();
+                            var transformer = scope.ServiceProvider.GetRequiredService<ExternalClaimsTransformer<TUser>>();
+                            context.Principal = await transformer.TransformPrincipalAsync(context.Principal, context.Scheme.Name)
+                                .ConfigureAwait(false);
+                        }
                     };
                 });
 
