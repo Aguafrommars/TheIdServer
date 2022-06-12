@@ -191,7 +191,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)));
 
-            ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
+            ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType, configurationManager);
             ConfigureDynamicConfiguration(mvcBuilder, configurationManager);
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
@@ -236,7 +236,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy, DbTypes dbType)
+        private static void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy, DbTypes dbType, IConfiguration configuration)
         {
             var dynamicBuilder = mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
             if (isProxy)

@@ -21,7 +21,7 @@
             @Localizer["access token type"]
         </label>
         <div class="col-lg-8 col-sm-12">
-            <AuthorizeView Policy="Is4-Writer">
+            <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
                 <Authorized Context="accessTokenType">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="access-token-type"
@@ -104,7 +104,7 @@
                 @Localizer["refresh token usage"]
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizeView Policy="Is4-Writer">
+                <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
                     <Authorized Context="refreshTokenUsage">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-usage"
@@ -132,7 +132,7 @@
                 @Localizer["refresh token expiration"]
             </label>
             <div class="col-lg-8 col-sm-12">
-                <AuthorizeView Policy="Is4-Writer">
+                <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
                     <Authorized Context="refreshTokenExpiration">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="refresh-token-expiration"

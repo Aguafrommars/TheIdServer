@@ -146,7 +146,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var identity = await context.Identities.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, identity.DisplayName);
+                Assert.Equal(expected, identity?.DisplayName);
             });
         }
 

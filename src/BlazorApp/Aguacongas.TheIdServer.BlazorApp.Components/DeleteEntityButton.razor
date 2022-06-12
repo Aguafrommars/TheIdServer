@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime _jsRuntime
 @inject IStringLocalizerAsync<DeleteEntityButton> Localizer
-<AuthorizeView Policy="Is4-Writer">
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
     <Authorized>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-entity">

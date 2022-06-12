@@ -1,19 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<Authors>Olivier Lefebvre</Authors>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>theidserver;identityserver4;duende-identityserveroidc;oauth;identity,authentication;security</PackageTags>
-		<Description>TheIdServer administration application role list page.</Description>
-		<DebugType>Full</DebugType>
-		<PackageIcon>package-icon.png</PackageIcon>
 
-		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+      <Authors>Olivier Lefebvre</Authors>
+      <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+      <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PackageTags>theidserver;identityserver4;duende-identityserveroidc;oauth;identity,authentication;security</PackageTags>
+      <Description>TheIdServer administration application role list page.</Description>
+      <DebugType>Full</DebugType>
+      <PackageIcon>package-icon.png</PackageIcon>
+      
+      <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
@@ -24,9 +25,9 @@
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.5" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0-preview.4.22251.1" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp.Components\Aguacongas.TheIdServer.BlazorApp.Components.csproj" />

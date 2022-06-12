@@ -16,12 +16,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         private readonly IAdminStore<OneTimeToken> _store;
         private readonly AuthenticationStateProvider _stateProvider;
         private readonly IAccessTokenProvider _provider;
-        private readonly IOptions<RemoteAuthenticationOptions<OidcProviderOptions>> _options;
+        private readonly IOptions<OidcProviderOptions> _options;
 
         public OneTimeTokenService(IAdminStore<OneTimeToken> store,
             AuthenticationStateProvider state,
             IAccessTokenProvider provider,
-            IOptions<RemoteAuthenticationOptions<OidcProviderOptions>> options)
+            IOptions<OidcProviderOptions> options)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _stateProvider = state ?? throw new ArgumentNullException(nameof(state));
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
             var state = await _stateProvider.GetAuthenticationStateAsync().ConfigureAwait(false);
             var oneTimeToken = await _store.CreateAsync(new OneTimeToken
             {
-                ClientId = _options.Value.ProviderOptions.ClientId,
+                ClientId = _options.Value.ClientId,
                 UserId = state.User.Claims.First(c => c.Type == "sub").Value,
                 Data = token.Value,
                 Expiration = DateTime.UtcNow.AddMinutes(1)

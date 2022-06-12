@@ -24,9 +24,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
         {
             var user = await base.CreateUserAsync(account, options);
-            if (user.Identity.IsAuthenticated)
+            if (user.Identity is ClaimsIdentity identity)
             {
-                var identity = user.Identity as ClaimsIdentity;
                 _logger.LogInformation("User connected {IdentityName}", identity.Name);
                 foreach (var claim in user.Claims.ToArray())
                 {

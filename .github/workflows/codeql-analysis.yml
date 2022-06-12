@@ -43,7 +43,7 @@ jobs:
     - name: Install .NET sdk
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '7.0.x'
         include-prerelease: true
     - name: Setup wasm tools
       run: dotnet workload install wasm-tools

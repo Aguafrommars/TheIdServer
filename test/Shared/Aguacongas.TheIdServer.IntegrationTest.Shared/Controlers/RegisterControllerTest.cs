@@ -43,7 +43,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim("role", "Is4-Writer"),
+                        new Claim("role",SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -70,8 +70,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.NotNull(result.RegistrationToken);
-                Assert.NotNull(result.RegistrationUri);
+                Assert.NotNull(result?.RegistrationToken);
+                Assert.NotNull(result?.RegistrationUri);
             }
 
             registration.Jwks = new JsonWebKeys
@@ -174,7 +174,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     {
-                        new Claim("role", "Is4-Writer"),
+                        new Claim("role", SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -195,9 +195,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
 
-                Assert.Equal("RedirectUri is required.", error.Error_description);
+                Assert.Equal("RedirectUri is required.", error?.Error_description);
             }
 
             registration.RedirectUris = new List<string>
@@ -215,8 +215,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("RedirectUri is required.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("RedirectUri is required.", error?.Error_description);
             }
 
             registration.RedirectUris = new List<string>
@@ -235,8 +235,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("RedirectUri 'test' is not valid.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("RedirectUri 'test' is not valid.", error?.Error_description);
             }
 
 
@@ -256,8 +256,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("RedirectUri 'ssh:test' uses invalid scheme. If this scheme should be allowed, then configure it via ValidationOptions.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("RedirectUri 'ssh:test' uses invalid scheme. If this scheme should be allowed, then configure it via ValidationOptions.", error?.Error_description);
             }
 
             registration.RedirectUris = new List<string>
@@ -283,8 +283,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_logo_uri", error.Error);
-                Assert.Equal("LogoUri 'test' is not valid.", error.Error_description);
+                Assert.Equal("invalid_logo_uri", error?.Error);
+                Assert.Equal("LogoUri 'test' is not valid.", error?.Error_description);
             }
 
             registration.LogoUris = new List<LocalizableProperty>
@@ -306,8 +306,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_logo_uri", error.Error);
-                Assert.Equal("LogoUri 'http://test' host doesn't match a redirect uri host.", error.Error_description);
+                Assert.Equal("invalid_logo_uri", error?.Error);
+                Assert.Equal("LogoUri 'http://test' host doesn't match a redirect uri host.", error?.Error_description);
             }
 
             registration.LogoUris = null;
@@ -330,8 +330,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_policy_uri", error.Error);
-                Assert.Equal("PolicyUri 'test' is not valid.", error.Error_description);
+                Assert.Equal("invalid_policy_uri", error?.Error);
+                Assert.Equal("PolicyUri 'test' is not valid.", error?.Error_description);
             }
 
             registration.PolicyUris = new List<LocalizableProperty>
@@ -353,8 +353,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_policy_uri", error.Error);
-                Assert.Equal("PolicyUri 'http://test' host doesn't match a redirect uri host.", error.Error_description);
+                Assert.Equal("invalid_policy_uri", error?.Error);
+                Assert.Equal("PolicyUri 'http://test' host doesn't match a redirect uri host.", error?.Error_description);
             }
 
             registration.PolicyUris = null;
@@ -371,8 +371,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_grant_type", error.Error);
-                Assert.Equal("GrantType 'invalid' is not supported.", error.Error_description);
+                Assert.Equal("invalid_grant_type", error?.Error);
+                Assert.Equal("GrantType 'invalid' is not supported.", error?.Error_description);
             }
 
             registration.GrantTypes = null;
@@ -389,8 +389,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_response_type", error.Error);
-                Assert.Equal("ResponseType 'invalid' is not supported.", error.Error_description);
+                Assert.Equal("invalid_response_type", error?.Error);
+                Assert.Equal("ResponseType 'invalid' is not supported.", error?.Error_description);
             }
 
             registration.GrantTypes = new[] { "implicit" };
@@ -411,8 +411,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_response_type", error.Error);
-                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code' found in grant_types.", error.Error_description);
+                Assert.Equal("invalid_response_type", error?.Error);
+                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code' found in grant_types.", error?.Error_description);
             }
 
             registration.GrantTypes = null;
@@ -429,8 +429,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_response_type", error.Error);
-                Assert.Equal("No GrantType 'implicit' for ResponseType 'id_token' found in grant_types.", error.Error_description);
+                Assert.Equal("invalid_response_type", error?.Error);
+                Assert.Equal("No GrantType 'implicit' for ResponseType 'id_token' found in grant_types.", error?.Error_description);
             }
 
             registration.ResponseTypes = new[] { "token id_token" };
@@ -446,8 +446,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_response_type", error.Error);
-                Assert.Equal("No GrantType 'implicit' for ResponseType 'token id_token' found in grant_types.", error.Error_description);
+                Assert.Equal("invalid_response_type", error?.Error);
+                Assert.Equal("No GrantType 'implicit' for ResponseType 'token id_token' found in grant_types.", error?.Error_description);
             }
 
             registration.ResponseTypes = new[] { "code token id_token" };
@@ -464,8 +464,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_response_type", error.Error);
-                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code token id_token' found in grant_types.", error.Error_description);
+                Assert.Equal("invalid_response_type", error?.Error);
+                Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code token id_token' found in grant_types.", error?.Error_description);
             }
 
             registration.ResponseTypes = new[] { "token" };
@@ -485,8 +485,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("Invalid RedirectUri 'http://test'. Implicit client must use 'https' scheme only.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("Invalid RedirectUri 'http://test'. Implicit client must use 'https' scheme only.", error?.Error_description);
             }
 
             registration.RedirectUris = new[]
@@ -505,8 +505,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error?.Error_description);
             }
 
             registration.RedirectUris = new[]
@@ -525,8 +525,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error?.Error_description);
             }
 
             registration.ResponseTypes = null;
@@ -550,8 +550,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_redirect_uri", error.Error);
-                Assert.Equal("Invalid RedirectUri 'http://test'.Only 'localhost' host is allowed for 'http' scheme and 'native' client.", error.Error_description);
+                Assert.Equal("invalid_redirect_uri", error?.Error);
+                Assert.Equal("Invalid RedirectUri 'http://test'.Only 'localhost' host is allowed for 'http' scheme and 'native' client.", error?.Error_description);
             }
 
             registration.ApplicationType = "invalid";
@@ -567,8 +567,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-                Assert.Equal("invalid_application_type", error.Error);
-                Assert.Equal("ApplicationType 'invalid' is invalid. It must be 'web' or 'native'.", error.Error_description);
+                Assert.Equal("invalid_application_type", error?.Error);
+                Assert.Equal("ApplicationType 'invalid' is invalid. It must be 'web' or 'native'.", error?.Error_description);
             }
         }
 
@@ -582,7 +582,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -607,11 +607,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
             var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
-            Assert.Equal("invalid_redirect_uri", error.Error);
+            Assert.Equal("invalid_redirect_uri", error?.Error);
 
             var uri = new Uri(redirectUri);
 
-            Assert.Equal($"Invalid RedirectUri '{redirectUri}'.Native client cannot use standard '{uri.Scheme}' scheme, you must use a custom scheme such as 'net.pipe' or 'net.tcp', or 'http' scheme with 'localhost' host.", error.Error_description);
+            Assert.Equal($"Invalid RedirectUri '{redirectUri}'.Native client cannot use standard '{uri.Scheme}' scheme, you must use a custom scheme such as 'net.pipe' or 'net.tcp', or 'http' scheme with 'localhost' host.", error?.Error_description);
         }
 
         [Fact]
@@ -652,8 +652,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.NotNull(result.RegistrationToken);
-                Assert.NotNull(result.RegistrationUri);
+                Assert.NotNull(result?.RegistrationToken);
+                Assert.NotNull(result?.RegistrationUri);
             }
 
             registration.RedirectUris = new[]
@@ -689,7 +689,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -718,7 +718,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.NotNull(registration.RegistrationToken);
+                Assert.NotNull(registration?.RegistrationToken);
             }
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -727,7 +727,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 {
                     Method = HttpMethod.Put,
                     Content = request,
-                    RequestUri = new Uri(registration.RegistrationUri)
+                    RequestUri = new Uri(registration!.RegistrationUri)
                 };
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
 
@@ -738,8 +738,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                Assert.Null(result.RegistrationToken);
-                Assert.Null(result.RegistrationUri);
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
             }
 
             registration.RedirectUris = new List<string>
@@ -834,8 +834,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                Assert.Null(result.RegistrationToken);
-                Assert.Null(result.RegistrationUri);
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
             }
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -855,8 +855,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                Assert.Null(result.RegistrationToken);
-                Assert.Null(result.RegistrationUri);
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
             }
 
             registration.ClientNames = null;
@@ -882,8 +882,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                Assert.Null(result.RegistrationToken);
-                Assert.Null(result.RegistrationUri);
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
             }
         }
 
@@ -893,7 +893,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[]
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -974,13 +974,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.NotNull(registration.RegistrationToken);
+                Assert.NotNull(registration?.RegistrationToken);
             }
 
             using (var message = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(registration.RegistrationUri)
+                RequestUri = new Uri(registration!.RegistrationUri)
             })
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
@@ -992,8 +992,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                Assert.Null(result.RegistrationToken);
-                Assert.Null(result.RegistrationUri);
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
             }
         }
 
@@ -1003,7 +1003,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[] 
                     { 
-                        new Claim(JwtClaimTypes.Role, "Is4-Writer"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
 
@@ -1032,13 +1032,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
 
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.NotNull(registration.RegistrationToken);
+                Assert.NotNull(registration?.RegistrationToken);
             }
 
             using (var message = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(registration.RegistrationUri)
+                RequestUri = new Uri(registration!.RegistrationUri)
             })
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
