@@ -25,15 +25,22 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Services\WsFederation\**" />
+      <EmbeddedResource Remove="Services\WsFederation\**" />
+      <None Remove="Services\WsFederation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Community.OData.Linq.Json" Version="2.1.0" />		
+		<PackageReference Include="Community.OData.Linq.Json" Version="2.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0-preview.4.22251.1" />		
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.4.22229.4" />		
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0-preview.4.22229.4" />
 		<PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0-preview.4.22251.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0-preview.4.22251.1" />
@@ -50,9 +57,6 @@
     </ItemGroup>
     <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Services\WsFederation\" />
     </ItemGroup>
 
 </Project>
