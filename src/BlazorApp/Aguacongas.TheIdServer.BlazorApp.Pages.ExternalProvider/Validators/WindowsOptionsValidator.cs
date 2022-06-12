@@ -10,7 +10,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         {
             When(m => !string.IsNullOrEmpty(m.MachineAccountName), () =>
             {
-                RuleFor(m => m.MachineAccountPassword).NotEmpty().WithMessage(localizer["MachineAccountPassword  is required."]);
+                RuleFor(m => m.MachineAccountPassword).NotEmpty().WithMessage(localizer["The machine account password is required."]);
             });
         }
     }
