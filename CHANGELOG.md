@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/Aguafrommars/TheIdServer/compare/6.1.0...6.2.0) (2022-06-12)
+
+
+### Features
+
+* dynamic windows provider ([fda4cdd](https://github.com/Aguafrommars/TheIdServer/commit/fda4cdd1bc0f5ac4ad08db0a76b95e209eb11dd3))
+
 # [6.1.0](https://github.com/Aguafrommars/TheIdServer/compare/6.0.1...6.1.0) (2022-05-29)
 
 
