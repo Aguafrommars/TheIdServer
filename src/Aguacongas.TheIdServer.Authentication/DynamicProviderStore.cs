@@ -54,13 +54,13 @@ namespace Aguacongas.TheIdServer.Authentication
 
         private TSchemeDefinition FromEntity(ExternalProvider entity)
         {
-            var hanlderType = _serializer.DeserializeType(entity.SerializedHandlerType);
+            var handlerType = _serializer.DeserializeType(entity.SerializedHandlerType);
             return new TSchemeDefinition
             {
                 Scheme = entity.Id,
                 DisplayName = entity.DisplayName,
-                HandlerType = hanlderType,
-                Options = _serializer.DeserializeOptions(entity.SerializedOptions, hanlderType.GetAuthenticationSchemeOptionsType())
+                HandlerType = handlerType,
+                Options = _serializer.DeserializeOptions(entity.SerializedOptions, handlerType.GetAuthenticationSchemeOptionsType())
             };
         }
 

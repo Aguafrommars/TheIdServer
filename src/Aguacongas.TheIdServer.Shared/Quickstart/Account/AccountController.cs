@@ -29,6 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Aguacongas.TheIdServer.UI
 {
@@ -275,11 +276,11 @@ namespace Aguacongas.TheIdServer.UI
             var settings = _options.Value;
             var providers = schemes
                 .Where(x => x.DisplayName != null ||
-                            (x.Name.Equals(settings.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                            x.Name.Equals(settings.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase)
                 )
                 .Select(x => new ExternalProvider
                 {
-                    DisplayName = x.DisplayName,
+                    DisplayName = x.DisplayName ?? x.Name,
                     AuthenticationScheme = x.Name
                 }).ToList();
 
