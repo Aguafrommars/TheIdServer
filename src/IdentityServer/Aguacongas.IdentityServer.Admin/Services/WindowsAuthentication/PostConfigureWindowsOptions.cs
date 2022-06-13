@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Aguacongas.IdentityServer.Admin.Services.WindowsAuthentication;
@@ -12,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin.Services.WindowsAuthentication;
 public class PostConfigureWindowsOptions : IPostConfigureOptions<WindowsOptions>
 {
     private readonly PostConfigureNegotiateOptions _inner;
-    private LdapSettings _settings;
+    private readonly ConcurrentDictionary<string, LdapSettings> _settings = new ConcurrentDictionary<string, LdapSettings>();
 
     /// <summary>
     /// Creates a new <see cref="PostConfigureWindowsOptions"/>
@@ -32,11 +33,15 @@ public class PostConfigureWindowsOptions : IPostConfigureOptions<WindowsOptions>
     /// <param name="options">The options instance to configure.</param>
     public void PostConfigure(string name, WindowsOptions options)
     {
-        var ldapConnection = _settings?.LdapConnection;
-        if (ldapConnection != null)
+        if (_settings.TryGetValue(name, out LdapSettings settings))
         {
-            ldapConnection.Dispose();
+            var ldapConnection = settings?.LdapConnection;
+            if (ldapConnection != null)
+            {
+                ldapConnection.Dispose();
+            }
         }
+        
 
         if (options.LdapEnabled)
         {
@@ -50,7 +55,7 @@ public class PostConfigureWindowsOptions : IPostConfigureOptions<WindowsOptions>
                 settings.IgnoreNestedGroups = options.IgnoreNestedGroups;
                 settings.MachineAccountName = options.MachineAccountName;
                 settings.MachineAccountPassword = options.MachineAccountPassword;
-                _settings = settings;
+                _settings.AddOrUpdate(name, n => settings, (n, s) => settings);
             });
         }            
 
