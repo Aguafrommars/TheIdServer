@@ -18,11 +18,12 @@ namespace Aguacongas.IdentityServer.Admin.Test.Shared.Services.WindowsAuthentica
         {
             var sut = new PostConfigureWindowsOptions(Array.Empty<IServerIntegratedAuth>(), 
                 new NullLogger<NegotiateHandler>());
-            sut.PostConfigure(null, new WindowsOptions
+            var name = Guid.NewGuid().ToString();
+            sut.PostConfigure(name, new WindowsOptions
             {
                 LdapEnabled = true
             });
-            sut.PostConfigure(null, new WindowsOptions
+            sut.PostConfigure(name, new WindowsOptions
             {
                 LdapEnabled = false
             });
