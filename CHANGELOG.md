@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/Aguafrommars/TheIdServer/compare/6.2.0...6.2.1) (2022-06-13)
+
+
+### Bug Fixes
+
+* cannot add more than one ldap domain ([0104c72](https://github.com/Aguafrommars/TheIdServer/commit/0104c725c1bc0a597b01d3a1ffc05e9eaf80c330))
+
 # [6.2.0](https://github.com/Aguafrommars/TheIdServer/compare/6.1.0...6.2.0) (2022-06-12)
 
 
