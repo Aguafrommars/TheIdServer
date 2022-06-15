@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using dn = Aguacongas.DynamicConfiguration.Razor.Services;
+using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 
@@ -57,8 +57,8 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
 
             services.Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
-                .AddScoped<dn.ConfigurationService>()
-                .AddScoped<dn.IConfigurationService, ConfigurationService>()
+                .AddScoped<DynamicConfiguration.ConfigurationService>()
+                .AddScoped<DynamicConfiguration.IConfigurationService, ConfigurationService>()
                 .AddConfigurationService(configuration.GetSection("settingsOptions"))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 

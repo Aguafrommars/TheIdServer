@@ -37,10 +37,10 @@
 	<ItemGroup>
 		<PackageReference Include="Community.OData.Linq" Version="2.1.0" />
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.4.22251.1" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.0-preview.4.22251.1" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.0-preview.4.22251.1" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.4.22251.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-preview.5.22303.8" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.0-preview.5.22303.8" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.0-preview.5.22303.8" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.5.22303.8" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
 	</ItemGroup>
 

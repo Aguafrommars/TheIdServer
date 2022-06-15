@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
+using StoreEntity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api.Components
 {
@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api.Components
 
         private readonly PageRequest _pageRequest = new PageRequest
         {
-            Select = nameof(entity.ApiScope.Id),
+            Select = nameof(StoreEntity.ApiScope.Id),
             Take = 5
         };
 
