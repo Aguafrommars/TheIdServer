@@ -1,5 +1,6 @@
 ﻿using Aguacongas.TheIdServer.MtlsSample;
 using IdentityModel.Client;
+using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 
 Console.Title = "Console MTLS Client";
@@ -7,6 +8,11 @@ Console.Title = "Console MTLS Client";
 var tokenResponse = await RequestTokenAsync();
 
 tokenResponse.Show();
+
+using var client = new HttpClient();
+client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+var response = await client.GetAsync("https://localhost:5448/WeatherForecast");
 
 Console.ReadLine();
 
