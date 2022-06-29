@@ -96,6 +96,13 @@ else
                             </div>
                         </div>
                         <ApiResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description"></ApiResources>
+                        <div class="mb-3 row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="requireResourceIndicator" Label="@Localizer["require resource indicator"]" @bind-Value="@Model.RequireResourceIndicator" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="secrets" class="card mb-3">

@@ -2126,5 +2126,9 @@
   {
     "key": "claims cache sliding expiration",
     "value": "expiration du glissement du cache des réclamations"
+  },
+  {
+    "key": "require resource indicator",
+    "value": "indicateur de resource requis"
   }
 ]

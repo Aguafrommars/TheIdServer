@@ -4,7 +4,6 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.MySql</RootNamespace>
-		<StartupObject>Aguacongas.TheIdServer.MySql.Program</StartupObject>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
