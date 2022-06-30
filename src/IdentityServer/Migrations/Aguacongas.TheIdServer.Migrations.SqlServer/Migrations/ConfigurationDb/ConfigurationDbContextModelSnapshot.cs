@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -770,7 +770,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 4, 12, 6, 35, 48, 947, DateTimeKind.Utc).AddTicks(5403)
+                            CreatedAt = new DateTime(2022, 6, 29, 14, 23, 52, 591, DateTimeKind.Utc).AddTicks(7127)
                         });
                 });
 
@@ -1030,6 +1030,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequireResourceIndicator")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
