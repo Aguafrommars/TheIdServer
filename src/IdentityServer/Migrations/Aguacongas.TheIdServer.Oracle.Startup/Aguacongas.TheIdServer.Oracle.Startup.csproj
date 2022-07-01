@@ -4,7 +4,6 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.Oracle</RootNamespace>
-		<StartupObject>Aguacongas.TheIdServer.Oracle.Program</StartupObject>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -13,7 +12,8 @@
 		<RepositoryType>git</RepositoryType>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>	</PropertyGroup>
 
 	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
@@ -29,6 +29,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Migrations.Oracle\Aguacongas.TheIdServer.Migrations.Oracle.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

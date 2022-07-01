@@ -4,7 +4,6 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.PostgreSQL</RootNamespace>
-		<StartupObject>Aguacongas.TheIdServer.PostgreSQL.Program</StartupObject>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -29,6 +28,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Migrations.PostgreSQL\Aguacongas.TheIdServer.Migrations.PostgreSQL.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

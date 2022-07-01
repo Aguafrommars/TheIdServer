@@ -207,6 +207,10 @@ namespace Aguacongas.TheIdServer
                         DisplayName = resource.DisplayName,
                         Enabled = resource.Enabled,
                         Id = resource.Name,
+                        
+#if DUENDE
+                        RequireResourceIndicator = resource.RequireResourceIndicator
+#endif
                     }).GetAwaiter().GetResult();
                 }
                 catch (ArgumentException)

@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
@@ -767,7 +767,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 4, 12, 6, 35, 13, 741, DateTimeKind.Utc).AddTicks(7642)
+                            CreatedAt = new DateTime(2022, 6, 29, 14, 22, 54, 697, DateTimeKind.Utc).AddTicks(8584)
                         });
                 });
 
@@ -1026,6 +1026,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("NonEditable")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RequireResourceIndicator")
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
