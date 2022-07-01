@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/Aguafrommars/TheIdServer/compare/6.2.1...6.3.0) (2022-07-01)
+
+
+### Features
+
+* api resource isolation configuration ([7e28899](https://github.com/Aguafrommars/TheIdServer/commit/7e28899b710b3d6c5f820456dfaeb98e9be39166))
+
 ## [6.2.1](https://github.com/Aguafrommars/TheIdServer/compare/6.2.0...6.2.1) (2022-06-13)
 
 
