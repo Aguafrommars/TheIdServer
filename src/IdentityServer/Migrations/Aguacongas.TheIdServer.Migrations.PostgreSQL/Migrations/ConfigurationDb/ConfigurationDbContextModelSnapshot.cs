@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -770,7 +770,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 4, 12, 6, 35, 31, 147, DateTimeKind.Utc).AddTicks(1020)
+                            CreatedAt = new DateTime(2022, 6, 29, 14, 23, 24, 594, DateTimeKind.Utc).AddTicks(7228)
                         });
                 });
 
@@ -1029,6 +1029,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("NonEditable")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("RequireResourceIndicator")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");

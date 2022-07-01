@@ -57,6 +57,13 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool NonEditable { get; set; }
 
         /// <summary>
+        /// Indicates if this API resource requires the resource indicator to request it,
+        /// and expects access tokens issued to it will only ever contain this API resource
+        /// as the audience.
+        /// </summary>
+        public bool RequireResourceIndicator { get; set; }
+
+        /// <summary>
         /// Gets or sets the secrets.
         /// </summary>
         /// <value>

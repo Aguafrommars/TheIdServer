@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
-    [Migration("20200813140441_DynamicRegistration")]
+    [Migration("20210427143841_WsFederation")]
     partial class WsFederation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
