@@ -37,7 +37,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.20.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.21.0" />
 	</ItemGroup>
 
 	<ItemGroup>
