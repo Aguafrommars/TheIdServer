@@ -23,7 +23,6 @@ install:
   - ps: Install-Product node ''
   - ps: .\dotnet-install.ps1 -Version 6.0.6 -Runtime dotnet -Architecture x64
   - ps: .\dotnet-install.ps1 -Version 6.0.6 -Runtime aspnetcore -Architecture x64
-  - ps: .\dotnet-install.ps1 -Version 7.0.0-preview.6.22324.4 -Runtime aspnetcore -Architecture x64
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk
@@ -33,6 +32,7 @@ install:
   - cmd: redis-64\tools\redis-server.exe --service-install
   - cmd: redis-64\tools\redis-server.exe --service-start
   - ps: ./appveyorinit.ps1
+  - ps: dotnet --list-runtimes
 build_script:
   - ps: ./build.ps1
 test_script:
