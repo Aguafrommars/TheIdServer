@@ -26,9 +26,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0-preview.5.22303.8" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0-preview-20220612-01" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.5.22302.2" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0-preview.6.22330.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220707-01" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.6.22329.4" />
 		<PackageReference Include="Moq" Version="4.18.1" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">

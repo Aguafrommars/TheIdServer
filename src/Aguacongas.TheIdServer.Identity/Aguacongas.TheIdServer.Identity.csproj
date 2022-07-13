@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.5.22303.8" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.0-preview.6.22330.3" />
   </ItemGroup>
 
   <ItemGroup>
