@@ -338,7 +338,6 @@ ASALocalRun/
 /sample/MultiTiers/.db/sql.db
 /src/Aguacongas.TheIdServer/Properties/ServiceDependencies/TheIdServer - Web Deploy/profile.arm.json
 /src/Aguacongas.TheIdServer/Properties/ServiceDependencies/theidserver - Web Deploy1/profile.arm.json
-/global.json
 /redis-64
 /src/Aguacongas.TheIdServer.Duende/keys
 /.dccache
