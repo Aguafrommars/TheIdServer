@@ -4,7 +4,9 @@
 		<TargetFramework>net7.0</TargetFramework>
 
 		<IsPackable>false</IsPackable>
-	</PropertyGroup>
+
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Test.Shared\AdminStores\AdminStoreTest.cs" Link="AdminStores\AdminStoreTest.cs" />

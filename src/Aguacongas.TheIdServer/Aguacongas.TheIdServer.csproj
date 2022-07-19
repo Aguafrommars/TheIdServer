@@ -19,6 +19,7 @@
 		<DockerfileContext>..\..</DockerfileContext>
 		
 		<OutputType>Library</OutputType>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.ruleset</CodeAnalysisRuleSet>

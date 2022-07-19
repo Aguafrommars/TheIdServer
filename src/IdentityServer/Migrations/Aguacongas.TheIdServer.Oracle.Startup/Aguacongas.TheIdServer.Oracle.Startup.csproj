@@ -13,7 +13,10 @@
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>	</PropertyGroup>
+    <Nullable>enable</Nullable>
+
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
 
 	<ItemGroup>
 	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
