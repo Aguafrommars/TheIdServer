@@ -4,7 +4,9 @@
 		<TargetFramework>net7.0</TargetFramework>
 
 		<IsPackable>false</IsPackable>
-	</PropertyGroup>
+
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Test.Shared\AdminStores\AdminStoreTest.cs" Link="AdminStores\AdminStoreTest.cs" />
@@ -49,7 +51,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0-preview.6.22330.3" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220707-01" />
 		<PackageReference Include="Moq" Version="4.18.1" />
-		<PackageReference Include="RavenDB.TestDriver" Version="5.3.103" />
+		<PackageReference Include="RavenDB.TestDriver" Version="5.4.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
