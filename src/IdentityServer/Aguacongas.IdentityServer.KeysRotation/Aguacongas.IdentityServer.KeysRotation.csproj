@@ -14,6 +14,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         
         <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+        <EnablePreviewFeatures>True</EnablePreviewFeatures>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,9 +30,9 @@
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.5.22302.2" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-        <PackageReference Include="MongoDB.Driver" Version="2.16.1" />
+        <PackageReference Include="MongoDB.Driver" Version="2.17.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.21.0" />
-        <PackageReference Include="RavenDB.Client" Version="5.3.103" />
+        <PackageReference Include="RavenDB.Client" Version="5.4.0" />
         <PackageReference Include="StackExchange.Redis" Version="2.6.48" />
     </ItemGroup>
 	<ItemGroup>
