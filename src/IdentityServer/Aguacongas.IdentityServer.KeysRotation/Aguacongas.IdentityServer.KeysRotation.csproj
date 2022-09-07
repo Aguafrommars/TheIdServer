@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.2" />
         <PackageReference Include="IdentityModel" Version="6.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.0-preview.7.22376.6" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.0-preview.7.22376.6" />
@@ -31,9 +31,9 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.7.22376.2" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
         <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.22.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.23.0" />
         <PackageReference Include="RavenDB.Client" Version="5.4.2" />
-        <PackageReference Include="StackExchange.Redis" Version="2.6.48" />
+        <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />
