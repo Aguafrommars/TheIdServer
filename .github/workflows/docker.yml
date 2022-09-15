@@ -43,7 +43,7 @@ jobs:
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
           tags: aguacongas/theidserver.duende:${{ steps.previoustag.outputs.tag }}
@@ -74,7 +74,7 @@ jobs:
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
           tags: aguacongas/theidserver:${{ steps.previoustag.outputs.tag }}
@@ -105,7 +105,7 @@ jobs:
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
           tags: aguacongas/theidserverapp:${{ steps.previoustag.outputs.tag }}
