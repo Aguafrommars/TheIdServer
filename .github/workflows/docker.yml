@@ -28,16 +28,21 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
       - name: Build and push TheIdServer Duende
         id: docker_build_theidserver_duende
         uses: docker/build-push-action@v2        
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.Duende/Dockerfile
-          tags: aguacongas/theidserver.duende:${{ github.event.release.tag_name || 'next' }}
+          tags: aguacongas/theidserver.duende:${{ steps.previoustag.outputs.tag }}
   is4:
     runs-on: ubuntu-latest
     steps:
@@ -50,16 +55,21 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
       - name: Build and push TheIdServer
         id: docker_build_theidserver
         uses: docker/build-push-action@v2
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.IS4/Dockerfile
-          tags: aguacongas/theidserver:${{ github.event.release.tag_name || 'next' }}
+          tags: aguacongas/theidserver:${{ steps.previoustag.outputs.tag }}
   app:
     runs-on: ubuntu-latest
     steps:
@@ -72,13 +82,18 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
       - name: Build and push TheIdServerApp
         id: docker_build_theidserverapp
         uses: docker/build-push-action@v2
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
         with:
-          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }}
+          build-args: GITHIB_FEED_TOKEN=${{ secrets.GITHIB_FEED_TOKEN }} BUILD_VERSION=${{ steps.previoustag.outputs.tag }} FILE_VERSION=${{ steps.previoustag.outputs.tag }}.0 SOURCE_VERSION=${{ github.sha }}
           push: true
           file: src/Aguacongas.TheIdServer.BlazorApp/Dockerfile
-          tags: aguacongas/theidserverapp:${{ github.event.release.tag_name || 'next' }}
+          tags: aguacongas/theidserverapp:${{ steps.previoustag.outputs.tag }}
