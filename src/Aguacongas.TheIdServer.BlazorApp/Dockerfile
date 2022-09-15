@@ -34,10 +34,10 @@ RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.BlazorApp"
-RUN dotnet build "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/build
+RUN dotnet build "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/build -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM build AS publish
-RUN dotnet publish "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/publish
+RUN dotnet publish "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/publish -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM nginx:1.22 AS final
 WORKDIR /usr/share/nginx/html

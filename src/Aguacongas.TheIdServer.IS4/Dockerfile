@@ -64,10 +64,10 @@ RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.IS4/Aguacongas.TheIdServer.IS4.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.IS4"
-RUN dotnet build "Aguacongas.TheIdServer.IS4.csproj" -c Release -o /app/build
+RUN dotnet build "Aguacongas.TheIdServer.IS4.csproj" -c Release -o /app/build -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM build AS publish
-RUN dotnet publish "Aguacongas.TheIdServer.IS4.csproj" -c Release -o /app/publish
+RUN dotnet publish "Aguacongas.TheIdServer.IS4.csproj" -c Release -o /app/publish -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM base AS final
 WORKDIR /app
