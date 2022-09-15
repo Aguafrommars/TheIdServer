@@ -28,6 +28,10 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -55,6 +59,10 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -82,6 +90,10 @@ jobs:
         with:
           username: aguacongas
           password: ${{ secrets.DOCKER_HUB_PAT }}
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
