@@ -47,6 +47,8 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Components;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -198,6 +200,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<HostModelOptions>(configurationManager.GetSection(nameof(HostModelOptions)))
                  .AddScoped<LazyAssemblyLoader>()
                  .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
+                 .AddScoped<NavigationManager, PreRenderNavigationManager>()
                  .AddScoped<SignOutSessionStateManager>()
                  .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
                  .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
@@ -345,7 +348,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 return TokenRetrieval.FromAuthorizationHeader()(request);
             }
-
             options.TokenRetriever = tokenRetriever;
         }
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
@@ -47,12 +48,22 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
         {
+            var scopes = new List<string>();
+            configuration.Bind("ProviderOptions:DefaultScopes", scopes);
             services.Configure<OidcProviderOptions>(options => configuration.Bind("ProviderOptions", options))
                 .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
                 .AddOidcAuthentication(options =>
                 {
                     SetDefaultAuthenticationOptions(options);
-                    configuration.Bind(options);
+                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
+                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    var providerOptions = options.ProviderOptions;
+                    configuration.Bind("ProviderOptions", providerOptions);
+                    providerOptions.DefaultScopes.Clear();
+                    foreach(var scope in scopes)
+                    {
+                        providerOptions.DefaultScopes.Add(scope);
+                    }
                 })
                 .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
 
