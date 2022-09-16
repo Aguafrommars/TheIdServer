@@ -27,6 +27,7 @@ install:
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
+  - cmd: dotnet nuget add source --username aguacongas --password $(GITHUB_TOKEN) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/bUnit-dev/index.json"
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install
