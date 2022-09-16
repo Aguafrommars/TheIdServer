@@ -18,12 +18,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
+using RelyingPartyPage = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RelyingPartyTest : EntityPageTestBase<page>
+    public class RelyingPartyTest : EntityPageTestBase<RelyingPartyPage>
     {
         public override string Entity => "relyingparty";
         public RelyingPartyTest(TheIdServerFactory factory) : base(factory)

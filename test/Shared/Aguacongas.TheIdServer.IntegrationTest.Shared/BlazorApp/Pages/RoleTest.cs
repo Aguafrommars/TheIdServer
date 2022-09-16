@@ -2,7 +2,6 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -12,13 +11,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
+using RolePage = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RoleTest : EntityPageTestBase<page>
+    public class RoleTest : EntityPageTestBase<RolePage>
     {
         public override string Entity => "role";
 
