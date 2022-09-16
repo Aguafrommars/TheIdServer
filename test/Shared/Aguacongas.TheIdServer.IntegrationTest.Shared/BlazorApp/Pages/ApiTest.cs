@@ -15,12 +15,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
+using ApiPage = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiTest : EntityPageTestBase<page>
+    public class ApiTest : EntityPageTestBase<ApiPage>
     {
         public override string Entity => "protectresource";
         public ApiTest(TheIdServerFactory factory) : base(factory)

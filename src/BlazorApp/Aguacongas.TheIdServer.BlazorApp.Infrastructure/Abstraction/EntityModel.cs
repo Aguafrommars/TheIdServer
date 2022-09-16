@@ -19,11 +19,9 @@ using System.Threading.Tasks;
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     [Authorize(Policy = SharedConstants.READERPOLICY)]
-    public abstract class EntityModel<T> : ComponentBase, IDisposable, IComparer<Type> where T : class, ICloneable<T>, new()
+    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, ICloneable<T>, new()
     {
         const int HEADER_HEIGHT = 95;
-        private IDisposable _registration;
-        private bool disposedValue;
 
         [Inject]
         protected Notifier Notifier { get; set; }
@@ -90,7 +88,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             HandleModificationState = new HandleModificationState(Logger);
-            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;            
+            HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
+
             if (Id == null)
             {
                 IsNew = true;
@@ -103,19 +102,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var model = await GetModelAsync()
                 .ConfigureAwait(false);
             CreateEditContext(model);
-
-            _registration ??= NavigationManager.RegisterLocationChangingHandler(async context =>
-            {
-                if (EditContext.IsModified())
-                {
-                    var isConfirmed = await JSRuntime.InvokeAsync<bool>("window.confirm", Localizer["Are you sure you want to leave this page?"]);
-
-                    if (!isConfirmed)
-                    {
-                        context.PreventNavigation();
-                    }
-                }
-            });
         }
 
         protected async Task HandleValidSubmit()
@@ -300,8 +286,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected abstract void RemoveNavigationProperty<TEntity>(TEntity entity);
 
         protected abstract void SanetizeEntityToSaved<TEntity>(TEntity entity);
-        
-        
+
         private void HandleModificationState_OnStateChange(ModificationKind kind, object _)
         {
             if (kind == ModificationKind.Delete)
@@ -418,35 +403,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _registration?.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~EntityModel()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
     }
 }

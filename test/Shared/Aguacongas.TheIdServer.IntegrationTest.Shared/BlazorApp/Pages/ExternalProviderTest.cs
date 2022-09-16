@@ -11,12 +11,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.ExternalProvider;
+using ExternalProviderPage = Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.ExternalProvider;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ExternalProviderTest : EntityPageTestBase<page>
+    public class ExternalProviderTest : EntityPageTestBase<ExternalProviderPage>
     {
         public ExternalProviderTest(TheIdServerFactory factory) : base(factory)
         {

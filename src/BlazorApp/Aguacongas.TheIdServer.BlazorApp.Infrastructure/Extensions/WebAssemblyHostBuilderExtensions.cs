@@ -48,34 +48,21 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
         {
-            var providerOptions = new ProviderOptions();
-            configuration.Bind("ProviderOptions", providerOptions);
-            services.Configure<ProviderOptions>(options => configuration.Bind("ProviderOptions", options))
+            var scopes = new List<string>();
+            configuration.Bind("ProviderOptions:DefaultScopes", scopes);
+            services.Configure<OidcProviderOptions>(options => configuration.Bind("ProviderOptions", options))
                 .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
                 .AddOidcAuthentication(options =>
                 {
                     SetDefaultAuthenticationOptions(options);
                     configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
                     configuration.GetSection("UserOptions").Bind(options.UserOptions);
-                    var oidcOptions = options.ProviderOptions;
-                    oidcOptions.Authority = providerOptions.Authority;
-                    oidcOptions.ClientId = providerOptions.ClientId;
-                    oidcOptions.MetadataUrl = providerOptions.MetadataUrl;
-                    oidcOptions.ResponseMode = providerOptions.ResponseMode;
-                    oidcOptions.ResponseType = providerOptions.ResponseType;
-                    oidcOptions.RedirectUri = providerOptions.RedirectUri;
-                    oidcOptions.PostLogoutRedirectUri = providerOptions.PostLogoutRedirectUri;
-
-                    oidcOptions.AdditionalProviderParameters.Clear();
-                    foreach(var kv in providerOptions.AdditionalProviderParameters)
+                    var providerOptions = options.ProviderOptions;
+                    configuration.Bind("ProviderOptions", providerOptions);
+                    providerOptions.DefaultScopes.Clear();
+                    foreach(var scope in scopes)
                     {
-                        oidcOptions.AdditionalProviderParameters.Add(kv.Key, kv.Value);
-                    }
-
-                    oidcOptions.DefaultScopes.Clear();
-                    foreach(var scope in providerOptions.DefaultScopes)
-                    {
-                        oidcOptions.DefaultScopes.Add(scope);
+                        providerOptions.DefaultScopes.Add(scope);
                     }
                 })
                 .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();

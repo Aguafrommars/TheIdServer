@@ -2,7 +2,6 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Options;
@@ -17,12 +16,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         private readonly IAdminStore<OneTimeToken> _store;
         private readonly AuthenticationStateProvider _stateProvider;
         private readonly IAccessTokenProvider _provider;
-        private readonly IOptions<ProviderOptions> _options;
+        private readonly IOptions<OidcProviderOptions> _options;
 
         public OneTimeTokenService(IAdminStore<OneTimeToken> store,
             AuthenticationStateProvider state,
             IAccessTokenProvider provider,
-            IOptions<ProviderOptions> options)
+            IOptions<OidcProviderOptions> options)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _stateProvider = state ?? throw new ArgumentNullException(nameof(state));
