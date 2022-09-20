@@ -59,6 +59,7 @@ COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
+RUN dotnet nuget disable source github
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
