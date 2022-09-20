@@ -30,7 +30,7 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer.Store/Aguacongas.IdentitySer
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/nginx.conf", "src/Aguacongas.TheIdServer.BlazorApp/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
-RUN dotnet nuget add source --username aguacongas --password GITHIB_FEED_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/bUnit-dev/index.json"
+RUN dotnet nuget update source --username aguacongas --password $GITHIB_FEED_TOKEN --store-password-in-clear-text --source "https://nuget.pkg.github.com/bUnit-dev/index.json" github
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .
