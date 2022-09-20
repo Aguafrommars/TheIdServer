@@ -30,6 +30,7 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer.Store/Aguacongas.IdentitySer
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/nginx.conf", "src/Aguacongas.TheIdServer.BlazorApp/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
+RUN dotnet nuget update source --source "https://nuget.pkg.github.com/bUnit-dev/index.json" github --username aguacongas --password $GITHIB_FEED_TOKEN --store-password-in-clear-text
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .
@@ -39,7 +40,7 @@ RUN dotnet build "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/bu
 FROM build AS publish
 RUN dotnet publish "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/publish -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
-FROM nginx:stable AS final
+FROM nginx:1.22 AS final
 WORKDIR /usr/share/nginx/html
 COPY --from=publish /app/publish/wwwroot .
 COPY --from=build /src/src/Aguacongas.TheIdServer.BlazorApp/nginx.conf /etc/nginx/nginx.conf
