@@ -60,6 +60,7 @@ COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.EntityFramework.Store.IS
 COPY ["src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/Aguacongas.IdentityServer.WsFederation.IS4.csproj", "src/IdentityServer/IS4/Aguacongas.IdentityServer.WsFederation.IS4/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
+RUN dotnet nuget add source --username aguacongas --password GITHIB_FEED_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/bUnit-dev/index.json"
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "src/Aguacongas.TheIdServer.IS4/Aguacongas.TheIdServer.IS4.csproj"
 COPY . .
