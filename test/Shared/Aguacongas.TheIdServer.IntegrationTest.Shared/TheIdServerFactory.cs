@@ -89,7 +89,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 .AddScoped(p => localizerMock)
                 .AddTransient(p => new HttpClient(Server.CreateHandler()))
                 .AddTransient<BaseAddressAuthorizationMessageHandler>()
-                .AddScoped<SignOutSessionStateManager, TestUtils.FakeSignOutSessionStateManager>()
                 .AddSingleton<IAccessTokenProviderAccessor, TestUtils.AccessTokenProviderAccessor>()
                 .AddScoped<IAccessTokenProvider>(p => p.GetRequiredService<TestUtils.FakeAuthenticationStateProvider>())
                 .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<TestUtils.FakeAuthenticationStateProvider>())

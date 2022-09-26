@@ -124,22 +124,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             public override string Name => _userName;
         }
 
-        public class FakeSignOutSessionStateManager : SignOutSessionStateManager
-        {
-            public FakeSignOutSessionStateManager(IJSRuntime jsRuntime) : base(jsRuntime)
-            { }
-
-            public override ValueTask SetSignOutState()
-            {
-                return new ValueTask();
-            }
-
-            public override Task<bool> ValidateSignOutState()
-            {
-                return Task.FromResult(true);
-            }
-        }
-
         public class FakeDelegatingHandler : DelegatingHandler
         {
             private readonly HttpMessageHandler _handler;
