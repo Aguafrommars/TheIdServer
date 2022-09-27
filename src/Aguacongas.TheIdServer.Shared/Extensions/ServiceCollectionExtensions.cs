@@ -201,7 +201,6 @@ namespace Microsoft.Extensions.DependencyInjection
                  .AddScoped<LazyAssemblyLoader>()
                  .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
                  .AddScoped<NavigationManager, PreRenderNavigationManager>()
-                 .AddScoped<SignOutSessionStateManager>()
                  .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
                  .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
                  .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
