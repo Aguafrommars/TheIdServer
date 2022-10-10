@@ -2130,5 +2130,9 @@
   {
     "key": "require resource indicator",
     "value": "indicateur de resource requis"
+  },
+  {
+    "key": "Are you sure you want to leave this page?",
+    "value": "Voulez-vous vraiment quitter cette page ?"
   }
 ]
