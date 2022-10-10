@@ -1994,5 +1994,9 @@
   {
     "key": "Resend email confirmation",
     "value": "Renvoyer la confirmation par e-mail"
+  },
+  {
+    "key": "Are you sure you want to leave this page?",
+    "value": "Voulez-vous vraiment quitter cette page ?"
   }
 ]
