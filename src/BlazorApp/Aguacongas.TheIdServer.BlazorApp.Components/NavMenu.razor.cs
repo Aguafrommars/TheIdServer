@@ -28,7 +28,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             base.OnInitialized();
         }
 
-        private string? _gitHash;
+        private string _gitHash;
 
         string GitHash
         {
