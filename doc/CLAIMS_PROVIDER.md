@@ -69,7 +69,7 @@ public class ClaimsProvidersSetup : ISetupClaimsProvider
 >  </ItemGroup>
 >
 >  <ItemGroup>
->    <PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
+>    <PackageReference Include="Duende.IdentityServer" Version="6.1.7" />
 >  </ItemGroup>
 > </Project>
 > ```

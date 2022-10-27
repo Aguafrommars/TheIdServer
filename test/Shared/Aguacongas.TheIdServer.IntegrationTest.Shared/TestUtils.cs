@@ -71,7 +71,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         Expires = DateTimeOffset.Now.AddDays(1),
                         GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
                     },
-                    "http://exemple.com"));
+                    "http://exemple.com", new InteractiveRequestOptions
+                    {
+                         Interaction= InteractionType.GetToken,
+                         ReturnUrl = "http://exemple.com"
+                    }));
             }
 
             public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options)

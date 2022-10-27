@@ -54,7 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="bunit" Version="1.11.7" />
+		<PackageReference Include="bunit" Version="1.12.4-preview" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-rc.2.22476.2" />
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0-rc.2.22476.2" />
