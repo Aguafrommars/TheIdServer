@@ -24,26 +24,28 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
         {
             var user = await base.CreateUserAsync(account, options);
-            if (user.Identity is ClaimsIdentity identity)
+            if (user.Identity is not ClaimsIdentity identity)
             {
-                _logger.LogInformation("User connected {IdentityName}", identity.Name);
-                foreach (var claim in user.Claims.ToArray())
+                return user;
+            }
+
+            _logger.LogInformation("User connected {IdentityName}", identity.Name);
+            foreach (var claim in user.Claims.ToArray())
+            {
+                var value = claim.Value;
+                if (value.StartsWith("["))
                 {
-                    var value = claim.Value;
-                    if (value.StartsWith("["))
+                    var values = JsonSerializer.Deserialize<IEnumerable<string>>(value);
+                    var type = claim.Type;
+                    foreach (var item in values)
                     {
-                        var values = JsonSerializer.Deserialize<IEnumerable<string>>(value);
-                        var type = claim.Type;
-                        foreach(var item in values)
-                        {
-                            _logger.LogDebug("Add {Type} claim {Item}", type, item);
-                            identity.AddClaim(new Claim(type, item));
-                        }
-                        identity.RemoveClaim(claim);
+                        _logger.LogDebug("Add {Type} claim {Item}", type, item);
+                        identity.AddClaim(new Claim(type, item));
                     }
+                    identity.RemoveClaim(claim);
                 }
             }
-            
+
             return user;
         }
     }
