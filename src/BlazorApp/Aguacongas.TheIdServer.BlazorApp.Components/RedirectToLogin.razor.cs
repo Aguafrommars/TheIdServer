@@ -1,6 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Threading.Tasks;
+using MsOptions = Microsoft.Extensions.Options;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
@@ -13,7 +15,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
             var identity = authenticationState.User?.Identity;
             if (identity != null && !identity.IsAuthenticated)
             {
-                _navigationManager.NavigateTo($"authentication/login?returnUrl={_navigationManager.Uri}");
+                _navigationManager.NavigateToLogin(Options.Get(MsOptions.Options.DefaultName).AuthenticationPaths.LogInPath);
                 return;
             }
             _administratorEmail = _settings.AdministratorEmail;

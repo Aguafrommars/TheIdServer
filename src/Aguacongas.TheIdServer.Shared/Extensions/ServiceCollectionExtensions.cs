@@ -47,6 +47,8 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Components;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -191,14 +193,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)));
 
-            ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
+            ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType, configurationManager);
             ConfigureDynamicConfiguration(mvcBuilder, configurationManager);
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
             services.Configure<HostModelOptions>(configurationManager.GetSection(nameof(HostModelOptions)))
                  .AddScoped<LazyAssemblyLoader>()
                  .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
-                 .AddScoped<SignOutSessionStateManager>()
+                 .AddScoped<NavigationManager, PreRenderNavigationManager>()
                  .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
                  .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
                  .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
@@ -236,7 +238,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy, DbTypes dbType)
+        private static void ConfigureDynamicProviderManager(IMvcBuilder mvcBuilder, bool isProxy, DbTypes dbType, IConfiguration configuration)
         {
             var dynamicBuilder = mvcBuilder.AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
             if (isProxy)
@@ -345,7 +347,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 return TokenRetrieval.FromAuthorizationHeader()(request);
             }
-
             options.TokenRetriever = tokenRetriever;
         }
 

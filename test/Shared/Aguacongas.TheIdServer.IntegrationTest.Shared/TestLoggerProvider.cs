@@ -9,9 +9,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "<Pending>")]
     internal class TestLoggerProvider : ILoggerProvider
     {
-        public ITestOutputHelper TestOutputHelper { get; set; }
+        public ITestOutputHelper? TestOutputHelper { get; set; }
 
-        public TestLoggerProvider(ITestOutputHelper testOutputHelper)
+        public TestLoggerProvider(ITestOutputHelper? testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
         }

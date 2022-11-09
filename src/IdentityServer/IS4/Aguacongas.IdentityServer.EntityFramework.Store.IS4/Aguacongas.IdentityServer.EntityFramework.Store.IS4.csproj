@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>IdentityServer4 EF Core stores implementation for TheIdServer.</Description>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -13,6 +13,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
 	<ItemGroup>

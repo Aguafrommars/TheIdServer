@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Keys
 {
-    [Authorize(Policy = "Is4-Reader")]
+    [Authorize(Policy = SharedConstants.READERPOLICY)]
     public partial class Keys
     {
         private ICollection<Key> _dataProtectionKeys;

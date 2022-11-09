@@ -7,7 +7,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Settings.Settings;
+using SettingsPage = Aguacongas.TheIdServer.BlazorApp.Pages.Settings.Settings;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.Shared.BlazorApp.Pages
 {
@@ -39,7 +39,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.BlazorApp.Pages
             await form.SubmitAsync().ConfigureAwait(false);
         }
 
-        private IRenderedComponent<page> CreateComponent(string userName,
+        private IRenderedComponent<SettingsPage> CreateComponent(string userName,
             string role)
         {
             Factory.ConfigureTestContext(userName,
@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Shared.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<page>();
+            var component = RenderComponent<SettingsPage>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

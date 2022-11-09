@@ -20,6 +20,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     Action<IServiceCollection> configureServices = null,
                     IEnumerable<KeyValuePair<string, string>> configurationOverrides = null)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             var webHostBuilder = new WebHostBuilder()
                 .UseEnvironment("Development")
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
@@ -59,6 +60,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     
                     builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
                 });
+#pragma warning restore CS0618 // Type or member is obsolete
 
             var testServer = new TestServer(webHostBuilder);
 

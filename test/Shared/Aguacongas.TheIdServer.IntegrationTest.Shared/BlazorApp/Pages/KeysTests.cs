@@ -15,7 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
+using KeysPage = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
@@ -112,7 +112,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        private IRenderedComponent<page> CreateComponent(string userName,
+        private IRenderedComponent<KeysPage> CreateComponent(string userName,
             string role)
         {
             Factory.ConfigureTestContext(userName,
@@ -125,18 +125,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<page>();
+            var component = RenderComponent<KeysPage>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }
 
-        protected static IElement WaitForNode(IRenderedComponent<page> component, string cssSelector)
+        protected static IElement WaitForNode(IRenderedComponent<KeysPage> component, string cssSelector)
         {
             component.WaitForElement(cssSelector);
             return component.Find(cssSelector);
         }
 
-        protected static List<IElement> WaitForAllNodes(IRenderedComponent<page> component, string cssSelector)
+        protected static List<IElement> WaitForAllNodes(IRenderedComponent<KeysPage> component, string cssSelector)
         {
             component.WaitForElements(cssSelector);
             return component.FindAll(cssSelector).ToList();

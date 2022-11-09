@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
     /// </summary>
     /// <seealso cref="Hub{IProviderHub}" />
     /// <seealso cref="IProviderHub" />
-    [Authorize(Policy = "Is4-Reader")]
+    [Authorize(Policy = SharedConstants.READERPOLICY)]
     public class ProviderHub : Hub<IProviderHub>, IProviderHub
     {
         /// <summary>
@@ -21,7 +22,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         /// <param name="kind">The key kind.</param>
         /// <param name="id">The key identifier.</param>
         /// <returns></returns>
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task KeyRevoked(string kind, string id)
         {
             return Clients.Others.KeyRevoked(kind, id);
@@ -33,7 +34,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         /// <param name="scheme">The scheme.</param>
         /// <returns></returns>
 
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task ProviderAdded(string scheme)
         {
             return Clients.Others.ProviderAdded(scheme);
@@ -44,7 +45,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         /// </summary>
         /// <param name="scheme">The scheme.</param>
         /// <returns></returns>
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task ProviderRemoved(string scheme)
         {
             return Clients.Others.ProviderRemoved(scheme);
@@ -55,7 +56,7 @@ namespace Aguacongas.TheIdServer.Admin.Hubs
         /// </summary>
         /// <param name="scheme">The scheme.</param>
         /// <returns></returns>
-        [Authorize(Policy = "Is4-Writer")]
+        [Authorize(Policy = SharedConstants.WRITERPOLICY)]
         public Task ProviderUpdated(string scheme)
         {
             return Clients.Others.ProviderUpdated(scheme);

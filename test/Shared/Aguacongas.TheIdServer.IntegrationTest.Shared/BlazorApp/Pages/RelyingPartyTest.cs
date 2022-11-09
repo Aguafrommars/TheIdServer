@@ -18,12 +18,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
+using RelyingPartyPage = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.RelyingParty;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RelyingPartyTest : EntityPageTestBase<page>
+    public class RelyingPartyTest : EntityPageTestBase<RelyingPartyPage>
     {
         public override string Entity => "relyingparty";
         public RelyingPartyTest(TheIdServerFactory factory) : base(factory)
@@ -115,11 +115,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var relyingParty = await context.RelyingParties.FirstOrDefaultAsync(a => a.Id == relyingPartyId);
-                Assert.Equal(expected, relyingParty.Description);
+                Assert.Equal(expected, relyingParty?.Description);
             });
         }
 
-        private async Task<string> CreateEntity(byte[] certificate)
+        private async Task<string> CreateEntity(byte[]? certificate)
         {
             var relyingPartyId = GenerateId();
             await DbActionAsync<ConfigurationDbContext>(context =>

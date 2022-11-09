@@ -11,13 +11,13 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-using dn = Aguacongas.DynamicConfiguration.Razor.Services;
+
 
 namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 {
@@ -48,25 +48,30 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
         {
-            services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
+            var scopes = new List<string>();
+            configuration.Bind("ProviderOptions:DefaultScopes", scopes);
+            services.Configure<OidcProviderOptions>(options => configuration.Bind("ProviderOptions", options))
+                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
                 .AddOidcAuthentication(options =>
                 {
+                    SetDefaultAuthenticationOptions(options);
                     configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
                     configuration.GetSection("UserOptions").Bind(options.UserOptions);
-                    configuration.Bind("ProviderOptions", options.ProviderOptions);
+                    var providerOptions = options.ProviderOptions;
+                    configuration.Bind("ProviderOptions", providerOptions);
+                    providerOptions.DefaultScopes.Clear();
+                    foreach(var scope in scopes)
+                    {
+                        providerOptions.DefaultScopes.Add(scope);
+                    }
                 })
-                .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
+                .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
 
             services.Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
-                .AddScoped<dn.ConfigurationService>()
-                .AddScoped<dn.IConfigurationService, ConfigurationService>()
+                .AddScoped<DynamicConfiguration.ConfigurationService>()
+                .AddScoped<DynamicConfiguration.IConfigurationService, ConfigurationService>()
                 .AddConfigurationService(configuration.GetSection("settingsOptions"))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
-            var postConfigurationOidc = services.First(s => s.ServiceType == typeof(IPostConfigureOptions<RemoteAuthenticationOptions<OidcProviderOptions>>));
-            
-            services.Remove(postConfigurationOidc);
-            services.Add(new ServiceDescriptor(postConfigurationOidc.ServiceType, postConfigurationOidc.ImplementationType, ServiceLifetime.Singleton));
 
             services.AddAuthorizationCore(options =>
             {
@@ -103,6 +108,14 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     var apiUri = new Uri(settings.ApiBaseUrl);
                     httpClient.BaseAddress = apiUri;
                 });
+        }
+
+        // Workaround https://github.com/dotnet/aspnetcore/issues/41998#issuecomment-1144812047
+        private static void SetDefaultAuthenticationOptions(RemoteAuthenticationOptions<OidcProviderOptions> options)
+        {
+            options.AuthenticationPaths.RemoteRegisterPath = "/identity/account/register";
+            options.AuthenticationPaths.RemoteProfilePath = "/identity/account/manage";
+            options.UserOptions.RoleClaim = "role";
         }
 
         public static IServiceCollection AddAdminApplication(this IServiceCollection services, Settings settings)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.PostgreSQL</RootNamespace>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -14,6 +14,7 @@
 		<PackageIcon>package-icon.png</PackageIcon>
 		
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>

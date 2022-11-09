@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -36,10 +37,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         }
 
-        private async Task BeginSignOut(MouseEventArgs args)
+        private Task BeginSignOut(MouseEventArgs args)
         {
-            await _signOutManager.SetSignOutState();
-            _navigationManager.NavigateTo(_options.Value.LogOutPath);
+            _navigationManager.NavigateToLogout(_options.Value.LogOutPath);
+            return Task.CompletedTask;
         }
 
         private string GetActiveClass(string culture)

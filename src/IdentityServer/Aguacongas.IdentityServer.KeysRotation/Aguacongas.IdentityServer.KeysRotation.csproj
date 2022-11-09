@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Description>TheIdServer signing keys rotation.</Description>
         <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -14,6 +14,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         
         <CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+        <EnablePreviewFeatures>True</EnablePreviewFeatures>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,18 +22,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.1" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.3" />
         <PackageReference Include="IdentityModel" Version="6.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.0" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-        <PackageReference Include="MongoDB.Driver" Version="2.15.1" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.18.0" />
-        <PackageReference Include="RavenDB.Client" Version="5.3.102" />
-        <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
+        <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
+        <PackageReference Include="RavenDB.Client" Version="5.4.4" />
+        <PackageReference Include="StackExchange.Redis" Version="2.6.70" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />

@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Bunit;
@@ -17,13 +16,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.User.User;
+using UserPage = Aguacongas.TheIdServer.BlazorApp.Pages.User.User;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class UserTest : EntityPageTestBase<page>
+    public class UserTest : EntityPageTestBase<UserPage>
     {
         public override string Entity => "user";
 
@@ -451,7 +449,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
 
-        private async Task<Tuple<string, IRenderedComponent<page>>> SetupPage()
+        private async Task<Tuple<string, IRenderedComponent<UserPage>>> SetupPage()
         {
             var userId = GenerateId();
             await CreateTestEntity(userId);
@@ -469,13 +467,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             }
             var manager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var user = await manager.FindByIdAsync(userId);
-            var result = await manager.AddToRoleAsync(user, "filtered");
+            var result = await manager.AddToRoleAsync(user!, "filtered");
             Assert.True(result.Succeeded);
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 userId);
 
-            return new Tuple<string, IRenderedComponent<page>>(userId, component);
+            return new Tuple<string, IRenderedComponent<UserPage>>(userId, component);
         }
         private async Task CreateTestEntity(string userId)
         {

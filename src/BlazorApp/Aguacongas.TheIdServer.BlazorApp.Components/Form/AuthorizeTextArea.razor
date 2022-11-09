@@ -1,5 +1,5 @@
 ﻿@inherits InputTextArea
-<AuthorizeView Policy="Is4-Writer">
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
     <Authorized>
         <InputTextArea id="@Id" class="form-control" maxlength="@MaxLength" ValueExpression="ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
     </Authorized>

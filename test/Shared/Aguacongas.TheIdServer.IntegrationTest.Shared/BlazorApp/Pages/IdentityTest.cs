@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,13 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Identity.Identity;
+using IndentyPage = Aguacongas.TheIdServer.BlazorApp.Pages.Identity.Identity;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class IdentityTest : EntityPageTestBase<page>
+    public class IdentityTest : EntityPageTestBase<IndentyPage>
     {
         public override string Entity => "identityresource";
         public IdentityTest(TheIdServerFactory factory) : base(factory)
@@ -146,7 +144,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var identity = await context.Identities.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, identity.DisplayName);
+                Assert.Equal(expected, identity?.DisplayName);
             });
         }
 

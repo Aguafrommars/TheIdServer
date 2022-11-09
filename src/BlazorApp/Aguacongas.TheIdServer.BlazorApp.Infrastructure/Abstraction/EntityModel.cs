@@ -18,10 +18,12 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    [Authorize(Policy = "Is4-Reader")]
-    public abstract class EntityModel<T> : ComponentBase, IComparer<Type> where T : class, ICloneable<T>, new()
+    [Authorize(Policy = SharedConstants.READERPOLICY)]
+    public abstract class EntityModel<T> : ComponentBase, IDisposable, IComparer<Type> where T : class, ICloneable<T>, new()
     {
         const int HEADER_HEIGHT = 95;
+        private IDisposable _registration;
+        private bool disposedValue;
 
         [Inject]
         protected Notifier Notifier { get; set; }
@@ -101,7 +103,24 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var model = await GetModelAsync()
                 .ConfigureAwait(false);
+
             CreateEditContext(model);
+
+            _registration ??= NavigationManager.RegisterLocationChangingHandler(async context =>
+            {
+                if (!EditContext.IsModified())
+                {
+                    return;
+                }
+
+                var isConfirmed = await JSRuntime.InvokeAsync<bool>("window.confirm", Localizer["Are you sure you want to leave this page?"]?.ToString())
+                    .ConfigureAwait(false);
+
+                if (!isConfirmed)
+                {
+                    context.PreventNavigation();
+                }
+            });
         }
 
         protected async Task HandleValidSubmit()
@@ -403,6 +422,26 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _registration?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

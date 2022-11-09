@@ -12,12 +12,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
+using ApiScopePage = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiScopeTest : EntityPageTestBase<page>
+    public class ApiScopeTest : EntityPageTestBase<ApiScopePage>
     {
         public override string Entity => "apiscope";
         public ApiScopeTest(TheIdServerFactory factory):base(factory)
@@ -145,7 +145,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var apiScope = await context.ApiScopes.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, apiScope.DisplayName);
+                Assert.Equal(expected, apiScope?.DisplayName);
             });
         }
 

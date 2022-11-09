@@ -14,23 +14,25 @@ services:
 environment:
   GITHUB_TOKEN:
     secure: aV5flJ5BOs49dlM4XRpu7t1qa+ajMD5L4hhwlBOv+zff/NlSkdnrmk5nYNsIJCdE
-  donetsdk: 6.0.202
+  donetsdk: 7.0.100
   JAVA_HOME: C:\Program Files\Java\jdk14
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
-  - ps: .\dotnet-install.ps1 -Version 5.0.404
+  - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
-  - ps: .\dotnet-install.ps1 -Version $env:donetsdk
   - ps: dotnet tool install --global dotnet-sonarscanner
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install
   - cmd: redis-64\tools\redis-server.exe --service-start
   - ps: ./appveyorinit.ps1
+  - ps: dotnet --list-runtimes
 build_script:
   - ps: ./build.ps1
 test_script:
