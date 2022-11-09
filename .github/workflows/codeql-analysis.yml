@@ -45,8 +45,6 @@ jobs:
       with:
         dotnet-version: '7.0.x'
         include-prerelease: true
-    - name: Init nuget.config
-      run: dotnet nuget update source --source "https://nuget.pkg.github.com/bUnit-dev/index.json" github --username aguacongas --password ${{ secrets.GITHIB_FEED_TOKEN }} --store-password-in-clear-text
     - name: Setup wasm tools
       run: dotnet workload install wasm-tools
       env: 
