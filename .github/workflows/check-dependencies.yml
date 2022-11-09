@@ -35,9 +35,6 @@ jobs:
         with:
           dotnet-version: 7.0.x
           include-prerelease: true
-      # Run update nuget feed
-      - name: Update nuget github feed
-        run: dotnet nuget update source github -s https://nuget.pkg.github.com/bUnit-dev/index.json -u Aguacongas -p ${{ secrets.GITHIB_FEED_TOKEN }}
       # Run update depencies script
       - name: Update dependencies
         run: ./update-dependencies.ps1

@@ -24,7 +24,6 @@ install:
   - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
-  - ps: dotnet nuget update source --source "https://nuget.pkg.github.com/bUnit-dev/index.json" github --username aguacongas --password $env:GITHUB_TOKEN --store-password-in-clear-text
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
