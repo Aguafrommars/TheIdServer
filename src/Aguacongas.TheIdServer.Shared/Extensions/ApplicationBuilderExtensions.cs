@@ -191,7 +191,7 @@ namespace Microsoft.AspNetCore.Builder
         }
 
         private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
-        {            
+        {
             return app.Use(async (context, next) =>
             {
                 var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
@@ -205,14 +205,14 @@ namespace Microsoft.AspNetCore.Builder
 
                 if (headers.TryGetValue(certificateHeader, out StringValues values))
                 {
-                    logger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
+                    requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
                     try
                     {
                         context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
                     }
                     catch (CryptographicException e)
                     {
-                        logger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
+                        requestLogger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
                     }
                 }
                 await next();

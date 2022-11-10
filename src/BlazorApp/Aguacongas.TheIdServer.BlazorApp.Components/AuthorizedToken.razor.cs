@@ -54,7 +54,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
                     return;
                 }
 
-                var match = _regex.Match(_token.ValueString);
+                var match = _regex().Match(_token.ValueString);
                 if (!match.Success)
                 {
                     return;

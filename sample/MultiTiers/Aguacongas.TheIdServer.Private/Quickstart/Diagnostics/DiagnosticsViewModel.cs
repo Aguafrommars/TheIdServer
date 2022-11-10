@@ -14,7 +14,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             AuthenticateResult = result;
 
-            iif(!result.Properties.Items.TryGetValue("client_list", out string encoded))
+            if(!result.Properties.Items.TryGetValue("client_list", out string encoded))
             {
                 return;
             }
