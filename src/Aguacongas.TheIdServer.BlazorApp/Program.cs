@@ -2,6 +2,7 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.BlazorApp.Models;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using System.Globalization;
@@ -12,7 +13,9 @@ var configuration = builder.Configuration;
 var settings = configuration.Get<Settings>();
 if (settings?.Prerendered == false)
 {
-    builder.RootComponents.Add<App>("app");
+    var rootComponents = builder.RootComponents;
+    rootComponents.Add<App>(settings.HostElementIdentifier);
+    rootComponents.Add<HeadOutlet>("head::after");
 }
             
 var host = builder.Build();
