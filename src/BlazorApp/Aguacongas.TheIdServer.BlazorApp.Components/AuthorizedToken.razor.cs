@@ -11,7 +11,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
     public partial class AuthorizedToken<T>
     {
         private const string DISPLAY_FORMAT = @"d\.hh\:mm\:ss";
-        private readonly Regex _regex = new Regex(Token.RegulatExpression, RegexOptions.Compiled);
+        [GeneratedRegex(Token.RegulatExpression, RegexOptions.Compiled)]
+        private static partial Regex _regex();
         private Token _token;
         private bool _updatingValue;
 
