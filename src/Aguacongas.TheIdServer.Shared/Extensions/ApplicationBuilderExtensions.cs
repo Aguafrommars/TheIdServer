@@ -64,31 +64,7 @@ namespace Microsoft.AspNetCore.Builder
             if (!string.IsNullOrEmpty(certificateHeader))
             {
                 logger.LogDebug("Get client certificate from header {ClientCertificateHeader}", certificateHeader);
-                app.Use(async (context, next) =>
-                {
-                    var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
-                    var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
-
-                    var headers = context.Request.Headers;
-                    using var scope = requestLogger.BeginScope(new Dictionary<string, object>
-                    {
-                        ["Headers"] = headers
-                    });
-
-                    if (headers.TryGetValue(certificateHeader, out StringValues values))
-                    {
-                        logger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
-                        try
-                        {
-                            context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
-                        }
-                        catch(CryptographicException e)
-                        {
-                            logger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
-                        }
-                    }
-                    await next();
-                });
+                app.UseClientCerificate(certificateHeader);
             }
 
             app.UseForwardedHeaders();
@@ -136,26 +112,7 @@ namespace Microsoft.AspNetCore.Builder
                .UseStaticFiles()
                .UseIdentityServerAdminApi("/api", child =>
                {
-                   if (configuration.GetValue<bool>("EnableOpenApiDoc"))
-                   {
-                       child.UseOpenApi()
-                           .UseSwaggerUi3(options =>
-                           {
-                               var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                               options.OAuth2Client = settings.OAuth2Client;
-                           });
-                   }
-                   var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-                   if (allowedOrigin != null)
-                   {
-                       child.UseCors(configure =>
-                       {
-                           configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                               .AllowAnyMethod()
-                               .AllowAnyHeader()
-                               .AllowCredentials();
-                       });
-                   }
+                   ConfigureAdminApiHandler(configuration, child);
                })
                 .UseRouting();
 
@@ -209,6 +166,58 @@ namespace Microsoft.AspNetCore.Builder
             return app;
         }
 
+        private static void ConfigureAdminApiHandler(IConfiguration configuration, IApplicationBuilder child)
+        {
+            if (configuration.GetValue<bool>("EnableOpenApiDoc"))
+            {
+                child.UseOpenApi()
+                    .UseSwaggerUi3(options =>
+                    {
+                        var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                        options.OAuth2Client = settings.OAuth2Client;
+                    });
+            }
+            var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+            if (allowedOrigin != null)
+            {
+                child.UseCors(configure =>
+                {
+                    configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            }
+        }
+
+        private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
+        {
+            return app.Use(async (context, next) =>
+            {
+                var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+                var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
+
+                var headers = context.Request.Headers;
+                using var scope = requestLogger.BeginScope(new Dictionary<string, object>
+                {
+                    ["Headers"] = headers
+                });
+
+                if (headers.TryGetValue(certificateHeader, out StringValues values))
+                {
+                    requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
+                    try
+                    {
+                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                    }
+                    catch (CryptographicException e)
+                    {
+                        requestLogger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
+                    }
+                }
+                await next();
+            });
+        }
         private static IApplicationBuilder UsePrometheus(this IApplicationBuilder app, IConfiguration configuration)
         {
             var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
