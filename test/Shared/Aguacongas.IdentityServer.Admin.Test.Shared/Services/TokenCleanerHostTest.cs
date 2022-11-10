@@ -67,7 +67,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 resetEvent.WaitOne();
             }
 
-            Assert.True(resetEvent.WaitOne(TimeSpan.FromSeconds(2)));
+            Assert.True(resetEvent.WaitOne(TimeSpan.FromSeconds(10)));
 
             await sut.StopAsync(default);
         }
