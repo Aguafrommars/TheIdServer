@@ -16,7 +16,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 {
     public class TokenCleanerHostTest
     {
-        [Fact(Skip = "failed too often on appveyor")]
+        [Fact]
         public async Task StartAsync_should_start_token_cleaner_task()
         {
             using var resetEvent = new ManualResetEvent(false);
