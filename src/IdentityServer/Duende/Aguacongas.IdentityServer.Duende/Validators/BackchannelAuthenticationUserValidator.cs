@@ -18,7 +18,7 @@ namespace Aguacongas.IdentityServer.Validators
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<BackchannelAuthenticationUserValidatonResult> ValidateRequestAsync(BackchannelAuthenticationUserValidatorContext userValidatorContext)
+        public async Task<BackchannelAuthenticationUserValidationResult> ValidateRequestAsync(BackchannelAuthenticationUserValidatorContext userValidatorContext)
         {
             var sub = userValidatorContext.LoginHintToken ?? userValidatorContext.IdTokenHintClaims?.SingleOrDefault(c => c.Type == JwtClaimTypes.Subject)?.Value;
 
@@ -28,14 +28,14 @@ namespace Aguacongas.IdentityServer.Validators
 
             if (user is null)
             {
-                return new BackchannelAuthenticationUserValidatonResult
+                return new BackchannelAuthenticationUserValidationResult
                 {
                     Error = "User not found.",
                     ErrorDescription = $"LoginHintToken, LoginHint and IdTokenHint don't contain a valid user id."
                 };
             }
 
-            return new BackchannelAuthenticationUserValidatonResult
+            return new BackchannelAuthenticationUserValidationResult
             {
                 Subject = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
