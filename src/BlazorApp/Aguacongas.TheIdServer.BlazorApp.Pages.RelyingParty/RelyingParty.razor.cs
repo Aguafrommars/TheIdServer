@@ -191,6 +191,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
             }
         }
 
+        protected override void OnCloning()
+        {
+            Model.Description = Localizer["Clone of {0}", Model.Description];
+        }
+
         private void RemoveCertificate()
         {
             _thumbprint = null;
