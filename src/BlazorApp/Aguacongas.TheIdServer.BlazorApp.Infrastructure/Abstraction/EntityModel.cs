@@ -8,6 +8,8 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -49,6 +51,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [Parameter]
         public string Id { get; set; }
 
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public bool Clone { get; set; }
+
         protected bool IsNew { get; private set; }
 
         protected T Model { get; private set; }
@@ -59,15 +65,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract bool NonEditable { get; }
 
-#pragma warning disable CA1056 // Uri properties should not be strings. Nope, because it's used as parameter of NavigationManager.NavigateTo
         protected abstract string BackUrl { get; }
-#pragma warning restore CA1056 // Uri properties should not be strings
 
         protected HandleModificationState HandleModificationState { get; private set; }
 
         protected string EntityPath => typeof(T).Name;
 
-        protected PageRequest ExportRequest => new PageRequest
+        protected PageRequest ExportRequest => new()
         {
             Filter = $"{nameof(IEntityId.Id)} eq '{Id}'",
             Expand = Expand
@@ -92,23 +96,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             HandleModificationState = new HandleModificationState(Logger);
             HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
 
-            if (Id == null)
-            {
-                IsNew = true;
-                var newModel = await Create().ConfigureAwait(false);
-                CreateEditContext(newModel);
-                EntityCreated(Model);
-                return;
-            }
-
-            var model = await GetModelAsync()
-                .ConfigureAwait(false);
-
-            CreateEditContext(model);
-
             _registration ??= NavigationManager.RegisterLocationChangingHandler(async context =>
             {
-                if (!EditContext.IsModified())
+                if (!EditContext.IsModified() && !Clone)
                 {
                     return;
                 }
@@ -121,6 +111,36 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     context.PreventNavigation();
                 }
             });
+
+            if (Id is null)
+            {
+                var newModel = await Create().ConfigureAwait(false);
+                CreateEditContext(newModel);
+                EntityCreated(Model);
+                return;
+            }
+
+            var model = await GetModelAsync()
+                .ConfigureAwait(false);
+
+            CreateEditContext(model);            
+        }
+
+        protected override void OnParametersSet()
+        {
+            if (Clone && Id is not null)
+            {
+                Id += "-clone";
+                HandleModificationState.Changes.Clear();
+                EntityCreated(Model);
+                if (Model is IEntityId entityId)
+                {
+                    entityId.Id = Id;
+                }
+                OnCloning();
+            }
+
+            IsNew = Id is null || Clone;
         }
 
         protected async Task HandleValidSubmit()
@@ -141,9 +161,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 }).ConfigureAwait(false);
                 return;
             }
-            
+
             Id = GetModelId(Model);
             IsNew = false;
+            Clone = false;
             CreateEditContext(Model.Clone());
 
             var keys = changes.Keys
@@ -159,7 +180,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
                 await Notifier.NotifyAsync(new Models.Notification
                 {
-                    Header = Id,
+                    Header = GetNotiticationHeader(),
                     Message = Localizer["Saved"]
                 }).ConfigureAwait(false);
 
@@ -180,8 +201,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 changes.Clear();
             }
 
-            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);            
         }
+
+        protected virtual string GetNotiticationHeader() => Id;        
 
         protected void EntityCreated<TEntity>(TEntity entity) where TEntity : class
         {
@@ -210,6 +233,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                     Header = GetModelId(Model),
                     Message = Localizer["Deleted"]
                 }).ConfigureAwait(false);
+
+                EditContext.MarkAsUnmodified();
+                HandleModificationState.Changes.Clear();
 
                 NavigationManager.NavigateTo(BackUrl);
             }
@@ -299,6 +325,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         protected virtual void OnEntityUpdated(Type entityType, IEntityId entityModel)
         {
             HandleModificationState.EntityUpdated(entityType, entityModel);
+        }
+
+        protected virtual void OnCloning()
+        {
         }
 
         protected abstract Task<T> Create();
@@ -423,6 +453,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
         }
+
+        
 
         protected virtual void Dispose(bool disposing)
         {

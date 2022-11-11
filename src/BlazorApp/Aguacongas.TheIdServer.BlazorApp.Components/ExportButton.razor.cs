@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
-    public partial class ExportButtom
+    public partial class ExportButton
     {
         [Parameter]
         public PageRequest Request { get; set; }

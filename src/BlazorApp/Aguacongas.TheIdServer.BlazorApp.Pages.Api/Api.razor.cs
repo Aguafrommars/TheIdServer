@@ -76,6 +76,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api
             }
         }
 
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
+        }
+
         private static ApiSecret CreateSecret()
             =>  new()
                 {

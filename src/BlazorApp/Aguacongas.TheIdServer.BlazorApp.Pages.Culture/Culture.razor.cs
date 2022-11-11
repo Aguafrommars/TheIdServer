@@ -76,6 +76,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Culture
             }
         }
 
+        protected override void OnCloning()
+        {
+            Model.Id = null;
+            _cultureInfo = CultureInfo.InvariantCulture;
+            StateHasChanged();
+        }
+
         private void HandleModificationState_OnFilterChange(string term)
         {
             StateHasChanged();

@@ -25,7 +25,7 @@ else
                         <h3>@Id</h3>
                     }
                 </div>
-                <div class="col d-flex">
+                <div class="col">
                     <AuthorizeButton Type="submit" CssSubClass="ms-auto me-1 btn-primary">
                         <span class="oi oi-data-transfer-download"></span>
                         @Localizer["Save"]
@@ -34,7 +34,11 @@ else
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }
-                    <ExportButtom EntityPath="@EntityPath" CssClass="ml-1" Request="@ExportRequest" />
+                    @if (!IsNew)
+                    {
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
+                    }
                 </div>
                 <div class="w-100"></div>
                 <div class="w-100"></div>

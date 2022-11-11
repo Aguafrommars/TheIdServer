@@ -153,7 +153,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
                 subEntity.RelyingPartyId = Model.Id;
             }
         }
-
+       
         private async Task SetCertificateAsync(InputFileChangeEventArgs e)
         {
             using var stream = e.File.OpenReadStream();

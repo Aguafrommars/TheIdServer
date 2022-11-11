@@ -32,10 +32,4 @@
 	<ItemGroup>
 	  <None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Content Update="Form\AuthorizeNullableCheckbox.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	</ItemGroup>
-
 </Project>

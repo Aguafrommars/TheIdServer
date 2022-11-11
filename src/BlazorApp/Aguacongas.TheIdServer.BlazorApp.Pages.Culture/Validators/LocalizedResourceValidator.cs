@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         public LocalizedResourceValidator(Culture culture, IStringLocalizer localizer)
         {
             RuleFor(m => m.Key).NotEmpty().WithMessage(localizer["The key is required."]);
-            RuleFor(m => m.Key).IsUnique(culture.Resources).WithMessage(localizer["The key must be unique."]);
+            RuleFor(m => m.Key).IsUnique(culture.Resources).WithMessage(r => localizer["The key '{0}' must be unique.", r.Key]);
         }
     }
 }
