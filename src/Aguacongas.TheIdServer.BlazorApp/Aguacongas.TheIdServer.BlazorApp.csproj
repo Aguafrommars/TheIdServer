@@ -91,4 +91,8 @@
   <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="TrimmerRootDescriptor.xml" />
+  </ItemGroup>
 </Project>
