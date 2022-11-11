@@ -32,7 +32,11 @@ else
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }
                 }
-                <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                @if (!IsNew)
+                {
+                    <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                    <CloneButton />
+                }
             </div>
             <div class="col">
                 <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />

@@ -119,6 +119,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string relyingPartyId = await CreateEntity(null);
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                relyingPartyId,
+                true);
+
+            var input = component.Find("#description");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {relyingPartyId}");
+        }
+
         private async Task<string> CreateEntity(byte[]? certificate)
         {
             var relyingPartyId = GenerateId();

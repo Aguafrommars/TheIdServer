@@ -1,7 +1,7 @@
 ﻿@inject Settings _settings
 @inject OneTimeTokenService _service
 @inject IJSRuntime _jsRuntime
-@inject IStringLocalizerAsync<ExportButtom> Localizer
+@inject IStringLocalizerAsync<ExportButton> Localizer
 <button class="btn btn-secondary @CssClass" @onclick="Download" disabled="@Disabled" title="@Localizer["export"]" >
     <span class="oi oi-arrow-circle-top"></span><span class="visually-hidden">@Localizer["export"]</span>
 </button>

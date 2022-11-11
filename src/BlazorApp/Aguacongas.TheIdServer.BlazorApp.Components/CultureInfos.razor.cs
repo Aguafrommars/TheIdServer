@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 {
     public partial class CultureInfos
     {
-        private IEnumerable<CultureInfo> _cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
+        private readonly IEnumerable<CultureInfo> _cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
         private IEnumerable<CultureInfo> _filterValues;
         protected override bool IsReadOnly => true;
 
@@ -19,7 +19,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         protected override Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
-            term = term ?? string.Empty;
+            term ??= string.Empty;
             _filterValues = _cultureInfos
                 .Where(c => c.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || c.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(c => c.Name)

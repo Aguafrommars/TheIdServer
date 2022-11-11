@@ -148,6 +148,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string identityId = await CreateEntity();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                identityId,
+                true);
+
+            var input = component.Find("#displayName");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {identityId}");
+        }
+
         private async Task<string> CreateEntity()
         {
             var identityId = GenerateId();

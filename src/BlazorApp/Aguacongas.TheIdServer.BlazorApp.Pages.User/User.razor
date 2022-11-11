@@ -21,8 +21,9 @@ else
                     @if (!IsNew)
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
                     }
-                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
                 </div>
                 <div class="col">
                     <Filter CssClass="mt-1" />

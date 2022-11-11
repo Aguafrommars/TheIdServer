@@ -238,6 +238,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            var apiId = await CreateApi();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                apiId,
+                true);
+
+            var input = component.Find("#displayName");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {apiId}");
+        }
+
         private async Task<string> CreateApi()
         {
             var apiId = GenerateId();

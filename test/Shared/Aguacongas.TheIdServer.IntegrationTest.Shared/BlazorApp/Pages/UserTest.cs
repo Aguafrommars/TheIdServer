@@ -448,8 +448,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            var tuple = await SetupPage();
+            var component = tuple.Item2;
+            
+            var input = WaitForNode(component, "#name");
 
-        private async Task<Tuple<string, IRenderedComponent<UserPage>>> SetupPage()
+            Assert.NotNull(input);
+        }
+
+        private async Task<Tuple<string, IRenderedComponent<UserPage>>> SetupPage(bool clone = false)
         {
             var userId = GenerateId();
             await CreateTestEntity(userId);
@@ -471,7 +481,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.True(result.Succeeded);
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                userId);
+                userId,
+                clone);
 
             return new Tuple<string, IRenderedComponent<UserPage>>(userId, component);
         }

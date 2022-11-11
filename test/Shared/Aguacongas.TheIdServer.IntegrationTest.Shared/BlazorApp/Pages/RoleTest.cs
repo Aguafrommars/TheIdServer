@@ -218,6 +218,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string roleId = await CreateRole();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                roleId,
+                true);
+
+            var input = WaitForNode(component, "#name");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {roleId}");
+        }
+
         private async Task<string> CreateRole()
         {
             var roleId = GenerateId();

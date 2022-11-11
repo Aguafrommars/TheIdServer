@@ -62,6 +62,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
             }    
         }
 
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
+        }
+
         private ExternalClaimTransformation CreateTransformation()
         {
             return new ExternalClaimTransformation

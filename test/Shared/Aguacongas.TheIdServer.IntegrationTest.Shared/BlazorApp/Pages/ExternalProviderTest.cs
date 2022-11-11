@@ -360,6 +360,20 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.Throws<ElementNotFoundException>(() => component.Find("li.validation-message"));
         }
 
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            var providerId = await CreateProvider();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                providerId,
+                true);
+
+            var input = component.Find("#displayName");
+
+            Assert.NotNull(input);
+        }
         private async Task<string> CreateProvider()
         {
             var providerId = GenerateId();
