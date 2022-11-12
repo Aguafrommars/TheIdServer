@@ -2126,5 +2126,9 @@
   {
     "key": "clone",
     "value": "cloner"
+  },
+  {
+    "key": "Clone of {0}",
+    "value": "Clone de {0}"
   }
 ]
