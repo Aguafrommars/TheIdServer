@@ -24,7 +24,9 @@
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ApiTest.cs" Link="BlazorApp\Pages\ApiTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ClientsTest.cs" Link="BlazorApp\Pages\ClientsTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ClientTest.cs" Link="BlazorApp\Pages\ClientTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\EntitiesPageTestBase.cs" Link="BlazorApp\Pages\EntitiesPageTestBase.cs" />
+		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\CulturesTest.cs" Link="BlazorApp\Pages\CulturesTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\CultureTest.cs" Link="BlazorApp\Pages\CultureTest.cs" />
+    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\EntitiesPageTestBase.cs" Link="BlazorApp\Pages\EntitiesPageTestBase.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\EntityPageTestBase.cs" Link="BlazorApp\Pages\EntityPageTestBase.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ExternalProvidersTest.cs" Link="BlazorApp\Pages\ExternalProvidersTest.cs" />
 		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ExternalProviderTest.cs" Link="BlazorApp\Pages\ExternalProviderTest.cs" />
