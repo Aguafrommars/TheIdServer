@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <linker>
-  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly.Authentication" preserve="all" />
+  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly.Authentication" >
+    <type fullname="Microsoft.AspNetCore.Components.WebAssembly.Authentication.RemoteAuthenticationContext`1" preserve="all" />
+  </assembly>
 </linker>
