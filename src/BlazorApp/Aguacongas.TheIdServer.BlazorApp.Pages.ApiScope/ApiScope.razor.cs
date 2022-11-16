@@ -12,23 +12,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
 
         protected override bool NonEditable => false;
 
-        protected override string BackUrl => "scopes";
+        protected override string BackUrl => "apiscopes";
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
         }
 
-        protected override Task<Entity.ApiScope> Create()
-        {
-            return Task.FromResult(new Entity.ApiScope
+        protected override Task<Entity.ApiScope> Create() =>Task.FromResult(new Entity.ApiScope
             {
                 Enabled = true,
                 ApiScopeClaims = new List<Entity.ApiScopeClaim>(),
                 Properties = new List<Entity.ApiScopeProperty>(),
                 Resources = new List<Entity.ApiScopeLocalizedResource>()
-            });
-        }
+            });        
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
@@ -50,6 +47,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
             {
                 subEntity.ApiScopeId = Model.Id;
             }
+        }
+
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
         }
 
         private static Entity.ApiScopeProperty CreateProperty()

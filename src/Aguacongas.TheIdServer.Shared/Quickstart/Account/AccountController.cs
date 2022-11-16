@@ -250,6 +250,7 @@ namespace Aguacongas.TheIdServer.UI
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+
             if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP).ConfigureAwait(false) != null)
             {
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
@@ -274,11 +275,11 @@ namespace Aguacongas.TheIdServer.UI
             var settings = _options.Value;
             var providers = schemes
                 .Where(x => x.DisplayName != null ||
-                            (x.Name.Equals(settings.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                            x.Name.Equals(settings.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase)
                 )
                 .Select(x => new ExternalProvider
                 {
-                    DisplayName = x.DisplayName,
+                    DisplayName = x.DisplayName ?? x.Name,
                     AuthenticationScheme = x.Name
                 }).ToList();
 
@@ -304,7 +305,10 @@ namespace Aguacongas.TheIdServer.UI
                 EnableLocalLogin = allowLocal && settings.AllowLocalLogin,
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
-                ExternalProviders = providers.ToArray()
+                ExternalProviders = providers.ToArray(),
+                ShowForgotPassworLink = settings.ShowForgotPassworLink,
+                ShowRegisterLink = settings.ShowRegisterLink,
+                ShowResendEmailConfirmationLink = settings.ShowResendEmailConfirmationLink
             };
         }
 

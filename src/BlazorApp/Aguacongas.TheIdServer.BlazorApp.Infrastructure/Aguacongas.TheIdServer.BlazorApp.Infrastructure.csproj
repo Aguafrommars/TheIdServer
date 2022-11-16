@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -26,11 +26,11 @@
 		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="1.0.0" />
 
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.5" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.5" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.17.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.25.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 

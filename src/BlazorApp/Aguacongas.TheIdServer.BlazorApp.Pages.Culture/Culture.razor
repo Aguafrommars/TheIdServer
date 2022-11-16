@@ -15,9 +15,9 @@ else
                 <div class="col">
                     @if (IsNew)
                     {
-                        <AuthorizeView Policy="Is4-Writer">
+                        <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
                             <Authorized Context="culture">
-                                <CultureInfos @bind-Value="@Model.Id" Entity="_cultureInfo" EntityChanged="CultureSelected" />
+                                <CultureInfos Id="id" @bind-Value="@Model.Id" Entity="_cultureInfo" EntityChanged="CultureSelected" />
                             </Authorized>
                         </AuthorizeView>                        
                     }
@@ -32,7 +32,11 @@ else
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }
-                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                    @if (!IsNew)
+                    {
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
+                    }
                 </div>
 
                 <div class="col">

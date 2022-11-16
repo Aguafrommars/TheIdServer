@@ -11,115 +11,123 @@
 }
 else
 {
-<EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
-    <CascadingValue Value="HandleModificationState">
-        <CascadingValue Value="Model">
-            <div class="row bg-light sticky-top mb-3">
-                <div class="col">
-                    @if (IsNew)
-                    {
-                        <AuthorizeText Id="name" Placeholder="@Localizer["scheme"]" @bind-Value="@Model.Id" />
-                    }
-                    else
-                    {
-                        <h3>@Id</h3>
-                    }
-                </div>
-                <div class="col d-flex">
-                    <AuthorizeButton Type="submit" CssSubClass="ms-auto me-1 btn-primary">
-                        <span class="oi oi-data-transfer-download"></span>
-                        @Localizer["Save"]
-                    </AuthorizeButton>
-                    @if (!IsNew)
-                    {
-                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
-                    }
-                    <ExportButtom EntityPath="@EntityPath" CssClass="ml-1" Request="@ExportRequest" />
-                </div>
-                <div class="w-100"></div>
-                <div class="w-100"></div>
-                <div class="col">
-                    <ul class="list-inline">
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#transformations" @onclick='() => ScrollTo("transformations")' @onclick:preventDefault>@Localizer["claims transformations"]</a>
-                        </li>
-                    </ul>
-                </div>
-                <FluentValidationValidator />
-                <div class="w-100"></div>
-                <ValidationSummary class="col" />
-            </div>
-            <div class="entity-details">
-                <div class="card mb-3">
-                    <div class="card-body">
+    <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
+        <CascadingValue Value="HandleModificationState">
+            <CascadingValue Value="Model">
+                <div class="row bg-light sticky-top mb-3">
+                    <div class="col">
                         @if (IsNew)
                         {
+                            <AuthorizeText Id="name" Placeholder="@Localizer["scheme"]" @bind-Value="@Model.Id" />
+                        }
+                        else
+                        {
+                            <h3>@Id</h3>
+                        }
+                    </div>
+                    <div class="col">
+                        <AuthorizeButton Type="submit" CssSubClass="ms-auto me-1 btn-primary">
+                            <span class="oi oi-data-transfer-download"></span>
+                            @Localizer["Save"]
+                        </AuthorizeButton>
+                        @if (!IsNew)
+                        {
+                            <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        }
+                        @if (!IsNew)
+                        {
+                            <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                            <CloneButton />
+                        }
+                    </div>
+                    <div class="col">
+                        <Filter CssClass="mt-1" />
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="@(NavigationManager.Uri)#transformations" @onclick='() => ScrollTo("transformations")' @onclick:preventDefault>@Localizer["claims transformations"]</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <FluentValidationValidator />
+                    <ValidationSummary class="col" />
+                </div>
+                <div class="entity-details">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            @if (IsNew)
+                            {
+                                <div class="mb-3 row">
+                                    <label class="col col-form-label" for="type">
+                                        @Localizer["type"]
+                                    </label>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <ProviderSelect Id="type" Value="@Model.KindName" ValueChanged="KindChanded" ValueExpression="() => Model.KindName" Kinds="@Model.Kinds" />
+                                    </div>
+                                </div>
+                            }
                             <div class="mb-3 row">
-                                <label class="col col-form-label" for="type">
-                                    @Localizer["type"]
+                                <label class="col col-form-label" for="displayName">
+                                    @Localizer["display name"]
                                 </label>
                                 <div class="col-lg-10 col-sm-12">
-                                    <ProviderSelect Id="type" Value="@Model.KindName" ValueChanged="KindChanded" ValueExpression="() => Model.KindName" Kinds="@Model.Kinds" />
+                                    <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Model.DisplayName" MaxLength="200" />
                                 </div>
                             </div>
-                        }
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="displayName">
-                                @Localizer["display name"]
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="displayName" Placeholder="@Localizer["display name"]" @bind-Value="@Model.DisplayName" MaxLength="200" />
-                            </div>
-                        </div>
-                        @switch (Model.KindName)
-                        {
-                            case "Google":
-                                <GoogleOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "Facebook":
-                                <FacebookOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "MicrosoftAccount":
-                                <MicrosoftAccountOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "OAuth":
-                                <OAuthOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "OpenIdConnect":
-                                <OpenIdConnectOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "Twitter":
-                                <TwitterOptionsComponent @ref="_optionsComponent" />
-                                break;
-                            case "WsFederation":
-                                <WsFederationOptionsComponent @ref="_optionsComponent" />
-                                break;
-                        }
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="storeClaims">
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <AuthorizeCheckbox Name="storeClaims" Label="@Localizer["store claims"]" @bind-Value="@Model.StoreClaims" />
+                            @switch (Model.KindName)
+                            {
+                                case "Google":
+                                    <GoogleOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "Facebook":
+                                    <FacebookOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "MicrosoftAccount":
+                                    <MicrosoftAccountOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "OAuth":
+                                    <OAuthOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "OpenIdConnect":
+                                    <OpenIdConnectOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "Twitter":
+                                    <TwitterOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "Windows":
+                                    <WindowsOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                                case "WsFederation":
+                                    <WsFederationOptionsComponent @ref="_optionsComponent" />
+                                    break;
+                            }
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="storeClaims">
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeCheckbox Name="storeClaims" Label="@Localizer["store claims"]" @bind-Value="@Model.StoreClaims" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="transformations" class="card mb-3">
-                    <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Claims transformations"]" Collection="Model.ClaimTransformations" CreateModel="CreateTransformation" />
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3 row">
-                            <div class="col">
-                                <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="@Localizer["map default outbound JWT claim types"]" @bind-Value="@Model.MapDefaultOutboundClaimType" />
-                            </div>
+                    <div id="transformations" class="card mb-3">
+                        <div class="card-header">
+                            <EntitySubGridTitle Text="@Localizer["Claims transformations"]" Collection="Model.ClaimTransformations" CreateModel="CreateTransformation" />
                         </div>
-                        <ClaimTransformations Collection="Model.ClaimTransformations" />
+                        <div class="card-body">
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <AuthorizeCheckbox Name="mapDefaultOutboundClaimType" Label="@Localizer["map default outbound JWT claim types"]" @bind-Value="@Model.MapDefaultOutboundClaimType" />
+                                </div>
+                            </div>
+                            <ClaimTransformations Collection="Model.ClaimTransformations" />
+                        </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
+            </CascadingValue>
         </CascadingValue>
-    </CascadingValue>
-</EditForm>
+    </EditForm>
 }

@@ -6,6 +6,7 @@ using Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.Components;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
@@ -38,7 +39,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
             var providerKindsResponse = await _providerKindStore.GetAsync(new PageRequest()).ConfigureAwait(false);
-            Model.Kinds = providerKindsResponse.Items;
+            Model.Kinds = providerKindsResponse.Items.OrderBy(k => k.KindName);
         }
 
         protected override void SanetizeEntityToSaved<TEntity>(TEntity entity)
@@ -59,6 +60,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
             {
                 base.OnEntityUpdated(entityType, entityModel);
             }    
+        }
+
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
         }
 
         private ExternalClaimTransformation CreateTransformation()

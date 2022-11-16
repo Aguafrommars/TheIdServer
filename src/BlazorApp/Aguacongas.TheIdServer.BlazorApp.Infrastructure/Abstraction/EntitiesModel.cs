@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
-    [Authorize(Policy = "Is4-Reader")]
+    [Authorize(Policy = SharedConstants.READERPOLICY)]
     public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
     {
         private PageRequest _pageRequest;

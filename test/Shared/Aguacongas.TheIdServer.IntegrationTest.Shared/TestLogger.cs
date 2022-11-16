@@ -8,15 +8,15 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 {
     class TestLogger : ILogger, IDisposable
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper? _testOutputHelper;
         private readonly bool _isEnable;
 
-        public TestLogger(ITestOutputHelper testOutputHelper)
+        public TestLogger(ITestOutputHelper? testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             _isEnable = Environment.GetEnvironmentVariable("APPVEYOR") != null;
         }
-        public IDisposable BeginScope<TState>(TState state)
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
             return this;
         }
@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             return _isEnable;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
             if (!IsEnabled(logLevel))
             {
@@ -43,7 +43,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             }
             try
             {
-                _testOutputHelper.WriteLine(formatter(state, exception));
+                _testOutputHelper?.WriteLine(formatter(state, exception));
             }
             catch
             {

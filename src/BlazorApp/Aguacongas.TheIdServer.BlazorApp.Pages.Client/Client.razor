@@ -32,7 +32,11 @@ else
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }
                 }
-                <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                @if (!IsNew)
+                {
+                    <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                    <CloneButton />
+                }
             </div>
             <div class="col">
                 <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
@@ -58,9 +62,12 @@ else
                             <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
                         </li>
                     }
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>@Localizer["idp restrictions"]</a>
-                    </li>
+                    @if (!Model.IsClientCredentialOnly())
+                    {
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>@Localizer["idp restrictions"]</a>
+                        </li>
+                    }
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
                     </li>

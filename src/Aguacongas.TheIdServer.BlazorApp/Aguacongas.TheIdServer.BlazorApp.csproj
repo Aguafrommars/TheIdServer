@@ -1,94 +1,98 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Authors>Olivier Lefebvre</Authors>
-        <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<IsPackable>true</IsPackable>
-        <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
-        <PackageIcon>package-icon.png</PackageIcon>
-        <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>theidserver;identityserver4;duende-identityserver;oidc;oauth;identity,authentication;security</PackageTags>
-        <Description>TheIdServer administration application.</Description>
-        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-        
-		<RunAOTCompilation>false</RunAOTCompilation>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Authors>Olivier Lefebvre</Authors>
+    <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <IsPackable>true</IsPackable>
+    <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
+    <PackageIcon>package-icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>theidserver;identityserver4;duende-identityserver;oidc;oauth;identity,authentication;security</PackageTags>
+    <Description>TheIdServer administration application.</Description>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <CodeAnalysisRuleSet>Aguacongas.TheIdServer.BlazorApp.ruleset</CodeAnalysisRuleSet>
-    </PropertyGroup>
+    <RunAOTCompilation>true</RunAOTCompilation>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <CodeAnalysisRuleSet>Aguacongas.TheIdServer.BlazorApp.ruleset</CodeAnalysisRuleSet>
-        <NoWarn>1701;1702</NoWarn>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>Aguacongas.TheIdServer.BlazorApp.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-        <Content Include="nginx.conf">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>Aguacongas.TheIdServer.BlazorApp.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1701;1702</NoWarn>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
-    </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+    <Content Include="nginx.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Apis\Aguacongas.TheIdServer.BlazorApp.Pages.Apis.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Api\Aguacongas.TheIdServer.BlazorApp.Pages.Api.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Clients\Aguacongas.TheIdServer.BlazorApp.Pages.Clients.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Client\Aguacongas.TheIdServer.BlazorApp.Pages.Client.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Culture\Aguacongas.TheIdServer.BlazorApp.Pages.Culture.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identities\Aguacongas.TheIdServer.BlazorApp.Pages.Identities.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identity\Aguacongas.TheIdServer.BlazorApp.Pages.Identity.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Import\Aguacongas.TheIdServer.BlazorApp.Pages.Import.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Keys\Aguacongas.TheIdServer.BlazorApp.Pages.Keys.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Roles\Aguacongas.TheIdServer.BlazorApp.Pages.Roles.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Role\Aguacongas.TheIdServer.BlazorApp.Pages.Role.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Settings\Aguacongas.TheIdServer.BlazorApp.Pages.Settings.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Users\Aguacongas.TheIdServer.BlazorApp.Pages.Users.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.User\Aguacongas.TheIdServer.BlazorApp.Pages.User.csproj" />
-      <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Api.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Apis.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Client.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Clients.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Culture.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Cultures.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identities.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identity.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Import.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Keys.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Role.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Roles.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.User.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Users.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.dll" />
-        <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.dll" />
-		<BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Settings.dll" />
-    </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope\Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Apis\Aguacongas.TheIdServer.BlazorApp.Pages.Apis.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Api\Aguacongas.TheIdServer.BlazorApp.Pages.Api.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Clients\Aguacongas.TheIdServer.BlazorApp.Pages.Clients.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Client\Aguacongas.TheIdServer.BlazorApp.Pages.Client.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures\Aguacongas.TheIdServer.BlazorApp.Pages.Cultures.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Culture\Aguacongas.TheIdServer.BlazorApp.Pages.Culture.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider\Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identities\Aguacongas.TheIdServer.BlazorApp.Pages.Identities.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Identity\Aguacongas.TheIdServer.BlazorApp.Pages.Identity.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Import\Aguacongas.TheIdServer.BlazorApp.Pages.Import.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Keys\Aguacongas.TheIdServer.BlazorApp.Pages.Keys.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty\Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Roles\Aguacongas.TheIdServer.BlazorApp.Pages.Roles.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Role\Aguacongas.TheIdServer.BlazorApp.Pages.Role.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Settings\Aguacongas.TheIdServer.BlazorApp.Pages.Settings.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.Users\Aguacongas.TheIdServer.BlazorApp.Pages.Users.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages.User\Aguacongas.TheIdServer.BlazorApp.Pages.User.csproj" />
+    <ProjectReference Include="..\BlazorApp\Aguacongas.TheIdServer.BlazorApp.Pages\Aguacongas.TheIdServer.BlazorApp.Pages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Api.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Apis.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ApiScopes.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Client.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Clients.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Culture.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Cultures.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProviders.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identities.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Identity.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Import.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Keys.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Role.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Roles.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.User.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Users.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Aguacongas.TheIdServer.BlazorApp.Pages.Settings.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
-    </ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="TrimmerRootDescriptor.xml" />
+  </ItemGroup>
 </Project>

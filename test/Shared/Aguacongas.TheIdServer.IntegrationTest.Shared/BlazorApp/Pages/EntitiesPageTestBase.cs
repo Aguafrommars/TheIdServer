@@ -19,13 +19,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         public abstract string Entities { get; }
 
+        protected virtual string FilteredString => "filtered";
 
         protected EntitiesPageTestBase(TheIdServerFactory factory)
         {
             _factory = factory;
         }
 
-        [Fact(Skip = "Fail often on appveyor")]
+        [Fact]
         public async Task OnFilterChanged_should_filter_entities()
         {
             await PopulateList();
@@ -33,7 +34,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => !component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -49,9 +50,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = GenerateId()
             }).ConfigureAwait(false);
 
-            await Task.Delay(500).ConfigureAwait(false);
+            component.WaitForState(() => !component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
-            Assert.DoesNotContain("filtered", component.Markup);
+            Assert.DoesNotContain(FilteredString, component.Markup);
         }
 
         [Fact]
@@ -62,7 +63,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
@@ -91,9 +92,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var testUserService = _factory.Services.GetRequiredService<TestUserService>();
             testUserService.User = null;
             var response = await Services.GetRequiredService<HttpClient>().GetAsync(calledUrl);
-            Assert.False(response.IsSuccessStatusCode);
+            AssertExportResponse(response);
         }
 
+        protected virtual void AssertExportResponse(HttpResponseMessage response)
+        {
+            Assert.False(response.IsSuccessStatusCode);
+        }
 
         [Fact]
         public async Task OnRowClicked_should_navigate_to_entity_page()
@@ -103,7 +108,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var navigationManager = Services.GetRequiredService<NavigationManager>();
 
@@ -124,7 +129,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var th = component.Find(".table.mb-0 th div");
 
@@ -165,7 +170,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains("filtered"), TimeSpan.FromMinutes(1));
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var selectAll = component.Find(".table.mb-0 th input");
 

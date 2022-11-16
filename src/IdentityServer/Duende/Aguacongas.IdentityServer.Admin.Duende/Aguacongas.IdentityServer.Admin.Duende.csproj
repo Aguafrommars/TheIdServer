@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Expose OData controllers to manage TheIdServer for Duende.IdentityServer.</Description>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -14,6 +14,7 @@
 		<PackageIcon>package-icon.png</PackageIcon>
 		
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -59,7 +60,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.1.0-preview.4" />
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.2.0-rc.1" />
 	</ItemGroup>
 
 	<ItemGroup>

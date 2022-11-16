@@ -52,6 +52,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Identity
             }
         }
 
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
+        }
+
         private static IdentityProperty CreateProperty()
             => new();
 

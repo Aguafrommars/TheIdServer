@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.KeysRotation.MongoDb;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Moq;
@@ -78,9 +77,16 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.MongoDb
         [Fact]
         public void StoreElement_should_store_element()
         {
+            var clientMock = new Mock<IMongoClient>();
+            clientMock.SetupGet(m => m.Settings).Returns(new MongoClientSettings
+            {
+                LinqProvider = LinqProvider.V3
+            });
+            var dbMock = new Mock<IMongoDatabase>();
+            dbMock.SetupGet(m => m.Client).Returns(clientMock.Object);
             var collectionMock = new Mock<IMongoCollection<KeyRotationKey>>();
-            collectionMock.SetupGet(m => m.Settings).Returns(new MongoCollectionSettings());
-
+            collectionMock.SetupGet(m => m.Database).Returns(dbMock.Object);
+            
             collectionMock.Setup(m => m.InsertOne(It.IsAny<KeyRotationKey>(), null, default)).Verifiable();
 
             var provider = new ServiceCollection()

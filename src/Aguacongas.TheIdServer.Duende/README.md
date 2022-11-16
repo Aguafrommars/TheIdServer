@@ -130,6 +130,24 @@ And the favicon is *wwwroot/favicon.ico*.
 
 By replacing those files you can redefined the site style by yours.
 
+### Configure account options
+
+The section *AccountOptions* is bound to [`AccountOptions`](../Aguacongas.TheIdServer.Shared/Quickstart/Account/AccountOptions.cs).
+
+```json
+"AccountOptions": {
+  "AllowLocalLogin": true,
+  "AllowRememberLogin": true,
+  "RememberMeLoginDuration": "30.00:00:00",
+  "ShowLogoutPrompt": true,
+  "AutomaticRedirectAfterSignOut": false,
+  "InvalidCredentialsErrorMessage": "Invalid username or password",
+  "ShowForgotPassworLink": true,
+  "ShowRegisterLink": true,
+  "ShowResendEmailConfirmationLink": true
+}
+```
+
 ## Configure ASP.Net Core Identity options
 
 The section **IdentityOptions** is binded to the class [`Microsoft.AspNetCore.Identity.IdentityOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identityoptions).  
@@ -164,6 +182,68 @@ So you can set any Duende IdentityServer options you want from configuration (bu
   }
 }
 ```
+
+### Discovery document customs entries
+
+You can add customs entries to the genererated discovery document with *IdentityServerOptions* sub section *CustomEntriesOfStringArray*, *CustomEntriesOfString* and *CustomEntriesOfBool*
+
+```json
+"IdentityServerOptions": {
+  "CustomEntriesOfStringArray": {
+    "token_endpoint_auth_signing_alg_values_supported": [
+      "RS256",
+      "ES256",
+      "ES384",
+      "ES512",
+      "PS256",
+      "PS384",
+      "PS512",
+      "RS384",
+      "RS512"
+    ]
+  }
+}
+```
+
+The sample above will add `"token_endpoint_auth_signing_alg_values_supported"` node to the generated document.
+
+### Mutual TLS client certificate options
+
+When Muutal TLS is enabled, you can configure the client certificate authentication options with `CertificateAuthenticationOptions` section.  
+
+```json
+"IdentityServerOptions": {
+    "MutualTls": {
+      "Enabled": true
+    }
+},
+"CertificateAuthenticationOptions": {
+  "AllowedCertificateTypes": "All",
+  "ValidateCertificateUse": false,
+  "ValidateValidityPeriod": false,
+  "RevocationMode": "NoCheck"
+}
+```
+
+### Retrieves client certificates fron HTTP request header
+
+When Mutual TLS is enabled the client certificate can be read in PEM format from request header. For exemple if you use a kubernetes NGINX ingress you can configure it to send the client certificate to the backend in the *ssl-client-cert* header.
+See [Client Certificate Authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication).
+
+To retrieve the client certificate from the request header confiure the `MutualTls` sub section like :
+
+```json
+"IdentityServerOptions": {
+    "MutualTls": {
+      "Enabled": true,
+      "PEMHeader": "ssl-client-cert"
+    }
+}
+```
+
+### Configure Server-side sessions
+
+Read [Server-side sessions](../../doc/SERVER_SIDE_SESSIONS.md)
 
 ## Configure stores
 
@@ -701,7 +781,6 @@ Some reverses proxies don't' forward headers. You can force HTTP requests scheme
 "ForceHttpsScheme": true
 ```
 
-
 ## Configure the provider hub
 
 The [Aguacongas.AspNetCore.Authentication library](https://github.com/Aguafrommars/DymamicAuthProviders) dynamically configures external providers.  
@@ -915,10 +994,6 @@ The endpoit return a json reponse depending on the store kind used and redis dep
 ## Configure OpenTelemetry
 
 [Configure OpenTelemetry doc](../../doc/OPEN_TELEMETRY.md) provides details on [OpenTelemetry](https://opentelemetry.io/) configuration.
-
-## Configure Server-side sessions
-
-Read [Server-side sessions](../../doc/SERVER_SIDE_SESSIONS.md)
 
 ## Additional resources
 

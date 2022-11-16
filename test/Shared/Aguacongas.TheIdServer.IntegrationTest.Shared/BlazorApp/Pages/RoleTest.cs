@@ -2,7 +2,6 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Data;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -12,13 +11,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
+using RolePage = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RoleTest : EntityPageTestBase<page>
+    public class RoleTest : EntityPageTestBase<RolePage>
     {
         public override string Entity => "role";
 
@@ -218,6 +216,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var claim = await context.RoleClaims.FirstOrDefaultAsync(t => t.RoleId == roleId);
                 Assert.Null(claim);
             });
+        }
+
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string roleId = await CreateRole();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                roleId,
+                true);
+
+            var input = WaitForNode(component, "#name");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {roleId}");
         }
 
         private async Task<string> CreateRole()

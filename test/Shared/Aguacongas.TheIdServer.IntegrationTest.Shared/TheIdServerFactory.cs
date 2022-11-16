@@ -62,7 +62,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var httpClient = CreateClient();
             var appConfiguration = TestUtils.CreateApplicationConfiguration(httpClient);
 
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());
+            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());           
 
             Services.GetRequiredService<TestUserService>()
                 .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));
@@ -89,7 +89,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
                 .AddScoped(p => localizerMock)
                 .AddTransient(p => new HttpClient(Server.CreateHandler()))
                 .AddTransient<BaseAddressAuthorizationMessageHandler>()
-                .AddScoped<SignOutSessionStateManager, TestUtils.FakeSignOutSessionStateManager>()
                 .AddSingleton<IAccessTokenProviderAccessor, TestUtils.AccessTokenProviderAccessor>()
                 .AddScoped<IAccessTokenProvider>(p => p.GetRequiredService<TestUtils.FakeAuthenticationStateProvider>())
                 .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<TestUtils.FakeAuthenticationStateProvider>())
@@ -114,7 +113,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             builder.ConfigureAppConfiguration(webBuilder =>
                 {
                     webBuilder.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.json"));
-                    webBuilder.AddInMemoryCollection(new Dictionary<string, string>
+                    webBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["DbType"] = DbTypes.InMemory.ToString(),
                         ["Seed"] = "false",

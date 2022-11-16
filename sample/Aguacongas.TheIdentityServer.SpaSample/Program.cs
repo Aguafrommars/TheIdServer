@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using System;
 using System.Net.Http;
+using System.Collections.Generic;
 
 namespace Aguacongas.TheIdentityServer.SpaSample
 {
@@ -18,13 +19,23 @@ namespace Aguacongas.TheIdentityServer.SpaSample
 
             var configuration = builder.Configuration;
             var services = builder.Services;
+
+            var scopes = new List<string>();
+            configuration.Bind("ProviderOptions:DefaultScopes", scopes);
+
             services.AddOptions()
                 .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.GetSection("AuthenticationPaths").Bind(options))
                 .AddOidcAuthentication(options =>
                 {
                     configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
                     configuration.GetSection("UserOptions").Bind(options.UserOptions);
+                    var providerOptions = options.ProviderOptions;
                     configuration.Bind("ProviderOptions", options.ProviderOptions);
+                    providerOptions.DefaultScopes.Clear();
+                    foreach (var scope in scopes)
+                    {
+                        providerOptions.DefaultScopes.Add(scope);
+                    }
                 })
                 .AddAccountClaimsPrincipalFactory<RemoteAuthenticationState, RemoteUserAccount, ClaimsPrincipalFactory>();
 

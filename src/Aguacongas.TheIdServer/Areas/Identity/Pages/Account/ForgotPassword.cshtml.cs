@@ -39,6 +39,15 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            public string ReturnUrl { get; set; }
+        }
+
+        public void OnGet(string returnUrl = null)        
+        {
+            Input = new InputModel
+            {
+                ReturnUrl = returnUrl
+            };
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -59,7 +68,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new { area = "Identity", code },
+                    values: new { area = "Identity", code, returnUrl = Input.ReturnUrl },
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(

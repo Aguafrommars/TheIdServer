@@ -30,13 +30,6 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.UpdateData(
-                table: "Cultures",
-                keyColumn: "Id",
-                keyValue: "en",
-                column: "CreatedAt",
-                value: new DateTime(2022, 4, 12, 6, 35, 48, 947, DateTimeKind.Utc).AddTicks(5403));
-
             migrationBuilder.CreateIndex(
                 name: "IX_ClientAllowedIdentityTokenSigningAlgorithms_ClientId_Algorithm",
                 table: "ClientAllowedIdentityTokenSigningAlgorithms",
@@ -49,12 +42,14 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
 
-            migrationBuilder.UpdateData(
-                table: "Cultures",
-                keyColumn: "Id",
-                keyValue: "en",
-                column: "CreatedAt",
-                value: new DateTime(2022, 1, 15, 10, 11, 36, 949, DateTimeKind.Utc).AddTicks(2767));
+            migrationBuilder.DropColumn(
+                name: "CoordinateLifetimeWithUserSession",
+                table: "Clients");
+
+            migrationBuilder.DropColumn(
+                name: "RequireRequestObject",
+                table: "Clients");
+
         }
     }
 }

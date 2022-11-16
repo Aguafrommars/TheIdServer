@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,8 +23,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
         private static readonly List<string> _userIdClaimTypes = new List<string>
         {
             JwtClaimTypes.Subject,
+            JwtClaimTypes.Id,
+            JwtClaimTypes.Name,
             ClaimTypes.NameIdentifier,
-            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier]
+            ClaimTypes.Name,
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier],
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.Name]
         };
 
         private readonly UserManager<TUser> _userManager;
@@ -152,6 +157,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(JwtClaimTypes.Id) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+                              externalUser.FindFirst(ClaimTypes.Name) ??
                               throw new InvalidOperationException("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user
@@ -171,10 +177,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
             // email
             var email = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Email)?.Value ??
                claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-         
+            var name = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)?.Value ??
+                claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            var allowedUserNameCharacters = _userManager.Options.User?.AllowedUserNameCharacters;
+            email = email?.All(c => allowedUserNameCharacters.Contains(c)) == true ? email : null;
+            name = name?.All(c => allowedUserNameCharacters.Contains(c)) == true ? name : null;
+            var sanetized = providerUserId.All(c => allowedUserNameCharacters.Contains(c)) ? providerUserId : null;
+
             var user = new TUser
             {
-                UserName = email ?? Guid.NewGuid().ToString(),
+                UserName = name ?? email ?? sanetized ?? Guid.NewGuid().ToString()
             };
 
             var identityResult = await _userManager.CreateAsync(user).ConfigureAwait(false);

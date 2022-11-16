@@ -16,12 +16,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
+using ClientPage = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ClientTest : EntityPageTestBase<page>
+    public class ClientTest : EntityPageTestBase<ClientPage>
     {
         public override string Entity => "client";
         public ClientTest(TheIdServerFactory factory) : base(factory)
@@ -582,9 +582,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var client = await context.Clients.Include(c => c.RedirectUris)
                     .FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
-                var uri = client.RedirectUris.FirstOrDefault(u => (u.Kind & UriKinds.Cors) == UriKinds.Cors);
+                var uri = client?.RedirectUris.FirstOrDefault(u => (u.Kind & UriKinds.Cors) == UriKinds.Cors);
                 Assert.NotNull(uri);
-                Assert.Equal("HTTP://FILTERED:80", uri.SanetizedCorsUri);
+                Assert.Equal("HTTP://FILTERED:80", uri?.SanetizedCorsUri);
             });
 
             input = WaitForNode(component, "#urls input[name=\"cors\"]");
@@ -604,10 +604,25 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var client = await context.Clients.Include(c => c.RedirectUris)
                     .FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
-                var uri = client.RedirectUris.FirstOrDefault();
+                var uri = client?.RedirectUris.FirstOrDefault();
                 Assert.NotNull(uri);
-                Assert.Null(uri.SanetizedCorsUri);
+                Assert.Null(uri?.SanetizedCorsUri);
             });
+        }
+
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string clientId = await CreateClient("authorization_code");
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                clientId,
+                true);
+
+            var input = WaitForNode(component, "#name");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {clientId}");
         }
 
         private async Task<string> CreateClient(string grantType = "hybrid", bool allowOfflineAccess = false)

@@ -51,7 +51,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
         protected IRenderedComponent<TComnponent> CreateComponent(string userName,
             string role,
-            string? id)
+            string? id,
+            bool clone = false)
         {
             Factory.ConfigureTestContext(userName,
                new Claim[]
@@ -63,7 +64,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<TComnponent>(ComponentParameter.CreateParameter("Id", id));
+            var component = RenderComponent<TComnponent>(ComponentParameter.CreateParameter("Id", id), ComponentParameter.CreateParameter("Clone", clone));
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

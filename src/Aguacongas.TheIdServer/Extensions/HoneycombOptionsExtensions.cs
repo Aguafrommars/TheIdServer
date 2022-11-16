@@ -21,23 +21,24 @@ namespace Honeycomb.OpenTelemetry
 
         private static void Copy(HoneycombOptions options, HoneycombOptions other)
         {
+            options.AddBaggageSpanProcessor = other.AddBaggageSpanProcessor;
+            options.AddDeterministicSampler = other.AddDeterministicSampler;
             options.ApiKey = other.ApiKey;
-            options.TracesApiKey = other.TracesApiKey;
-            options.MetricsApiKey = other.MetricsApiKey;
             options.Dataset = other.Dataset;
-            options.TracesDataset = other.TracesDataset;
-            options.MetricsDataset = other.MetricsDataset;
+            options.Debug = other.Debug;
+            options.EnableLocalVisualizations = other.EnableLocalVisualizations; 
             options.Endpoint = other.Endpoint;
-            options.TracesEndpoint = other.TracesEndpoint;
+            options.MeterNames = other.MeterNames;
+            options.MetricsApiKey = other.MetricsApiKey;
+            options.MetricsDataset = other.MetricsDataset;
             options.MetricsEndpoint = other.MetricsEndpoint;
+            options.ResourceBuilder = other.ResourceBuilder;
             options.SampleRate = other.SampleRate;
             options.ServiceName = other.ServiceName;
             options.ServiceVersion = other.ServiceVersion;
-            options.InstrumentHttpClient = other.InstrumentHttpClient;
-            options.InstrumentSqlClient = other.InstrumentSqlClient;
-            options.InstrumentGrpcClient = other.InstrumentGrpcClient;
-            options.InstrumentStackExchangeRedisClient = other.InstrumentStackExchangeRedisClient;
-            options.MeterNames = other.MeterNames;
+            options.TracesApiKey = other.TracesApiKey;
+            options.TracesDataset = other.TracesDataset;
+            options.TracesEndpoint = other.TracesEndpoint;
         }
     }
 }

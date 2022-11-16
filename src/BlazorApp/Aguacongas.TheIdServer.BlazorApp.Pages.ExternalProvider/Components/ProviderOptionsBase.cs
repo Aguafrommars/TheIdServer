@@ -12,7 +12,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.Components
         public abstract string SerializeOptions();
     }
 
-    public abstract class ProviderOptionsBase<T> : ProviderOptionsBase where T: RemoteAuthenticationOptions
+    public abstract class ProviderOptionsBase<T> : ProviderOptionsBase where T : class
     {
         private ExternalProviderWrapper _wrapper;
         protected IExternalProvider<T> Model => _wrapper;

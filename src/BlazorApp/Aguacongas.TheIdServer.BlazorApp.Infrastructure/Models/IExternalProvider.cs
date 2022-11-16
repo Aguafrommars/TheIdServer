@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models
 {
-    public interface IExternalProvider<TOptions> where TOptions : RemoteAuthenticationOptions
+    public interface IExternalProvider<TOptions> where TOptions : class
     {
         string Id { get; }
         TOptions DefaultOptions { get; }

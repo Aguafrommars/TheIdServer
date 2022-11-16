@@ -4,13 +4,12 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.RelyingParties;
+using RelyingPartiesPage = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParties.RelyingParties;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RelyingPartiesTest : EntitiesPageTestBase<RelyingParty, page>
+    public class RelyingPartiesTest : EntitiesPageTestBase<RelyingParty, RelyingPartiesPage>
     {
         public override string Entities => "relyingparties";
         public RelyingPartiesTest(TheIdServerFactory factory)

@@ -5,12 +5,12 @@ using Aguacongas.IdentityServer.Store.Entity;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Clients.Clients;
+using ClientsPage = Aguacongas.TheIdServer.BlazorApp.Pages.Clients.Clients;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class CientsTest : EntitiesPageTestBase<Client, page>
+    public class CientsTest : EntitiesPageTestBase<Client, ClientsPage>
     {
         public override string Entities => "clients";
         public CientsTest(TheIdServerFactory factory)

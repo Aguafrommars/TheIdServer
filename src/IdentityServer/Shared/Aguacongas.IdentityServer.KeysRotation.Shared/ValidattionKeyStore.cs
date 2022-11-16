@@ -30,7 +30,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             {
                 if (i.Descriptor is RsaEncryptorDescriptor rsa)
                 {
-                    return CreateRsaSinginKey(i, rsa);
+                    return CreateRsaSinginKey(rsa);
                 }
 
                 return CreateEcdSingingKey(i);
@@ -49,7 +49,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             };
         }
 
-        private SecurityKeyInfo CreateRsaSinginKey(IKey i, RsaEncryptorDescriptor rsa)
+        private SecurityKeyInfo CreateRsaSinginKey(RsaEncryptorDescriptor rsa)
         {
             var algorythm = rsa.Configuration.SigningAlgorithm?.ToString() ?? _keyringProvider.Algorithm;
             var key = rsa.RsaSecurityKey;

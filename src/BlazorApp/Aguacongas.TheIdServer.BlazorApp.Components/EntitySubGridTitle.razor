@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col d-flex">
         <span class="h5">@Text</span>
-        <AuthorizeView Policy="Is4-Writer">
+        <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
             <Authorized>
                 <button type="button" class="btn btn-sm btn-primary ms-md-auto" @onclick="OnAddItenClicked">
                     <span class="oi oi-plus"></span> @Localizer["Add"]

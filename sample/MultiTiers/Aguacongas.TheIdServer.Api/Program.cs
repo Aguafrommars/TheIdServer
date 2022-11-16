@@ -1,26 +1,17 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Serilog;
 
-namespace Aguacongas.TheIdServer.Api
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateWebHostBuilder(args).Build();
-            host.Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>()
-                    .UseSerilog((hostingContext, configuration) =>
+builder.Host.UseSerilog((hostingContext, configuration) =>
                         configuration.ReadFrom.Configuration(hostingContext.Configuration));
-        }
-    }
-}
+
+builder.AddTheIdServerApi();
+
+var app = builder.Build();
+
+app.UseTheIdServerApi(app.Environment);
+
+app.Run();

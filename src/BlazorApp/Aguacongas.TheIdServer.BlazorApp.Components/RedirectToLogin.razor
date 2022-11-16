@@ -1,9 +1,15 @@
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.Extensions.Options
+
+@inject IStringLocalizerAsync<PageNotFound> Localizer
+@inject IOptionsSnapshot<RemoteAuthenticationOptions<ApiAuthorizationProviderOptions>> Options
 @inject NavigationManager _navigationManager
 @inject AuthenticationStateProvider  _authenticationStateProvider
 @inject Settings _settings
+@inject IStringLocalizerAsync<RedirectToLogin> Localizer
 <p>
-    Your are not authorized to view this page.
+    @Localizer["Your are not authorized to view this page."]
 </p>
 <p>
-    Contact your <a href="mailto:@_administratorEmail">administrator.</a>
+    <a href="mailto:@_administratorEmail">@Localizer["Contact your administrator."]</a>
 </p>

@@ -15,12 +15,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
+using ApiPage = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiTest : EntityPageTestBase<page>
+    public class ApiTest : EntityPageTestBase<ApiPage>
     {
         public override string Entity => "protectresource";
         public ApiTest(TheIdServerFactory factory) : base(factory)
@@ -76,7 +76,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
-                Assert.Equal(expected, api.DisplayName);
+                Assert.Equal(expected, api?.DisplayName);
             });
         }
 
@@ -114,7 +114,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
                 var api = await context.Apis.FirstOrDefaultAsync(a => a.Id == apiId);
-                Assert.Equal(apiId, api.DisplayName);
+                Assert.Equal(apiId, api?.DisplayName);
             });
         }
 
@@ -236,6 +236,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotEmpty(divs);
 
             await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+        }
+
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            var apiId = await CreateApi();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                apiId,
+                true);
+
+            var input = component.Find("#displayName");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {apiId}");
         }
 
         private async Task<string> CreateApi()

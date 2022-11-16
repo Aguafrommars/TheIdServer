@@ -2,19 +2,19 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using dn = Aguacongas.DynamicConfiguration.Razor.Services;
+using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Services
 {
-    public class ConfigurationService : dn.IConfigurationService
+    public class ConfigurationService : DynamicConfiguration.Razor.Services.IConfigurationService
     {
-        private readonly dn.ConfigurationService _parent;
+        private readonly DynamicConfiguration.Razor.Services.ConfigurationService _parent;
         private readonly Notifier _notifier;
         private readonly IStringLocalizerAsync<ConfigurationService> _localizer;
 
         public object Configuration => _parent.Configuration;
 
-        public ConfigurationService(dn.ConfigurationService parent, Notifier notifier, IStringLocalizerAsync<ConfigurationService> localizer)
+        public ConfigurationService(DynamicConfiguration.Razor.Services.ConfigurationService parent, Notifier notifier, IStringLocalizerAsync<ConfigurationService> localizer)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));

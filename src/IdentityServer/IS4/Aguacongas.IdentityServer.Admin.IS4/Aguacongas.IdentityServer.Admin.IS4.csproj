@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Expose OData controllers to manage TheIdServer for IdentityServer4.</Description>
 		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
@@ -14,6 +14,7 @@
 		<PackageIcon>package-icon.png</PackageIcon>
 		
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

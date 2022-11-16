@@ -22,10 +22,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     {
         public static IConfigurationRoot CreateApplicationConfiguration(HttpClient httpClient)
         {
-            var appConfigurationDictionary = new Dictionary<string, string>
+            var appConfigurationDictionary = new Dictionary<string, string?>
             {
                 ["AdministratorEmail"] = "aguacongas@gmail.com",
-                ["ApiBaseUrl"] = new Uri(httpClient.BaseAddress, "api").ToString(),
+                ["ApiBaseUrl"] = new Uri(httpClient?.BaseAddress ?? throw new InvalidOperationException("BaseAddress cannot be null."), "api").ToString(),
                 ["ProviderOptions:Authority"] = httpClient.BaseAddress.ToString(),
                 ["ProviderOptions:ClientId"] = "theidserveradmin",
                 ["ProviderOptions:DefaultScopes[0]"] = "openid",
@@ -37,6 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["WelcomeContenUrl"] = "/welcome-fragment.html",
                 ["SettingsOptions:TypeName"] = "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
                 ["SettingsOptions:ApiUrl"] = new Uri(httpClient.BaseAddress, "api/api/configuration").ToString(),
+                ["MenuOptions:ShowSettings"] = "true"
             };
             var appConfiguration = new ConfigurationBuilder().AddInMemoryCollection(appConfigurationDictionary).Build();
             return appConfiguration;
@@ -70,7 +71,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                         Expires = DateTimeOffset.Now.AddDays(1),
                         GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
                     },
-                    "http://exemple.com"));
+                    "http://exemple.com", new InteractiveRequestOptions
+                    {
+                         Interaction= InteractionType.GetToken,
+                         ReturnUrl = "http://exemple.com"
+                    }));
             }
 
             public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options)
@@ -98,7 +103,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
 
             public override bool IsInRole(string role)
             {
-                return Identity.IsAuthenticated && Claims != null && Claims.Any(c => c.Type == "role" && c.Value == role);
+                return Identity!.IsAuthenticated && Claims != null && Claims.Any(c => c.Type == "role" && c.Value == role);
             }
         }
 
@@ -107,7 +112,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             private readonly string _userName;
             private bool _IsAuthenticated = true;
 
-            public FakeIdendity(string userName, IEnumerable<Claim> claims) : base(claims)
+            public FakeIdendity(string userName, IEnumerable<Claim>? claims) : base(claims)
             {
                 _userName = userName;
             }
@@ -121,22 +126,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             }
 
             public override string Name => _userName;
-        }
-
-        public class FakeSignOutSessionStateManager : SignOutSessionStateManager
-        {
-            public FakeSignOutSessionStateManager(IJSRuntime jsRuntime) : base(jsRuntime)
-            { }
-
-            public override ValueTask SetSignOutState()
-            {
-                return new ValueTask();
-            }
-
-            public override Task<bool> ValidateSignOutState()
-            {
-                return Task.FromResult(true);
-            }
         }
 
         public class FakeDelegatingHandler : DelegatingHandler
@@ -156,14 +145,14 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 {
                     var content = new MultipartFormDataContent();
                     var fileContent = dataContent.First() as StreamContent;
-                    var contentDisposition = fileContent.Headers.GetValues("Content-Disposition");
+                    var contentDisposition = fileContent!.Headers.GetValues("Content-Disposition");
                     var fileName = contentDisposition.First().Split("; ").First(s => s.StartsWith("filename")).Split("=")[1];
                     var file = File.OpenRead(fileName);
                     content.Add(new StreamContent(file), "files", file.Name);
                     request.Content = content;
 
                 }
-                return method.Invoke(_handler, new object[] { request, cancellationToken }) as Task<HttpResponseMessage>;
+                return (method?.Invoke(_handler, new object[] { request, cancellationToken }) as Task<HttpResponseMessage>)!;
             }
         }
     }
@@ -172,12 +161,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest
     {
         public ManualResetEvent Called { get; } = new ManualResetEvent(false);
 
-        protected override void BeginInvokeJS(long taskId, string identifier, string argsJson)
+        protected override void BeginInvokeJS(long taskId, string identifier, string? argsJson)
         {
             Called.Set();
         }
 
-        protected override void BeginInvokeJS(long taskId, string identifier, string argsJson, JSCallResultType resultType, long targetInstanceId)
+        protected override void BeginInvokeJS(long taskId, string identifier, string? argsJson, JSCallResultType resultType, long targetInstanceId)
         {
             Called.Set();
         }

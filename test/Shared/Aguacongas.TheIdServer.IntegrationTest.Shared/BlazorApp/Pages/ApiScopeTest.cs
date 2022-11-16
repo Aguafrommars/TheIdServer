@@ -12,12 +12,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using page = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
+using ApiScopePage = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiScopeTest : EntityPageTestBase<page>
+    public class ApiScopeTest : EntityPageTestBase<ApiScopePage>
     {
         public override string Entity => "apiscope";
         public ApiScopeTest(TheIdServerFactory factory):base(factory)
@@ -118,11 +118,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task SaveClick_should_update_entity()
         {
-            string identityId = await CreateEntity();
+            string apiScopeId = await CreateEntity();
 
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
-                identityId);
+                apiScopeId);
 
             var input = component.Find("#displayName");
 
@@ -144,9 +144,24 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
-                var apiScope = await context.ApiScopes.FirstOrDefaultAsync(a => a.Id == identityId);
-                Assert.Equal(expected, apiScope.DisplayName);
+                var apiScope = await context.ApiScopes.FirstOrDefaultAsync(a => a.Id == apiScopeId);
+                Assert.Equal(expected, apiScope?.DisplayName);
             });
+        }
+
+        [Fact]
+        public async Task WhenWriter_should_be_able_to_clone_entity()
+        {
+            string apiScopeId = await CreateEntity();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                apiScopeId, 
+                true);
+
+            var input = component.Find("#displayName");
+
+            Assert.Contains(input.Attributes, a => a.Value == $"Clone of {apiScopeId}");
         }
 
         private async Task<string> CreateEntity()

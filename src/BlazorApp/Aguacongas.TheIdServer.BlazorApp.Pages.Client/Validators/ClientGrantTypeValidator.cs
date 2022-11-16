@@ -13,15 +13,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
     /// 
     /// </summary>
     /// <seealso cref="AbstractValidator{ClientGrantType}" />
-    public class ClientGrantTypeValidator : AbstractValidator<ClientGrantType>
+    public partial class ClientGrantTypeValidator : AbstractValidator<ClientGrantType>
     {
-        private readonly Regex _regex = new Regex("\\s", RegexOptions.Compiled);
+        [GeneratedRegex("\\s", RegexOptions.Compiled)]
+        private static partial Regex _regex();
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientGrantTypeValidator"/> class.
         /// </summary>
         public ClientGrantTypeValidator(Client client, IStringLocalizer localizer)
         {
-            RuleFor(m => m.GrantType).Must(g => g == null || !_regex.IsMatch(g)).WithMessage(localizer["The grant type cannot contains space."]);
+            RuleFor(m => m.GrantType).Must(g => g == null || !_regex().IsMatch(g)).WithMessage(localizer["The grant type cannot contains space."]);
             RuleFor(m => m.GrantType).IsUnique(client.AllowedGrantTypes).WithMessage(localizer["The grant type must be unique."]);
             RuleFor(m => m.GrantType).Must(g => (g != "hybrid" && g != "authorization_code") ||
                 !client.AllowedGrantTypes.Any(gt => gt.GrantType == "implicit"))

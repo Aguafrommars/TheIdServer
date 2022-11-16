@@ -85,7 +85,7 @@
   },
   {
     "key": "always include user claims in id token",
-    "value": "toujours inclure les revendications des utilisateurs dans le jeton d'identification"
+    "value": "toujours inclure les réclamations des utilisateurs dans le jeton d'identification"
   },
   {
     "key": "always send claims",
@@ -213,19 +213,19 @@
   },
   {
     "key": "claims mapping",
-    "value": "cartographie des revendications"
+    "value": "cartographie des réclamations"
   },
   {
     "key": "Claims mapping",
-    "value": "Cartographie des revendications"
+    "value": "Cartographie des réclamations"
   },
   {
     "key": "claims prefix",
-    "value": "préfixe de revendications"
+    "value": "préfixe de réclamations"
   },
   {
     "key": "claims transformations",
-    "value": "transformations de revendications"
+    "value": "transformations de réclamations"
   },
   {
     "key": "Claims transformations",
@@ -789,7 +789,7 @@
   },
   {
     "key": "map default outbound JWT claim types",
-    "value": "mapper les types de revendication JWT sortants par défaut"
+    "value": "mapper les types de réclamations JWT sortants par défaut"
   },
   {
     "key": "metadata address",
@@ -1345,15 +1345,15 @@
   },
   {
     "key": "The claim prefix cannot exceed 250 char.",
-    "value": "Le préfixe de revendication ne peut pas dépasser 250 caractères."
+    "value": "Le préfixe de réclamations ne peut pas dépasser 250 caractères."
   },
   {
     "key": "The claim type cannot exceed 2000 chars.",
-    "value": "Le type de revendication ne peut pas dépasser 2000 caractères."
+    "value": "Le type de réclamations ne peut pas dépasser 2000 caractères."
   },
   {
     "key": "The claim type cannot exceed 250 chars.",
-    "value": "Le type de revendication ne peut pas dépasser 250 caractères."
+    "value": "Le type de réclamations ne peut pas dépasser 250 caractères."
   },
   {
     "key": "The claim type is required.",
@@ -1361,7 +1361,7 @@
   },
   {
     "key": "The claim type must be unique.",
-    "value": "Le type de revendication doit être unique."
+    "value": "Le type de réclamations doit être unique."
   },
   {
     "key": "The claim value cannot exceed 2000 chars.",
@@ -1453,11 +1453,11 @@
   },
   {
     "key": "The from claim type is required.",
-    "value": "Le type de revendication de est requis."
+    "value": "Le type de réclamations de est requis."
   },
   {
     "key": "The from claim type must be unique.",
-    "value": "Le type de revendication de doit être unique."
+    "value": "Le type de réclamations de doit être unique."
   },
   {
     "key": "The front channel logout url cannot exceed 2000 char.",
@@ -1489,15 +1489,15 @@
   },
   {
     "key": "The identity claim type cannot exceed 2000 chars.",
-    "value": "Le type de revendication d'identité ne peut pas dépasser 2 000 caractères."
+    "value": "Le type de réclamations d'identité ne peut pas dépasser 2 000 caractères."
   },
   {
     "key": "The identity claim type is required.",
-    "value": "Le type de revendication d'identité est requis."
+    "value": "Le type de réclamations d'identité est requis."
   },
   {
     "key": "The identity claim type must be unique.",
-    "value": "Le type de revendication d'identité doit être unique."
+    "value": "Le type de réclamations d'identité doit être unique."
   },
   {
     "key": "The identity property key cannot exceed 250 chars.",
@@ -1521,14 +1521,14 @@
   },
   {
     "key": "The identity should provide at least one claim.",
-    "value": "L'identité doit fournir au moins une revendication."
+    "value": "L'identité doit fournir au moins une réclamations."
   },
   {
     "key": "The key is required.",
     "value": "La clé est requise."
   },
   {
-    "key": "The key must be unique.",
+    "key": "The key '{0}' must be unique.",
     "value": "La clé doit être unique."
   },
   {
@@ -2012,16 +2012,8 @@
     "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
   },
   {
-    "key": "Below is the list of backchannel login requests awaiting your approbation.",
-    "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
-  },
-  {
     "key": "Sessions",
     "value": "Sessions"
-  },
-  {
-    "key": "Renewed",
-    "value": "Renouvelée"
   },
   {
     "key": "Renewed",
@@ -2042,5 +2034,101 @@
   {
     "key": "allowed identity token signing algorithms",
     "value": "algorithmes de signature de jeton d'identité autorisés"
+  },
+  {
+    "key": "Reset password",
+    "value": "Réinitialiser le mot de passe"
+  },
+  {
+    "key": "Reset your password.",
+    "value": "Réinitialisez votre mot de passe."
+  },
+  {
+    "key": "Reset",
+    "value": "Réinitialiser"
+  },
+  {
+    "key": "Reset password confirmation",
+    "value": "Confirmation de la réinitialisation du mot de passe"
+  },
+  {
+    "key": "Your password has been reset.",
+    "value": "Votre mot de passe a été réinitialisé."
+  },
+  {
+    "key": "Please click here to log in",
+    "value": "Veuillez cliquer ici pour vous connecter"
+  },
+  {
+    "key": "Register as a new user",
+    "value": "S'inscrire en tant que nouvel utilisateur"
+  },
+  {
+    "key": "Resend email confirmation",
+    "value": "Renvoyer la confirmation par e-mail"
+  },
+  {
+    "key": "Resend",
+    "value": "Renvoyer"
+  },
+  {
+    "key": "The machine account password is required.",
+    "value": "Le mot de passe du compte machine est requis."
+  },
+  {
+    "key": "persist kerberos credentials",
+    "value": "conserver les informations d'identification kerberos"
+  },
+  {
+    "key": "persist ntlm credentials",
+    "value": "conserver les informations d'identification ntlm"
+  },
+  {
+    "key": "enable ldap",
+    "value": "activer ldap"
+  },
+  {
+    "key": "domain",
+    "value": "domaine"
+  },
+  {
+    "key": "machine account name",
+    "value": "nom du compte machine"
+  },
+  {
+    "key": "machine account password",
+    "value": "mot de passe compte machine"
+  },
+  {
+    "key": "enable ldap claim resolution",
+    "value": "activer la resolution des réclamations ldap"
+  },
+  {
+    "key": "ignore nested groups",
+    "value": "ignorer les groupes imbriqués"
+  },
+  {
+    "key": "claims cache absolute expiration",
+    "value": "expiration absolue du cache des réclamations"
+  },
+  {
+    "key": "claims cache sliding expiration",
+    "value": "expiration du glissement du cache des réclamations"
+  },
+  {
+    "key": "require resource indicator",
+    "value": "indicateur de resource requis"
+  },
+  {
+    "key": "Are you sure you want to leave this page?",
+    "value": "Voulez-vous vraiment quitter cette page ?"
+  },
+  {
+    "key": "clone",
+    "value": "cloner"
+  },
+  {
+    "key": "Clone of {0}",
+    "value": "Clone de {0}"
   }
 ]

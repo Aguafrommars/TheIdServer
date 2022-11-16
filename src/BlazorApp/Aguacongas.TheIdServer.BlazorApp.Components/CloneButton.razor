@@ -1,0 +1,9 @@
+﻿@inject IStringLocalizerAsync<CloneButton> Localizer
+@inject NavigationManager Navigation
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
+    <Authorized>
+        <button class="btn btn-secondary @CssClass" type="button" @onclick="Clone" title="@Localizer["clone"]">
+            <span class="oi oi-fork"></span><span class="visually-hidden">@Localizer["clone"]</span>
+        </button>
+    </Authorized>
+</AuthorizeView>

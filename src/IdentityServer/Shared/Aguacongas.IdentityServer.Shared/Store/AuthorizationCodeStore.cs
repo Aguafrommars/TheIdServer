@@ -5,11 +5,11 @@ using IdentityModel;
 #if DUENDE
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-using models = Duende.IdentityServer.Models;
+using IsModels = Duende.IdentityServer.Models;
 #else
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
-using models = IdentityServer4.Models;
+using IsModels = IdentityServer4.Models;
 #endif
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,26 +18,26 @@ using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, models.AuthorizationCode>, IAuthorizationCodeStore
+    public class AuthorizationCodeStore : GrantStore<AuthorizationCode, IsModels.AuthorizationCode>, IAuthorizationCodeStore
     {
         public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store, 
             IPersistentGrantSerializer serializer) : base(store, serializer)
         {
         }
 
-        public Task<models.AuthorizationCode> GetAuthorizationCodeAsync(string code)
+        public Task<IsModels.AuthorizationCode> GetAuthorizationCodeAsync(string code)
             => GetAsync(code);
 
         public Task RemoveAuthorizationCodeAsync(string code)
             => RemoveAsync(code);
 
-        public Task<string> StoreAuthorizationCodeAsync(models.AuthorizationCode code)
+        public Task<string> StoreAuthorizationCodeAsync(IsModels.AuthorizationCode code)
             => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
 
-        protected override string GetClientId(models.AuthorizationCode dto)
+        protected override string GetClientId(IsModels.AuthorizationCode dto)
             => dto?.ClientId;
 
-        protected override string GetSubjectId(models.AuthorizationCode dto)
+        protected override string GetSubjectId(IsModels.AuthorizationCode dto)
         {
             var subject = dto?.Subject;
             if (subject == null)
@@ -53,7 +53,7 @@ namespace Aguacongas.IdentityServer.Store
             return idClaim.Value;
         }
 
-        protected override AuthorizationCode CreateEntity(models.AuthorizationCode dto, string clientId, string subjectId, DateTime? expiration)
+        protected override AuthorizationCode CreateEntity(IsModels.AuthorizationCode dto, string clientId, string subjectId, DateTime? expiration)
         {
             var entitiy = base.CreateEntity(dto, clientId, subjectId, expiration);
             entitiy.SessionId = dto.SessionId;
