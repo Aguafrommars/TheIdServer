@@ -37,6 +37,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                         (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
                     (kv.Value.Contains(term) || kv.Key.Contains(term)))
                 .Select(kv => kv.Key);
+
+            if (!Options.Value.CibaEnabled)
+            {
+                result = result.Where(r => r != "ciba");
+            }
+
             return Task.FromResult(result);
         }
 
