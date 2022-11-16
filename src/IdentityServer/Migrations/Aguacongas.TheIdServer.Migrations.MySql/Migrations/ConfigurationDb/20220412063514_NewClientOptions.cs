@@ -22,7 +22,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                 nullable: false,
                 defaultValue: false);
 
-
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
@@ -43,7 +42,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-                migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientAllowedIdentityTokenSigningAlgorithms_ClientId_Algorit~",
                 table: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: new[] { "ClientId", "Algorithm" },
@@ -55,13 +54,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
 
-            migrationBuilder.DropColumn(
-                name: "CoordinateLifetimeWithUserSession",
-                table: "Clients");
-
-            migrationBuilder.DropColumn(
-                name: "RequireRequestObject",
-                table: "Clients");
         }
     }
 }

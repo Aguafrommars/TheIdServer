@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
+using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

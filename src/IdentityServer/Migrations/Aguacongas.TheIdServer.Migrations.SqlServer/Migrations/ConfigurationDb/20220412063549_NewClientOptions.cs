@@ -9,19 +9,6 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "CoordinateLifetimeWithUserSession",
-                table: "Clients",
-                type: "bit",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "RequireRequestObject",
-                table: "Clients",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
@@ -63,7 +50,6 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                 name: "RequireRequestObject",
                 table: "Clients");
 
-            
         }
     }
 }
