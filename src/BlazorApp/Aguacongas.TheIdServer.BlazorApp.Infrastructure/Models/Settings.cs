@@ -15,6 +15,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public bool Prerendered { get; set; }
 
         public string HostElementIdentifier { get; set; } = "app";
+
+        public bool ServerSideSessionEnabled { get; set; }
+
+        public bool CibaEnabled { get; set; }
     }
 
     public class LoggingOptions
