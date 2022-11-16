@@ -40,7 +40,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
             if (!Options.Value.CibaEnabled)
             {
-                result = result.Where(r => r != "ciba");
+                result = result.Where(r => r != "urn:openid:params:grant-type:ciba");
             }
 
             return Task.FromResult(result);
