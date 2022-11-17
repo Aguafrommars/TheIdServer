@@ -11,12 +11,8 @@ using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
-#if DUENDE
 using Duende.IdentityServer.Hosting;
 using Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4.Configuration;
-#endif
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

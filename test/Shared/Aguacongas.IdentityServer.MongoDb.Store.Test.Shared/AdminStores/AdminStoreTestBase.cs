@@ -19,11 +19,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-#if DUENDE
 using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 
 namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 {

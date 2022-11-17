@@ -15,8 +15,8 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\IdentityServer\IS4\Aguacongas.IdentityServer.IS4\Aguacongas.IdentityServer.IS4.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IdentityServer\Duende\Aguacongas.IdentityServer.Duende\Aguacongas.IdentityServer.Duende.csproj" />
+  </ItemGroup>
 
 </Project>

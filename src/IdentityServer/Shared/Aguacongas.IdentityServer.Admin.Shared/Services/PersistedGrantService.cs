@@ -1,15 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-#if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores.Serialization;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores.Serialization;
-#endif
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;

@@ -1,17 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer.Stores;
-using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using IdentityServer4.Stores;
-using static IdentityServer4.IdentityServerConstants;
-#endif
 using Moq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Aguacongas.IdentityServer.Test.Shared.Store
 {

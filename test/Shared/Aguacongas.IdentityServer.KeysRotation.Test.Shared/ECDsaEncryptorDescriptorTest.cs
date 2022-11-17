@@ -7,11 +7,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
-#if DUENDE
 using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using static IdentityServer4.IdentityServerConstants;
-#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test
 {

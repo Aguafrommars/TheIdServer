@@ -2,11 +2,7 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Microsoft.Extensions.DependencyInjection;
 using System;
-#if DUENDE
 using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using static IdentityServer4.IdentityServerConstants;
-#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation.Extensions
 {

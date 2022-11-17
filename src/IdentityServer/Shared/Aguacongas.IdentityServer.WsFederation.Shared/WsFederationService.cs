@@ -1,15 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation.Validation;
-#if DUENDE
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
-using Configuration = Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4.Extensions;
-using IdentityServer4.Services;
-using Configuration = IdentityServer4.Configuration;
-#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,6 +11,7 @@ using System;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Configuration = Duende.IdentityServer.Configuration;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {

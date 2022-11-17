@@ -4,11 +4,7 @@ using Aguacongas.IdentityServer.Admin;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer.Extensions;
-#else
-using IdentityServer4.Extensions;
-#endif
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

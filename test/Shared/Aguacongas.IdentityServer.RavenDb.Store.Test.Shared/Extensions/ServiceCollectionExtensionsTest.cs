@@ -16,11 +16,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 
 namespace Aguacongas.IdentityServer.RavenDb.Store.Test.Extensions
 {

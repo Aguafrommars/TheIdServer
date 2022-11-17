@@ -77,7 +77,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiProperties(IAdminStore<Entity.ApiProperty> apiPropertyStore, IdentityServer4.Models.ApiResource resource)
+        private static void SeedApiProperties(IAdminStore<Entity.ApiProperty> apiPropertyStore, Duende.IdentityServer.Models.ApiResource resource)
         {
             foreach (var property in resource.Properties)
             {
@@ -91,7 +91,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiApiScopes(IAdminStore<Entity.ApiApiScope> apiApiScopeStore, IdentityServer4.Models.ApiResource resource)
+        private static void SeedApiApiScopes(IAdminStore<Entity.ApiApiScope> apiApiScopeStore, Duende.IdentityServer.Models.ApiResource resource)
         {
             foreach (var apiScope in resource.Scopes)
             {
@@ -104,7 +104,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiSecrets(IAdminStore<Entity.ApiSecret> apiSecretStore, IdentityServer4.Models.ApiResource resource)
+        private static void SeedApiSecrets(IAdminStore<Entity.ApiSecret> apiSecretStore, Duende.IdentityServer.Models.ApiResource resource)
         {
             foreach (var secret in resource.ApiSecrets)
             {
@@ -120,7 +120,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiClaims(IAdminStore<Entity.ApiClaim> apiClaimStore, IdentityServer4.Models.ApiResource resource)
+        private static void SeedApiClaims(IAdminStore<Entity.ApiClaim> apiClaimStore, Duende.IdentityServer.Models.ApiResource resource)
         {
             foreach (var claim in resource.UserClaims)
             {
@@ -163,7 +163,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiScopeProperties(IAdminStore<Entity.ApiScopeProperty> apiScopePropertyStore, IdentityServer4.Models.ApiScope resource)
+        private static void SeedApiScopeProperties(IAdminStore<Entity.ApiScopeProperty> apiScopePropertyStore, Duende.IdentityServer.Models.ApiScope resource)
         {
             foreach (var property in resource.Properties)
             {
@@ -177,7 +177,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedApiScopeClaims(IAdminStore<Entity.ApiScopeClaim> apiScopeClaimStore, IdentityServer4.Models.ApiScope resource)
+        private static void SeedApiScopeClaims(IAdminStore<Entity.ApiScopeClaim> apiScopeClaimStore, Duende.IdentityServer.Models.ApiScope resource)
         {
             foreach (var claim in resource.UserClaims)
             {
@@ -219,7 +219,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedIdentityProperties(IAdminStore<Entity.IdentityProperty> identityPropertyStore, IdentityServer4.Models.IdentityResource resource)
+        private static void SeedIdentityProperties(IAdminStore<Entity.IdentityProperty> identityPropertyStore, Duende.IdentityServer.Models.IdentityResource resource)
         {
             foreach (var property in resource.Properties)
             {
@@ -233,7 +233,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedIdentityClaims(IAdminStore<Entity.IdentityClaim> identityClaimStore, IdentityServer4.Models.IdentityResource resource)
+        private static void SeedIdentityClaims(IAdminStore<Entity.IdentityClaim> identityClaimStore, Duende.IdentityServer.Models.IdentityResource resource)
         {
             foreach (var claim in resource.UserClaims)
             {
@@ -316,7 +316,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientUris(IAdminStore<Entity.ClientUri> clientUriStore, IdentityServer4.Models.Client client)
+        private static void SeedClientUris(IAdminStore<Entity.ClientUri> clientUriStore, Duende.IdentityServer.Models.Client client)
         {
             var uris = client.RedirectUris.Select(o => new Entity.ClientUri
             {
@@ -374,7 +374,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientProperties(IAdminStore<Entity.ClientProperty> clientPropertyStore, IdentityServer4.Models.Client client)
+        private static void SeedClientProperties(IAdminStore<Entity.ClientProperty> clientPropertyStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var property in client.Properties)
             {
@@ -388,7 +388,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientRestrictions(IAdminStore<Entity.ClientIdpRestriction> clientIdpRestrictionStore, IdentityServer4.Models.Client client)
+        private static void SeedClientRestrictions(IAdminStore<Entity.ClientIdpRestriction> clientIdpRestrictionStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var restriction in client.IdentityProviderRestrictions)
             {
@@ -401,7 +401,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientSecrets(IAdminStore<Entity.ClientSecret> clientSecretStore, IdentityServer4.Models.Client client)
+        private static void SeedClientSecrets(IAdminStore<Entity.ClientSecret> clientSecretStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var secret in client.ClientSecrets)
             {
@@ -417,7 +417,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientClaims(IAdminStore<Entity.ClientClaim> clientClaimStore, IdentityServer4.Models.Client client)
+        private static void SeedClientClaims(IAdminStore<Entity.ClientClaim> clientClaimStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var claim in client.Claims)
             {
@@ -431,7 +431,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientScopes(IAdminStore<Entity.ClientScope> clientScopeStore, IdentityServer4.Models.Client client)
+        private static void SeedClientScopes(IAdminStore<Entity.ClientScope> clientScopeStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var clientScope in client.AllowedScopes)
             {
@@ -444,7 +444,7 @@ namespace Aguacongas.TheIdServer
             }
         }
 
-        private static void SeedClientGrantType(IAdminStore<Entity.ClientGrantType> clientGrantTypeStore, IdentityServer4.Models.Client client)
+        private static void SeedClientGrantType(IAdminStore<Entity.ClientGrantType> clientGrantTypeStore, Duende.IdentityServer.Models.Client client)
         {
             foreach (var grantType in client.AllowedGrantTypes)
             {
@@ -497,7 +497,7 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", Duende.IdentityServer.IdentityServerConstants.ClaimValueTypes.Json)
                     })).GetAwaiter().GetResult();
 
                 ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(alice, roles))
@@ -527,7 +527,7 @@ namespace Aguacongas.TheIdServer
                         new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json),
+                        new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", Duende.IdentityServer.IdentityServerConstants.ClaimValueTypes.Json),
                         new Claim("location", "somewhere")
                     })).GetAwaiter().GetResult();
                 ExcuteAndCheckResult(() => userMgr.AddToRoleAsync(bob, "Is4-Reader"))

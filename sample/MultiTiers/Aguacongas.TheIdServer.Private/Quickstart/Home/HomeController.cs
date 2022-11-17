@@ -1,6 +1,6 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-using IdentityServer4.Services;
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

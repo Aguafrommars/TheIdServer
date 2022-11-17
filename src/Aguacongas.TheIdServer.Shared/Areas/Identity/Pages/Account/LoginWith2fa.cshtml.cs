@@ -1,15 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
-#if DUENDE
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4.Events;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-#endif
 using Aguacongas.TheIdServer.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

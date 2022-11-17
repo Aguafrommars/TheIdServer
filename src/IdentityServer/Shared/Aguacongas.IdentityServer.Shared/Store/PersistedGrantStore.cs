@@ -1,23 +1,14 @@
 ﻿using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
-using static Duende.IdentityServer.IdentityServerConstants;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-#else
-using static IdentityServer4.IdentityServerConstants;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using IdentityServer4.Stores.Serialization;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Aguacongas.IdentityServer.Store
 {

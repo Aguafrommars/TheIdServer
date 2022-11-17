@@ -1,12 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-#if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4;
-using IdentityServer4.Models;
-#endif
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

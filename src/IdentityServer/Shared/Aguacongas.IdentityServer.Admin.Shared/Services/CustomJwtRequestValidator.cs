@@ -1,14 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -29,41 +24,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
     {
         private readonly TokenValidationParameters _tokenValidationOptions;
 
-
-#pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomJwtRequestValidator" /> class.
         /// </summary>
         /// <param name="tokenValidationOptions">The token validation options.</param>
-#if DUENDE
         /// <param name="issuerNameService">The issuer name service.</param>
-#else
-        /// <param name="contextAccessor">The context accessor.</param>
-#endif
         /// <param name="options">The options.</param>
         /// <param name="logger">The logger.</param>
         /// <exception cref="ArgumentNullException">tokenValidationOptions</exception>
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
         public CustomJwtRequestValidator(IOptions<TokenValidationParameters> tokenValidationOptions,
-#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-#pragma warning restore CS1587 // XML comment is not placed on a valid language element
-#if DUENDE
             Duende.IdentityServer.Configuration.IdentityServerOptions options,
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
             IIssuerNameService issuerNameService,
-#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-#else
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-            IHttpContextAccessor contextAccessor,
-#pragma warning restore CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
-            IdentityServer4.Configuration.IdentityServerOptions options, 
-#endif
             ILogger<JwtRequestValidator> logger) :
-#if DUENDE
             base(options, issuerNameService, logger)
-#else
-            base(contextAccessor, options, logger)
-#endif
         {
             _tokenValidationOptions = tokenValidationOptions?.Value ?? throw new ArgumentNullException(nameof(tokenValidationOptions));
         }

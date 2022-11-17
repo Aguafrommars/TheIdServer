@@ -1,13 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
-#if DUENDE
 using Duende.IdentityServer.Stores;
-using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using IdentityServer4.Stores;
-using static IdentityServer4.IdentityServerConstants;
-#endif
 using Microsoft.AspNetCore.DataProtection.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -16,6 +10,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

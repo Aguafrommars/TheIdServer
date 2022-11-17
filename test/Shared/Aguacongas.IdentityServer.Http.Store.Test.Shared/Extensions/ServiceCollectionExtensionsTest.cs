@@ -2,21 +2,15 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Validation;
-using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4.Services;
-using IdentityServer4.Validation;
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Net.Http;
 using Xunit;
+using ISConfiguration = Duende.IdentityServer.Configuration;
 
 namespace Aguacongas.IdentityServer.Http.Store.Test.Extensions
 {

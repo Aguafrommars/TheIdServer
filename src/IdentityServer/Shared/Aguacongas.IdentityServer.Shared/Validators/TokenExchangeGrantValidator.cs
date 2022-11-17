@@ -4,15 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
-#if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4;
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-#endif
 using IdentityModel;
 
 namespace Aguacongas.IdentityServer.Shared.Validators

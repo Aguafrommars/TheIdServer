@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-#if DUENDE
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Validation;
-#endif
-using IdentityServer4.WsFederation;
+using Duende.IdentityServer.WsFederation;
 using System;
 using System.Collections.Specialized;
 using System.Security.Claims;

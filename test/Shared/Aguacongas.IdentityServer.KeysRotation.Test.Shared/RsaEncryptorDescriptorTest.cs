@@ -6,12 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 using System.IO;
-
-#if DUENDE
 using Duende.IdentityServer;
-#else
-using IdentityServer4;
-#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation.Test
 {

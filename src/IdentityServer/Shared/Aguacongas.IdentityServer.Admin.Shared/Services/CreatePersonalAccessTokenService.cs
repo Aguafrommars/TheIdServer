@@ -1,17 +1,8 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
-#if DUENDE
 using Duende.IdentityServer;
-using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;

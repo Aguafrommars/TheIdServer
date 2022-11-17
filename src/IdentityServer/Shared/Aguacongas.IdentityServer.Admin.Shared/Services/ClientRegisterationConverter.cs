@@ -6,11 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Aguacongas.IdentityServer.Admin.Models;
 using Newtonsoft.Json.Linq;
-#if DUENDE
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Models;
-#endif
 using System.Reflection;
 
 namespace Aguacongas.IdentityServer.Admin.Services

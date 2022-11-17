@@ -3,13 +3,8 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Services;
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-#endif
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

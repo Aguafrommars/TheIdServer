@@ -2,13 +2,8 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
-#if DUENDE
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-#endif
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;

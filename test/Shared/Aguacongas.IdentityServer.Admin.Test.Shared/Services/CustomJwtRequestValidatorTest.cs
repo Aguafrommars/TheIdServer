@@ -1,18 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Services;
-#if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using Duende.IdentityServer.Services;
 using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4;
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

@@ -1,14 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-#if DUENDE
 using Duende.IdentityServer.Models;
-using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using IdentityServer4.Models;
-using static IdentityServer4.IdentityServerConstants;
-#endif
 using Microsoft.IdentityModel.Tokens;
 using System;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {

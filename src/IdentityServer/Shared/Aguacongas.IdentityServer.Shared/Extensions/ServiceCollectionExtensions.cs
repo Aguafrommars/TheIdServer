@@ -5,19 +5,12 @@ using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Shared.Validators;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
-#if DUENDE
 using Aguacongas.IdentityServer.Services;
 using Aguacongas.IdentityServer.Validators;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Stores.Serialization;
-using IdentityServer4.Validation;
-#endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

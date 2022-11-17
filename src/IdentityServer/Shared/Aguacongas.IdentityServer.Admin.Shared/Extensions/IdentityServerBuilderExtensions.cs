@@ -3,17 +3,10 @@
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
-#if DUENDE
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Configuration;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using IdentityServer4.Validation;
-#endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;

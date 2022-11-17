@@ -12,11 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-#if DUENDE
 using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Services;
-#endif
 using Moq;
 using Raven.Client.Documents.Session;
 using System;

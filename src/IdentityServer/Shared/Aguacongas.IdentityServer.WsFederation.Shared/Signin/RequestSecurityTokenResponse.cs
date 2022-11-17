@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-using IdentityServer4.WsFederation;
+using Duende.IdentityServer.WsFederation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Tokens.Saml;
 using Microsoft.IdentityModel.Xml;

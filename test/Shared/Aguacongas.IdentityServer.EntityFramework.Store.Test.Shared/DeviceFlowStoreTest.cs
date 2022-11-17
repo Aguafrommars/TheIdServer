@@ -3,15 +3,6 @@
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
-using Duende.IdentityServer.Services;
-using ISConfiguration = Duende.IdentityServer.Configuration;
-using ISModels = Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Services;
-using ISConfiguration = IdentityServer4.Configuration;
-using ISModels = IdentityServer4.Models;
-#endif
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +10,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using ISConfiguration = Duende.IdentityServer.Configuration;
+using ISModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
 {

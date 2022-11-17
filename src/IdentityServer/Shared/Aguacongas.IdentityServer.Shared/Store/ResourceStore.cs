@@ -1,13 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer.Stores;
 using IsModels = Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Stores;
-using IsModels = IdentityServer4.Models;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;

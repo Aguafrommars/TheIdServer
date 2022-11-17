@@ -20,11 +20,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-#if DUENDE
 using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 
 namespace Aguacongas.TheIdServer.Test
 {

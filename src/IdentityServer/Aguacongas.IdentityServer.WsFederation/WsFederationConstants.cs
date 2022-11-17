@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-namespace IdentityServer4.WsFederation
+namespace Duende.IdentityServer.WsFederation
 {
     /// <summary>
     /// Ws-Federation constants

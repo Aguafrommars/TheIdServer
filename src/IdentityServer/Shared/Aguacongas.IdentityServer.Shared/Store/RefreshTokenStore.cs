@@ -2,15 +2,9 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using System;
-#if DUENDE
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
 using IsModels = Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Stores;
-using IdentityServer4.Stores.Serialization;
-using IsModels = IdentityServer4.Models;
-#endif
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store

@@ -4,11 +4,7 @@ using Aguacongas.IdentityServer.WsFederation;
 using Aguacongas.IdentityServer.WsFederation.Metadata;
 using Aguacongas.IdentityServer.WsFederation.Stores;
 using Aguacongas.IdentityServer.WsFederation.Validation;
-#if DUENDE
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Validation;
-#endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

@@ -3,11 +3,7 @@
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using System;
 using System.Security.Cryptography;
-#if DUENDE
 using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using static IdentityServer4.IdentityServerConstants;
-#endif
 
 namespace Aguacongas.IdentityServer.KeysRotation
 {

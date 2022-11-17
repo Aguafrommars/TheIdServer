@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
-#if DUENDE
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Models;
-#endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

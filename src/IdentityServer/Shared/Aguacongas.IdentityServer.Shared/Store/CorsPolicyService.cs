@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Services;
-#endif
 using System;
 using System.Threading.Tasks;
 

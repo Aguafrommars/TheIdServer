@@ -26,11 +26,8 @@ using Raven.Client.Documents.Session;
 using Raven.Client.Documents;
 using mongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
 using MongoDB.Driver;
-#if DUENDE
 using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using static IdentityServer4.IdentityServerConstants;
-#endif
+
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class KeyRotationBuilderExtensions

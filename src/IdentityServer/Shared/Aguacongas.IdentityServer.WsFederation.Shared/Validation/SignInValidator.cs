@@ -1,13 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation.Stores;
-#if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4;
-using IdentityServer4.Stores;
-#endif
 using Microsoft.IdentityModel.Protocols.WsFederation;
 using System;
 using System.Linq;

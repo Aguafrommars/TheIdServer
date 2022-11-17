@@ -13,12 +13,8 @@ using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
 using IdentityModel.AspNetCore.OAuth2Introspection;
-#if DUENDE
 using Aguacongas.IdentityServer.Services;
 using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Services;
-#endif
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -91,7 +87,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
-#if DUENDE
                 .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
@@ -106,9 +101,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDefaultSecretValidators()
                 .AddInMemoryPersistedGrants()
                 .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
-#else
-                .AddIdentityServer(configurationManager.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
-#endif
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
                 .AddJwtBearerClientAuthentication()
@@ -116,12 +108,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 .ConfigureDiscovey(configurationManager.GetSection(nameof(IdentityServerOptions)))
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
-#if DUENDE
             if (configurationManager.GetValue<bool>("IdentityServerOptions:EnableServerSideSession"))
             {
                 identityServerBuilder.AddServerSideSessions<ServerSideSessionStore>();
             }
-#endif
 
             identityServerBuilder.AddJwtRequestUriHttpClient();
 
@@ -165,7 +155,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddAuthorization(options =>
                     options.AddIdentityServerPolicies(true))
                 .AddAuthentication()
-                .AddJwtBearer("Bearer", options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
 

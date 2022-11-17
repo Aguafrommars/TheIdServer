@@ -74,7 +74,6 @@
 		<Content Include="..\Aguacongas.TheIdServer.Shared\Areas\Identity\Pages\_ViewStart.cshtml" Link="Areas\Identity\Pages\_ViewStart.cshtml" />
 		<None Include="..\Aguacongas.TheIdServer.Shared\compilerconfig.json.defaults" Link="compilerconfig.json.defaults" />
 		<None Include="..\Aguacongas.TheIdServer.Shared\tempkey.rsa" Link="tempkey.rsa" />
-		<None Include="..\Aguacongas.TheIdServer.Shared\updateUI.ps1" Link="updateUI.ps1" />
 		<None Include="Localization-fr.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

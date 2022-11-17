@@ -3,18 +3,14 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
-using IdentityModel;
-#if DUENDE
+using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
+using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
-using ISModels = Duende.IdentityServer.Models;
-#else
-using IdentityServer4;
-using IdentityServer4.Services;
-using ISModels = IdentityServer4.Models;
-#endif
+using Duende.IdentityServer.WsFederation;
+using IdentityModel;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Protocols.WsFederation;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
@@ -24,12 +20,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Xml;
 using Xunit;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Builder;
-using Aguacongas.TheIdServer.Admin.Hubs;
-using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Aguacongas.TheIdServer.UI;
+using ISModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
 {
@@ -51,7 +42,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             using var reader = XmlReader.Create(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var serializer = new WsFederationMetadataSerializer();
+            var serializer = new Microsoft.IdentityModel.Protocols.WsFederation.WsFederationMetadataSerializer();
             var metadata = serializer.ReadMetadata(reader);
 
             Assert.NotNull(metadata);
@@ -131,10 +122,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RelyingParty = new RelyingParty
                 {
                     Id = clientId,
-                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    TokenType = WsFederationConstants.TokenTypes.Saml11TokenProfile11,
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
+                    SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
                 }
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
@@ -160,10 +151,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RelyingParty = new RelyingParty
                 {
                     Id = clientId,
-                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    TokenType = WsFederationConstants.TokenTypes.Saml11TokenProfile11,
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
+                    SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
                 }
             }).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
@@ -224,10 +215,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RelyingParty = new RelyingParty
                 {
                     Id = clientId,
-                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    TokenType = WsFederationConstants.TokenTypes.Saml11TokenProfile11,
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
                     ClaimMappings = new[]
                     {
                         new RelyingPartyClaimMapping
@@ -391,10 +382,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RelyingParty = new RelyingParty
                 {
                     Id = clientId,
-                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11,
+                    TokenType = WsFederationConstants.TokenTypes.Saml11TokenProfile11,
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
                     ClaimMappings = new[]
                     {
                         new RelyingPartyClaimMapping
@@ -549,10 +540,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 RelyingParty = new RelyingParty
                 {
                     Id = clientId,
-                    TokenType = IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11,
+                    TokenType = WsFederationConstants.TokenTypes.Saml2TokenProfile11,
                     DigestAlgorithm = SecurityAlgorithms.Sha256Digest,
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
-                    SamlNameIdentifierFormat = IdentityServer4.WsFederation.WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
+                    SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
                     ClaimMappings = Array.Empty<RelyingPartyClaimMapping>()
                 }
             }).ConfigureAwait(false);

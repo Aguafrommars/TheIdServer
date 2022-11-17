@@ -9,11 +9,7 @@
 // use discard intead of unused instance
 // use inline declaration
 // use object locker instead of this
-#if DUENDE
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Models;
-#endif
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.IdentityModel.Tokens;

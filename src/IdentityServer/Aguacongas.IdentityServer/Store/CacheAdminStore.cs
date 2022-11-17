@@ -1,17 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
-#if DUENDE
 using Duende.IdentityServer.Extensions;
-using Configuration = Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4.Extensions;
-using Configuration = IdentityServer4.Configuration;
-#endif
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Configuration = Duende.IdentityServer.Configuration;
 
 namespace Aguacongas.IdentityServer.Store
 {

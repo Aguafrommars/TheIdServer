@@ -1,10 +1,5 @@
-﻿#if DUENDE
-using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-#endif
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System;
 using System.Collections.Generic;

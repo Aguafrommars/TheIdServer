@@ -4,15 +4,8 @@ using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using IdentityModel;
-#if DUENDE
-using Duende.IdentityServer.Services;
 using ISConfiguration = Duende.IdentityServer.Configuration;
 using ISModels = Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Services;
-using ISConfiguration = IdentityServer4.Configuration;
-using ISModels = IdentityServer4.Models;
-#endif
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;

@@ -2,20 +2,10 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation.Validation;
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using ISValidation = Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using ISValidation = IdentityServer4.Validation;
-#endif
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.WsFederation;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +18,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Xml;
 using ClaimProperties = Microsoft.IdentityModel.Tokens.Saml.ClaimProperties;
+using ISValidation = Duende.IdentityServer.Validation;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {
@@ -162,7 +153,7 @@ namespace Aguacongas.IdentityServer.WsFederation
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
                 else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) ||
-                    relyParty.TokenType != IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
+                    relyParty.TokenType != Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
                 {
                     outboundClaims.Add(claim);
                 }
@@ -268,8 +259,8 @@ namespace Aguacongas.IdentityServer.WsFederation
         {
             return tokenType switch
             {
-                IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11 => new SamlSecurityTokenHandler(),
-                IdentityServer4.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11 => new Saml2SecurityTokenHandler(),
+                Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11 => new SamlSecurityTokenHandler(),
+                Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11 => new Saml2SecurityTokenHandler(),
                 _ => throw new NotImplementedException($"TokenType: {tokenType} not implemented"),
             };
         }

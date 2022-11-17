@@ -4,17 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-#if DUENDE
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4.Events;
-using IdentityServer4.Extensions;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-#endif
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

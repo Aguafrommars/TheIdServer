@@ -1,20 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.Authentication;
-#if DUENDE
 using Duende.IdentityServer.Services;
-using ISConfiguration = Duende.IdentityServer.Configuration;
-#else
-using IdentityServer4.Services;
-using ISConfiguration = IdentityServer4.Configuration;
-#endif
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using ISConfiguration = Duende.IdentityServer.Configuration;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
 {

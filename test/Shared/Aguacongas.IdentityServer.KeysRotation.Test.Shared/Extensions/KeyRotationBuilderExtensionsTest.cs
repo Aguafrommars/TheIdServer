@@ -6,11 +6,7 @@ using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Azure.Core;
 using Azure.Storage;
 using Azure.Storage.Blobs;
-#if DUENDE
 using Duende.IdentityServer;
-#else
-using IdentityServer4;
-#endif
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.Azure.KeyVault;

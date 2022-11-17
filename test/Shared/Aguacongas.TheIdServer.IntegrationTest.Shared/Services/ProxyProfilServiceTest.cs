@@ -6,13 +6,8 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Models;
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-#endif
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

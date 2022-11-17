@@ -4,11 +4,7 @@ using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Aguacongas.TheIdServer.UI;
-#if DUENDE
 using Duende.IdentityServer.Models;
-#else
-using IdentityServer4.Models;
-#endif
 using IdentityModel;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;

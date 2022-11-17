@@ -11,13 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-#if DUENDE
 using Duende.IdentityServer.Configuration;
 using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using IdentityServer4.Configuration;
-using static IdentityServer4.IdentityServerConstants;
-#endif
 
 namespace Microsoft.Extensions.DependencyInjection
 {

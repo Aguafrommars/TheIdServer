@@ -4,13 +4,7 @@ using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer.ResponseHandling;
-using static Duende.IdentityServer.IdentityServerConstants;
-#else
-using IdentityServer4.ResponseHandling;
-using static IdentityServer4.IdentityServerConstants;
-#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Aguacongas.IdentityServer.Admin.Services
 {
@@ -31,13 +26,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="IRegisterClientService" />
     public class RegisterClientService : IRegisterClientService
     {
-#if DUENDE
         private readonly Duende.IdentityServer.Configuration.IdentityServerOptions _identityServerOptions1;
         private readonly Duende.IdentityServer.Models.Client _defaultValues = new();
-#else
-        private readonly IdentityServer4.Configuration.IdentityServerOptions _identityServerOptions1;
-        private readonly IdentityServer4.Models.Client _defaultValues = new();
-#endif
         private readonly DynamicClientRegistrationOptions _dymamicClientRegistrationOptions;
         private readonly IAdminStore<Client> _clientStore;
         private readonly IAdminStore<ClientUri> _clientUriStore;
@@ -73,18 +63,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// clientGrantTypeStore
         /// or
         /// discoveryResponseGenerator</exception>
-        [SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "1 more is ok")]
         public RegisterClientService(IAdminStore<Client> clientStore,
             IAdminStore<ClientUri> clientUriStore,
             IAdminStore<ClientLocalizedResource> clientResourceStore,
             IAdminStore<ClientGrantType> clientGrantTypeStore,
             IAdminStore<ClientProperty> clientPropertyStore,
             IDiscoveryResponseGenerator discoveryResponseGenerator,
-#if DUENDE
             Duende.IdentityServer.Configuration.IdentityServerOptions identityServerOptions,
-#else
-            IdentityServer4.Configuration.IdentityServerOptions identityServerOptions,
-#endif
             IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions,
             ILogger<RegisterClientService> logger)
 

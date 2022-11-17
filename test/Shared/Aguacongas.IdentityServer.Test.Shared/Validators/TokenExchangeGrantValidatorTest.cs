@@ -1,11 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Shared.Validators;
-#if DUENDE
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
-#else
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
-#endif
 using IdentityModel;
 using Moq;
 using System;

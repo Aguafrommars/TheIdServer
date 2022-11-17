@@ -18,12 +18,9 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-#if DUENDE
 using Duende.IdentityServer;
 using ISModels = Duende.IdentityServer.Models;
-#else
-using ISModels = IdentityServer4.Models;
-#endif
+
 namespace Aguacongas.TheIdServer
 {
     public static class SeedData

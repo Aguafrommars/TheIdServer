@@ -1,13 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-#if DUENDE
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4.Extensions;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Http;
-#endif
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Xml;

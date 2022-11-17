@@ -2,19 +2,11 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using IdentityModel;
-#if DUENDE
 using Duende.IdentityServer;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using AspNetIdentity = Duende.IdentityServer.AspNetIdentity;
-#else
-using IdentityServer4;
-using IdentityServer4.Extensions;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using AspNetIdentity = IdentityServer4.AspNetIdentity;
-#endif
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;

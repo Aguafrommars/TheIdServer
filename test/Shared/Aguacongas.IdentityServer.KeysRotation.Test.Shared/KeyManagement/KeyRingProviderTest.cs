@@ -1,11 +1,7 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
-#if DUENDE
 using Duende.IdentityServer;
-#else
-using IdentityServer4;
-#endif
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;

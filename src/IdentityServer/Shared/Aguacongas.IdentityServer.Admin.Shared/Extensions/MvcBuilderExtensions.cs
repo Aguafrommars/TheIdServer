@@ -7,11 +7,7 @@ using Aguacongas.IdentityServer.Admin.Filters;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.Store;
-#if DUENDE
 using Duende.IdentityServer.Services;
-#else
-using IdentityServer4.Services;
-#endif
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -87,8 +83,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     config.PostProcess = document =>
                     {
                         document.Info.Version = "v1";
-                        document.Info.Title = "IdentityServer4 admin API";
-                        document.Info.Description = "A web API to administrate your IdentityServer4";
+                        document.Info.Title = "Duende IdentityServer admin API";
+                        document.Info.Description = "A web API to administrate your Duende IdentityServer";
                         document.Info.Contact = new NSwag.OpenApiContact
                         {
                             Name = "Olivier Lefebvre",
@@ -119,8 +115,8 @@ namespace Microsoft.Extensions.DependencyInjection
                             [SharedConstants.ADMINSCOPE] = "Admin scope access",
                             [SharedConstants.TOKENSCOPES] = "Token scope access"
                         },
-                        Description = "IdentityServer4",
-                        Name = "IdentityServer4",
+                        Description = "Duende IdentityServer",
+                        Name = "Duende IdentityServer",
                         Scheme = "Bearer",
                         Type = NSwag.OpenApiSecuritySchemeType.OAuth2,
                         AuthorizationUrl = $"{authority}/connect/authorize",

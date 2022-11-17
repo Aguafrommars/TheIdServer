@@ -1,11 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
-#if DUENDE
 using Duende.IdentityServer.Stores;
-#else
-using IdentityServer4.Stores;
-#endif
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Security.Cryptography;
