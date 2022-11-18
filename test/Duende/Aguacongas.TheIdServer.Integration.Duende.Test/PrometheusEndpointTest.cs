@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.IntegrationTest;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

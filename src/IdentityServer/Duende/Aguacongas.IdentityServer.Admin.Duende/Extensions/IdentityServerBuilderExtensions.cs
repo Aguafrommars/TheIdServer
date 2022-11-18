@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
+using Aguacongas.IdentityServer.Admin.Duende.Services;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Duende.IdentityServer.Configuration;
@@ -74,6 +75,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     discovery.ExpandRelativePathsInCustomEntries = true;
                     discovery.CustomEntries["registration_endpoint"] = $"~{apiPath}/register";
                 })
+                .AddTransient<RegisterClientStores>()
                 .AddTransient<IRegisterClientService, RegisterClientService>()
                 .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>();
             return builder;

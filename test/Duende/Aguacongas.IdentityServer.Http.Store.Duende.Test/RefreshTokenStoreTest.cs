@@ -94,21 +94,11 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                     Items = new List<RefreshToken>(0)
                 })
                 .Verifiable();
-#if DUENDE
             var refreshToken = new ISModels.RefreshToken();
             refreshToken.SetAccessToken(new ISModels.Token
             {
                 ClientId = "test"
             });
-#else
-            var refreshToken = new ISModels.RefreshToken
-            {
-                AccessToken = new ISModels.Token
-                {
-                    ClientId = "test"
-                }
-            };
-#endif
             await sut.StoreRefreshTokenAsync(refreshToken);
 
             storeMock.Verify(m => m.GetAsync(It.IsAny<PageRequest>(), default));
@@ -128,21 +118,11 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
             storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
                 .ReturnsAsync(new RefreshToken())
                 .Verifiable();
-#if DUENDE
             var refreshToken = new ISModels.RefreshToken();
             refreshToken.SetAccessToken(new ISModels.Token
             {
                 ClientId = "test"
             });
-#else
-            var refreshToken = new ISModels.RefreshToken
-            {
-                AccessToken = new ISModels.Token
-                {
-                    ClientId = "test"
-                }
-            };
-#endif
             await sut.UpdateRefreshTokenAsync("test", refreshToken);
 
             storeMock.Verify(m => m.GetAsync("test", null, default));

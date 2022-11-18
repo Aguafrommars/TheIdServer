@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Duende.Services;
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Store;
@@ -16,6 +17,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using static Duende.IdentityServer.IdentityServerConstants;
+using IsConfiguration = Duende.IdentityServer.Configuration;
+using IsModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.Admin.Services
 {
@@ -25,8 +28,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
     /// <seealso cref="IRegisterClientService" />
     public class RegisterClientService : IRegisterClientService
     {
-        private readonly Duende.IdentityServer.Configuration.IdentityServerOptions _identityServerOptions1;
-        private readonly Duende.IdentityServer.Models.Client _defaultValues = new();
+        private readonly IsConfiguration.IdentityServerOptions _identityServerOptions1;
+        private readonly IsModels.Client _defaultValues = new();
         private readonly DynamicClientRegistrationOptions _dymamicClientRegistrationOptions;
         private readonly IAdminStore<Client> _clientStore;
         private readonly IAdminStore<ClientUri> _clientUriStore;
@@ -40,11 +43,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterClientService" /> class.
         /// </summary>
-        /// <param name="clientStore">The client store.</param>
-        /// <param name="clientUriStore">The client URI store.</param>
-        /// <param name="clientResourceStore">The client resource store.</param>
-        /// <param name="clientGrantTypeStore">The client grant type store.</param>
-        /// <param name="clientPropertyStore">The client property store.</param>
+        /// <param name="stores">The stores.</param>
         /// <param name="discoveryResponseGenerator">The discovery response generator.</param>
         /// <param name="identityServerOptions">The options.</param>
         /// <param name="dymamicClientRegistrationOptions">The dymamic client registration options.</param>
@@ -62,24 +61,20 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// clientGrantTypeStore
         /// or
         /// discoveryResponseGenerator</exception>
-        public RegisterClientService(IAdminStore<Client> clientStore,
-            IAdminStore<ClientUri> clientUriStore,
-            IAdminStore<ClientLocalizedResource> clientResourceStore,
-            IAdminStore<ClientGrantType> clientGrantTypeStore,
-            IAdminStore<ClientProperty> clientPropertyStore,
+        public RegisterClientService(RegisterClientStores stores,
             IDiscoveryResponseGenerator discoveryResponseGenerator,
-            Duende.IdentityServer.Configuration.IdentityServerOptions identityServerOptions,
+            IsConfiguration.IdentityServerOptions identityServerOptions,
             IOptions<DynamicClientRegistrationOptions> dymamicClientRegistrationOptions,
             ILogger<RegisterClientService> logger)
 
         {
             _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
             _dymamicClientRegistrationOptions = dymamicClientRegistrationOptions?.Value ?? throw new ArgumentNullException(nameof(dymamicClientRegistrationOptions));
-            _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
-            _clientUriStore = clientUriStore ?? throw new ArgumentNullException(nameof(clientUriStore));
-            _clientResourceStore = clientResourceStore ?? throw new ArgumentNullException(nameof(clientResourceStore));
-            _clientPropertyStore = clientPropertyStore ?? throw new ArgumentNullException(nameof(clientPropertyStore));
-            _clientGrantTypeStore = clientGrantTypeStore ?? throw new ArgumentNullException(nameof(clientGrantTypeStore));
+            _clientStore = stores.ClientStore;
+            _clientUriStore = stores.ClientUriStore;
+            _clientResourceStore = stores.ClientResourceStore;
+            _clientPropertyStore = stores.ClientPropertyStore;
+            _clientGrantTypeStore = stores.ClientGrantTypeStore;
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -284,11 +279,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 UserSsoLifetime = _defaultValues.UserSsoLifetime,
                 PolicyUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
                 TosUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ?? registration.TosUris?.FirstOrDefault()?.Value,
-#if DUENDE
                 CibaLifetime = _defaultValues.CibaLifetime,
                 PollingInterval = _defaultValues.PollingInterval,
                 CoordinateLifetimeWithUserSession = _defaultValues.CoordinateLifetimeWithUserSession,
-#endif
                 RegistrationToken = Guid.NewGuid()
             };
 

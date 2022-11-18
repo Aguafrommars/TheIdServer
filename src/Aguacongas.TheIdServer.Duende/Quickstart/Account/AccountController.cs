@@ -354,13 +354,10 @@ namespace Aguacongas.TheIdServer.UI
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
                 {
-#if DUENDE
                     var provider = HttpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
                     var handler = await provider.GetHandlerAsync(HttpContext, idp); 
                     var providerSupportsSignout = handler is IAuthenticationSignOutHandler;
-#else
-                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp).ConfigureAwait(false);
-#endif
+
                     if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)

@@ -205,9 +205,7 @@ namespace Aguacongas.TheIdServer
                         Enabled = resource.Enabled,
                         Id = resource.Name,
                         
-#if DUENDE
                         RequireResourceIndicator = resource.RequireResourceIndicator
-#endif
                     }).GetAwaiter().GetResult();
                 }
                 catch (ArgumentException)
@@ -482,10 +480,7 @@ namespace Aguacongas.TheIdServer
             var clientIdpRestrictionStore = provider.GetRequiredService<IAdminStore<Entity.ClientIdpRestriction>>();
             var clientUriStore = provider.GetRequiredService<IAdminStore<Entity.ClientUri>>();
             var clientPropertyStore = provider.GetRequiredService<IAdminStore<Entity.ClientProperty>>();
-
-#if DUENDE
             var clientAllowedIdentityTokenSigningAlgorithmStore = provider.GetRequiredService<IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm>>();
-#endif
 
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("SeedClients");
@@ -552,15 +547,12 @@ namespace Aguacongas.TheIdServer
                 SeedClientRestrictions(clientIdpRestrictionStore, client);
                 SeedClientProperties(clientPropertyStore, client);
                 SeedClientUris(clientUriStore, client);
-#if DUENDE
                 SeedClientAllowedIdentityTokenSigningAlgorithms(clientAllowedIdentityTokenSigningAlgorithmStore, client);
-#endif
 
                 logger.LogInformation("Add client {ClientName}", client.ClientName);
             }
         }
 
-#if DUENDE
         private static void SeedClientAllowedIdentityTokenSigningAlgorithms(IAdminStore<Entity.ClientAllowedIdentityTokenSigningAlgorithm> clientAllowedIdentityTokenSigningAlgorithmStore, ISModels.Client client)
         {
             foreach (var algorythm in client.AllowedIdentityTokenSigningAlgorithms.Where(a => IdentityServerConstants.SupportedSigningAlgorithms.Contains(a)))
@@ -580,7 +572,7 @@ namespace Aguacongas.TheIdServer
                 }
             }
         }
-#endif
+
         private static void SeedClientUris(IAdminStore<Entity.ClientUri> clientUriStore, ISModels.Client client)
         {
             var uris = client.RedirectUris.Select(o => new Entity.ClientUri

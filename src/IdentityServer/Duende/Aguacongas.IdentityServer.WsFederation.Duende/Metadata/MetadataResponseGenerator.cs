@@ -17,7 +17,6 @@ namespace Aguacongas.IdentityServer.WsFederation
         private readonly ISigningCredentialStore _keys;
         private readonly IOptions<WsFederationOptions> _options;
 
-#if DUENDE
         private readonly IIssuerNameService _issuerNameService;
 
         /// <summary>
@@ -32,22 +31,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             _issuerNameService = issuerNameService;
             _options = options;
         }
-#else
-        private readonly IHttpContextAccessor _contextAccessor;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataResponseGenerator"/> class.
-        /// </summary>
-        /// <param name="contextAccessor">The context accessor.</param>
-        /// <param name="keys">The keys.</param>
-        /// <param name="options">WS-Federation options</param>
-        public MetadataResponseGenerator(IHttpContextAccessor contextAccessor, ISigningCredentialStore keys, IOptions<WsFederationOptions> options)
-        {
-            _keys = keys;
-            _contextAccessor = contextAccessor;
-            _options = options;
-        }
-#endif
         /// <summary>
         /// Generates the asynchronous.
         /// </summary>
@@ -58,11 +42,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             var credentials = await _keys.GetSigningCredentialsAsync().ConfigureAwait(false);
             var key = credentials.Key;
             var keyInfo = new KeyInfo(key.GetX509Certificate(_keys));
-#if DUENDE
             var issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false);
-#else
-            var issuer = _contextAccessor.HttpContext.GetIdentityServerIssuerUri();
-#endif
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256Signature, SecurityAlgorithms.Sha256Digest);
             var config = new WsFederationConfiguration()
             {

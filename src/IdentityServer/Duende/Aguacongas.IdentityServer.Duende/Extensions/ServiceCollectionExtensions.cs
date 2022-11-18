@@ -61,10 +61,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IRefreshTokenStore>(p => p.GetRequiredService<RefreshTokenStore>())
                 .AddTransient<IReferenceTokenStore>(p => p.GetRequiredService<ReferenceTokenStore>())
                 .AddTransient<IUserConsentStore>(p => p.GetRequiredService<UserConsentStore>())
-#if DUENDE
                 .AddTransient<BackChannelAuthenticationRequestStore>()
                 .AddTransient<IBackChannelAuthenticationRequestStore>(p => p.GetRequiredService<BackChannelAuthenticationRequestStore>())
-#endif
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
                 .AddTransient<IPersistedGrantStore, PersistedGrantStore>();
         }
@@ -72,7 +70,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTokenExchange(this IServiceCollection services)
         => services.AddTransient<IExtensionGrantValidator, TokenExchangeGrantValidator>();
 
-#if DUENDE
         public static IServiceCollection AddCibaServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<BackchannelAuthenticationUserNotificationServiceOptions>(configuration)
@@ -120,6 +117,5 @@ namespace Microsoft.Extensions.DependencyInjection
             
             return Type.GetType(settings.ServiceType, true);
         }
-#endif
     }
 }

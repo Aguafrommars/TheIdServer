@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using ClaimProperties = Microsoft.IdentityModel.Tokens.Saml.ClaimProperties;
 using ISValidation = Duende.IdentityServer.Validation;
+using IsWsFederationConstant = Duende.IdentityServer.WsFederation.WsFederationConstants;
 
 namespace Aguacongas.IdentityServer.WsFederation
 {
@@ -28,17 +29,12 @@ namespace Aguacongas.IdentityServer.WsFederation
     public class SignInResponseGenerator : ISignInResponseGenerator    {
         private static IEnumerable<string> AllClaimTypes { get; } = typeof(ClaimValueTypes).GetFields().Select(f => f.GetValue(null) as string);
 
-#if DUENDE
         private readonly IIssuerNameService _issuerNameService;
-#else
-        private readonly IHttpContextAccessor _contextAccessor;
-#endif
         private readonly IProfileService _profile;
         private readonly ISigningCredentialStore _keys;
         private readonly IResourceStore _resources;
         private readonly ILogger<SignInResponseGenerator> _logger;
 
-#if DUENDE
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInResponseGenerator"/> class.
         /// </summary>
@@ -60,29 +56,7 @@ namespace Aguacongas.IdentityServer.WsFederation
             _resources = resources ?? throw new ArgumentNullException(nameof(resources));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-#else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignInResponseGenerator"/> class.
-        /// </summary>
-        /// <param name="contextAccessor">The context accessor.</param>
-        /// <param name="profile">The profile.</param>
-        /// <param name="keys">The keys.</param>
-        /// <param name="resources">The resources.</param>
-        /// <param name="logger">The logger.</param>
-        public SignInResponseGenerator(
-            IHttpContextAccessor contextAccessor,
-            IProfileService profile,
-            ISigningCredentialStore keys,
-            IResourceStore resources,
-            ILogger<SignInResponseGenerator> logger)
-        {
-            _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
-            _profile = profile ?? throw new ArgumentNullException(nameof(profile));
-            _keys = keys ?? throw new ArgumentNullException(nameof(keys));
-            _resources = resources ?? throw new ArgumentNullException(nameof(resources));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-#endif
+
         /// <summary>
         /// Generates the response asynchronous.
         /// </summary>
@@ -153,7 +127,7 @@ namespace Aguacongas.IdentityServer.WsFederation
                     AddMappedClaim(relyParty, outboundClaims, mapping, claim);
                 }
                 else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri _) ||
-                    relyParty.TokenType != Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11)
+                    relyParty.TokenType != IsWsFederationConstant.TokenTypes.Saml11TokenProfile11)
                 {
                     outboundClaims.Add(claim);
                 }
@@ -214,11 +188,7 @@ namespace Aguacongas.IdentityServer.WsFederation
                 Expires = DateTime.UtcNow.AddSeconds(result.Client.IdentityTokenLifetime),
                 SigningCredentials = new SigningCredentials(x509Key, relyingParty.SignatureAlgorithm, relyingParty.DigestAlgorithm),
                 Subject = outgoingSubject,
-#if DUENDE
                 Issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false),
-#else
-                Issuer = _contextAccessor.HttpContext.GetIdentityServerIssuerUri(),
-#endif
             };
 
             if (result.RelyingParty.EncryptionCertificate != null)
@@ -259,8 +229,8 @@ namespace Aguacongas.IdentityServer.WsFederation
         {
             return tokenType switch
             {
-                Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml11TokenProfile11 => new SamlSecurityTokenHandler(),
-                Duende.IdentityServer.WsFederation.WsFederationConstants.TokenTypes.Saml2TokenProfile11 => new Saml2SecurityTokenHandler(),
+                IsWsFederationConstant.TokenTypes.Saml11TokenProfile11 => new SamlSecurityTokenHandler(),
+                IsWsFederationConstant.TokenTypes.Saml2TokenProfile11 => new Saml2SecurityTokenHandler(),
                 _ => throw new NotImplementedException($"TokenType: {tokenType} not implemented"),
             };
         }

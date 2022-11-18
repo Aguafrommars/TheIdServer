@@ -30,11 +30,7 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
                     configureServices?.Invoke(services);
 
                     var configurationManager = new ConfigurationManager();
-#if DUENDE
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
-#else
-                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.IS4\appsettings.json"));
-#endif
                     configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
                     if (configurationOverrides != null)
                     {

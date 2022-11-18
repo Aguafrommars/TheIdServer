@@ -58,14 +58,10 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             dataProtectorMock.Setup(m => m.Unprotect(It.IsAny<byte[]>())).Returns<byte[]>(b => b);
             dataProtectorProviderMock.Setup(m => m.CreateProtector(It.IsAny<string>())).Returns(dataProtectorMock.Object);
 
-#if DUENDE
             var serializer = new PersistentGrantSerializer(new PersistentGrantOptions
             {
                 DataProtectData = true
             }, dataProtectorProviderMock.Object);
-#else
-            var serializer = new PersistentGrantSerializer();
-#endif
             var localizerMock = new Mock<IStringLocalizer<PersistedGrantService>>();
             var loggerMock = new Mock<ILogger<PersistedGrantService>>();
 
@@ -97,21 +93,11 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                     })
                 } }
             });
-#if DUENDE
             var refreshToken = new RefreshToken();
             refreshToken.SetAccessToken(new Token
             {
                 Claims = Array.Empty<Claim>()
             });
-#else
-            var refreshToken = new RefreshToken
-            {
-                        AccessToken = new Token
-                        {
-                            Claims = Array.Empty<Claim>()
-                        }
-            };
-#endif
             refreshTokenStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Entity.RefreshToken>
             {
                 Items = new[] { new Entity.RefreshToken(){

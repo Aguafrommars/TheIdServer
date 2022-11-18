@@ -110,11 +110,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                    CreationTime = t.CreationTime,
                    Description = t.Description,
                    Expiration = t.CreationTime.AddSeconds(t.Lifetime),
-#if DUENDE
                    Scopes = t.AuthorizedScopes,
-#else
-                   Scopes = t.Scopes,
-#endif
                    SubjectId = subjectId
                }));
 

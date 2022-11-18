@@ -14,26 +14,20 @@ namespace Aguacongas.IdentityServer.Store
 {
     public class PersistedGrantStore : IPersistedGrantStore
     {
-#if DUENDE
         private readonly IAdminStore<Entity.BackChannelAuthenticationRequest> _backChannelAuthenticationRequestStore;
-#endif
         private readonly IAdminStore<Entity.AuthorizationCode> _authorizationCodeStore;
         private readonly IAdminStore<ReferenceToken> _referenceTokenStore;
         private readonly IAdminStore<Entity.RefreshToken> _refreshTokenStore;
         private readonly IAdminStore<UserConsent> _userConsentStore;
 
         public PersistedGrantStore(
-#if DUENDE
             IAdminStore<Entity.BackChannelAuthenticationRequest> backChannelAuthenticationRequestStore,
-#endif
             IAdminStore<Entity.AuthorizationCode> authorizationCodeStore,
             IAdminStore<ReferenceToken> referenceTokenStore,
             IAdminStore<Entity.RefreshToken> refreshToken,
             IAdminStore<UserConsent> userConsentStore)
         {
-#if DUENDE
             _backChannelAuthenticationRequestStore = backChannelAuthenticationRequestStore ?? throw new ArgumentNullException(nameof(backChannelAuthenticationRequestStore));
-#endif
             _authorizationCodeStore = authorizationCodeStore ?? throw new ArgumentNullException(nameof(authorizationCodeStore));
             _referenceTokenStore = referenceTokenStore ?? throw new ArgumentNullException(nameof(referenceTokenStore));
             _refreshTokenStore = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
@@ -73,11 +67,9 @@ namespace Aguacongas.IdentityServer.Store
                     case PersistedGrantTypes.UserConsent:
                         await DeleteAllAsync(query, _userConsentStore).ConfigureAwait(false);
                         break;
-#if DUENDE
                     case PersistedGrantTypes.BackChannelAuthenticationRequest:
                         await DeleteAllAsync(query, _backChannelAuthenticationRequestStore).ConfigureAwait(false);
                         break;
-#endif
                     default: throw new InvalidOperationException($"Grant type '{type}' unsupported.");
                 }
             }
@@ -139,13 +131,10 @@ namespace Aguacongas.IdentityServer.Store
                 PersistedGrantTypes.ReferenceToken,
                 PersistedGrantTypes.RefreshToken,
                 PersistedGrantTypes.UserConsent,
-#if DUENDE
                 PersistedGrantTypes.BackChannelAuthenticationRequest
-#endif
             };
 
             var type = filter.Type;
-#if (DUENDE)
             if (filter.Types is not null)
             {
                 var types = filter.Types.ToList();
@@ -156,7 +145,6 @@ namespace Aguacongas.IdentityServer.Store
                 }
                 responseList = responseList.Where(gt => types.Contains(gt)).ToList();
             }
-#endif
 
             if (type is not null)
             {

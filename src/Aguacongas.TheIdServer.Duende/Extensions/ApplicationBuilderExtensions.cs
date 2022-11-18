@@ -112,7 +112,6 @@ namespace Microsoft.AspNetCore.Builder
                })
                 .UseRouting();
 
-#if DUENDE
             app.UseMiddleware<BaseUrlMiddleware>()
                 .ConfigureCors();
 
@@ -120,9 +119,6 @@ namespace Microsoft.AspNetCore.Builder
 
             app.UseMiddleware<MutualTlsEndpointMiddleware>()
                .UseMiddleware<IdentityServerMiddleware>();
-#else
-            app.UseIdentityServer();
-#endif
 
             if (!isProxy)
             {
