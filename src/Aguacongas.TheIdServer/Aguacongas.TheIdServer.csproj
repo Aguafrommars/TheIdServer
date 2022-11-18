@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>aspnetcore;identityserver4;oidc,oauth;authentication;security</PackageTags>
-		<Description>OpenID/Connect , OAuth and WS-Federation server base on IdentityServer4.</Description>
+		<Description>OpenID/Connect , OAuth and WS-Federation server base on Duende IdentityServer.</Description>
 		<DebugType>Full</DebugType>
 		<UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
 		<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>

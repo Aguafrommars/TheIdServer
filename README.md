@@ -1,14 +1,13 @@
 # TheIdServer
 
-[OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server based on [IdentityServer4](https://identityserver4.readthedocs.io/en/latest/) or [Duende IdentityServer](https://duendesoftware.com/products/identityserver).
+[OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/) and [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) server based on [Duende IdentityServer](https://duendesoftware.com/products/identityserver).
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver) [![Docker](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml/badge.svg)](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
 
 
-### Try it now at [https://theidserver.herokuapp.com/](https://theidserver.herokuapp.com/) for the IdentityServer4 version  
-### Or [https://theidserver-duende.herokuapp.com/](https://theidserver-duende.herokuapp.com/) for the Duende IdentityServer version
+### Try it now at [https://theidserver-duende.herokuapp.com/](https://theidserver-duende.herokuapp.com/)
 
 **login**: alice  
 **pwd**: Pass123$
@@ -67,7 +66,6 @@ Choose your favorite:
   
 ## Setup
 
-* Read the [IS4 server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.IS4/README.md) to configure IdentityServer4 version.  
 * Read the [Duende server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md) to configure Duende IdentityServer version.  
 **You'll need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing) for a commercial use of this version.**
 * Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
@@ -78,7 +76,6 @@ You can build the solution with Visual Studio or use the `dotnet build` command.
 To build docker images launch at solution root: 
 
 ```bash
-docker build -t aguacongas/theidserver:dev -f "./src/Aguacongas.TheIdServer.IS4/Dockerfile" .
 docker build -t aguacongas/theidserver.duende:dev -f "./src/Aguacongas.TheIdServer.Duende/Dockerfile" .
 docker build -t aguacongas/theidserverapp:dev -f "./src/Aguacongas.TheIdServer.BlazorApp/Dockerfile" .
 ```
@@ -99,3 +96,7 @@ Choose your favorite:
 * [github sponsor](https://github.com/sponsors/aguacongas/sponsorships?sponsor=aguacongas&tier_id=151490)
 * [issuehunts](https://issuehunt.io/r/Aguafrommars/TheIdServer/issues/170)
 * [liberapay](https://liberapay.com/aguacongas)
+
+## IdentityServer4 end of support
+
+The old IS4 version has been remove from the solution as [IS4 reach is end of support](https://github.com/IdentityServer/IdentityServer4#important-update).

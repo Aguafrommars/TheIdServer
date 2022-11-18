@@ -1,9 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -16,16 +15,12 @@ namespace Microsoft.AspNetCore.Builder
                 .AddAuthorization()
                 .AddControllers();
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = "https://localhost:5443";
-                    options.RequireHttpsMetadata = false;
-                    options.SupportedTokens = SupportedTokens.Both;
-                    options.ApiName = "api1";
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(10);
-                    options.LegacyAudienceValidation = true;
+                    options.Audience = "api1";
                 });
 
             return webApplicationBuilder;

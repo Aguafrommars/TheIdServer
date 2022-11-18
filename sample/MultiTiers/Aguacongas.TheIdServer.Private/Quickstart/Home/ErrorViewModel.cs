@@ -1,6 +1,6 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
-using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 
 namespace IdentityServerHost.Quickstart.UI
 {

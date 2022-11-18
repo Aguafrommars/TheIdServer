@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace IdentityServer4.Quickstart.UI
+namespace Duende.IdentityServer.Quickstart.UI
 {
     /// <summary>
     /// Trowed when user click on malicious link

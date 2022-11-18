@@ -8,11 +8,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,13 +22,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<NoWarn>1701;1702;EF1001</NoWarn>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\DbContextOptionsBuilderExtensionsTest.cs" Link="DbContextOptionsBuilderExtensionsTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\ExternalClaimsTransformerTest.cs" Link="ExternalClaimsTransformerTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\Services\KeyStoreTest.cs" Link="Services\KeyStoreTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\StartupTest.cs" Link="StartupTest.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />

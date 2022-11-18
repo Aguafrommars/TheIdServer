@@ -11,15 +11,9 @@
 	  <PackageTags>theidserver;duende.identityserver;ef;administration</PackageTags>	  
 	  <PackageIcon>package-icon.png</PackageIcon>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		
 	  <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Shared\DynamicAuthenticationBuilderExtensions.cs" Link="DynamicAuthenticationBuilderExtensions.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Shared\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />

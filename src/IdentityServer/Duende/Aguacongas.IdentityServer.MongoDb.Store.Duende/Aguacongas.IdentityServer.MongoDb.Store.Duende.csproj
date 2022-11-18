@@ -16,11 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Shared\DynamicAuthenticationBuilderExtensions.cs" Link="DynamicAuthenticationBuilderExtensions.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Shared\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.Duende\Aguacongas.IdentityServer.Duende.csproj" />
   </ItemGroup>

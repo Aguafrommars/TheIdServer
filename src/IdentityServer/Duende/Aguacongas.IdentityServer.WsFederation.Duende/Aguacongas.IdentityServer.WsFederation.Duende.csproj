@@ -27,28 +27,12 @@
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Extensions\MvcBuilderExtensions.cs" Link="Extensions\MvcBuilderExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Extensions\SecurityKeyExtensions.cs" Link="Extensions\SecurityKeyExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Extensions\ServiceCollectionExtensions.cs" Link="Extensions\ServiceCollectionExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Metadata\MetadataResponseGenerator.cs" Link="Metadata\MetadataResponseGenerator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Signin\ISignInResponseGenerator.cs" Link="Signin\ISignInResponseGenerator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Signin\RequestSecurityTokenResponse.cs" Link="Signin\RequestSecurityTokenResponse.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Signin\SignInResponseGenerator.cs" Link="Signin\SignInResponseGenerator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\ISignInValidator.cs" Link="Validation\ISignInValidator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\SignInValidationResult.cs" Link="Validation\SignInValidationResult.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\Validation\SignInValidator.cs" Link="Validation\SignInValidator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationController.cs" Link="WsFederationController.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationEndSessionRequestValidator.cs" Link="WsFederationEndSessionRequestValidator.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.WsFederation.Shared\WsFederationService.cs" Link="WsFederationService.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.IdentityServer.WsFederation\Aguacongas.IdentityServer.WsFederation.csproj" />
