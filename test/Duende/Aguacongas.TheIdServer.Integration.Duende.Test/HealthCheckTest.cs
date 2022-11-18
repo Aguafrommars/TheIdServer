@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.TheIdServer.IntegrationTest.Shared
+namespace Aguacongas.TheIdServer.Duende.IntegrationTest
 {
     [Collection(BlazorAppCollection.Name)]
     public class HealthCheckTest

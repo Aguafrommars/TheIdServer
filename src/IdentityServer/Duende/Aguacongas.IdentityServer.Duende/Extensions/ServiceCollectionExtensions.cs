@@ -2,7 +2,7 @@
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
-using Aguacongas.IdentityServer.Shared.Validators;
+using Aguacongas.IdentityServer.Duende.Validators;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.IdentityServer.Services;

@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Test.Shared.Store
+namespace Aguacongas.IdentityServer.Duende.Test.Store
 {
     public class ResourceStoreTest
     {

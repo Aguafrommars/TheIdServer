@@ -9,7 +9,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Admin.Test.Shared.Services.WindowsAuthentication
+namespace Aguacongas.IdentityServer.Admin.Duende.Test.Services.WindowsAuthentication
 {
     public class WindowsHandlerTest
     {

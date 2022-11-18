@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Admin.Test.Shared.Services.WindowsAuthentication.Extensions
+namespace Aguacongas.IdentityServer.Duende.Test.Services.WindowsAuthentication.Extensions
 {
     public class AuthenticationBuilderExtensions
     {

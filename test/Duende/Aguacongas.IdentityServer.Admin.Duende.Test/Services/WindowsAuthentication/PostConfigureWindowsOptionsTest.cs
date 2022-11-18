@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Admin.Test.Shared.Services.WindowsAuthentication
+namespace Aguacongas.IdentityServer.Admin.Duende.Test.Services.WindowsAuthentication
 {
     public class PostConfigureWindowsOptionsTest
     {

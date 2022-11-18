@@ -9,7 +9,7 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using IdentityModel;
 
-namespace Aguacongas.IdentityServer.Shared.Validators
+namespace Aguacongas.IdentityServer.Duende.Validators
 {
     public class TokenExchangeGrantValidator : IExtensionGrantValidator
     {

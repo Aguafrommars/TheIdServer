@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using SettingsPage = Aguacongas.TheIdServer.BlazorApp.Pages.Settings.Settings;
 
-namespace Aguacongas.TheIdServer.IntegrationTest.Shared.BlazorApp.Pages
+namespace Aguacongas.TheIdServer.Duende.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
     public class SettingsTest : TestContext

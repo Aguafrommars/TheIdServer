@@ -1,4 +1,4 @@
-﻿using Aguacongas.IdentityServer.Shared.Validators;
+﻿using Aguacongas.IdentityServer.Duende.Validators;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 using IdentityModel;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Test.Shared.Validators
+namespace Aguacongas.IdentityServer.Duende.Test.Validators
 {
     public class TokenExchangeGrantValidatorTest
     {

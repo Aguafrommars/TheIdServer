@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Duende.IdentityServer.IdentityServerConstants;
 
-namespace Aguacongas.IdentityServer.Test.Shared.Store
+namespace Aguacongas.IdentityServer.Duende.Test.Store
 {
     public class PersistedGrantStoreTest
     {
