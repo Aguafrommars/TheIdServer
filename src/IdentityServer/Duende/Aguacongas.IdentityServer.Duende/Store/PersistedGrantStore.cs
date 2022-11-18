@@ -101,7 +101,6 @@ namespace Aguacongas.IdentityServer.Store
             }
 
             var clientId = filter.ClientId;
-#if (DUENDE)
             if (filter.ClientIds is not null)
             {
                 var clientIds = filter.ClientIds.ToList();
@@ -114,7 +113,6 @@ namespace Aguacongas.IdentityServer.Store
                 var clientIdsFilter = string.Join(" or ", clientIds.Select(id => $"{nameof(IGrant.ClientId)} eq '{id}'"));
                 filterList.Add($"({clientIdsFilter})");
             }
-#endif
             if (clientId is not null)
             {
                 filterList.Add($"{nameof(IGrant.ClientId)} eq '{filter.ClientId}'");

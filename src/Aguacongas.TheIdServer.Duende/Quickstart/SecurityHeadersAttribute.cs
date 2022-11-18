@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.UI
                 builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
                 builder.Append("style-src 'self' ");
                 builder.Append(SiteOptions.BOOTSTRAPCSSURL);
-                builder.Append(";");
+                builder.Append(';');
 
                 var autorizeScriptsUrl = new[]
                 {

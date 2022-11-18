@@ -67,7 +67,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await cultureInput.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "fr-FR" }).ConfigureAwait(false);
 
             var items = component.FindAll("button.dropdown-item");
-            dropDownItem = items.Last();
+            dropDownItem = items[items.Count - 1];
             Assert.NotNull(dropDownItem);
 
             await dropDownItem.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);

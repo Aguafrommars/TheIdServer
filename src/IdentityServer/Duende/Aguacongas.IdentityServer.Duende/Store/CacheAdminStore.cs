@@ -17,25 +17,16 @@ namespace Aguacongas.IdentityServer.Store
         private readonly TStore _parent;
         private readonly IFlushableCache<TEntity> _entityCache;
         private readonly IFlushableCache<PageResponse<TEntity>> _responseCache;
-#if !DUENDE
-        private readonly ILogger<CacheAdminStore<TStore, TEntity>> _logger;
-#endif
         private readonly Configuration.IdentityServerOptions _options;
 
         public CacheAdminStore(TStore parent,
             IFlushableCache<TEntity> entityCache,
             IFlushableCache<PageResponse<TEntity>> responseCache,
-#if !DUENDE
-            ILogger<CacheAdminStore<TStore, TEntity>> logger, 
-#endif
             Configuration.IdentityServerOptions options)
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _entityCache = entityCache ?? throw new ArgumentNullException(nameof(entityCache));
             _responseCache = responseCache ?? throw new ArgumentNullException(nameof(responseCache));
-#if !DUENDE
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-#endif
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 

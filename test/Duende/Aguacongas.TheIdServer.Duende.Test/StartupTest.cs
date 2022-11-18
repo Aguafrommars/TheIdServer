@@ -22,7 +22,6 @@ using Moq;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 using Auth = Aguacongas.TheIdServer.Authentication;
@@ -98,78 +97,6 @@ namespace Aguacongas.TheIdServer.Test
             var hubLifetimeManager = provider.GetServices<RedisHubLifetimeManager<ProviderHub>>();
             Assert.NotNull(hubLifetimeManager);
         }
-
-#if !DUENDE
-        [Fact(Skip = "fail")]
-        public void Configure_should_configure_initial_data()
-        {
-            var configuration = new ConfigurationManager();
-            configuration.AddInMemoryCollection(new Dictionary<string, string>
-            {
-                ["ConnectionStrings:DefaultConnection"] = "Data source=./db.sql",
-                ["DbType"] = "Sqlite",
-                ["Migrate"] = "true",
-                ["Seed"] = "true",
-                ["SeedProvider"] = "true"
-            });
-            var environementMock = new Mock<IWebHostEnvironment>();
-            var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();
-            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<SchemeDefinition>().AsQueryable()).Verifiable();
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            using var host = WebHost.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddTheIdServer(configuration);
-                    services.AddTransient(p => storeMock.Object);
-                })
-                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
-                .UseSerilog((hostingContext, configuration) =>
-                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
-                .Build();
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            host.Start();
-
-            storeMock.Verify();
-        }
-
-        [Fact(Skip = "fail")]
-        public void Configure_should_load_provider_configuration()
-        {
-            var configuration = new ConfigurationManager();
-            configuration.AddInMemoryCollection(new Dictionary<string, string>
-            {
-                ["PrivateServerAuthentication:ApiUrl"] = "https://localhost:7443/api",
-                ["Proxy"] = "true"
-            });
-            var environementMock = new Mock<IWebHostEnvironment>();
-            var storeMock = new Mock<IDynamicProviderStore<Auth.SchemeDefinition>>();
-            storeMock.SetupGet(m => m.SchemeDefinitions).Returns(Array.Empty<Auth.SchemeDefinition>().AsQueryable()).Verifiable();
-            var culturestoreMock = new Mock<IAdminStore<Culture>>();
-            culturestoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<Culture>
-            {
-                Items = Array.Empty<Culture>()
-            });
-#pragma warning disable CS0618 // Type or member is obsolete
-            using var host = WebHost.CreateDefaultBuilder()
-                .ConfigureServices(services => 
-                {
-                    services.AddTheIdServer(configuration);
-                    services.AddTransient(p => storeMock.Object);
-                    services.AddTransient(p => culturestoreMock.Object);
-                })
-                .Configure((context, builder) => builder.UseTheIdServer(context.HostingEnvironment, context.Configuration))
-                .UseSerilog((hostingContext, configuration) =>
-                        configuration.ReadFrom.Configuration(hostingContext.Configuration))
-                .Build();
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            host.Start();
-
-            storeMock.Verify();
-        }
-#endif
 
         [Theory]
         [InlineData(DbTypes.InMemory)]
