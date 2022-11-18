@@ -27,6 +27,8 @@ namespace Aguacongas.IdentityServer.Admin.Duende.Test.Services.WindowsAuthentica
             {
                 LdapEnabled = false
             });
+
+            Assert.True(true);
         }
     }
 }

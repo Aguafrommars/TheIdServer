@@ -118,7 +118,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(rows);
 
-            var lastRow = rows.Last();
+            var lastRow = rows[rows.Count - 1];
             var inputList = lastRow.QuerySelectorAll("input");
 
             Assert.NotEmpty(inputList);
@@ -130,7 +130,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             }).ConfigureAwait(false);
 
             rows = component.FindAll("#claims tr");
-            lastRow = rows.Last();
+            lastRow = rows[rows.Count - 1];
             inputList = lastRow.QuerySelectorAll("input");
 
             await inputList.Last().ChangeAsync(new ChangeEventArgs

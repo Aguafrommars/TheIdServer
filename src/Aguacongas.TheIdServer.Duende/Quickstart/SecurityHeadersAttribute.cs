@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
@@ -28,12 +29,15 @@ namespace Aguacongas.TheIdServer.UI
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var builder = new StringBuilder("default-src 'self'");
                 builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
-                builder.Append("style-src 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css;");
+                builder.Append("style-src 'self' ");
+                builder.Append(SiteOptions.BOOTSTRAPCSSURL);
+                builder.Append(";");
+
                 var autorizeScriptsUrl = new[]
                 {
                     "'sha256-vwa3kDBkD7mP1Y0njpcyAH7GXn3/HkE72HGlVShVMUg='",
-                    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
-                    "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js",
+                    SiteOptions.BOOTSTRAPJSURL,
+                    SiteOptions.JQUERYURL,
                 };
                 builder.Append("script-src 'self'");
                 foreach(var url in autorizeScriptsUrl)
@@ -44,8 +48,6 @@ namespace Aguacongas.TheIdServer.UI
 #if DEBUG
                 builder.Append("; connect-src *");
 #endif
-                // also an example if you need client images to be displayed from twitter
-                // builder.Append(";img-src 'self' https://pbs.twimg.com;");
                 var csp = builder.ToString();
                 
                 // once for standards compliant browsers

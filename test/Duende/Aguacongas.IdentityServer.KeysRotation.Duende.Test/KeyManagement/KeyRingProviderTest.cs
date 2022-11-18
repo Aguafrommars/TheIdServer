@@ -1,6 +1,7 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.KeysRotation.Duende.Test;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -48,7 +49,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
         }
 
-        [Fact(Skip = "Crash often on CI")]
+        [SkipCiFact]
         public async Task GetCurrentKeyRing_should_not_return_revoked_keys()
         {
             var certificate = new X509Certificate2("TestCert1.pfx", "password");
@@ -189,7 +190,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var expirationCts2 = new CancellationTokenSource();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
-            var allKeys1 = new IKey[0];
+            var allKeys1 = Array.Empty<IKey>();
 
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
             var key2 = CreateKey("2016-03-01 00:00:00Z", "2017-03-01 00:00:00Z");
@@ -239,7 +240,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var expirationCts2 = new CancellationTokenSource();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
-            var allKeys = new IKey[0];
+            var allKeys = Array.Empty<IKey>();
 
             var newlyCreatedKey = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
 
@@ -285,7 +286,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var callSequence = new List<string>();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
-            var allKeys = new IKey[0];
+            var allKeys = Array.Empty<IKey>();
 
             var keyRingProvider = SetupCreateCacheableKeyRingTestAndCreateKeyManager(
                 callSequence: callSequence,

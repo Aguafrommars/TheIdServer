@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Integration.Duende.Test;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer;
@@ -478,7 +479,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             Assert.Contains("myorg.com", content);
         }
 
-        [Fact(Skip = "Fail on appveyor")]
+        [SkipCiFact]
         public async Task Index_should_return_signin_document_for_saml2_token_type_when_user_found()
         {
             var sub = Guid.NewGuid().ToString();

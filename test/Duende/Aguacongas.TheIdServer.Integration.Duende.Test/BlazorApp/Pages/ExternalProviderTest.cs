@@ -322,7 +322,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotEmpty(divs);
 
-            await divs.Last().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await divs[divs.Count - 1].ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
         }
 
         [Fact]

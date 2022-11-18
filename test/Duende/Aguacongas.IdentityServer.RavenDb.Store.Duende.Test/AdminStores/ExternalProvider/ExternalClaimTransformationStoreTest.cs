@@ -134,10 +134,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores.ExternalProvi
             Assert.Null(await s2.LoadAsync<Entity.ExternalClaimTransformation>($"{typeof(Entity.ExternalClaimTransformation).Name.ToLowerInvariant()}/{entity.Id}"));
         }
 
-        private IAdminStore<Entity.ExternalClaimTransformation> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.ExternalClaimTransformation>> logger)
+        private static IAdminStore<Entity.ExternalClaimTransformation> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<Entity.ExternalClaimTransformation>> logger)
             => new ExternalClaimTransformationStore(new ScopedAsynDocumentcSession(session), logger);
 
-        private ICollection<Entity.ExternalClaimTransformation> GetCollection(Entity.ExternalProvider provider)
+        private static ICollection<Entity.ExternalClaimTransformation> GetCollection(Entity.ExternalProvider provider)
         {
             provider.ClaimTransformations = provider.ClaimTransformations ?? new List<Entity.ExternalClaimTransformation>();
             return provider.ClaimTransformations;

@@ -134,10 +134,10 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test.AdminStores
             Assert.Null(await s2.LoadAsync<LocalizedResource>($"{typeof(LocalizedResource).Name.ToLowerInvariant()}/{entity.Id}"));
         }
 
-        private IAdminStore<LocalizedResource> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<LocalizedResource>> logger)
+        private static IAdminStore<LocalizedResource> CreateSut(IAsyncDocumentSession session, ILogger<AdminStore<LocalizedResource>> logger)
             => new LocalizedResourceStore(new ScopedAsynDocumentcSession(session), logger);
 
-        private ICollection<LocalizedResource> GetCollection(Culture culture)
+        private static ICollection<LocalizedResource> GetCollection(Culture culture)
         {
             culture.Resources = culture.Resources ?? new List<LocalizedResource>();
             return culture.Resources;

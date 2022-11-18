@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Integration.Duende.Test;
 using Aguacongas.TheIdServer.Models;
 using Bunit;
 using Microsoft.AspNetCore.Components;
@@ -273,7 +274,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(rows);
 
-            var lastRow = rows.Last();
+            var lastRow = rows[rows.Count - 1];
             var inputList = lastRow.QuerySelectorAll("input");
 
             Assert.NotEmpty(inputList);
@@ -282,7 +283,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await inputList.First().ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
 
             rows = component.FindAll("#claims tr");
-            lastRow = rows.Last();
+            lastRow = rows[rows.Count - 1];
             inputList = lastRow.QuerySelectorAll("input");
 
             await inputList.Last().ChangeAsync(new ChangeEventArgs { Value = expected }).ConfigureAwait(false);
@@ -345,7 +346,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
         }
 
-        [Fact(Skip = "Fail to often on AppVeyor")]
+        [SkipCiFact]
         public async Task DeleteUserClaim_should_remove_claim_from_user()
         {
             var tuple = await SetupPage();

@@ -34,7 +34,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var inputs = component.FindAll("input")
                 .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
-            Assert.All(inputs, input => input.Attributes.Any(a => a.Name == "disabled"));
+            Assert.All(inputs, input => Assert.Contains(input.Attributes, a => a.Name == "disabled"));
         }
 
         [Fact]

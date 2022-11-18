@@ -20,7 +20,12 @@ namespace Aguacongas.TheIdServer.Identity.IntegrationTest
     {
         private readonly TheIdServerTestFixture _fixture;
 
-        public UserStoreTest(ITestOutputHelper testOutputHelper, TheIdServerTestFixture fixture)
+        public UserStoreTest(TheIdServerTestFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
+        public UserStoreTest(TheIdServerTestFixture fixture, ITestOutputHelper testOutputHelper)
         {
             _fixture = fixture;
             fixture.TestOutputHelper = testOutputHelper;
