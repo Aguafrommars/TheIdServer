@@ -17,12 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\AuthorizationCodeStoreTest.cs" Link="AuthorizationCodeStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\CorsPolicyServiceTest.cs" Link="CorsPolicyServiceTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\DeviceFlowStoreTest.cs" Link="DeviceFlowStoreTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	    <PrivateAssets>all</PrivateAssets>

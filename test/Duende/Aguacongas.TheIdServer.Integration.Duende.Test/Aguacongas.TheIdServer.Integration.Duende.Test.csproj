@@ -18,42 +18,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ApiScopesTest.cs" Link="BlazorApp\Pages\ApiScopesTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ApiScopeTest.cs" Link="BlazorApp\Pages\ApiScopeTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ApisTest.cs" Link="BlazorApp\Pages\ApisTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ApiTest.cs" Link="BlazorApp\Pages\ApiTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ClientsTest.cs" Link="BlazorApp\Pages\ClientsTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ClientTest.cs" Link="BlazorApp\Pages\ClientTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\CulturesTest.cs" Link="BlazorApp\Pages\CulturesTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\CultureTest.cs" Link="BlazorApp\Pages\CultureTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\EntitiesPageTestBase.cs" Link="BlazorApp\Pages\EntitiesPageTestBase.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\EntityPageTestBase.cs" Link="BlazorApp\Pages\EntityPageTestBase.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ExternalProvidersTest.cs" Link="BlazorApp\Pages\ExternalProvidersTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ExternalProviderTest.cs" Link="BlazorApp\Pages\ExternalProviderTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\IdentitiesTest.cs" Link="BlazorApp\Pages\IdentitiesTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\IdentityTest.cs" Link="BlazorApp\Pages\IdentityTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\ImportTest.cs" Link="BlazorApp\Pages\ImportTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\KeysTests.cs" Link="BlazorApp\Pages\KeysTests.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RelyingPartiesTest.cs" Link="BlazorApp\Pages\RelyingPartiesTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RelyingPartyTest.cs" Link="BlazorApp\Pages\RelyingPartyTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RolesTest.cs" Link="BlazorApp\Pages\RolesTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\RoleTest.cs" Link="BlazorApp\Pages\RoleTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\SettingsTest.cs" Link="BlazorApp\Pages\SettingsTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UsersTest.cs" Link="BlazorApp\Pages\UsersTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\BlazorApp\Pages\UserTest.cs" Link="BlazorApp\Pages\UserTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\RegisterControllerTest.cs" Link="Controllers\RegisterControllerTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\Controlers\WsFederationControllerTest.cs" Link="Controllers\WsFederationControllerTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\HealthCheckTest.cs" Link="HealthCheckTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\PrometheusEndpointTest.cs" Link="PrometheusEndpointTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\StartupTest.cs" Link="StartupTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestUserService.cs" Link="TestUserService.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TestUtils.cs" Link="TestUtils.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.IntegrationTest.Shared\TheIdServerFactory.cs" Link="BlazorApp\TheIdServerFactory.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="bunit" Version="1.12.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0" />

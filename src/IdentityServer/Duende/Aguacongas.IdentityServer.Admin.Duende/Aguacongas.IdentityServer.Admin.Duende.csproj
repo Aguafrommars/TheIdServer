@@ -33,26 +33,6 @@
 		<NoWarn>1701;1702;AD0001</NoWarn>
 	</PropertyGroup>
 
-
-	<ItemGroup>
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Extensions\EndpointRoutingApplicationBuilderExtensions.cs" Link="Extensions\EndpointRoutingApplicationBuilderExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Extensions\IdentityServerBuilderExtensions.cs" Link="Extensions\IdentityServerBuilderExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Extensions\MvcBuilderExtensions.cs" Link="Extensions\MvcBuilderExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\GenericControllerFeatureProvider.cs" Link="GenericControllerFeatureProvider.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Models\ClientRegisteration.cs" Link="Models\ClientRegisteration.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\RegisterController.cs" Link="RegisterController.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ClientRegisterationConverter.cs" Link="Services\ClientRegisterationConverter.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CreatePersonalAccessTokenService.cs" Link="Services\CreatePersonalAccessTokenService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\CustomJwtRequestValidator.cs" Link="Services\CustomJwtRequestValidator.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\IRegisterClientService.cs" Link="Services\IRegisterClientService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\PersistedGrantService.cs" Link="Services\PersistedGrantService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ProfileService.cs" Link="Services\ProfileService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ProxyClaimsProvider.cs" Link="Services\ProxyClaimsProvider.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\ProxyProfilService.cs" Link="Services\ProxyProfilService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\RegisterClientService.cs" Link="Services\RegisterClientService.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Shared\Services\SchemeChangeSubscriber.cs" Link="Services\SchemeChangeSubscriber.cs" />
-	</ItemGroup>
-
 	<ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.Duende\Aguacongas.IdentityServer.Duende.csproj" />

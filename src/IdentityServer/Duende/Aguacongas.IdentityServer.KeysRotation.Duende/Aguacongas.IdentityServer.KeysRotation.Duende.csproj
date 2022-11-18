@@ -26,34 +26,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaEncryptor.cs" Link="ECDsaEncryptor.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaEncryptorConfiguration.cs" Link="ECDsaEncryptorConfiguration.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaEncryptorDescriptor.cs" Link="ECDsaEncryptorDescriptor.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaEncryptorDescriptorDeserializer.cs" Link="ECDsaEncryptorDescriptorDeserializer.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaEncryptorFactory.cs" Link="ECDsaEncryptorFactory.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ECDsaKeyInfo.cs" Link="ECDsaKeyInfo.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\Extensions\IIdentityServerBuilderExtensions.cs" Link="Extensions\IIdentityServerBuilderExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\Extensions\KeyRotationBuilderExtensions.cs" Link="Extensions\KeyRotationBuilderExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\Extensions\SecretExtensions.cs" Link="Extensions\SecretExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\Extensions\ServiceCollectionExtensions.cs" Link="Extensions\ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\IKeyRingStores.cs" Link="IKeyRingStores.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ISigningAlgortithmEncryptor.cs" Link="ISigningAlgortithmEncryptor.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyManagement\DefaultKeyResolver.cs" Link="KeyManagement\DefaultKeyResolver.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyManagement\Internal\CacheableKeyRing.cs" Link="KeyManagement\Internal\CacheableKeyRing.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyManagement\Internal\ICacheableKeyRingProvider.cs" Link="KeyManagement\Internal\ICacheableKeyRingProvider.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyManagement\KeyRing.cs" Link="KeyManagement\KeyRing.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyManagement\KeyRingProvider.cs" Link="KeyManagement\KeyRingProvider.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyRotationOptions.cs" Link="KeyRotationOptions.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\KeyRotationOptionsSetup.cs" Link="KeyRotationOptionsSetup.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptor.cs" Link="RsaEncryptor.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorConfiguration.cs" Link="RsaEncryptorConfiguration.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorDescriptor.cs" Link="RsaEncryptorDescriptor.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorDescriptorDeserializer.cs" Link="RsaEncryptorDescriptorDeserializer.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\RsaEncryptorFactory.cs" Link="RsaEncryptorFactory.cs" />
-	  <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Shared\ValidattionKeyStore.cs" Link="ValidattionKeyStore.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
 	</ItemGroup>
 

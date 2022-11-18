@@ -15,14 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Test.Shared\AdminStores\AdminStoreOfClientTest.cs" Link="AdminStores\AdminStoreOfClientTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Test.Shared\AdminStores\AdminStoreOfClientUriTest.cs" Link="AdminStores\AdminStoreOfClientUriTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Test.Shared\AdminStores\AdminStoreOfUserClaimTest.cs" Link="AdminStores\AdminStoreOfUserClaimTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Test.Shared\AdminStores\AdminStoreTestBase.cs" Link="AdminStores\AdminStoreTestBase.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.MongoDb.Store.Test.Shared\Extensions\ServiceCollectionExtensionsTest.cs" Link="Extensions\ServiceCollectionExtensionsTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
 	  <PackageReference Include="Moq" Version="4.18.2" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
