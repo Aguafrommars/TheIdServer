@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,14 +17,10 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.Identity.IntegrationTest
 {
+    [SuppressMessage("Usage", "xUnit1033:Test classes decorated with 'Xunit.IClassFixture<TFixture>' or 'Xunit.ICollectionFixture<TFixture>' should add a constructor argument of type TFixture", Justification = "false positive")]
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
-
-        public UserStoreTest(TheIdServerTestFixture fixture)
-        {
-            _fixture = fixture;
-        }
 
         public UserStoreTest(TheIdServerTestFixture fixture, ITestOutputHelper testOutputHelper)
         {
