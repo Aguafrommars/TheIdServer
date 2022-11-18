@@ -26,18 +26,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         [Fact]
-        public void WhenNonWriter_should_disable_inputs()
-        {
-            var component = CreateComponent("Bob Smith",
-                SharedConstants.READERPOLICY,
-                null);
-
-            var inputs = component.FindAll("input")
-                .Where(i => !i.Attributes.Any(a => a.Name == "class" && a.Value.Contains("new-claim")));
-            Assert.All(inputs, input => Assert.Contains(input.Attributes, a => a.Name == "disabled"));
-        }
-
-        [Fact]
         public void WhenWriter_should_enable_inputs()
         {
             var component = CreateComponent("Alice Smith",
