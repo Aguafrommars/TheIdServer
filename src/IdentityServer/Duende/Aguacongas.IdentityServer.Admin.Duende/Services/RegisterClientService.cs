@@ -50,15 +50,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="logger">A looger</param>
         /// <exception cref="ArgumentNullException">options
         /// or
-        /// clientStore
-        /// or
-        /// clientUriStore
-        /// or
-        /// clientResourceStore
-        /// or
-        /// clientPropertyStore
-        /// or
-        /// clientGrantTypeStore
+        /// stores
         /// or
         /// discoveryResponseGenerator</exception>
         public RegisterClientService(RegisterClientStores stores,
@@ -70,6 +62,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             _identityServerOptions1 = identityServerOptions ?? throw new ArgumentNullException(nameof(identityServerOptions));
             _dymamicClientRegistrationOptions = dymamicClientRegistrationOptions?.Value ?? throw new ArgumentNullException(nameof(dymamicClientRegistrationOptions));
+            stores = stores ?? throw new ArgumentNullException(nameof(stores));
             _clientStore = stores.ClientStore;
             _clientUriStore = stores.ClientUriStore;
             _clientResourceStore = stores.ClientResourceStore;
