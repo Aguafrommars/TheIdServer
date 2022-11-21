@@ -12,9 +12,15 @@
         <EntityInfo />
         <LoginDisplay />
     </div>
-
     <div class="content px-4">
-        @Body
+        @if (IsClientSide)
+        {
+            @Body
+        }
+        else
+        {
+            <PageLoading Information="Loading..." />
+        }
     </div>
 </div>
 <Toaster />
