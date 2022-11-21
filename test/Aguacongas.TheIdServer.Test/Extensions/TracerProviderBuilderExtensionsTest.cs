@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
             Assert.NotNull(provider);
         }
 
-        [Fact]
+        [SkipCiFact]
         public void AddTheIdServerTelemetry_should_add_exporters()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()
