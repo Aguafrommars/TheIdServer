@@ -125,7 +125,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
 
             var result = new Uri($"{baseAddress}{uri}");
-            Logger.LogDebug($"Request {result}");
+            Logger.LogDebug("Request {result}", result);
             return result;
         }
     }
