@@ -4,6 +4,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Shared
 {
     public partial class MainLayout
     {
-        bool IsClientSide => RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER"));
+        static bool IsClientSide => RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER"));
     }
 }
