@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/Aguafrommars/TheIdServer/compare/7.0.0...7.0.1) (2022-11-23)
+
+
+### Bug Fixes
+
+* uri scheme validation ([53b400c](https://github.com/Aguafrommars/TheIdServer/commit/53b400cd1f11e36baa9abd4b8a5ae1cabf6b7a80))
+
 # [7.0.0](https://github.com/Aguafrommars/TheIdServer/compare/6.3.0...7.0.0) (2022-11-21)
 
 
