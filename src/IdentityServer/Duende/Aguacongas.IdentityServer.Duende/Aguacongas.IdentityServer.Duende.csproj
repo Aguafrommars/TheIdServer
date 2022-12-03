@@ -14,7 +14,7 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
-		
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
@@ -37,7 +37,7 @@
 		<None Include="package-icon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer" Version="6.1.7" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

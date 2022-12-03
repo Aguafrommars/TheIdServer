@@ -21,8 +21,8 @@ init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node ''
-  - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
-  - ps: .\dotnet-install.ps1 -Version 6.0.9 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 6.0.11 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 6.0.11 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
