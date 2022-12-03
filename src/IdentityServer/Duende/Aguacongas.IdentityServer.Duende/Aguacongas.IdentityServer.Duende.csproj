@@ -14,7 +14,7 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
-		
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 

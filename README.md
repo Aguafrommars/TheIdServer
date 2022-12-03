@@ -58,11 +58,11 @@ Choose your favorite:
 * [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-token-cleaner)
 * [Keys rotation](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/KEYS_ROTATION.md)
 * [Create Personal Access Token](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PAT.md)
-* [Duende CIBA integration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CIBA.md)(Duende version only)
+* [Duende CIBA integration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CIBA.md)
 * [Token exchange](https://datatracker.ietf.org/doc/html/rfc8693)([RFC 8693](https://datatracker.ietf.org/doc/html/rfc8693))
 * [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#health-checks)
 * [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/Aguacongas.TheIdServer/OPEN_TELEMETRY.md)
-* [Server side session](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER_SIDE_SESSIONS.md)(Duende version only)
+* [Server side session](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER_SIDE_SESSIONS.md)
   
 ## Setup
 
