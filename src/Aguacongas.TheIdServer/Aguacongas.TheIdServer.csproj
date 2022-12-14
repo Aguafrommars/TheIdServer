@@ -40,18 +40,18 @@
 		<PackageReference Include="Azure.Identity" Version="1.8.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="1.2.1" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.1" PrivateAssets="All" />
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.3.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.3.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.0.0-rc9.3" />
