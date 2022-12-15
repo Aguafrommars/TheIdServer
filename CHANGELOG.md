@@ -1,3 +1,10 @@
+## [6.3.1](https://github.com/Aguafrommars/TheIdServer/compare/6.3.0...6.3.1) (2022-12-15)
+
+
+### Bug Fixes
+
+* cve-2022-41089 ([#914](https://github.com/Aguafrommars/TheIdServer/issues/914)) ([6bbb353](https://github.com/Aguafrommars/TheIdServer/commit/6bbb353dc3949e6361530f75fc946559fa423b97))
+
 # [6.3.0](https://github.com/Aguafrommars/TheIdServer/compare/6.2.1...6.3.0) (2022-07-01)
 
 
