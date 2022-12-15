@@ -1,3 +1,12 @@
+## [7.0.2](https://github.com/Aguafrommars/TheIdServer/compare/7.0.1...7.0.2) (2022-12-15)
+
+
+### Bug Fixes
+
+* cve-2022-41089 ([4984b6e](https://github.com/Aguafrommars/TheIdServer/commit/4984b6e8bd405c064dff40e5f1d7f8cd6c2cdcad)), closes [#44973](https://github.com/Aguafrommars/TheIdServer/issues/44973)
+* update packages ([9b8f211](https://github.com/Aguafrommars/TheIdServer/commit/9b8f2115151180e43876936b05e2c1aa46aa469e))
+* update packages ([fca1e6b](https://github.com/Aguafrommars/TheIdServer/commit/fca1e6b588730d28ac0e8ec5d060d31282bd8429))
+
 ## [7.0.1](https://github.com/Aguafrommars/TheIdServer/compare/7.0.0...7.0.1) (2022-11-23)
 
 
