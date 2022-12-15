@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2022 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
-using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
