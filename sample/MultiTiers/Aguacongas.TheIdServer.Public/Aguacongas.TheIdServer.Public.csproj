@@ -19,10 +19,10 @@
 		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.0.1" />
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="7.0.1" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="7.0.1" />    
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="7.0.1" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.0.2" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="7.0.2" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="7.0.2" />    
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="7.0.2" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.1" />
