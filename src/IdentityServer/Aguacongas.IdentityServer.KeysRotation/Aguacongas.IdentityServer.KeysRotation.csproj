@@ -24,16 +24,16 @@
     <ItemGroup>
         <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.3" />
         <PackageReference Include="IdentityModel" Version="6.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.2" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.1" />
         <PackageReference Include="RavenDB.Client" Version="5.4.100" />
-        <PackageReference Include="StackExchange.Redis" Version="2.6.86" />
+        <PackageReference Include="StackExchange.Redis" Version="2.6.90" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />
