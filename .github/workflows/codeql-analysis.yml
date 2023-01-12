@@ -46,10 +46,6 @@ jobs:
         dotnet-version: '7.0.x'
         include-prerelease: true
     - name: Setup wasm tools
-      run: dotnet workload install wasm-tools
-      env: 
-        GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
-    - name: Restore wasm tools
       run: dotnet workload restore
       env: 
         GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
