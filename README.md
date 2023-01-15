@@ -66,7 +66,7 @@ Choose your favorite:
   
 ## Setup
 
-* Read the [Duende server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md) to configure Duende IdentityServer version.  
+* Read the [Duende server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md) to configure the Duende IdentityServer.  
 **You'll need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing) for a commercial use of this version.**
 * Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
 
