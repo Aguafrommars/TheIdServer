@@ -55,13 +55,13 @@ Choose your favorite:
 * [External claims mapping](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/EXTERNAL_CLAIMS_MAPPING.md)
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
-* [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#configure-token-cleaner)
+* [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#configure-token-cleaner)
 * [Keys rotation](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/KEYS_ROTATION.md)
 * [Create Personal Access Token](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PAT.md)
 * [Duende CIBA integration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CIBA.md)
 * [Token exchange](https://datatracker.ietf.org/doc/html/rfc8693)([RFC 8693](https://datatracker.ietf.org/doc/html/rfc8693))
-* [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer/README.md#health-checks)
-* [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/Aguacongas.TheIdServer/OPEN_TELEMETRY.md)
+* [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#health-checks)
+* [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/OPEN_TELEMETRY.md)
 * [Server side session](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER_SIDE_SESSIONS.md)
   
 ## Setup
