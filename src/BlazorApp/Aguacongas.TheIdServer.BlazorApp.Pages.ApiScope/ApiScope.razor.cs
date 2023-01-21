@@ -8,7 +8,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope
 {
     public partial class ApiScope
     {
-        protected override string Expand => $"{nameof(Entity.ApiScope.ApiScopeClaims)},{nameof(Entity.ApiScope.Properties)},{nameof(Entity.ApiScope.Resources)}";
+        protected override string Expand => $"{nameof(Entity.ApiScope.ApiScopeClaims)},{nameof(Entity.ApiScope.Properties)},{nameof(Entity.ApiScope.Resources)},{nameof(Entity.ApiScope.Apis)}";
 
         protected override bool NonEditable => false;
 
