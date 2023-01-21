@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.IdentityModel.Tokens;
