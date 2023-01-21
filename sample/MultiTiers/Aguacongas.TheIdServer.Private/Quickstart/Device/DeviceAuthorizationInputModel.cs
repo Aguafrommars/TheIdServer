@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 namespace IdentityServerHost.Quickstart.UI
 {
     public class DeviceAuthorizationInputModel : ConsentInputModel

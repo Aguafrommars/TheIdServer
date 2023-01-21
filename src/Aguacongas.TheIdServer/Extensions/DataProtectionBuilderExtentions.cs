@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Models;
@@ -26,7 +26,8 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return builder;
             }
-            builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options));
+            builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options))
+                .SetApplicationName(dataProtectionsOptions.ApplicationName);
             ConfigureEncryptionAlgorithm(builder, configuration);
             switch (dataProtectionsOptions.StorageKind)
             {
