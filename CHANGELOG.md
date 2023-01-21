@@ -1,3 +1,17 @@
+# [7.1.0](https://github.com/Aguafrommars/TheIdServer/compare/7.0.3...7.1.0) (2023-01-21)
+
+
+### Bug Fixes
+
+* error unprotecting key with kid ([8eef54d](https://github.com/Aguafrommars/TheIdServer/commit/8eef54df01fae6fb55e2ee0e260214977b95f121))
+* update packages ([a0d3ebf](https://github.com/Aguafrommars/TheIdServer/commit/a0d3ebfd3a55dce5e55f283243546578a9a4364d))
+* update packages ([7bd4945](https://github.com/Aguafrommars/TheIdServer/commit/7bd49459e3dc62c8805fac522b158ce6f847c7d1))
+
+
+### Features
+
+* scope used by ([24e43a2](https://github.com/Aguafrommars/TheIdServer/commit/24e43a2929e57e872f3941bce283b351de283124))
+
 ## [7.0.3](https://github.com/Aguafrommars/TheIdServer/compare/7.0.2...7.0.3) (2023-01-18)
 
 
