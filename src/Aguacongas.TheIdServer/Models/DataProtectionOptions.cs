@@ -33,6 +33,8 @@ namespace Aguacongas.TheIdServer.Models
         public KeyProtectionOptions KeyProtectionOptions { get; set; }
 
         public RedisKey RedisKey { get; set; } = "DataProtection-Keys";
+
+        public string ApplicationName { get; set; } = "TheIdServer";
     }
 
     public class KeyProtectionOptions

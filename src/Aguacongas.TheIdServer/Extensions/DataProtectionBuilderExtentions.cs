@@ -26,7 +26,8 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return builder;
             }
-            builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options));
+            builder.AddKeyManagementOptions(options => configuration.GetSection(nameof(KeyManagementOptions))?.Bind(options))
+                .SetApplicationName(dataProtectionsOptions.ApplicationName);
             ConfigureEncryptionAlgorithm(builder, configuration);
             switch (dataProtectionsOptions.StorageKind)
             {
