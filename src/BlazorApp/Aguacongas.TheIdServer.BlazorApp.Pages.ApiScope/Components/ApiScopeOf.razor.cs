@@ -2,6 +2,7 @@
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -10,7 +11,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.Components
 {
     public partial class ApiScopeOf
     {
-        private IEnumerable<Entity.ApiApiScope> Apis => Model.Apis.Where(a => a.ApiId != null && a.ApiId.Contains(HandleModificationState.FilterTerm));
+        private IEnumerable<Entity.ApiApiScope> Apis 
+            => Model?.Apis?.Where(a => a.ApiId.Contains(HandleModificationState.FilterTerm)) ?? 
+            Array.Empty<Entity.ApiApiScope>();
 
         [Parameter]
         public Entity.ApiScope Model { get; set; }
