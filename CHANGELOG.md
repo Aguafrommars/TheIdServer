@@ -1,3 +1,12 @@
+## [7.1.1](https://github.com/Aguafrommars/TheIdServer/compare/7.1.0...7.1.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* update packages ([92531e8](https://github.com/Aguafrommars/TheIdServer/commit/92531e837039c73f41cfa284719bc2a6f6c240a4))
+* update packages ([a57ed6a](https://github.com/Aguafrommars/TheIdServer/commit/a57ed6af7e7204c03a8be185ccc209c8c9e3bdfd))
+* update packages ([149e38e](https://github.com/Aguafrommars/TheIdServer/commit/149e38e2062b15e4a0af7ac0f8a7174e8fa35680))
+
 # [7.1.0](https://github.com/Aguafrommars/TheIdServer/compare/7.0.3...7.1.0) (2023-01-21)
 
 
