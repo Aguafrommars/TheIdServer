@@ -63,7 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options =>
                     {
-                        configurationManager.Bind(nameof(IdentityOptions), options);
+                        configurationManager.Bind(nameof(AspNetCore.Identity.IdentityOptions), options);
                     })
                 .AddTheIdServerStores()
                 .AddDefaultTokenProviders();
