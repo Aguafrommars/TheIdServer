@@ -1,3 +1,13 @@
+## [7.1.2](https://github.com/Aguafrommars/TheIdServer/compare/7.1.1...7.1.2) (2023-02-03)
+
+
+### Bug Fixes
+
+* identity options serialization ([1b5a686](https://github.com/Aguafrommars/TheIdServer/commit/1b5a686c936801da688d604c3d9b5f16a7b18527))
+* update packages ([38dee4e](https://github.com/Aguafrommars/TheIdServer/commit/38dee4e258baa08ba49234e015ada747c66e0a2f))
+* update packages ([5e5b988](https://github.com/Aguafrommars/TheIdServer/commit/5e5b9882d5407bf66986404af653e146a692c4ca))
+* update packages ([7ff02de](https://github.com/Aguafrommars/TheIdServer/commit/7ff02deff531efeff58f6044fb790531daa27503))
+
 ## [7.1.1](https://github.com/Aguafrommars/TheIdServer/compare/7.1.0...7.1.1) (2023-01-26)
 
 
