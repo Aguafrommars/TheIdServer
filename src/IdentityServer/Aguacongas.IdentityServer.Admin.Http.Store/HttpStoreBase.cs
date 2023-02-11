@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
@@ -125,7 +125,7 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             }
 
             var result = new Uri($"{baseAddress}{uri}");
-            Logger.LogDebug($"Request {result}");
+            Logger.LogDebug("Request {result}", result);
             return result;
         }
     }

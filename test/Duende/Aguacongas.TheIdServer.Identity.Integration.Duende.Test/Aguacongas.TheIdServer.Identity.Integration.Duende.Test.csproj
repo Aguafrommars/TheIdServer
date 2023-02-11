@@ -8,31 +8,20 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestLogger.cs" Link="TestLogger.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestLoggerProvider.cs" Link="TestLoggerProvider.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestRole.cs" Link="TestRole.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUser.cs" Link="TestUser.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUserService.cs" Link="TestUserService.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TestUtils.cs" Link="TestUtils.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\TheIdServerTestFixture.cs" Link="TheIdServerTestFixture.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Identity.IntegrationTest.Shared\UserStoreTest.cs" Link="UserStoreTest.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.2" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
-		<PackageReference Include="Moq" Version="4.18.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2" />
+		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<PrivateAssets>all</PrivateAssets>

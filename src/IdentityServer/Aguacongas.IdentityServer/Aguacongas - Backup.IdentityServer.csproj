@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Authors>Olivier Lefebvre</Authors>
+		<Description>TheIdServer bases classes</Description>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>theidserver</PackageTags>		
+		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
+		<DebugType>Full</DebugType>
+		<PackageIcon>package-icon.png</PackageIcon>
+		<IsPackable>true</IsPackable>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Store\CacheAdminStore.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Community.OData.Linq" Version="2.1.0" />
+		<PackageReference Include="IdentityModel" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
+		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Identity\Aguacongas.TheIdServer.Identity.csproj" />
+		<ProjectReference Include="..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="package-icon.png" Pack="true" PackagePath="" />
+		<None Include="Store\CacheAdminStore.cs" />
+	</ItemGroup>
+
+</Project>

@@ -8,38 +8,17 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\AzureKeyVault\AzureKeyVaultXmlEncryptorTest.cs" Link="AzureKeyVault\AzureKeyVaultXmlEncryptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorDescriptorDeserializerTest.cs" Link="ECDsaEncryptorDescriptorDeserializerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorDescriptorTest.cs" Link="ECDsaEncryptorDescriptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorFactoryTest.cs" Link="ECDsaEncryptorFactoryTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\ECDsaEncryptorTest.cs" Link="ECDsaEncryptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\EntityFrameworkCore\EntityFrameworkCoreXmlRepositoryTest.cs" Link="EntityFrameworkCore\EntityFrameworkCoreXmlRepositoryTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\Extensions\KeyRotationBuilderExtensionsTest.cs" Link="Extensions\KeyRotationBuilderExtensionsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\KeyManagement\CertificateXmlEncryptorTest.cs" Link="KeyManagement\CertificateXmlEncryptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\KeyManagement\EncryptedXmlDecryptorTest.cs" Link="KeyManagement\EncryptedXmlDecryptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\KeyManagement\KexRingTest.cs" Link="KeyManagement\KexRingTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\KeyManagement\KeyRingProviderTest.cs" Link="KeyManagement\KeyRingProviderTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\MongoDb\MongoDbXmlRepositoryTest.cs" Link="MongoDb\MongoDbXmlRepositoryTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\RavenDb\RavenDbXmlRepositoryTest.cs" Link="RavenDb\RavenDbXmlRepositoryTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\RsaEncryptorDescriptorDeserializerTest.cs" Link="RsaEncryptorDescriptorDeserializerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\RsaEncryptorDescriptorTest.cs" Link="RsaEncryptorDescriptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\RsaEncryptorFactoryTest.cs" Link="RsaEncryptorFactoryTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\RsaEncryptorTest.cs" Link="RsaEncryptorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\XmlEncryption\CertificateXmlEncryptorTest.cs" Link="XmlEncryption\CertificateXmlEncryptorTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
-	  <PackageReference Include="Moq" Version="4.18.2" />
+	  <PackageReference Include="Moq" Version="4.18.4" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 		  <PrivateAssets>all</PrivateAssets>

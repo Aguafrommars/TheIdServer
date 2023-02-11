@@ -2130,5 +2130,21 @@
   {
     "key": "Clone of {0}",
     "value": "Clone de {0}"
+  },
+  {
+    "key": "Scope of",
+    "value": "Portée de"
+  },
+  {
+    "key": "Allowed to",
+    "value": "Autorisé à"
+  },
+  {
+    "key": "scope of",
+    "value": "portée de"
+  },
+  {
+    "key": "allowed to",
+    "value": "autorisé à"
   }
 ]

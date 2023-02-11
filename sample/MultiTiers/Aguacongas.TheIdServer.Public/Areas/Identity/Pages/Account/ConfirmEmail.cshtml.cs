@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

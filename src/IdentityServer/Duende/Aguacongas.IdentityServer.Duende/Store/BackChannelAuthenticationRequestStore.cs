@@ -6,11 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Models = Duende.IdentityServer.Models;
+using IsModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.Store
 {
-    public class BackChannelAuthenticationRequestStore : GrantStore<BackChannelAuthenticationRequest, Duende.IdentityServer.Models.BackChannelAuthenticationRequest>, IBackChannelAuthenticationRequestStore
+    public class BackChannelAuthenticationRequestStore : GrantStore<BackChannelAuthenticationRequest, IsModels.BackChannelAuthenticationRequest>, IBackChannelAuthenticationRequestStore
     {
         private readonly IAdminStore<BackChannelAuthenticationRequest> _store;
 
@@ -19,7 +19,7 @@ namespace Aguacongas.IdentityServer.Store
             _store = store;
         }
 
-        public async Task<string> CreateRequestAsync(Duende.IdentityServer.Models.BackChannelAuthenticationRequest request)
+        public async Task<string> CreateRequestAsync(IsModels.BackChannelAuthenticationRequest request)
         {
             var clientId = GetClientId(request);
             var subjectId = GetSubjectId(request);
@@ -31,7 +31,7 @@ namespace Aguacongas.IdentityServer.Store
             return entity.SessionId;
         }
 
-        public async Task<Duende.IdentityServer.Models.BackChannelAuthenticationRequest> GetByAuthenticationRequestIdAsync(string requestId)
+        public async Task<IsModels.BackChannelAuthenticationRequest> GetByAuthenticationRequestIdAsync(string requestId)
         {
             var page = await _store.GetAsync(new PageRequest
             {
@@ -41,11 +41,11 @@ namespace Aguacongas.IdentityServer.Store
             return CreateDto(page.Items.FirstOrDefault()?.Data);
         }
 
-        public Task<Duende.IdentityServer.Models.BackChannelAuthenticationRequest> GetByInternalIdAsync(string id)
+        public Task<IsModels.BackChannelAuthenticationRequest> GetByInternalIdAsync(string id)
         => GetAsync(id);
         
 
-        public async Task<IEnumerable<Duende.IdentityServer.Models.BackChannelAuthenticationRequest>> GetLoginsForUserAsync(string subjectId, string clientId = null)
+        public async Task<IEnumerable<IsModels.BackChannelAuthenticationRequest>> GetLoginsForUserAsync(string subjectId, string clientId = null)
         {
             var filter = $"{nameof(BackChannelAuthenticationRequest.UserId)} eq '{subjectId}'";
             if (clientId is not null)
@@ -64,21 +64,22 @@ namespace Aguacongas.IdentityServer.Store
         public Task RemoveByInternalIdAsync(string id)
         => RemoveAsync(id);
 
-        public Task UpdateByInternalIdAsync(string id, Duende.IdentityServer.Models.BackChannelAuthenticationRequest request)
+        public Task UpdateByInternalIdAsync(string id, IsModels.BackChannelAuthenticationRequest request)
         => UpdateAsync(id, request, request.CreationTime.AddSeconds(request.Lifetime));
 
-        protected override string GetClientId(Duende.IdentityServer.Models.BackChannelAuthenticationRequest dto)
+        protected override string GetClientId(IsModels.BackChannelAuthenticationRequest dto)
         => dto.ClientId;
 
-        protected override string GetSubjectId(Duende.IdentityServer.Models.BackChannelAuthenticationRequest dto)
+        protected override string GetSubjectId(IsModels.BackChannelAuthenticationRequest dto)
         => dto.Subject.FindFirst(c => c.Type == JwtClaimTypes.Subject)?.Value;
 
-        protected override BackChannelAuthenticationRequest CreateEntity(Duende.IdentityServer.Models.BackChannelAuthenticationRequest dto, string clientId, string subjectId, DateTime? expiration)
+        protected override BackChannelAuthenticationRequest CreateEntity(IsModels.BackChannelAuthenticationRequest dto, string clientId, string subjectId, DateTime? expiration)
         {
             var entity = base.CreateEntity(dto, clientId, subjectId, expiration);            
             entity.Id = dto.InternalId;
             entity.SessionId = dto.SessionId ?? Guid.NewGuid().ToString();
             return entity;
         }
+        
     }
 }

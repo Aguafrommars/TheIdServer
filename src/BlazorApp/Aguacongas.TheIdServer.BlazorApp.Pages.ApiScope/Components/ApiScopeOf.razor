@@ -1,0 +1,17 @@
+﻿<div class="row">
+    <div class="col">
+        <ul class="list-inline">
+            @foreach (var api in Apis)
+            {
+                <li class="list-inline-item">
+                    <div class="input-group input-group-sm mb-3">
+                        <a class="form-control" href="/protectresource/@api.ApiId">@api.ApiId</a>
+                        <div class="input-group-append">
+                            <span class="input-group-text oi oi-wrench" />
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

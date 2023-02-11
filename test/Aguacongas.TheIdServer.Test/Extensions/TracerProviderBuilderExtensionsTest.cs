@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry;
@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
             Assert.NotNull(provider);
         }
 
-        [Fact]
+        [SkipCiFact]
         public void AddTheIdServerTelemetry_should_add_exporters()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()

@@ -19,35 +19,35 @@
 		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.IS4" Version="6.3.0" />
-		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="6.3.0" />
-		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="6.3.0" />
-		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="6.3.0" />
-		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.1.2" />
+		<PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="7.1.2" />
+		<PackageReference Include="Aguacongas.TheIdServer.Identity" Version="7.1.2" />    
+		<PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="7.1.2" />
+    <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="SendGrid" Version="9.28.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.3" PrivateAssets="All" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
-		<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.1" />
+		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\src\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />

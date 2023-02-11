@@ -1,0 +1,13 @@
+@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) 2023 @Olivier Lefebvre
+*@
+@inject IViewLocalizer Localizer
+
+@model RedirectViewModel
+
+<h1>@Localizer["You are now being returned to the application."]</h1>
+<p>@Localizer["Once complete, you may close this tab"]</p>
+
+<meta http-equiv="refresh" content="0;url=@Model.RedirectUrl" data-url="@Model.RedirectUrl">
+<script src="~/js/signin-redirect.js"></script>

@@ -1,7 +1,7 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
-using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServerHost.Quickstart.UI

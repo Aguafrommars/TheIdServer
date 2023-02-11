@@ -9,19 +9,6 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "CoordinateLifetimeWithUserSession",
-                table: "Clients",
-                type: "boolean",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "RequireRequestObject",
-                table: "Clients",
-                type: "boolean",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.CreateTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
@@ -54,10 +41,6 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
-
-            migrationBuilder.DropColumn(
-                name: "CoordinateLifetimeWithUserSession",
-                table: "Clients");
 
             migrationBuilder.DropColumn(
                 name: "RequireRequestObject",

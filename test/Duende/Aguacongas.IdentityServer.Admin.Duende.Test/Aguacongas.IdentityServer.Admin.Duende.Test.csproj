@@ -8,36 +8,18 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Configuration\ConfigureSigningCredentialsTest.cs" Link="Configuration\ConfigureSigningCredentialsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Extensions\ServiceCollectionExtensionsTest.cs" Link="Extensions\ServiceCollectionExtensionsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Filters\ExceptionFilterTest.cs" Link="Filters\ExceptionFilterTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\GenericApiControllerTest.cs" Link="GenericApiControllerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\GenericKeyControllerTest.cs" Link="GenericKeyControllerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\ClientRegisterationConverterTest.cs" Link="Services\ClientRegisterationConverterTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\CustomJwtRequestValidatorTest.cs" Link="Services\CustomJwtRequestValidatorTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\KeyManagerWrapperTest.cs" Link="Services\KeyManagerWrapperTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\PersistedGrantServiceTest.cs" Link="Services\PersistedGrantServiceTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\ProfileServiceTest.cs" Link="Services\ProfileServiceTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\ProxyClaimsProviderTest.cs" Link="Services\ProxyClaimsProviderTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\TokenCleanerHostTest.cs" Link="Services\TokenCleanerHostTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\WindowsAuthentication\Extensions\AuthenticationBuilderExtensionsTest.cs" Link="Services\WindowsAuthentication\Extensions\AuthenticationBuilderExtensionsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\WindowsAuthentication\PostConfigureWindowsOptionsTest.cs" Link="Services\WindowsAuthentication\PostConfigureWindowsOptionsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Admin.Test.Shared\Services\WindowsAuthentication\WindowsHandlerTest.cs" Link="Services\WindowsAuthentication\WindowsHandlerTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
-	  <PackageReference Include="Moq" Version="4.18.2" />
+	  <PackageReference Include="Moq" Version="4.18.4" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 		  <PrivateAssets>all</PrivateAssets>

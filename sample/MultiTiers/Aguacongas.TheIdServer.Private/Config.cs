@@ -1,9 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
-using IdentityServer4.Models;
+// Copyright (c) 2023 @Olivier Lefebvre
+using Duende.IdentityServer.Models;
 using System.Collections.Generic;
-using System.Security.Claims;
-using static IdentityServer4.IdentityServerConstants;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Aguacongas.TheIdServer
 {

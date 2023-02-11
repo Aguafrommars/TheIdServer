@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>RavenDb stores implementation for TheIdServer.</Description>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="RavenDB.Client" Version="5.4.4" />
+		<PackageReference Include="RavenDB.Client" Version="5.4.100" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,15 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using FluentValidation;
 using FluentValidation.Validators;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
     public partial class UriValidator<T> : PropertyValidator<T, string>
     {
-        [GeneratedRegex("^(http|https)://.+")]
+        [GeneratedRegex("^.+://.+")]
         private static partial Regex _urlRegex();
 
         public override string Name => $"UriValidatorOf{typeof(T).Name}";

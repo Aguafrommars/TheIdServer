@@ -9,25 +9,19 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\AuthorizationCodeStoreTest.cs" Link="AuthorizationCodeStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\CorsPolicyServiceTest.cs" Link="CorsPolicyServiceTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Test.Shared\DeviceFlowStoreTest.cs" Link="DeviceFlowStoreTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
