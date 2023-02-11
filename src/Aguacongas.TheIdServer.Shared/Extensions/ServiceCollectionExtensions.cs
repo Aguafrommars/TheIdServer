@@ -104,7 +104,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddResponseGenerators()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
-                .AddInMemoryPersistedGrants()
                 .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
 #else
                 .AddIdentityServer(configurationManager.GetSection(nameof(IdentityServer4.Configuration.IdentityServerOptions)))
