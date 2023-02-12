@@ -7,6 +7,8 @@
 		<DockerfileContext>..\..</DockerfileContext>
 
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+
+    <CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,6 +23,10 @@
 
 	<ItemGroup>
 	  <Content Remove="Localization-fr.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>

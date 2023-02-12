@@ -30,6 +30,9 @@
 		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Aguacongas.DynamicConfiguration.Redis" Version="1.0.1" />
 		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="1.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.2" />
