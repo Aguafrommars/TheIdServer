@@ -99,7 +99,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddResponseGenerators()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
-                .AddInMemoryPersistedGrants()
                 .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
