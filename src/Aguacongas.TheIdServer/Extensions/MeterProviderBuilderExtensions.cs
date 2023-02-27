@@ -2,6 +2,7 @@
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
+using System.Linq;
 
 namespace OpenTelemetry.Metrics
 {
@@ -43,16 +44,23 @@ namespace OpenTelemetry.Metrics
                 });
             }
 
-            if (metricsOptions.Prometheus is not null)
+            var prometeuspOptions = metricsOptions.Prometheus;
+            if (prometeuspOptions is not null)
             {
                 builder.AddPrometheusExporter(o =>
                 {
-                    var prometeuspOptions = metricsOptions.Prometheus;
-                    o.StartHttpListener = prometeuspOptions.StartHttpListener;
-                    o.HttpListenerPrefixes = prometeuspOptions.HttpListenerPrefixes;
                     o.ScrapeEndpointPath = prometeuspOptions.ScrapeEndpointPath;
                     o.ScrapeResponseCacheDurationMilliseconds = prometeuspOptions.ScrapeResponseCacheDurationMilliseconds;
                 });
+
+                if (prometeuspOptions.StartHttpListener) 
+                {
+                    builder.AddPrometheusHttpListener(o =>
+                    {
+                        o.UriPrefixes = prometeuspOptions.HttpListenerPrefixes?.ToArray() ?? o.UriPrefixes;
+                        o.ScrapeEndpointPath = prometeuspOptions.ScrapeEndpointPath;
+                    });
+                }
             }
 
             if (metricsOptions.Honeycomb?.ApiKey is not null)

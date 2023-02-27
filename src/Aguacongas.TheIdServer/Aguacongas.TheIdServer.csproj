@@ -55,12 +55,13 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.4" PrivateAssets="All" />
-		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.3.2" />
-		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.3.2" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.4.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.4.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.0.0-rc9.3" />
-		<PackageReference Include="OpenTelemetry.Exporter.Prometheus" Version="1.3.0-beta.1" />
-		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.3.2" />
-		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.3" />
+		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.4.0-rc.4" />
+		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.4.0-rc.4" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.4.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.4.0" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.3" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.3" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.0.0-rc9.3" />
@@ -70,10 +71,7 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
