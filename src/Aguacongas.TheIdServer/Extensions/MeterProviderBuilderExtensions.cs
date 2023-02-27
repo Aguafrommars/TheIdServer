@@ -57,7 +57,7 @@ namespace OpenTelemetry.Metrics
                 {
                     builder.AddPrometheusHttpListener(o =>
                     {
-                        o.UriPrefixes = prometeuspOptions.HttpListenerPrefixes.ToArray();
+                        o.UriPrefixes = prometeuspOptions.HttpListenerPrefixes?.ToArray() ?? o.UriPrefixes;
                         o.ScrapeEndpointPath = prometeuspOptions.ScrapeEndpointPath;
                     });
                 }
