@@ -4,15 +4,11 @@ using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using Xunit;
-using ZstdSharp.Unsafe;
 
-namespace Aguacongas.TheIdServer.Test.Extensions
-{
+namespace Aguacongas.TheIdServer.Test.Extensions {
     public class ServiceCollectionExtensionsTest
     {
         [Fact]
