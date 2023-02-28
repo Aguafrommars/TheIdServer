@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
             Assert.NotNull(provider);
         }
 
-        [SkipCiFact]
+        [Fact]
         public void AddTheIdServerTelemetry_should_add_exporters()
         {
             using var provider = Sdk.CreateTracerProviderBuilder()
@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                     {
                         OpenTelemetryProtocol = new OtlpExporterOptions
                         {
-                            Endpoint = new Uri("https://exemple.com")
+                            Endpoint = new Uri("https://google.com")
                         },
                         Honeycomb = new HoneycombOptions
                         {
@@ -53,12 +53,12 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         },
                         Jaeger = new JaegerExporterOptions
                         {
-                            AgentHost = "exemple.com",
+                            AgentHost = "google.com",
                             AgentPort = 443
                         },
                         Zipkin = new ZipkinExporterOptions
                         {
-                            Endpoint = new Uri("https://exemple.com")
+                            Endpoint = new Uri("https://google.com")
                         }
                     }
                 })
