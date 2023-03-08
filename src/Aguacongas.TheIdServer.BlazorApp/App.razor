@@ -3,6 +3,8 @@
 @using Microsoft.Extensions.Logging
 @inject LazyAssemblyLoader _assemblyLoader
 @inject ILogger<App> _logger
+@inject ThemeService _themeService
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly"
             AdditionalAssemblies="@_lazyLoadedAssemblies" OnNavigateAsync="@OnNavigateAsync">

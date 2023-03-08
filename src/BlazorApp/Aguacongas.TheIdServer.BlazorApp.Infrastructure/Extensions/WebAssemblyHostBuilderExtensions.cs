@@ -67,8 +67,9 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
 
-            services.Configure<Settings>(options => configuration.Bind(options))
+            services.Configure<Settings>(configuration.Bind)
                 .Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
+                .AddScoped<ThemeService>()
                 .AddScoped<DynamicConfiguration.ConfigurationService>()
                 .AddScoped<DynamicConfiguration.IConfigurationService, ConfigurationService>()
                 .AddConfigurationService(configuration.GetSection("settingsOptions"))

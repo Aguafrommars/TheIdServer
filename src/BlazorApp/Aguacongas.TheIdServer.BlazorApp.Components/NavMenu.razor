@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizerAsync<NavMenu> Localizer
 
-<div class="top-row pl-4 navbar navbar-light sticky-top">
+<div class="top-row pl-4 navbar bg-body-secondary sticky-top">
     <a class="ms-3 navbar-brand" href="">
         <img class="logo" src="/logo.png" />
         <span>TheIdServer Admin</span>
@@ -12,71 +12,71 @@
 <div class="@NavMenuCssClass mb-2" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+            <NavLink class="nav-link text-body" href="home" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> @Localizer["Home"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="users">
+            <NavLink class="nav-link text-body" href="users">
                 <span class="oi oi-people" aria-hidden="true"></span> @Localizer["Users"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="roles">
+            <NavLink class="nav-link text-body" href="roles">
                 <span class="oi oi-shield" aria-hidden="true"></span> @Localizer["Roles"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="clients">
+            <NavLink class="nav-link text-body" href="clients">
                 <span class="oi oi-browser" aria-hidden="true"></span> @Localizer["Clients"]
             </NavLink>
         </li>
         <li class="nav-text px-4">resources</li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="apis">
+            <NavLink class="nav-link text-body" href="apis">
                 <span class="oi oi-wrench" aria-hidden="true"></span> @Localizer["Apis"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="apiscopes">
+            <NavLink class="nav-link text-body" href="apiscopes">
                 <span class="oi oi-shield" aria-hidden="true"></span> @Localizer["Scopes"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="identities">
+            <NavLink class="nav-link text-body" href="identities">
                 <span class="oi oi-puzzle-piece" aria-hidden="true"></span> @Localizer["Identities"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="relyingparties">
+            <NavLink class="nav-link text-body" href="relyingparties">
                 <span class="oi oi-aperture" aria-hidden="true"></span> @Localizer["Relying parties"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="externalproviders">
+            <NavLink class="nav-link text-body" href="externalproviders">
                 <span class="oi oi-cloud-upload" aria-hidden="true"></span> @Localizer["Providers"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="cultures">
+            <NavLink class="nav-link text-body" href="cultures">
                 <span class="oi oi-globe" aria-hidden="true"></span> @Localizer["Cultures"]
             </NavLink>
         </li>
         <li class="nav-text px-4">misc</li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="import">
+            <NavLink class="nav-link text-body" href="import">
                 <span class="oi oi-arrow-circle-bottom" aria-hidden="true"></span> @Localizer["Import"]
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="keys">
+            <NavLink class="nav-link text-body" href="keys">
                 <span class="oi oi-key" aria-hidden="true"></span> @Localizer["Keys"]
             </NavLink>
         </li>
         @if (Options?.Value?.ShowSettings == true)
         {
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="settings">
+                <NavLink class="nav-link text-body" href="settings">
                     <span class="oi oi-cog" aria-hidden="true"></span> @Localizer["Settings"]
                 </NavLink>
             </li>
@@ -85,7 +85,7 @@
             <LoginDisplay />
         </li>
     </ul>
-    <div class="fixed-bottom bg-light col-1">
+    <div class="fixed-bottom row col-1 bg-body">
         <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/@GitHash/README.md" target="_blank">@Localizer["About"]</a>
     </div>
 </div>
