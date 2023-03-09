@@ -29,7 +29,7 @@ namespace Aguacongas.TheIdServer.UI
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var builder = new StringBuilder("default-src 'self'");
                 builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
-                builder.Append("style-src 'self' ");
+                builder.Append("img-src 'self' data:; style-src 'self' ");
                 builder.Append(SiteOptions.BOOTSTRAPCSSURL);
                 builder.Append(';');
 
