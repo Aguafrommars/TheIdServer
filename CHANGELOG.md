@@ -1,3 +1,30 @@
+# [7.2.0](https://github.com/Aguafrommars/TheIdServer/compare/7.1.2...7.2.0) (2023-03-10)
+
+
+### Bug Fixes
+
+* update packages ([f64c16a](https://github.com/Aguafrommars/TheIdServer/commit/f64c16ae5bfc20c0d411c8050eaad2a8893837c0))
+* update packages ([693dfd0](https://github.com/Aguafrommars/TheIdServer/commit/693dfd07042cef364775fd0a7465d6ec16a94c61))
+* update packages ([440bb3f](https://github.com/Aguafrommars/TheIdServer/commit/440bb3f1b5f623b4b2f956ea1f432ae812232dc6))
+* update packages ([4157d5a](https://github.com/Aguafrommars/TheIdServer/commit/4157d5ad3a92856201d32092b28c355e3d1519dd))
+* update packages ([373af77](https://github.com/Aguafrommars/TheIdServer/commit/373af77762ee0b60042272f79559274061e7e39c))
+* update packages ([0ac50a6](https://github.com/Aguafrommars/TheIdServer/commit/0ac50a60c783ac62eebaf5f65bb54f81d14058e1))
+* update packages ([f9c18e6](https://github.com/Aguafrommars/TheIdServer/commit/f9c18e6ff052244e49982581fa17b00b844933c5))
+* update packages ([61aa0b0](https://github.com/Aguafrommars/TheIdServer/commit/61aa0b0baf1fe3c8405c35d851c097b623cef8ac))
+* update packages ([ef8ec20](https://github.com/Aguafrommars/TheIdServer/commit/ef8ec20f2da0d77960f9a53a453a4fb38332fb80))
+* update packages ([73698b3](https://github.com/Aguafrommars/TheIdServer/commit/73698b3af916965a0d99188490212081226c9a81))
+* update packages ([c0389be](https://github.com/Aguafrommars/TheIdServer/commit/c0389beaddb08b410e838df9b4da7f6bbd0e87cc))
+* update packages ([33b4bb6](https://github.com/Aguafrommars/TheIdServer/commit/33b4bb64ac7778c06ca1a5cf26cb8db123f2bb63))
+* update packages ([860be51](https://github.com/Aguafrommars/TheIdServer/commit/860be51fe25df10cc7ce18629b8e6643a9075c3e))
+* update packages ([d886da2](https://github.com/Aguafrommars/TheIdServer/commit/d886da28d8d041f83c6fa8684cc2f568404e5c82))
+* update packages ([8150d95](https://github.com/Aguafrommars/TheIdServer/commit/8150d9566c7dc6bc9ec7a6b20d87f66172c7c6a8))
+
+
+### Features
+
+* admin app dark theme ([25da138](https://github.com/Aguafrommars/TheIdServer/commit/25da138e25e1109f4f4b4173f72d9abeb6989ee9))
+* admin app dark theme ([3df021c](https://github.com/Aguafrommars/TheIdServer/commit/3df021c5cd9e2078216c69bc1fc195441050b6c3))
+
 ## [7.1.2](https://github.com/Aguafrommars/TheIdServer/compare/7.1.1...7.1.2) (2023-02-03)
 
 
