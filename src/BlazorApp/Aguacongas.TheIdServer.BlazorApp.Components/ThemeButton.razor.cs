@@ -6,14 +6,13 @@ public partial class ThemeButton
 {
     string ThemeCss => ThemeService.Theme == "light" ? "oi-moon" : "oi-sun";
 
-    async Task ToggleTheme()
+    Task ToggleTheme()
     {
         if (ThemeService.Theme == "dark")
         {
-            await ThemeService.SetThemeAsync("light").ConfigureAwait(false);
-            return;
+            return ThemeService.SetThemeAsync("light");
         }
 
-        await ThemeService.SetThemeAsync("dark").ConfigureAwait(false);
+        return ThemeService.SetThemeAsync("dark");
     }
 }
