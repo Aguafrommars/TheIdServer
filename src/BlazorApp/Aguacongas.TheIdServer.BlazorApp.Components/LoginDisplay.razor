@@ -13,25 +13,25 @@
     <Authorized>
         @if (!string.IsNullOrEmpty(_options.Value.RemoteProfilePath))
         {
-            <a class="nav-link" href="@_options.Value.RemoteProfilePath">@Localizer["Hello, {0}!", context.User.Identity.Name]</a>
+            <a class="nav-link text-body" href="@_options.Value.RemoteProfilePath">@Localizer["Hello, {0}!", context.User.Identity.Name]</a>
         }
         else
         {
-            <span>@Localizer["Hello, {0}!", context.User.Identity.Name]</span>
+            <span class="nav-link text-body">@Localizer["Hello, {0}!", context.User.Identity.Name]</span>
         }
-        <a href="javascript:void(0);" class="nav-link" @onclick="BeginSignOut">@Localizer["Log out"]</a>
+        <a href="javascript:void(0);" class="nav-link text-body" @onclick="BeginSignOut">@Localizer["Log out"]</a>
     </Authorized>
     <NotAuthorized>
         @if (!string.IsNullOrEmpty(_options.Value.RemoteRegisterPath))
         {
-            <a class="nav-link" href="@_options.Value.RemoteRegisterPath">@Localizer["Register"]</a>
+            <a class="nav-link text-body" href="@_options.Value.RemoteRegisterPath">@Localizer["Register"]</a>
         }
-        <a class="nav-link" href="@_options.Value.LogInPath">@Localizer["Log in"]</a>
+        <a class="nav-link text-body" href="@_options.Value.LogInPath">@Localizer["Log in"]</a>
     </NotAuthorized>
 </AuthorizeView>
 @if (_supportedCultures.Count() > 1)
 {
-    <button class="nav-link btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link text-body btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @_selectedCulture
     </button>
     <div class="dropdown-menu language-menu">
