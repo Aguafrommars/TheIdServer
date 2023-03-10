@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Components
         public bool ShowAlgorithm { get; set; }
 
         static string GetRevokedClass(Key key)
-            => key.IsRevoked ? "text-black-50" : null;
+            => key.IsRevoked ? "text-body-tertiary" : null;
         
         private Task RevokeConfirmed(Tuple<string, string> tuple)
             => RevokeClick.InvokeAsync(tuple);

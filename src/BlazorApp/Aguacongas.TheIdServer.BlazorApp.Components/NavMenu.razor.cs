@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private string _gitHash;
 
-        string GitHash
+        string  GitHash
         {
             get
             {

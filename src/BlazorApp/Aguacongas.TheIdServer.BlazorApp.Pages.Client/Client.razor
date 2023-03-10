@@ -12,8 +12,8 @@ else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <CascadingValue Value="HandleModificationState">
-            <div class="row bg-light sticky-top">
-                <div class="col">
+            <div class="row bg-body sticky-top">
+                <div class="col-12 col-md">
                     @if (IsNew)
                 {
                     <AuthorizeText Id="id" Placeholder="client id" @bind-Value="@Model.Id" />
@@ -23,7 +23,7 @@ else
                     <h3>@Id</h3>
                 }
             </div>
-            <div class="col">
+                <div class="col-12 col-md-5 mb-1">
                 @if (!NonEditable)
                 {
                     <SaveButton />
@@ -38,7 +38,7 @@ else
                     <CloneButton />
                 }
             </div>
-            <div class="col">
+                <div class="col-12 col-md mb-1">
                 <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
             </div>
             <div class="w-100"></div>

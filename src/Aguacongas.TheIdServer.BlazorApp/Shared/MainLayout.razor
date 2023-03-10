@@ -3,14 +3,15 @@
 
 @inherits LayoutComponentBase
 
-<div class="sidebar bg-light">
+<div class="sidebar">
     <NavMenu />
 </div>
 
-<div class="main bg-light mb-2">
-    <div class="top-row px-4 auth">
+<div class="main mb-2">
+    <div class="nav top-row px-4 auth bg-body-secondary">
         <EntityInfo />
         <LoginDisplay />
+        <ThemeButton />
     </div>
     <div class="content px-4">
         @if (IsClientSide)

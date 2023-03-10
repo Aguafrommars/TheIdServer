@@ -99,7 +99,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddResponseGenerators()
                 .AddDefaultSecretParsers()
                 .AddDefaultSecretValidators()
-                .AddInMemoryPersistedGrants()
                 .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDynamicClientRegistration()
@@ -188,20 +187,21 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
             services.Configure<HostModelOptions>(configurationManager.GetSection(nameof(HostModelOptions)))
-                 .AddScoped<LazyAssemblyLoader>()
-                 .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
-                 .AddScoped<NavigationManager, PreRenderNavigationManager>()
-                 .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
-                 .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
-                 .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
-                 .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
-                 .AddTransient<JSInterop.IJSRuntime, JSRuntime>()
-                 .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>, KeyStore<ECDsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.ECDsaEncryptorDescriptor>>()
-                 .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
-                 .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
-                 .AddAdminApplication(new Settings())
-                 .AddDatabaseDeveloperPageExceptionFilter()
-                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
+                .AddScoped<ThemeService>()
+                .AddScoped<LazyAssemblyLoader>()
+                .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
+                .AddScoped<NavigationManager, PreRenderNavigationManager>()
+                .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
+                .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
+                .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
+                .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
+                .AddTransient<JSInterop.IJSRuntime, JSRuntime>()
+                .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>, KeyStore<ECDsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.ECDsaEncryptorDescriptor>>()
+                .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
+                .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
+                .AddAdminApplication(new Settings())
+                .AddDatabaseDeveloperPageExceptionFilter()
+                .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
             ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
            

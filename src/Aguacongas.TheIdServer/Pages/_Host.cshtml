@@ -5,10 +5,11 @@ Copyright (c) 2023 @Olivier Lefebvre
 @page
 @using Aguacongas.TheIdServer.BlazorApp
 @using Aguacongas.TheIdServer.Models
+@using System.Globalization;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@CultureInfo.CurrentUICulture.Name" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -16,9 +17,9 @@ Copyright (c) 2023 @Olivier Lefebvre
     <base href="/" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link href="@SiteOptions.BOOTSTRAPCSSURL"
-          rel="stylesheet" 
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
-        crossorigin="anonymous">
+          rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+          crossorigin="anonymous">
     <script src="@SiteOptions.JQUERYURL"
         asp-fallback-src="~/lib/jquery/jquery.min.js"
         asp-fallback-test="window.jQuery"   
@@ -26,12 +27,12 @@ Copyright (c) 2023 @Olivier Lefebvre
         crossorigin="anonymous" 
         referrerpolicy="no-referrer"></script>
     <script src="@SiteOptions.BOOTSTRAPJSURL"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
-        crossorigin="anonymous" 
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous" 
         referrerpolicy="no-referrer"></script>
     <link href="css/app.css" rel="stylesheet" />
 </head>
-<body class="bg-light">
+<body>
     <app>
         <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
     </app>

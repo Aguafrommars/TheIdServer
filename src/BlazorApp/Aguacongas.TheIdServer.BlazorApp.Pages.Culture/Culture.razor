@@ -11,8 +11,8 @@ else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <CascadingValue Value="HandleModificationState">
-            <div class="row bg-light sticky-top mb-3">
-                <div class="col">
+            <div class="row bg-body sticky-top mb-3">
+                <div class="col-12 col-md">
                     @if (IsNew)
                     {
                         <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
@@ -26,7 +26,7 @@ else
                         <h3>@Model.Id <small><em>@Info.DisplayName</em></small></h3>
                     }
                 </div>
-                <div class="col">
+                <div class="col-12 col-md-5 mb-1">
                     <SaveButton />
                     @if (!IsNew)
                     {
@@ -39,7 +39,7 @@ else
                     }
                 </div>
 
-                <div class="col">
+                <div class="col-12 col-md mb-1">
                     <Filter CssClass="mt-1" />
                 </div>
                 <div class="w-100"></div>

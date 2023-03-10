@@ -4,6 +4,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 *@
 @using Microsoft.Extensions.Options
 @using Aguacongas.TheIdServer.Models
+@using System.Globalization;
 @inject IViewLocalizer Localizer
 @inject IOptions<SiteOptions> Options
 @{
@@ -14,7 +15,7 @@ Copyright (c) 2023 @Olivier Lefebvre
     }
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@CultureInfo.CurrentUICulture.Name" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,20 +25,25 @@ Copyright (c) 2023 @Olivier Lefebvre
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="stylesheet"
           href="@SiteOptions.BOOTSTRAPCSSURL"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
-        crossorigin="anonymous" 
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+          crossorigin="anonymous" 
         referrerpolicy="no-referrer" /> 
     <link rel="stylesheet" href="~/css/site.min.css" />
+    <link rel="stylesheet" href="~/css/open-iconic/font/css/open-iconic-bootstrap.min.css" />
     <script src="@SiteOptions.JQUERYURL"
         asp-fallback-src="~/lib/jquery/jquery.min.js"
         asp-fallback-test="window.jQuery"   
         integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A==" 
         crossorigin="anonymous" 
         referrerpolicy="no-referrer"></script>
+    <script src="@SiteOptions.BOOTSTRAPJSURL"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="bg-body-secondary navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" href="~/">
                     <span>
@@ -45,22 +51,27 @@ Copyright (c) 2023 @Olivier Lefebvre
                         @Options.Value.Name
                     </span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @if (!string.IsNullOrWhiteSpace(name))
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto">
+                        @if (!string.IsNullOrWhiteSpace(name))
                     {
-                        <ul class="nav navbar-nav">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">@name <strong class="caret"></strong></a>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-item"><a asp-action="Logout" asp-controller="Account">@Localizer["Logout"]</a></li>
                                 </ul>
                             </li>
-                        </ul>
                     }
+                    </ul>
+                    <div class="d-flex">
+                        <button class="btn btn-outline-secondary text-body-emphasis" id="theme-toggle-button">
+                            <span class="oi oi-moon" id="theme-icon"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -71,5 +82,6 @@ Copyright (c) 2023 @Olivier Lefebvre
     </div>
 
     @RenderSection("scripts", required: false)
+    <script src="/js/theme.js"></script>
 </body>
 </html>
