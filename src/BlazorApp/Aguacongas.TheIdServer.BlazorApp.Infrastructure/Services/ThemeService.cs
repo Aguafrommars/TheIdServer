@@ -6,7 +6,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services;
 public class ThemeService {
     private readonly IJSRuntime _runtime;
 
-    public string? Theme { get; private set; }
+    public string Theme { get; private set; }
     public event EventHandler ThemeChanged;
 
     public ThemeService(IJSRuntime runtime) {

@@ -3,20 +3,13 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
-using AngleSharp.Dom;
 using Bunit;
-using Bunit.Extensions.WaitForHelpers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 using CulturePage = Aguacongas.TheIdServer.BlazorApp.Pages.Culture.Culture;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
