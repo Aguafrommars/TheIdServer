@@ -10,11 +10,11 @@
 
 
 <h3>@Localizer["Keys"]</h3>
-<span class="h5">@Localizer["Data Protection"]</span><span class="text-black-50"> (keys used to crypt cookies)</span>
+<span class="h5">@Localizer["Data Protection"]</span><span class="text-body-secondary"> (keys used to crypt cookies)</span>
 <div id="data-protection-keys">
     <KeyCollection Collection="_dataProtectionKeys" RevokeClick="RevokeDataProtectionKey" />
 </div>
-<span class="h5">@Localizer["Signing"]</span><span class="text-black-50"> (keys used to sign JWT tokens)</span>
+<span class="h5">@Localizer["Signing"]</span><span class="text-body-secondary"> (keys used to sign JWT tokens)</span>
 <div id="signing-keys">
     <KeyCollection Collection="_signingKeys" RevokeClick="RevokeSigningKey" ShowAlgorithm="true" />
 </div>
