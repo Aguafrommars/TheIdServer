@@ -31,7 +31,7 @@
 </AuthorizeView>
 @if (_supportedCultures.Count() > 1)
 {
-    <button class="nav-link text-body btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link text-body btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @onclick:stopPropagation="true">
         @_selectedCulture
     </button>
     <div class="dropdown-menu language-menu">
