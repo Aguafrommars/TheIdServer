@@ -9,7 +9,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
-<div class="@NavMenuCssClass mb-2" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link text-body" href="home" Match="NavLinkMatch.All">
@@ -84,8 +84,11 @@
         <li class="nav-item px-3 navbar-toggler">
             <LoginDisplay />
         </li>
+        <li class="nav-item px-3 navbar-toggler">
+            <ThemeButton />
+        </li>
     </ul>
-    <div class="fixed-bottom row col-1 bg-body">
+    <div class="bg-body sticky-bottom">
         <a class="px-3" href="https://github.com/aguacongas/TheIdServer/blob/@GitHash/README.md" target="_blank">@Localizer["About"]</a>
     </div>
 </div>
