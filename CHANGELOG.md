@@ -1,3 +1,14 @@
+## [7.2.1](https://github.com/Aguafrommars/TheIdServer/compare/7.2.0...7.2.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* db migrations ([fe53806](https://github.com/Aguafrommars/TheIdServer/commit/fe53806f84ed58a00dc59725981e76345fbbee0d))
+* impossible to change language on sm device ([c452ccd](https://github.com/Aguafrommars/TheIdServer/commit/c452ccd044fa0706ed280916211ea6b47372c8e4))
+* toggle theme button invisible on sm device ([c09df27](https://github.com/Aguafrommars/TheIdServer/commit/c09df27151521cc28a54720c93b9708fe9204708))
+* update packages ([b65cfe3](https://github.com/Aguafrommars/TheIdServer/commit/b65cfe368c47420dfe2010fd0083a14353142017))
+* update packages ([cde3de2](https://github.com/Aguafrommars/TheIdServer/commit/cde3de2e7fc4f875da7f1c2e33e38dba0a93e8fe))
+
 # [7.2.0](https://github.com/Aguafrommars/TheIdServer/compare/7.1.2...7.2.0) (2023-03-10)
 
 
