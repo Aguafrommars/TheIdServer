@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 using StackExchange.Redis;
 using System;
 using System.IO;
@@ -595,16 +595,22 @@ namespace Microsoft.Extensions.DependencyInjection
         }
         private static async Task<string> GetTokenFromClientCertificateAsync(string authority, string resource, string clientId, X509Certificate2 certificate)
         {
-            var authContext = new AuthenticationContext(authority);
-            var result = await authContext.AcquireTokenAsync(resource, new ClientAssertionCertificate(clientId, certificate)).ConfigureAwait(false);
+            var app = ConfidentialClientApplicationBuilder.Create(clientId)
+                .WithCertificate(certificate)
+                .WithAuthority(authority)
+                .Build();
+            var result = await app.AcquireTokenForClient(new[] { resource }).ExecuteAsync().ConfigureAwait(false);
             return result.AccessToken;
         }
 
         private static async Task<string> GetTokenFromClientSecretAsync(string authority, string resource, string clientId, string clientSecret)
         {
-            var authContext = new AuthenticationContext(authority);
-            var clientCred = new ClientCredential(clientId, clientSecret);
-            var result = await authContext.AcquireTokenAsync(resource, clientCred).ConfigureAwait(false);
+            var app = ConfidentialClientApplicationBuilder.Create(clientId)
+                .WithClientSecret(clientSecret)
+                .WithAuthority(authority)
+                .Build();
+
+            var result = await app.AcquireTokenForClient(new[] { resource }).ExecuteAsync().ConfigureAwait(false);
             return result.AccessToken;
         }
 
