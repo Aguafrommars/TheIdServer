@@ -33,8 +33,7 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v2.1.0
         with:
-          dotnet-version: 7.0.200
-          include-prerelease: true
+          dotnet-version: 7.0.*
       # Restore workload
       - name: Restore workload
         run: dotnet workload restore
