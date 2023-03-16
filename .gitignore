@@ -375,3 +375,6 @@ override.tf.json
 # example: *tfplan*
 /sample/Aguacongas.TheIdServer.MtlsSample/client.pks
 /sample/Aguacongas.TheIdServer.MtlsSample/.dccache
+/src/Aguacongas.TheIdServer.Duende/TheIdServer.db
+/src/Aguacongas.TheIdServer.Duende/TheIdServer.db-shm
+/src/Aguacongas.TheIdServer.Duende/TheIdServer.db-wal
