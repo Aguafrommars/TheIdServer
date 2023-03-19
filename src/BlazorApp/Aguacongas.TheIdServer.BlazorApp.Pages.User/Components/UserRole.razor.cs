@@ -1,11 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
+using EntityNS = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.User.Components
 {
@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User.Components
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
-            _pageRequest.Filter = $"contains({nameof(entity.Role.Name)},'{term}')";
+            _pageRequest.Filter = $"contains({nameof(EntityNS.Role.Name)},'{term}')";
             var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 

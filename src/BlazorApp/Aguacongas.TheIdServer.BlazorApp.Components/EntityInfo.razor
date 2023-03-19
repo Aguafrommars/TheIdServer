@@ -1,4 +1,6 @@
 ﻿@inject NavigationManager _navigationManager
 @inject IStringLocalizerAsync<EntityInfo> Localizer
-
-<h5 class="me-auto text-black-50 text-capitalize">@_entityType</h5>
+@if (!string.IsNullOrEmpty(_entityType))
+{
+    <h5 class="me-auto text-body-secondary text-capitalize">@_entityType</h5>
+}

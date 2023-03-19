@@ -67,7 +67,16 @@ The application obtains its configuration from appsettings.json and the environm
     "redirectUri": "https://localhost:5443/authentication/login-callback",
     "responseType": "code"
   },
-  "welcomeContenUrl": "/welcome-fragment.html"
+  "settingsOptions": {
+    "typeName": "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
+    "apiUrl": "https://localhost:5443/api/api/configuration"
+  },
+  "menuOptions": {
+    "showSettings": true
+  },
+  "welcomeContenUrl": "https://localhost:5443/welcome-fragment.html",
+  "serverSideSessionEnabled": false,
+  "cibaEnabled": false
 }
 ```
 
@@ -149,12 +158,18 @@ This endpoint should return an HTML fragment.
 </p>
 ```
 
-## Client and API secrets
+## UI Options
+### Hide settings menu
 
-The application doesn't generate secrets. Shared Secrets or x509 certificates require conversion before storing. 
+To hide the settings menu, unset **menuOptions:showSettings**.
 
-* Convert a SharedSecret to SHA256 value.
-* Convert an X509 certificate to Base64 string.
+### Hide CIBA grant type
+
+If CIBA is not enabled you can hide the CIBA grant type by unsetting cibaEnabled options.
+
+### Hide coordinate lifetime with user session checkbox
+
+If server side sessions are not enable you can hide the coordinate lifetime with user session checkbox in client tokens section by unsetting serverSideSessionEnabled options.
 
 ## Additional resources
 

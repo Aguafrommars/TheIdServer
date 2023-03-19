@@ -1,0 +1,59 @@
+﻿@* 
+Project: Aguafrommars/TheIdServer
+Copyright (c) 2023 @Olivier Lefebvre
+*@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
+@inject IViewLocalizer Localizer
+@inject IUrlHelper UrlHelper
+@model LoginWith2faModel
+@{
+    ViewData["Title"] = Localizer["Two-factor authentication"];
+}
+
+@if (Model.RedirectToReturnUrl)
+{
+    <h1>@Localizer["You are now being returned to the application."]</h1>
+    <p>@Localizer["Once complete, you may close this tab"]</p>
+
+    <meta http-equiv="refresh" content="0;url=@Model.ReturnUrl" data-url="@Model.ReturnUrl">
+    <script src="~/js/signin-redirect.js"></script>
+}
+else
+{
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <p>@Localizer["Your login is protected with an authenticator app. Enter your authenticator code below."]</p>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <input asp-for="RememberMe" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating mb-2">
+                    <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
+                    <label asp-for="Input.TwoFactorCode" class="form-label"></label>
+                    <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+                </div>
+                <div class="form-group  mb-2">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMachine">
+                            <input asp-for="Input.RememberMachine" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMachine)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Localizer["Log in"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <p>
+        @Localizer["Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.", UrlHelper.Page("./LoginWithRecoveryCode", new { returnUrl = Model.ReturnUrl })]
+    </p>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -1,9 +1,9 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
 using System.Runtime.Serialization;
 
-namespace IdentityServer4.Quickstart.UI
+namespace Duende.IdentityServer.Quickstart.UI
 {
     /// <summary>
     /// Trowed when user click on malicious link

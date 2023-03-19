@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer base classes for Duende.IdentityServer.</Description>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
@@ -14,39 +14,20 @@
 		<DebugType>Full</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
-		
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Absractions\IFlushableCache.cs" Link="Absractions\IFlushableCache.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Absractions\IProvideClaims.cs" Link="Absractions\IProvideClaims.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Extensions\DynamicAuthenticationBuilderExtensions.cs" Link="Extensions\DynamicAuthenticationBuilderExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Extensions\EntityExtensions.cs" Link="Extensions\EntityExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Extensions\ServiceCollectionExtensions.cs" Link="Extensions\ServiceCollectionExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\AuthorizationCodeStore.cs" Link="Store\AuthorizationCodeStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\CacheAdminStore.cs" Link="Store\CacheAdminStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ClientStore.cs" Link="Store\ClientStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\CorsPolicyService.cs" Link="Store\CorsPolicyService.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\DeviceFlowStore.cs" Link="Store\DeviceFlowStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ExternalProviderKindStore.cs" Link="Store\ExternalProviderKindStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\FlushableCache.cs" Link="Store\FlushableCache.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\GrantStore.cs" Link="Store\GrantStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\NotifyChangedExternalProviderStore.cs" Link="Store\NotifyChangedExternalProviderStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\PersistedGrantStore.cs" Link="Store\PersistedGrantStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ReferenceTokenStore.cs" Link="Store\ReferenceTokenStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\RefreshTokenStore.cs" Link="Store\RefreshTokenStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\ResourceStore.cs" Link="Store\ResourceStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Store\UserConsentStore.cs" Link="Store\UserConsentStore.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.Shared\Validators\TokenExchangeGrantValidator.cs" Link="Validators\TokenExchangeGrantValidator.cs" />
+	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,7 +41,7 @@
 		<None Include="package-icon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer" Version="6.1.5" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>

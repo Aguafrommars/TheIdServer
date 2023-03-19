@@ -33,19 +33,12 @@ span.input-group-text.oi {
 }
 
     .main .top-row {
-        background-color: #e6e6e6;
-        border-bottom: 1px solid #d6d5d5;
         justify-content: flex-end;
     }
 
         .main .top-row > a, .main .top-row .btn-link {
             white-space: nowrap;
         }
-
-.sidebar .top-row {
-    background-color: #e6e6e6;
-    border-bottom: 1px solid #d6d5d5;
-}
 
 .sidebar .navbar-brand {
     font-size: 1.1rem;
@@ -72,7 +65,6 @@ span.input-group-text.oi {
     }
 
     .nav-item a {
-        color: #373737;
         border-radius: 4px;
         height: 3rem;
         display: flex;
@@ -82,17 +74,14 @@ span.input-group-text.oi {
 
         .nav-item a.active {
             background-color: rgba(0,0,0,0.25);
-            color: black;
         }
 
         .nav-item a:hover {
             background-color: rgba(0,0,0,0.1);
-            color: black;
         }
 
 .nav-text {
     font-size: 0.9rem;
-    color: #969595;
 }
 
 .content {
@@ -213,6 +202,7 @@ span.input-group-text.oi {
         position: sticky;
         top: 0;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
         .sidebar .collapse {

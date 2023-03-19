@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry;
@@ -45,7 +45,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                     {
                         OpenTelemetryProtocol = new OtlpExporterOptions
                         {
-                            Endpoint = new Uri("https://exemple.com")
+                            Endpoint = new Uri("https://google.com")
                         },
                         Honeycomb = new HoneycombOptions
                         {
@@ -53,12 +53,12 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         },
                         Jaeger = new JaegerExporterOptions
                         {
-                            AgentHost = "exemple.com",
+                            AgentHost = "google.com",
                             AgentPort = 443
                         },
                         Zipkin = new ZipkinExporterOptions
                         {
-                            Endpoint = new Uri("https://exemple.com")
+                            Endpoint = new Uri("https://google.com")
                         }
                     }
                 })

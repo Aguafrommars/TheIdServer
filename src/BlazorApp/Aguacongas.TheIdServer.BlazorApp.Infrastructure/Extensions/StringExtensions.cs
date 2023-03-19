@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,13 +13,11 @@ namespace System
             {
                 return null;
             }
-            using (var sha = SHA256.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(value);
-                var hash = sha.ComputeHash(bytes);
 
-                return Convert.ToBase64String(hash);
-            }
+            var bytes = Encoding.UTF8.GetBytes(value);
+            var hash = SHA256.HashData(bytes);
+
+            return Convert.ToBase64String(hash);
         }
     }
 }

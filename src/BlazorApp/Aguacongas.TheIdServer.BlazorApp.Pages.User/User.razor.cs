@@ -1,18 +1,18 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
+using EntityNS= Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
 {
     public partial class User
     {
-        protected override string Expand => $"{nameof(entity.User.UserClaims)},{nameof(entity.User.UserRoles)}";
+        protected override string Expand => $"{nameof(EntityNS.User.UserClaims)},{nameof(EntityNS.User.UserRoles)}";
 
         protected override bool NonEditable => false;
 
@@ -22,21 +22,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
         {
             return Task.FromResult(new Models.User
             {
-                Claims = new List<entity.UserClaim>(),
-                Consents = new List<entity.UserConsent>(),
-                Logins = new List<entity.UserLogin>(),
-                Roles = new List<entity.Role>(),
-                Tokens = new List<entity.UserToken>(),
-                ReferenceTokens = new List<entity.ReferenceToken>(),
-                RefreshTokens = new List<entity.RefreshToken>(),
-                BackChannelAuthenticationRequests = new List<entity.BackChannelAuthenticationRequest>(),
-                Sessions = new List<entity.UserSession>()
+                Id = Guid.NewGuid().ToString(),
+                Claims = new List<EntityNS.UserClaim>(),
+                Consents = new List<EntityNS.UserConsent>(),
+                Logins = new List<EntityNS.UserLogin>(),
+                Roles = new List<EntityNS.Role>(),
+                Tokens = new List<EntityNS.UserToken>(),
+                ReferenceTokens = new List<EntityNS.ReferenceToken>(),
+                RefreshTokens = new List<EntityNS.RefreshToken>(),
+                BackChannelAuthenticationRequests = new List<EntityNS.BackChannelAuthenticationRequest>(),
+                Sessions = new List<EntityNS.UserSession>()
             });
         }
 
         protected override void RemoveNavigationProperty<TEntity>(TEntity entity)
         {
-            if (entity is entity.UserClaim claim)
+            if (entity is EntityNS.UserClaim claim)
             {
                 claim.UserId = Model.Id;
             }
@@ -51,30 +52,30 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
         {
             var pageRequest = new PageRequest
             {
-                Filter = $"{nameof(entity.UserClaim.UserId)} eq '{Id}'"
+                Filter = $"{nameof(EntityNS.UserClaim.UserId)} eq '{Id}'"
             };
 
             var model = await base.GetModelAsync();
 
-            var userLoginStore = GetStore<entity.UserLogin>();
+            var userLoginStore = GetStore<EntityNS.UserLogin>();
             var getLoginsResponse = await userLoginStore.GetAsync(pageRequest);
 
-            var userConsentStore = GetStore<entity.UserConsent>();
+            var userConsentStore = GetStore<EntityNS.UserConsent>();
             var getUserConsentsResponse = await userConsentStore.GetAsync(pageRequest);
             
-            var userTokenStore = GetStore<entity.UserToken>();
+            var userTokenStore = GetStore<EntityNS.UserToken>();
             var getUserTokensResponse = await userTokenStore.GetAsync(pageRequest);
 
-            var referenceTokenStore = GetStore<entity.ReferenceToken>();
+            var referenceTokenStore = GetStore<EntityNS.ReferenceToken>();
             var getReferenceTokenResponse = await referenceTokenStore.GetAsync(pageRequest);
 
-            var refreshTokenStore = GetStore<entity.RefreshToken>();
+            var refreshTokenStore = GetStore<EntityNS.RefreshToken>();
             var getRefreshTokenResponse = await refreshTokenStore.GetAsync(pageRequest);
 
-            var backChannelAuthenticationRequestStore = GetStore<entity.BackChannelAuthenticationRequest>();
+            var backChannelAuthenticationRequestStore = GetStore<EntityNS.BackChannelAuthenticationRequest>();
             var getBackChannelAuthenticationRequestResponse = await backChannelAuthenticationRequestStore.GetAsync(pageRequest);
 
-            var sessionStore = GetStore<entity.UserSession>();
+            var sessionStore = GetStore<EntityNS.UserSession>();
             var sessionstResponse = await sessionStore.GetAsync(pageRequest);
 
             model.Logins = getLoginsResponse.Items.ToList();
@@ -88,16 +89,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
             var userRoles = model.UserRoles;
             if (userRoles.Any())
             {
-                var roleStore = GetStore<entity.Role>();
+                var roleStore = GetStore<EntityNS.Role>();
                 var rolesResponse = await roleStore.GetAsync(new PageRequest
                 {
-                    Filter = string.Join(" or ", userRoles.Select(r => $"{nameof(entity.Role.Id)} eq '{r.RoleId}'"))
+                    Filter = string.Join(" or ", userRoles.Select(r => $"{nameof(EntityNS.Role.Id)} eq '{r.RoleId}'"))
                 }).ConfigureAwait(false);
                 model.Roles = rolesResponse.Items.ToList();
             }
             else
             {
-                model.Roles = new List<entity.Role>();
+                model.Roles = new List<EntityNS.Role>();
             }
 
             return model;
@@ -105,9 +106,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
 
         protected async override Task<object> CreateAsync(Type entityType, object entity)
         {
-            if (entity is entity.Role role)
+            if (entity is EntityNS.Role role)
             {
-                var roleStore = GetStore<entity.Role>();
+                var roleStore = GetStore<EntityNS.Role>();
                 var roleResponse = await roleStore.GetAsync(new PageRequest
                 {
                     Select = "Id",
@@ -118,7 +119,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
                 var roles = roleResponse.Items;
                 if (roles.Any())
                 {
-                    await base.CreateAsync(typeof(entity.UserRole), new entity.UserRole
+                    await base.CreateAsync(typeof(EntityNS.UserRole), new EntityNS.UserRole
                     {
                         RoleId = roles.First().Id,
                         UserId = Model.Id
@@ -131,14 +132,22 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
 
         protected override Task<object> DeleteAsync(Type entityType, object entity)
         {
-            if (entity is entity.Role role)
+            if (entity is EntityNS.Role role)
             {
-                return base.DeleteAsync(typeof(entity.UserRole), Model.UserRoles.First(r => r.RoleId == role.Id));
+                return base.DeleteAsync(typeof(EntityNS.UserRole), Model.UserRoles.First(r => r.RoleId == role.Id));
             }
             return base.DeleteAsync(entityType, entity);
         }
 
-        private static entity.UserClaim CreateClaim()
+        protected override void OnCloning()
+        {
+            Model.Id = Guid.NewGuid().ToString();
+            Model.UserName = Localizer["Clone of {0}", Model.UserName];
+        }
+
+        protected override string GetNotiticationHeader() => Model.UserName;
+
+        private static EntityNS.UserClaim CreateClaim()
             => new()
             {
                 Issuer = ClaimsIdentity.DefaultIssuer

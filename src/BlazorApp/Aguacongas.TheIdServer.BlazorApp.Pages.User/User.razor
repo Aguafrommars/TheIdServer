@@ -12,19 +12,20 @@ else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <CascadingValue Value="HandleModificationState">
-            <div class="row bg-light sticky-top mb-3">
-                <div class="col">
+            <div class="row bg-body sticky-top mb-3">
+                <div class="col-12 col-md">
                     <h3>@Model.UserName</h3>
                 </div>
-                <div class="col">
+                <div class="col-12 col-md-5 mb-1">
                     <SaveButton />
                     @if (!IsNew)
                     {
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
                     }
-                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
                 </div>
-                <div class="col">
+                <div class="col-12 col-md mb-1">
                     <Filter CssClass="mt-1" />
                 </div>
                 <div class="w-100"></div>

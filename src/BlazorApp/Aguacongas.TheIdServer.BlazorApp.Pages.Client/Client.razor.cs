@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -126,6 +126,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
                 return Task.FromResult(entity);
             }
             return base.CreateAsync(entityType, entity);
+        }
+
+        protected override void OnCloning()
+        {
+            Model.ClientName = Localizer["Clone of {0}", Model.ClientName];
         }
 
         private void FilterFocusChanged(bool hasFocus)

@@ -8,24 +8,18 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Authentication.Integration.Test.Shared\DynamicManagerTest.cs" Link="DynamicManagerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Authentication.Integration.Test.Shared\TestUserService.cs" Link="TestUserService.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Authentication.Integration.Test.Shared\TestUtils.cs" Link="TestUtils.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.TheIdServer.Authentication.Integration.Test.Shared\TheIdServerTestFixture.cs" Link="TheIdServerTestFixture.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.4" />
 	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="4.1.1" />
-	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0-rc.1.22427.2" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220726-02" />
+	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.4" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.assert" Version="2.4.2" />
 	  <PackageReference Include="xunit.core" Version="2.4.2" />
@@ -33,7 +27,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="coverlet.collector" Version="3.1.2">
+	  <PackageReference Include="coverlet.collector" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

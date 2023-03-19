@@ -2,41 +2,28 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\AuthorizationCodeStoreTest.cs" Link="AuthorizationCodeStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\ClientStoreTest.cs" Link="ClientStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\CorsPolicyServiceTest.cs" Link="CorsPolicyServiceTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\DeviceFlowStoreTest.cs" Link="DeviceFlowStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\Extensions\ServiceCollectionExtensionsTest.cs" Link="Extensions\ServiceCollectionExtensionsTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\OAuthDelegatingHandlerTest.cs" Link="OAuthDelegatingHandlerTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\ReferenceTokenStoreTest.cs" Link="ReferenceTokenStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\RefreshTokenStoreTest.cs" Link="RefreshTokenStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\ResourceStoreTest.cs" Link="ResourceStoreTest.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.Http.Store.Test.Shared\UserConsentStoreTest.cs" Link="UserConsentStoreTest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220726-02" />
-	  <PackageReference Include="Moq" Version="4.18.2" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+	  <PackageReference Include="Moq" Version="4.18.4" />
 	  <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="coverlet.collector" Version="3.1.2">
+	  <PackageReference Include="coverlet.collector" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

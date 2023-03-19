@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
+using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Routing;
 using System.Reflection;
 
@@ -30,7 +31,13 @@ namespace Aguacongas.TheIdServer.BlazorApp
             "Settings"
         };
 
-        private Task OnNavigateAsync(NavigationContext args)
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync().ConfigureAwait(false);
+            await _themeService.InitAsync().ConfigureAwait(false);
+        }
+
+    private Task OnNavigateAsync(NavigationContext args)
         {
             var path = args.Path.Split("/")[0];
             if (path == "protectresource")

@@ -1528,7 +1528,7 @@
     "value": "La clé est requise."
   },
   {
-    "key": "The key must be unique.",
+    "key": "The key '{0}' must be unique.",
     "value": "La clé doit être unique."
   },
   {
@@ -2012,16 +2012,8 @@
     "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
   },
   {
-    "key": "Below is the list of backchannel login requests awaiting your approbation.",
-    "value": "Vous trouverez ci-dessous la liste des demandes de connexion backchannel en attente de votre approbation."
-  },
-  {
     "key": "Sessions",
     "value": "Sessions"
-  },
-  {
-    "key": "Renewed",
-    "value": "Renouvelée"
   },
   {
     "key": "Renewed",
@@ -2116,10 +2108,6 @@
     "value": "ignorer les groupes imbriqués"
   },
   {
-    "key": "ignore nested groups",
-    "value": "ignorer les groupes imbriqués"
-  },
-  {
     "key": "claims cache absolute expiration",
     "value": "expiration absolue du cache des réclamations"
   },
@@ -2130,5 +2118,33 @@
   {
     "key": "require resource indicator",
     "value": "indicateur de resource requis"
+  },
+  {
+    "key": "Are you sure you want to leave this page?",
+    "value": "Voulez-vous vraiment quitter cette page ?"
+  },
+  {
+    "key": "clone",
+    "value": "cloner"
+  },
+  {
+    "key": "Clone of {0}",
+    "value": "Clone de {0}"
+  },
+  {
+    "key": "Scope of",
+    "value": "Portée de"
+  },
+  {
+    "key": "Allowed to",
+    "value": "Autorisé à"
+  },
+  {
+    "key": "scope of",
+    "value": "portée de"
+  },
+  {
+    "key": "allowed to",
+    "value": "autorisé à"
   }
 ]

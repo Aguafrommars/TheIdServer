@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>MongoDb stores implementation for TheIdServer.</Description>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.MongoDb.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="2.17.1" />
+		<PackageReference Include="MongoDB.Driver" Version="2.19.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />

@@ -14,8 +14,8 @@ else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <CascadingValue Value="HandleModificationState">
-            <div class="row bg-light sticky-top">
-                <div class="col">
+            <div class="row bg-body sticky-top">
+                <div class="col-12 col-md">
                     @if (IsNew)
                     {
                         <AuthorizeText Id="name" Placeholder="identity id" @bind-Value="@Model.Id" />
@@ -25,7 +25,7 @@ else
                         <h3>@Id</h3>
                     }
                 </div>
-                <div class="col">
+                <div class="col-12 col-mb-5">
                     @if (!NonEditable)
                     {
                         <SaveButton />
@@ -34,9 +34,13 @@ else
                             <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                         }
                     }
-                    <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                    @if (!IsNew)
+                    {
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
+                    }
                 </div>
-                <div class="col">
+                <div class="col-12 col-mb mb-1">
                     <Filter CssClass="mt-1" />
                 </div>
                 <div class="w-100"></div>
@@ -47,6 +51,12 @@ else
                         </li>
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#scopeOf" @onclick='() => ScrollTo("scopeOf")' @onclick:preventDefault>@Localizer["scope of"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#allowedTo" @onclick='() => ScrollTo("allowedTo")' @onclick:preventDefault>@Localizer["allowed to"]</a>
                         </li>
                     </ul>
                 </div>
@@ -131,6 +141,26 @@ else
                     </div>
                     <div class="card-body">
                         <ApiScopeProperties Collection="@Model.Properties" />
+                    </div>
+                </div>
+                <div id="scopeOf" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Scope of"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ApiScopeOf Model="@Model" />
+                    </div>
+                </div>
+                <div id="allowedTo" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Allowed to"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ApiScopeAllowdTo Model="@Model" />
                     </div>
                 </div>
             </div>

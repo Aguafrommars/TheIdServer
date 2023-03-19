@@ -4,7 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Description>EF Core stores implementation for TheIdServer.</Description>
-        <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+        <Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
         <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
         <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0-rc.1.22427.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
     </ItemGroup>
 
     <ItemGroup>

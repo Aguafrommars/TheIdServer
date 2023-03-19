@@ -1,63 +1,62 @@
 @page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-@inherits RemoteAuthenticatorView
 @inject IStringLocalizerAsync<Authentication> Localizer
 
-    <RemoteAuthenticatorView Action="@Action">
-        <LoggingIn>
+<RemoteAuthenticatorView Action="@Action" @ref="_remoteAuthenticatorView">
+    <LoggingIn>
+        <PageLoading Information="@Localizer["Checking login state..."]" />
+    </LoggingIn>
+    <CompletingLoggingIn>
+        <PageLoading Information="@Localizer["Completing login..."]" />
+    </CompletingLoggingIn>
+    <LogInFailed>
+        @if (context != null)
+        {
+            @Localizer["There was an error trying to log you in: '{0}'", context]
+        }
+        else
+        {
             <PageLoading Information="@Localizer["Checking login state..."]" />
-        </LoggingIn>
-        <CompletingLoggingIn>
-            <PageLoading Information="@Localizer["Completing login..."]" />
-        </CompletingLoggingIn>
-        <LogInFailed>
-            @if (context != null)
-            {
-                @Localizer["There was an error trying to log you in: '{0}'", context]
-            }
-            else
-            {
-                <PageLoading Information="@Localizer["Checking login state..."]" />
-            }
-        </LogInFailed>
-        <LogOut>
+        }
+    </LogInFailed>
+    <LogOut>
+        <PageLoading Information="@Localizer["Processing logout..."]" />
+    </LogOut>
+    <CompletingLogOut>
+        <PageLoading Information="@Localizer["Processing logout callback..."]" />
+    </CompletingLogOut>
+    <LogOutFailed>
+        @if (context != null)
+        {
+            @Localizer["There was an error trying to log you out: '{0}'", context]
+        }
+        else
+        {
             <PageLoading Information="@Localizer["Processing logout..."]" />
-        </LogOut>
-        <CompletingLogOut>
-            <PageLoading Information="@Localizer["Processing logout callback..."]" />
-        </CompletingLogOut>
-        <LogOutFailed>
-            @if (context != null)
-            {
-                @Localizer["There was an error trying to log you out: '{0}'", context]
-            }
-            else
-            {
-                <PageLoading Information="@Localizer["Processing logout..."]" />
-            }
-        </LogOutFailed>
-        <LogOutSucceeded>
-            @Localizer["You are logged out."]
-        </LogOutSucceeded>
-        <Registering>
-            @if (ApplicationPaths.RemoteRegisterPath == null)
-            {
-                @Localizer["Registration is not supported."]
-            }
-            else
-            {
-                <PageLoading Information="@Localizer["Checking login state..."]" />
-            }
-        </Registering>
-        <UserProfile>
-            @if (ApplicationPaths.RemoteProfilePath == null)
-            {
-                @Localizer["Editing the profile is not supported."]
-            }
-            else
-            {
-                <PageLoading Information="@Localizer["Checking login state..."]" />
-            }
-        </UserProfile>
-    </RemoteAuthenticatorView>
+        }
+    </LogOutFailed>
+    <LogOutSucceeded>
+        @Localizer["You are logged out."]
+    </LogOutSucceeded>
+    <Registering>
+        @if (_remoteAuthenticatorView.ApplicationPaths.RemoteRegisterPath == null)
+        {
+            @Localizer["Registration is not supported."]
+        }
+        else
+        {
+            <PageLoading Information="@Localizer["Checking login state..."]" />
+        }
+    </Registering>
+    <UserProfile>
+        @if (_remoteAuthenticatorView.ApplicationPaths.RemoteProfilePath == null)
+        {
+            @Localizer["Editing the profile is not supported."]
+        }
+        else
+        {
+            <PageLoading Information="@Localizer["Checking login state..."]" />
+        }
+    </UserProfile>
+</RemoteAuthenticatorView>

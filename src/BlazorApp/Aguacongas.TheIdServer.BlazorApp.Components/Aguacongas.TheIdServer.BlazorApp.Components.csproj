@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
@@ -22,8 +22,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0-rc.1.22427.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0-rc.1.22427.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,10 +32,4 @@
 	<ItemGroup>
 	  <None Include="package-icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Content Update="Form\AuthorizeNullableCheckbox.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	</ItemGroup>
-
 </Project>

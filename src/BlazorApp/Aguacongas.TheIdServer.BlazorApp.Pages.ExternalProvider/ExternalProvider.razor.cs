@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider.Components;
@@ -60,6 +60,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProvider
             {
                 base.OnEntityUpdated(entityType, entityModel);
             }    
+        }
+
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
         }
 
         private ExternalClaimTransformation CreateTransformation()

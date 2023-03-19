@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Models;
@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
+using EntityNS = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 {
@@ -21,20 +21,20 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         private string _href;
 
         [Parameter]
-        public entity.Client Model { get; set; }
+        public EntityNS.Client Model { get; set; }
 
         private static readonly ScopeComparer _comparer = new();
         private IEnumerable<Scope> _filterScopes;
         private readonly PageRequest _idPageRequest = new()
         {
-            Select = $"{nameof(entity.IdentityResource.Id)},{nameof(entity.IdentityResource.DisplayName)}",
-            Expand = nameof(entity.IdentityResource.Resources),
+            Select = $"{nameof(IdentityResource.Id)},{nameof(IdentityResource.DisplayName)}",
+            Expand = nameof(IdentityResource.Resources),
             Take = 5
         };
         private readonly PageRequest _scopeRequest = new()
         {
-            Select = $"{nameof(entity.ApiScope.Id)},{nameof(entity.ApiScope.DisplayName)}",
-            Expand = nameof(entity.ApiScope.Resources),
+            Select = $"{nameof(EntityNS.ApiScope.Id)},{nameof(EntityNS.ApiScope.DisplayName)}",
+            Expand = nameof(EntityNS.ApiScope.Resources),
             Take = 5
         };
 
@@ -55,21 +55,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
             var identityResponse = await GetIdentityScopeAsync(term, cancellationToken).ConfigureAwait(false);
-            _scopeRequest.Filter = $"contains({nameof(entity.ApiScope.Id)},'{term}') or contains({nameof(entity.ApiScope.DisplayName)},'{term}')";
+            _scopeRequest.Filter = $"contains({nameof(EntityNS.ApiScope.Id)},'{term}') or contains({nameof(EntityNS.ApiScope.DisplayName)},'{term}')";
             var apiScopeResponse = await _apiScopeStore.GetAsync(_scopeRequest, cancellationToken).ConfigureAwait(false);
 
             var culture = CultureInfo.CurrentCulture.Name;
             _filterScopes = identityResponse.Items.Select(i => new Scope
             {
                 Value = i.Id,
-                Description = i.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
+                Description = i.Resources.FirstOrDefault(r => r.ResourceKind == EntityNS.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
                         ?? i.DisplayName,
                 IsIdentity = true
             })
                 .Union(apiScopeResponse.Items.Select(s => new Scope
                 {
                     Value = s.Id,
-                    Description = s.Resources.FirstOrDefault(r => r.ResourceKind == entity.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
+                    Description = s.Resources.FirstOrDefault(r => r.ResourceKind == EntityNS.EntityResourceKind.DisplayName && r.CultureId == culture)?.Value
                         ?? s.DisplayName
                 }))
                 .Distinct(_comparer)
@@ -91,7 +91,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                 };
             }
 
-            _idPageRequest.Filter = $"contains({nameof(entity.IdentityResource.Id)},'{term}') or contains({nameof(entity.IdentityResource.DisplayName)},'{term}')";
+            _idPageRequest.Filter = $"contains({nameof(EntityNS.IdentityResource.Id)},'{term}') or contains({nameof(EntityNS.IdentityResource.DisplayName)},'{term}')";
             var identityResponse = await _identityStore.GetAsync(_idPageRequest, cancellationToken).ConfigureAwait(false);
             return identityResponse;
         }
@@ -118,7 +118,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         {
             var identityResponse = await _identityStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(entity.IdentityResource.Id)} eq '{Entity.Scope}'",
+                Filter = $"{nameof(EntityNS.IdentityResource.Id)} eq '{Entity.Scope}'",
                 Take = 0
             }).ConfigureAwait(false);
             if (identityResponse.Count != 0)
@@ -129,7 +129,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
             var apiScopeResponse = await _apiScopeStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(entity.ApiScope.Id)} eq '{Entity.Scope}'",
+                Filter = $"{nameof(EntityNS.ApiScope.Id)} eq '{Entity.Scope}'",
                 Take = 0
             }).ConfigureAwait(false);
             if (apiScopeResponse.Count != 0)

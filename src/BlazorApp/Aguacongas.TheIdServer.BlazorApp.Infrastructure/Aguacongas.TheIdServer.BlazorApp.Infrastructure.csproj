@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
@@ -23,15 +23,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.1.1" />
-		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="1.0.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="1.0.1" />
 
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.0-rc.1.22427.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.0-rc.1.22427.2" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-rc.1.22426.10" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="7.0.0-rc.1.22427.2" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.23.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="7.0.4" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.27.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

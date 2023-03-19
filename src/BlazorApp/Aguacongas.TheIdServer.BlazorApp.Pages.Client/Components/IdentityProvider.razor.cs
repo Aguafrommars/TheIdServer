@@ -1,18 +1,18 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using entity = Aguacongas.IdentityServer.Store.Entity;
+using EntityNS = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 {
     public partial class IdentityProvider
     {
         private bool _isReadOnly;
-        private IEnumerable<entity.ExternalProvider> _filteredProviders;
+        private IEnumerable<EntityNS.ExternalProvider> _filteredProviders;
         private string _providerName;
         private readonly PageRequest _pageRequest = new PageRequest
         {
@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
-            _pageRequest.Filter = $"contains({nameof(entity.ExternalProvider.Id)},'{term}') or contains({nameof(entity.ExternalProvider.DisplayName)},'{term}')";
+            _pageRequest.Filter = $"contains({nameof(EntityNS.ExternalProvider.Id)},'{term}') or contains({nameof(EntityNS.ExternalProvider.DisplayName)},'{term}')";
             var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 

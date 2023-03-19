@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
@@ -67,7 +67,9 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 })
                 .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
 
-            services.Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
+            services.Configure<Settings>(configuration.Bind)
+                .Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
+                .AddScoped<ThemeService>()
                 .AddScoped<DynamicConfiguration.ConfigurationService>()
                 .AddScoped<DynamicConfiguration.IConfigurationService, ConfigurationService>()
                 .AddConfigurationService(configuration.GetSection("settingsOptions"))
