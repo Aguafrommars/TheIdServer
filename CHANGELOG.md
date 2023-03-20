@@ -1,3 +1,11 @@
+## [7.2.2](https://github.com/Aguafrommars/TheIdServer/compare/7.2.1...7.2.2) (2023-03-20)
+
+
+### Bug Fixes
+
+* dark theme dropdown ([ad43cd9](https://github.com/Aguafrommars/TheIdServer/commit/ad43cd9d43bc7441beb67f22ca2cd5725ca4760e))
+* update packages ([beff18c](https://github.com/Aguafrommars/TheIdServer/commit/beff18cfdb5fc71ea9f029d26a998d6ca34a0488))
+
 ## [7.2.1](https://github.com/Aguafrommars/TheIdServer/compare/7.2.0...7.2.1) (2023-03-15)
 
 
