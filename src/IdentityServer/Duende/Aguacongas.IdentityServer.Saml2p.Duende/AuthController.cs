@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
 using Duende.IdentityServer.Stores;
+using Microsoft.Extensions.Options;
 #if DEBUG
 using System.Diagnostics;
 #endif
@@ -25,16 +26,18 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
     [Route("Auth")]
     public class AuthController : Controller
     {
-        private readonly Saml2Configuration _config;
+        private readonly IClientStore _clientStore;
+        private readonly IOptions<Saml2Configuration> _config;
         private readonly IHttpClientFactory _httpClientFactory;
 
         // List of Artifacts for test purposes.
         private static ConcurrentDictionary<string, Saml2AuthnResponse> artifactSaml2AuthnResponseCache = new ConcurrentDictionary<string, Saml2AuthnResponse>();
 
-        public AuthController(IClientStore clientStore, Saml2Configuration config, IHttpClientFactory httpClientFactory)
+        public AuthController(IClientStore clientStore, IOptions<Saml2Configuration> config, IHttpClientFactory httpClientFactory)
         {
-            this._config = config;
-            this._httpClientFactory = httpClientFactory;
+            _clientStore = clientStore;
+            _config = config;
+            _httpClientFactory = httpClientFactory;
         }
 
         [Route("Login")]
@@ -166,10 +169,7 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
 
                 var claimsIdentity = new ClaimsIdentity(claims);
                 saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
-                //saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single());
                 saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
-
-                var token = saml2AuthnResponse.CreateSecurityToken(relyingParty.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
             }
 
             return responsebinding.Bind(saml2AuthnResponse).ToActionResult();
@@ -197,7 +197,6 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
 
                 var claimsIdentity = new ClaimsIdentity(claims);
                 saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
-                //saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single());
                 saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
                 var token = saml2AuthnResponse.CreateSecurityToken(relyingParty.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);

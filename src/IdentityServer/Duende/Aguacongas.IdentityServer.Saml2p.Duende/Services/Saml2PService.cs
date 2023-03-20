@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Aguacongas.IdentityServer.Saml2p.Duende.Abstration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services;
-internal class Saml2PService
+public class Saml2PService : ISaml2PService
 {
 }
