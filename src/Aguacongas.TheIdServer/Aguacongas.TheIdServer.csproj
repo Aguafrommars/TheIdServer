@@ -53,7 +53,7 @@
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.4" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.5" PrivateAssets="All" />
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.4.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.4.0" />
