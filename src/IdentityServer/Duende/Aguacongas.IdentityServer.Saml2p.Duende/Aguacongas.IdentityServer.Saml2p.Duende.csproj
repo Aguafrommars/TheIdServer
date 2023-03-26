@@ -11,4 +11,8 @@
     <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.8.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Aguacongas.IdentityServer.Store\Aguacongas.IdentityServer.Store.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -385,6 +385,21 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool RequireRequestObject { get; set; }
 
         /// <summary>
+        /// Saml2P metadata
+        /// </summary>
+        public string Saml2PMetadata { get; set; }
+
+        /// <summary>
+        /// User acs artifact
+        /// </summary>
+        public bool UseAcsArtifact { get; set; }
+
+        /// <summary>
+        /// Signature validation certificate
+        /// </summary>
+        public byte[] SignatureValidationCertificate { get; set; }
+
+        /// <summary>
         /// Gets or sets the relying.
         /// </summary>
         /// <value>

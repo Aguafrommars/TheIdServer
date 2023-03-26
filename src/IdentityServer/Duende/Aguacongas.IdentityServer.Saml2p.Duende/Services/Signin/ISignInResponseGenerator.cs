@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.Saml2p.Duende.Abstration;
-public interface ISaml2PService
+namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Signin;
+internal interface ISignInResponseGenerator
 {
 }
