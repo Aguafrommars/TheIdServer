@@ -34,6 +34,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public DbSet<UserSession> UserSessions { get; set; }
 
+        public DbSet<Saml2pArtifact> Saml2pArtifact { get; set; }
+
         public virtual DbSet<BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
 
         public override int SaveChanges()

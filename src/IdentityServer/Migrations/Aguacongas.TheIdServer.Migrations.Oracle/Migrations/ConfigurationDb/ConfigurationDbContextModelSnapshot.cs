@@ -461,6 +461,15 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                     b.Property<int?>("UserSsoLifetime")
                         .HasColumnType("int");
 
+                    b.Property<string>("Saml2PMetadata")
+                        .HasColumnType("nclob");
+
+                    b.Property<string>("SignatureValidationCertificate")
+                        .HasColumnType("blob");
+
+                    b.Property<string>("UseAcsArtifact")
+                        .HasColumnType("bool");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RelyingPartyId");

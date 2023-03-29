@@ -17,10 +17,10 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -450,6 +450,12 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.Property<bool>("RequireRequestObject")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Saml2PMetadata")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("SignatureValidationCertificate")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
 
@@ -457,6 +463,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("UseAcsArtifact")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserCodeType")
@@ -770,7 +779,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 6, 29, 14, 23, 52, 591, DateTimeKind.Utc).AddTicks(7127)
+                            CreatedAt = new DateTime(2023, 3, 29, 15, 26, 28, 338, DateTimeKind.Utc).AddTicks(8358)
                         });
                 });
 

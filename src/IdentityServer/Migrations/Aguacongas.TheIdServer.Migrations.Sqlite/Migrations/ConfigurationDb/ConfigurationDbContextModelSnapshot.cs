@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -445,6 +445,12 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                     b.Property<bool>("RequireRequestObject")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Saml2PMetadata")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("SignatureValidationCertificate")
+                        .HasColumnType("BLOB");
+
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("INTEGER");
 
@@ -452,6 +458,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("UseAcsArtifact")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserCodeType")
@@ -765,7 +774,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 6, 29, 14, 23, 39, 659, DateTimeKind.Utc).AddTicks(7239)
+                            CreatedAt = new DateTime(2023, 3, 29, 15, 26, 16, 726, DateTimeKind.Utc).AddTicks(314)
                         });
                 });
 

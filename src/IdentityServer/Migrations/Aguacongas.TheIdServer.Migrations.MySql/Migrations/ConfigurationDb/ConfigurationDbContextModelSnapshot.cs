@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
@@ -447,6 +447,12 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Property<bool>("RequireRequestObject")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Saml2PMetadata")
+                        .HasColumnType("longtext");
+
+                    b.Property<byte[]>("SignatureValidationCertificate")
+                        .HasColumnType("longblob");
+
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
 
@@ -454,6 +460,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasColumnType("longtext");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("UseAcsArtifact")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserCodeType")
@@ -767,7 +776,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2022, 6, 29, 14, 22, 54, 697, DateTimeKind.Utc).AddTicks(8584)
+                            CreatedAt = new DateTime(2023, 3, 29, 15, 25, 36, 811, DateTimeKind.Utc).AddTicks(7720)
                         });
                 });
 

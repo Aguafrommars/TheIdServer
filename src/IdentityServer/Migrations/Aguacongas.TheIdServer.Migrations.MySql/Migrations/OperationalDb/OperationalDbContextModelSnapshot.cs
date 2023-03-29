@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore.KeyRotationKey", b =>
@@ -248,6 +248,67 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2pArtifact", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Saml2pArtifact");
+                });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserConsent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserConstents");
+                });
+
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserSession", b =>
                 {
                     b.Property<string>("Id")
@@ -276,11 +337,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserSessions");
                 });
@@ -301,7 +360,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.OperationalDb
 
                     b.ToTable("DataProtectionKeys");
                 });
-
 #pragma warning restore 612, 618
         }
     }
