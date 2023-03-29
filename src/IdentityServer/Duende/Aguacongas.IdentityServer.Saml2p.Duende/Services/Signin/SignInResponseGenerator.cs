@@ -1,6 +1,6 @@
-﻿using Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
+﻿using Aguacongas.IdentityServer.Saml2p.Duende.Services.Artifact;
+using Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
-using Aguacongas.IdentityServer.Store;
 using Duende.IdentityServer.Services;
 using ITfoxtec.Identity.Saml2;
 using ITfoxtec.Identity.Saml2.MvcCore;
@@ -9,16 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens.Saml2;
 using System.Security.Claims;
-using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Signin;
 public class SignInResponseGenerator : ISignInResponseGenerator
 {
-    private readonly IAdminStore<Entity.Saml2pArtifact> _store;
+    private readonly IArtifactStore _store;
     private readonly IUserSession _userSession;
     private readonly IOptions<Saml2Configuration> _options;
 
-    public SignInResponseGenerator(IAdminStore<Entity.Saml2pArtifact> store,
+    public SignInResponseGenerator(IArtifactStore store,
         IUserSession userSession,
         IOptions<Saml2Configuration> options)
     {
@@ -27,8 +26,33 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         _options = options;
     }
 
-    public Task<IActionResult> GenerateLoginResponseAsync(SignInValidationResult result, Saml2StatusCodes status)
-    => LoginResponse(result.Saml2Request?.Id, status, result.Saml2RedirectBinding?.RelayState, result.RelyingParty, Guid.NewGuid().ToString(), result.User, result.Client?.ClientId);
+    public async Task<IActionResult> GenerateArtifactResponseAsync(SignInValidationResult<Saml2SoapEnvelope> result)
+    {
+        var relyingParty = result.RelyingParty;
+        var saml2ArtifactResolve = new Saml2ArtifactResolve(GetRelyingPartySaml2Configuration(relyingParty));
+        
+        var soapEnvelope = result.Saml2Binding;
+        if (soapEnvelope is null)
+        {
+            throw new InvalidOperationException("SoapEnvelope cannot be null.");
+
+        }
+        soapEnvelope.Unbind(result.GerericRequest, saml2ArtifactResolve);
+
+        var artifact = await _store.RemoveAsync(saml2ArtifactResolve.Artifact).ConfigureAwait(false);
+
+        var saml2AuthnResponse = new InternalSaml2AuthnResponse(GetRelyingPartySaml2Configuration(result.RelyingParty), artifact.Xml);
+        var saml2ArtifactResponse = new Saml2ArtifactResponse(_options.Value, saml2AuthnResponse)
+        {
+            InResponseTo = saml2ArtifactResolve.Id
+        };
+        soapEnvelope?.Bind(saml2ArtifactResponse);
+
+        return soapEnvelope.ToActionResult();
+    }
+
+    public Task<IActionResult> GenerateLoginResponseAsync(SignInValidationResult<Saml2RedirectBinding> result, Saml2StatusCodes status)
+    => LoginResponse(result.Saml2Request?.Id, status, result.Saml2Binding?.RelayState, result.RelyingParty, Guid.NewGuid().ToString(), result.User, result.Client?.ClientId);
 
     private Task<IActionResult> LoginResponse(Saml2Id? inResponseTo, Saml2StatusCodes status, string? relayState, RelyingParty? relyingParty, string? sessionIndex = null, ClaimsPrincipal? user= null, string? clientId = null)
     {
@@ -101,15 +125,14 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         }
 
         var xml = saml2AuthnResponse.ToXml();
-        await _store.CreateAsync(new Entity.Saml2pArtifact
+        await _store.StoreAsync(new IdentityServer.Store.Entity.Saml2pArtifact
         {
-            Id = Guid.NewGuid().ToString(),
-            Artifact = saml2ArtifactResolve.Artifact,
-            Xml = xml.OuterXml,
+            Id = saml2ArtifactResolve.Artifact,
             ClientId = clientId,
+            CreatedAt = DateTime.UtcNow,
             SessionId = await _userSession.GetSessionIdAsync().ConfigureAwait(false),
             UserId = user?.FindFirstValue("sub"),
-            CreatedAt = DateTime.UtcNow,
+            Xml = xml.OuterXml
         }).ConfigureAwait(false);
 
         return responseBinding.ToActionResult();
@@ -142,4 +165,11 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         return rpConfig;
     }
 
+    class InternalSaml2AuthnResponse : Saml2AuthnResponse
+    {
+        public InternalSaml2AuthnResponse(Saml2Configuration config, string xml) : base(config)
+        {
+            Read(xml, true);
+        }
+    }
 }

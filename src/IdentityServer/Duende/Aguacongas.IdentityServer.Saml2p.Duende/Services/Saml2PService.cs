@@ -1,18 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Saml2p.Duende.Services.Signin;
-using Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
-using ITfoxtec.Identity.Saml2;
-using ITfoxtec.Identity.Saml2.MvcCore;
 using ITfoxtec.Identity.Saml2.Schemas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens.Saml2;
-using System.Reflection.Emit;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services;
@@ -37,14 +31,19 @@ public class Saml2PService : ISaml2PService
         _logger = logger;
     }
 
-    public Task<IActionResult> ArtifactAsync(HttpRequest request)
+    public async Task<IActionResult> ArtifactAsync(HttpRequest request)
     {
-        throw new NotImplementedException();
+        var result = await _signInValidator.ValidateArtifactRequestAsync(request).ConfigureAwait(false);
+        if (result.Error is not null)
+        {
+            throw new InvalidOperationException(result.Error);
+        }
+
+        return await _generator.GenerateArtifactResponseAsync(result).ConfigureAwait(false);
     }
 
     public async Task<IActionResult> LoginAsync(HttpRequest request, IUrlHelper helper)
     {
-        
         var user = await _userSession.GetUserAsync().ConfigureAwait(false);
 
         var signinResult = await _signInValidator.ValidateAsync(request, user).ConfigureAwait(false);
@@ -69,7 +68,7 @@ public class Saml2PService : ISaml2PService
 
         try
         {
-            signinResult.Saml2RedirectBinding?.Unbind(signinResult.GerericRequest, signinResult.Saml2Request);
+            signinResult.Saml2Binding?.Unbind(signinResult.GerericRequest, signinResult.Saml2Request);
 
             return await _generator.GenerateLoginResponseAsync(signinResult, Saml2StatusCodes.Success).ConfigureAwait(false);
         }

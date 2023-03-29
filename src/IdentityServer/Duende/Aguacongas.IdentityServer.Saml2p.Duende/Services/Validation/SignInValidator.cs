@@ -23,30 +23,22 @@ public class SignInValidator : ISignInValidator
         _options = options;
     }
 
-    public async Task<SignInValidationResult> ValidateAsync(HttpRequest request, ClaimsPrincipal user)
+    public async Task<SignInValidationResult<Saml2SoapEnvelope>> ValidateArtifactRequestAsync(HttpRequest request)
     {
-        var genericRequest = request.ToGenericHttpRequest();
+        var soapEnvelope = new Saml2SoapEnvelope();
+        var httpRequest = await request.ToGenericHttpRequestAsync(readBodyAsString: true).ConfigureAwait(false);
         var settings = _options.Value;
-        var saml2AuthnRequest = new Saml2AuthnRequest(settings);
-        var requestBinding = new Saml2RedirectBinding();
-        requestBinding.ReadSamlRequest(genericRequest, saml2AuthnRequest);
+        var saml2ArtifactResolve = new Saml2ArtifactResolve(settings);
 
-
-        var result = new SignInValidationResult
-        {
-            Saml2Request = saml2AuthnRequest,
-            Saml2RedirectBinding = requestBinding,
-            GerericRequest = genericRequest
-        };
-
-        var issuer = saml2AuthnRequest.Issuer;
+        var samlRequest = soapEnvelope.ReadSamlRequest(httpRequest, saml2ArtifactResolve);
+        var issuer = samlRequest.Issuer;
 
         // check client
         var client = await _clientStore.FindEnabledClientByIdAsync(issuer);
 
         if (client == null)
         {
-            return new SignInValidationResult
+            return new SignInValidationResult<Saml2SoapEnvelope>
             {
                 Error = "invalid_relying_party",
                 ErrorMessage = $"{issuer} client not found."
@@ -54,7 +46,7 @@ public class SignInValidator : ISignInValidator
         }
         if (client.ProtocolType != IdentityServerConstants.ProtocolTypes.Saml2p)
         {
-            return new SignInValidationResult
+            return new SignInValidationResult<Saml2SoapEnvelope>
             {
                 Error = "invalid_relying_party",
                 ErrorMessage = $"{issuer} client is not a saml2p client."
@@ -64,23 +56,73 @@ public class SignInValidator : ISignInValidator
         var rp = await _relyingPartyStore.FindRelyingPartyAsync(issuer).ConfigureAwait(false);
         if (rp == null)
         {
-            return new SignInValidationResult
+            return new SignInValidationResult<Saml2SoapEnvelope>
             {
                 Error = "invalid_relying_party",
                 ErrorMessage = $"{issuer} relying party not found."
             };
         }
 
-        result.Client = client;
-        result.RelyingParty = rp;
-
-        if (user?.Identity?.IsAuthenticated != true)
+        return new SignInValidationResult<Saml2SoapEnvelope>
         {
-            result.SignInRequired = true;
+            Saml2Request = samlRequest,
+            Saml2Binding = soapEnvelope,
+            GerericRequest = httpRequest,
+            Client = client,
+            RelyingParty = rp,
+        };
+    }
+
+    public async Task<SignInValidationResult<Saml2RedirectBinding>> ValidateAsync(HttpRequest request, ClaimsPrincipal user)
+    {
+        var genericRequest = request.ToGenericHttpRequest();
+        var settings = _options.Value;
+        var saml2AuthnRequest = new Saml2AuthnRequest(settings);
+        var requestBinding = new Saml2RedirectBinding();
+        requestBinding.ReadSamlRequest(genericRequest, saml2AuthnRequest);
+
+        var issuer = saml2AuthnRequest.Issuer;
+
+        // check client
+        var client = await _clientStore.FindEnabledClientByIdAsync(issuer);
+
+        if (client == null)
+        {
+            return new SignInValidationResult<Saml2RedirectBinding>
+            {
+                Error = "invalid_relying_party",
+                ErrorMessage = $"{issuer} client not found."
+            };
+        }
+        if (client.ProtocolType != IdentityServerConstants.ProtocolTypes.Saml2p)
+        {
+            return new SignInValidationResult<Saml2RedirectBinding>
+            {
+                Error = "invalid_relying_party",
+                ErrorMessage = $"{issuer} client is not a saml2p client."
+            };
         }
 
-        result.User = user;
+        var rp = await _relyingPartyStore.FindRelyingPartyAsync(issuer).ConfigureAwait(false);
+        if (rp == null)
+        {
+            return new SignInValidationResult<Saml2RedirectBinding>
+            {
+                Error = "invalid_relying_party",
+                ErrorMessage = $"{issuer} relying party not found."
+            };
+        }
 
-        return result;
+        return new SignInValidationResult<Saml2RedirectBinding>
+        {
+            Saml2Request = saml2AuthnRequest,
+            Saml2Binding = requestBinding,
+            GerericRequest = genericRequest,
+            Client = client,
+            RelyingParty = rp,
+            User = user,
+            SignInRequired = user?.Identity?.IsAuthenticated != true
+        };
     }
+
 }

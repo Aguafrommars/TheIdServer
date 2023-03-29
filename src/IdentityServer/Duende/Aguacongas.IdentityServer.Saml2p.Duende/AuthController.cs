@@ -16,6 +16,8 @@ using System.Threading;
 using System.Collections.Concurrent;
 using Duende.IdentityServer.Stores;
 using Microsoft.Extensions.Options;
+using Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
+using Aguacongas.IdentityServer.Saml2p.Duende.Services;
 #if DEBUG
 using System.Diagnostics;
 #endif
@@ -26,80 +28,20 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
     [Route("Auth")]
     public class AuthController : Controller
     {
-        private readonly IClientStore _clientStore;
-        private readonly IOptions<Saml2Configuration> _config;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ISaml2PService _saml2PService;
 
-        // List of Artifacts for test purposes.
-        private static ConcurrentDictionary<string, Saml2AuthnResponse> artifactSaml2AuthnResponseCache = new ConcurrentDictionary<string, Saml2AuthnResponse>();
-
-        public AuthController(IClientStore clientStore, IOptions<Saml2Configuration> config, IHttpClientFactory httpClientFactory)
+        public AuthController(ISaml2PService saml2PService)
         {
-            _clientStore = clientStore;
-            _config = config;
-            _httpClientFactory = httpClientFactory;
+            _saml2PService = saml2PService;
         }
 
         [Route("Login")]
-        public async Task<IActionResult> Login()
-        {
-            var requestBinding = new Saml2RedirectBinding();
-            var relyingParty = await ValidateRelyingParty(ReadRelyingPartyFromLoginRequest(requestBinding));
+        public Task<IActionResult> Login()
+        => _saml2PService.LoginAsync(Request, Url);
 
-            var saml2AuthnRequest = new Saml2AuthnRequest(GetRpSaml2Configuration());
-            try
-            {
-                requestBinding.Unbind(Request.ToGenericHttpRequest(), saml2AuthnRequest);
-
-                // ****  Handle user login e.g. in GUI ****
-                // Test user with session index and claims
-                var sessionIndex = Guid.NewGuid().ToString();
-                var claims = CreateTestUserClaims(saml2AuthnRequest.Subject?.NameID?.ID);
-
-                return LoginResponse(saml2AuthnRequest.Id, Saml2StatusCodes.Success, requestBinding.RelayState, relyingParty, sessionIndex, claims);
-            }
-            catch (Exception exc)
-            {
-#if DEBUG
-                Debug.WriteLine($"Saml 2.0 Authn Request error: {exc.ToString()}\nSaml Auth Request: '{saml2AuthnRequest.XmlDocument?.OuterXml}'\nQuery String: {Request.QueryString}");
-#endif
-                return LoginResponse(saml2AuthnRequest.Id, Saml2StatusCodes.Responder, requestBinding.RelayState, relyingParty);
-            }
-        }
-        
         [Route("Artifact")]
-        public async Task<IActionResult> Artifact()
-        {
-            try
-            {
-                var soapEnvelope = new Saml2SoapEnvelope();
-
-                var httpRequest = await Request.ToGenericHttpRequestAsync(readBodyAsString: true);
-                var relyingParty = await ValidateRelyingParty(ReadRelyingPartyFromSoapEnvelopeRequest(httpRequest, soapEnvelope));
-
-                var saml2ArtifactResolve = new Saml2ArtifactResolve(GetRpSaml2Configuration(relyingParty));
-                soapEnvelope.Unbind(httpRequest, saml2ArtifactResolve);
-
-                if (!artifactSaml2AuthnResponseCache.Remove(saml2ArtifactResolve.Artifact, out Saml2AuthnResponse saml2AuthnResponse))
-                {
-                    throw new Exception($"Saml2AuthnResponse not found by Artifact '{saml2ArtifactResolve.Artifact}' in the cache.");
-                }
-
-                var saml2ArtifactResponse = new Saml2ArtifactResponse(_config, saml2AuthnResponse)
-                {
-                    InResponseTo = saml2ArtifactResolve.Id
-                };
-                soapEnvelope.Bind(saml2ArtifactResponse);
-                return soapEnvelope.ToActionResult();
-            }
-            catch (Exception exc)
-            {
-#if DEBUG
-                Debug.WriteLine($"SPSsoDescriptor error: {exc.ToString()}");
-#endif
-                throw;
-            }
-        }
+        public Task<IActionResult> Artifact()
+        => _saml2PService.ArtifactAsync(Request);
 
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
@@ -124,12 +66,6 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
                 return LogoutResponse(saml2LogoutRequest.Id, Saml2StatusCodes.Responder, requestBinding.RelayState, saml2LogoutRequest.SessionIndex, relyingParty);
             }
         }
-
-        private string ReadRelyingPartyFromLoginRequest<T>(Saml2Binding<T> binding)
-        {
-            return binding.ReadSamlRequest(Request.ToGenericHttpRequest(), new Saml2AuthnRequest(GetRpSaml2Configuration()))?.Issuer;
-        }
-
         private string ReadRelyingPartyFromLogoutRequest<T>(Saml2Binding<T> binding)
         {
             return binding.ReadSamlRequest(Request.ToGenericHttpRequest(), new Saml2LogoutRequest(GetRpSaml2Configuration()))?.Issuer;
