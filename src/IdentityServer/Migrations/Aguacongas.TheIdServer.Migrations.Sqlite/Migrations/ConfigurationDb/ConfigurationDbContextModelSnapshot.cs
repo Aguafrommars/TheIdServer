@@ -448,9 +448,6 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                     b.Property<string>("Saml2PMetadata")
                         .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("SignatureValidationCertificate")
-                        .HasColumnType("BLOB");
-
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("INTEGER");
 
@@ -709,6 +706,9 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         .HasMaxLength(250)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("UsedForEncryption")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -774,7 +774,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 3, 29, 15, 26, 16, 726, DateTimeKind.Utc).AddTicks(314)
+                            CreatedAt = new DateTime(2023, 4, 2, 15, 29, 12, 245, DateTimeKind.Utc).AddTicks(3116)
                         });
                 });
 

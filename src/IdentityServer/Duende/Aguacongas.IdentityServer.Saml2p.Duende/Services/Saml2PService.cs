@@ -46,7 +46,7 @@ public class Saml2PService : ISaml2PService
     {
         var user = await _userSession.GetUserAsync().ConfigureAwait(false);
 
-        var signinResult = await _signInValidator.ValidateAsync(request, user).ConfigureAwait(false);
+        var signinResult = await _signInValidator.ValidateLoginAsync(request, user).ConfigureAwait(false);
 
         if (signinResult.Error is not null)
         {
@@ -56,7 +56,7 @@ public class Saml2PService : ISaml2PService
 
         if (signinResult.SignInRequired)
         {
-            var returnUrl = helper.Action(nameof(AuthController.Login));
+            var returnUrl = helper.Action(nameof(Saml2PController.Login));
             returnUrl = AddQueryString(returnUrl, request.QueryString.Value);
 
             var userInteraction = _identityServerOptions.Value.UserInteraction;
@@ -74,17 +74,28 @@ public class Saml2PService : ISaml2PService
         }
         catch (Exception exc)
         {
-            _logger.LogError(exc, exc.Message);
+            _logger.LogError(exc, "{Message}", exc.Message);
             return await _generator.GenerateLoginResponseAsync(signinResult, Saml2StatusCodes.Responder).ConfigureAwait(false);
         }
     }
 
-    public Task<IActionResult> LogoutAsync(HttpRequest request)
+    public async Task<IActionResult> LogoutAsync(HttpRequest request)
     {
-        throw new NotImplementedException();
+        var signinResult = await _signInValidator.ValidateLogoutAsync(request).ConfigureAwait(false);
+        try
+        {
+            signinResult.Saml2Binding?.Unbind(signinResult.GerericRequest, signinResult.Saml2Request);
+
+            return await _generator.GenerateLogoutResponseAsync(signinResult, Saml2StatusCodes.Success).ConfigureAwait(false);
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, "{Message}", exc.Message);
+            return await _generator.GenerateLogoutResponseAsync(signinResult, Saml2StatusCodes.Responder).ConfigureAwait(false);
+        }
     }
 
-    
+
     private static string AddQueryString(string? url, string? query)
     {
         if (url?.Contains('?') == false)

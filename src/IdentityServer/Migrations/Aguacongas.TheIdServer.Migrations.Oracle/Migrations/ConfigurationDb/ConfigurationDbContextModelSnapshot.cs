@@ -464,9 +464,6 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                     b.Property<string>("Saml2PMetadata")
                         .HasColumnType("nclob");
 
-                    b.Property<string>("SignatureValidationCertificate")
-                        .HasColumnType("blob");
-
                     b.Property<string>("UseAcsArtifact")
                         .HasColumnType("bool");
 
@@ -712,6 +709,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nclob");
+
+                    b.Property<bool>("UsedForEncryption")
+                        .HasColumnType("bool");
 
                     b.HasKey("Id");
 

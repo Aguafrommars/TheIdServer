@@ -116,14 +116,25 @@ else
                                        @onchange="@(() => SetProtcolType(WSFED))" />
                                     <label class="form-check-label" for="wsfed" @onclick="@(() => SetProtcolType(WSFED))">WS-Federation</label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="protocol-type"
+                                            value="2"
+                                            checked="@(Model.ProtocolType == SAML2P)"
+                                        @onchange="@(() => SetProtcolType(SAML2P))" />
+                                    <label class="form-check-label" for="saml2p" @onclick="@(() => SetProtcolType(SAML2P))">SAML2P</label>
+                                </div>
                             }
                             else if (Model.ProtocolType == OIDC)
                             {
                                 <span class="form-control-plaintext">OIDC</span>
                             }
-                            else
+                            else if (Model.ProtocolType == WSFED)
                             {
                                 <span class="form-control-plaintext">WS-Federation</span>
+                            }
+                            else
+                            {
+                                <span class="form-control-plaintext">SAML2P</span>
                             }
                         </div>
                     </div>
@@ -183,7 +194,7 @@ else
                             </div>
                         </div>
                     }
-                    else
+                    else if (Model.ProtocolType == WSFED)
                     {
                         <div class="mb-3 row">
                             <label class="col col-form-label" for="relying-party">
@@ -191,6 +202,17 @@ else
                             </label>
                             <div class="col-lg-10 col-sm-12">
                                 <ClientRelyingParty @bind-Value="@Model.RelyingPartyId" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3 row">
+                            <label class="col col-form-label" for="metadata">
+                                @Localizer["metadata"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeText Id="metadata" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.Saml2PMetadata" />
                             </div>
                         </div>
                     }
@@ -259,11 +281,11 @@ else
                     <ClientTokens Model="@Model" />
                 </div>
             </div>
-            @if (Model.ProtocolType == OIDC)
+            @if (Model.ProtocolType != WSFED)
             {
                 <div id="secrets" class="card mb-3">
                     <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
+                        <EntitySubGridTitle Text="@Localizer["Secrets"]" ProtocolType="@Model.ProtocolType" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
                     </div>
                     <div class="card-body">
                         <ClientSecrets Collection="@Model.ClientSecrets" />

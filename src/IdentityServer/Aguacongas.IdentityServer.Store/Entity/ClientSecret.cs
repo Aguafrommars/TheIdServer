@@ -80,6 +80,12 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
+        /// When the secret is a certificate and the client is a SANL2 client.
+        /// Used to indicated if the certificate is the encryption certificate.
+        /// </summary>
+        public bool UsedForEncryption { get; set; }
+
+        /// <summary>
         /// Gets or sets the client.
         /// </summary>
         /// <value>

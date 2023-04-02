@@ -13,7 +13,7 @@ public class RelyingParty
 
     public Uri? SingleLogoutDestination { get; set; }
 
-    public X509Certificate2? SignatureValidationCertificate { get; set; }
+    public IEnumerable<X509Certificate2?> SignatureValidationCertificate { get; set; } = Array.Empty<X509Certificate2>();
 
     public X509Certificate2? EncryptionCertificate { get; set; }
 }

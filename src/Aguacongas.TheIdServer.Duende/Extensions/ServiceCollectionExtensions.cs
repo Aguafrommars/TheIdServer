@@ -45,6 +45,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Components;
+using Aguacongas.IdentityServer.Saml2p.Duende.Services.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -165,7 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme, 
                     options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
-                
+
 
             var mvcBuilder = services.Configure<SendGridOptions>(configurationManager)
                 .AddLocalization()
@@ -180,7 +181,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     settings.NullValueHandling = NullValueHandling.Ignore;
                     settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
-                .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)));
+                .AddIdentityServerWsFederation(configurationManager.GetSection(nameof(WsFederationOptions)))
+                .AddIdentityServerSaml2P(configurationManager.GetSection(nameof(Saml2POptions)));
 
             ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
             ConfigureDynamicConfiguration(mvcBuilder, configurationManager);

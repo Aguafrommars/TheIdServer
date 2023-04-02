@@ -453,9 +453,6 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                     b.Property<string>("Saml2PMetadata")
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("SignatureValidationCertificate")
-                        .HasColumnType("bytea");
-
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("integer");
 
@@ -714,6 +711,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
+                    b.Property<bool>("UsedForEncryption")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text");
@@ -779,7 +779,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 3, 29, 15, 26, 6, 372, DateTimeKind.Utc).AddTicks(1778)
+                            CreatedAt = new DateTime(2023, 4, 2, 15, 29, 5, 388, DateTimeKind.Utc).AddTicks(2090)
                         });
                 });
 

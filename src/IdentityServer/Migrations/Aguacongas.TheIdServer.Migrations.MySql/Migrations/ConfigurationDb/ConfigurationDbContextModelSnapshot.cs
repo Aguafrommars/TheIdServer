@@ -450,9 +450,6 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Property<string>("Saml2PMetadata")
                         .HasColumnType("longtext");
 
-                    b.Property<byte[]>("SignatureValidationCertificate")
-                        .HasColumnType("longblob");
-
                     b.Property<int>("SlidingRefreshTokenLifetime")
                         .HasColumnType("int");
 
@@ -711,6 +708,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
+                    b.Property<bool>("UsedForEncryption")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -776,7 +776,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 3, 29, 15, 25, 36, 811, DateTimeKind.Utc).AddTicks(7720)
+                            CreatedAt = new DateTime(2023, 4, 2, 15, 28, 49, 560, DateTimeKind.Utc).AddTicks(1009)
                         });
                 });
 
