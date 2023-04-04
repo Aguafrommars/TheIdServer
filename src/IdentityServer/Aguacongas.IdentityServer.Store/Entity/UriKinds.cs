@@ -22,6 +22,9 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// Cors uri
         /// </summary>
         Cors = 4,
+        /// <summary>
+        /// Acs artifact uri
+        /// </summary>
         Acs = 8
     }
 }

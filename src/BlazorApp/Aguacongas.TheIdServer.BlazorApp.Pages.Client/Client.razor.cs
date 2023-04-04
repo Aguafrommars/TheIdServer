@@ -152,10 +152,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return Model.IsWebClient();
         }
 
-        private static Entity.ClientSecret CreateSecret()
+        private Entity.ClientSecret CreateSecret()
             => new()
             {
-                Type = "SharedSecret"
+                Type = Model.ProtocolType == SAML2P ? "X509Thumbprint" :  "SharedSecret"
             };
 
         private static Entity.ClientClaim CreateClaim()

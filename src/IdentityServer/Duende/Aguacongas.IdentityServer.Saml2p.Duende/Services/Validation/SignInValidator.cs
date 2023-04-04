@@ -79,7 +79,19 @@ public class SignInValidator : ISignInValidator
         var settings = await _configurationService.GetConfigurationAsync().ConfigureAwait(false);
         var saml2AuthnRequest = new Saml2AuthnRequest(settings);
         var requestBinding = new Saml2RedirectBinding();
-        requestBinding.ReadSamlRequest(genericRequest, saml2AuthnRequest);
+
+        try
+        {
+            requestBinding.ReadSamlRequest(genericRequest, saml2AuthnRequest);
+        }
+        catch (InvalidSaml2BindingException ex)
+        {
+            return new SignInValidationResult<Saml2RedirectBinding>
+            {
+                Error = nameof(InvalidSaml2BindingException),
+                ErrorMessage = ex.Message
+            };
+        }
 
         var issuer = saml2AuthnRequest.Issuer;
 

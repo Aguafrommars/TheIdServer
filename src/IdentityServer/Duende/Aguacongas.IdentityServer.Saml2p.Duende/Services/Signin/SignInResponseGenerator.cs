@@ -3,6 +3,7 @@ using Aguacongas.IdentityServer.Saml2p.Duende.Services.Configuration;
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
 using Duende.IdentityServer.Services;
+using IdentityModel;
 using ITfoxtec.Identity.Saml2;
 using ITfoxtec.Identity.Saml2.MvcCore;
 using ITfoxtec.Identity.Saml2.Schemas;
@@ -102,7 +103,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             saml2AuthnResponse.SessionIndex = sessionIndex;
 
             var claimsIdentity = new ClaimsIdentity(user?.Claims);
-            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
+            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == JwtClaimTypes.Name).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
             saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);

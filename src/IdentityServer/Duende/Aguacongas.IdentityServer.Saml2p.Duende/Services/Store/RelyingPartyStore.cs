@@ -20,7 +20,7 @@ public class RelyingPartyStore : IRelyingPartyStore
     {
         var client = await _clientStore.GetAsync(issuer, new GetRequest
         {
-            Expand = nameof(Entity.Client.ClientSecrets)
+            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)}"
         }).ConfigureAwait(false);
 
         var logoutUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.PostLogout)?.Uri;

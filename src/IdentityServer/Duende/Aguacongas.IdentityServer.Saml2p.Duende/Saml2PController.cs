@@ -11,7 +11,7 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende
         public Task<IActionResult> Metadata([FromServices] IMetadataResponseGenerator metadataResponseGenerator)
         => metadataResponseGenerator.GenerateMetadataResponseAsync();
 
-        [HttpPost("login")]
+        [Route("login")]
         public Task<IActionResult> Login([FromServices] ISaml2PService saml2PService)
         => saml2PService.LoginAsync(Request, Url);
 

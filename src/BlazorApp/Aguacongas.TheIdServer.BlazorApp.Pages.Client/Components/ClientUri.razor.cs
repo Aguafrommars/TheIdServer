@@ -17,6 +17,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         [Parameter]
         public bool CanHandlePostLogout { get; set; }
 
+        [Parameter]
+        public bool CanHandleAcsArtifact { get; set; }
+
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
         bool Cors
@@ -70,5 +73,21 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
             }
         }
 
+        bool AcsArtifact
+        {
+            get { return (Model.Kind & Entity.UriKinds.Acs) == Entity.UriKinds.Acs; }
+            set
+            {
+                if (value)
+                {
+                    Model.Kind |= Entity.UriKinds.Acs;
+                }
+                else
+                {
+                    Model.Kind &= ~Entity.UriKinds.Acs;
+                }
+                HandleModificationState.EntityUpdated(Model);
+            }
+        }
     }
 }
