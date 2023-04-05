@@ -48,6 +48,6 @@ public class Saml2ConfigurationService : ISaml2ConfigurationService
         };
     }
 
-    private string Location(HttpRequest request)
+    private static string Location(HttpRequest request)
     => $"{request.Scheme}://{request.Host}/saml2p";
 }

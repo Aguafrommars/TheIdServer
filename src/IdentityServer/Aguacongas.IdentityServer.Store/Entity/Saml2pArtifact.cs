@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Aguacongas.IdentityServer.Store.Entity;
 
 /// <summary>
-/// Sqml2P artifact
+/// Saml2P artifact
 /// </summary>
-public class Saml2pArtifact : IEntityId, IUserSubEntity, IClientSubEntity
+public class Saml2PArtifact : IEntityId, IUserSubEntity, IClientSubEntity
 {
     /// <summary>
     /// Gets or sets the identifier.

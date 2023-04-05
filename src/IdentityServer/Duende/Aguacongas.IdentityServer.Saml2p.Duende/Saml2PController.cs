@@ -1,10 +1,12 @@
 ﻿using Aguacongas.IdentityServer.Saml2p.Duende.Services;
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Metatdata;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende
 {
     [Route("[controller]")]
+    [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "This is a controller")]
     public class Saml2PController : Controller
     {
         [HttpGet("metadata")]

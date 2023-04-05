@@ -72,12 +72,12 @@ public class RelyingPartyStore : IRelyingPartyStore
         return relyingParty;
     }
 
-    private X509Certificate2 GetCertificateFromBase64(string value)
+    private static X509Certificate2 GetCertificateFromBase64(string value)
     => new X509Certificate2(Convert.FromBase64String(value));
 
-    private X509Certificate2? GetCertificateFromName(string value)
+    private static X509Certificate2? GetCertificateFromName(string value)
     => FindCertificate(value, X509FindType.FindBySubjectDistinguishedName);
-    private X509Certificate2? GetCertificateFromThumprint(string value)
+    private static X509Certificate2? GetCertificateFromThumprint(string value)
     => FindCertificate(value, X509FindType.FindByThumbprint);
 
     private static X509Certificate2? FindCertificate(string value, X509FindType findType)

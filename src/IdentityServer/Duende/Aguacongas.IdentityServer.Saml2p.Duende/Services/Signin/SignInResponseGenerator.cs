@@ -143,7 +143,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         }
 
         var xml = saml2AuthnResponse.ToXml();
-        await _store.StoreAsync(new IdentityServer.Store.Entity.Saml2pArtifact
+        await _store.StoreAsync(new IdentityServer.Store.Entity.Saml2PArtifact
         {
             Id = saml2ArtifactResolve.Artifact,
             ClientId = clientId,

@@ -8,5 +8,5 @@ public interface ISignInResponseGenerator
 {
     Task<IActionResult> GenerateArtifactResponseAsync(SignInValidationResult<Saml2SoapEnvelope> result);
     Task<IActionResult> GenerateLoginResponseAsync(SignInValidationResult<Saml2RedirectBinding> result, Saml2StatusCodes status);
-    Task<IActionResult> GenerateLogoutResponseAsync(SignInValidationResult<Saml2PostBinding> signinResult, Saml2StatusCodes success);
+    Task<IActionResult> GenerateLogoutResponseAsync(SignInValidationResult<Saml2PostBinding> signinResult, Saml2StatusCodes status);
 }

@@ -50,7 +50,7 @@ public class Saml2PService : ISaml2PService
 
         if (signinResult.Error is not null)
         {
-            _logger.LogError(signinResult.ErrorMessage);
+            _logger.LogError("{Error}", signinResult.ErrorMessage);
             return await _generator.GenerateLoginResponseAsync(signinResult, Saml2StatusCodes.Responder).ConfigureAwait(false);
         }
 
