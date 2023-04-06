@@ -197,7 +197,7 @@ else
                             </div>
                         </div>
                     }
-                    else if (Model.ProtocolType == WSFED)
+                    else if (Model.ProtocolType != OIDC)
                     {
                         <div class="mb-3 row">
                             <label class="col col-form-label" for="relying-party">
@@ -205,18 +205,6 @@ else
                             </label>
                             <div class="col-lg-10 col-sm-12">
                                 <ClientRelyingParty @bind-Value="@Model.RelyingPartyId" />
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="metadata">
-                                @Localizer["metadata"]
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="metadata" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.Saml2PMetadata" />
-                                <AuthorizeCheckbox Name="acs" Label="@Localizer["use acs artifact"]" @bind-Value="@Model.UseAcsArtifact" />
                             </div>
                         </div>
                     }

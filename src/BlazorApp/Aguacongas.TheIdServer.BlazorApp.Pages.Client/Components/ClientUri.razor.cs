@@ -18,7 +18,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         public bool CanHandlePostLogout { get; set; }
 
         [Parameter]
-        public bool CanHandleAcsArtifact { get; set; }
+        public bool IsSaml2PClient { get; set; }
 
         [CascadingParameter]
         public HandleModificationState HandleModificationState { get; set; }
@@ -51,6 +51,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                 else
                 {
                     Model.Kind &= ~Entity.UriKinds.Redirect;
+                }
+                HandleModificationState.EntityUpdated(Model);
+            }
+        }
+
+        bool Metadata
+        {
+            get { return (Model.Kind & Entity.UriKinds.Saml2Metadata) == Entity.UriKinds.Saml2Metadata; }
+            set
+            {
+                if (value)
+                {
+                    Model.Kind |= Entity.UriKinds.Saml2Metadata;
+                }
+                else
+                {
+                    Model.Kind &= ~Entity.UriKinds.Saml2Metadata;
                 }
                 HandleModificationState.EntityUpdated(Model);
             }

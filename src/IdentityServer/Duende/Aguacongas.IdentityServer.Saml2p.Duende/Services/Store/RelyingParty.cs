@@ -16,4 +16,6 @@ public class RelyingParty
     public IEnumerable<X509Certificate2?> SignatureValidationCertificate { get; set; } = Array.Empty<X509Certificate2>();
 
     public X509Certificate2? EncryptionCertificate { get; set; }
+    public string? SignatureAlgorithm { get; set; }
+    public Uri? SamlNameIdentifierFormat { get; set; }
 }

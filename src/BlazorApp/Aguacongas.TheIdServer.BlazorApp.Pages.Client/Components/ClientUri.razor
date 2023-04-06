@@ -20,13 +20,26 @@ else
         </div>
     </td>
 }
-<td class="text-center">
-    <div class="d-flex">
-        <div class="m-auto">
-            <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
+@if (!IsSaml2PClient)
+{
+    <td class="text-center">
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
+            </div>
         </div>
-    </div>
-</td>
+    </td>
+}
+else
+{
+    <td class="text-center">
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="metadata" @bind-Value="@Metadata" />
+            </div>
+        </div>
+    </td>
+}
 @if (CanHandlePostLogout)
 {
     <td class="text-center">
@@ -37,7 +50,7 @@ else
         </div>
     </td>
 }
-@if (CanHandleAcsArtifact)
+@if (IsSaml2PClient)
 {
     <td class="text-center">
         <div class="d-flex">

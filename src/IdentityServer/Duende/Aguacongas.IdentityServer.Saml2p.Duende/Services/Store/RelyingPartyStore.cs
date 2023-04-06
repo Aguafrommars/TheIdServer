@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using ITfoxtec.Identity.Saml2.Cryptography;
 using ITfoxtec.Identity.Saml2.Schemas.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using static Duende.IdentityServer.IdentityServerConstants;
@@ -20,14 +21,13 @@ public class RelyingPartyStore : IRelyingPartyStore
     {
         var client = await _clientStore.GetAsync(issuer, new GetRequest
         {
-            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)}"
+            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.RelyingParty)}"
         }).ConfigureAwait(false);
 
         var logoutUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.PostLogout)?.Uri;
         var acsUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Acs)?.Uri;
         var signatureCertificateList = client.ClientSecrets
-            .Where(s => !s.UsedForEncryption && 
-                (s.Expiration == null || s.Expiration > DateTime.UtcNow) &&
+            .Where(s => (s.Expiration == null || s.Expiration > DateTime.UtcNow) &&
                 (s.Type == SecretTypes.X509CertificateThumbprint ||
                 s.Type == SecretTypes.X509CertificateName ||
                 s.Type == SecretTypes.X509CertificateBase64))
@@ -39,35 +39,25 @@ public class RelyingPartyStore : IRelyingPartyStore
                 _ => null
             });
 
-        var encriptionsCertificate = client.ClientSecrets
-            .Where(s => s.UsedForEncryption &&
-                (s.Expiration == null || s.Expiration > DateTime.UtcNow) &&
-                (s.Type == SecretTypes.X509CertificateThumbprint ||
-                s.Type == SecretTypes.X509CertificateName ||
-                s.Type == SecretTypes.X509CertificateBase64))
-            .OrderBy(s => s.Expiration)
-            .Select(s => s.Type switch
-            {
-                SecretTypes.X509CertificateThumbprint => GetCertificateFromThumprint(s.Value),
-                SecretTypes.X509CertificateName => GetCertificateFromName(s.Value),
-                SecretTypes.X509CertificateBase64 => GetCertificateFromBase64(s.Value),
-                _ => null
-            })
-            .FirstOrDefault();
+        var rp = client.RelyingParty;
+        var encriptionsCertificate = rp.EncryptionCertificate is not null ?
+            new X509Certificate2(rp.EncryptionCertificate) : null;
 
         var relyingParty = new RelyingParty
         {
             Issuer = issuer,
-            UseAcsArtifact = client.UseAcsArtifact,
+            UseAcsArtifact = acsUri != null,
             AcsDestination = acsUri is not null ? new Uri(acsUri) : null,
             SingleLogoutDestination = logoutUri is not null ? new Uri(logoutUri) : null,
             SignatureValidationCertificate = signatureCertificateList,
-            EncryptionCertificate = encriptionsCertificate
+            EncryptionCertificate = encriptionsCertificate,
+            SignatureAlgorithm = rp.SignatureAlgorithm,
+            SamlNameIdentifierFormat = rp.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : null
         };
-        var metadata = client.Saml2PMetadata;
+        var metadata = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Saml2Metadata);
         if (metadata != null)
         {
-            return await LoadRelyingPartyFromMetadataAsync(relyingParty, metadata).ConfigureAwait(false);
+            return await LoadRelyingPartyFromMetadataAsync(relyingParty, metadata.Uri).ConfigureAwait(false);
         }
         return relyingParty;
     }
@@ -119,10 +109,12 @@ public class RelyingPartyStore : IRelyingPartyStore
 
         relyingParty.Issuer = entityDescriptor.EntityId;
         relyingParty.Metadata = metadata;
-        relyingParty.AcsDestination = entityDescriptor.SPSsoDescriptor.AssertionConsumerServices.Where(a => a.IsDefault).OrderBy(a => a.Index).First().Location;
-        var singleLogoutService = entityDescriptor.SPSsoDescriptor.SingleLogoutServices.First();
+        var spSsoDescriptor = entityDescriptor.SPSsoDescriptor;
+        relyingParty.SamlNameIdentifierFormat = spSsoDescriptor.NameIDFormats?.FirstOrDefault();
+        relyingParty.AcsDestination = spSsoDescriptor.AssertionConsumerServices.Where(a => a.IsDefault).OrderBy(a => a.Index).First().Location;
+        var singleLogoutService = spSsoDescriptor.SingleLogoutServices.First();
         relyingParty.SingleLogoutDestination = singleLogoutService.ResponseLocation ?? singleLogoutService.Location;
-        relyingParty.SignatureValidationCertificate = entityDescriptor.SPSsoDescriptor.SigningCertificates;
+        relyingParty.SignatureValidationCertificate = spSsoDescriptor.SigningCertificates;
         return relyingParty;
     }
 }

@@ -15,11 +15,22 @@
                                 GridState="GridState" />
             </th>
         }
-        <th scope="col" class="text-center">
-            <SortableHeader Property="Redirect"
+        @if (Model.ProtocolType != "saml2p")
+        {
+            <th scope="col" class="text-center">
+                <SortableHeader Property="Redirect"
                             Text="@Localizer["redirect"]"
                             GridState="GridState" />
-        </th>
+            </th>
+        }
+        else
+        {
+            <th scope="col" class="text-center">
+                <SortableHeader Property="Metadata"
+                                Text="@Localizer["metadata"]"
+                                GridState="GridState" />
+            </th>
+        }
         @if (Model.CanHandlePostLogout())
         {
             <th scope="col" class="text-center">
@@ -39,7 +50,7 @@
         <th></th>
     </TableHeader>
     <RowTemplate>
-        <ClientUri Model="url" CanHandlePostLogout="Model.CanHandlePostLogout()" IsSpaClient="Model.IsSpaClient()" CanHandleAcsArtifact='Model.ProtocolType == "saml2p"' />
+        <ClientUri Model="url" CanHandlePostLogout="Model.CanHandlePostLogout()" IsSpaClient="Model.IsSpaClient()" IsSaml2PClient='Model.ProtocolType == "saml2p"' />
         <td>
             <AuthorizeButton Type="button" CssSubClass="btn-primary" Clicked="() => OnDeleteEntityClicked(url)">
                 <span class="oi oi-trash"></span>

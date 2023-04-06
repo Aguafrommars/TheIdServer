@@ -103,7 +103,10 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             saml2AuthnResponse.SessionIndex = sessionIndex;
 
             var claimsIdentity = new ClaimsIdentity(user?.Claims);
-            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == JwtClaimTypes.Name).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
+            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims
+                .Where(c => c.Type == JwtClaimTypes.Name)
+                .Select(c => c.Value)
+                .Single(), relyingParty?.SamlNameIdentifierFormat ?? NameIdentifierFormats.Persistent);
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
             saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
