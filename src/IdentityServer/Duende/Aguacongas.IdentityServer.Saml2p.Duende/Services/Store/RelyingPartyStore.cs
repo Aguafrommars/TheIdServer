@@ -40,7 +40,7 @@ public class RelyingPartyStore : IRelyingPartyStore
             });
 
         var rp = client.RelyingParty;
-        var encriptionsCertificate = rp.EncryptionCertificate is not null ?
+        var encriptionsCertificate = rp?.EncryptionCertificate is not null ?
             new X509Certificate2(rp.EncryptionCertificate) : null;
 
         var relyingParty = new RelyingParty
@@ -51,8 +51,8 @@ public class RelyingPartyStore : IRelyingPartyStore
             SingleLogoutDestination = logoutUri is not null ? new Uri(logoutUri) : null,
             SignatureValidationCertificate = signatureCertificateList,
             EncryptionCertificate = encriptionsCertificate,
-            SignatureAlgorithm = rp.SignatureAlgorithm,
-            SamlNameIdentifierFormat = rp.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : null
+            SignatureAlgorithm = rp?.SignatureAlgorithm,
+            SamlNameIdentifierFormat = rp?.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : null
         };
         var metadata = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Saml2Metadata);
         if (metadata != null)
@@ -115,6 +115,7 @@ public class RelyingPartyStore : IRelyingPartyStore
         var singleLogoutService = spSsoDescriptor.SingleLogoutServices.First();
         relyingParty.SingleLogoutDestination = singleLogoutService.ResponseLocation ?? singleLogoutService.Location;
         relyingParty.SignatureValidationCertificate = spSsoDescriptor.SigningCertificates;
+        relyingParty.UseAcsArtifact = relyingParty.AcsDestination is not null;
         return relyingParty;
     }
 }

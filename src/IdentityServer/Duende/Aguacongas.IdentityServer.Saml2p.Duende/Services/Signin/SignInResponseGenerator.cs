@@ -30,15 +30,16 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     public async Task<IActionResult> GenerateArtifactResponseAsync(SignInValidationResult<Saml2SoapEnvelope> result)
     {
         var relyingParty = result.RelyingParty;
-        var saml2ArtifactResolve = new Saml2ArtifactResolve(await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false));
+        var relyingPartyConfig = await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false);
+        var saml2ArtifactResolve = new Saml2ArtifactResolve(relyingPartyConfig);
         
         var soapEnvelope = result.Saml2Binding ?? throw new InvalidOperationException("SoapEnvelope cannot be null.");
         soapEnvelope.Unbind(result.GerericRequest, saml2ArtifactResolve);
 
         var artifact = await _store.RemoveAsync(saml2ArtifactResolve.Artifact).ConfigureAwait(false);
 
-        var saml2AuthnResponse = new InternalSaml2AuthnResponse(await GetRelyingPartySaml2ConfigurationAsync(result.RelyingParty).ConfigureAwait(false),
-            artifact.Xml);
+        relyingPartyConfig.AllowedAudienceUris.Add(relyingParty?.Issuer);
+        var saml2AuthnResponse = new InternalSaml2AuthnResponse(relyingPartyConfig, artifact.Xml);
         var saml2ArtifactResponse = new Saml2ArtifactResponse(await _configurationService.GetConfigurationAsync().ConfigureAwait(false),
             saml2AuthnResponse)
         {
@@ -122,13 +123,14 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             RelayState = relayState
         };
 
-        var saml2ArtifactResolve = new Saml2ArtifactResolve(await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false))
+        var config = await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false);
+        var saml2ArtifactResolve = new Saml2ArtifactResolve(config)
         {
             Destination = relyingParty.AcsDestination
         };
         responseBinding.Bind(saml2ArtifactResolve);
 
-        var saml2AuthnResponse = new Saml2AuthnResponse(await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false))
+        var saml2AuthnResponse = new Saml2AuthnResponse(config)
         {
             InResponseTo = inResponseTo,
             Status = status
@@ -139,13 +141,17 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             saml2AuthnResponse.SessionIndex = sessionIndex;
 
             var claimsIdentity = new ClaimsIdentity(user?.Claims);
-            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).Single(), NameIdentifierFormats.Persistent);
+            saml2AuthnResponse.NameId = new Saml2NameIdentifier(claimsIdentity.Claims
+                .Where(c => c.Type == JwtClaimTypes.Name)
+                .Select(c => c.Value)
+                .Single(), relyingParty?.SamlNameIdentifierFormat ?? NameIdentifierFormats.Persistent);
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
-            saml2AuthnResponse.CreateSecurityToken(relyingParty.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
+            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
         }
 
         var xml = saml2AuthnResponse.ToXml();
+
         await _store.StoreAsync(new IdentityServer.Store.Entity.Saml2PArtifact
         {
             Id = saml2ArtifactResolve.Artifact,
@@ -190,7 +196,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     {
         public InternalSaml2AuthnResponse(Saml2Configuration config, string xml) : base(config)
         {
-            Read(xml, true);
+            Read(xml);
         }
     }
 }
