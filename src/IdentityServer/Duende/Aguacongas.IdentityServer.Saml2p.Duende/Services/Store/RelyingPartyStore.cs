@@ -21,7 +21,7 @@ public class RelyingPartyStore : IRelyingPartyStore
     {
         var client = await _clientStore.GetAsync(issuer, new GetRequest
         {
-            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.RelyingParty)}"
+            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.RelyingParty)},{nameof(Entity.Client.Properties)}"
         }).ConfigureAwait(false);
 
         var logoutUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.PostLogout)?.Uri;
@@ -46,7 +46,7 @@ public class RelyingPartyStore : IRelyingPartyStore
         var relyingParty = new RelyingParty
         {
             Issuer = issuer,
-            UseAcsArtifact = acsUri != null,
+            UseAcsArtifact = client.Properties.Any(p => p.Key == nameof(RelyingParty.UseAcsArtifact) && p.Value.ToUpperInvariant() == "TRUE"),
             AcsDestination = acsUri is not null ? new Uri(acsUri) : null,
             SingleLogoutDestination = logoutUri is not null ? new Uri(logoutUri) : null,
             SignatureValidationCertificate = signatureCertificateList,
@@ -115,7 +115,6 @@ public class RelyingPartyStore : IRelyingPartyStore
         var singleLogoutService = spSsoDescriptor.SingleLogoutServices.First();
         relyingParty.SingleLogoutDestination = singleLogoutService.ResponseLocation ?? singleLogoutService.Location;
         relyingParty.SignatureValidationCertificate = spSsoDescriptor.SigningCertificates;
-        relyingParty.UseAcsArtifact = relyingParty.AcsDestination is not null;
         return relyingParty;
     }
 }
