@@ -58,7 +58,7 @@ public class Saml2PControllerTest
     }
 
     [Fact]
-    public async Task Login_should_return_saml2_form_post_result_when_user_user_found()
+    public async Task Login_should_return_saml2_form_post_result_when_user_found()
     {
         var userSessionMock = new Mock<IUserSession>();
         var sub = Guid.NewGuid().ToString();
@@ -102,6 +102,319 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
+            RedirectUris = new[]
+            {
+                new ClientUri
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Kind = UriKinds.Acs,
+                    Uri = "http://exemple.com"
+                }
+            },
+            ClientSecrets = new[]
+            {
+                new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Type = "X509CertificateBase64",
+                    Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
+                }
+            }
+        }).ConfigureAwait(false);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await identityContext.Users.AddAsync(new User
+        {
+            Id = sub,
+            UserName = name,
+            NormalizedUserName = name.ToUpperInvariant(),
+            SecurityStamp = Guid.NewGuid().ToString()
+        }).ConfigureAwait(false);
+        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+
+        var config = new Saml2Configuration
+        {
+            Issuer = issuer,
+            SignatureAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            SigningCertificate = certificate,
+        };
+        config.AllowedAudienceUris.Add(issuer);
+
+        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        config.AllowedIssuer = entityDiscriptor.EntityId;
+        var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
+        config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
+        config.SingleLogoutDestination = idPSsoDescriptor.SingleLogoutServices.First().Location;
+        foreach (var signingCertificate in idPSsoDescriptor.SigningCertificates)
+        {
+            if (signingCertificate.IsValidLocalTime())
+            {
+                config.SignatureValidationCertificates.Add(signingCertificate);
+            }
+        }
+        if (idPSsoDescriptor.WantAuthnRequestsSigned.HasValue)
+        {
+            config.SignAuthnRequest = idPSsoDescriptor.WantAuthnRequestsSigned.Value;
+        }
+
+        var binding = new Saml2RedirectBinding();
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+
+        binding.SetRelayStateQuery(new Dictionary<string, string?>
+        {
+            ["ReturnUrl"] = client.BaseAddress?.ToString()
+        });
+
+        binding.Bind(new Saml2AuthnRequest(config)
+        {
+            Subject = new Subject { NameID = new NameID { ID = "abcd" } },
+            NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
+        });
+
+        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        Assert.NotNull(content);
+    }
+
+    [Fact]
+    public async Task Login_should_return_redirect_result_when_no_user_found()
+    {
+        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+
+        var issuer = $"urn:{Guid.NewGuid()}";
+        await context.Clients.AddAsync(new Client
+        {
+            Id = issuer,
+            Enabled = true,
+            ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
+            RedirectUris = new[]
+            {
+                new ClientUri
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Kind = UriKinds.Acs,
+                    Uri = "http://exemple.com"
+                }
+            },
+            ClientSecrets = new[]
+            {
+                new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Type = "X509CertificateBase64",
+                    Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
+                }
+            }
+        }).ConfigureAwait(false);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var config = new Saml2Configuration
+        {
+            Issuer = issuer,
+            SignatureAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            SigningCertificate = certificate,
+        };
+        config.AllowedAudienceUris.Add(issuer);
+
+        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        config.AllowedIssuer = entityDiscriptor.EntityId;
+        var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
+        config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
+        config.SingleLogoutDestination = idPSsoDescriptor.SingleLogoutServices.First().Location;
+        foreach (var signingCertificate in idPSsoDescriptor.SigningCertificates)
+        {
+            if (signingCertificate.IsValidLocalTime())
+            {
+                config.SignatureValidationCertificates.Add(signingCertificate);
+            }
+        }
+        if (idPSsoDescriptor.WantAuthnRequestsSigned.HasValue)
+        {
+            config.SignAuthnRequest = idPSsoDescriptor.WantAuthnRequestsSigned.Value;
+        }
+
+        var binding = new Saml2RedirectBinding();
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+
+        binding.SetRelayStateQuery(new Dictionary<string, string?>
+        {
+            ["ReturnUrl"] = client.BaseAddress?.ToString()
+        });
+
+        binding.Bind(new Saml2AuthnRequest(config)
+        {
+            Subject = new Subject { NameID = new NameID { ID = "abcd" } },
+            NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
+        });
+
+        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Login_should_return_saml2_form_post_result_when_client_found()
+    {
+        var userSessionMock = new Mock<IUserSession>();
+        var sub = Guid.NewGuid().ToString();
+        var name = Guid.NewGuid().ToString();
+        var user = new ClaimsPrincipal(
+            new ClaimsIdentity(
+                new[]
+                {
+                        new Claim("name", name),
+                        new Claim("sub", sub),
+                        new Claim("amr", Guid.NewGuid().ToString())
+                },
+                "saml2p",
+                "name",
+                "role"));
+        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+
+        var profileServiceMock = new Mock<IProfileService>();
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
+            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
+            {
+                    new Claim(JwtClaimTypes.Name, name),
+                    new Claim(JwtClaimTypes.Subject, sub),
+                    new Claim("http://exemple.com", Guid.NewGuid().ToString()),
+            })
+            .Returns(Task.CompletedTask);
+
+        _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+        {
+            services.AddTransient(p => userSessionMock.Object)
+                .AddTransient(p => profileServiceMock.Object);
+        }));
+
+        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        using var scope = _factory.Services.CreateScope();
+
+        var issuer = $"urn:{Guid.NewGuid()}";
+
+        var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await identityContext.Users.AddAsync(new User
+        {
+            Id = sub,
+            UserName = name,
+            NormalizedUserName = name.ToUpperInvariant(),
+            SecurityStamp = Guid.NewGuid().ToString()
+        }).ConfigureAwait(false);
+        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+
+        var config = new Saml2Configuration
+        {
+            Issuer = issuer,
+            SignatureAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            SigningCertificate = certificate,
+        };
+        config.AllowedAudienceUris.Add(issuer);
+
+        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        config.AllowedIssuer = entityDiscriptor.EntityId;
+        var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
+        config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
+        config.SingleLogoutDestination = idPSsoDescriptor.SingleLogoutServices.First().Location;
+        foreach (var signingCertificate in idPSsoDescriptor.SigningCertificates)
+        {
+            if (signingCertificate.IsValidLocalTime())
+            {
+                config.SignatureValidationCertificates.Add(signingCertificate);
+            }
+        }
+        if (idPSsoDescriptor.WantAuthnRequestsSigned.HasValue)
+        {
+            config.SignAuthnRequest = idPSsoDescriptor.WantAuthnRequestsSigned.Value;
+        }
+
+        var binding = new Saml2RedirectBinding();
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+
+        binding.SetRelayStateQuery(new Dictionary<string, string?>
+        {
+            ["ReturnUrl"] = client.BaseAddress?.ToString()
+        });
+
+        binding.Bind(new Saml2AuthnRequest(config)
+        {
+            Subject = new Subject { NameID = new NameID { ID = "abcd" } },
+            NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
+        });
+
+        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        Assert.NotNull(content);
+    }
+
+    [Fact]
+    public async Task Login_should_return_saml2_form_post_result_when_client_not_valid()
+    {
+        var userSessionMock = new Mock<IUserSession>();
+        var sub = Guid.NewGuid().ToString();
+        var name = Guid.NewGuid().ToString();
+        var user = new ClaimsPrincipal(
+            new ClaimsIdentity(
+                new[]
+                {
+                        new Claim("name", name),
+                        new Claim("sub", sub),
+                        new Claim("amr", Guid.NewGuid().ToString())
+                },
+                "saml2p",
+                "name",
+                "role"));
+        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+
+        var profileServiceMock = new Mock<IProfileService>();
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
+            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
+            {
+                    new Claim(JwtClaimTypes.Name, name),
+                    new Claim(JwtClaimTypes.Subject, sub),
+                    new Claim("http://exemple.com", Guid.NewGuid().ToString()),
+            })
+            .Returns(Task.CompletedTask);
+
+        _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+        {
+            services.AddTransient(p => userSessionMock.Object)
+                .AddTransient(p => profileServiceMock.Object);
+        }));
+
+        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+
+        var issuer = $"urn:{Guid.NewGuid()}";
+        await context.Clients.AddAsync(new Client
+        {
+            Id = issuer,
+            Enabled = true,
+            ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation,
             RedirectUris = new[]
             {
                 new ClientUri
@@ -362,7 +675,7 @@ public class Saml2PControllerTest
     }
 
     [Fact]
-    public async Task Logout_should_return_saml2_form_post_result_when_user_user_found()
+    public async Task Logout_should_return_saml2_form_post_result_when_user_found()
     {
         var userSessionMock = new Mock<IUserSession>();
         var sub = Guid.NewGuid().ToString();
