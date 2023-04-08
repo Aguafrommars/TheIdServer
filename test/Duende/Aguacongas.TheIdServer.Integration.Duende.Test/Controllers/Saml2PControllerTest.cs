@@ -7,23 +7,28 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
 using IdentityModel;
 using ITfoxtec.Identity.Saml2;
+using ITfoxtec.Identity.Saml2.MvcCore;
 using ITfoxtec.Identity.Saml2.Schemas;
 using ITfoxtec.Identity.Saml2.Schemas.Metadata;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using Xunit;
 using ISModels = Duende.IdentityServer.Models;
 
-namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controlers;
+namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers;
 
 [Collection(BlazorAppCollection.Name)]
 public class Saml2PControllerTest
@@ -171,7 +176,7 @@ public class Saml2PControllerTest
         });
 
         using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
-       
+
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -180,7 +185,7 @@ public class Saml2PControllerTest
     }
 
     [Fact]
-    public async Task Login_should_return_saml2_redirect_when_user_user_and_use_acs_artifact_found()
+    public async Task Login_should_return_saml2_redirect_when_user_and_use_acs_artifact_found()
     {
         var userSessionMock = new Mock<IUserSession>();
         var sub = Guid.NewGuid().ToString();
@@ -279,6 +284,11 @@ public class Saml2PControllerTest
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
         config.SingleLogoutDestination = idPSsoDescriptor.SingleLogoutServices.First().Location;
+        config.ArtifactResolutionService = idPSsoDescriptor.ArtifactResolutionServices
+            .Select(s => new Saml2IndexedEndpoint { Index = s.Index, Location = s.Location })
+            .First();
+        config.CertificateValidationMode = X509CertificateValidationMode.None;
+
         foreach (var signingCertificate in idPSsoDescriptor.SigningCertificates)
         {
             if (signingCertificate.IsValidLocalTime())
@@ -311,8 +321,43 @@ public class Saml2PControllerTest
         using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
-    }
 
+        var location = response.Headers.Location;
+        Assert.NotNull(location);
+        var query = location.Query.Substring(1);
+
+        var nv = new NameValueCollection();
+        foreach(var segment in query.Split('&'))
+        {
+            var kv = segment.Split('=');
+            nv.Add(kv[0], Uri.UnescapeDataString(kv[1]));
+        }
+
+        var genericHttpRequest = new ITfoxtec.Identity.Saml2.Http.HttpRequest
+        {
+            Method = "GET",
+            QueryString = query,
+            Query = nv
+        };
+
+        var artifactBinding = new Saml2ArtifactBinding();
+        var saml2ArtifactResolve = new Saml2ArtifactResolve(config);
+
+        artifactBinding.Unbind(genericHttpRequest, saml2ArtifactResolve);
+
+        var httpFactoryMock = new Mock<IHttpClientFactory>();
+        httpFactoryMock.Setup(m => m.CreateClient(It.IsAny<string>())).Returns(client);
+
+        var soapEnvelope = new Saml2SoapEnvelope();
+        var saml2AuthnResponse = new Saml2AuthnResponse(config);
+
+        await soapEnvelope.ResolveAsync(httpFactoryMock.Object, saml2ArtifactResolve, saml2AuthnResponse)
+            .ConfigureAwait(false);
+
+        var relayStateQuery = artifactBinding.GetRelayStateQuery();
+
+        Assert.NotEmpty(relayStateQuery);
+    }
 
     private async Task<EntityDescriptor> GetIpdDescriptorAsync()
     {

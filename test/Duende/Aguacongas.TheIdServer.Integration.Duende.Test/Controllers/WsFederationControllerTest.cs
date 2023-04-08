@@ -23,7 +23,7 @@ using System.Xml;
 using Xunit;
 using ISModels = Duende.IdentityServer.Models;
 
-namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
+namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 {
     [Collection(BlazorAppCollection.Name)]
     public class WsFederationControllerTest

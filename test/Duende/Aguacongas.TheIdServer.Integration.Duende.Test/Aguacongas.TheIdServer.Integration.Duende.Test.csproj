@@ -62,7 +62,6 @@
 
 	<ItemGroup>
 	  <Folder Include="BlazorApp\Pages\" />
-	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>
