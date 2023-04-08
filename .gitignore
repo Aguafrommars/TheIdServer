@@ -378,3 +378,4 @@ override.tf.json
 /src/Aguacongas.TheIdServer.Duende/TheIdServer.db
 /src/Aguacongas.TheIdServer.Duende/TheIdServer.db-shm
 /src/Aguacongas.TheIdServer.Duende/TheIdServer.db-wal
+/global.json

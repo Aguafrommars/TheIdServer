@@ -46,6 +46,9 @@
 	  <None Update="appsettings.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="itfoxtec.identity.saml2.testwebappcore_Certificate.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="test.crt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -59,7 +62,6 @@
 
 	<ItemGroup>
 	  <Folder Include="BlazorApp\Pages\" />
-	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>

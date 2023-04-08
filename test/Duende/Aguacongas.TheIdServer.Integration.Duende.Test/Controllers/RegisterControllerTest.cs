@@ -2,6 +2,7 @@
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.IntegrationTest;
 using Aguacongas.TheIdServer.IntegrationTest.BlazorApp;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer.Models;
@@ -20,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
+namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 {
     [Collection(BlazorAppCollection.Name)]
     public class RegisterControllerTest
@@ -37,8 +38,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
             using var client = _factory.CreateClient();
 
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] 
-                    { 
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim("role",SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
@@ -168,7 +169,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         public async Task CreateAsync_should_validate_request()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] 
+                    .SetTestUser(true, new Claim[]
                     {
                         new Claim("role", SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
@@ -576,8 +577,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         public async Task CreateAsync_should_validate_native_redirect_uri_scheme(string redirectUri)
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] 
-                    { 
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
@@ -683,8 +684,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         public async Task UpdateAsync_should_update_client()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] 
-                    { 
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
@@ -888,7 +889,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         {
             _factory.Services.GetRequiredService<TestUserService>()
                     .SetTestUser(true, new Claim[]
-                    { 
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });
@@ -997,8 +998,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
         public async Task DeleteAsync_should_delete_client()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[] 
-                    { 
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
                     });

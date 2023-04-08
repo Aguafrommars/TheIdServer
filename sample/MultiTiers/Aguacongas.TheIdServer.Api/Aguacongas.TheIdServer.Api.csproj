@@ -6,7 +6,7 @@
 		<UserSecretsId>3d7ce8dc-f8b3-4d0a-967c-7d1aeead003e</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
-	</PropertyGroup>
+  </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Api.ruleset</CodeAnalysisRuleSet>

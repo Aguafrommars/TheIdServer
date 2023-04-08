@@ -13,15 +13,50 @@ else
 @if (IsSpaClient)
 {
     <td class="text-center">
-        <AuthorizeCheckbox Name="cors" @bind-Value="@Cors" />
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="cors" @bind-Value="@Cors" />
+            </div>
+        </div>
     </td>
 }
-<td class="text-center">
-    <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
-</td>
+@if (!IsSaml2PClient)
+{
+    <td class="text-center">
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
+            </div>
+        </div>
+    </td>
+}
+else
+{
+    <td class="text-center">
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="metadata" @bind-Value="@Metadata" />
+            </div>
+        </div>
+    </td>
+}
 @if (CanHandlePostLogout)
 {
     <td class="text-center">
-        <AuthorizeCheckbox Name="postlogout" @bind-Value="@PostLogout" />
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="postlogout" @bind-Value="@PostLogout" />
+            </div>
+        </div>
+    </td>
+}
+@if (IsSaml2PClient)
+{
+    <td class="text-center">
+        <div class="d-flex">
+            <div class="m-auto">
+                <AuthorizeCheckbox Name="acsartifact" @bind-Value="@AcsArtifact" />
+            </div>
+        </div>
     </td>
 }

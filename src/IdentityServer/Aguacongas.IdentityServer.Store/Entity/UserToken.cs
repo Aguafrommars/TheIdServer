@@ -51,13 +51,5 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </value>
         public string Value { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user.
-        /// </summary>
-        /// <value>
-        /// The user.
-        /// </value>
-        public virtual User User { get; set; }
-
     }
 }
