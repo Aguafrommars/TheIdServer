@@ -20,10 +20,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel.Security;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using ISModels = Duende.IdentityServer.Models;
@@ -357,6 +359,135 @@ public class Saml2PControllerTest
         var relayStateQuery = artifactBinding.GetRelayStateQuery();
 
         Assert.NotEmpty(relayStateQuery);
+    }
+
+    [Fact]
+    public async Task Logout_should_return_saml2_form_post_result_when_user_user_found()
+    {
+        var userSessionMock = new Mock<IUserSession>();
+        var sub = Guid.NewGuid().ToString();
+        var name = Guid.NewGuid().ToString();
+        var user = new ClaimsPrincipal(
+            new ClaimsIdentity(
+                new[]
+                {
+                        new Claim("http://schemas.itfoxtec.com/ws/2014/02/identity/claims/saml2nameid", name),
+                        new Claim("sub", sub),
+                        new Claim("amr", Guid.NewGuid().ToString())
+                },
+                "saml2p",
+                "name",
+                "role"));
+        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+
+        var profileServiceMock = new Mock<IProfileService>();
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
+            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
+            {
+                    new Claim(JwtClaimTypes.Name, name),
+                    new Claim(JwtClaimTypes.Subject, sub),
+                    new Claim("http://exemple.com", Guid.NewGuid().ToString()),
+            })
+            .Returns(Task.CompletedTask);
+
+        _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
+        {
+            services.AddTransient(p => userSessionMock.Object)
+                .AddTransient(p => profileServiceMock.Object);
+        }));
+
+        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+
+        var issuer = $"urn:{Guid.NewGuid()}";
+        await context.Clients.AddAsync(new Client
+        {
+            Id = issuer,
+            Enabled = true,
+            ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
+            RedirectUris = new[]
+            {
+                new ClientUri
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Kind = UriKinds.Acs,
+                    Uri = "http://exemple.com"
+                }
+            },
+            ClientSecrets = new[]
+            {
+                new ClientSecret
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
+                    Type = "X509CertificateBase64",
+                    Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
+                }
+            }
+        }).ConfigureAwait(false);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await identityContext.Users.AddAsync(new User
+        {
+            Id = sub,
+            UserName = name,
+            NormalizedUserName = name.ToUpperInvariant(),
+            SecurityStamp = Guid.NewGuid().ToString()
+        }).ConfigureAwait(false);
+        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+
+        var config = new Saml2Configuration
+        {
+            Issuer = issuer,
+            SignatureAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
+            SigningCertificate = certificate,
+        };
+        config.AllowedAudienceUris.Add(issuer);
+
+        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        config.AllowedIssuer = entityDiscriptor.EntityId;
+        var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
+        config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
+        config.SingleLogoutDestination = idPSsoDescriptor.SingleLogoutServices.First().Location;
+        foreach (var signingCertificate in idPSsoDescriptor.SigningCertificates)
+        {
+            if (signingCertificate.IsValidLocalTime())
+            {
+                config.SignatureValidationCertificates.Add(signingCertificate);
+            }
+        }
+        if (idPSsoDescriptor.WantAuthnRequestsSigned.HasValue)
+        {
+            config.SignAuthnRequest = idPSsoDescriptor.WantAuthnRequestsSigned.Value;
+        }
+
+        var binding = new Saml2PostBinding();
+        using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+
+        binding.SetRelayStateQuery(new Dictionary<string, string?>
+        {
+            ["ReturnUrl"] = client.BaseAddress?.ToString()
+        });
+
+        binding.Bind(new Saml2LogoutRequest(config, user));
+        using var logoutContent = new FormUrlEncodedContent(new Dictionary<string, string> 
+        {
+            ["SAMLRequest"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(binding.XmlDocument.OuterXml)),
+            ["RelayState"] = binding.RelayState
+        });
+        using var response = await client.PostAsync("/saml2p/logout", logoutContent).ConfigureAwait(false);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        Assert.NotNull(content);
     }
 
     private async Task<EntityDescriptor> GetIpdDescriptorAsync()
