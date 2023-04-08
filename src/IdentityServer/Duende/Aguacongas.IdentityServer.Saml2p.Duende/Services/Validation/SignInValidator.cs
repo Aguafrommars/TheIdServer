@@ -69,7 +69,7 @@ public class SignInValidator : ISignInValidator
             Saml2Binding = soapEnvelope,
             GerericRequest = httpRequest,
             Client = client,
-            RelyingParty = rp,
+            RelyingParty = await _relyingPartyStore.FindRelyingPartyAsync(issuer).ConfigureAwait(false),
         };
     }
 

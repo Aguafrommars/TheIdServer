@@ -4,6 +4,7 @@ using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
 using ITfoxtec.Identity.Saml2.Schemas;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -36,7 +37,7 @@ public class Saml2PService : ISaml2PService
         var result = await _signInValidator.ValidateArtifactRequestAsync(request).ConfigureAwait(false);
         if (result.Error is not null)
         {
-            throw new InvalidOperationException(result.Error);
+            return new BadRequestObjectResult(result.Error);
         }
 
         return await _generator.GenerateArtifactResponseAsync(result).ConfigureAwait(false);
@@ -94,7 +95,6 @@ public class Saml2PService : ISaml2PService
             return await _generator.GenerateLogoutResponseAsync(signinResult, Saml2StatusCodes.Responder).ConfigureAwait(false);
         }
     }
-
 
     private static string AddQueryString(string? url, string? query)
     {

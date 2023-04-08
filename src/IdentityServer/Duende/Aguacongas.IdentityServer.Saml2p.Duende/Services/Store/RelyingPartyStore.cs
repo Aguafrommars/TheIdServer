@@ -17,12 +17,17 @@ public class RelyingPartyStore : IRelyingPartyStore
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     }
 
-    public async Task<RelyingParty> FindRelyingPartyAsync(string issuer)
+    public async Task<RelyingParty?> FindRelyingPartyAsync(string issuer)
     {
         var client = await _clientStore.GetAsync(issuer, new GetRequest
         {
             Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.RelyingParty)},{nameof(Entity.Client.Properties)}"
         }).ConfigureAwait(false);
+
+        if (client is null)
+        {
+            return null;
+        }
 
         var logoutUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.PostLogout)?.Uri;
         var acsUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Acs)?.Uri;
@@ -54,6 +59,7 @@ public class RelyingPartyStore : IRelyingPartyStore
             SignatureAlgorithm = rp?.SignatureAlgorithm,
             SamlNameIdentifierFormat = rp?.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : null
         };
+
         var metadata = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Saml2Metadata);
         if (metadata != null)
         {

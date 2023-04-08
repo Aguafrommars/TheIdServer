@@ -6,5 +6,5 @@ public interface IRelyingPartyStore
     /// </summary>
     /// <param name="issuer">The issuer.</param>
     /// <returns></returns>
-    Task<RelyingParty> FindRelyingPartyAsync(string issuer);
+    Task<RelyingParty?> FindRelyingPartyAsync(string issuer);
 }
