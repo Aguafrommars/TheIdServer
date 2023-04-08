@@ -1,5 +1,6 @@
 ﻿using Aguacongas.IdentityServer.KeysRotation;
 using Duende.IdentityServer.Stores;
+using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
