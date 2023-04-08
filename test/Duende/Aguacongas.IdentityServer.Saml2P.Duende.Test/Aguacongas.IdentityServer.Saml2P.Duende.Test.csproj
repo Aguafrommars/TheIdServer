@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\IdentityServer\Duende\Aguacongas.IdentityServer.Saml2p.Duende\Aguacongas.IdentityServer.Saml2p.Duende.csproj" />
+    <ProjectReference Include="..\..\..\src\IdentityServer\Duende\Aguacongas.IdentityServer.Saml2p.Duende\Aguacongas.IdentityServer.Saml2p.Duende.csproj" />
   </ItemGroup>
 
 </Project>
