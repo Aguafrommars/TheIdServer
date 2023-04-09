@@ -22,7 +22,7 @@
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
 		<None Update="README.md">
 			<PackagePath>\</PackagePath>
 			<Pack>True</Pack>
@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="Duende.IdentityServer" Version="6.2.3" />
-    <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.8.4" />
+    <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.8.6" />
   </ItemGroup>
 
   <ItemGroup>
