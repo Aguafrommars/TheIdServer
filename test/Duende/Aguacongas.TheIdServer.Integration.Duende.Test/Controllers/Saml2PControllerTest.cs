@@ -110,7 +110,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -207,7 +207,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -423,7 +423,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -553,7 +553,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -682,7 +682,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -902,7 +902,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 },
                 new ClientUri
@@ -1038,7 +1038,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },
@@ -1189,7 +1189,7 @@ public class Saml2PControllerTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow,
-                    Kind = UriKinds.Acs,
+                    Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
             },

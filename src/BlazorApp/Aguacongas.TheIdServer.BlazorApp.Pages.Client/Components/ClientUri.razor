@@ -20,17 +20,14 @@ else
         </div>
     </td>
 }
-@if (!IsSaml2PClient)
-{
-    <td class="text-center">
-        <div class="d-flex">
-            <div class="m-auto">
-                <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
-            </div>
+<td class="text-center">
+    <div class="d-flex">
+        <div class="m-auto">
+            <AuthorizeCheckbox Name="redirect" @bind-Value="@Redirect" />
         </div>
-    </td>
-}
-else
+    </div>
+</td>
+@if (IsSaml2PClient)
 {
     <td class="text-center">
         <div class="d-flex">
@@ -46,16 +43,6 @@ else
         <div class="d-flex">
             <div class="m-auto">
                 <AuthorizeCheckbox Name="postlogout" @bind-Value="@PostLogout" />
-            </div>
-        </div>
-    </td>
-}
-@if (IsSaml2PClient)
-{
-    <td class="text-center">
-        <div class="d-flex">
-            <div class="m-auto">
-                <AuthorizeCheckbox Name="acsartifact" @bind-Value="@AcsArtifact" />
             </div>
         </div>
     </td>

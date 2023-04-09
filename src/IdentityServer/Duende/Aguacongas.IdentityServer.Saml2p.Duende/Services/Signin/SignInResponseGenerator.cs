@@ -12,12 +12,22 @@ using Microsoft.IdentityModel.Tokens.Saml2;
 using System.Security.Claims;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Signin;
+
+/// <summary>
+/// Signing  response generator
+/// </summary>
 public class SignInResponseGenerator : ISignInResponseGenerator
 {
     private readonly IArtifactStore _store;
     private readonly IUserSession _userSession;
     private readonly ISaml2ConfigurationService _configurationService;
 
+    /// <summary>
+    /// Initialize a new instance of <see cref="SignInResponseGenerator"/>
+    /// </summary>
+    /// <param name="store"></param>
+    /// <param name="userSession"></param>
+    /// <param name="configurationService"></param>
     public SignInResponseGenerator(IArtifactStore store,
         IUserSession userSession,
         ISaml2ConfigurationService configurationService)
@@ -27,6 +37,12 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         _configurationService = configurationService;
     }
 
+    /// <summary>
+    /// Generates artifact response
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async Task<IActionResult> GenerateArtifactResponseAsync(SignInValidationResult<Saml2SoapEnvelope> result)
     {
         var relyingParty = result.RelyingParty;
@@ -50,9 +66,21 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         return soapEnvelope.ToActionResult();
     }
 
+    /// <summary>
+    /// Generates login response
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="status"></param>
+    /// <returns></returns>
     public Task<IActionResult> GenerateLoginResponseAsync(SignInValidationResult<Saml2RedirectBinding> result, Saml2StatusCodes status)
     => LoginResponse(result.Saml2Request?.Id, status, result.Saml2Binding?.RelayState, result.RelyingParty, Guid.NewGuid().ToString(), result.User, result.Client?.ClientId);
 
+    /// <summary>
+    /// Generates logout response
+    /// </summary>
+    /// <param name="signinResult"></param>
+    /// <param name="status"></param>
+    /// <returns></returns>
     public async Task<IActionResult> GenerateLogoutResponseAsync(SignInValidationResult<Saml2PostBinding> signinResult, Saml2StatusCodes status)
     {
         var responseBinding = new Saml2PostBinding();

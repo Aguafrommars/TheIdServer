@@ -23,10 +23,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// </summary>
         Cors = 4,
         /// <summary>
-        /// Acs artifact uri
-        /// </summary>
-        Acs = 8,
-        /// <summary>
         /// Saml2P metadata uri
         /// </summary>
         Saml2Metadata = 16

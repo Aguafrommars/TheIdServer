@@ -15,15 +15,12 @@
                                 GridState="GridState" />
             </th>
         }
-        @if (Model.ProtocolType != "saml2p")
-        {
-            <th scope="col" class="text-center">
-                <SortableHeader Property="Redirect"
-                            Text="@Localizer["redirect"]"
-                            GridState="GridState" />
-            </th>
-        }
-        else
+        <th scope="col" class="text-center">
+            <SortableHeader Property="Redirect"
+                        Text="@Localizer["redirect"]"
+                        GridState="GridState" />
+        </th>
+        @if (Model.ProtocolType == "saml2p")
         {
             <th scope="col" class="text-center">
                 <SortableHeader Property="Metadata"
@@ -36,14 +33,6 @@
             <th scope="col" class="text-center">
                 <SortableHeader Property="Acs"
                                 Text="@Localizer["post logout"]"
-                                GridState="GridState" />
-            </th>
-        }
-        @if (Model.ProtocolType == "saml2p")
-        {
-            <th scope="col" class="text-center">
-                <SortableHeader Property="PostLogout"
-                                Text="@Localizer["acr artifact"]"
                                 GridState="GridState" />
             </th>
         }
