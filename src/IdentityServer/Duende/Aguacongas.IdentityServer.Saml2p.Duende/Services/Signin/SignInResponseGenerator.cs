@@ -78,15 +78,15 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     /// <summary>
     /// Generates logout response
     /// </summary>
-    /// <param name="signinResult"></param>
+    /// <param name="result"></param>
     /// <param name="status"></param>
     /// <returns></returns>
-    public async Task<IActionResult> GenerateLogoutResponseAsync(SignInValidationResult<Saml2PostBinding> signinResult, Saml2StatusCodes status)
+    public async Task<IActionResult> GenerateLogoutResponseAsync(SignInValidationResult<Saml2PostBinding> result, Saml2StatusCodes status)
     {
         var responseBinding = new Saml2PostBinding();
-        responseBinding.RelayState = signinResult.Saml2Binding?.RelayState;
-        var relyingParty = signinResult.RelyingParty;
-        var samlLogoutRequest = signinResult.Saml2Request;
+        responseBinding.RelayState = result.Saml2Binding?.RelayState;
+        var relyingParty = result.RelyingParty;
+        var samlLogoutRequest = result.Saml2Request;
 
         var saml2LogoutResponse = new Saml2LogoutResponse(await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false))
         {
