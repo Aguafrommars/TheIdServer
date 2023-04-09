@@ -6,6 +6,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Configuration;
+
+/// <summary>
+/// Saml2P configuration service
+/// </summary>
 public class Saml2ConfigurationService : ISaml2ConfigurationService
 {
     private readonly ISigningCredentialStore _signingCredentialStore;
@@ -13,6 +17,13 @@ public class Saml2ConfigurationService : ISaml2ConfigurationService
     private readonly IIssuerNameService _issuerNameService;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
+    /// <summary>
+    /// Initialize a new instance of <see cref="Saml2ConfigurationService"/>
+    /// </summary>
+    /// <param name="signingCredentialStore"></param>
+    /// <param name="issuerNameService"></param>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="options"></param>
     public Saml2ConfigurationService(ISigningCredentialStore signingCredentialStore,
         IIssuerNameService issuerNameService,
         IHttpContextAccessor httpContextAccessor,
@@ -24,6 +35,11 @@ public class Saml2ConfigurationService : ISaml2ConfigurationService
         _options = options;
     }
 
+    /// <summary>
+    /// Gets the configuration
+    /// </summary>
+    /// <returns>a <see cref="Saml2Configuration"/></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async Task<Saml2Configuration> GetConfigurationAsync()
     {
         var request = (_httpContextAccessor.HttpContext?.Request) ?? throw new InvalidOperationException("Http request cannot be null");

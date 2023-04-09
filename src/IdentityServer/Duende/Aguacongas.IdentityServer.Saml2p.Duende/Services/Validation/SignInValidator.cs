@@ -8,12 +8,22 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
+
+/// <summary>
+/// Signing requests validator
+/// </summary>
 public class SignInValidator : ISignInValidator
 {
     private readonly IClientStore _clientStore;
     private readonly IRelyingPartyStore _relyingPartyStore;
     private readonly ISaml2ConfigurationService _configurationService;
 
+    /// <summary>
+    /// Initialize a new instance of <see cref="SignInValidator"/>
+    /// </summary>
+    /// <param name="clientStore"></param>
+    /// <param name="relyingPartyStore"></param>
+    /// <param name="configurationService"></param>
     public SignInValidator(IClientStore clientStore,
         IRelyingPartyStore relyingPartyStore,
         ISaml2ConfigurationService configurationService)
@@ -23,6 +33,11 @@ public class SignInValidator : ISignInValidator
         _configurationService = configurationService;
     }
 
+    /// <summary>
+    /// Validates artifact request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task<SignInValidationResult<Saml2SoapEnvelope>> ValidateArtifactRequestAsync(HttpRequest request)
     {
         var soapEnvelope = new Saml2SoapEnvelope();
@@ -73,6 +88,12 @@ public class SignInValidator : ISignInValidator
         };
     }
 
+    /// <summary>
+    /// Validates login request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public async Task<SignInValidationResult<Saml2RedirectBinding>> ValidateLoginAsync(HttpRequest request, ClaimsPrincipal user)
     {
         var genericRequest = request.ToGenericHttpRequest();
@@ -136,6 +157,12 @@ public class SignInValidator : ISignInValidator
             SignInRequired = user?.Identity?.IsAuthenticated != true
         };
     }
+
+    /// <summary>
+    /// Validates logout request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task<SignInValidationResult<Saml2PostBinding>> ValidateLogoutAsync(HttpRequest request)
     {
         var genericRequest = request.ToGenericHttpRequest();

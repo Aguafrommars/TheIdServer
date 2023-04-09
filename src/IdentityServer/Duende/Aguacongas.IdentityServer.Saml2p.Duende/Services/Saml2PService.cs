@@ -4,13 +4,16 @@ using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
 using ITfoxtec.Identity.Saml2.Schemas;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services;
+
+/// <summary>
+/// Saml2P service
+/// </summary>
 public class Saml2PService : ISaml2PService
 {
     private readonly ISignInValidator _signInValidator;
@@ -19,6 +22,14 @@ public class Saml2PService : ISaml2PService
     private readonly IOptions<IdentityServerOptions> _identityServerOptions;
     private readonly ILogger<Saml2PService> _logger;
 
+    /// <summary>
+    /// Initialize a new instance of <see cref="Saml2PService"/>
+    /// </summary>
+    /// <param name="signInValidator"></param>
+    /// <param name="userSession"></param>
+    /// <param name="generator"></param>
+    /// <param name="identityServerOptions"></param>
+    /// <param name="logger"></param>
     public Saml2PService(ISignInValidator signInValidator,
         IUserSession userSession,
         ISignInResponseGenerator generator,
@@ -32,6 +43,11 @@ public class Saml2PService : ISaml2PService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Handles artifact request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task<IActionResult> ArtifactAsync(HttpRequest request)
     {
         var result = await _signInValidator.ValidateArtifactRequestAsync(request).ConfigureAwait(false);
@@ -43,6 +59,12 @@ public class Saml2PService : ISaml2PService
         return await _generator.GenerateArtifactResponseAsync(result).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Handles login request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="helper"></param>
+    /// <returns></returns>
     public async Task<IActionResult> LoginAsync(HttpRequest request, IUrlHelper helper)
     {
         var user = await _userSession.GetUserAsync().ConfigureAwait(false);
@@ -80,6 +102,11 @@ public class Saml2PService : ISaml2PService
         }
     }
 
+    /// <summary>
+    /// Handles logout request
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task<IActionResult> LogoutAsync(HttpRequest request)
     {
         var signinResult = await _signInValidator.ValidateLogoutAsync(request).ConfigureAwait(false);

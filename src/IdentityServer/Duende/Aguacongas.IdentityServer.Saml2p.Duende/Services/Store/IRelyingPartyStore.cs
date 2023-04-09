@@ -1,4 +1,8 @@
 ﻿namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
+
+/// <summary>
+/// Relying party store interface
+/// </summary>
 public interface IRelyingPartyStore
 {
     /// <summary>

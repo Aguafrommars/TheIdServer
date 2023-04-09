@@ -6,17 +6,32 @@ using static Duende.IdentityServer.IdentityServerConstants;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
+
+/// <summary>
+/// Relying party store
+/// </summary>
 public class RelyingPartyStore : IRelyingPartyStore
 {
     private readonly IAdminStore<Entity.Client> _clientStore;
     private readonly IHttpClientFactory _httpClientFactory;
 
+    /// <summary>
+    /// Initialize a new instance of <see cref="RelyingPartyStore"/>
+    /// </summary>
+    /// <param name="clientStore"></param>
+    /// <param name="httpClientFactory"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public RelyingPartyStore(IAdminStore<Entity.Client> clientStore, IHttpClientFactory httpClientFactory)
     {
         _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     }
 
+    /// <summary>
+    /// Find relying party for by issuer.
+    /// </summary>
+    /// <param name="issuer"></param>
+    /// <returns></returns>
     public async Task<RelyingParty?> FindRelyingPartyAsync(string issuer)
     {
         var client = await _clientStore.GetAsync(issuer, new GetRequest
@@ -29,8 +44,8 @@ public class RelyingPartyStore : IRelyingPartyStore
             return null;
         }
 
-        var logoutUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.PostLogout)?.Uri;
-        var acsUri = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Acs)?.Uri;
+        var logoutUri = client.RedirectUris.FirstOrDefault(u => (u.Kind & Entity.UriKinds.PostLogout) == Entity.UriKinds.PostLogout)?.Uri;
+        var acsUri = client.RedirectUris.FirstOrDefault(u => (u.Kind & Entity.UriKinds.Redirect) == Entity.UriKinds.Redirect)?.Uri;
         var signatureCertificateList = client.ClientSecrets
             .Where(s => (s.Expiration == null || s.Expiration > DateTime.UtcNow) &&
                 (s.Type == SecretTypes.X509CertificateThumbprint ||
