@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
@@ -13,6 +13,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public string AdministratorEmail { get; set; }
         public string WelcomeContenUrl { get;  set; }
         public bool Prerendered { get; set; }
+
+        public string HostElementIdentifier { get; set; } = "app";
+
+        public bool ServerSideSessionEnabled { get; set; }
+
+        public bool CibaEnabled { get; set; }
     }
 
     public class LoggingOptions

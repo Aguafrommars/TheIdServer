@@ -1,10 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -55,38 +56,23 @@ namespace Microsoft.AspNetCore.Builder
                 .AddIdentityServerAdmin<ApplicationUser, SchemeDefinition>();
 
             services.AddAuthorization(options =>
-            {
-                options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
                 {
-                    policy.RequireAssertion(context =>
-                       context.User.IsInRole(SharedConstants.WRITERPOLICY));
-                });
-                options.AddPolicy(SharedConstants.READERPOLICY, policy =>
-                {
-                    policy.RequireAssertion(context =>
-                       context.User.IsInRole(SharedConstants.READERPOLICY));
-                });
-            })
-                .AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication("Bearer", options =>
+                    options.AddPolicy(SharedConstants.WRITERPOLICY, policy =>
+                    {
+                        policy.RequireAssertion(context =>
+                           context.User.IsInRole(SharedConstants.WRITERPOLICY));
+                    });
+                    options.AddPolicy(SharedConstants.READERPOLICY, policy =>
+                    {
+                        policy.RequireAssertion(context =>
+                           context.User.IsInRole(SharedConstants.READERPOLICY));
+                    });
+                })
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = "https://localhost:7443";
-                    options.RequireHttpsMetadata = false;
-                    options.SupportedTokens = IdentityServer4.AccessTokenValidation.SupportedTokens.Both;
-                    options.ApiName = "theidserveradminapi";
-                    options.ApiSecret = "5b556f7c-b3bc-4b5b-85ab-45eed0cb962d";
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(10);
-                    options.LegacyAudienceValidation = true;
-                })
-                .AddDynamic<SchemeDefinition>()
-                .AddGoogle()
-                .AddFacebook()
-                .AddOpenIdConnect()
-                .AddTwitter()
-                .AddMicrosoftAccount()
-                .AddOAuth("OAuth", options =>
-                {
+                    options.Audience = "theidserveradminapi";
                 });
 
 

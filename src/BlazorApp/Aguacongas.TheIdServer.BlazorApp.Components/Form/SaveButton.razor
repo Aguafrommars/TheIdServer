@@ -6,14 +6,14 @@
         {
             <button id="@Id" class="btn me-1 @CssSubClass" type="submit" @onclick="OnClicked">
                 <span class="oi oi-data-transfer-download"></span>
-                @Localizer["Save"]
+                <span class="d-none d-lg-inline">@Localizer["Save"]</span>
             </button>
         }
         else
         {
             <button id="@Id" class="btn me-1 @CssSubClass" type="submit" disabled="@_disabled">
                 <span class="oi oi-data-transfer-download"></span>
-                @Localizer["Save"]
+                <span class="d-none d-lg-inline">@Localizer["Save"]</span>
             </button>
         }
     </Authorized>

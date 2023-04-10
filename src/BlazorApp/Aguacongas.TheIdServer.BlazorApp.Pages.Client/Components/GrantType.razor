@@ -1,4 +1,6 @@
-﻿@inherits AutoCompleteModel<Entity.ClientGrantType>
+﻿
+@inherits AutoCompleteModel<Entity.ClientGrantType>
+@inject IOptions<Settings> Options
 
 @if (IsReadOnly)
 {

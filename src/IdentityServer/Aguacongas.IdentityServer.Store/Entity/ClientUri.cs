@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The URI.
         /// </value>
         [Required]
-        [Url]
+        [RegularExpression("^.+://.+")]
         [MaxLength(2000)]
         public string Uri { get; set; }
 
@@ -45,7 +45,7 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <value>
         /// The sanetized cors URI.
         /// </value>
-        [Url]
+        [RegularExpression("^.+://.+")]
         [MaxLength(2000)]
         public string SanetizedCorsUri { get; set; }
 

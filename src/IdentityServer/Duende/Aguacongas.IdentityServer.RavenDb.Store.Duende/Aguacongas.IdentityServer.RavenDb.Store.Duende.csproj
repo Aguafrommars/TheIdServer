@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Duende.IdentityServer RavenDb stores implementation for TheIdServer.</Description>
-		<Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.RavenDb.Store</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -17,8 +17,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Shared\DynamicAuthenticationBuilderExtensions.cs" Link="DynamicAuthenticationBuilderExtensions.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.IdentityServer.RavenDb.Store.Shared\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -50,6 +50,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Identity
             {
                 subEntity.IdentityId = Model.Id;
             }
+        }
+
+        protected override void OnCloning()
+        {
+            Model.DisplayName = Localizer["Clone of {0}", Model.DisplayName];
         }
 
         private static IdentityProperty CreateProperty()

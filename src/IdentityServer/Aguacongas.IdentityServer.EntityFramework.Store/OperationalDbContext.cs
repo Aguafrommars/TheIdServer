@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
@@ -33,6 +33,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public DbSet<KeyRotationKey> KeyRotationKeys { get; set; }
 
         public DbSet<UserSession> UserSessions { get; set; }
+
+        public DbSet<Saml2PArtifact> Saml2pArtifact { get; set; }
 
         public virtual DbSet<BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
 

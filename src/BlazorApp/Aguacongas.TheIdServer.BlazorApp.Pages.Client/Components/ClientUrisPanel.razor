@@ -1,6 +1,6 @@
 ﻿@inject IStringLocalizerAsync<ClientUrisPanel> Localizer
 <div id="urls" class="card mb-3">
-@if(Model.ProtocolType == "oidc")
+@if(Model.ProtocolType != "wsfed")
 {
     <div class="card-header">
         <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />

@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
@@ -14,14 +14,15 @@ namespace IdentityServerHost.Quickstart.UI
         {
             AuthenticateResult = result;
 
-            if (result.Properties.Items.ContainsKey("client_list"))
+            if(!result.Properties.Items.TryGetValue("client_list", out string encoded))
             {
-                var encoded = result.Properties.Items["client_list"];
-                var bytes = Base64Url.Decode(encoded);
-                var value = Encoding.UTF8.GetString(bytes);
-
-                Clients = JsonConvert.DeserializeObject<string[]>(value);
+                return;
             }
+
+            var bytes = Base64Url.Decode(encoded);
+            var value = Encoding.UTF8.GetString(bytes);
+
+            Clients = JsonConvert.DeserializeObject<string[]>(value);
         }
 
         public AuthenticateResult AuthenticateResult { get; }

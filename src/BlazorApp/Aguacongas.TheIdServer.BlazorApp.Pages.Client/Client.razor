@@ -12,8 +12,8 @@ else
 {
     <EditForm EditContext="EditContext" OnValidSubmit="HandleValidSubmit">
         <CascadingValue Value="HandleModificationState">
-            <div class="row bg-light sticky-top">
-                <div class="col">
+            <div class="row bg-body sticky-top">
+                <div class="col-12 col-md">
                     @if (IsNew)
                 {
                     <AuthorizeText Id="id" Placeholder="client id" @bind-Value="@Model.Id" />
@@ -23,7 +23,7 @@ else
                     <h3>@Id</h3>
                 }
             </div>
-            <div class="col">
+                <div class="col-12 col-md-5 mb-1">
                 @if (!NonEditable)
                 {
                     <SaveButton />
@@ -32,9 +32,13 @@ else
                         <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
                     }
                 }
-                <ExportButtom EntityPath="@EntityPath" Request="@ExportRequest" />
+                @if (!IsNew)
+                {
+                    <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                    <CloneButton />
+                }
             </div>
-            <div class="col">
+                <div class="col-12 col-md mb-1">
                 <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
             </div>
             <div class="w-100"></div>
@@ -54,10 +58,10 @@ else
                                 <a href="@(NavigationManager.Uri)#consent" @onclick='() => ScrollTo("consent")' @onclick:preventDefault>@Localizer["consent"]</a>
                             </li>
                         }
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
-                        </li>
                     }
+                    <li class="list-inline-item">
+                        <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
+                    </li>
                     @if (!Model.IsClientCredentialOnly())
                     {
                         <li class="list-inline-item">
@@ -67,10 +71,13 @@ else
                     <li class="list-inline-item">
                         <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#tokens" @onclick='() => ScrollTo("tokens")' @onclick:preventDefault>@Localizer["tokens"]</a>
-                    </li>
-                    @if (Model.ProtocolType == OIDC)
+                    @if (Model.ProtocolType != SAML2P)
+                    {
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#tokens" @onclick='() => ScrollTo("tokens")' @onclick:preventDefault>@Localizer["tokens"]</a>
+                        </li>
+                    }
+                    @if (Model.ProtocolType != WSFED)
                     {
                         <li class="list-inline-item">
                             <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
@@ -112,14 +119,25 @@ else
                                        @onchange="@(() => SetProtcolType(WSFED))" />
                                     <label class="form-check-label" for="wsfed" @onclick="@(() => SetProtcolType(WSFED))">WS-Federation</label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="protocol-type"
+                                            value="2"
+                                            checked="@(Model.ProtocolType == SAML2P)"
+                                        @onchange="@(() => SetProtcolType(SAML2P))" />
+                                    <label class="form-check-label" for="saml2p" @onclick="@(() => SetProtcolType(SAML2P))">SAML2P</label>
+                                </div>
                             }
                             else if (Model.ProtocolType == OIDC)
                             {
                                 <span class="form-control-plaintext">OIDC</span>
                             }
-                            else
+                            else if (Model.ProtocolType == WSFED)
                             {
                                 <span class="form-control-plaintext">WS-Federation</span>
+                            }
+                            else
+                            {
+                                <span class="form-control-plaintext">SAML2P</span>
                             }
                         </div>
                     </div>
@@ -158,17 +176,17 @@ else
                         </div>
                     </div>
                     <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
-                    <div class="mb-3 row">
-                        <label class="col col-form-label" for="front-channel-logout-uri">
-                            @Localizer["front channel logout uri"]
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeText Id="front-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.FrontChannelLogoutUri" MaxLength="2000" />
-                            <AuthorizeCheckbox Name="front-channel-logout-uri-required" Label="@Localizer["front channel logout uri required"]" @bind-Value="@Model.FrontChannelLogoutSessionRequired" />
-                        </div>
-                    </div>
                     @if (Model.ProtocolType == OIDC)
                     {
+                        <div class="mb-3 row">
+                            <label class="col col-form-label" for="front-channel-logout-uri">
+                                @Localizer["front channel logout uri"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeText Id="front-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.FrontChannelLogoutUri" MaxLength="2000" />
+                                <AuthorizeCheckbox Name="front-channel-logout-uri-required" Label="@Localizer["front channel logout uri required"]" @bind-Value="@Model.FrontChannelLogoutSessionRequired" />
+                            </div>
+                        </div>
                         <div class="mb-3 row">
                             <label class="col col-form-label" for="back-channel-logout-uri">
                                 @Localizer["back channel logout uri"]
@@ -179,7 +197,7 @@ else
                             </div>
                         </div>
                     }
-                    else
+                    else if (Model.ProtocolType != OIDC)
                     {
                         <div class="mb-3 row">
                             <label class="col col-form-label" for="relying-party">
@@ -245,24 +263,27 @@ else
                     <ClientScopes Model="@Model" />
                 </div>
             </div>
-            <div id="tokens" class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <h5 class="col">@Localizer["Tokens"]</h5>
+            @if (Model.ProtocolType != SAML2P)
+            {
+                <div id="tokens" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Tokens"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ClientTokens Model="@Model" />
                     </div>
                 </div>
-                <div class="card-body">
-                    <ClientTokens Model="@Model" />
-                </div>
-            </div>
-            @if (Model.ProtocolType == OIDC)
+            }
+            @if (Model.ProtocolType != WSFED)
             {
                 <div id="secrets" class="card mb-3">
                     <div class="card-header">
                         <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
                     </div>
                     <div class="card-body">
-                        <ClientSecrets Collection="@Model.ClientSecrets" />
+                        <ClientSecrets ProtocolType="@Model.ProtocolType" Collection="@Model.ClientSecrets" />
                         @if (Model.ClientSecrets.Any())
                         {
                             <div class="col">

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -37,6 +37,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                         (kv.Key == "authorization_code" || kv.Key == "implicit")) &&
                     (kv.Value.Contains(term) || kv.Key.Contains(term)))
                 .Select(kv => kv.Key);
+
+            if (!Options.Value.CibaEnabled)
+            {
+                result = result.Where(r => r != "urn:openid:params:grant-type:ciba");
+            }
+
             return Task.FromResult(result);
         }
 

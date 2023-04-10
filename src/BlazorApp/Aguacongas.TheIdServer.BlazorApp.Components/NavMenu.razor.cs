@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
@@ -30,7 +30,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         private string _gitHash;
 
-        string GitHash
+        string  GitHash
         {
             get
             {

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
 
 namespace Aguacongas.IdentityServer.Store.Entity
@@ -21,6 +21,10 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// <summary>
         /// Cors uri
         /// </summary>
-        Cors = 4
+        Cors = 4,
+        /// <summary>
+        /// Saml2P metadata uri
+        /// </summary>
+        Saml2Metadata = 16
     }
 }

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions;
 using Aguacongas.TheIdServer.BlazorApp.Services;
@@ -14,6 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
     {
         public static readonly string OIDC = "oidc";
         public static readonly string WSFED = "wsfed";
+        public static readonly string SAML2P = "saml2p";
 
         private bool _filtered;
         private bool _isWebClient;
@@ -128,6 +129,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return base.CreateAsync(entityType, entity);
         }
 
+        protected override void OnCloning()
+        {
+            Model.ClientName = Localizer["Clone of {0}", Model.ClientName];
+        }
+
         private void FilterFocusChanged(bool hasFocus)
         {
             if (hasFocus)
@@ -146,10 +152,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return Model.IsWebClient();
         }
 
-        private static Entity.ClientSecret CreateSecret()
+        private Entity.ClientSecret CreateSecret()
             => new()
             {
-                Type = "SharedSecret"
+                Type = Model.ProtocolType == SAML2P ? "X509Thumbprint" :  "SharedSecret"
             };
 
         private static Entity.ClientClaim CreateClaim()

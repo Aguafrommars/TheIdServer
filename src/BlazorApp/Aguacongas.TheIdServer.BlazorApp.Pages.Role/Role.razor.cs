@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Store;
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Role
 {
     public partial class Role
     {
-        private readonly GridState _gridState = new GridState();
+        private readonly GridState _gridState = new();
 
         private IEnumerable<Entity.RoleClaim> Claims => Model.Claims.Where(c => c.Id == null || (c.ClaimType != null && c.ClaimType.Contains(HandleModificationState.FilterTerm)) || (c.ClaimValue != null && c.ClaimValue.Contains(HandleModificationState.FilterTerm)));
 
@@ -41,7 +41,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Role
         protected override Task<Models.Role> Create()
         {
             return Task.FromResult(new Models.Role
-            {
+            { 
+                Id = Guid.NewGuid().ToString(),
                 Claims =new List<Entity.RoleClaim>()
             });
         }
@@ -59,8 +60,15 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Role
             }
         }
 
-        private static Entity.RoleClaim CreateClaim()
-            => new();
+        protected override void OnCloning()
+        {
+            Model.Id = Guid.NewGuid().ToString();
+            Model.Name = Localizer["Clone of {0}", Model.Name];
+        }
+
+        protected override string GetNotiticationHeader() => Model.Name;
+
+        private static Entity.RoleClaim CreateClaim() => new();
 
         private void OnDeleteClaimClicked(Entity.RoleClaim claim)
         {

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using System.Linq;
 
@@ -14,7 +14,8 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
 
         public static bool IsWebClient(this IdentityServer.Store.Entity.Client client)
         {
-            return client.ProtocolType == "wsfed" ||
+            return client.ProtocolType == "wsfed" || 
+                client.ProtocolType == "saml2p" ||
                 client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
                     g.GrantType == "hybrid" ||
                     g.GrantType == "implicit" ||
@@ -37,7 +38,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
 
         public static bool CanHandlePostLogout(this IdentityServer.Store.Entity.Client client)
         {
-            return client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
+            return client.ProtocolType == "saml2p" || client.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code" ||
                     g.GrantType == "hybrid" ||
                     g.GrantType == "implicit") ||
                 client.HasCustomGrantType();

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
         {
             return Task.FromResult(new Models.User
             {
+                Id = Guid.NewGuid().ToString(),
                 Claims = new List<EntityNS.UserClaim>(),
                 Consents = new List<EntityNS.UserConsent>(),
                 Logins = new List<EntityNS.UserLogin>(),
@@ -137,6 +138,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.User
             }
             return base.DeleteAsync(entityType, entity);
         }
+
+        protected override void OnCloning()
+        {
+            Model.Id = Guid.NewGuid().ToString();
+            Model.UserName = Localizer["Clone of {0}", Model.UserName];
+        }
+
+        protected override string GetNotiticationHeader() => Model.UserName;
 
         private static EntityNS.UserClaim CreateClaim()
             => new()

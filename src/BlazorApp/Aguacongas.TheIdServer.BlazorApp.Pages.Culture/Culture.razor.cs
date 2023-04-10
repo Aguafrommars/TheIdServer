@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +74,13 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Culture
             {
                 culture.Resources = null;
             }
+        }
+
+        protected override void OnCloning()
+        {
+            Model.Id = null;
+            _cultureInfo = CultureInfo.InvariantCulture;
+            StateHasChanged();
         }
 
         private void HandleModificationState_OnFilterChange(string term)

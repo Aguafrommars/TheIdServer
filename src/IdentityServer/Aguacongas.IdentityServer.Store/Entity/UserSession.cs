@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -61,14 +61,6 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The serialized ticket
         /// </summary>
         public string Ticket { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user.
-        /// </summary>
-        /// <value>
-        /// The user.
-        /// </value>
-        public virtual User User { get; set; }
 
     }
 }

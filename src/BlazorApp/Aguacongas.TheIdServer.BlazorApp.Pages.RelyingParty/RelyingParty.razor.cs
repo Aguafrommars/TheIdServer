@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using IdentityModel;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.IdentityModel.Tokens;
@@ -153,7 +153,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
                 subEntity.RelyingPartyId = Model.Id;
             }
         }
-
+       
         private async Task SetCertificateAsync(InputFileChangeEventArgs e)
         {
             using var stream = e.File.OpenReadStream();
@@ -189,6 +189,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
                 _thumbprint = new[] { Localizer["Invalid file"].Value };
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
+        }
+
+        protected override void OnCloning()
+        {
+            Model.Description = Localizer["Clone of {0}", Model.Description];
         }
 
         private void RemoveCertificate()

@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2022 @Olivier Lefebvre
+// Copyright (c) 2023 @Olivier Lefebvre
 using System;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Microsoft.EntityFrameworkCore;
@@ -236,6 +236,33 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 
                     b.ToTable("RefreshTokens");
                 });
+
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2pArtifact", b =>
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar2(450)");
+
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasColumnType("nclob");
+
+                b.Property<string>("UserId")
+                    .HasColumnType("varchar(200)");
+
+                b.Property<string>("Xml")
+                    .HasColumnType("nclob");
+
+                b.Property<string>("SessionId")
+                    .HasColumnType("nclob");
+
+                b.Property<DateTime>("CreatedAt")
+                   .IsRequired()
+                   .HasColumnType("timestamp");
+
+                b.HasKey("Id");
+
+                b.ToTable("Saml2pArtifact");
+            });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.UserConsent", b =>
                 {

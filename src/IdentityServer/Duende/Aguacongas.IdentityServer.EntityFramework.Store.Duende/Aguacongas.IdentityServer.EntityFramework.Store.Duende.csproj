@@ -4,21 +4,19 @@
 	  <TargetFramework>net7.0</TargetFramework>
 	  <Authors>Olivier Lefebvre</Authors>
 	  <Description>Duende.IdentityServer EF Core stores implementation for TheIdServer.</Description>
-	  <Copyright>Copyright (c) 2022 @Olivier Lefebvre</Copyright>
+	  <Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
 	  <PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Aguacongas.IdentityServer.EntityFramework.Store</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
 	  <PackageTags>theidserver;duende.identityserver;ef;administration</PackageTags>	  
 	  <PackageIcon>package-icon.png</PackageIcon>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		
 	  <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Shared\DynamicAuthenticationBuilderExtensions.cs" Link="DynamicAuthenticationBuilderExtensions.cs" />
-    <Compile Include="..\..\Shared\Aguacongas.IdentityServer.EntityFramework.Store.Shared\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+    <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,21 +9,19 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
+            migrationBuilder.AddColumn<bool?>(
                 name: "CoordinateLifetimeWithUserSession",
                 table: "Clients",
-                type: "INTEGER",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "RequireRequestObject",
                 table: "Clients",
-                type: "INTEGER",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.CreateTable(
-                name: "ClientAllowedIdentityTokenSigningAlgorithms",
+               name: "ClientAllowedIdentityTokenSigningAlgorithms",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
@@ -54,14 +52,6 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
         {
             migrationBuilder.DropTable(
                 name: "ClientAllowedIdentityTokenSigningAlgorithms");
-
-            migrationBuilder.DropColumn(
-                name: "CoordinateLifetimeWithUserSession",
-                table: "Clients");
-
-            migrationBuilder.DropColumn(
-                name: "RequireRequestObject",
-                table: "Clients");
         }
     }
 }

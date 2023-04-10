@@ -8,11 +8,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants)TRACE;DUENDE</DefineConstants>
+	  <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,16 +24,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\DbContextOptionsBuilderExtensionsTest.cs" Link="DbContextOptionsBuilderExtensionsTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\ExternalClaimsTransformerTest.cs" Link="ExternalClaimsTransformerTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\Services\KeyStoreTest.cs" Link="Services\KeyStoreTest.cs" />
-		<Compile Include="..\..\Shared\Aguacongas.TheIdServer.Test.Shared\StartupTest.cs" Link="StartupTest.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221003-04" />
-		<PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.4" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
