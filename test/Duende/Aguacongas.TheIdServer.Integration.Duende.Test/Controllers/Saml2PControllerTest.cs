@@ -696,6 +696,14 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             },
+            AllowedScopes = new[]
+            {
+                new ClientScope
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Scope = "profile"
+                }
+            },
             Properties = new[]
             {
                 new ClientProperty
