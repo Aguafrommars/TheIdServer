@@ -271,6 +271,12 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     /// <returns></returns>
     protected async Task<ClaimsIdentity> CreateSubjectAsync(SignInValidationResult<Saml2RedirectBinding> result)
     {
+        var user = result.User;
+        if (user is null)
+        {
+            return new ClaimsIdentity();
+        }
+
         var requestedClaimTypes = new List<string>();
 
         var resources = await _resources.FindEnabledIdentityResourcesByScopeAsync(result.Client?.AllowedScopes).ConfigureAwait(false);
@@ -308,8 +314,8 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         var relyParty = result.RelyingParty;
         var mapping = relyParty.ClaimMapping;
 
-        var user = result.User;
-        var nameidFormat = relyParty.SamlNameIdentifierFormat.ToString();
+        
+        var nameidFormat = relyParty.SamlNameIdentifierFormat?.ToString() ?? NameIdentifierFormats.Persistent.ToString();
         var nameid = new Claim(nameidFormat, user.GetDisplayName());
 
         var outboundClaims = new List<Claim> 
