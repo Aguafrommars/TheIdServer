@@ -656,7 +656,8 @@ public class Saml2PControllerTest
             {
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
-                    new Claim("http://exemple.com", Guid.NewGuid().ToString()),
+                    new Claim("amr", Guid.NewGuid().ToString()),
+                    new Claim("test", Guid.NewGuid().ToString()),
             })
             .Returns(Task.CompletedTask);
 
@@ -704,6 +705,7 @@ public class Saml2PControllerTest
                     Scope = "profile"
                 }
             },
+            RelyingPartyId = "test",
             Properties = new[]
             {
                 new ClientProperty
@@ -711,6 +713,40 @@ public class Saml2PControllerTest
                     Id = Guid.NewGuid().ToString(),
                     Key = nameof(IdentityServer.Saml2p.Duende.Services.Store.RelyingParty.UseAcsArtifact),
                     Value = true.ToString()
+                }
+            }
+        }).ConfigureAwait(false);
+        await context.Identities.AddAsync(new IdentityResource
+        {
+            Id = "profile",
+            Enabled = true,
+            IdentityClaims = new[]
+            {
+                new IdentityClaim
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = "amr"
+                },
+                new IdentityClaim
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = "test"
+                }
+            }
+        }).ConfigureAwait(false);
+        await context.RelyingParties.AddAsync(new IdentityServer.Store.Entity.RelyingParty
+        {
+            Id = "test",
+            TokenType = Guid.NewGuid().ToString(),
+            DigestAlgorithm = Guid.NewGuid().ToString(),
+            SignatureAlgorithm = Guid.NewGuid().ToString(),
+            ClaimMappings = new[]
+            {
+                new RelyingPartyClaimMapping
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FromClaimType = "amr",
+                    ToClaimType = "urm:amr"
                 }
             }
         }).ConfigureAwait(false);

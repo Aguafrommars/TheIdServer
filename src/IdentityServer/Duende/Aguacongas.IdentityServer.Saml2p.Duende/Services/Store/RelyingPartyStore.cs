@@ -35,9 +35,11 @@ public class RelyingPartyStore : IRelyingPartyStore
     /// <returns></returns>
     public async Task<RelyingParty?> FindRelyingPartyAsync(string issuer)
     {
+        var relyingPartyName = nameof(Entity.Client.RelyingParty);
+        var relyingPartyNameClaimMappingName = nameof(Entity.Client.RelyingParty.ClaimMappings);
         var client = await _clientStore.GetAsync(issuer, new GetRequest
         {
-            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.RelyingParty)},{nameof(Entity.Client.Properties)}"
+            Expand = $"{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.RedirectUris)},{relyingPartyName},{relyingPartyName}.{relyingPartyNameClaimMappingName},{nameof(Entity.Client.Properties)}"
         }).ConfigureAwait(false);
 
         if (client is null)
