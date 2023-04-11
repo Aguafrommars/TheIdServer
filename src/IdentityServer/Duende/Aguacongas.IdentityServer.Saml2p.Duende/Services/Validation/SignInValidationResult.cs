@@ -35,7 +35,7 @@ public class SignInValidationResult<T> where T : Saml2Binding<T>
     /// <summary>
     /// Relying party
     /// </summary>
-    public RelyingParty? RelyingParty { get; set; }
+    public RelyingParty RelyingParty { get; set; } = new RelyingParty();
 
     /// <summary>
     /// Is sign in required

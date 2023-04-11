@@ -2,6 +2,7 @@
 using Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
+using ITfoxtec.Identity.Saml2;
 using ITfoxtec.Identity.Saml2.Schemas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -110,9 +111,13 @@ public class Saml2PService : ISaml2PService
     public async Task<IActionResult> LogoutAsync(HttpRequest request)
     {
         var signinResult = await _signInValidator.ValidateLogoutAsync(request).ConfigureAwait(false);
+        var logoutRequest = new Saml2LogoutRequest(await _generator.GetRelyingPartySaml2ConfigurationAsync(signinResult.RelyingParty)
+            .ConfigureAwait(false));
+        signinResult.Saml2Request = logoutRequest;
+
         try
         {
-            signinResult.Saml2Binding?.Unbind(signinResult.GerericRequest, signinResult.Saml2Request);
+            signinResult.Saml2Binding?.Unbind(signinResult.GerericRequest, logoutRequest);
 
             return await _generator.GenerateLogoutResponseAsync(signinResult, Saml2StatusCodes.Success).ConfigureAwait(false);
         }
