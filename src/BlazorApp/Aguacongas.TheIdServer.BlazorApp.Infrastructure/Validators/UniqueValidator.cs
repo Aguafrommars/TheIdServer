@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Validators
 {
-    public class UniqueValidator<T> : PropertyValidator<T, string> 
+    public class UniqueValidator<T, TProperty> : PropertyValidator<T, TProperty> 
         where T : class
     {
         private readonly IEnumerable<T> _items;
@@ -23,14 +23,14 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
 
         protected override string GetDefaultMessageTemplate(string errorCode) => "{PropertyName} must be unique";
 
-        public override bool IsValid(ValidationContext<T> context, string value)
+        public override bool IsValid(ValidationContext<T> context, TProperty value)
         {
             var editedItem = context.InstanceToValidate;
             var propertyName = context.PropertyName;
             propertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
             var property = typeof(T).GetTypeInfo().GetProperty(propertyName);
             return _items.All(item =>
-              item.Equals(editedItem) || property.GetValue(item) as string != value);
+              item.Equals(editedItem) || !((TProperty)property.GetValue(item)).Equals(value));
         }
     }
 

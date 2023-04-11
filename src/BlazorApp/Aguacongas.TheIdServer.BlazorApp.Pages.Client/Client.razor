@@ -15,301 +15,301 @@ else
             <div class="row bg-body sticky-top">
                 <div class="col-12 col-md">
                     @if (IsNew)
-                {
-                    <AuthorizeText Id="id" Placeholder="client id" @bind-Value="@Model.Id" />
-                }
-                else
-                {
-                    <h3>@Id</h3>
-                }
-            </div>
+                    {
+                        <AuthorizeText Id="id" Placeholder="client id" @bind-Value="@Model.Id" />
+                    }
+                    else
+                    {
+                        <h3>@Id</h3>
+                    }
+                </div>
                 <div class="col-12 col-md-5 mb-1">
-                @if (!NonEditable)
-                {
-                    <SaveButton />
+                    @if (!NonEditable)
+                    {
+                        <SaveButton />
+                        @if (!IsNew)
+                        {
+                            <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        }
+                    }
                     @if (!IsNew)
                     {
-                        <DeleteEntityButton EntityId="@Model.Id" DeleteConfirmed="DeleteEntity" />
+                        <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
+                        <CloneButton />
                     }
-                }
-                @if (!IsNew)
-                {
-                    <ExportButton EntityPath="@EntityPath" Request="@ExportRequest" />
-                    <CloneButton />
-                }
-            </div>
+                </div>
                 <div class="col-12 col-md mb-1">
-                <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
-            </div>
-            <div class="w-100"></div>
-            <div class="col">
-                <ul class="list-inline text-lowercase">
-                    @if (Model.ProtocolType == OIDC)
-                    {
-                        <li class="list-inline-item text-lowercase">
-                            <a href="@(NavigationManager.Uri)#grantTypes" @onclick='() => ScrollTo("grantTypes")' @onclick:preventDefault>@Localizer["grant types"]</a>
-                        </li>
-                    }
-                    @if (IsWebClient())
-                    {
+                    <Filter CssClass="mt-1" FocusChanged="FilterFocusChanged" />
+                </div>
+                <div class="w-100"></div>
+                <div class="col">
+                    <ul class="list-inline text-lowercase">
                         @if (Model.ProtocolType == OIDC)
                         {
-                            <li class="list-inline-item">
-                                <a href="@(NavigationManager.Uri)#consent" @onclick='() => ScrollTo("consent")' @onclick:preventDefault>@Localizer["consent"]</a>
+                            <li class="list-inline-item text-lowercase">
+                                <a href="@(NavigationManager.Uri)#grantTypes" @onclick='() => ScrollTo("grantTypes")' @onclick:preventDefault>@Localizer["grant types"]</a>
                             </li>
                         }
-                    }
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
-                    </li>
-                    @if (!Model.IsClientCredentialOnly())
-                    {
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>@Localizer["idp restrictions"]</a>
-                        </li>
-                    }
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
-                    </li>
-                    @if (Model.ProtocolType != SAML2P)
-                    {
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#tokens" @onclick='() => ScrollTo("tokens")' @onclick:preventDefault>@Localizer["tokens"]</a>
-                        </li>
-                    }
-                    @if (Model.ProtocolType != WSFED)
-                    {
-                        <li class="list-inline-item">
-                            <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
-                        </li>
-                    }
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="w-100"></div>
-            <FluentValidationValidator />
-            <ValidationSummary class="col" />
-        </div>
-        <div class="entity-details">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="mb-3 row">
-                        <label class="col col-form-label">
-                            @Localizer["protocol type"]
-                        </label>
-                        <div class="col-lg-10 col-sm-12 form-inline">
-                            @if (IsNew)
-                            {
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="protocol-type"
-                                       value="0"
-                                       checked="@(Model.ProtocolType == OIDC)"
-                                       @onchange="@(() => SetProtcolType(OIDC))" />
-                                    <label class="form-check-label" for="oidc" @onclick="@(() => SetProtcolType(OIDC))">OIDC</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="protocol-type"
-                                       value="1"
-                                       checked="@(Model.ProtocolType == WSFED)"
-                                       @onchange="@(() => SetProtcolType(WSFED))" />
-                                    <label class="form-check-label" for="wsfed" @onclick="@(() => SetProtcolType(WSFED))">WS-Federation</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="protocol-type"
-                                            value="2"
-                                            checked="@(Model.ProtocolType == SAML2P)"
-                                        @onchange="@(() => SetProtcolType(SAML2P))" />
-                                    <label class="form-check-label" for="saml2p" @onclick="@(() => SetProtcolType(SAML2P))">SAML2P</label>
-                                </div>
-                            }
-                            else if (Model.ProtocolType == OIDC)
-                            {
-                                <span class="form-control-plaintext">OIDC</span>
-                            }
-                            else if (Model.ProtocolType == WSFED)
-                            {
-                                <span class="form-control-plaintext">WS-Federation</span>
-                            }
-                            else
-                            {
-                                <span class="form-control-plaintext">SAML2P</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="col col-form-label">
-                        </label>
-                        <div class="col-lg-10 col-sm-12">
-                            <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="col col-form-label" for="name">
-                            @Localizer["name"]
-                        </label>
-                        <div class="col-lg-9 col-sm-12">
-                            <AuthorizeText Id="name" Placeholder="@Localizer["client name"]" @bind-Value="@Model.ClientName" MaxLength="200" />
-                        </div>
-                        <div class="col-1">
-                            <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
-                                <span class="oi oi-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName" />
-                    <div class="mb-3 row">
-                        <label class="col col-form-label" for="description">
-                            @Localizer["description"]
-                        </label>
-                        <div class="col-lg-9 col-sm-12">
-                            <AuthorizeTextArea Id="description" Placeholder="@Localizer["description"]" @bind-Value="@Model.Description" MaxLength="1000" />
-                        </div>
-                        <div class="col-1">
-                            <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
-                                <span class="oi oi-plus"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
-                    @if (Model.ProtocolType == OIDC)
-                    {
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="front-channel-logout-uri">
-                                @Localizer["front channel logout uri"]
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="front-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.FrontChannelLogoutUri" MaxLength="2000" />
-                                <AuthorizeCheckbox Name="front-channel-logout-uri-required" Label="@Localizer["front channel logout uri required"]" @bind-Value="@Model.FrontChannelLogoutSessionRequired" />
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="back-channel-logout-uri">
-                                @Localizer["back channel logout uri"]
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <AuthorizeText Id="back-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.BackChannelLogoutUri" MaxLength="2000" />
-                                <AuthorizeCheckbox Name="back-channel-logout-uri-required" Label="@Localizer["back channel logout uri required"]" @bind-Value="@Model.BackChannelLogoutSessionRequired" />
-                            </div>
-                        </div>
-                    }
-                    else if (Model.ProtocolType != OIDC)
-                    {
-                        <div class="mb-3 row">
-                            <label class="col col-form-label" for="relying-party">
-                                @Localizer["relying party"]
-                            </label>
-                            <div class="col-lg-10 col-sm-12">
-                                <ClientRelyingParty @bind-Value="@Model.RelyingPartyId" />
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-            @if (Model.ProtocolType == OIDC)
-            {
-                <div id="grantTypes" class="card mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["Grant types"]</h5>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ClientGrantTypes Model="@Model" />
-                    </div>
-                </div>
-            }
-            @if (IsWebClient() && Model.ProtocolType == OIDC)
-            {
-                <div id="consent" class="card mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["Consent"]</h5>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ClientConsents Model="@Model" />
-                    </div>
-                </div>
-            }
-            @if (IsWebClient())
-            {
-                <ClientUrisPanel Model="@Model" />
-            }
-            @if (!Model.IsClientCredentialOnly())
-            {
-                <div id="providers" class="card mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["External provider restrictions"]</h5>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ClientIdpRestrictions Model="@Model" />
-                    </div>
-                </div>
-            }
-            <div id="scopes" class="card mb-3">
-                <div class="card-header">
-                    <div class="row">
-                        <h5 class="col">@Localizer["Scopes"]</h5>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <ClientScopes Model="@Model" />
-                </div>
-            </div>
-            @if (Model.ProtocolType != SAML2P)
-            {
-                <div id="tokens" class="card mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <h5 class="col">@Localizer["Tokens"]</h5>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ClientTokens Model="@Model" />
-                    </div>
-                </div>
-            }
-            @if (Model.ProtocolType != WSFED)
-            {
-                <div id="secrets" class="card mb-3">
-                    <div class="card-header">
-                        <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
-                    </div>
-                    <div class="card-body">
-                        <ClientSecrets ProtocolType="@Model.ProtocolType" Collection="@Model.ClientSecrets" />
-                        @if (Model.ClientSecrets.Any())
+                        @if (IsWebClient())
                         {
-                            <div class="col">
-                                <AuthorizeCheckbox Name="require-secret" Label="@Localizer["require secret"]" @bind-Value="@Model.RequireClientSecret" />
+                            @if (Model.ProtocolType == OIDC)
+                            {
+                                <li class="list-inline-item">
+                                    <a href="@(NavigationManager.Uri)#consent" @onclick='() => ScrollTo("consent")' @onclick:preventDefault>@Localizer["consent"]</a>
+                                </li>
+                            }
+                            <li class="list-inline-item">
+                                <a href="@(NavigationManager.Uri)#urls" @onclick='() => ScrollTo("urls")' @onclick:preventDefault>@Localizer["urls"]</a>
+                            </li>
+                        }
+                        @if (!Model.IsClientCredentialOnly())
+                        {
+                            <li class="list-inline-item">
+                                <a href="@(NavigationManager.Uri)#providers" @onclick='() => ScrollTo("providers")' @onclick:preventDefault>@Localizer["idp restrictions"]</a>
+                            </li>
+                        }
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#scopes" @onclick='() => ScrollTo("scopes")' @onclick:preventDefault>@Localizer["scopes"]</a>
+                        </li>
+                        @if (Model.ProtocolType != SAML2P)
+                        {
+                            <li class="list-inline-item">
+                                <a href="@(NavigationManager.Uri)#tokens" @onclick='() => ScrollTo("tokens")' @onclick:preventDefault>@Localizer["tokens"]</a>
+                            </li>
+                        }
+                        @if (Model.ProtocolType != WSFED)
+                        {
+                            <li class="list-inline-item">
+                                <a href="@(NavigationManager.Uri)#secrets" @onclick='() => ScrollTo("secrets")' @onclick:preventDefault>@Localizer["secrets"]</a>
+                            </li>
+                        }
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#claims" @onclick='() => ScrollTo("claims")' @onclick:preventDefault>@Localizer["claims"]</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="@(NavigationManager.Uri)#properties" @onclick='() => ScrollTo("properties")' @onclick:preventDefault>@Localizer["properties"]</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-100"></div>
+                <FluentValidationValidator />
+                <ValidationSummary class="col" />
+            </div>
+            <div class="entity-details">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="mb-3 row">
+                            <label class="col col-form-label">
+                                @Localizer["protocol type"]
+                            </label>
+                            <div class="col-lg-10 col-sm-12 form-inline">
+                                @if (IsNew)
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="protocol-type"
+                                               value="0"
+                                               checked="@(Model.ProtocolType == OIDC)"
+                                        @onchange="@(() => SetProtcolType(OIDC))" />
+                                        <label class="form-check-label" for="oidc" @onclick="@(() => SetProtcolType(OIDC))">OIDC</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="protocol-type"
+                                               value="1"
+                                               checked="@(Model.ProtocolType == WSFED)"
+                                        @onchange="@(() => SetProtcolType(WSFED))" />
+                                        <label class="form-check-label" for="wsfed" @onclick="@(() => SetProtcolType(WSFED))">WS-Federation</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="protocol-type"
+                                               value="2"
+                                               checked="@(Model.ProtocolType == SAML2P)"
+                                        @onchange="@(() => SetProtcolType(SAML2P))" />
+                                        <label class="form-check-label" for="saml2p" @onclick="@(() => SetProtcolType(SAML2P))">SAML2P</label>
+                                    </div>
+                                }
+                                else if (Model.ProtocolType == OIDC)
+                                {
+                                    <span class="form-control-plaintext">OIDC</span>
+                                }
+                                else if (Model.ProtocolType == WSFED)
+                                {
+                                    <span class="form-control-plaintext">WS-Federation</span>
+                                }
+                                else
+                                {
+                                    <span class="form-control-plaintext">SAML2P</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col col-form-label">
+                            </label>
+                            <div class="col-lg-10 col-sm-12">
+                                <AuthorizeCheckbox Name="enabled" Label="@Localizer["enabled"]" @bind-Value="@Model.Enabled" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col col-form-label" for="name">
+                                @Localizer["name"]
+                            </label>
+                            <div class="col-lg-9 col-sm-12">
+                                <AuthorizeText Id="name" Placeholder="@Localizer["client name"]" @bind-Value="@Model.ClientName" MaxLength="200" />
+                            </div>
+                            <div class="col-1">
+                                <button id="btnAddDisplayName" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.DisplayName)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.DisplayName" />
+                        <div class="mb-3 row">
+                            <label class="col col-form-label" for="description">
+                                @Localizer["description"]
+                            </label>
+                            <div class="col-lg-9 col-sm-12">
+                                <AuthorizeTextArea Id="description" Placeholder="@Localizer["description"]" @bind-Value="@Model.Description" MaxLength="1000" />
+                            </div>
+                            <div class="col-1">
+                                <button id="btnAddDescription" type="button" class="btn btn-primary btn-sm" @onclick="() => AddResource(Entity.EntityResourceKind.Description)">
+                                    <span class="oi oi-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <ClientResources Collection="@Model.Resources" ResourceKind="@Entity.EntityResourceKind.Description" />
+                        @if (Model.ProtocolType == OIDC)
+                        {
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="front-channel-logout-uri">
+                                    @Localizer["front channel logout uri"]
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Id="front-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.FrontChannelLogoutUri" MaxLength="2000" />
+                                    <AuthorizeCheckbox Name="front-channel-logout-uri-required" Label="@Localizer["front channel logout uri required"]" @bind-Value="@Model.FrontChannelLogoutSessionRequired" />
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="back-channel-logout-uri">
+                                    @Localizer["back channel logout uri"]
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeText Id="back-channel-logout-uri" Placeholder="https://theidserver.com/logout" @bind-Value="@Model.BackChannelLogoutUri" MaxLength="2000" />
+                                    <AuthorizeCheckbox Name="back-channel-logout-uri-required" Label="@Localizer["back channel logout uri required"]" @bind-Value="@Model.BackChannelLogoutSessionRequired" />
+                                </div>
+                            </div>
+                        }
+                        else if (Model.ProtocolType != OIDC)
+                        {
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="relying-party">
+                                    @Localizer["relying party"]
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <ClientRelyingParty @bind-Value="@Model.RelyingPartyId" />
+                                </div>
                             </div>
                         }
                     </div>
                 </div>
-            }
-            <div id="claims" class="card mb-3">
-                <div class="card-header">
-                    <EntitySubGridTitle Text="@Localizer["Claims"]" Collection="@Model.ClientClaims" CreateModel="CreateClaim" />
+                @if (Model.ProtocolType == OIDC)
+                {
+                    <div id="grantTypes" class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <h5 class="col">@Localizer["Grant types"]</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ClientGrantTypes Model="@Model" />
+                        </div>
+                    </div>
+                }
+                @if (IsWebClient() && Model.ProtocolType == OIDC)
+                {
+                    <div id="consent" class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <h5 class="col">@Localizer["Consent"]</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ClientConsents Model="@Model" />
+                        </div>
+                    </div>
+                }
+                @if (IsWebClient())
+                {
+                    <ClientUrisPanel Model="@Model" />
+                }
+                @if (!Model.IsClientCredentialOnly())
+                {
+                    <div id="providers" class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <h5 class="col">@Localizer["External provider restrictions"]</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ClientIdpRestrictions Model="@Model" />
+                        </div>
+                    </div>
+                }
+                <div id="scopes" class="card mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col">@Localizer["Scopes"]</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ClientScopes Model="@Model" />
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ClientClaims Model="@Model" Collection="@Model.ClientClaims" />
+                @if (Model.ProtocolType != SAML2P)
+                {
+                    <div id="tokens" class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <h5 class="col">@Localizer["Tokens"]</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ClientTokens Model="@Model" />
+                        </div>
+                    </div>
+                }
+                @if (Model.ProtocolType != WSFED)
+                {
+                    <div id="secrets" class="card mb-3">
+                        <div class="card-header">
+                            <EntitySubGridTitle Text="@Localizer["Secrets"]" Collection="@Model.ClientSecrets" CreateModel="CreateSecret" />
+                        </div>
+                        <div class="card-body">
+                            <ClientSecrets ProtocolType="@Model.ProtocolType" Collection="@Model.ClientSecrets" />
+                            @if (Model.ClientSecrets.Any())
+                            {
+                                <div class="col">
+                                    <AuthorizeCheckbox Name="require-secret" Label="@Localizer["require secret"]" @bind-Value="@Model.RequireClientSecret" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                <div id="claims" class="card mb-3">
+                    <div class="card-header">
+                        <EntitySubGridTitle Text="@Localizer["Claims"]" Collection="@Model.ClientClaims" CreateModel="CreateClaim" />
+                    </div>
+                    <div class="card-body">
+                        <ClientClaims Model="@Model" Collection="@Model.ClientClaims" />
+                    </div>
+                </div>
+                <div id="properties" class="card mb-3">
+                    <div class="card-header">
+                        <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="@Model.Properties" CreateModel="CreateProperty" />
+                    </div>
+                    <div class="card-body">
+                        <ClientProperties Collection="@Model.Properties" />
+                    </div>
                 </div>
             </div>
-            <div id="properties" class="card mb-3">
-                <div class="card-header">
-                    <EntitySubGridTitle Text="@Localizer["Properties"]" Collection="@Model.Properties" CreateModel="CreateProperty" />
-                </div>
-                <div class="card-body">
-                    <ClientProperties Collection="@Model.Properties" />
-                </div>
-            </div>
-        </div>
-    </CascadingValue>
-</EditForm>
+        </CascadingValue>
+    </EditForm>
 }
