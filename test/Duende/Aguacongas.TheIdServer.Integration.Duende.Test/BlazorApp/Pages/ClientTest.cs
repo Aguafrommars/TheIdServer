@@ -625,6 +625,144 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.Contains(input.Attributes, a => a.Value == $"Clone of {clientId}");
         }
 
+        [Fact]
+        public async Task SaveClik_should_validate_wsfed_entity()
+        {
+            var clientId = GenerateId();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                null);
+
+            var idInput = WaitForNode(component, "#id");
+            Assert.NotNull(idInput);
+
+            await idInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
+
+            var protocolTypeInputs = WaitForAllNodes(component, "input[type=radio]");
+            Assert.NotNull(protocolTypeInputs);
+            
+            var protocolTypeInput = protocolTypeInputs[1];
+            await protocolTypeInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = 1
+            });
+
+            var redirectUriInput = WaitForNode(component, "#redirect-uri");
+            Assert.NotNull(redirectUriInput);
+
+            await redirectUriInput
+                .ChangeAsync(new ChangeEventArgs 
+                { 
+                    Value = clientId 
+                })
+                .ConfigureAwait(false);
+
+            redirectUriInput = WaitForNode(component, "#redirect-uri");
+            Assert.NotNull(redirectUriInput);
+
+            await redirectUriInput
+                .ChangeAsync(new ChangeEventArgs
+                {
+                    Value = clientId
+                })
+                .ConfigureAwait(false);
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            Assert.Contains("The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).", component.Markup);
+            Assert.Contains("The relying party is required.", component.Markup);
+            Assert.Contains($"The url '{clientId}' is not valid.", component.Markup);
+        }
+
+        [Fact]
+        public async Task SaveClick_should_validate_saml2p_entity()
+        {
+            var clientId = GenerateId();
+
+            var component = CreateComponent("Alice Smith",
+                SharedConstants.WRITERPOLICY,
+                null);
+
+            var idInput = WaitForNode(component, "#id");
+            Assert.NotNull(idInput);
+
+            await idInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = clientId
+            }).ConfigureAwait(false);
+
+            var protocolTypeInputs = WaitForAllNodes(component, "input[type=radio]");
+            Assert.NotNull(protocolTypeInputs);
+
+            var protocolTypeInput = protocolTypeInputs[2];
+            await protocolTypeInput.ChangeAsync(new ChangeEventArgs
+            {
+                Value = 2
+            });
+
+            var addButton = WaitForNode(component, "#urls button");
+            Assert.NotNull(addButton);
+
+            await addButton.ClickAsync(new MouseEventArgs());
+            
+            var urlInputs = WaitForAllNodes(component, "#urls input.form-control");
+
+            await urlInputs[0].ChangeAsync(new ChangeEventArgs
+            {
+                Value = "https://test"
+            }).ConfigureAwait(false);
+
+            var urlCheckBoxes = WaitForAllNodes(component, "#urls input.form-check-input");
+            await urlCheckBoxes[0].ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
+
+            addButton = WaitForNode(component, "#urls button");
+            await addButton.ClickAsync(new MouseEventArgs());
+
+            urlInputs = WaitForAllNodes(component, "#urls input.form-control");
+            await urlInputs[1].ChangeAsync(new ChangeEventArgs
+            {
+                Value = "https://test"
+            }).ConfigureAwait(false);
+
+
+            urlCheckBoxes = WaitForAllNodes(component, "#urls input.form-check-input");
+            await urlCheckBoxes[3].ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
+
+            var form = component.Find("form");
+            Assert.NotNull(form);
+
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            Assert.Contains("Uri must be unique.", component.Markup);
+            Assert.Contains("Cannot have more than one URI per kind.", component.Markup);
+            Assert.Contains($"Either a metadata URI or a X509Certificate secret must be set.", component.Markup);
+
+            urlCheckBoxes = WaitForAllNodes(component, "#urls input.form-check-input");
+            await urlCheckBoxes[4].ChangeAsync(new ChangeEventArgs
+            {
+                Value = true
+            }).ConfigureAwait(false);
+
+            form = component.Find("form");
+
+            await form.SubmitAsync().ConfigureAwait(false);
+
+            Assert.Contains($"Either a metadata URI or a X509Certificate secret must be set.", component.Markup);
+        }
+
         private async Task<string> CreateClient(string grantType = "hybrid", bool allowOfflineAccess = false)
         {
             var clientId = GenerateId();
