@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         {
             var selected = _filteredParties?.FirstOrDefault(p => p.Id == inputValue);
             CurrentValue = selected?.Id ?? inputValue;
+            CurrentValue = string.IsNullOrEmpty(CurrentValue) ? null : CurrentValue;
         }
-
     }
 }

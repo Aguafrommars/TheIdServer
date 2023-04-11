@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using static Microsoft.IdentityModel.Tokens.Saml2.Saml2Constants;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
 
@@ -46,9 +47,19 @@ public class RelyingParty
     /// Signature algorithm
     /// </summary>
     public string? SignatureAlgorithm { get; set; }
-    
+
     /// <summary>
     /// Saml name identifier format
     /// </summary>
-    public Uri? SamlNameIdentifierFormat { get; set; }
+    public Uri SamlNameIdentifierFormat { get; set; } = NameIdentifierFormats.Persistent;
+
+    /// <summary>
+    /// Claims mapping
+    /// </summary>
+    public IDictionary<string, string> ClaimMapping { get; set; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// Token type
+    /// </summary>
+    public string? TokenType { get; set; }
 }

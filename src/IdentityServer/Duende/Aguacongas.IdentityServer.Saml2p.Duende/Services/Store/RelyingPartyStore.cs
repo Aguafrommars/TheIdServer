@@ -3,6 +3,7 @@ using ITfoxtec.Identity.Saml2.Cryptography;
 using ITfoxtec.Identity.Saml2.Schemas.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using static Duende.IdentityServer.IdentityServerConstants;
+using static Microsoft.IdentityModel.Tokens.Saml2.Saml2Constants;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Store;
@@ -60,7 +61,7 @@ public class RelyingPartyStore : IRelyingPartyStore
             });
 
         var rp = client.RelyingParty;
-        var encriptionsCertificate = rp?.EncryptionCertificate is not null ?
+        var encriptionCertificate = rp?.EncryptionCertificate is not null ?
             new X509Certificate2(rp.EncryptionCertificate) : null;
 
         var relyingParty = new RelyingParty
@@ -70,10 +71,16 @@ public class RelyingPartyStore : IRelyingPartyStore
             AcsDestination = acsUri is not null ? new Uri(acsUri) : null,
             SingleLogoutDestination = logoutUri is not null ? new Uri(logoutUri) : null,
             SignatureValidationCertificate = signatureCertificateList,
-            EncryptionCertificate = encriptionsCertificate,
+            EncryptionCertificate = encriptionCertificate,
             SignatureAlgorithm = rp?.SignatureAlgorithm,
-            SamlNameIdentifierFormat = rp?.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : null
+            SamlNameIdentifierFormat = rp?.SamlNameIdentifierFormat is not null ? new Uri(rp.SamlNameIdentifierFormat) : NameIdentifierFormats.Persistent,
+            TokenType = rp?.TokenType,
         };
+
+        if (rp?.ClaimMappings is not null)
+        {
+            relyingParty.ClaimMapping = rp.ClaimMappings.ToDictionary(m => m.FromClaimType, m => m.ToClaimType);
+        }
 
         var metadata = client.RedirectUris.FirstOrDefault(u => u.Kind == Entity.UriKinds.Saml2Metadata);
         if (metadata != null)
