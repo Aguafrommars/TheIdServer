@@ -140,7 +140,7 @@ public class RelyingPartyStore : IRelyingPartyStore
         relyingParty.Issuer = entityDescriptor.EntityId;
         relyingParty.Metadata = metadata;
         var spSsoDescriptor = entityDescriptor.SPSsoDescriptor;
-        relyingParty.SamlNameIdentifierFormat = spSsoDescriptor.NameIDFormats?.FirstOrDefault();
+        relyingParty.SamlNameIdentifierFormat = spSsoDescriptor.NameIDFormats?.FirstOrDefault() ?? NameIdentifierFormats.Persistent;
         relyingParty.AcsDestination = spSsoDescriptor.AssertionConsumerServices.Where(a => a.IsDefault).OrderBy(a => a.Index).First().Location;
         var singleLogoutService = spSsoDescriptor.SingleLogoutServices.First();
         relyingParty.SingleLogoutDestination = singleLogoutService.ResponseLocation ?? singleLogoutService.Location;

@@ -1206,8 +1206,7 @@ public class Saml2PControllerTest
                 SingleLogoutDestination = new Uri("https://exemple.com"),
                 SignatureValidationCertificate = Array.Empty<X509Certificate2>(),
                 EncryptionCertificate = null,
-                SignatureAlgorithm = null,
-                SamlNameIdentifierFormat = null
+                SignatureAlgorithm = null
             };
         });
 
