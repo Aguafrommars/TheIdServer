@@ -6,7 +6,7 @@ namespace Aguacongas.IdentityServer.Store.Entity;
 /// <summary>
 /// Saml2P artifact
 /// </summary>
-public class Saml2PArtifact : IEntityId, IUserSubEntity, IClientSubEntity, IGrant
+public class Saml2PArtifact : IUserSubEntity, IClientSubEntity, IGrant
 {
     /// <summary>
     /// Gets or sets the identifier.

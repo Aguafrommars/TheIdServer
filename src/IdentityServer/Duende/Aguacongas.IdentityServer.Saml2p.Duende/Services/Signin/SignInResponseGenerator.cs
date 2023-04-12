@@ -41,6 +41,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     /// <param name="configurationService"></param>
     /// <param name="resource"></param>
     /// <param name="profile"></param>
+    /// <param name="options"></param>
     /// <param name="logger"></param>
     public SignInResponseGenerator(IArtifactStore store,
         IUserSession userSession,
