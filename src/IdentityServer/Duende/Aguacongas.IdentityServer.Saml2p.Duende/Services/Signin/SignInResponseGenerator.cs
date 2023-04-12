@@ -12,6 +12,7 @@ using ITfoxtec.Identity.Saml2.MvcCore;
 using ITfoxtec.Identity.Saml2.Schemas;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens.Saml2;
 using System.Security.Claims;
 using ClaimProperties = Microsoft.IdentityModel.Tokens.Saml.ClaimProperties;
@@ -29,6 +30,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
     private readonly ISaml2ConfigurationService _configurationService;
     private readonly IResourceStore _resources;
     private readonly IProfileService _profile;
+    private readonly IOptions<Saml2POptions> _options;
     private readonly ILogger<SignInResponseGenerator> _logger;
 
     /// <summary>
@@ -45,6 +47,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         ISaml2ConfigurationService configurationService,
         IResourceStore resource,
         IProfileService profile,
+        IOptions<Saml2POptions> options,
         ILogger<SignInResponseGenerator> logger)
     {
         _store = store;
@@ -52,6 +55,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         _configurationService = configurationService;
         _resources = resource;
         _profile = profile;
+        _options = options;
         _logger = logger;
     }
 
@@ -73,7 +77,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         var artifact = await _store.RemoveAsync(saml2ArtifactResolve.Artifact).ConfigureAwait(false);
 
         relyingPartyConfig.AllowedAudienceUris.Add(relyingParty?.Issuer);
-        var saml2AuthnResponse = new InternalSaml2AuthnResponse(relyingPartyConfig, artifact.Xml);
+        var saml2AuthnResponse = new InternalSaml2AuthnResponse(relyingPartyConfig, artifact.Data);
         var saml2ArtifactResponse = new Saml2ArtifactResponse(await _configurationService.GetConfigurationAsync().ConfigureAwait(false),
             saml2AuthnResponse)
         {
@@ -170,7 +174,10 @@ public class SignInResponseGenerator : ISignInResponseGenerator
                 .Single(), relyingParty?.SamlNameIdentifierFormat);
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
-            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
+            var settings = _options.Value;
+            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, 
+                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime, 
+                issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
 
         if (status == Saml2StatusCodes.Success)
@@ -201,6 +208,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             Status = status
         };
 
+        var settings = _options.Value;
         var userId = claimsIdentity?.GetSubjectId();
         if (status == Saml2StatusCodes.Success && claimsIdentity != null)
         {
@@ -214,7 +222,9 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(JwtClaimTypes.Subject));
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
-            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, subjectConfirmationLifetime: 5, issuedTokenLifetime: 60);
+            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer,
+                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime, 
+                issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
 
         var xml = saml2AuthnResponse.ToXml();
@@ -226,7 +236,8 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             CreatedAt = DateTime.UtcNow,
             SessionId = await _userSession.GetSessionIdAsync().ConfigureAwait(false),
             UserId = userId,
-            Xml = xml.OuterXml
+            Data = xml.OuterXml,
+            Expiration = DateTime.UtcNow.AddMinutes(settings.SubjectConfirmationLifetime),
         }).ConfigureAwait(false);
 
         return responseBinding.ToActionResult();

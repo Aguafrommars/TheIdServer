@@ -246,7 +246,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2pArtifact", b =>
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2PArtifact", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -258,14 +258,20 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.OperationalDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SessionId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Xml")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
