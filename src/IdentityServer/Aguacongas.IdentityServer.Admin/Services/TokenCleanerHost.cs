@@ -128,6 +128,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 var backChannelAuthenticationRequestStore = service.GetRequiredService<IAdminStore<BackChannelAuthenticationRequest>>();
                 var backChannelAuthenticationRequestResponse = await backChannelAuthenticationRequestStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
                 await RemoveExpiredTokensAsync(backChannelAuthenticationRequestStore, backChannelAuthenticationRequestResponse.Items, cancellationToken).ConfigureAwait(false);
+
+                var authorizationCodeStore = service.GetRequiredService<IAdminStore<AuthorizationCode>>();
+                var authorizationCodeResponse = await authorizationCodeStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(authorizationCodeStore, authorizationCodeResponse.Items, cancellationToken).ConfigureAwait(false);
+
+                var saml2PArtifactStore = service.GetRequiredService<IAdminStore<Saml2PArtifact>>();
+                var saml2PArtifactResponse = await saml2PArtifactStore.GetAsync(pageRequest, cancellationToken).ConfigureAwait(false);
+                await RemoveExpiredTokensAsync(saml2PArtifactStore, saml2PArtifactResponse.Items, cancellationToken).ConfigureAwait(false);
             }
             catch (TaskCanceledException)
             {

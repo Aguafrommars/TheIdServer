@@ -249,7 +249,7 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
                 b.Property<string>("UserId")
                     .HasColumnType("varchar(200)");
 
-                b.Property<string>("Xml")
+                b.Property<string>("Data")
                     .HasColumnType("nclob");
 
                 b.Property<string>("SessionId")
@@ -258,6 +258,12 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
                 b.Property<DateTime>("CreatedAt")
                    .IsRequired()
                    .HasColumnType("timestamp");
+
+                b.Property<DateTime?>("Expiration")
+                    .HasColumnType("datetime(6)");
+
+                b.Property<DateTime?>("ModifiedAt")
+                    .HasColumnType("datetime(6)");
 
                 b.HasKey("Id");
 

@@ -32,5 +32,15 @@ public class Saml2POptions
     /// <summary>
     /// Metadata entity descriptor lifetime in day
     /// </summary>
-    public int? ValidUntil { get; set; } = 365;
+    public int ValidUntil { get; set; } = 365;
+
+    /// <summary>
+    /// Subject confirmation lifetime
+    /// </summary>
+    public int SubjectConfirmationLifetime { get; set; } = 5;
+
+    /// <summary>
+    /// Issued token lifetime
+    /// </summary>
+    public int IssuedTokenLifetime { get; set; } = 60;
 }
