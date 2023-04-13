@@ -1,3 +1,24 @@
+# [7.3.0](https://github.com/Aguafrommars/TheIdServer/compare/7.2.2...7.3.0) (2023-04-13)
+
+
+### Bug Fixes
+
+* switch to ws-fed crash app ([ce16e0e](https://github.com/Aguafrommars/TheIdServer/commit/ce16e0e562861cb20599e0490216f911b20cd687))
+* switch to ws-fed crash app ([6467e03](https://github.com/Aguafrommars/TheIdServer/commit/6467e03e29297146fc2feaeb84106b74c1709906))
+* update packages ([2cac728](https://github.com/Aguafrommars/TheIdServer/commit/2cac728362c1e33ce100dbf9686f58afff5f9449))
+* update packages ([bb7deb8](https://github.com/Aguafrommars/TheIdServer/commit/bb7deb8d5a8d2fd5209f0e7e4fd65285623e2426))
+* update packages ([b614764](https://github.com/Aguafrommars/TheIdServer/commit/b6147649e6d16eaf5f47b1e1d559173ff9e2ccd3))
+* update packages ([d77918c](https://github.com/Aguafrommars/TheIdServer/commit/d77918c3ff9d5c14e8a9d63d342ddeaed4b5941e))
+* update packages ([a0c2150](https://github.com/Aguafrommars/TheIdServer/commit/a0c21501324bbfe1d7d74f8dc0f16b9770aa6422))
+* update packages ([e16e518](https://github.com/Aguafrommars/TheIdServer/commit/e16e518a080562376ef85253655f0d3c76696c32))
+* update packages ([c0d8ef7](https://github.com/Aguafrommars/TheIdServer/commit/c0d8ef718bb4cd937f3164f500fbcc18201d6b52))
+* update packages ([99c737e](https://github.com/Aguafrommars/TheIdServer/commit/99c737e54a3e3143eafd4b0f3640c8a3b6148710))
+
+
+### Features
+
+* saml2p ([f23936a](https://github.com/Aguafrommars/TheIdServer/commit/f23936abef264bed300ee4b1b714c28849cc8713))
+
 ## [7.2.2](https://github.com/Aguafrommars/TheIdServer/compare/7.2.1...7.2.2) (2023-03-20)
 
 
