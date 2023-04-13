@@ -120,6 +120,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 .AddTransient(p => deviceCodeStoreMock.Object)
                 .AddTransient(p => backChannelAuthenticationRequestStoreMock.Object)
                 .AddTransient(p => authorizationCodeStoreMock.Object)
+                .AddTransient(p => saml2PArtifactStoreMock.Object)
                 .BuildServiceProvider();
 
             using var sut = new TokenCleanerHost(provider, TimeSpan.FromSeconds(1), provider.GetRequiredService<ILogger<TokenCleanerHost>>());
@@ -152,10 +153,18 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
 
             var refreshTokenStoreMock = new Mock<IAdminStore<RefreshToken>>();
             var referenceTokenStoreMock = new Mock<IAdminStore<ReferenceToken>>();
+            var backChannelAuthenticationRequestStoreMock = new Mock<IAdminStore<BackChannelAuthenticationRequest>>();
+            var deviceCodeStoreMock = new Mock<IAdminStore<DeviceCode>>();
+            var authorizationStoreMock = new Mock<IAdminStore<AuthorizationCode>>();
+            var saml2PArtifactStoreMock = new Mock<IAdminStore<Saml2PArtifact>>();
             var provider = new ServiceCollection().AddLogging()
                 .AddTransient(p => oneTimeTokenStoreMock.Object)
                 .AddTransient(p => referenceTokenStoreMock.Object)
                 .AddTransient(p => refreshTokenStoreMock.Object)
+                .AddTransient(p => backChannelAuthenticationRequestStoreMock.Object)
+                .AddTransient(p => deviceCodeStoreMock.Object)
+                .AddTransient(p =>  authorizationStoreMock.Object)
+                .AddTransient(p => saml2PArtifactStoreMock.Object)
                 .BuildServiceProvider();
 
             using var sut = new TokenCleanerHost(provider, TimeSpan.FromSeconds(1), provider.GetRequiredService<ILogger<TokenCleanerHost>>());
