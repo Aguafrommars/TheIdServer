@@ -253,7 +253,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2pArtifact", b =>
+            modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Saml2PArtifact", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -265,15 +265,21 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.OperationalDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Data")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("SessionId")
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Xml")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

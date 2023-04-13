@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
+using Duende.IdentityServer.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -52,10 +53,73 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 .Callback(() => resetEvent.Set())
                 .Returns(Task.CompletedTask);
 
+            var deviceCodeStoreMock = new Mock<IAdminStore<DeviceCode>>();
+
+            deviceCodeStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new PageResponse<DeviceCode>
+                {
+                    Items = new[]
+                    {
+                        new DeviceCode()
+                    }
+                });
+
+            deviceCodeStoreMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Callback(() => resetEvent.Set())
+                .Returns(Task.CompletedTask);
+
+            var backChannelAuthenticationRequestStoreMock = new Mock<IAdminStore<BackChannelAuthenticationRequest>>();
+
+            backChannelAuthenticationRequestStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new PageResponse<BackChannelAuthenticationRequest>
+                {
+                    Items = new[]
+                    {
+                        new BackChannelAuthenticationRequest()
+                    }
+                });
+
+            backChannelAuthenticationRequestStoreMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Callback(() => resetEvent.Set())
+            .Returns(Task.CompletedTask);
+
+            var authorizationCodeStoreMock = new Mock<IAdminStore<AuthorizationCode>>();
+
+            authorizationCodeStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new PageResponse<AuthorizationCode>
+                {
+                    Items = new[]
+                    {
+                        new AuthorizationCode()
+                    }
+                });
+
+            authorizationCodeStoreMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Callback(() => resetEvent.Set())
+                .Returns(Task.CompletedTask);
+
+            var saml2PArtifactStoreMock = new Mock<IAdminStore<Saml2PArtifact>>();
+
+            saml2PArtifactStoreMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new PageResponse<Saml2PArtifact>
+                {
+                    Items = new[]
+                    {
+                        new Saml2PArtifact()
+                    }
+                });
+
+            saml2PArtifactStoreMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Callback(() => resetEvent.Set())
+                .Returns(Task.CompletedTask);
+
             var provider = new ServiceCollection().AddLogging()
                 .AddTransient(p => oneTimeTokenStoreMock.Object)
                 .AddTransient(p => referenceTokenStoreMock.Object)
                 .AddTransient(p => refreshTokenStoreMock.Object)
+                .AddTransient(p => deviceCodeStoreMock.Object)
+                .AddTransient(p => backChannelAuthenticationRequestStoreMock.Object)
+                .AddTransient(p => authorizationCodeStoreMock.Object)
                 .BuildServiceProvider();
 
             using var sut = new TokenCleanerHost(provider, TimeSpan.FromSeconds(1), provider.GetRequiredService<ILogger<TokenCleanerHost>>());

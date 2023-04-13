@@ -1484,7 +1484,7 @@
     "value": "L'identifiant est requis."
   },
   {
-    "key": "The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed).",
+    "key": "The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).",
     "value": "L'id doit être un URI lorsque le protocole est WS-Federation. (ex : urne:wsfed)."
   },
   {
@@ -2146,5 +2146,21 @@
   {
     "key": "allowed to",
     "value": "autorisé à"
+  },
+  {
+    "key": "metadata",
+    "value": "métadonnées"
+  },
+  {
+    "key": "Cannot have more than one URI per kind.",
+    "value": "Pas plus d’une URI par type."
+  },
+  {
+    "key": "Either a metadata or redirect URI must be set.",
+    "value": "Une URI de métadonnées ou de redirection doit être défini."
+  },
+  {
+    "key": "Either a metadata or redirect URI must be set.",
+    "value": "Une URI de métadonnées ou un secret X509Certificate doit être défini."
   }
 ]

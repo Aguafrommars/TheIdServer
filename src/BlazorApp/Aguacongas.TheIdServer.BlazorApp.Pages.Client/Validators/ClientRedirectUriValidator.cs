@@ -13,6 +13,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleFor(m => m.Uri).MaximumLength(2000).WithMessage(localizer["An url cannot exceed 2000 char."]);
             RuleFor(m => m.Uri).Uri().WithMessage((c, v) => $"The url '{v}' is not valid.");
             RuleFor(m => m.Uri).IsUnique(client.RedirectUris).WithMessage(localizer["Uri must be unique."]);
+            When(m => client.ProtocolType == "saml2p", () =>
+            {
+                RuleFor(m => m.Kind).IsUnique(client.RedirectUris)
+                    .WithMessage(localizer["Cannot have more than one URI per kind."]);
+            });
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Extentions
     {
         public static bool IsClientCredentialOnly(this IdentityServer.Store.Entity.Client client)
         {
-            return client.AllowedGrantTypes.All(g => g.GrantType == "client_credentials");
+            return client.AllowedGrantTypes.Any() && client.AllowedGrantTypes.All(g => g.GrantType == "client_credentials");
         }
 
         public static bool IsWebClient(this IdentityServer.Store.Entity.Client client)

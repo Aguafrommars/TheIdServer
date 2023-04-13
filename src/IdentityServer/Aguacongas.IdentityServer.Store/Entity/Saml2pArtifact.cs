@@ -6,7 +6,7 @@ namespace Aguacongas.IdentityServer.Store.Entity;
 /// <summary>
 /// Saml2P artifact
 /// </summary>
-public class Saml2PArtifact : IEntityId, IUserSubEntity, IClientSubEntity
+public class Saml2PArtifact : IUserSubEntity, IClientSubEntity, IGrant
 {
     /// <summary>
     /// Gets or sets the identifier.
@@ -40,7 +40,7 @@ public class Saml2PArtifact : IEntityId, IUserSubEntity, IClientSubEntity
     /// <value>
     /// The data.
     /// </value>
-    public string Xml { get; set; }
+    public string Data { get; set; }
 
     /// <summary>
     /// Gets or sets the session identifier.
@@ -57,4 +57,20 @@ public class Saml2PArtifact : IEntityId, IUserSubEntity, IClientSubEntity
     /// The created at.
     /// </value>
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// Gets or sets the expiration.
+    /// </summary>
+    /// <value>
+    /// The expiration.
+    /// </value>
+    public DateTime? Expiration { get; set; }
+
+    /// <summary>
+    /// Gets or sets the modified at.
+    /// </summary>
+    /// <value>
+    /// The modified at.
+    /// </value>
+    public DateTime? ModifiedAt { get; set; }
 }
