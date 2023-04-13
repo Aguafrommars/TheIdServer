@@ -20,11 +20,11 @@
 	<ItemGroup>
 		<PackageReference Include="bunit" Version="1.18.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.4" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.5" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.5" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.5" />
 		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -46,6 +46,9 @@
 	  <None Update="appsettings.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="itfoxtec.identity.saml2.testwebappcore_Certificate.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="test.crt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -59,7 +62,6 @@
 
 	<ItemGroup>
 	  <Folder Include="BlazorApp\Pages\" />
-	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 </Project>

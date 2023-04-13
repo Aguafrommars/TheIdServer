@@ -1,32 +1,32 @@
 ﻿@inject IStringLocalizerAsync<ClientUrisPanel> Localizer
 <div id="urls" class="card mb-3">
-@if(Model.ProtocolType == "oidc")
-{
-    <div class="card-header">
-        <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />
-    </div>
-    <div class="card-body">
-        <ClientUris Model="@Model" Collection="@Model.RedirectUris" />
-    </div>
-}
-else
-{
-    <div class="card-header">
-        <div class="row">
-            <div class="col d-flex">
-                <span class="h5">URL</span>
+    @if (Model.ProtocolType != "wsfed")
+    {
+        <div class="card-header">
+            <EntitySubGridTitle Text="URLs" Collection="@Model.RedirectUris" CreateModel="CreateRedirectUri" />
+        </div>
+        <div class="card-body">
+            <ClientUris Model="@Model" Collection="@Model.RedirectUris" />
+        </div>
+    }
+    else
+    {
+        <div class="card-header">
+            <div class="row">
+                <div class="col d-flex">
+                    <span class="h5">URL</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card-body">
-        <div class="mb-3 row">
-            <label class="col col-form-label" for="redirect-uri">
-                @Localizer["redirect uri"]
-            </label>
-            <div class="col-lg-10 col-sm-12">
-                <AuthorizeText Id="redirect-uri" Placeholder="https://wsfed.client.com" @bind-Value="@Model.RedirectUris.First().Uri" MaxLength="2000" />
+        <div class="card-body">
+            <div class="mb-3 row">
+                <label class="col col-form-label" for="redirect-uri">
+                    @Localizer["redirect uri"]
+                </label>
+                <div class="col-lg-10 col-sm-12">
+                    <AuthorizeText Id="redirect-uri" Placeholder="https://wsfed.client.com" @bind-Value="@WsFedRedirectUri" MaxLength="2000" />
+                </div>
             </div>
         </div>
-    </div>        
-}
+    }
 </div>

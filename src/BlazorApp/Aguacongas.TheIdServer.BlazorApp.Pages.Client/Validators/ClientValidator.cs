@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         {
             RuleFor(m => m.Id).NotEmpty().WithMessage(localizer["The id is required."]);
             RuleFor(m => m.Id).Must(id => Uri.TryCreate(id, UriKind.Absolute, out Uri _))
-                .WithMessage(localizer["The id must be an URI when protocole is WS-Federation. (ex: urn:wsfed)."])
+                .WithMessage(localizer["The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed)."])
                 .When(m => m.ProtocolType == "wsfed");
             RuleFor(m => m.ClientClaimsPrefix).MaximumLength(250).WithMessage(localizer["The claim prefix cannot exceed 250 char."]);
             RuleFor(m => m.PairWiseSubjectSalt).MaximumLength(250).WithMessage(localizer["The subject salt cannot exceed 250 char."]);
@@ -83,6 +83,16 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
             RuleForEach(m => m.Resources)
                 .Where(m => m.ResourceKind == EntityResourceKind.TosUri)
                 .SetValidator(new ClientResourceUriValidator(client, EntityResourceKind.Description, localizer));
+            When(m => m.ProtocolType == "saml2p", () =>
+            {
+                RuleFor(m => m.RedirectUris)
+                    .Must(m => m.Any(u => u.Kind == UriKinds.Redirect || u.Kind == UriKinds.Saml2Metadata))
+                    .WithMessage(localizer["Either a metadata or redirect URI must be set."]);
+                RuleFor(m => m.ClientSecrets)
+                    .Must((c, m) => c.RedirectUris.Any(u => u.Kind == UriKinds.Saml2Metadata) ||
+                        c.ClientSecrets.Any())
+                    .WithMessage(localizer["Either a metadata URI or a X509Certificate secret must be set."]);
+            });
         }
     }
 }

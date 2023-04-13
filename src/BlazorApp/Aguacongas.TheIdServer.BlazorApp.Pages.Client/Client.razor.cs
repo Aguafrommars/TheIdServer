@@ -14,6 +14,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
     {
         public static readonly string OIDC = "oidc";
         public static readonly string WSFED = "wsfed";
+        public static readonly string SAML2P = "saml2p";
 
         private bool _filtered;
         private bool _isWebClient;
@@ -151,10 +152,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
             return Model.IsWebClient();
         }
 
-        private static Entity.ClientSecret CreateSecret()
+        private Entity.ClientSecret CreateSecret()
             => new()
             {
-                Type = "SharedSecret"
+                Type = Model.ProtocolType == SAML2P ? "X509Thumbprint" :  "SharedSecret"
             };
 
         private static Entity.ClientClaim CreateClaim()

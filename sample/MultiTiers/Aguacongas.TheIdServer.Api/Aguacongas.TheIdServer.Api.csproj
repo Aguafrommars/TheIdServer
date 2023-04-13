@@ -6,7 +6,7 @@
 		<UserSecretsId>3d7ce8dc-f8b3-4d0a-967c-7d1aeead003e</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
-	</PropertyGroup>
+  </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Api.ruleset</CodeAnalysisRuleSet>
@@ -39,22 +39,22 @@
 		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.2.1" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="7.2.1" />
-		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="7.2.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.2.2" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="7.2.2" />
+		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="7.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.4" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.5" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" PrivateAssets="All" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />

@@ -9,6 +9,29 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 {
     public partial class ClientUrisPanel
     {
+        string WsFedRedirectUri
+        {
+            get => Model.RedirectUris.FirstOrDefault()?.Uri;
+            set
+            {
+                var uri = Model.RedirectUris.FirstOrDefault();
+                if (uri is null)
+                {
+                    uri = new Entity.ClientUri
+                    {
+                        Kind = Entity.UriKinds.Redirect,
+                        Uri = value
+                    };
+                    Model.RedirectUris.Add(uri);
+                    HandleModificationState.EntityCreated(uri);
+                    return;
+                }
+
+                uri.Uri = value;
+                HandleModificationState.EntityUpdated(uri);
+            }
+        }
+
         [Parameter]
         public Entity.Client Model { get; set; }
 
@@ -18,15 +41,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         protected override void OnInitialized()
         {
             HandleModificationState.OnStateChange += HandleModificationState_OnStateChange;
-            if (Model.ProtocolType == "wsfed" && !Model.RedirectUris.Any())
-            {
-                var uri = new Entity.ClientUri
-                {
-                    Kind = Entity.UriKinds.Redirect
-                };
-                Model.RedirectUris.Add(uri);
-                HandleModificationState.EntityCreated(uri);
-            }
         }
 
         private void HandleModificationState_OnStateChange(ModificationKind kind, object entity)

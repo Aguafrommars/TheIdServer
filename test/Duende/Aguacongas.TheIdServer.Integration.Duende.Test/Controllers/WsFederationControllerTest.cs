@@ -23,7 +23,7 @@ using System.Xml;
 using Xunit;
 using ISModels = Duende.IdentityServer.Models;
 
-namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
+namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 {
     [Collection(BlazorAppCollection.Name)]
     public class WsFederationControllerTest
@@ -165,7 +165,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.Controlers
                 AllowAutoRedirect = false
             });
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.Found, response.StatusCode);
             Assert.StartsWith("/Account/Login".ToUpperInvariant(), response?.Headers?.Location?.OriginalString.ToUpperInvariant());
         }

@@ -12,7 +12,7 @@ namespace Aguacongas.IdentityServer.Store
 {
 
     /// <summary>
-    /// <see cref="IResourceStore"/> implemtation
+    /// <see cref="IResourceStore"/> implementation
     /// </summary>
     /// <seealso cref="IResourceStore" />
     public class ResourceStore : IResourceStore
@@ -40,6 +40,11 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<IsModels.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
         {
+            if (apiResourceNames == null || !apiResourceNames.Any())
+            {
+                return Array.Empty<IsModels.ApiResource>();
+            }
+
             var filter = string.Join(" or ", apiResourceNames.Select(s => $"{nameof(ProtectResource.Id)} eq '{s}'"));
             var response = await _apiStore.GetAsync(new PageRequest
             {
@@ -57,6 +62,11 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<IsModels.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
+            if (scopeNames == null || !scopeNames.Any())
+            {
+                return Array.Empty<IsModels.ApiResource>();
+            }
+
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiApiScope.ApiScopeId)} eq '{s}'"));
             var apiIdListResponse = await _apiApiScopeStore.GetAsync(new PageRequest
             {
@@ -86,6 +96,11 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<IsModels.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
         {
+            if (scopeNames == null || !scopeNames.Any())
+            {
+                return Array.Empty<IsModels.ApiScope>();
+            }
+
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiScope.Id)} eq '{s}'"));
             var response = await _apiScopeStore.GetAsync(new PageRequest
             {
@@ -102,6 +117,11 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns></returns>
         public async Task<IEnumerable<IsModels.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
+            if (scopeNames == null || !scopeNames.Any())
+            {
+                return Array.Empty<IsModels.IdentityResource>();
+            }
+
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(IdentityResource.Id)} eq '{s}'"));
             var response = await _identityStore.GetAsync(new PageRequest
             {
