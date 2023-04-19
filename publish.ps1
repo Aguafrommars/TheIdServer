@@ -21,3 +21,10 @@ if ($LASTEXITCODE -ne 0) {
 
 7z a $path\artifacts\build\Aguacongas.TheIdServer.Duende.$env:version.zip $path\artifacts\Aguacongas.TheIdServer.Duende
 7z a $path\artifacts\build\Aguacongas.TheIdServer.BlazorApp$env:version.zip $path\artifacts\Aguacongas.TheIdServer.BlazorApp
+
+$runtimes = "win-x86", "win-x64", "linux-x64", "osx-x64"
+
+foreach($r in $runtimes) {
+    dotnet publish src\Aguacongas.TheIdServer.Duende\Aguacongas.TheIdServer.Duende.csproj -c Release -o $path\artifacts\Aguacongas.TheIdServer.Duende-$r -r $r  -p:Version=$env:Version -p:FileVersion=$fileversion -p:SourceRevisionId=$env:APPVEYOR_REPO_COMMIT        
+    7z a $path\artifacts\build\Aguacongas.TheIdServer.Duende-$r.$env:version.zip $path\artifacts\Aguacongas.TheIdServer.Duende-$r
+}
