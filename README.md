@@ -14,6 +14,9 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver) [![Docker](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml/badge.svg)](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
 
+### Documentation
+
+Thanks [@ldeluigi](https://github.com/ldeluigi) and its [markdown-docs GitHub action](https://github.com/ldeluigi/markdown-docs). All markdown files are deployed in html [here](https://aguafrommars.github.io/TheIdServer/).
 
 ### Try it now at [https://theidserver-duende.herokuapp.com/](https://theidserver-duende.herokuapp.com/)
 
