@@ -289,6 +289,9 @@ else
                                 <div class="col">
                                     <AuthorizeCheckbox Name="require-secret" Label="@Localizer["require secret"]" @bind-Value="@Model.RequireClientSecret" />
                                 </div>
+                                <div class="col">
+                                    <AuthorizeCheckbox Name="require-dpop" Label="@Localizer["require DPoP"]" @bind-Value="@Model.RequireDPoP" />
+                                </div>
                             }
                         </div>
                     </div>
