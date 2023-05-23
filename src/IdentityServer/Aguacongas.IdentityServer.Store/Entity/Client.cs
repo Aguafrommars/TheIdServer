@@ -385,6 +385,11 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool RequireRequestObject { get; set; }
 
         /// <summary>
+        /// Specifies whether the client must use Demonstrating Proof-of-Possession.
+        /// </summary>
+        public bool RequireDPoP { get; set; }
+
+        /// <summary>
         /// Gets or sets the relying.
         /// </summary>
         /// <value>

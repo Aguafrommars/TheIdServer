@@ -461,6 +461,9 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
                 b.Property<int?>("UserSsoLifetime")
                     .HasColumnType("int");
 
+                b.Property<bool>("RequireDPoP")
+                        .HasColumnType("bool");
+
                 b.HasKey("Id");
 
                 b.HasIndex("RelyingPartyId");
