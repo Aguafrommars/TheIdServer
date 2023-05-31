@@ -194,7 +194,7 @@ namespace Microsoft.AspNetCore.Builder
                     requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
                     try
                     {
-                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values.First()));
+                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]));
                     }
                     catch (CryptographicException e)
                     {
