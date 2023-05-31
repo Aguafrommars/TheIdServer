@@ -1,23 +1,28 @@
 ﻿using Aguacongas.DynamicConfiguration.Redis;
-using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Admin.Http.Store;
-using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
+using Aguacongas.IdentityServer.EntityFramework.Store;
+using Aguacongas.IdentityServer.Saml2p.Duende.Services.Configuration;
+using Aguacongas.IdentityServer.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
-using IdentityModel.AspNetCore.OAuth2Introspection;
-using Aguacongas.IdentityServer.Services;
+using Duende.IdentityServer.Configuration;
+using Duende.IdentityServer.Configuration.Configuration;
 using Duende.IdentityServer.Services;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -27,6 +32,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -34,18 +40,11 @@ using Newtonsoft.Json;
 using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Linq;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
-using Aguacongas.IdentityServer.EntityFramework.Store;
-using Aguacongas.TheIdServer.Data;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Authentication.Certificate;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.AspNetCore.Components;
-using Aguacongas.IdentityServer.Saml2p.Duende.Services.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -83,12 +82,14 @@ namespace Microsoft.Extensions.DependencyInjection
             var identityServerBuilder = services.AddClaimsProviders(configurationManager)
                 .Configure<ForwardedHeadersOptions>(configurationManager.GetSection(nameof(ForwardedHeadersOptions)))
                 .Configure<AccountOptions>(configurationManager.GetSection(nameof(AccountOptions)))
-                .Configure<DynamicClientRegistrationOptions>(configurationManager.GetSection(nameof(DynamicClientRegistrationOptions)))
+                .Configure<Aguacongas.IdentityServer.Admin.Options.DynamicClientRegistrationOptions>(configurationManager.GetSection(nameof(Aguacongas.IdentityServer.Admin.Options.DynamicClientRegistrationOptions)))
                 .Configure<TokenValidationParameters>(configurationManager.GetSection(nameof(TokenValidationParameters)))
                 .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
                 .ConfigureNonBreakingSameSiteCookies()
                 .AddOidcStateDataFormatterCache()
-                .Configure<Duende.IdentityServer.Configuration.IdentityServerOptions>(configurationManager.GetSection(nameof(Duende.IdentityServer.Configuration.IdentityServerOptions)))
+                .Configure<IdentityServerOptions>(configurationManager.GetSection(nameof(IdentityServerOptions)))
+                .Configure<DynamicProviderOptions>(options => { })
+                .AddTransient(p => p.GetRequiredService<IOptions<DynamicProviderOptions>>().Value)
                 .AddIdentityServerBuilder()
                 .AddRequiredPlatformServices()
                 .AddCookieAuthentication()
@@ -105,7 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDynamicClientRegistration()
                 .AddJwtBearerClientAuthentication()
                 .AddMutualTlsSecretValidators()
-                .ConfigureDiscovey(configurationManager.GetSection(nameof(IdentityServerOptions)))
+                .ConfigureDiscovey(configurationManager.GetSection(nameof(Aguacongas.IdentityServer.IdentityServerOptions)))
                 .ConfigureKey(configurationManager.GetSection("IdentityServer:Key"));
 
             if (configurationManager.GetValue<bool>("IdentityServerOptions:EnableServerSideSession"))
@@ -119,7 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 identityServerBuilder.Services.AddTransient<IProfileService>(p =>
                 {
-                    var options = p.GetRequiredService<IOptions<IdentityServerOptions>>().Value;
+                    var options = p.GetRequiredService<IOptions<Aguacongas.IdentityServer.IdentityServerOptions>>().Value;
                     var httpClient = p.GetRequiredService<IHttpClientFactory>().CreateClient(options.HttpClientName);
                     return new ProxyProfilService<ApplicationUser>(httpClient,
                         p.GetRequiredService<UserManager<ApplicationUser>>(),
@@ -159,11 +160,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
 
-            var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<MutualTlsOptions>();
+            var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions>();
             if (mutulaTlsOptions?.Enabled == true)
             {
                 // MutualTLS
-                authenticationBuilder.AddCertificate(mutulaTlsOptions.ClientCertificateAuthenticationScheme, 
+                authenticationBuilder.AddCertificate(mutulaTlsOptions?.ClientCertificateAuthenticationScheme, 
                     options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
 
@@ -344,7 +345,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddDefaultServices(IServiceCollection services, IConfiguration configuration, DbTypes dbType)
         {
-            services.Configure<IdentityServerOptions>(options => configuration.Bind("ApiAuthentication", options))
+            services.Configure<Aguacongas.IdentityServer.IdentityServerOptions>(options => configuration.Bind("ApiAuthentication", options))
                 .AddIdentityProviderStore();
 
             if (dbType == DbTypes.RavenDb)
