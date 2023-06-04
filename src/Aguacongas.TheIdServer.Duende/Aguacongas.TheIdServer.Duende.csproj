@@ -49,5 +49,6 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.5" />
+    <PackageReference Include="Duende.IdentityServer.Configuration" Version="6.3.2" />
 	</ItemGroup>
 </Project>
