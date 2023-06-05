@@ -1,3 +1,32 @@
+# [7.4.0](https://github.com/Aguafrommars/TheIdServer/compare/7.3.0...7.4.0) (2023-06-04)
+
+
+### Bug Fixes
+
+* avoid request rp twice ([145878c](https://github.com/Aguafrommars/TheIdServer/commit/145878c7ca41b70d04d6f7251e575084ba8f7c71))
+* update packages ([0a47dfd](https://github.com/Aguafrommars/TheIdServer/commit/0a47dfd6f42692eb09d7dc7804ec36d55ae7cbdb))
+* update packages ([c29094b](https://github.com/Aguafrommars/TheIdServer/commit/c29094ba8ad86a3759ec3da485c7566f8fd0ae9b))
+* update packages ([778db37](https://github.com/Aguafrommars/TheIdServer/commit/778db3776b1f8040e0082a936d8e94799b61ce76))
+* update packages ([4364665](https://github.com/Aguafrommars/TheIdServer/commit/43646658b51459dd4d24b0bf62f4540986a6700e))
+* update packages ([41adf50](https://github.com/Aguafrommars/TheIdServer/commit/41adf50056a7a0a704c2ff20f694146cbea45ebe))
+* update packages ([9645237](https://github.com/Aguafrommars/TheIdServer/commit/9645237b2730322e60a42e61274fee9b0d6d2aa2))
+* update packages ([b6f40bb](https://github.com/Aguafrommars/TheIdServer/commit/b6f40bb219ee1379aaf5d2459a8afff9cf98e375))
+* update packages ([31ea2b8](https://github.com/Aguafrommars/TheIdServer/commit/31ea2b823d73567b3f23c17864e10b6177bef233))
+* update packages ([943867d](https://github.com/Aguafrommars/TheIdServer/commit/943867daea361e5c996baaff5e1c3be63ab2c4a2))
+* update packages ([5063ff7](https://github.com/Aguafrommars/TheIdServer/commit/5063ff7f9bbf45eff261d463136da579d78e3547))
+* update packages ([c25f719](https://github.com/Aguafrommars/TheIdServer/commit/c25f7193503c04ddc1ef944d2d55cadf1c37f867))
+* update packages ([661d7e4](https://github.com/Aguafrommars/TheIdServer/commit/661d7e40fbaba4505aabe93b8d04e5baee9826e5))
+* update packages ([47aab57](https://github.com/Aguafrommars/TheIdServer/commit/47aab575387f3333beace5bb072291c14248f99b))
+* update packages ([f2b481c](https://github.com/Aguafrommars/TheIdServer/commit/f2b481c6d2e8f6e0be6a00b99e5e0d54aaa4d652))
+* update packages ([0cdcd71](https://github.com/Aguafrommars/TheIdServer/commit/0cdcd7136b64234a4158eecbc51a45e67f3688f1))
+* update packages ([2fb387c](https://github.com/Aguafrommars/TheIdServer/commit/2fb387c7374557efcccc0d4fc66c7f89f54811e2))
+* update packages ([3e8183f](https://github.com/Aguafrommars/TheIdServer/commit/3e8183f891439b1132866be968567a972f2342d9))
+
+
+### Features
+
+* dpop ([9fa03f4](https://github.com/Aguafrommars/TheIdServer/commit/9fa03f4954d29dc87aaf4c63552454460e8625ae))
+
 # [7.3.0](https://github.com/Aguafrommars/TheIdServer/compare/7.2.2...7.3.0) (2023-04-13)
 
 
