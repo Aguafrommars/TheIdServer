@@ -1,3 +1,16 @@
+## [7.4.1](https://github.com/Aguafrommars/TheIdServer/compare/7.4.0...7.4.1) (2023-06-15)
+
+
+### Bug Fixes
+
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([1cc7c6f](https://github.com/Aguafrommars/TheIdServer/commit/1cc7c6f561627bfbf137a2917dcd472a1632c351))
+* update packages ([77ce1e0](https://github.com/Aguafrommars/TheIdServer/commit/77ce1e0cb1d21140185b55e38688769a809ea16d))
+* update packages ([da2d5b2](https://github.com/Aguafrommars/TheIdServer/commit/da2d5b2282da7a79cbd9b65e5767b7c79bcc2996))
+* update packages ([6bc1bb1](https://github.com/Aguafrommars/TheIdServer/commit/6bc1bb18aba92b440f3a2b27f5fc0529b4a6c8be))
+* update packages ([89723ea](https://github.com/Aguafrommars/TheIdServer/commit/89723ea7ad6b2731006681dace50d748dca6f7b5))
+* update packages ([56e4ea4](https://github.com/Aguafrommars/TheIdServer/commit/56e4ea4a89b9decf66f09de7a37b7018c80d503e))
+* update packages ([564fba2](https://github.com/Aguafrommars/TheIdServer/commit/564fba25e1d8fd55ab02c55058e855524f48dc78))
+
 # [7.4.0](https://github.com/Aguafrommars/TheIdServer/compare/7.3.0...7.4.0) (2023-06-04)
 
 
