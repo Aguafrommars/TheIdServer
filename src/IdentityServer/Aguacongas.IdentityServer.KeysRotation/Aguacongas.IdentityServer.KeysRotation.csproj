@@ -30,7 +30,7 @@
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.54.1" />
-        <PackageReference Include="MongoDB.Driver" Version="2.19.2" />
+        <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.31.0" />
         <PackageReference Include="RavenDB.Client" Version="5.4.105" />
         <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
