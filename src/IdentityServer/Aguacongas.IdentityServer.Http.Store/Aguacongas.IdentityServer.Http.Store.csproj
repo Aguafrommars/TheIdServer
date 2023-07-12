@@ -29,7 +29,7 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>
