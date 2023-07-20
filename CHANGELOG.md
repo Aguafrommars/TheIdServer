@@ -1,3 +1,11 @@
+## [7.4.3](https://github.com/Aguafrommars/TheIdServer/compare/7.4.2...7.4.3) (2023-07-20)
+
+
+### Bug Fixes
+
+* bump word-wrap from 1.2.3 to 1.2.4 ([9088721](https://github.com/Aguafrommars/TheIdServer/commit/90887211eb3fb3510b305c4c74c071d28c227f3a))
+* update packages ([79eede5](https://github.com/Aguafrommars/TheIdServer/commit/79eede558b0ea14e6d7a7e8d15b97fb0b625ee1f))
+
 ## [7.4.2](https://github.com/Aguafrommars/TheIdServer/compare/7.4.1...7.4.2) (2023-07-13)
 
 
