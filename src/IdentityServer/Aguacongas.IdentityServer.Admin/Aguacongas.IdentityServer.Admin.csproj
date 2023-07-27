@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -28,10 +28,6 @@
       <Compile Remove="Services\WsFederation\**" />
       <EmbeddedResource Remove="Services\WsFederation\**" />
       <None Remove="Services\WsFederation\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     </ItemGroup>
 
 	<ItemGroup>

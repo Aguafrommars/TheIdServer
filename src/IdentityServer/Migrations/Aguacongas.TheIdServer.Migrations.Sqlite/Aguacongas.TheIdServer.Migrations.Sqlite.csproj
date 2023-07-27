@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,14 +12,8 @@
 		<PackageTags>theidserver;sqlite</PackageTags>
 		<Description>Contains db contexts migrations code for Sqlite.</Description>		
 		<PackageIcon>package-icon.png</PackageIcon>
-		
-		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />

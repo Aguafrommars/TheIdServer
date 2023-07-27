@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFramework>net7.0</TargetFramework>
@@ -11,13 +11,8 @@
 	  <PackageTags>theidserver;duende.identityserver;ef;administration</PackageTags>	  
 	  <PackageIcon>package-icon.png</PackageIcon>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	  <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.EntityFramework.Store\Aguacongas.IdentityServer.EntityFramework.Store.csproj" />

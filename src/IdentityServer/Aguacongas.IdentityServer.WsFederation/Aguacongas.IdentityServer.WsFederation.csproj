@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -15,7 +15,6 @@
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
-		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
@@ -30,10 +29,6 @@
 	  <Compile Remove="Validation\**" />
 	  <EmbeddedResource Remove="Validation\**" />
 	  <None Remove="Validation\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
