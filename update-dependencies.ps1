@@ -7,7 +7,7 @@ function UpdatePackages {
     $return = $false
     
     # Get outdated packages
-    $packageLineList = dotnet list $project package --outdated
+    $packageLineList = dotnet list $project package --outdated --include-prerelease
     
     foreach($line in $packageLineList) {
        Write-Host $line
@@ -18,12 +18,16 @@ function UpdatePackages {
           continue
        }
        
+       Write-Host $match
+       
+       $packageName = $Matches.1
+       $version = $Matches.2
        # update an outdated package
-       $added = dotnet add $project package $Matches.1 --version $Matches.2
-
+       $added = dotnet add $project package $packageName --version $version
        if ($LASTEXITCODE -ne 0) {
            # error while updating the package
-           Write-Error "dotnet add $project package $Matches.1 --version $Matches.2 exit with code $LASTEXITCODE"
+
+           Write-Error "dotnet add $project package $packageName --version $version exit with code $LASTEXITCODE"
            Write-Host $added
            break
        }

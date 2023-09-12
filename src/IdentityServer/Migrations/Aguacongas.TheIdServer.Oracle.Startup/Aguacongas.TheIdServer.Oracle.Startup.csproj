@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>Aguacongas.TheIdServer.Oracle</RootNamespace>
 		<Authors>Olivier Lefebvre</Authors>
 		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
