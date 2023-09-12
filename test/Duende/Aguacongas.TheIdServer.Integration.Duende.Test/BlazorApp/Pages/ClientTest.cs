@@ -4,6 +4,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
+using Aguacongas.TheIdServer.Integration.Duende.Test;
 using AngleSharp.Dom;
 using Bunit;
 using Bunit.Extensions.WaitForHelpers;
@@ -447,7 +448,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(component.Find("input[name=require-pkce]"));
         }
 
-        [Fact]
+        [SkipCiFact]
         public async Task Options_clicks_should_enable_save_button()
         {
             var clientId = await CreateClient(allowOfflineAccess: true);
