@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -22,10 +22,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.IdentityServer.RavenDb.Store.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="RavenDB.Client" Version="5.4.110" />
