@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -12,8 +12,6 @@
         <PackageTags>theidserver;mysql</PackageTags>
         <Description>Contains db contexts migrations code for MySql.</Description>
         <PackageIcon>package-icon.png</PackageIcon>
-				
-        <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 				<EnablePreviewFeatures>True</EnablePreviewFeatures>
     </PropertyGroup>
 
@@ -22,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
 		<Content Include="THIRD-PARTY-NOTICES">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>

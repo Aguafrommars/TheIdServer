@@ -20,7 +20,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
-            await sut.GetAllResourcesAsync().ConfigureAwait(false);
+            await sut.GetAllResourcesAsync();
 
             apiStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => 
                 p.Expand == $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"), default));
@@ -39,7 +39,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
-            await sut.FindIdentityResourcesByScopeNameAsync(new string[] { "test" }).ConfigureAwait(false);
+            await sut.FindIdentityResourcesByScopeNameAsync(new string[] { "test" });
 
             identityStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
                 p.Filter == "Id eq 'test'"), default));
@@ -79,7 +79,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                     }
             });
 
-            await sut.FindApiResourcesByScopeNameAsync(new string[] { "test" }).ConfigureAwait(false);
+            await sut.FindApiResourcesByScopeNameAsync(new string[] { "test" });
 
             apiApiScopeStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
                 p.Filter == $"{nameof(ApiApiScope.ApiScopeId)} eq 'test'"), default));
@@ -96,7 +96,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
-            await sut.FindApiResourcesByNameAsync(new string[] { "test" }).ConfigureAwait(false);
+            await sut.FindApiResourcesByNameAsync(new string[] { "test" });
 
             apiStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
                 p.Expand == $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"), default));
@@ -111,7 +111,7 @@ namespace Aguacongas.IdentityServer.Http.Store.Test
                 out Mock<IAdminStore<ApiApiScope>> apiApiScopeStoreMock,
                 out ResourceStore sut);
 
-            await sut.FindApiScopesByNameAsync(new string[] { "test" }).ConfigureAwait(false);
+            await sut.FindApiScopesByNameAsync(new string[] { "test" });
 
             apiScopeStoreMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p =>
                 p.Expand == $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"), default));

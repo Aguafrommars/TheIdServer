@@ -46,11 +46,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = keyId
-            }).ConfigureAwait(false);
+            });
 
             var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
-            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await confirm.ClickAsync(new MouseEventArgs());
 
             await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {
@@ -99,11 +99,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = keyId
-            }).ConfigureAwait(false);
+            });
 
             var confirm = component.Find($"#revoke-entity-{keyId} .modal-footer button.btn-danger");
 
-            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await confirm.ClickAsync(new MouseEventArgs());
 
             await Factory.DbActionAsync<OperationalDbContext>(async context =>
             {

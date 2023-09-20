@@ -235,6 +235,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientCredentials", "sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebClient", "sample\DPoP\WebClient\WebClient.csproj", "{D2B86706-5A7D-4414-8AE4-E579B4DEA462}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF817CA8-D33B-401C-8DFB-D7069180E7AA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

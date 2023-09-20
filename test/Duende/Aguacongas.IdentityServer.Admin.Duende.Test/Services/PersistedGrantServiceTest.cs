@@ -24,13 +24,13 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
         {
             var sut = CreateSut(out Mock<IDataProtector> _);
 
-            await sut.RemoveAllGrantsAsync("test", "test", "test").ConfigureAwait(false);
+            await sut.RemoveAllGrantsAsync("test", "test", "test");
             
-            await sut.RemoveAllGrantsAsync("test", "test").ConfigureAwait(false);
+            await sut.RemoveAllGrantsAsync("test", "test");
 
-            await sut.RemoveAllGrantsAsync("test").ConfigureAwait(false);
+            await sut.RemoveAllGrantsAsync("test");
 
-            var grants = await sut.GetAllGrantsAsync("test").ConfigureAwait(false);
+            var grants = await sut.GetAllGrantsAsync("test");
 
             Assert.NotEmpty(grants);
         }
@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
             var sut = CreateSut(out Mock<IDataProtector> mock);
 
             mock.Setup(m => m.Unprotect(It.IsAny<byte[]>())).Throws(new CryptographicException());
-            var grants = await sut.GetAllGrantsAsync("test").ConfigureAwait(false);
+            var grants = await sut.GetAllGrantsAsync("test");
 
             Assert.NotEmpty(grants);
         }

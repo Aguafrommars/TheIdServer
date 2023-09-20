@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.Test.Services
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 
-            var page = await sut.GetAllKeysAsync().ConfigureAwait(false);
+            var page = await sut.GetAllKeysAsync();
 
             Assert.Empty(page.Items);
         }
@@ -49,7 +49,7 @@ namespace Aguacongas.TheIdServer.Test.Services
 
             var sut = new KeyStore<string, IAuthenticatedEncryptorDescriptor>(wrapper);
 
-            await Assert.ThrowsAsync<NotImplementedException>(() => sut.RevokeKeyAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())).ConfigureAwait(false);
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.RevokeKeyAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()));
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Aguacongas.TheIdServer.Test
 
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
-            var result = await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+            var result = await sut.TransformPrincipalAsync(principal, "test");
 
             Assert.Contains(result.Claims, c => c.Type == "transformed");
         }
@@ -88,7 +88,7 @@ namespace Aguacongas.TheIdServer.Test
 
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
-            var result = await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+            var result = await sut.TransformPrincipalAsync(principal, "test");
 
             Assert.Contains(result.Claims, c => c.Type == claimType);
             var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -117,7 +117,7 @@ namespace Aguacongas.TheIdServer.Test
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.TransformPrincipalAsync(principal, "test"))
-                .ConfigureAwait(false);
+                ;
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace Aguacongas.TheIdServer.Test
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.TransformPrincipalAsync(principal, "test"))
-                .ConfigureAwait(false);
+                ;
         }
 
         [Fact]
@@ -210,7 +210,7 @@ namespace Aguacongas.TheIdServer.Test
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => sut.TransformPrincipalAsync(principal, "test"))
-                .ConfigureAwait(false);
+                ;
         }
 
         [Fact]
@@ -238,7 +238,7 @@ namespace Aguacongas.TheIdServer.Test
 
             var sut = builder.GetRequiredService<ExternalClaimsTransformer<ApplicationUser>>();
 
-            await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+            await sut.TransformPrincipalAsync(principal, "test");
 
             principal = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
@@ -246,7 +246,7 @@ namespace Aguacongas.TheIdServer.Test
                 new Claim("new", "test"),
             }));
 
-            await sut.TransformPrincipalAsync(principal, "test").ConfigureAwait(false);
+            await sut.TransformPrincipalAsync(principal, "test");
 
             var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             Assert.NotNull(applicationDbContext.UserClaims.FirstOrDefault(c => c.ClaimType == "new"));

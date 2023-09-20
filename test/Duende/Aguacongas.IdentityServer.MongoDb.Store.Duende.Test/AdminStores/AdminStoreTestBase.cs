@@ -65,12 +65,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
             Assert.NotNull(sut);
 
-            await CreateEntityGraphAsync(navigationProperties, provider, sut).ConfigureAwait(false);
+            await CreateEntityGraphAsync(navigationProperties, provider, sut);
 
             var entities = await sut.GetAsync(new PageRequest
             {
                 Expand = GetExpand()
-            }).ConfigureAwait(false);
+            });
 
             Assert.NotEmpty(entities.Items);
             foreach(var property in navigationProperties)
@@ -99,12 +99,12 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
             Assert.NotNull(sut);
-            var entity = await CreateEntityGraphAsync(navigationProperties, provider, sut).ConfigureAwait(false);
+            var entity = await CreateEntityGraphAsync(navigationProperties, provider, sut);
 
             var result = await sut.GetAsync(entity.Id, new GetRequest
             {
                 Expand = GetExpand()
-            }).ConfigureAwait(false);
+            });
 
             Assert.NotNull(result);
             foreach (var property in navigationProperties.Where(p => p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>))))
@@ -138,10 +138,10 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             Assert.NotNull(sut);
 
             var create = new TEntity();
-            var entity = await sut.CreateAsync(create).ConfigureAwait(false);
-            await sut.UpdateAsync(entity).ConfigureAwait(false);
+            var entity = await sut.CreateAsync(create);
+            await sut.UpdateAsync(entity);
 
-            var updated = await sut.GetAsync(entity.Id, null).ConfigureAwait(false);
+            var updated = await sut.GetAsync(entity.Id, null);
             if (updated is IAuditable auditable)
             {
                 Assert.NotNull(auditable.ModifiedAt);
@@ -169,11 +169,11 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
             Assert.NotNull(sut);
             
-            var entity = await CreateEntityGraphAsync(navigationProperties, provider, sut).ConfigureAwait(false);
+            var entity = await CreateEntityGraphAsync(navigationProperties, provider, sut);
 
-            await sut.DeleteAsync(entity.Id).ConfigureAwait(false);
+            await sut.DeleteAsync(entity.Id);
 
-            var nullResult = await sut.GetAsync(entity.Id, null).ConfigureAwait(false);
+            var nullResult = await sut.GetAsync(entity.Id, null);
             Assert.Null(nullResult);
             foreach (var property in navigationProperties.Where(p => p.PropertyType.ImplementsGenericInterface(typeof(ICollection<>))))
             {
@@ -189,7 +189,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
                     },
                     null
                 });
-                await (task as Task).ConfigureAwait(false);
+                await (task as Task);
                 var response = task.GetType().GetProperty(nameof(Task<object>.Result)).GetValue(task);
                 var items = response.GetType().GetProperty(nameof(PageResponse<object>.Items)).GetValue(response);
                 Assert.Empty(items as IEnumerable);
@@ -216,7 +216,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
             Assert.NotNull(sut);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.DeleteAsync(Guid.NewGuid().ToString())).ConfigureAwait(false);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.DeleteAsync(Guid.NewGuid().ToString()));
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
             var notFound = new TEntity();
             notFound.Id = Guid.NewGuid().ToString();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateAsync(notFound)).ConfigureAwait(false);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateAsync(notFound));
         }
 
         protected virtual object CreateParentEntiy(Type parentType)
@@ -259,9 +259,9 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             if (parentPropetyName != null)
             {
                 var parentPropetyType = GetParentType(parentPropetyName);
-                await AddParentEntity(provider, create, parentPropetyName, parentPropetyType).ConfigureAwait(false);
+                await AddParentEntity(provider, create, parentPropetyName, parentPropetyType);
             }
-            var entity = await sut.CreateAsync(create).ConfigureAwait(false);
+            var entity = await sut.CreateAsync(create);
             foreach (var property in navigationProperties)
             {
                 var subEntityType = property.PropertyType;
@@ -274,13 +274,13 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
                     var storeType = typeof(IAdminStore<>).MakeGenericType(subEntityType);
                     var subStore = provider.GetRequiredService(storeType) as IAdminStore;
-                    await subStore.CreateAsync(subEntity).ConfigureAwait(false);
+                    await subStore.CreateAsync(subEntity);
                     continue;
                 }
 
-                await AddParentEntity(provider, create, $"{property.Name}Id", property.PropertyType).ConfigureAwait(false);
+                await AddParentEntity(provider, create, $"{property.Name}Id", property.PropertyType);
             }
-            await sut.UpdateAsync(entity).ConfigureAwait(false);
+            await sut.UpdateAsync(entity);
 
             return entity;
         }
@@ -289,7 +289,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         {
             var parentStoreType = typeof(IAdminStore<>).MakeGenericType(parentPropetyType);
             var parentStore = provider.GetRequiredService(parentStoreType) as IAdminStore;
-            var parent = await parentStore.CreateAsync(CreateParentEntiy(parentPropetyType)).ConfigureAwait(false) as IEntityId;
+            var parent = await parentStore.CreateAsync(CreateParentEntiy(parentPropetyType)) as IEntityId;
             var parentPropety = create.GetType().GetProperty(parentPropetyName);
             parentPropety.SetValue(create, parent.Id);
         }

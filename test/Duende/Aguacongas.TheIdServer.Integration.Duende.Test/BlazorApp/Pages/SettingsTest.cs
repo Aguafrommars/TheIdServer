@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest.BlazorApp.Pages
                 return Task.CompletedTask;
             };
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
         }
 
         private IRenderedComponent<SettingsPage> CreateComponent(string userName,

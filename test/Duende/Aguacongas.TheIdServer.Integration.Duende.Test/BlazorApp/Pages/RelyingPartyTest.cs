@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         [Fact]
         public async Task OnInitializedAsync_should_get_certificate_thumbprint()
         {
-            string relyingPartyId = await CreateEntity(await File.ReadAllBytesAsync("test.crt").ConfigureAwait(false));
+            string relyingPartyId = await CreateEntity(await File.ReadAllBytesAsync("test.crt"));
 
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
@@ -55,7 +55,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await component.InvokeAsync(()=> inputFile.Instance.OnChange.InvokeAsync(new InputFileChangeEventArgs(new List<IBrowserFile>
             {
                 new FakeBrowserFile()
-            })).ConfigureAwait(false)).ConfigureAwait(false);
+            })));
 
             DotNetDispatcher.BeginInvokeDotNet(new JSRuntimeImpl(), new DotNetInvocationInfo(null, "NotifyChange", 1, default), "[[{ \"name\": \"test.crt\" }]]");
 
@@ -80,7 +80,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = relyingPartyId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -102,7 +102,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = expected
-            }).ConfigureAwait(false);
+            });
 
             Assert.Contains(expected, component.Markup);
 
@@ -110,7 +110,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {

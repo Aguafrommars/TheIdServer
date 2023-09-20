@@ -301,9 +301,10 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         }
 
         var client = result.Client;
+#pragma warning disable CS8601 // Possible null reference assignment.
         var ctx = new ProfileDataRequestContext
         {
-            Subject = result.User,
+            Subject = user,
             RequestedClaimTypes = requestedClaimTypes,
             Client = client,
             Caller = "SAML 2.0",
@@ -315,6 +316,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
                 }
             }
         };
+#pragma warning restore CS8601 // Possible null reference assignment.
 
         await _profile.GetProfileDataAsync(ctx).ConfigureAwait(false);
 

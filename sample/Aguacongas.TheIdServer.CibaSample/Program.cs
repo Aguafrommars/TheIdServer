@@ -20,13 +20,14 @@ async Task<TokenResponse> RequestTokenAsync(BackchannelAuthenticationResponse au
     var disco = await _cache.GetAsync();
     if (disco.IsError)
     {
-        throw new Exception(disco.Error);
+        throw new InvalidOperationException(disco.Error);
     }
 
     var client = new HttpClient();
 
     while (true)
     {
+#pragma warning disable CS8601 // Possible null reference assignment.
         var response = await client.RequestBackchannelAuthenticationTokenAsync(new BackchannelAuthenticationTokenRequest
         {
             Address = disco.TokenEndpoint,
@@ -34,6 +35,7 @@ async Task<TokenResponse> RequestTokenAsync(BackchannelAuthenticationResponse au
             ClientSecret = "secret",
             AuthenticationRequestId = authorizeResponse.AuthenticationRequestId
         });
+#pragma warning restore CS8601 // Possible null reference assignment.
 
         if (response.IsError)
         {
@@ -100,8 +102,13 @@ async Task<BackchannelAuthenticationResponse> RequestBackchannelLoginAsync()
     return response;
 }
 
-async Task CallServiceAsync(string token)
+async Task CallServiceAsync(string? token)
 {
+    if (token is null)
+    {
+        return;
+    }
+
     var baseAddress = Constants.SampleApi;
 
     var client = new HttpClient

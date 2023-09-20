@@ -14,7 +14,7 @@ namespace Aguacongas.TheIdServer.CibaSample
                 "Token response:".ConsoleGreen();
                 Console.WriteLine(response.Json);
 
-                if (response.AccessToken.Contains("."))
+                if (response.AccessToken is not null && response.AccessToken.Contains(".") == true)
                 {
                     "\nAccess Token (decoded):".ConsoleGreen();
 

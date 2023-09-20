@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,8 +12,6 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>package-icon.png</PackageIcon>
-		
-		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
@@ -32,10 +30,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<NoWarn>1701;1702;AD0001</NoWarn>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
 
 	<ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
