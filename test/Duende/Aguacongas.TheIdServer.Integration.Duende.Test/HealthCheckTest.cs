@@ -20,7 +20,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/healthz");
 
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("Healthy", content);
         }

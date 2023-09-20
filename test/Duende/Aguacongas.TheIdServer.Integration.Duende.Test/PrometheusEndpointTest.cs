@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest
             userService.SetTestUser(true, new[] { new Claim("role", SharedConstants.READERPOLICY) });
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/metrics");
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest
         {
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/metrics");
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }

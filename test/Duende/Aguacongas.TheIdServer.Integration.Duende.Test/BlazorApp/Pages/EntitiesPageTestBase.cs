@@ -43,12 +43,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = GenerateId()
-            }).ConfigureAwait(false);
+            });
             // cancel previous search
             await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = GenerateId()
-            }).ConfigureAwait(false);
+            });
 
             component.WaitForState(() => !component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
@@ -75,7 +75,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             button = component.Find("button.btn-secondary");
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var invocationHanlder = JSInterop.SetupVoid("open", i => true).SetVoidResult();
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await button.ClickAsync(new MouseEventArgs());
 
             Assert.Single(invocationHanlder.Invocations);
             var calledUrl = invocationHanlder.Invocations.First().Arguments[0] as string;
@@ -179,7 +179,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             var selected = component.Find(".table.table-hover td input");
 
@@ -193,7 +193,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = false
-            }).ConfigureAwait(false);
+            });
 
             selected = component.Find(".table.table-hover td input");
 
@@ -206,7 +206,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             selected = component.Find(".table.table-hover td input");
 

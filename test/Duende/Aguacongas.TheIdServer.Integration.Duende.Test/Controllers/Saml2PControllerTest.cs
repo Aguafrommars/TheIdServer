@@ -18,6 +18,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -52,7 +53,7 @@ public class Saml2PControllerTest
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
         var descriptor = new EntityDescriptor();
         descriptor.ReadIdPSsoDescriptor(content);
 
@@ -124,8 +125,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -134,8 +135,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -145,7 +146,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -179,11 +180,11 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -221,8 +222,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -232,7 +233,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -266,7 +267,7 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
     }
@@ -318,8 +319,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -329,7 +330,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -363,11 +364,11 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -437,8 +438,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -447,8 +448,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -458,7 +459,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -492,11 +493,11 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -567,8 +568,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -577,8 +578,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -588,7 +589,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -622,11 +623,11 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -715,7 +716,7 @@ public class Saml2PControllerTest
                     Value = true.ToString()
                 }
             }
-        }).ConfigureAwait(false);
+        });
         await context.Identities.AddAsync(new IdentityResource
         {
             Id = "profile",
@@ -733,7 +734,7 @@ public class Saml2PControllerTest
                     Type = "test"
                 }
             }
-        }).ConfigureAwait(false);
+        });
         await context.RelyingParties.AddAsync(new IdentityServer.Store.Entity.RelyingParty
         {
             Id = "test",
@@ -749,8 +750,8 @@ public class Saml2PControllerTest
                     ToClaimType = "urm:amr"
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -759,8 +760,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -770,7 +771,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -809,7 +810,7 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
 
@@ -843,7 +844,7 @@ public class Saml2PControllerTest
         var saml2AuthnResponse = new Saml2AuthnResponse(config);
 
         await soapEnvelope.ResolveAsync(httpFactoryMock.Object, saml2ArtifactResolve, saml2AuthnResponse)
-            .ConfigureAwait(false);
+            ;
 
         var relayStateQuery = artifactBinding.GetRelayStateQuery();
 
@@ -967,8 +968,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -977,8 +978,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -988,7 +989,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -1022,11 +1023,11 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -1096,8 +1097,8 @@ public class Saml2PControllerTest
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
             }
-        }).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -1106,8 +1107,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -1117,7 +1118,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -1151,11 +1152,11 @@ public class Saml2PControllerTest
             ["SAMLRequest"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(binding.XmlDocument.OuterXml)),
             ["RelayState"] = binding.RelayState
         });
-        using var response = await client.PostAsync("/saml2p/logout", logoutContent).ConfigureAwait(false);
+        using var response = await client.PostAsync("/saml2p/logout", logoutContent);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
 
         Assert.NotNull(content);
     }
@@ -1257,8 +1258,8 @@ public class Saml2PControllerTest
             }
         };
 
-        await context.Clients.AddAsync(app).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.Clients.AddAsync(app);
+        await context.SaveChangesAsync();
 
         var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await identityContext.Users.AddAsync(new User
@@ -1267,8 +1268,8 @@ public class Saml2PControllerTest
             UserName = name,
             NormalizedUserName = name.ToUpperInvariant(),
             SecurityStamp = Guid.NewGuid().ToString()
-        }).ConfigureAwait(false);
-        await identityContext.SaveChangesAsync().ConfigureAwait(false);
+        });
+        await identityContext.SaveChangesAsync();
 
         var config = new Saml2Configuration
         {
@@ -1278,7 +1279,7 @@ public class Saml2PControllerTest
         };
         config.AllowedAudienceUris.Add(issuer);
 
-        var entityDiscriptor = await GetIpdDescriptorAsync().ConfigureAwait(false);
+        var entityDiscriptor = await GetIpdDescriptorAsync();
         config.AllowedIssuer = entityDiscriptor.EntityId;
         var idPSsoDescriptor = entityDiscriptor.IdPSsoDescriptor;
         config.SingleSignOnDestination = idPSsoDescriptor.SingleSignOnServices.First().Location;
@@ -1317,7 +1318,7 @@ public class Saml2PControllerTest
             NameIdPolicy = new NameIdPolicy { AllowCreate = true, Format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" },
         });
 
-        using var response = await client.GetAsync(binding.RedirectLocation).ConfigureAwait(false);
+        using var response = await client.GetAsync(binding.RedirectLocation);
 
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
 
@@ -1355,14 +1356,14 @@ public class Saml2PControllerTest
             saml2AuthnResponse));
 
         app.ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation;
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object, 
             saml2ArtifactResolve, 
             saml2AuthnResponse));
 
         app.Enabled = false;
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object, 
             saml2ArtifactResolve, 
@@ -1376,7 +1377,7 @@ public class Saml2PControllerTest
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync();
         var descriptor = new EntityDescriptor();
         descriptor.ReadIdPSsoDescriptor(content);
 
@@ -1393,7 +1394,7 @@ public class Saml2PControllerTest
 
     class MockHttpMessageHandler : HttpMessageHandler
     {
-        public Func<HttpRequestMessage, HttpResponseMessage> Process { get; set; }
+        public required Func<HttpRequestMessage, HttpResponseMessage> Process { get; set; }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             return Task.FromResult(Process(request));

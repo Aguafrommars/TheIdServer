@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 new Mock<IAdminStore<ApiScope>>().Object,
                 storeMock.Object);
 
-            var result = await sut.FindApiResourcesByScopeNameAsync(new[] { Guid.NewGuid().ToString() }).ConfigureAwait(false);
+            var result = await sut.FindApiResourcesByScopeNameAsync(new[] { Guid.NewGuid().ToString() });
 
             Assert.Empty(result);
         }

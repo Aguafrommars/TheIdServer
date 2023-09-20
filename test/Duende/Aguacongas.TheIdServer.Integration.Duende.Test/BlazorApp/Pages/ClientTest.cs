@@ -46,7 +46,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
@@ -64,7 +64,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(header);
 
-            await header.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await header.ClickAsync(new MouseEventArgs());
 
             var urls = component.FindAll("#urls tr");
 
@@ -72,7 +72,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             header = component.Find("#urls th div");
 
-            await header.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await header.ClickAsync(new MouseEventArgs());
 
             urls = component.FindAll("#urls tr");
 
@@ -80,7 +80,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var headers = component.FindAll("#urls th div");
 
-            await headers.ToArray()[1].ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await headers.ToArray()[1].ClickAsync(new MouseEventArgs());
 
             urls = component.FindAll("#urls tr");
 
@@ -88,7 +88,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             headers = component.FindAll("#urls th div");
 
-            await headers.ToArray()[1].ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await headers.ToArray()[1].ClickAsync(new MouseEventArgs());
 
             urls = component.FindAll("#urls tr");
 
@@ -106,7 +106,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = component.Find("#grantTypes input");
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "test test" });
 
             var message = component.Find(".validation-message");
 
@@ -115,7 +115,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "hybrid" });
 
             message = component.Find(".validation-message");
 
@@ -125,7 +125,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "authorization_code" });
 
             message = component.Find(".validation-message");
 
@@ -136,7 +136,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
         }        
 
         [Theory]
@@ -160,7 +160,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = "test test"
-            }).ConfigureAwait(false);
+            });
 
             var message = component.Find(".validation-message");
 
@@ -171,7 +171,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = value
-            }).ConfigureAwait(false);
+            });
 
             Assert.Throws<ElementNotFoundException>(()=> component.Find(".validation-message"));
         }
@@ -207,19 +207,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var expected = 1;
             var input = WaitForNode(component, "#scopes input");
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = firstId });
 
             var nodes = WaitForAllNodes(component, "#scopes .dropdown-item");
 
             Assert.Equal(expected, nodes.Count);
 
-            await nodes.First().ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await nodes.First().ClickAsync(new MouseEventArgs());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -240,7 +240,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var expected = 3;
             var input = WaitForNode(component, "#tokens input.new-claim");
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "RS" }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "RS" });
 
             var nodes = WaitForAllNodes(component, "#tokens .list-inline-item .dropdown-item");
 
@@ -259,13 +259,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var button = WaitForNode(component, "#grantTypes div.select");
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await button.ClickAsync(new MouseEventArgs());
 
             var form = component.Find("form");
 
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             var message = component.Find(".validation-message");
 
@@ -393,7 +393,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var expected = 1;
             var input = WaitForNode(component, "#scopes input");
 
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "t" }).ConfigureAwait(false);
+            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "t" });
 
             var nodes = WaitForAllNodes(component, "#scopes .dropdown-item");
 
@@ -488,11 +488,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             var confirm = component.Find("#delete-entity button.btn-danger");
 
-            await confirm.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await confirm.ClickAsync(new MouseEventArgs());
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -513,11 +513,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var input = WaitForNode(component, "#grantTypes input");
 
-            await input.TriggerEventAsync("onfocus", new FocusEventArgs()).ConfigureAwait(false);
+            await input.TriggerEventAsync("onfocus", new FocusEventArgs());
 
             var button = WaitForNode(component, "#grantTypes .dropdown-item.m-0.p-0.pl-1.pr-1");
             
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await button.ClickAsync(new MouseEventArgs());
 
             var idInput = component.Find("#id");
             Assert.NotNull(idInput);
@@ -525,7 +525,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await idInput.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             var nameInput = component.Find("#name");
             
@@ -533,23 +533,23 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await nameInput.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             button = WaitForNode(component, "#secrets button.btn-sm");
 
-            await button.ClickAsync(new MouseEventArgs()).ConfigureAwait(false);
+            await button.ClickAsync(new MouseEventArgs());
 
             var valueInput = component.Find("#secrets input[placeholder=value]");
 
             await valueInput.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -571,12 +571,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -593,12 +593,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = false
-            }).ConfigureAwait(false);
+            });
 
             form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             await DbActionAsync<ConfigurationDbContext>(async context =>
             {
@@ -641,7 +641,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await idInput.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             var protocolTypeInputs = WaitForAllNodes(component, "input[type=radio]");
             Assert.NotNull(protocolTypeInputs);
@@ -660,7 +660,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 { 
                     Value = clientId 
                 })
-                .ConfigureAwait(false);
+                ;
 
             redirectUriInput = WaitForNode(component, "#redirect-uri");
             Assert.NotNull(redirectUriInput);
@@ -670,12 +670,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 {
                     Value = clientId
                 })
-                .ConfigureAwait(false);
+                ;
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             Assert.Contains("The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).", component.Markup);
             Assert.Contains("The relying party is required.", component.Markup);
@@ -697,7 +697,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await idInput.ChangeAsync(new ChangeEventArgs
             {
                 Value = clientId
-            }).ConfigureAwait(false);
+            });
 
             var protocolTypeInputs = WaitForAllNodes(component, "input[type=radio]");
             Assert.NotNull(protocolTypeInputs);
@@ -718,13 +718,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await urlInputs[0].ChangeAsync(new ChangeEventArgs
             {
                 Value = "https://test"
-            }).ConfigureAwait(false);
+            });
 
             var urlCheckBoxes = WaitForAllNodes(component, "#urls input.form-check-input");
             await urlCheckBoxes[0].ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             addButton = WaitForNode(component, "#urls button");
             await addButton.ClickAsync(new MouseEventArgs());
@@ -733,19 +733,19 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await urlInputs[1].ChangeAsync(new ChangeEventArgs
             {
                 Value = "https://test"
-            }).ConfigureAwait(false);
+            });
 
 
             urlCheckBoxes = WaitForAllNodes(component, "#urls input.form-check-input");
             await urlCheckBoxes[3].ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             var form = component.Find("form");
             Assert.NotNull(form);
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             Assert.Contains("Uri must be unique.", component.Markup);
             Assert.Contains("Cannot have more than one URI per kind.", component.Markup);
@@ -755,11 +755,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await urlCheckBoxes[4].ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }).ConfigureAwait(false);
+            });
 
             form = component.Find("form");
 
-            await form.SubmitAsync().ConfigureAwait(false);
+            await form.SubmitAsync();
 
             Assert.Contains($"Either a metadata URI or a X509Certificate secret must be set.", component.Markup);
         }

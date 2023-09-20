@@ -55,7 +55,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }
@@ -102,7 +102,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }
@@ -147,7 +147,7 @@ namespace Aguacongas.IdentityServer.Admin.Test.Services
                 provider.GetRequiredService<UserManager<IdentityUser>>(),
                 provider.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>());
 
-            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName).ConfigureAwait(false);
+            var result = await sut.GetAsync("test", "test", "test", "test", typeof(ClaimsProvider).FullName);
 
             Assert.Contains(result.Items, c => c.ClaimType == "test");
         }
