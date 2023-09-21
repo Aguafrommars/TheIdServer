@@ -40,7 +40,7 @@ RUN dotnet build "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/bu
 FROM build AS publish
 RUN dotnet publish "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/publish -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
-FROM nginx:1.24 AS final
+FROM nginx:1.25.2 AS final
 WORKDIR /usr/share/nginx/html
 COPY --from=publish /app/publish/wwwroot .
 COPY --from=build /src/src/Aguacongas.TheIdServer.BlazorApp/nginx.conf /etc/nginx/nginx.conf
