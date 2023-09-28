@@ -68,7 +68,8 @@ public class Saml2PService : ISaml2PService
     /// <returns></returns>
     public async Task<IActionResult> LoginAsync(HttpRequest request, IUrlHelper helper)
     {
-        var user = await _userSession.GetUserAsync().ConfigureAwait(false);
+        var user = await _userSession.GetUserAsync().ConfigureAwait(false) ?? 
+            throw new InvalidOperationException("No user found in session");
 
         var signinResult = await _signInValidator.ValidateLoginAsync(request, user).ConfigureAwait(false);
 
@@ -85,7 +86,7 @@ public class Saml2PService : ISaml2PService
 
             var userInteraction = _identityServerOptions.Value.UserInteraction;
             var loginUrl = request.PathBase + userInteraction.LoginUrl;
-            var url = AddQueryString(loginUrl, userInteraction.LoginReturnUrlParameter, returnUrl);
+            var url = AddQueryString(loginUrl, userInteraction.LoginReturnUrlParameter ?? "", returnUrl);
 
             return new RedirectResult(url);
         }
