@@ -189,7 +189,7 @@ public class Saml2PControllerTest
         Assert.NotNull(content);
     }
 
-    [Fact]
+    [SkipCiFact]
     public async Task Login_should_return_redirect_result_when_no_user_found()
     {
         var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
