@@ -20,7 +20,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.11" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
 		<PackageReference Include="Moq" Version="4.20.69" />
-		<PackageReference Include="RavenDB.TestDriver" Version="5.4.110" />
+		<PackageReference Include="RavenDB.TestDriver" Version="6.0.0" />
 		<PackageReference Include="xunit" Version="2.5.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
