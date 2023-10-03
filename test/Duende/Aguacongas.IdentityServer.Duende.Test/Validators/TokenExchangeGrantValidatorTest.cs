@@ -30,13 +30,13 @@ namespace Aguacongas.IdentityServer.Duende.Test.Validators
                     Raw = new NameValueCollection()
                 }
             };
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context)    ;
 
             Assert.Equal("invalid_request", context.Result.Error);
 
             context.Request.Raw.Add(OidcConstants.TokenRequest.SubjectToken, "test");
 
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context);
 
             Assert.Equal("invalid_request", context.Result.Error);
         }
@@ -63,7 +63,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Validators
             };
 
             var sut = new TokenExchangeGrantValidator(validatorMock.Object);
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context); 
 
             Assert.Equal("invalid_request", context.Result.Error);
         }
@@ -96,7 +96,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Validators
             };
 
             var sut = new TokenExchangeGrantValidator(validatorMock.Object);
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context);
 
             Assert.False(context.Result.IsError);
             Assert.Equal("test", context.Request.ClientId);
@@ -136,7 +136,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Validators
             };
 
             var sut = new TokenExchangeGrantValidator(validatorMock.Object);
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context);
 
             Assert.False(context.Result.IsError);
             Assert.Equal("test", context.Request.ClientId);
@@ -177,7 +177,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Validators
             };
 
             var sut = new TokenExchangeGrantValidator(validatorMock.Object);
-            await sut.ValidateAsync(context).ConfigureAwait(false);
+            await sut.ValidateAsync(context);
 
             Assert.False(context.Result.IsError);
             Assert.Contains(context.Result.Subject.Claims, c => c.Type == JwtClaimTypes.Subject && c.Value == "test");

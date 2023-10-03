@@ -6,15 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<IsPackable>false</IsPackable>
-	<CodeAnalysisRuleSet>..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
-
 	<ItemGroup>
-		<PackageReference Include="IdentityModel" Version="6.1.0" />
+		<PackageReference Include="IdentityModel" Version="6.2.0" />
 	</ItemGroup>
 
 </Project>

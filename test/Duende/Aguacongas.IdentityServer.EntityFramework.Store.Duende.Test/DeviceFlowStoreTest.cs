@@ -50,8 +50,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                Assert.NotNull(await sut.FindByDeviceCodeAsync(code).ConfigureAwait(false));
-                Assert.Null(await sut.FindByDeviceCodeAsync(GenerateId()).ConfigureAwait(false));
+                Assert.NotNull(await sut.FindByDeviceCodeAsync(code));
+                Assert.Null(await sut.FindByDeviceCodeAsync(GenerateId()));
             }
         }
 
@@ -72,8 +72,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                Assert.NotNull(await sut.FindByUserCodeAsync(code).ConfigureAwait(false));
-                Assert.Null(await sut.FindByUserCodeAsync(GenerateId()).ConfigureAwait(false));
+                Assert.NotNull(await sut.FindByUserCodeAsync(code));
+                Assert.Null(await sut.FindByUserCodeAsync(GenerateId()));
             }
         }
 
@@ -94,8 +94,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                await sut.RemoveByDeviceCodeAsync(code).ConfigureAwait(false);
-                await sut.RemoveByDeviceCodeAsync(code).ConfigureAwait(false);
+                await sut.RemoveByDeviceCodeAsync(code);
+                await sut.RemoveByDeviceCodeAsync(code);
 
                 Assert.Null(await context.DeviceCodes.FirstOrDefaultAsync(d => d.Code == code));
             }
@@ -138,7 +138,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                await sut.UpdateByUserCodeAsync(code, new ISModels.DeviceCode()).ConfigureAwait(false);
+                await sut.UpdateByUserCodeAsync(code, new ISModels.DeviceCode());
 
                 await Assert.ThrowsAsync<InvalidOperationException>(() =>
                     sut.UpdateByUserCodeAsync(GenerateId(), new ISModels.DeviceCode()));

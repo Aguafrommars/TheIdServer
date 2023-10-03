@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -12,12 +12,7 @@
 	  <PackageIcon>package-icon.png</PackageIcon>	  
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
-	  <CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.MongoDb.Store\Aguacongas.IdentityServer.MongoDb.Store.csproj" />

@@ -35,7 +35,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var provider = services.BuildServiceProvider();
             var keyProvider = provider.GetRequiredService<IKeyRingStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>>();
 
-            var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var cred = await keyProvider.GetSigningCredentialsAsync();
 
             var sut = new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), cred.Key as ECDsaSecurityKey);
 

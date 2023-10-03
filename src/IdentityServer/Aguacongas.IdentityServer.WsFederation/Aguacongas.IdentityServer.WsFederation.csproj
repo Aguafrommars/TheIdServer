@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -15,7 +15,6 @@
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
-		<CodeAnalysisRuleSet>..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
@@ -33,11 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="6.32.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

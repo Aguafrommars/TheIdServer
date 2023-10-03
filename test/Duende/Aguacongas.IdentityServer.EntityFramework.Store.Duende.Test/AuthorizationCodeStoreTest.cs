@@ -50,8 +50,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                Assert.NotNull(await sut.GetAuthorizationCodeAsync(id).ConfigureAwait(false));
-                Assert.Null(await sut.GetAuthorizationCodeAsync(GenerateId()).ConfigureAwait(false));
+                Assert.NotNull(await sut.GetAuthorizationCodeAsync(id));
+                Assert.Null(await sut.GetAuthorizationCodeAsync(GenerateId()));
             }
 
         }
@@ -72,8 +72,8 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store.Test
                 });
                 await context.SaveChangesAsync();
 
-                await sut.RemoveAuthorizationCodeAsync(id).ConfigureAwait(false);
-                await sut.RemoveAuthorizationCodeAsync(id).ConfigureAwait(false);
+                await sut.RemoveAuthorizationCodeAsync(id);
+                await sut.RemoveAuthorizationCodeAsync(id);
 
                 Assert.Null(await context.DeviceCodes.FirstOrDefaultAsync(d => d.Id == id));
             }

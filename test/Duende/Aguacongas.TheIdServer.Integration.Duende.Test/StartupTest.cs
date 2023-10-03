@@ -41,7 +41,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             using var client = factory.CreateClient();
             using var request = new HttpRequestMessage(HttpMethod.Get, "/connect");
             request.Headers.Add("ssl-client-cert", Uri.EscapeDataString(File.ReadAllText("test.pem")));
-            using var response = await client.SendAsync(request).ConfigureAwait(false);
+            using var response = await client.SendAsync(request);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -71,7 +71,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             SeedData.SeedUsers(scope, configurationManager);
 
             var clientStore = scope.ServiceProvider.GetRequiredService<IAdminStore<Client>>();
-            var result = await clientStore.GetAsync("theidserveradmin", new GetRequest()).ConfigureAwait(false);
+            var result = await clientStore.GetAsync("theidserveradmin", new GetRequest());
 
             Assert.NotNull(result);
 
@@ -79,7 +79,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             SeedData.SeedUsers(scope, configurationManager);
 
             var userMgr = provider.GetRequiredService<UserManager<ApplicationUser>>();
-            var user = await userMgr.FindByNameAsync("alice").ConfigureAwait(false);
+            var user = await userMgr.FindByNameAsync("alice");
 
             Assert.NotNull(user);
         }
@@ -213,16 +213,16 @@ namespace Aguacongas.TheIdServer.IntegrationTest
             mockHttpContext.SetupGet(m => m.RequestServices).Returns(requestServices);
             if (jwtBearerHandler != null)
             {
-                await jwtBearerHandler.InitializeAsync(new AuthenticationScheme("Bearer", null, typeof(JwtBearerHandler)), mockHttpContext.Object).ConfigureAwait(false);
-                await jwtBearerHandler.AuthenticateAsync().ConfigureAwait(false);
+                await jwtBearerHandler.InitializeAsync(new AuthenticationScheme("Bearer", null, typeof(JwtBearerHandler)), mockHttpContext.Object);
+                await jwtBearerHandler.AuthenticateAsync();
             }            
 
             var oauthIntrospectionHandler = provider.GetService<OAuth2IntrospectionHandler>();
             Assert.NotNull(oauthIntrospectionHandler);
             if (oauthIntrospectionHandler != null)
             {
-                await oauthIntrospectionHandler.InitializeAsync(new AuthenticationScheme("introspection", null, typeof(OAuth2IntrospectionHandler)), mockHttpContext.Object).ConfigureAwait(false);
-                await oauthIntrospectionHandler.AuthenticateAsync().ConfigureAwait(false);
+                await oauthIntrospectionHandler.InitializeAsync(new AuthenticationScheme("introspection", null, typeof(OAuth2IntrospectionHandler)), mockHttpContext.Object);
+                await oauthIntrospectionHandler.AuthenticateAsync();
             }
         }
 

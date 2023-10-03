@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            await sut.CreateSessionAsync(new ServerSideSession()).ConfigureAwait(false);
+            await sut.CreateSessionAsync(new ServerSideSession());
 
             storeMock.Verify();
         }
@@ -42,7 +42,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            await sut.DeleteSessionAsync(Guid.NewGuid().ToString()).ConfigureAwait(false);
+            await sut.DeleteSessionAsync(Guid.NewGuid().ToString());
 
             storeMock.Verify();
         }
@@ -71,7 +71,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             await sut.DeleteSessionsAsync(new SessionFilter
             {
                 SessionId = id
-            }).ConfigureAwait(false);
+            });
             
             storeMock.Verify();
         }
@@ -98,7 +98,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            var result = await sut.GetAndRemoveExpiredSessionsAsync(1).ConfigureAwait(false);
+            var result = await sut.GetAndRemoveExpiredSessionsAsync(1);
 
             storeMock.Verify();
 
@@ -119,7 +119,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            var session = await sut.GetSessionAsync(id).ConfigureAwait(false);
+            var session = await sut.GetSessionAsync(id);
 
             storeMock.Verify();
 
@@ -150,7 +150,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             var result = await sut.GetSessionsAsync(new SessionFilter
             {
                 SubjectId = id,
-            }).ConfigureAwait(false);
+            });
 
             storeMock.Verify();
 
@@ -183,7 +183,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            var result = await sut.QuerySessionsAsync().ConfigureAwait(false);
+            var result = await sut.QuerySessionsAsync();
 
             storeMock.Verify();
 
@@ -192,7 +192,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             result = await sut.QuerySessionsAsync(new SessionQuery
             {
                 CountRequested = 2,                
-            }).ConfigureAwait(false);
+            });
 
             Assert.True(result.HasNextResults);
             Assert.False(result.HasPrevResults);
@@ -204,7 +204,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             {
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
-            }).ConfigureAwait(false);
+            });
 
             Assert.True(result.HasNextResults);
             Assert.True(result.HasPrevResults);
@@ -216,7 +216,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             {
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
-            }).ConfigureAwait(false);
+            });
             
             Assert.False(result.HasNextResults);
             Assert.True(result.HasPrevResults);
@@ -229,7 +229,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 RequestPriorResults = true,
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
-            }).ConfigureAwait(false);
+            });
             
             Assert.True(result.HasNextResults);
             Assert.True(result.HasPrevResults);
@@ -242,7 +242,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
                 RequestPriorResults = true,
                 CountRequested = 2,
                 ResultsToken = result.ResultsToken
-            }).ConfigureAwait(false);
+            });
             
             Assert.True(result.HasNextResults);
             Assert.False(result.HasPrevResults);
@@ -254,7 +254,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             {
                 CountRequested = 1,
                 DisplayName = "test"
-            }).ConfigureAwait(false);
+            });
 
             Assert.True(result.HasNextResults);
             Assert.False(result.HasPrevResults);
@@ -265,7 +265,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             result = await sut.QuerySessionsAsync(new SessionQuery
             {
                 CountRequested = 5
-            }).ConfigureAwait(false);
+            });
 
             Assert.False(result.HasNextResults);
             Assert.False(result.HasPrevResults);
@@ -282,7 +282,7 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
 
             var sut = new ServerSideSessionStore(storeMock.Object);
 
-            await sut.UpdateSessionAsync(new ServerSideSession()).ConfigureAwait(false);
+            await sut.UpdateSessionAsync(new ServerSideSession());
 
             storeMock.Verify();
         }

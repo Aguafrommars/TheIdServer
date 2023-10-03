@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -12,8 +12,6 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>package-icon.png</PackageIcon>
-		
-		<CodeAnalysisRuleSet>..\..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset</CodeAnalysisRuleSet>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
@@ -34,17 +32,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <AdditionalFiles Include="..\..\..\..\.sonarlint\aguacongas_theidserver\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
     <ProjectReference Include="..\..\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.Duende\Aguacongas.IdentityServer.Duende.csproj" />
     <ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation.Duende\Aguacongas.IdentityServer.KeysRotation.Duende.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.3" />
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.5" />
 	</ItemGroup>
 
 	<ItemGroup>
