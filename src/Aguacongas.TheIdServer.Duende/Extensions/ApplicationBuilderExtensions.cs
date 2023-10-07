@@ -120,7 +120,8 @@ namespace Microsoft.AspNetCore.Builder
                 app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
             }
 
-            app.UseAuthorization()
+            app.UseRouting()
+                .UseAuthorization()
                 .Use((context, next) =>
                 {
                     var service = context.RequestServices;
@@ -133,7 +134,6 @@ namespace Microsoft.AspNetCore.Builder
                     return next();
                 })
                 .UsePrometheus(configuration)
-                .UseRouting()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapHealthChecks("healthz", new HealthCheckOptions
