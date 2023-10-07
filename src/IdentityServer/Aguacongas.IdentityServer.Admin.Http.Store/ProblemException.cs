@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using System;
-using System.Runtime.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Aguacongas.IdentityServer.Admin.Http.Store
 {
@@ -10,7 +10,8 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
     /// </summary>
     /// <seealso cref="System.Exception" />
     [Serializable]
-    public class ProblemException: Exception
+    [SuppressMessage("Major Code Smell", "S3925:\"ISerializable\" should be implemented correctly", Justification = "Obsolete")]
+    public class ProblemException : Exception
     {
         public ProblemDetails Details { get; set; }
 
@@ -23,11 +24,6 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         }
 
         public ProblemException()
-        {
-        }
-
-        protected ProblemException(SerializationInfo serializationInfo, StreamingContext streamingContext) 
-            : base(serializationInfo, streamingContext)
         {
         }
     }

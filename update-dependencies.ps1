@@ -4,10 +4,17 @@ function UpdatePackages {
         $project
     )
 
+    $currentDirectoy = Get-Location
+
     $return = $false
     
+    $dir = Split-Path $project
+    Write-Host 'Set-Location' $dir
+    
+    Set-Location $dir
+
     # Get outdated packages
-    $packageLineList = dotnet list $project package --outdated --include-prerelease
+    $packageLineList = dotnet list package --outdated
     
     foreach($line in $packageLineList) {
        Write-Host $line
@@ -23,18 +30,20 @@ function UpdatePackages {
        $packageName = $Matches.1
        $version = $Matches.2
        # update an outdated package
-       $added = dotnet add $project package $packageName --version $version
+       $added = dotnet add package $packageName --version $version
        if ($LASTEXITCODE -ne 0) {
            # error while updating the package
 
-           Write-Error "dotnet add $project package $packageName --version $version exit with code $LASTEXITCODE"
+           Write-Error "dotnet add package $packageName --version $version exit with code $LASTEXITCODE"
            Write-Host $added
            break
        }
 
+	   Write-Host 'package' $Matches.1 'version' $Matches.2 'updated'
        $return = $true
     }
-
+	
+    Set-Location $currentDirectoy
     return $return
 }
 

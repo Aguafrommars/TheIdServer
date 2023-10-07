@@ -7,6 +7,8 @@
 		<DockerfileContext>..\..</DockerfileContext>
 
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.11" />
+	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.1.23421.29" />
     <PackageReference Include="Duende.IdentityServer.Configuration" Version="6.3.5" />
 	</ItemGroup>
 </Project>

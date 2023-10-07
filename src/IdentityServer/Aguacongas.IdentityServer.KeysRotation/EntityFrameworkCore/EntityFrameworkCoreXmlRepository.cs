@@ -67,7 +67,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
             };
 
             context.KeyRotationKeys.Add(newKey); // generic context interface change from original IDataProtectionKeyContext
-            _logger.LogDebug("Saving key '{FriendlyName}' to '{DbContext}'.", typeof(TContext).Name);
+            _logger.LogDebug("Saving key '{FriendlyName}' to '{DbContext}'.", friendlyName, typeof(TContext).Name);
             context.SaveChanges();
         }
 

@@ -17,6 +17,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Aguacongas.IdentityServer.Admin.Configuration;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -41,6 +42,8 @@ namespace Microsoft.AspNetCore.Builder
             string notAllowedApiRewritePath = "not-allowed")
         {
             var entityTypeList = Utils.GetEntityTypeList();
+
+            ApiBasePath.Value = $"{basePath[1..]}/";
 
             return builder.Map(basePath, child =>
             {

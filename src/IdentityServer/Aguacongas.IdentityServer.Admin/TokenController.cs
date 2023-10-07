@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// </summary>
     /// <seealso cref="Controller" />
     [Produces("application/json")]
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     [Authorize(SharedConstants.TOKENPOLICY)]
     public class TokenController : Controller
     {

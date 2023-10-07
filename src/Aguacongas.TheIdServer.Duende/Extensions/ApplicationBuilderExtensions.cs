@@ -14,6 +14,7 @@ using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Duende.IdentityServer.Hosting;
 using Duende.IdentityServer.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -41,6 +42,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
+using Aguacongas.TheIdServer.BlazorApp;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -109,8 +111,7 @@ namespace Microsoft.AspNetCore.Builder
                .UseIdentityServerAdminApi("/api", child =>
                {
                    ConfigureAdminApiHandler(configuration, child);
-               })
-                .UseRouting();
+               });
 
             app.UseIdentityServer();
 
@@ -132,6 +133,7 @@ namespace Microsoft.AspNetCore.Builder
                     return next();
                 })
                 .UsePrometheus(configuration)
+                .UseRouting()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapHealthChecks("healthz", new HealthCheckOptions
@@ -146,10 +148,10 @@ namespace Microsoft.AspNetCore.Builder
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
                     endpoints.MapFallbackToPage("/_Host");
-                })
-                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+                });
+                
 
-            return app;
+            return app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
         private static void ConfigureAdminApiHandler(IConfiguration configuration, IApplicationBuilder child)
@@ -160,7 +162,7 @@ namespace Microsoft.AspNetCore.Builder
                     .UseSwaggerUi3(options =>
                     {
                         var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                        options.OAuth2Client = settings.OAuth2Client;
+                        options.OAuth2Client = settings?.OAuth2Client;
                     });
             }
             var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
@@ -173,7 +175,7 @@ namespace Microsoft.AspNetCore.Builder
                         .AllowAnyHeader()
                         .AllowCredentials();
                 });
-            }
+            };
         }
 
         private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)

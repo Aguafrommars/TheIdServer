@@ -26,9 +26,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Validators
         public override bool IsValid(ValidationContext<T> context, TProperty value)
         {
             var editedItem = context.InstanceToValidate;
-            var propertyName = context.PropertyName;
-            propertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
-            var property = typeof(T).GetTypeInfo().GetProperty(propertyName);
+            var propertyPath = context.PropertyPath;
+            propertyPath = propertyPath.Substring(propertyPath.LastIndexOf('.') + 1);
+            var property = typeof(T).GetTypeInfo().GetProperty(propertyPath);
             return _items.All(item =>
               item.Equals(editedItem) || !((TProperty)property.GetValue(item)).Equals(value));
         }

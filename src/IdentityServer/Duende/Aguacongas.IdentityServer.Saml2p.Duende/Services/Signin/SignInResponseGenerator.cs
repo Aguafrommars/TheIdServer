@@ -84,9 +84,12 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         {
             InResponseTo = saml2ArtifactResolve.Id
         };
-        soapEnvelope?.Bind(saml2ArtifactResponse);
+        soapEnvelope.Bind(saml2ArtifactResponse);
 
-        await _userSession.AddClientIdAsync(result.Client?.ClientId).ConfigureAwait(false);
+        if (result.Client?.ClientId is not null)
+        {
+            await _userSession.AddClientIdAsync(result.Client.ClientId).ConfigureAwait(false);
+        }        
 
         return soapEnvelope.ToActionResult();
     }
@@ -181,7 +184,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
                 issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
 
-        if (status == Saml2StatusCodes.Success)
+        if (status == Saml2StatusCodes.Success && clientId is not null)
         {
             await _userSession.AddClientIdAsync(clientId).ConfigureAwait(false);
         }
@@ -223,7 +226,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(JwtClaimTypes.Subject));
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
-            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer,
+            saml2AuthnResponse.CreateSecurityToken(relyingParty.Issuer,
                 subjectConfirmationLifetime: settings.SubjectConfirmationLifetime, 
                 issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
@@ -343,7 +346,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
                 AddMappedClaim(nameidFormat, outboundClaims, mapping, claim);
             }
             else if (Uri.TryCreate(claim.Type, UriKind.Absolute, out Uri? _) ||
-                relyParty?.TokenType != "urn:oasis:names:tc:SAML:1.0:assertion")
+                relyParty.TokenType != "urn:oasis:names:tc:SAML:1.0:assertion")
             {
                 outboundClaims.Add(claim);
             }

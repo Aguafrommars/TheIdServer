@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// Welcome fragment controller
     /// </summary>
     /// <seealso cref="Controller" />
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     public class WelcomeFragmentController : Controller
     {
         private readonly IWebHostEnvironment _environment;
