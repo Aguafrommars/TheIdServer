@@ -37,18 +37,18 @@
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="7.0.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.3.2" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.2.2" />
-		<PackageReference Include="Azure.Identity" Version="1.10.1" />
+		<PackageReference Include="Azure.Identity" Version="1.10.2" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="1.3.1" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.11" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.10" PrivateAssets="All" />
