@@ -20,11 +20,11 @@
 	<ItemGroup>
 		<PackageReference Include="bunit" Version="1.23.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.11" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.12" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.12" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
 		<PackageReference Include="Moq" Version="4.20.69" />
 		<PackageReference Include="xunit" Version="2.5.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
