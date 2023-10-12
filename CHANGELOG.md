@@ -1,3 +1,10 @@
+## [7.4.5](https://github.com/Aguafrommars/TheIdServer/compare/7.4.4...7.4.5) (2023-10-12)
+
+
+### Bug Fixes
+
+* .net 7.0.12 patch ([#1097](https://github.com/Aguafrommars/TheIdServer/issues/1097)) ([6e5b7b0](https://github.com/Aguafrommars/TheIdServer/commit/6e5b7b0255784927edde52f6aaa73d2e64a304a2))
+
 ## [7.4.4](https://github.com/Aguafrommars/TheIdServer/compare/7.4.3...7.4.4) (2023-08-10)
 
 
