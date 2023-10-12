@@ -11,38 +11,23 @@ using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
-using Duende.IdentityServer.Hosting;
 using Duende.IdentityServer.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
-using Aguacongas.TheIdServer.BlazorApp;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -113,14 +98,16 @@ namespace Microsoft.AspNetCore.Builder
                    ConfigureAdminApiHandler(configuration, child);
                });
 
-            app.UseIdentityServer();
+            app.UseIdentityServer()
+                .UseRouting()
+                .UseAuthentication();
 
             if (!isProxy)
             {
-                app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
+                app.UseIdentityServerAdminAuthentication("/providerhub");
             }
 
-            app.UseRouting()
+            app.UseIdentityServerAdminAuthentication()
                 .UseAuthorization()
                 .Use((context, next) =>
                 {
@@ -136,6 +123,7 @@ namespace Microsoft.AspNetCore.Builder
                 .UsePrometheus(configuration)
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapAdminApiControllers();
                     endpoints.MapHealthChecks("healthz", new HealthCheckOptions
                     {
                         ResponseWriter = WriteHealtResponse

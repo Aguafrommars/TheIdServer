@@ -34,6 +34,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
+		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Admin.Duende\Aguacongas.IdentityServer.Admin.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.KeysRotation.Duende\Aguacongas.IdentityServer.KeysRotation.Duende.csproj" />
@@ -44,7 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.1.23421.29" />
+	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
     <PackageReference Include="Duende.IdentityServer.Configuration" Version="6.3.5" />
 	</ItemGroup>
 </Project>

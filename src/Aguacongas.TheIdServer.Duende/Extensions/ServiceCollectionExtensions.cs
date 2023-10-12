@@ -15,35 +15,24 @@ using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer.Configuration;
-using Duende.IdentityServer.Configuration.Configuration;
 using Duende.IdentityServer.Services;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Raven.Client.Documents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -154,17 +143,17 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var authenticationBuilder = services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
                 .AddAuthorization(options =>
-                    options.AddIdentityServerPolicies(true))
+                    options.AddIdentityServerPolicies())
                 .AddAuthentication()
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
 
             var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions>();
-            if (mutulaTlsOptions?.Enabled == true)
+            if (mutulaTlsOptions!.Enabled)
             {
                 // MutualTLS
-                authenticationBuilder.AddCertificate(mutulaTlsOptions?.ClientCertificateAuthenticationScheme, 
+                authenticationBuilder.AddCertificate(mutulaTlsOptions!.ClientCertificateAuthenticationScheme, 
                     options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
 
@@ -430,7 +419,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 switch (dbTypes)
                 {
                     case DbTypes.MongoDb:
-                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection"), tags: tags);
+                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection")!, tags: tags);
                         break;
                     case DbTypes.RavenDb:
                         builder.AddRavenDB(options =>

@@ -40,15 +40,13 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
 
             var expandParameter = request != null ? $"?expand={request.Expand}" : string.Empty;
 
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{id}{expandParameter}"), cancellationToken)
-                .ConfigureAwait(false))
-            {
-                await EnsureSuccess(response)
-                    .ConfigureAwait(false);
+            using var response = await httpClient.GetAsync(GetUri(httpClient, $"{BaseUri}/{id}{expandParameter}"), cancellationToken)
+                .ConfigureAwait(false);
+            await EnsureSuccess(response)
+                .ConfigureAwait(false);
 
-                return await DeserializeResponse(response)
-                    .ConfigureAwait(false);
-            }
+            return await DeserializeResponse(response)
+                .ConfigureAwait(false);
         }
 
         public virtual async Task<PageResponse<T>> GetAsync(PageRequest request, CancellationToken cancellationToken = default)
@@ -63,16 +61,14 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
 
-            using (var response = await httpClient.GetAsync(GetUri(httpClient, QueryHelpers.AddQueryString(BaseUri, dictionary)), cancellationToken)
-                .ConfigureAwait(false))
-            {
+            using var response = await httpClient.GetAsync(GetUri(httpClient, QueryHelpers.AddQueryString(BaseUri, dictionary)), cancellationToken)
+                .ConfigureAwait(false);
 
-                await EnsureSuccess(response)
-                    .ConfigureAwait(false);
+            await EnsureSuccess(response)
+                .ConfigureAwait(false);
 
-                return await DeserializeResponse<PageResponse<T>>(response)
-                    .ConfigureAwait(false);
-            }
+            return await DeserializeResponse<PageResponse<T>>(response)
+                .ConfigureAwait(false);
         }
 
         protected async Task EnsureSuccess(HttpResponseMessage response)
@@ -119,9 +115,9 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
         protected Uri GetUri(HttpClient httpClient, string uri)
         {
             var baseAddress = httpClient.BaseAddress.ToString();
-            if (baseAddress.EndsWith("/", StringComparison.Ordinal))
+            if (baseAddress.EndsWith('/'))
             {
-                baseAddress = baseAddress.Substring(0, baseAddress.Length - 1);
+                baseAddress = baseAddress[..^1];
             }
 
             var result = new Uri($"{baseAddress}{uri}");

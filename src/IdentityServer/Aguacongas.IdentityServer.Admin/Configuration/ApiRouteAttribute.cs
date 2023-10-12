@@ -11,6 +11,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration;
 /// <summary>
 /// Api route attribute
 /// </summary>
+[AttributeUsage(AttributeTargets.Class)]
 public class ApiRouteAttribute : Attribute, IRouteTemplateProvider
 {
     private int? _order;
@@ -20,7 +21,8 @@ public class ApiRouteAttribute : Attribute, IRouteTemplateProvider
     /// <param name="template">The route template. May not be null.</param>
     public ApiRouteAttribute([StringSyntax("Route")] string template)
     {
-        Template = $"{ApiBasePath.Value}{template ?? throw new ArgumentNullException(nameof(template))}";
+        var routeBasePath = $"{ApiBasePath.Value[1..]}/";
+        Template = $"{routeBasePath}{template ?? throw new ArgumentNullException(nameof(template))}";
     }
 
     /// <inheritdoc />
@@ -43,5 +45,5 @@ public class ApiRouteAttribute : Attribute, IRouteTemplateProvider
     int? IRouteTemplateProvider.Order => _order;
 
     /// <inheritdoc />
-    public string? Name { get; set; }
+    public string Name { get; set; }
 }
