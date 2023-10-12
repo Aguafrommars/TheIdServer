@@ -33,7 +33,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Services
                 AuthenticationType = "oidc",
                 NameClaim = "name",
                 RoleClaim = "role"
-            }).ConfigureAwait(false);
+            });
 
             Assert.Contains(user.Claims, c => c.Type == "role" && c.Value == "role");
         }

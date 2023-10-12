@@ -34,7 +34,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var provider = builder.Services.BuildServiceProvider();
             var keyProvider = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
-            var cred = await keyProvider.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var cred = await keyProvider.GetSigningCredentialsAsync();
 
             var sut = new RsaEncryptorDescriptor(new RsaEncryptorConfiguration(), cred.Key as RsaSecurityKey);
 

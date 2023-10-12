@@ -42,7 +42,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            using var reader = XmlReader.Create(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+            using var reader = XmlReader.Create(await response.Content.ReadAsStreamAsync());
             var serializer = new Microsoft.IdentityModel.Protocols.WsFederation.WsFederationMetadataSerializer();
             var metadata = serializer.ReadMetadata(reader);
 
@@ -78,8 +78,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Id = clientId,
                 Enabled = true,
                 ProtocolType = "oidc"
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
@@ -99,8 +99,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Id = clientId,
                 Enabled = true,
                 ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
@@ -128,8 +128,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
                     SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
                 }
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0");
@@ -157,8 +157,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                     SignatureAlgorithm = SecurityAlgorithms.RsaSha256Signature,
                     SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString
                 }
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
             {
@@ -286,8 +286,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         }
                     }
                 }
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await identityContext.Users.AddAsync(new User
@@ -296,15 +296,15 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 UserName = name,
                 NormalizedUserName = name.ToUpperInvariant(),
                 SecurityStamp = Guid.NewGuid().ToString()
-            }).ConfigureAwait(false);
-            await identityContext.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await identityContext.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
 
             Assert.NotNull(content);
         }
@@ -453,8 +453,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         }
                     }
                 }
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await identityContext.Users.AddAsync(new User
@@ -463,15 +463,15 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 UserName = name,
                 NormalizedUserName = name.ToUpperInvariant(),
                 SecurityStamp = Guid.NewGuid().ToString()
-            }).ConfigureAwait(false);
-            await identityContext.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await identityContext.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
 
             Assert.NotNull(content);
             Assert.Contains("exemple.com", content);
@@ -546,8 +546,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                     SamlNameIdentifierFormat = WsFederationConstants.SamlNameIdentifierFormats.UnspecifiedString,
                     ClaimMappings = Array.Empty<RelyingPartyClaimMapping>()
                 }
-            }).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await context.SaveChangesAsync();
 
             var identityContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await identityContext.Users.AddAsync(new User
@@ -556,15 +556,15 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 UserName = name,
                 NormalizedUserName = name.ToUpperInvariant(),
                 SecurityStamp = Guid.NewGuid().ToString()
-            }).ConfigureAwait(false);
-            await identityContext.SaveChangesAsync().ConfigureAwait(false);
+            });
+            await identityContext.SaveChangesAsync();
 
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync($"/wsfederation?wtrealm={clientId}&wa=wsignin1.0&wreply={client.BaseAddress}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
 
             Assert.NotNull(content);
             Assert.Contains("exemple.com", content);

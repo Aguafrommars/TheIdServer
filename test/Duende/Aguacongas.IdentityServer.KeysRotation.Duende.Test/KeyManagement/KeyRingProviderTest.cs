@@ -40,11 +40,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var provider = builder.Services.BuildServiceProvider();
             var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
-            var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var cred = await sut.GetSigningCredentialsAsync();
             Assert.NotNull(cred);
 
             sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
-            var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var newCred = await sut.GetSigningCredentialsAsync();
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
         }
@@ -63,7 +63,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var provider = builder.Services.BuildServiceProvider();
             var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
-            var keys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
+            var keys = await sut.GetValidationKeysAsync();
             Assert.NotNull(keys);
             Assert.NotEmpty(keys);
 
@@ -71,7 +71,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var cacheableKeyRingProvider = provider.GetRequiredService<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             cacheableKeyRingProvider.KeyManager.RevokeKey(defaultKeyId, "test");
             sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
-            var newKeys = await sut.GetValidationKeysAsync().ConfigureAwait(false);
+            var newKeys = await sut.GetValidationKeysAsync();
 
             Assert.DoesNotContain(keys, k => newKeys.Any(nk => nk.Key.KeyId == k.Key.KeyId));
         }
@@ -96,11 +96,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var provider = builder.Services.BuildServiceProvider();
             var sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
 
-            var cred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var cred = await sut.GetSigningCredentialsAsync();
             Assert.NotNull(cred);
 
             sut = provider.GetRequiredService<IKeyRingStore<RsaEncryptorConfiguration, RsaEncryptor>>();
-            var newCred = await sut.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var newCred = await sut.GetSigningCredentialsAsync();
 
             Assert.Equal(cred.Key.KeyId, newCred.Key.KeyId);
         }

@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="SonarQube - TheIdServer Aguacongas" ToolsVersion="16.0">
-  <Include Path="..\..\..\.sonarlint\aguacongas_theidservercsharp.ruleset" Action="Default" />
 </RuleSet>

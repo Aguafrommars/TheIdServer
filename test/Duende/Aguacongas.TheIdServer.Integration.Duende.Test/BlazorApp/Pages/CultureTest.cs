@@ -39,7 +39,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await filterInput.TriggerEventAsync("oninput", new ChangeEventArgs
             {
                 Value = cultureId
-            }).ConfigureAwait(false);
+            });
 
             Assert.DoesNotContain("filtered", component.Markup);
         }
