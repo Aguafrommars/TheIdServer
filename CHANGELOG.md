@@ -1,3 +1,25 @@
+## [7.4.5](https://github.com/Aguafrommars/TheIdServer/compare/7.4.4...7.4.5) (2023-10-12)
+
+
+### Bug Fixes
+
+* .net 7.0.12 patch ([#1097](https://github.com/Aguafrommars/TheIdServer/issues/1097)) ([6e5b7b0](https://github.com/Aguafrommars/TheIdServer/commit/6e5b7b0255784927edde52f6aaa73d2e64a304a2))
+
+## [7.4.4](https://github.com/Aguafrommars/TheIdServer/compare/7.4.3...7.4.4) (2023-08-10)
+
+
+### Bug Fixes
+
+* update packages ([405aa92](https://github.com/Aguafrommars/TheIdServer/commit/405aa920ec30836588a593d144db57107a640ea3))
+* update packages ([857281d](https://github.com/Aguafrommars/TheIdServer/commit/857281dd43de13a2bd114aa13b698b986c4abd3a))
+* update packages ([d63d2aa](https://github.com/Aguafrommars/TheIdServer/commit/d63d2aa2b80b5032da6aff444d850ae0370eeda7))
+* update packages ([162ba03](https://github.com/Aguafrommars/TheIdServer/commit/162ba030b87216ecd8973de00c8edd03bac1d9d2))
+* update packages ([1a33c24](https://github.com/Aguafrommars/TheIdServer/commit/1a33c24d3d48c4dd1829ed0caca5dfbecf1595a9))
+* update packages ([5cf164c](https://github.com/Aguafrommars/TheIdServer/commit/5cf164c7bfd29e59ed3971f778e50b663fbf571f))
+* update packages ([abb2fe1](https://github.com/Aguafrommars/TheIdServer/commit/abb2fe15082d0edaa36c038c79e7cfadc5d14714))
+* update packages ([9c8678b](https://github.com/Aguafrommars/TheIdServer/commit/9c8678bb16807f742a66e7b4cb624168f04c92c4))
+* update packages ([54421d7](https://github.com/Aguafrommars/TheIdServer/commit/54421d73d9c21890db89d11080f21a4b78a3aa7d))
+
 ## [7.4.3](https://github.com/Aguafrommars/TheIdServer/compare/7.4.2...7.4.3) (2023-07-20)
 
 
