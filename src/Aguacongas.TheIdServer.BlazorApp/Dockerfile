@@ -2,6 +2,7 @@ ARG GITHIB_FEED_TOKEN
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj", "src/Aguacongas.TheIdServer.BlazorApp/"]
@@ -32,13 +33,14 @@ COPY ["src/Aguacongas.TheIdServer.BlazorApp/nginx.conf", "src/Aguacongas.TheIdSe
 RUN apt-get update -y
 RUN apt-get install -y python3
 RUN dotnet workload install wasm-tools
-RUN dotnet restore "src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
+RUN dotnet restore "./src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.BlazorApp"
-RUN dotnet build "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/build -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
+RUN dotnet build "./Aguacongas.TheIdServer.BlazorApp.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM build AS publish
-RUN dotnet publish "Aguacongas.TheIdServer.BlazorApp.csproj" -c Release -o /app/publish -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Aguacongas.TheIdServer.BlazorApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
 
 FROM nginx:1.25.2 AS final
 WORKDIR /usr/share/nginx/html
