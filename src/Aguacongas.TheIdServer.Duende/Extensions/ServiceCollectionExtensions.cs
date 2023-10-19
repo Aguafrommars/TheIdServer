@@ -150,7 +150,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
 
             var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions>();
-            if (mutulaTlsOptions!.Enabled)
+            if (mutulaTlsOptions?.Enabled == true)
             {
                 // MutualTLS
                 authenticationBuilder.AddCertificate(mutulaTlsOptions!.ClientCertificateAuthenticationScheme, 
