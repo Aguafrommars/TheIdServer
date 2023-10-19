@@ -32,6 +32,7 @@ COPY ["src/IdentityServer/Aguacongas.IdentityServer.Store/Aguacongas.IdentitySer
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/nginx.conf", "src/Aguacongas.TheIdServer.BlazorApp/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
+RUN apt-get install -y gcc
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .

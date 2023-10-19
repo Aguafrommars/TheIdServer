@@ -64,6 +64,7 @@ COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/Aguacon
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
 RUN apt-get update -y
 RUN apt-get install -y python3
+RUN apt-get install -y gcc
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.Duende/./Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
