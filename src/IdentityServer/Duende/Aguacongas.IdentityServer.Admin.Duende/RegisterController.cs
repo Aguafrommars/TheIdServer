@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
@@ -15,7 +16,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// 
     /// </summary>
     [Produces("application/json")]
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     public class RegisterController : Controller
     {
         private readonly IRegisterClientService _registerClientService;

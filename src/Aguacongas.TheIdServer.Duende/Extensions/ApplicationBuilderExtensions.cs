@@ -153,11 +153,28 @@ namespace Microsoft.AspNetCore.Builder
         {
             if (configuration.GetValue<bool>("EnableOpenApiDoc"))
             {
-                child.UseOpenApi()
+                child.UseOpenApi(
+                    options =>
+                    {
+                        var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
+                        if (settings?.Path is not null)
+                        {
+                            var path = settings.Path;
+                            path = path.EndsWith('/') ? path : $"{path}/";
+                            options.Path = $"{settings.Path}{{documentName}}/swagger.json";
+                        }                        
+                    })
                     .UseSwaggerUi3(options =>
                     {
                         var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
                         options.OAuth2Client = settings?.OAuth2Client;
+                        options.Path = settings?.Path;
+                        if (settings?.Path is not null)
+                        {
+                            var path = settings.Path;
+                            path = path.EndsWith('/') ? path : $"{path}/";
+                            options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
+                        }
                     });
             }
             var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();

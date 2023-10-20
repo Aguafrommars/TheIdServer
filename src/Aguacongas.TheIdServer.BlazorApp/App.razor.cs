@@ -55,7 +55,7 @@ namespace Aguacongas.TheIdServer.BlazorApp
                 return LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}s.wasm");
             }
 
-            pageKind = _pageKindList.FirstOrDefault(k => path == k.ToLower());
+            pageKind = _pageKindList.FirstOrDefault(k => path.Equals(k, StringComparison.InvariantCultureIgnoreCase));
             return pageKind != null ? LoadAssemblyAsync($"Aguacongas.TheIdServer.BlazorApp.Pages.{pageKind}.wasm") : Task.CompletedTask;
         }
 
