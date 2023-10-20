@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.1.1" />
+        <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="5.0.0-preview0177" />
     </ItemGroup>
     
     <ItemGroup>

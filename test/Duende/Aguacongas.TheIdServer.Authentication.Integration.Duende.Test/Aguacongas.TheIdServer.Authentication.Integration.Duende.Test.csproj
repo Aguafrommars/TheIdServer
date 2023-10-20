@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
-	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="4.1.1" />
+	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="5.0.0-preview0177" />
 	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0-rc.2.23480.2" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
 	  <PackageReference Include="xunit" Version="2.5.3" />
