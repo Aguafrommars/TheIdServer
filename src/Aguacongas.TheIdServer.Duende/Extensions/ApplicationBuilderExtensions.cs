@@ -21,6 +21,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
@@ -33,6 +34,12 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
+        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = true
+        };
+
         public static IApplicationBuilder UseTheIdServer(this IApplicationBuilder app, IWebHostEnvironment environment, IConfiguration configuration)
         {
             var isProxy = configuration.GetValue<bool>("Proxy");
@@ -163,7 +170,7 @@ namespace Microsoft.AspNetCore.Builder
                         .AllowAnyHeader()
                         .AllowCredentials();
                 });
-            };
+            }
         }
 
         private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
@@ -184,7 +191,7 @@ namespace Microsoft.AspNetCore.Builder
                     requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
                     try
                     {
-                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]));
+                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]!));
                     }
                     catch (CryptographicException e)
                     {
@@ -247,8 +254,8 @@ namespace Microsoft.AspNetCore.Builder
                 var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
                 opContext.Database.Migrate();
 
-                var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                appcontext.Database.Migrate();
+                var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                appContext.Database.Migrate();
             }
 
             if (configuration.GetValue<bool>("Seed"))
@@ -287,12 +294,6 @@ namespace Microsoft.AspNetCore.Builder
 
                 if (value.Data.Any())
                 {
-                    var serializerOptions = new JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        WriteIndented = true
-                    };
-
                     jsonWriter.WriteStartObject("data");
 
                     foreach (var item in value.Data)
@@ -300,7 +301,7 @@ namespace Microsoft.AspNetCore.Builder
                         jsonWriter.WritePropertyName(item.Key);
 
                         JsonSerializer.Serialize(jsonWriter, item.Value,
-                            item.Value?.GetType() ?? typeof(object), serializerOptions);
+                            item.Value?.GetType() ?? typeof(object), _serializerOptions);
                     }
 
                     jsonWriter.WriteEndObject();

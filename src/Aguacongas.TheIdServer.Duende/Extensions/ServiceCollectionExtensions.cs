@@ -383,12 +383,13 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureDataProtection(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureDataProtection(IServiceCollection services, ConfigurationManager configurationManager)
         {
-            var dataprotectionSection = configuration.GetSection(nameof(DataProtectionOptions));
-            if (dataprotectionSection != null)
+            var dataProtectionSection = configurationManager.GetSection(nameof(DataProtectionOptions));
+            if (dataProtectionSection != null)
             {
-                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
+                services.AddDataProtection(options => dataProtectionSection.Bind(options))
+                    .ConfigureDataProtection(dataProtectionSection);
             }
         }
 

@@ -33,6 +33,7 @@ COPY ["src/Aguacongas.TheIdServer.BlazorApp/nginx.conf", "src/Aguacongas.TheIdSe
 RUN apt-get update -y
 RUN apt-get install -y python3
 RUN apt-get install -y gcc
+RUN apt-get clean
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj"
 COPY . .
