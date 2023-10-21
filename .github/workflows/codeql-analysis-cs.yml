@@ -51,7 +51,7 @@ jobs:
         GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       env: 
         GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       with:
@@ -69,4 +69,4 @@ jobs:
       name: Build
       
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2
