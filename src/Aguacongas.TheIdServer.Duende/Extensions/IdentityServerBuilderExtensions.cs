@@ -5,13 +5,9 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.Extensions;
 using Aguacongas.TheIdServer.Models;
-using Microsoft.Extensions.Configuration;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using Duende.IdentityServer.Configuration;
+using StackExchange.Redis;
+using System.Security.Cryptography.X509Certificates;
 using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -63,7 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
             additionalSigningKeyTypeSection.Bind(additionalKeyType);
             foreach (var key in additionalKeyType.Keys)
             {
-                if (key.StartsWith("E"))
+                if (key.StartsWith('E'))
                 {
                     var ecdsa = Enum.Parse<ECDsaSigningAlgorithm>(key);
                     builder.AddECDsaKeysRotation(ecdsa, options => keyRotationSection?.Bind(options))

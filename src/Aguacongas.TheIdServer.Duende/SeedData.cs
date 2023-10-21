@@ -4,28 +4,25 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Duende.IdentityServer;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-using Duende.IdentityServer;
 using ISModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.TheIdServer
 {
     public static class SeedData
     {
-        public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+    public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
         {            
             using var scope = services.CreateScope();
 
@@ -155,10 +152,7 @@ namespace Aguacongas.TheIdServer
             }
 
             var exsitings = culture.Resources.ToList();
-            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), _jsonSerializerOptions);
 
             foreach (var resource in resources!)
             {

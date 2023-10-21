@@ -1,23 +1,16 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
-using IdentityModel;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Stores;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Aguacongas.TheIdServer.UI
 {
@@ -263,7 +256,7 @@ namespace Aguacongas.TheIdServer.UI
             var identityResult = await _userManager.CreateAsync(user);
             if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);
 
-            if (filtered.Any())
+            if (filtered.Count > 0)
             {
                 identityResult = await _userManager.AddClaimsAsync(user, filtered);
                 if (!identityResult.Succeeded) throw new InvalidOperationException(identityResult.Errors.First().Description);

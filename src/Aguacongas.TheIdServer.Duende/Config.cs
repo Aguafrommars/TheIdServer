@@ -2,16 +2,14 @@
 // Copyright (c) 2023 @Olivier Lefebvre
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer
 {
     public static class Config
     {
+        internal static string[] SeedPage { get; } = ["/seed"];
+
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             var profile = new IdentityResources.Profile();

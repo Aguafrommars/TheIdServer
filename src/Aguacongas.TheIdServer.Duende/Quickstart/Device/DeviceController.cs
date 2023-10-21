@@ -1,9 +1,5 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
@@ -70,10 +66,7 @@ namespace Aguacongas.IdentityServer.UI.Device
         [ValidateAntiForgeryToken]
         public Task<IActionResult> Callback(DeviceAuthorizationInputModel model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
+            ArgumentNullException.ThrowIfNull(model);
 
             return CallbackInternal(model);
         }
