@@ -91,20 +91,20 @@ namespace Aguacongas.TheIdServer.UI
             // the user clicked the "cancel" button
             if (button != "login")
             {
-                return await OnCancel(model, context).ConfigureAwait(false);
+                return await OnCancel(model, context!).ConfigureAwait(false);
             }
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true).ConfigureAwait(false);
+                var result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, model.RememberLogin, lockoutOnFailure: true).ConfigureAwait(false);
                 if (result.Succeeded)
                 {
-                    return await OnSiginSuccesss(model, context).ConfigureAwait(false);
+                    return await OnSiginSuccesss(model, context!).ConfigureAwait(false);
                 }
 
                 if (result.RequiresTwoFactor)
                 {
-                    return Redirect($"/Identity/Account/LoginWith2fa?rememberMe={model.RememberLogin}&returnUrl={_urlEncoder.Encode(model.ReturnUrl)}");
+                    return Redirect($"/Identity/Account/LoginWith2fa?rememberMe={model.RememberLogin}&returnUrl={_urlEncoder.Encode(model.ReturnUrl!)}");
                 }
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.Client.ClientId)).ConfigureAwait(false);
@@ -118,8 +118,8 @@ namespace Aguacongas.TheIdServer.UI
 
         private async Task<IActionResult> OnSiginSuccesss(LoginInputModel model, AuthorizationRequest context)
         {
-            var user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
-            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId)).ConfigureAwait(false);
+            var user = await _userManager.FindByNameAsync(model.Username!).ConfigureAwait(false);
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user!.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId)).ConfigureAwait(false);
 
             if (context != null)
             {
@@ -131,7 +131,7 @@ namespace Aguacongas.TheIdServer.UI
                 }
 
                 // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                return Redirect(model.ReturnUrl);
+                return Redirect(model.ReturnUrl!);
             }
 
             // request for a local page
@@ -162,10 +162,10 @@ namespace Aguacongas.TheIdServer.UI
                 {
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
-                    return this.LoadingPage("Redirect", model.ReturnUrl);
+                    return this.LoadingPage("Redirect", model.ReturnUrl!);
                 }
 
-                return Redirect(model.ReturnUrl);
+                return Redirect(model.ReturnUrl!);
             }
             else
             {
@@ -202,9 +202,9 @@ namespace Aguacongas.TheIdServer.UI
         public async Task<IActionResult> Logout(LogoutInputModel model)
         {
             // build a model so the logged out page knows what to display
-            var vm = await BuildLoggedOutViewModelAsync(model.LogoutId).ConfigureAwait(false);
+            var vm = await BuildLoggedOutViewModelAsync(model.LogoutId!).ConfigureAwait(false);
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync().ConfigureAwait(false);
@@ -219,10 +219,10 @@ namespace Aguacongas.TheIdServer.UI
                 // build a return URL so the upstream provider will redirect back
                 // to us after the user has logged out. this allows us to then
                 // complete our single sign-out processing.
-                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+                var url = Url.Action("Logout", new { logoutId = vm.LogoutId });
 
                 // this triggers a redirect to the external provider for sign-out
-                return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
+                return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme!);
             }
 
             return View("LoggedOut", vm);
@@ -251,7 +251,7 @@ namespace Aguacongas.TheIdServer.UI
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Username = context.LoginHint,
                 };
 
                 if (!local)
@@ -285,7 +285,7 @@ namespace Aguacongas.TheIdServer.UI
 
                     if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                     {
-                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
+                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme!)).ToList();
                     }
                 }
             }
@@ -305,7 +305,7 @@ namespace Aguacongas.TheIdServer.UI
 
         private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
-            var vm = await BuildLoginViewModelAsync(model.ReturnUrl).ConfigureAwait(false);
+            var vm = await BuildLoginViewModelAsync(model.ReturnUrl!).ConfigureAwait(false);
             vm.Username = model.Username;
             vm.RememberLogin = model.RememberLogin;
             return vm;
@@ -315,7 +315,7 @@ namespace Aguacongas.TheIdServer.UI
         {
             var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = _options.Value.ShowLogoutPrompt };
 
-            if (User?.Identity.IsAuthenticated != true)
+            if (User?.Identity?.IsAuthenticated != true)
             {
                 // if the user is not authenticated, then just show logged out page
                 vm.ShowLogoutPrompt = false;
@@ -344,12 +344,12 @@ namespace Aguacongas.TheIdServer.UI
             {
                 AutomaticRedirectAfterSignOut = _options.Value.AutomaticRedirectAfterSignOut,
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
+                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
                 LogoutId = logoutId
             };
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)

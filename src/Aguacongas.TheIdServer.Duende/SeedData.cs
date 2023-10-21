@@ -38,7 +38,7 @@ namespace Aguacongas.TheIdServer
                 var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
                 opContext.Database.Migrate();
 
-                var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                var appcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 appcontext.Database.Migrate();
             }
             
@@ -74,17 +74,17 @@ namespace Aguacongas.TheIdServer
             int index = 0;
             foreach (var user in userList)
             {
-                var existing = userMgr.FindByNameAsync(user.UserName).GetAwaiter().GetResult();
+                var existing = userMgr.FindByNameAsync(user.UserName!).GetAwaiter().GetResult();
                 if (existing != null)
                 {
                     logger.LogInformation("{UserName} already exists", user.UserName);
                     continue;
                 }
                 var pwd = configuration.GetValue<string>($"InitialData:Users:{index}:Password");
-                ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd))
+                ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd!))
                     .GetAwaiter().GetResult();
 
-                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()
+                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()!
                     .Select(c => new Claim(c.ClaimType, c.ClaimValue, c.OriginalType, c.Issuer))
                     .ToList();
                 claimList.Add(new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64));
@@ -92,7 +92,7 @@ namespace Aguacongas.TheIdServer
                     .GetAwaiter().GetResult();
 
                 var roleList = configuration.GetSection($"InitialData:Users:{index}:Roles").Get<IEnumerable<string>>();
-                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList))
+                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList!))
                     .GetAwaiter().GetResult();
 
                 logger.LogInformation("{UserName} created", user.UserName);
@@ -160,7 +160,7 @@ namespace Aguacongas.TheIdServer
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            foreach (var resource in resources)
+            foreach (var resource in resources!)
             {
                 if (!exsitings.Any(r => r.Key == resource.Key))
                 {

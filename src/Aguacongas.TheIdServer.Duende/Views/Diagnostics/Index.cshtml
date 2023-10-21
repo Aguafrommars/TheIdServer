@@ -8,7 +8,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 
 <h3>Claims</h3>
 <dl>
-    @foreach (var claim in Model.AuthenticateResult.Principal.Claims)
+    @foreach (var claim in Model.AuthenticateResult!.Principal!.Claims)
     {
         <dt>@claim.Type</dt>
         <dd>@claim.Value</dd>
@@ -17,18 +17,18 @@ Copyright (c) 2023 @Olivier Lefebvre
 
 <h3>Properties</h3>
 <dl>
-    @foreach (var prop in Model.AuthenticateResult.Properties.Items)
+    @foreach (var prop in Model.AuthenticateResult!.Properties!.Items)
     {
         <dt>@prop.Key</dt>
         <dd>@prop.Value</dd>
     }
 </dl>
 
-@if (Model.Clients.Any())
+@if (Model.Clients?.Any() ?? true)
 {
     <h3>Clients</h3>
     <ul>
-        @foreach (var client in Model.Clients)
+        @foreach (var client in Model.Clients!)
         {
             <li>@client</li>
         }

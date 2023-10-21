@@ -101,7 +101,7 @@ namespace Aguacongas.TheIdServer.UI
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
+                var externalClaims = result.Principal!.Claims.Select(c => $"{c.Type}: {c.Value}");
                 _logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
@@ -112,7 +112,7 @@ namespace Aguacongas.TheIdServer.UI
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                user = await AutoProvisionUserAsync(provider, providerUserId, claims).ConfigureAwait(false);
+                user = await AutoProvisionUserAsync(provider!, providerUserId, claims).ConfigureAwait(false);
             }
 
             // this allows us to collect any additonal claims or properties
@@ -141,7 +141,7 @@ namespace Aguacongas.TheIdServer.UI
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             // retrieve return URL
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+            var returnUrl = result.Properties!.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -172,28 +172,28 @@ namespace Aguacongas.TheIdServer.UI
             };
 
             var id = new ClaimsIdentity(provider);
-            var name = user.Identity.Name ??
+            var name = user.Identity!.Name ??
                 user.FindFirst(JwtClaimTypes.Name)?.Value ??
                 user.FindFirst(ClaimTypes.Name)?.Value ??
                 user.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.Name])?.Value ??
                 user.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
                 user.FindFirst(JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap[ClaimTypes.NameIdentifier])?.Value;
 
-            id.AddClaim(new Claim(JwtClaimTypes.Subject, name));
-            id.AddClaim(new Claim(JwtClaimTypes.Name, name));
+            id.AddClaim(new Claim(JwtClaimTypes.Subject, name!));
+            id.AddClaim(new Claim(JwtClaimTypes.Name, name!));
 
             await HttpContext.SignInAsync(
                 IdentityConstants.ExternalScheme,
                 new ClaimsPrincipal(id),
                 props).ConfigureAwait(false);
 
-            return Redirect(props.RedirectUri);
+            return Redirect(props.RedirectUri!);
         }
 
-        private async Task<(ApplicationUser user, string provider, string providerUserId, IEnumerable<Claim> claims)>
+        private async Task<(ApplicationUser? user, string? provider, string providerUserId, IEnumerable<Claim> claims)>
             FindUserFromExternalProviderAsync(AuthenticateResult result)
         {
-            var externalUser = result.Principal;
+            var externalUser = result.Principal!;
 
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
@@ -207,11 +207,11 @@ namespace Aguacongas.TheIdServer.UI
             var claims = externalUser.Claims.ToList();
             claims.Remove(userIdClaim);
 
-            var provider = result.Properties.Items["scheme"];
+            var provider = result.Properties?.Items["scheme"];
             var providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = await _userManager.FindByLoginAsync(provider, providerUserId);
+            var user = await _userManager.FindByLoginAsync(provider!, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
@@ -280,14 +280,14 @@ namespace Aguacongas.TheIdServer.UI
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out
-            var sid = externalResult.Principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
+            var sid = externalResult.Principal!.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
             if (sid != null)
             {
                 localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            var id_token = externalResult.Properties.GetTokenValue("id_token");
+            var id_token = externalResult.Properties!.GetTokenValue("id_token");
             if (id_token != null)
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });

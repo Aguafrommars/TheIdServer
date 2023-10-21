@@ -8,7 +8,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 @inject IViewLocalizer Localizer
 @inject IOptions<SiteOptions> Options
 @{
-    string name = null;
+    string? name = null;
     if (!true.Equals(ViewData["signed-out"]))
     {
         name = Context.User?.GetDisplayName();

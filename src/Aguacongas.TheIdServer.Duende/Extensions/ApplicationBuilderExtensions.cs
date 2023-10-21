@@ -153,41 +153,48 @@ namespace Microsoft.AspNetCore.Builder
         {
             if (configuration.GetValue<bool>("EnableOpenApiDoc"))
             {
-                child.UseOpenApi(
-                    options =>
-                    {
-                        var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
-                        if (settings?.Path is not null)
-                        {
-                            var path = settings.Path;
-                            path = path.EndsWith('/') ? path : $"{path}/";
-                            options.Path = $"{settings.Path}{{documentName}}/swagger.json";
-                        }                        
-                    })
-                    .UseSwaggerUi3(options =>
-                    {
-                        var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                        options.OAuth2Client = settings?.OAuth2Client;
-                        options.Path = settings?.Path;
-                        if (settings?.Path is not null)
-                        {
-                            var path = settings.Path;
-                            path = path.EndsWith('/') ? path : $"{path}/";
-                            options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
-                        }
-                    });
+                ConfigureOpentApi(configuration, child);
             }
             var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-            if (allowedOrigin != null)
+            if (allowedOrigin is null)
             {
-                child.UseCors(configure =>
-                {
-                    configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
-                });
+                return;
             }
+
+            child.UseCors(configure =>
+            {
+                configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
+        }
+
+        private static void ConfigureOpentApi(IConfiguration configuration, IApplicationBuilder child)
+        {
+            child.UseOpenApi(
+                options =>
+                {
+                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
+                    if (settings?.Path is not null)
+                    {
+                        var path = settings.Path;
+                        path = path.EndsWith('/') ? path : $"{path}/";
+                        options.Path = $"{settings.Path}{{documentName}}/swagger.json";
+                    }
+                })
+                .UseSwaggerUi3(options =>
+                {
+                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                    options.OAuth2Client = settings?.OAuth2Client;
+                    options.Path = settings?.Path;
+                    if (settings?.Path is not null)
+                    {
+                        var path = settings.Path;
+                        path = path.EndsWith('/') ? path : $"{path}/";
+                        options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
+                    }
+                });
         }
 
         private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)

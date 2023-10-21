@@ -18,7 +18,7 @@ namespace Aguacongas.TheIdServer.UI
                && !context.RedirectUri.StartsWith("http", StringComparison.Ordinal);
         }
 
-        public static IActionResult LoadingPage(this Controller controller, string viewName, string redirectUri)
+        public static IActionResult LoadingPage(this Controller controller, string? viewName, string? redirectUri)
         {
             controller.HttpContext.Response.StatusCode = 200;
             controller.HttpContext.Response.Headers["Location"] = "";

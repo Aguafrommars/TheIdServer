@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             var dataProtectionsOptions = configuration.Get<DataProtectionOptions>();
-            switch (dataProtectionsOptions.StorageKind)
+            switch (dataProtectionsOptions?.StorageKind)
             {
                 case StorageKind.AzureStorage:
                     builder.PersistKeysToAzureBlobStorage(new Uri(dataProtectionsOptions.StorageConnectionString));
@@ -106,7 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.PersistKeysToStackExchangeRedis(redis, dataProtectionsOptions.RedisKey);
                     break;
             }
-            var protectOptions = dataProtectionsOptions.KeyProtectionOptions;
+            var protectOptions = dataProtectionsOptions?.KeyProtectionOptions;
             if (protectOptions != null)
             {
                 switch (protectOptions.KeyProtectionKind)

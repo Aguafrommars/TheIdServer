@@ -11,12 +11,12 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
     public class SessionModel : PageModel
     {
-        public QueryResult<UserSession> Sessions { get; set; }
+        public QueryResult<UserSession>? Sessions { get; set; }
 
         [BindProperty, Required]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BindProperty, Required]
-        public string Button { get; set; }
+        public string? Button { get; set; }
 
         private readonly ISessionManagementService _sessionManagementService;
         private readonly IClientStore _clients;
@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         {
             Sessions = await _sessionManagementService.QuerySessionsAsync(new SessionQuery
             {
-                SubjectId = User.FindFirst("sub").Value
+                SubjectId = User.FindFirst("sub")!.Value
             }).ConfigureAwait(false);
 
             return Page();
@@ -50,12 +50,12 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         }
 
         public string GetActivePageClass(int index)
-        => index == Sessions.CurrentPage ? "active" : string.Empty;
+        => index == Sessions!.CurrentPage ? "active" : string.Empty;
 
         public string GetPreviousPageClass()
-        => Sessions.HasPrevResults ? string.Empty : "disabled";
+        => Sessions!.HasPrevResults ? string.Empty : "disabled";
 
         public string GetNextPageClass()
-        => Sessions.HasNextResults ? string.Empty : "disabled";
+        => Sessions!.HasNextResults ? string.Empty : "disabled";
     }
 }

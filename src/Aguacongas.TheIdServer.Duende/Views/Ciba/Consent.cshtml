@@ -31,7 +31,7 @@ Copyright (c) 2023 @Olivier Lefebvre
         <input type="hidden" asp-for="Input.Id" />
         <div class="row">
             <div class="col-sm-8">
-                @if (Model.IdentityScopes.Any())
+                @if (Model.IdentityScopes?.Any() == true)
                 {
                     <div class="form-group">
                         <div class="card">
@@ -49,7 +49,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
-                @if (Model.ApiScopes.Any())
+                @if (Model.ApiScopes?.Any() == true)
                 {
                     <div class="form-group">
                         <div class="card">

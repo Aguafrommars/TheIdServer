@@ -17,13 +17,13 @@ namespace Aguacongas.TheIdServer.UI
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Type-Options"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                    context.HttpContext.Response.Headers["X-Content-Type-Options"] = "nosniff";
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Frame-Options"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                    context.HttpContext.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
@@ -53,19 +53,19 @@ namespace Aguacongas.TheIdServer.UI
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("Content-Security-Policy", csp);
+                    context.HttpContext.Response.Headers["Content-Security-Policy"] = csp;
                 }
                 // and once again for IE
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Security-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("X-Content-Security-Policy", csp);
+                    context.HttpContext.Response.Headers["X-Content-Security-Policy"] = csp;
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
                 var referrer_policy = "no-referrer";
                 if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
                 {
-                    context.HttpContext.Response.Headers.Add("Referrer-Policy", referrer_policy);
+                    context.HttpContext.Response.Headers["Referrer-Policy"] = referrer_policy;
                 }
             }
         }
