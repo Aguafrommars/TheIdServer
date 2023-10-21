@@ -28,7 +28,7 @@ Copyright (c) 2023 @Olivier Lefebvre
     </div>
 
     <form asp-page="/Ciba/Consent">
-        <input type="hidden" asp-for="Input.Id" />
+        <input type="hidden" asp-for="Input!.Id!" />
         <div class="row">
             <div class="col-sm-8">
                 @if (Model.IdentityScopes?.Any() == true)
@@ -74,7 +74,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                             @Localizer["Description"]
                         </div>
                         <div class="card-body">
-                            <input class="form-control" placeholder="@Localizer["Description or name of device"]" asp-for="Input.Description" autofocus>
+                            <input class="form-control" placeholder="@Localizer["Description or name of device"]" asp-for="Input!.Description!" autofocus>
                         </div>
                     </div>
                 </div>
