@@ -38,15 +38,15 @@
 		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.4.5" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="7.4.5" />
 		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="7.4.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.12" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.12" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
