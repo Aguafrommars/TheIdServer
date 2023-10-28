@@ -70,7 +70,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 tokenValidationParameters.ValidTypes = new[] { JwtClaimTypes.JwtTypes.AuthorizationRequest };
             }
 
-            var result = Handler.ValidateToken(context.JwtTokenString, tokenValidationParameters);
+            var result = await Handler.ValidateTokenAsync(context.JwtTokenString, tokenValidationParameters).ConfigureAwait(false);
             if (!result.IsValid)
             {
                 throw result.Exception;

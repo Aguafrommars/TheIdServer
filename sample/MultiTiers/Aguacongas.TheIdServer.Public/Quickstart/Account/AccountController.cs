@@ -17,6 +17,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Aguacongas.TheIdServer.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -321,7 +322,10 @@ namespace IdentityServerHost.Quickstart.UI
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
                 {
-                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
+                    var provider = HttpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
+                    var handler = await provider.GetHandlerAsync(HttpContext, idp);
+                    var providerSupportsSignout = handler is IAuthenticationSignOutHandler;
+
                     if (providerSupportsSignout)
                     {
                         if (vm.LogoutId == null)
