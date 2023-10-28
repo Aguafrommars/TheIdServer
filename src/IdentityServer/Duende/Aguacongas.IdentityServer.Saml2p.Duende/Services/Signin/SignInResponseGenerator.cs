@@ -84,9 +84,9 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         {
             InResponseTo = saml2ArtifactResolve.Id
         };
-        soapEnvelope?.Bind(saml2ArtifactResponse);
+        soapEnvelope!.Bind(saml2ArtifactResponse);
 
-        await _userSession.AddClientIdAsync(result.Client?.ClientId).ConfigureAwait(false);
+        await _userSession.AddClientIdAsync(result.Client!.ClientId).ConfigureAwait(false);
 
         return soapEnvelope.ToActionResult();
     }
