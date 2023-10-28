@@ -67,11 +67,11 @@ RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.Duende/./Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.Duende"
-RUN dotnet build "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
+RUN dotnet build "./Aguacongas.TheIdServer.Duende.csproj" -c "$BUILD_CONFIGURATION" -o /app/build -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
+RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM base AS final
 WORKDIR /app
