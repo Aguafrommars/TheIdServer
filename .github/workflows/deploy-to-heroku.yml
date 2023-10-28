@@ -27,7 +27,7 @@ jobs:
         env: 
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       - name: Publish
-        run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$SOURCE_VERSION
+        run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
