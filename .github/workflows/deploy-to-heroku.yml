@@ -34,5 +34,5 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "theidserver-duende"
           heroku_email: "aguacongas@gmail.com"
-          appdir: heroku_output
+          buildpack: https://github.com/Aguafrommars/theidserver-buildpack
         
