@@ -62,19 +62,16 @@ COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/Aguacongas.IdentityServer.Saml2p.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
-RUN apt-get update -y
-RUN apt-get install -y python3
-RUN apt-get install -y gcc
-RUN apt-get clean
+RUN apt-get update -y && apt-get install -y python3 gcc && apt-get clean
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.Duende/./Aguacongas.TheIdServer.Duende.csproj"
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.Duende"
-RUN dotnet build "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
+RUN dotnet build "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:FileVersion=$FILE_VERSION -p:SourceRevisionId=$SOURCE_VERSION
+RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM base AS final
 WORKDIR /app

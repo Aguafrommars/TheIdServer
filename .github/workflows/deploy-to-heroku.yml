@@ -32,7 +32,7 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "YOUR theidserver-duende"
+          heroku_app_name: "theidserver-duende"
           heroku_email: "aguacongas@gmail.com"
           appdir: heroku_output
         
