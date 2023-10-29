@@ -35,9 +35,9 @@
 		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.4.5" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="7.4.5" />
-		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="7.4.5" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="7.4.6" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="7.4.6" />
+		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="7.4.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.13" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
