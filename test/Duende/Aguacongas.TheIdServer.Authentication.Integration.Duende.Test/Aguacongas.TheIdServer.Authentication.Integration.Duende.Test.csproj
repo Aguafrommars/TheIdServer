@@ -20,9 +20,13 @@
 	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="5.0.0-preview0177" />
 	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0-rc.2.23480.2" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
-	  <PackageReference Include="xunit" Version="2.5.3" />
-	  <PackageReference Include="xunit.assert" Version="2.5.3" />
-	  <PackageReference Include="xunit.core" Version="2.5.3" />
+	  <PackageReference Include="xunit" Version="2.6.0" />
+	  <PackageReference Include="xunit.assert" Version="2.6.0" />
+	  <PackageReference Include="xunit.core" Version="2.6.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
+	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="4.1.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.13" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
