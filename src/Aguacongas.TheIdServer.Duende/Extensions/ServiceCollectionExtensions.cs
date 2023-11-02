@@ -196,7 +196,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
             ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
-           
+
+            services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
+
             return services;
         }
 

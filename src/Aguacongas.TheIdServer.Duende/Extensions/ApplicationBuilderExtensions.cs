@@ -7,6 +7,7 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
@@ -68,7 +69,8 @@ namespace Microsoft.AspNetCore.Builder
             if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseMigrationsEndPoint();
+                    .UseMigrationsEndPoint()
+                    .UseWebAssemblyDebugging();
             }
             else
             {
@@ -143,6 +145,8 @@ namespace Microsoft.AspNetCore.Builder
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
                     endpoints.MapFallbackToPage("/_Host");
+                    endpoints.MapRazorComponents<App>()
+                        .AddInteractiveWebAssemblyRenderMode();
                 });
                 
 
