@@ -3,11 +3,12 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Aguacongas.IdentityServer
 {
     [Serializable]
+    [SuppressMessage("Major Code Smell", "S3925:\"ISerializable\" should be implemented correctly", Justification = "Obsolete")]
     public class IdentityException: Exception
     {
         public IEnumerable<IdentityError> Errors { get; set; }
@@ -20,11 +21,6 @@ namespace Aguacongas.IdentityServer
         }
 
         public IdentityException()
-        {
-        }
-
-        protected IdentityException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
         {
         }
     }

@@ -42,12 +42,10 @@ namespace Aguacongas.IdentityServer.Admin.Duende.Test.Services.WindowsAuthentica
 
             var loggerFactoryMock = new Mock<ILoggerFactory>();
             var urlEncoderMock = new Mock<UrlEncoder>();
-            var systemClockMock = new Mock<ISystemClock>();
 
             var sut = new WindowsHandler(optionsMonitorMock.Object,
                 loggerFactoryMock.Object,
-                urlEncoderMock.Object,
-                systemClockMock.Object);
+                urlEncoderMock.Object);
 
             var httpRequestMock = new Mock<HttpRequest>();
             var httpContextMock = new Mock<HttpContext>();

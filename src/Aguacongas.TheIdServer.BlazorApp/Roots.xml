@@ -1,0 +1,6 @@
+﻿<linker>
+  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly">
+    <type fullname="Microsoft.AspNetCore.Components.RootComponentOperationBatch" preserve="all">
+    </type>
+  </assembly>
+</linker>

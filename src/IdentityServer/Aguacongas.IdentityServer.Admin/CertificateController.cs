@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// certificate controller
     /// </summary>
     /// <seealso cref="Controller" />
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     public class CertificateController : Controller
     {
         private readonly ICertificateVerifierService _service;

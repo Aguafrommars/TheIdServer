@@ -7,45 +7,40 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
+using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
-using Duende.IdentityServer.Hosting;
 using Duende.IdentityServer.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
 
 namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
+        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = true
+        };
+
         public static IApplicationBuilder UseTheIdServer(this IApplicationBuilder app, IWebHostEnvironment environment, IConfiguration configuration)
         {
             var isProxy = configuration.GetValue<bool>("Proxy");
@@ -74,7 +69,8 @@ namespace Microsoft.AspNetCore.Builder
             if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                    .UseMigrationsEndPoint();
+                    .UseMigrationsEndPoint()
+                    .UseWebAssemblyDebugging();
             }
             else
             {
@@ -109,17 +105,19 @@ namespace Microsoft.AspNetCore.Builder
                .UseIdentityServerAdminApi("/api", child =>
                {
                    ConfigureAdminApiHandler(configuration, child);
-               })
-                .UseRouting();
+               });
 
-            app.UseIdentityServer();
+            app.UseIdentityServer()
+                .UseRouting()
+                .UseAuthentication();
 
             if (!isProxy)
             {
-                app.UseIdentityServerAdminAuthentication("/providerhub", JwtBearerDefaults.AuthenticationScheme);
+                app.UseIdentityServerAdminAuthentication("/providerhub");
             }
 
-            app.UseAuthorization()
+            app.UseIdentityServerAdminAuthentication()
+                .UseAuthorization()
                 .Use((context, next) =>
                 {
                     var service = context.RequestServices;
@@ -134,6 +132,7 @@ namespace Microsoft.AspNetCore.Builder
                 .UsePrometheus(configuration)
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapAdminApiControllers();
                     endpoints.MapHealthChecks("healthz", new HealthCheckOptions
                     {
                         ResponseWriter = WriteHealtResponse
@@ -146,34 +145,60 @@ namespace Microsoft.AspNetCore.Builder
                         endpoints.MapHub<ProviderHub>("/providerhub");
                     }
                     endpoints.MapFallbackToPage("/_Host");
-                })
-                .LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+                    endpoints.MapRazorComponents<App>()
+                        .AddInteractiveWebAssemblyRenderMode();
+                });
+                
 
-            return app;
+            return app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
         private static void ConfigureAdminApiHandler(IConfiguration configuration, IApplicationBuilder child)
         {
             if (configuration.GetValue<bool>("EnableOpenApiDoc"))
             {
-                child.UseOpenApi()
-                    .UseSwaggerUi3(options =>
-                    {
-                        var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
-                        options.OAuth2Client = settings.OAuth2Client;
-                    });
+                ConfigureOpentApi(configuration, child);
             }
             var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-            if (allowedOrigin != null)
+            if (allowedOrigin is null)
             {
-                child.UseCors(configure =>
-                {
-                    configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
-                });
+                return;
             }
+
+            child.UseCors(configure =>
+            {
+                configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
+        }
+
+        private static void ConfigureOpentApi(IConfiguration configuration, IApplicationBuilder child)
+        {
+            child.UseOpenApi(
+                options =>
+                {
+                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
+                    if (settings?.Path is not null)
+                    {
+                        var path = settings.Path;
+                        path = path.EndsWith('/') ? path : $"{path}/";
+                        options.Path = $"{settings.Path}{{documentName}}/swagger.json";
+                    }
+                })
+                .UseSwaggerUi3(options =>
+                {
+                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                    options.OAuth2Client = settings?.OAuth2Client;
+                    options.Path = settings?.Path;
+                    if (settings?.Path is not null)
+                    {
+                        var path = settings.Path;
+                        path = path.EndsWith('/') ? path : $"{path}/";
+                        options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
+                    }
+                });
         }
 
         private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
@@ -194,7 +219,7 @@ namespace Microsoft.AspNetCore.Builder
                     requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
                     try
                     {
-                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]));
+                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]!));
                     }
                     catch (CryptographicException e)
                     {
@@ -257,8 +282,8 @@ namespace Microsoft.AspNetCore.Builder
                 var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
                 opContext.Database.Migrate();
 
-                var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                appcontext.Database.Migrate();
+                var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                appContext.Database.Migrate();
             }
 
             if (configuration.GetValue<bool>("Seed"))
@@ -297,12 +322,6 @@ namespace Microsoft.AspNetCore.Builder
 
                 if (value.Data.Any())
                 {
-                    var serializerOptions = new JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        WriteIndented = true
-                    };
-
                     jsonWriter.WriteStartObject("data");
 
                     foreach (var item in value.Data)
@@ -310,7 +329,7 @@ namespace Microsoft.AspNetCore.Builder
                         jsonWriter.WritePropertyName(item.Key);
 
                         JsonSerializer.Serialize(jsonWriter, item.Value,
-                            item.Value?.GetType() ?? typeof(object), serializerOptions);
+                            item.Value?.GetType() ?? typeof(object), _serializerOptions);
                     }
 
                     jsonWriter.WriteEndObject();

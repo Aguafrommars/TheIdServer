@@ -51,6 +51,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
         };
 
         private IEnumerable<string> _thumbprint;
+        private string _invalidCertError;
 
         protected override string Expand => $"{nameof(Entity.RelyingParty.ClaimMappings)}";
 
@@ -174,7 +175,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _thumbprint = new[] { Localizer["Invalid file"].Value };
+                    _invalidCertError = Localizer["Invalid file"].Value;
                     await InvokeAsync(StateHasChanged).ConfigureAwait(false);
                     return;
                 }
@@ -186,7 +187,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty
             }
             catch (CryptographicException)
             {
-                _thumbprint = new[] { Localizer["Invalid file"].Value };
+                _invalidCertError = Localizer["Invalid file"].Value;
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
         }

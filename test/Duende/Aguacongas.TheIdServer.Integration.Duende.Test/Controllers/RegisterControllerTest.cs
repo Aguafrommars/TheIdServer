@@ -26,7 +26,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
     [Collection(BlazorAppCollection.Name)]
     public class RegisterControllerTest
     {
-        private WebApplicationFactory<AccountController> _factory;
+        private readonly WebApplicationFactory<AccountController> _factory;
         public RegisterControllerTest(TheIdServerFactory factory)
         {
             _factory = factory;

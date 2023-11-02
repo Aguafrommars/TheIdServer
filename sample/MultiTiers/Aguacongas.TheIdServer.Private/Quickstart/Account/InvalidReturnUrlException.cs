@@ -26,10 +26,5 @@ namespace Duende.IdentityServer.Quickstart.UI
         public InvalidReturnUrlException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected InvalidReturnUrlException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
-        {
-        }
     }
 }

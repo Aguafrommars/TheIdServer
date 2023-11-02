@@ -73,12 +73,12 @@ namespace Aguacongas.TheIdServer.UI
                     return this.LoadingPage("Redirect", result.RedirectUri);
                 }
 
-                return Redirect(result.RedirectUri);
+                return Redirect(result.RedirectUri!);
             }
 
             if (result.HasValidationError)
             {
-                ModelState.AddModelError(string.Empty, result.ValidationError);
+                ModelState.AddModelError(string.Empty, result.ValidationError!);
             }
 
             if (result.ShowView)
@@ -100,10 +100,10 @@ namespace Aguacongas.TheIdServer.UI
             var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             if (request == null) return result;
 
-            ConsentResponse grantedConsent = null;
+            ConsentResponse? grantedConsent = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
-            if (model?.Button == "no")
+            if (model.Button == "no")
             {
                 grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
@@ -111,7 +111,7 @@ namespace Aguacongas.TheIdServer.UI
                 await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
             }
             // user clicked 'yes' - validate the data
-            else if (model?.Button == "yes")
+            else if (model.Button == "yes")
             {
                 // if the user consented to some scope, build the response model
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())
@@ -160,7 +160,7 @@ namespace Aguacongas.TheIdServer.UI
             return result;
         }
 
-        private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
+        private async Task<ConsentViewModel?> BuildViewModelAsync(string? returnUrl, ConsentInputModel? model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
@@ -176,7 +176,7 @@ namespace Aguacongas.TheIdServer.UI
         }
 
         private ConsentViewModel CreateConsentViewModel(
-            ConsentInputModel model, string returnUrl,
+            ConsentInputModel? model, string? returnUrl,
             AuthorizationRequest request)
         {
             var client = request.Client;
@@ -193,11 +193,11 @@ namespace Aguacongas.TheIdServer.UI
                 ClientLogoUrl = client.LogoUri,
                 AllowRememberConsent = client.AllowRememberConsent
             };
-            if (client.Properties.TryGetValue("PolicyUrl", out string policyUrl))
+            if (client.Properties.TryGetValue("PolicyUrl", out var policyUrl))
             {
                 vm.PolicyUrl = policyUrl;
             }
-            if (client.Properties.TryGetValue("TosUrl", out string tosUrl))
+            if (client.Properties.TryGetValue("TosUrl", out var tosUrl))
             {
                 vm.TosUrl = tosUrl;
             }            

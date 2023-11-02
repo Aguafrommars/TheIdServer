@@ -14,18 +14,18 @@ namespace Aguacongas.TheIdServer.UI
         {
             AuthenticateResult = result;
 
-            if (!result.Properties.Items.TryGetValue("client_list", out string encoded))
+            if (result.Properties?.Items is null || !result.Properties.Items.TryGetValue("client_list", out var encoded))
             {
                 return;
             }
 
-            var bytes = Base64Url.Decode(encoded);
+            var bytes = Base64Url.Decode(encoded!);
             var value = Encoding.UTF8.GetString(bytes);
 
             Clients = JsonConvert.DeserializeObject<string[]>(value);
         }
 
-        public AuthenticateResult AuthenticateResult { get; }
-        public IEnumerable<string> Clients { get; } = new List<string>();
+        public AuthenticateResult? AuthenticateResult { get; }
+        public IEnumerable<string>? Clients { get; } = new List<string>();
     }
 }

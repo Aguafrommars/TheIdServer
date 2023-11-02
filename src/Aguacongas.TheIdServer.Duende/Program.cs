@@ -1,17 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Diagnostics;
-using System.Linq;
 using MutualTlsOptions = Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +22,7 @@ services.AddTheIdServer(configuration);
 var seed = args.Any(x => x == "/seed");
 if (seed)
 {
-    args = args.Except(new[] { "/seed" }).ToArray();
+    args = args.Except(Config.SeedPage).ToArray();
 }
 
 services.AddOpenTelemetry(configuration.GetSection(nameof(OpenTelemetryOptions)));
@@ -61,4 +55,4 @@ app.Use(async (context, next) =>
 });
 app.UseTheIdServer(app.Environment, configuration);
 
-app.Run();
+await app.RunAsync().ConfigureAwait(false);

@@ -69,7 +69,7 @@ The application obtains its configuration from appsettings.json and the environm
   },
   "settingsOptions": {
     "typeName": "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
-    "apiUrl": "https://localhost:5443/api/api/configuration"
+    "apiUrl": "https://localhost:5443/api/configuration"
   },
   "menuOptions": {
     "showSettings": true

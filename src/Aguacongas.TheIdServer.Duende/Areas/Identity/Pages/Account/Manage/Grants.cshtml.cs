@@ -20,7 +20,7 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
         private readonly IResourceStore _resources;
         private readonly IEventService _events;
 
-        public IEnumerable<GrantViewModel> Grants { get; set; }
+        public IEnumerable<GrantViewModel>? Grants { get; set; }
 
         public GrantsModel(IIdentityServerInteractionService interaction,
             IClientStore clients,
@@ -80,14 +80,14 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 
         public class GrantViewModel
         {
-            public string ClientId { get; set; }
-            public string ClientName { get; set; }
-            public string ClientUrl { get; set; }
-            public string ClientLogoUrl { get; set; }
+            public string? ClientId { get; set; }
+            public string? ClientName { get; set; }
+            public string? ClientUrl { get; set; }
+            public string? ClientLogoUrl { get; set; }
             public DateTime Created { get; set; }
             public DateTime? Expires { get; set; }
-            public IEnumerable<string> IdentityGrantNames { get; set; }
-            public IEnumerable<string> ApiGrantNames { get; set; }
+            public IEnumerable<string>? IdentityGrantNames { get; set; }
+            public IEnumerable<string>? ApiGrantNames { get; set; }
         }
     }
 }

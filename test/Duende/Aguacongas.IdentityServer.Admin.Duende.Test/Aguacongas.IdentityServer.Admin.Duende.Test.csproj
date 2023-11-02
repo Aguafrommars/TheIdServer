@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
@@ -16,9 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.13" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-rc.2.23480.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0-rc.2.23480.1" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
 	  <PackageReference Include="Moq" Version="4.20.69" />
 	  <PackageReference Include="xunit" Version="2.6.0" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
