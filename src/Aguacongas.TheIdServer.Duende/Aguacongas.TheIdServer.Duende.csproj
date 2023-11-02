@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
-    <PackageReference Include="Duende.IdentityServer.Configuration" Version="6.3.5" />
+    <PackageReference Include="Duende.IdentityServer.Configuration" Version="7.0.0-preview.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 	</ItemGroup>
 </Project>

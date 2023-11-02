@@ -77,7 +77,7 @@ namespace Aguacongas.IdentityServer.Store
                 .ConfigureAwait(false);
         }
 
-        private Task RemoveEntityAsync(TEntity entity)
+        protected Task RemoveEntityAsync(TEntity entity)
         {
             if (entity == null)
             {
