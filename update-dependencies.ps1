@@ -18,6 +18,14 @@ function UpdatePackages {
           continue
        }
        
+       Write-Host $match
+       
+       $packageName = $Matches.1
+       $version = $Matches.2
+       if ($version -eq "Not found at the sources") {
+        # latest version not found
+        continue
+       }
        # update an outdated package
        $added = dotnet add $project package $Matches.1 --version $Matches.2
 
