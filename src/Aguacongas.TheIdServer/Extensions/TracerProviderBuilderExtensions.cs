@@ -55,7 +55,6 @@ namespace OpenTelemetry.Trace
                          return;
                      }
 
-                     o.SetHttpFlavor = httpClientOptions.SetHttpFlavor;
                      o.RecordException = httpClientOptions.RecordException;
                  })
                 .AddAspNetCoreInstrumentation(o =>
