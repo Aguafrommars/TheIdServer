@@ -15,6 +15,6 @@ namespace Aguacongas.TheIdServer.UI
             Error = new ErrorMessage { Error = error };
         }
 
-        public ErrorMessage Error { get; set; }
+        public ErrorMessage? Error { get; set; }
     }
 }

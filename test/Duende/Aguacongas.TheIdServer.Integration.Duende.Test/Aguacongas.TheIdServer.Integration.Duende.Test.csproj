@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<UserSecretsId>51a7f0be-96e4-42d5-ad09-37e9adabfff6</UserSecretsId>
-
+    <IsTestProject>true</IsTestProject>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
@@ -20,13 +20,13 @@
 	<ItemGroup>
 		<PackageReference Include="bunit" Version="1.24.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.13" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.13" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0-rc.2.23480.1" />
 		<PackageReference Include="Moq" Version="4.20.69" />
-		<PackageReference Include="xunit" Version="2.5.3" />
+		<PackageReference Include="xunit" Version="2.6.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

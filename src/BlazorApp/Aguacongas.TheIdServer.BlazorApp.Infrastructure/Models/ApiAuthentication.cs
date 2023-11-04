@@ -1,5 +1,4 @@
 ﻿using IdentityModel.Client;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models

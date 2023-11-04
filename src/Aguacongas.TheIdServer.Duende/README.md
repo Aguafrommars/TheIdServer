@@ -730,6 +730,7 @@ Use the section *SwaggerUiSettings* to configure the swagger client authenticati
 
 ```json
 "SwaggerUiSettings": {
+  "Path": "/api/swagger",
   "OAuth2Client": {
     "ClientId": "theidserver-swagger",
     "AppName": "TheIdServer Swagger UI",

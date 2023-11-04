@@ -10,12 +10,12 @@ namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
 {
     public class CibaModel : PageModel
     {
-        public IEnumerable<BackchannelUserLoginRequest> Logins { get; set; }
+        public IEnumerable<BackchannelUserLoginRequest>? Logins { get; set; }
 
         [BindProperty, Required]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BindProperty, Required]
-        public string Button { get; set; }
+        public string? Button { get; set; }
 
         private readonly IBackchannelAuthenticationInteractionService _backchannelAuthenticationInteraction;
 

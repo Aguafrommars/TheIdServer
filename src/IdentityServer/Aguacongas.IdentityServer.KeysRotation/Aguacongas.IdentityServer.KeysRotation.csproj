@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Description>TheIdServer signing keys rotation.</Description>
         <Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
@@ -18,16 +18,16 @@
     <ItemGroup>
         <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.3.2" />
         <PackageReference Include="IdentityModel" Version="6.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.13" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.13" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.13" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.0-rc.2.23480.2" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="8.0.0-rc.2.23480.2" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-rc.2.23480.1" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.57.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
         <PackageReference Include="RavenDB.Client" Version="6.0.0" />
-        <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
+        <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />

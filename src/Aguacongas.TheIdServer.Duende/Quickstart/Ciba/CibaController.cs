@@ -35,7 +35,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
         public async Task<IActionResult> Consent(string id)
         {
             var request = await _interaction.GetLoginRequestByInternalIdAsync(id);
-            var model = BuildViewModelAsync(request, id);
+            var model = BuildViewModelAsync(request!, id);
 
             return View(model);
         }
@@ -44,18 +44,18 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Consent([FromForm] InputModel input)
         {
-            var request = await _interaction.GetLoginRequestByInternalIdAsync(input.Id);
-            var viewModel = BuildViewModelAsync(request, input.Id, input);
+            var request = await _interaction.GetLoginRequestByInternalIdAsync(input.Id!);
+            var viewModel = BuildViewModelAsync(request!, input.Id!, input);
 
-            CompleteBackchannelLoginRequest result = null;
+            CompleteBackchannelLoginRequest? result = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
             if (input.Button == "no")
             {
-                result = new CompleteBackchannelLoginRequest(input.Id);
+                result = new CompleteBackchannelLoginRequest(input.Id!);
 
                 // emit event
-                await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues))
+                await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request!.Client.ClientId, request.ValidatedResources.RawScopeValues))
                     .ConfigureAwait(false);
             }
             // user clicked 'yes' - validate the data
@@ -70,14 +70,14 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
                         scopes = scopes.Where(x => x != StandardScopes.OfflineAccess);
                     }
 
-                    result = new CompleteBackchannelLoginRequest(input.Id)
+                    result = new CompleteBackchannelLoginRequest(input.Id!)
                     {
                         ScopesValuesConsented = scopes.ToArray(),
                         Description = input.Description
                     };
 
                     // emit event
-                    await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, result.ScopesValuesConsented, false))
+                    await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request!.Client.ClientId, request.ValidatedResources.RawScopeValues, result.ScopesValuesConsented, false))
                         .ConfigureAwait(false);
                 }
                 else
@@ -100,7 +100,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
             return View(viewModel);
         }
 
-        private ViewModel BuildViewModelAsync(BackchannelUserLoginRequest request, string id, InputModel model = null)
+        private ViewModel BuildViewModelAsync(BackchannelUserLoginRequest request, string id, InputModel? model = null)
         {
             if (request is null)
             {
@@ -113,7 +113,7 @@ namespace Aguacongas.TheIdServer.Duende.Quickstart.Ciba
             throw new InvalidOperationException(_localizer["SubjectIds don't match."]);
         }
 
-        private ViewModel CreateConsentViewModel(InputModel model, 
+        private ViewModel CreateConsentViewModel(InputModel? model, 
             string id,
             BackchannelUserLoginRequest request)
         {

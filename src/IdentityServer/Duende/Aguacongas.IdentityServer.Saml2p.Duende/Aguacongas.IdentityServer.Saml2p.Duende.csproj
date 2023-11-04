@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <Authors>Olivier Lefebvre</Authors>
 		<Description>Add Saml2P controller to your Duende.IdentityServer server.</Description>
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer" Version="6.3.5" />
+    <PackageReference Include="Duende.IdentityServer" Version="7.0.0-preview.1" />
     <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.10.2" />
   </ItemGroup>
 
