@@ -29,7 +29,7 @@ function UpdatePackages {
        
        $packageName = $Matches.1
        $version = $Matches.2
-       if ($version -eq "Not found at the sources") {
+       if ($version -eq "Not") {
         # latest version not found
         continue
        }
