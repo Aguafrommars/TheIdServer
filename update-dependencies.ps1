@@ -1,7 +1,7 @@
 # Update one project packages
 function UpdatePackages {
     param (
-        $project
+        $project        
     )
 
     $currentDirectoy = Get-Location
@@ -16,35 +16,60 @@ function UpdatePackages {
     # Get outdated packages
     $packageLineList = dotnet list package --outdated
     
-    foreach($line in $packageLineList) {
-       Write-Host $line
+    foreach ($line in $packageLineList) {
+        Write-Host $line
        
-       $match = $line -match '>\s(\S*)\s*\S*\s*\S*\s*(\S*)'
-       if (!$match) {
-          # the line doesn't contain a package information, continue
-          continue
-       }
+        $match = $line -match '>\s(\S*)\s*\S*\s*\S*\s*(\S*)'
+        if (!$match) {
+            # the line doesn't contain a package information, continue
+            continue
+        }
        
-       Write-Host $match
+        Write-Host $match
        
-       $packageName = $Matches.1
-       $version = $Matches.2
-       if ($version -eq "Not") {
-        # latest version not found
-        continue
-       }
-       # update an outdated package
-       $added = dotnet add package $packageName --version $version
-       if ($LASTEXITCODE -ne 0) {
-           # error while updating the package
+        $packageName = $Matches.1
+        $version = $Matches.2
+        if ($version -eq "Not") {
+            # latest version not found
+            $preReleasePackageLineList = dotnet list package --outdated --include-prerelease
 
-           Write-Error "dotnet add package $packageName --version $version exit with code $LASTEXITCODE"
-           Write-Host $added
-           break
-       }
+            foreach ($preReleaseLine in $preReleasePackageLineList) {
+                Write-Host $preReleaseLine
+                $preReleaseMatch = $preReleaseLine -match '>\s(\S*)\s*\S*\s*\S*\s*(\S*)'
+                if (!$preReleaseMatch) {
+                    # the line doesn't contain a package information, continue
+                    continue
+                }
 
-	   Write-Host 'package' $Matches.1 'version' $Matches.2 'updated'
-       $return = $true
+                if ($packageName -ne $Matches.1) {
+                    continue
+                }
+
+                $latestVersion = $Matches.2
+                if ($latestVersion -match '-rc') {
+                    $version = $latestVersion
+                    Write-Host "Release candidate version found for $packageName : $version"
+                }
+                break    
+            }
+        }
+
+        if ($version -eq "Not") {
+            continue
+        }
+
+        # update an outdated package
+        $added = dotnet add package $packageName --version $version
+        if ($LASTEXITCODE -ne 0) {
+            # error while updating the package
+
+            Write-Error "dotnet add package $packageName --version $version exit with code $LASTEXITCODE"
+            Write-Host $added
+            break
+        }
+
+        Write-Host 'package' $Matches.1 'version' $Matches.2 'updated'
+        $return = $true
     }
 	
     Set-Location $currentDirectoy
@@ -70,7 +95,7 @@ dotnet restore
 $projectList = dotnet sln list
 $updated = $false
 
-foreach($path in $projectList) {
+foreach ($path in $projectList) {
     if ($path -eq "Project(s)" -or $path -eq "----------") {
         # The line doesn't contain a path, continue
         continue
@@ -109,8 +134,9 @@ git commit -m "fix: update packages"
 Write-Host "git push"
 
 try {
-git push
-} catch {
+    git push
+}
+catch {
 
 }
 
@@ -119,7 +145,7 @@ $authorization = "Bearer $env:GITHUB_TOKEN"
 $createPrUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls"
 $headers = @{
     Authorization = $authorization
-    Accept = "application/vnd.github.v3+json"
+    Accept        = "application/vnd.github.v3+json"
 }
 $payload = "{ ""title"": ""update packages"", ""head"": ""$src"", ""base"": ""$dest"" }"
 Write-Host "Invoke-WebRequest -Uri $createPrUrl -Body $payload"
