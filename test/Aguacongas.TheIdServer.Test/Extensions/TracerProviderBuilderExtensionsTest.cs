@@ -88,8 +88,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                             },
                             HttpClient = new HttpClientInstrumentationOptions
                             {
-                                RecordException = true,
-                                SetHttpFlavor = true
+                                RecordException = true
                             },
                             Redis = new RedisOptions
                             {

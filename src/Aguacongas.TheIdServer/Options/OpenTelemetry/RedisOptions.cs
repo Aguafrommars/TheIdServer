@@ -2,7 +2,7 @@
 
 namespace Aguacongas.TheIdServer.Options.OpenTelemetry
 {
-    public class RedisOptions : StackExchangeRedisCallsInstrumentationOptions
+    public class RedisOptions : StackExchangeRedisInstrumentationOptions
     {
         public string ConnectionString { get; set; }
     }
