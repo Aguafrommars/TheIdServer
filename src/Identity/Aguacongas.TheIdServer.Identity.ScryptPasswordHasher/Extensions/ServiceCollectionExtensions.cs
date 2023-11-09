@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
                 var p = options.ThreadCount;
 
                 return N > 1 &&
-                (N & (N - 1)) != 0 &&
+                (N & (N - 1)) == 0 &&
                 r > 0 &&
                 p > 0 &&
                 !((ulong)r * (ulong)p >= 1 << 30 ||

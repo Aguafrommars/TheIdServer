@@ -17,7 +17,7 @@ Default values:
 "Argon2PasswordHasherOptions": {
     "Interations": 2,
     "Memory": 67108864,
-    "HashPrefix": 0xA0
+    "HashPrefix": 0xA2
 }
 ```
 
