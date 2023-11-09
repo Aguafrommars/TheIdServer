@@ -248,6 +248,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Iden
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Test", "test\Identity\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Test\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Test.csproj", "{4ED9CAC7-0113-4B25-A580-6B1D5DA05173}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher", "src\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.csproj", "{916046EF-085E-44F7-9DC4-4D7C41768C5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest", "test\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest.csproj", "{717AC678-2735-4959-84B2-BD399FB59C23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1350,6 +1354,30 @@ Global
 		{4ED9CAC7-0113-4B25-A580-6B1D5DA05173}.Release|x64.Build.0 = Release|Any CPU
 		{4ED9CAC7-0113-4B25-A580-6B1D5DA05173}.Release|x86.ActiveCfg = Release|Any CPU
 		{4ED9CAC7-0113-4B25-A580-6B1D5DA05173}.Release|x86.Build.0 = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|x64.Build.0 = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Debug|x86.Build.0 = Debug|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|x64.ActiveCfg = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|x64.Build.0 = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|x86.ActiveCfg = Release|Any CPU
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C}.Release|x86.Build.0 = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|x64.Build.0 = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Debug|x86.Build.0 = Debug|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x64.ActiveCfg = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x64.Build.0 = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x86.ActiveCfg = Release|Any CPU
+		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1456,6 +1484,8 @@ Global
 		{5CDF0690-B16C-4A75-80C2-F1EDC7C26514} = {DE50F426-4409-4573-8502-93364ED12E0C}
 		{90BF8847-F021-470D-A2ED-37C0B0A6E388} = {1FC87EDC-78E7-465E-9721-D7B481D64ED7}
 		{4ED9CAC7-0113-4B25-A580-6B1D5DA05173} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
+		{916046EF-085E-44F7-9DC4-4D7C41768C5C} = {1FC87EDC-78E7-465E-9721-D7B481D64ED7}
+		{717AC678-2735-4959-84B2-BD399FB59C23} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
             .Validate(options => options.Memory > Argon2id.MinMemorySize && options.Interations > Argon2id.MinIterations);
 
         return services.AddTransient<IArgon2Id, Argon2Id>()
-            .AddScoped<IPasswordHasher<TUser>, PasswordHasher<TUser>>();
+            .AddScoped<IPasswordHasher<TUser>, Argon2PasswordHasher<TUser>>();
     }
 
     /// <summary>
@@ -36,6 +36,4 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddArgon2PasswordHasher<TUser>(this IServiceCollection services, IConfiguration configuration) where TUser : class
     => services.AddArgon2PasswordHasher<TUser>(configuration.Bind);
-
-
 }
