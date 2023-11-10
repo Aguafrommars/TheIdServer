@@ -250,7 +250,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Iden
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher", "src\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.csproj", "{916046EF-085E-44F7-9DC4-4D7C41768C5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest", "test\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest.csproj", "{717AC678-2735-4959-84B2-BD399FB59C23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest", "test\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest\Aguacongas.TheIdServer.Identity.ScryptPasswordHasherTest.csproj", "{717AC678-2735-4959-84B2-BD399FB59C23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher", "src\Identity\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.csproj", "{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.BcryptPasswordHasherTest", "test\Identity\Aguacongas.TheIdServer.Identity.BcryptPasswordHasherTest\Aguacongas.TheIdServer.Identity.BcryptPasswordHasherTest.csproj", "{34F746F3-152C-426F-B91F-02DE10F15518}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1378,6 +1382,30 @@ Global
 		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x64.Build.0 = Release|Any CPU
 		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x86.ActiveCfg = Release|Any CPU
 		{717AC678-2735-4959-84B2-BD399FB59C23}.Release|x86.Build.0 = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|x64.Build.0 = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Debug|x86.Build.0 = Debug|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|x64.ActiveCfg = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|x64.Build.0 = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3}.Release|x86.Build.0 = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|x64.Build.0 = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Debug|x86.Build.0 = Debug|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|x64.ActiveCfg = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|x64.Build.0 = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|x86.ActiveCfg = Release|Any CPU
+		{34F746F3-152C-426F-B91F-02DE10F15518}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1486,6 +1514,8 @@ Global
 		{4ED9CAC7-0113-4B25-A580-6B1D5DA05173} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
 		{916046EF-085E-44F7-9DC4-4D7C41768C5C} = {1FC87EDC-78E7-465E-9721-D7B481D64ED7}
 		{717AC678-2735-4959-84B2-BD399FB59C23} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
+		{6024B537-CE0D-496E-9ECE-4D9F7C8B5DA3} = {1FC87EDC-78E7-465E-9721-D7B481D64ED7}
+		{34F746F3-152C-426F-B91F-02DE10F15518} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Add Scrypt password hasher services in DI
+    /// Add scrypt password hasher services in DI
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <param name="services"></param>
@@ -47,7 +47,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Add Scrypt password hasher services in DI
+    /// Add scrypt password hasher services in DI
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <param name="services"></param>

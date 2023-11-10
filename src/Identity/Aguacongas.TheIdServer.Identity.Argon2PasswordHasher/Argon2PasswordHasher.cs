@@ -6,7 +6,7 @@ using System.Text;
 namespace Aguacongas.TheIdServer.Identity.Argon2PasswordHasher;
 
 /// <summary>
-/// Argon2 passwor hasher
+/// Argon2 password hasher
 /// </summary>
 /// <typeparam name="TUser"></typeparam>
 public class Argon2PasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class
