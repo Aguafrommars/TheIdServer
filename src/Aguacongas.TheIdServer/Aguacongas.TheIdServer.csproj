@@ -64,7 +64,7 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.0.0-rc9.14" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.12" />
 		<PackageReference Include="SendGrid" Version="9.28.1" />
-		<PackageReference Include="Serilog" Version="3.0.1" />
+		<PackageReference Include="Serilog" Version="3.1.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
