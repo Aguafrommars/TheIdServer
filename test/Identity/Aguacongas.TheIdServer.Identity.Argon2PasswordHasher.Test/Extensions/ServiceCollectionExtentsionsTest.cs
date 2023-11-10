@@ -9,10 +9,8 @@ public class ServiceCollectionExtentsionsTest
     {
         var provider = new ServiceCollection().AddArgon2PasswordHasher<string>().BuildServiceProvider();
         
-        var hasher = provider.GetService<IPasswordHasher<string>>();
+        var hasher = provider.GetService<IPasswordHasher<string>>() as Argon2PasswordHasher<string>;
 
         Assert.NotNull(hasher);
-
-        hasher.HashPassword(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()); 
     }
 }
