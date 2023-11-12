@@ -24,6 +24,7 @@ public class ServiceCollectionExtensionsTest
                     [0x0C] = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher",
                     [0xBC] = "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher"
                 };
+                options.UsePasswordHasherTypeName = "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher";
             })
             .BuildServiceProvider();
 

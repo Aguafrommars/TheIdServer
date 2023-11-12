@@ -170,7 +170,7 @@ Read [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/che
 
 ### PBKDF2 Password hasher
 
-`Microsoft.AspNetCore.Identity.PasswordHasher` is the default hasher used by ASP.Net Core Identity.
+`Microsoft.AspNetCore.Identity.PasswordHasher` is the default hasher used by ASP.Net Core Identity.  
 You can hash password using PBKDF2 if the [upgrade password hasher](#upgrade-password-hasher) is configured to use `Microsoft.AspNetCore.Identity.PasswordHasher`.
 
 The section **PasswordHasherOptions** is bound to the class [`Microsoft.AspNetCore.Identity.PasswordHasherOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.passwordhasheroptions).  
