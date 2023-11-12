@@ -11,6 +11,10 @@ using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Identity.Argon2PasswordHasher;
+using Aguacongas.TheIdServer.Identity.BcryptPasswordHasher;
+using Aguacongas.TheIdServer.Identity.ScryptPasswordHasher;
+using Aguacongas.TheIdServer.Identity.UpgradePasswordHasher;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
@@ -49,13 +53,18 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddConfigurationStores()
                 .AddOperationalStores()
                 .AddTokenExchange()
+                .Configure<PasswordHasherOptions>(configurationManager.GetSection(nameof(PasswordHasherOptions)))
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options =>
                     {
                         configurationManager.Bind(nameof(AspNetCore.Identity.IdentityOptions), options);
                     })
                 .AddTheIdServerStores()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddArgon2PasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(Argon2PasswordHasherOptions)))
+                .AddBcryptPasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(BcryptPasswordHasherOptions)))
+                .AddScryptPasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(ScryptPasswordHasherOptions)))
+                .AddUpgradePasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(UpgradePasswordHasherOptions)));
 
             if (isProxy)
             {

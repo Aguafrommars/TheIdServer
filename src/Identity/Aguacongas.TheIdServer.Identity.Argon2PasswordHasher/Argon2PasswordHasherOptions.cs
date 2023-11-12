@@ -11,13 +11,11 @@ public class Argon2PasswordHasherOptions
     /// <summary>
     /// Number of iteration to use. 2 by default.
     /// </summary>
-    [Range(Argon2id.MinIterations, int.MaxValue)]
     public int Interations { get; set; } = 2;
 
     /// <summary>
     /// Memory to use. 67108864 by default.
     /// </summary>
-    [Range(Argon2id.MinMemorySize, int.MaxValue)]
     public int Memory { get; set; } = 67108864;
 
     /// <summary>

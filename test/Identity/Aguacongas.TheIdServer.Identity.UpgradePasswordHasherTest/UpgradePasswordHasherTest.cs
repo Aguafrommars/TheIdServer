@@ -2,6 +2,7 @@ using Aguacongas.TheIdServer.Identity.UpgradePasswordHasher;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Aguacongas.TheIdServer.Identity.UpgradePasswordHasherTest;
 
@@ -66,6 +67,10 @@ public class UpgradePasswordHasherTest
             },
             UsePasswordHasherTypeName = "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher"
         };
+
+
+        var serialized = JsonSerializer.Serialize(settings);
+        
         var provider = new ServiceCollection()
             .AddBcryptPasswordHasher<string>()
             .AddScryptPasswordHasher<string>()

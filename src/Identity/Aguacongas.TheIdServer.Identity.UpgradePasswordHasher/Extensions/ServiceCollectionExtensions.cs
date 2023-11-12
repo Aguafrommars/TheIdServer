@@ -22,7 +22,8 @@ public static class ServiceCollectionExtensions
             .Configure(options => configure?.Invoke(options))
             .Validate<IServiceProvider>((options, provider) =>
             {
-                var hasherList= provider.GetServices<IPasswordHasher<TUser>>()
+                using var scope = provider.CreateScope();
+                var hasherList= scope.ServiceProvider.GetServices<IPasswordHasher<TUser>>()
                     .Where(h => h.GetType() != typeof(UpgradePasswordHasher<TUser>));
                 return options.HashPrefixMaps is not null &&
                     options.HashPrefixMaps.Values.All(m => hasherList.Any(h => h.GetType().FullName!.StartsWith($"{m}`1"))) &&

@@ -5,8 +5,8 @@ An implementation of IPasswordHasher<TUser> using [BCrypt.Net-Next](https://gith
 ## Installation
 
 ```csharp
-services.AddIdentity<TUser, TRole>();
-services.AddBcryptPasswordHasher<TUser>();
+services.AddIdentity<TUser, TRole>()
+    .AddBcryptPasswordHasher<TUser>();
 ```
 
 ### Options

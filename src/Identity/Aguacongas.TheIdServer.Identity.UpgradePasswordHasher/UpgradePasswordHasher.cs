@@ -29,11 +29,8 @@ public class UpgradePasswordHasher<TUser> : IPasswordHasher<TUser> where TUser :
 
     /// <inheritdoc/>
     public string HashPassword(TUser user, string password)
-    {
-        var hasherTypeName = _options.Value.UsePasswordHasherTypeName;
-        var hasher = GetHasher(hasherTypeName);
-        return hasher.HashPassword(user, password);
-    }
+    => GetHasher(_options.Value.UsePasswordHasherTypeName)
+        .HashPassword(user, password);
 
     /// <inheritdoc/>
     public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
@@ -43,7 +40,7 @@ public class UpgradePasswordHasher<TUser> : IPasswordHasher<TUser> where TUser :
         var settings = _options.Value;
         var hash = Convert.FromBase64String(hashedPassword);
         var hashPrefix = hash[0];
-        var hasherTypeName = settings.HashPrefixMaps[hashPrefix];
+        var hasherTypeName = settings.HashPrefixMaps![hashPrefix];
         var hasher = GetHasher(hasherTypeName);
 
         var result = hasher.VerifyHashedPassword(user, hashedPassword, providedPassword);
