@@ -48,31 +48,11 @@ public class Argon2PasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : 
         ArgumentException.ThrowIfNullOrWhiteSpace(hashedPassword);
         ArgumentException.ThrowIfNullOrWhiteSpace(providedPassword);
 
-        byte[] decodedHashedPassword;
-        try
-        {
-            decodedHashedPassword = Convert.FromBase64String(hashedPassword);
-        }
-        catch (FormatException)
-        {
-            return PasswordVerificationResult.Failed;
-        }
-
+        var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
         var hashSpan = decodedHashedPassword.AsSpan()[1..];
 
-        try
-        {
-            if (!_argon2Id.VerifyHash(hashSpan,
-                new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(providedPassword))))
-            {
-                return PasswordVerificationResult.Failed;
-            }
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-            return PasswordVerificationResult.Failed;
-        }
-        catch(FormatException)
+        if (!_argon2Id.VerifyHash(hashSpan,
+            new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(providedPassword))))
         {
             return PasswordVerificationResult.Failed;
         }

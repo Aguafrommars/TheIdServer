@@ -67,21 +67,6 @@ public class ScryptPasswordHasherTest
         Assert.Equal(PasswordVerificationResult.Failed, result);
     }
 
-    [Fact]
-    public void VerifyHashedPassword_should_return_fail_invalid_base64_string()
-    {
-        var settings = new ScryptPasswordHasherOptions();
-        var password = Guid.NewGuid().ToString();
-        var hash = $"{CreateHash(settings, password)}===";
-
-        var options = Options.Create(settings);
-        var sut = new ScryptPasswordHasher<string>(new ScryptEncoder(settings.IterationCount, settings.BlockSize, settings.ThreadCount), options);
-
-        var result = sut.VerifyHashedPassword(Guid.NewGuid().ToString(), hash, password);
-
-        Assert.Equal(PasswordVerificationResult.Failed, result);
-    }
-
     private static string CreateHash(ScryptPasswordHasherOptions settings, string password)
     {
         var options = Options.Create(settings);

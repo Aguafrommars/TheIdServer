@@ -46,16 +46,7 @@ public class ScryptPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : 
         ArgumentException.ThrowIfNullOrWhiteSpace(hashedPassword);
         ArgumentException.ThrowIfNullOrWhiteSpace(providedPassword);
 
-        byte[] decodedHashedPassword;
-        try
-        {
-            decodedHashedPassword = Convert.FromBase64String(hashedPassword);
-        }
-        catch (FormatException)
-        {
-            return PasswordVerificationResult.Failed;
-        }
-
+        var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
         var hash = Encoding.UTF8.GetString(decodedHashedPassword[1..]);
 
         var isValid = _encoder.Compare(providedPassword, hash);
