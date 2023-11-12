@@ -14,7 +14,18 @@ public class ServiceCollectionExtensionsTest
         var provider = services.AddArgon2PasswordHasher<string>()
             .AddBcryptPasswordHasher<string>()
             .AddScryptPasswordHasher<string>()
-            .AddUpgradePasswordHasher<string>()
+            .AddUpgradePasswordHasher<string>(options =>
+            {
+                options.HashPrefixMaps = new Dictionary<byte, string>
+                {
+                    [0x00] = "Microsoft.AspNetCore.Identity.PasswordHasher",
+                    [0x01] = "Microsoft.AspNetCore.Identity.PasswordHasher",
+                    [0xA2] = "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher",
+                    [0x0C] = "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher",
+                    [0xBC] = "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher"
+                };
+                options.UsePasswordHasherTypeName = "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher";
+            })
             .BuildServiceProvider();
 
         using var scope = provider.CreateScope();

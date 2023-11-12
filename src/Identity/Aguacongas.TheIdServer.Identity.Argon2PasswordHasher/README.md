@@ -5,8 +5,8 @@ An implementation of IPasswordHasher<TUser> using [Geralt](https://www.geralt.xy
 ## Installation
 
 ```csharp
-services.AddIdentity<TUser, TRole>();
-services.AddArgon2PasswordHasher<TUser>();
+services.AddIdentity<TUser, TRole>()
+    .AddArgon2PasswordHasher<TUser>();
 ```
 
 ### Options

@@ -5,42 +5,39 @@ An implementation of `IPasswordHasher<TUser>` and fallback to the configured def
 ## Installation
 
 ```csharp
-services.AddIdentity<TUser, TRole>();
 services.AddScoped<IPasswordHasher<TUser>, My.MyPasswordHasher<TUser>>();
-services.AddUpgradePasswordHasher<TUser>(options => 
-{
-    options.HashPrefixMaps = new Dictionary<byte, string>
+services.AddIdentity<TUser, TRole>()
+    .AddUpgradePasswordHasher<TUser>(options => 
     {
-        [0x00] = "Microsoft.AspNetCore.Identity.PasswordHasher",
-        [0x01] = "Microsoft.AspNetCore.Identity.PasswordHasher",
-        [0x03] = "My.MyPasswordHasher"
-    }
-    options.UsePasswordHasherTypeName = "My.MyPasswordHasher";
-    options.DeadLine = new DateTime(2024, 1, 1); // after this date each `SuccessRehashNeeded` result will be considered as `Failed`. It forces the user to update its password.
-}); // it must be added at last, after adding all needed IPasswordHasher<TUser>.
+        options.HashPrefixMaps = new Dictionary<byte, string>
+        {
+            [0x00] = "Microsoft.AspNetCore.Identity.PasswordHasher",
+            [0x01] = "Microsoft.AspNetCore.Identity.PasswordHasher",
+            [0x03] = "My.MyPasswordHasher"
+        }
+        options.UsePasswordHasherTypeName = "My.MyPasswordHasher";
+        options.DeadLine = new DateTime(2024, 1, 1); // after this date each `SuccessRehashNeeded` result will be considered as `Failed`. It forces the user to update its password.
+    }); // it must be added at last position, after adding all needed IPasswordHasher<TUser>.
 ```
 
 ### Options
 
-Default values:
-
-``` json
-"ScryptPasswordHasherOptions": {
-    "HashPrefixMaps": [
-        { 0x00: "Microsoft.AspNetCore.Identity.PasswordHasher" },
-        { 0x01: "Microsoft.AspNetCore.Identity.PasswordHasher" },
-        { 0xA2: "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher" },
-        { 0x0C: "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher" },
-        { 0xBC: "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher" }
-    ],
-    "UsePasswordHasherTypeName": "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher",
-    "DeadLine": null
-}
-```
-
 - **HashPrefixMaps** defines de map between prefix and password hasher implementation.
 - **UsePasswordHasherTypeName** the password hasher implementation to use.
 - **DeadLine** (optional) after this date hash using old algorithm or old configuration will be considered invalid to prevent password shucking. It forces the user to update its password.
+
+```json
+{
+    "HashPrefixMaps": {
+      "0": "Microsoft.AspNetCore.Identity.PasswordHasher",
+      "1": "Microsoft.AspNetCore.Identity.PasswordHasher",
+      "162": "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher",
+      "12": "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher",
+      "188": "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher"
+    },
+    "UsePasswordHasherTypeName": "Microsoft.AspNetCore.Identity.PasswordHasher",
+    "DeadLineUtc": "2024-01-01"
+```
 
 ### How it works
 

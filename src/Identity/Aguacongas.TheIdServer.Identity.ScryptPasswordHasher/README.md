@@ -5,8 +5,8 @@ An implementation of IPasswordHasher<TUser> using [Scrypt.Net](https://github.co
 ## Installation
 
 ```csharp
-services.AddIdentity<TUser, TRole>();
-services.AddScryptPasswordHasher<TUser>();
+services.AddIdentity<TUser, TRole>()
+    .AddScryptPasswordHasher<TUser>();
 ```
 
 ### Options
