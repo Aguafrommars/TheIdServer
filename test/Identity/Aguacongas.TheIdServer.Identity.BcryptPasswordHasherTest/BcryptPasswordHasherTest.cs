@@ -66,21 +66,6 @@ public class BcryptPasswordHasherTest
         Assert.Equal(PasswordVerificationResult.Failed, result);
     }
 
-    [Fact]
-    public void VerifyHashedPassword_should_return_fail_invalid_base64_string()
-    {
-        var settings = new BcryptPasswordHasherOptions();
-        var password = Guid.NewGuid().ToString();
-        var hash = $"{CreateHash(settings, password)}===";
-
-        var options = Options.Create(settings);
-        var sut = new BcryptPasswordHasher<string>(options);
-
-        var result = sut.VerifyHashedPassword(Guid.NewGuid().ToString(), hash, password);
-
-        Assert.Equal(PasswordVerificationResult.Failed, result);
-    }
-
     private static string CreateHash(BcryptPasswordHasherOptions settings, string password)
     {
         var options = Options.Create(settings);

@@ -13,5 +13,9 @@ public class ServiceCollectionExtentsionsTest
         var hasher = provider.GetService<IPasswordHasher<string>>() as BcryptPasswordHasher<string>;
 
         Assert.NotNull(hasher);
+
+        // test options validation
+        var hash = hasher.HashPassword(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        Assert.NotNull(hash);
     }
 }
