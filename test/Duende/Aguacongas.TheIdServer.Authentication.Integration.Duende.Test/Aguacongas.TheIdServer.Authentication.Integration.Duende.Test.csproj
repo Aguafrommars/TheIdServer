@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
 	  <PackageReference Include="Aguacongas.AspNetCore.Authentication.TestBase" Version="5.0.0-preview0177" />
 	  <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />

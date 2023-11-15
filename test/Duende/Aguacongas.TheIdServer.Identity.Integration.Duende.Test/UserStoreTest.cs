@@ -17,7 +17,6 @@ using Xunit.Abstractions;
 
 namespace Aguacongas.TheIdServer.Identity.IntegrationTest
 {
-    [SuppressMessage("Usage", "xUnit1033:Test classes decorated with 'Xunit.IClassFixture<TFixture>' or 'Xunit.ICollectionFixture<TFixture>' should add a constructor argument of type TFixture", Justification = "false positive")]
     public class UserStoreTest : IdentitySpecificationTestBase<TestUser, TestRole>, IClassFixture<TheIdServerTestFixture>
     {
         private readonly TheIdServerTestFixture _fixture;
