@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Add Scrypt password hasher services in DI
+    /// Add scrypt password hasher services in DI
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <param name="services"></param>
@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
                 var p = options.ThreadCount;
 
                 return N > 1 &&
-                (N & (N - 1)) != 0 &&
+                (N & (N - 1)) == 0 &&
                 r > 0 &&
                 p > 0 &&
                 !((ulong)r * (ulong)p >= 1 << 30 ||
@@ -47,7 +47,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Add Scrypt password hasher services in DI
+    /// Add scrypt password hasher services in DI
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <param name="services"></param>

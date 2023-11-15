@@ -5,17 +5,28 @@ using System.Text;
 
 namespace Aguacongas.TheIdServer.Identity.ScryptPasswordHasher;
 
+/// <summary>
+/// scrypt password hasher
+/// </summary>
+/// <typeparam name="TUser"></typeparam>
+
 public class ScryptPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class
 {
     private readonly ScryptEncoder _encoder;
     private readonly IOptions<ScryptPasswordHasherOptions> _options;
 
+    /// <summary>
+    /// Initialize a ne instance of <see cref="ScryptPasswordHasher{TUser}"/>
+    /// </summary>
+    /// <param name="encoder"></param>
+    /// <param name="options"></param>
     public ScryptPasswordHasher(ScryptEncoder encoder, IOptions<ScryptPasswordHasherOptions> options)
     {
         _encoder = encoder;
         _options = options;
     }
 
+    /// <inheritdoc/>
     public string HashPassword(TUser user, string password)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
@@ -29,21 +40,13 @@ public class ScryptPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : 
         .ToArray());
     }
 
+    /// <inheritdoc/>
     public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(hashedPassword);
         ArgumentException.ThrowIfNullOrWhiteSpace(providedPassword);
 
-        byte[] decodedHashedPassword;
-        try
-        {
-            decodedHashedPassword = Convert.FromBase64String(hashedPassword);
-        }
-        catch (FormatException)
-        {
-            return PasswordVerificationResult.Failed;
-        }
-
+        var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
         var hash = Encoding.UTF8.GetString(decodedHashedPassword[1..]);
 
         var isValid = _encoder.Compare(providedPassword, hash);

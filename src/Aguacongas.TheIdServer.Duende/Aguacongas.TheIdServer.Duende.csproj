@@ -42,10 +42,14 @@
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Saml2p.Duende\Aguacongas.IdentityServer.Saml2p.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.WsFederation.Duende\Aguacongas.IdentityServer.WsFederation.Duende.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0-rc.2.23480.2" />
+	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
     <PackageReference Include="Duende.IdentityServer.Configuration" Version="7.0.0-preview.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 	</ItemGroup>

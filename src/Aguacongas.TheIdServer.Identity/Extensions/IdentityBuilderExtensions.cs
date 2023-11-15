@@ -1,9 +1,6 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

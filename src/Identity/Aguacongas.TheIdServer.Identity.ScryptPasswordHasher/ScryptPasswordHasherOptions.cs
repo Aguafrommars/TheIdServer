@@ -1,10 +1,23 @@
 ﻿namespace Aguacongas.TheIdServer.Identity.ScryptPasswordHasher;
+
+/// <summary>
+/// scrypt password hasher options
+/// </summary>
 public class ScryptPasswordHasherOptions
 {
-    public int IterationCount { get; set; } = 16384;
+    /// <summary>
+    /// Iteration count (N parameter in Kb). 131072 by default (128 MiB).
+    /// </summary>
+    public int IterationCount { get; set; } = 131072;
 
+    /// <summary>
+    /// Block size (r parameter). 8 by default (1024 bytes).
+    /// </summary>
     public int BlockSize { get; set; } = 8;
 
+    /// <summary>
+    /// Thread count (p parameter). 1 by default.
+    /// </summary>
     public int ThreadCount { get; set; } = 1;
 
     /// <summary>

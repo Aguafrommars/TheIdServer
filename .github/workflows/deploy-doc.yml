@@ -33,7 +33,7 @@ jobs:
       - name: Generate HTML from Markdown
         uses: ldeluigi/markdown-docs@latest
         with:
-          src: .
+          src: doc
           dst: generated
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2

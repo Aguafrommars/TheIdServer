@@ -150,7 +150,7 @@ The section *AccountOptions* is bound to [`AccountOptions`](../Aguacongas.TheIdS
 
 ## Configure ASP.Net Core Identity options
 
-The section **IdentityOptions** is binded to the class [`Microsoft.AspNetCore.Identity.IdentityOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identityoptions).  
+The section **IdentityOptions** is bound to the class [`Microsoft.AspNetCore.Identity.IdentityOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identityoptions).  
 So you can set any ASP.Net Core Identity options you want from configuration
 
 ```json
@@ -164,9 +164,93 @@ So you can set any ASP.Net Core Identity options you want from configuration
 }
 ```
 
+## Configure password hashers options
+
+Read [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) to choose and configure your password hasher.
+
+### PBKDF2 Password hasher
+
+`Microsoft.AspNetCore.Identity.PasswordHasher` is the default hasher used by ASP.Net Core Identity.  
+You can hash password using PBKDF2 if the [upgrade password hasher](#upgrade-password-hasher) is configured to use `Microsoft.AspNetCore.Identity.PasswordHasher`.
+
+The section **PasswordHasherOptions** is bound to the class [`Microsoft.AspNetCore.Identity.PasswordHasherOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.passwordhasheroptions).  
+So you can set any [`Microsoft.AspNetCore.Identity.PasswordHasherOptions`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.passwordhasheroptions) properties you want from configuration.
+
+```json
+"PasswordHasherOptions": {
+    "IterationCount": 600000
+}
+```
+
+### Argon2id password hasher
+
+You can hash password using Argon2id if the [upgrade password hasher](#upgrade-password-hasher) is configured to use `Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher`.
+
+The section **Argon2PasswordHasherOptions** is bound to the class [`Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/Argon2PasswordHasherOptions.cs).  
+So you can set any [`Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/Argon2PasswordHasherOptions.cs) properties you want from configuration.
+
+```json
+"Argon2PasswordHasherOptions": {
+    "Interations": 2,
+    "Memory": 67108864
+}
+```
+
+### scrypt password hasher
+
+You can hash password using scrypt if the [upgrade password hasher](#upgrade-password-hasher) is configured to use `Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher`.
+
+The section **ScryptPasswordHasherOptions** is bound to the class [`Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/Argon2PasswordHasherOptions.cs).  
+So you can set any [`Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/Argon2PasswordHasherOptions.cs) properties you want from configuration.
+
+```json
+"ScryptPasswordHasherOptions": {
+    "IterationCount": 131072,
+    "BlockSize": 8,
+    "ThreadCount": 1
+}
+```
+
+### bcrypt password hasher
+
+You can hash password using bcrypt if the [upgrade password hasher](#upgrade-password-hasher) is configured to use `Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher`.
+
+The section **BcryptPasswordHasherOptions** is bound to the class [`Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.BcryptPasswordHasher/BcryptPasswordHasherOptions.cs).  
+So you can set any [`Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.BcryptPasswordHasher/BcryptPasswordHasherOptions.cs) properties you want from configuration.
+
+```json
+"BcryptPasswordHasherOptions": {
+    "WorkFactor": 11
+}
+```
+
+### Upgrade password hasher
+
+Upgrade password hasher is used to manage hash migration between old password hashing algorithm to the new one to use.  
+In previous version of TheIdServer password was hashed with PBKDF2 by default ASP.Net Core Identity password hasher with its default configuration.  
+Now you can choose between Argon2id, scrypt, bcrypt and PBKDF2 by settings the hasher to use.
+
+Read [Password Hasher to rehash password to a new algorithm for ASP.NET Core Identity.](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher/README.md#password-hasher-to-rehash-password-to-a-new-algorithm-for-aspnet-core-identity) for more information.
+
+The section **UpgradePasswordHasherOptions** is bound to the class [`Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.UpgradePasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher/UpgradePasswordHasherOptions.cs).  
+So you can set any [`Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.UpgradePasswordHasherOptions`](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Identity/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher/UpgradePasswordHasherOptions.cs) properties you want from configuration.
+
+```json
+"UpgradePasswordHasherOptions": {
+    "HashPrefixMaps": {
+      "0": "Microsoft.AspNetCore.Identity.PasswordHasher",
+      "1": "Microsoft.AspNetCore.Identity.PasswordHasher",
+      "162": "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher",
+      "12": "Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.ScryptPasswordHasher",
+      "188": "Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.BcryptPasswordHasher"
+    },
+    "UsePasswordHasherTypeName": "Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.Argon2PasswordHasher"
+}
+```
+
 ## Configure Duende IdentityServer
 
-The section **IdentityServerOptions** is binded to the class [`Duende.IdentityServer.Configuration.IdentityServerOptions`](https://docs.duendesoftware.com/identityserver/v5/reference/options/).  
+The section **IdentityServerOptions** is bound to the class [`Duende.IdentityServer.Configuration.IdentityServerOptions`](https://docs.duendesoftware.com/identityserver/v5/reference/options/).  
 So you can set any Duende IdentityServer options you want from configuration (but key management options).
 
 ```json
