@@ -24,8 +24,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0-rc.2.23479.6" />
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

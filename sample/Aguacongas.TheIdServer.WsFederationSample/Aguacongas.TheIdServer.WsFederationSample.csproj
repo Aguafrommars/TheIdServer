@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="8.0.0" />
 		<PackageReference Include="Serilog" Version="3.1.1" />
 		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 	</ItemGroup>
