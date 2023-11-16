@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -426,6 +426,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("int");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("int");
 
@@ -448,6 +451,9 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .HasColumnType("bit");
 
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("bit");
 
                     b.Property<bool>("RequireRequestObject")
@@ -773,7 +779,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 5, 20, 8, 25, 0, 710, DateTimeKind.Utc).AddTicks(6726)
+                            CreatedAt = new DateTime(2023, 11, 16, 21, 3, 5, 62, DateTimeKind.Utc).AddTicks(2489)
                         });
                 });
 

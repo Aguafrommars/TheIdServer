@@ -5,14 +5,12 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 {
     public partial class ClientTokens
     {
-        [SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used in component")]
         private bool _showAllOptions;
 
         private readonly Dictionary<string, TimeSpan?> _accessTokenQuickValues = new Dictionary<string, TimeSpan?>
