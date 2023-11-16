@@ -8,6 +8,7 @@ using Duende.IdentityServer;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Security.Claims;
 using System.Text.Json;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
@@ -527,7 +528,18 @@ namespace Aguacongas.TheIdServer
                         SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
                         UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
                         UserCodeType = client.UserCodeType,
-                        UserSsoLifetime = client.UserSsoLifetime
+                        UserSsoLifetime = client.UserSsoLifetime,
+                        AllowedIdentityTokenSigningAlgorithms = client.AllowedIdentityTokenSigningAlgorithms.Select(a => new Entity.ClientAllowedIdentityTokenSigningAlgorithm
+                        {
+                            Algorithm = a
+                        }).ToArray(),
+                        CibaLifetime = client.CibaLifetime,
+                        CoordinateLifetimeWithUserSession = client.CoordinateLifetimeWithUserSession,
+                        PollingInterval = client.PollingInterval,
+                        RequireRequestObject = client.RequireRequestObject,
+                        RequireDPoP = client.RequireDPoP,
+                        PushedAuthorizationLifetime = client.PushedAuthorizationLifetime,
+                        RequirePushedAuthorization = client.RequirePushedAuthorization
                     }).GetAwaiter().GetResult();
                 }
                 catch (ArgumentException)

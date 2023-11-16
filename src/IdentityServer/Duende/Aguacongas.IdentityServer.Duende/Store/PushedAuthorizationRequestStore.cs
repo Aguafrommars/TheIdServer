@@ -6,18 +6,34 @@ using System.Threading.Tasks;
 namespace Aguacongas.IdentityServer.Store;
 public class PushedAuthorizationRequestStore : IPushedAuthorizationRequestStore
 {
-    public Task ConsumeByHashAsync(string referenceValueHash)
+    private readonly IAdminStore<Entity.PushedAuthorizationRequest> _store;
+
+    public PushedAuthorizationRequestStore(IAdminStore<Entity.PushedAuthorizationRequest> store)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(store);
+        _store = store;
     }
 
-    public Task<PushedAuthorizationRequest> GetByHashAsync(string referenceValueHash)
+    public Task ConsumeByHashAsync(string referenceValueHash)
+    => _store.DeleteAsync(referenceValueHash);
+    
+
+    public async Task<PushedAuthorizationRequest> GetByHashAsync(string referenceValueHash)
     {
-        throw new NotImplementedException();
+        var entity = await _store.GetAsync(referenceValueHash, null).ConfigureAwait(false);
+        return entity is null ? null : new PushedAuthorizationRequest
+        {
+            ExpiresAtUtc = entity.ExpiresAtUtc,
+            Parameters = entity.Parameters,
+            ReferenceValueHash = entity.Id
+        };
     }
 
     public Task StoreAsync(PushedAuthorizationRequest pushedAuthorizationRequest)
+    => _store.CreateAsync(new Entity.PushedAuthorizationRequest
     {
-        throw new NotImplementedException();
-    }
+        ExpiresAtUtc = pushedAuthorizationRequest.ExpiresAtUtc,
+        Id = pushedAuthorizationRequest.ReferenceValueHash,
+        Parameters = pushedAuthorizationRequest.Parameters
+    });
 }

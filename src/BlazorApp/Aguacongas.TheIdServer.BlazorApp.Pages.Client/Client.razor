@@ -196,6 +196,24 @@ else
                                     <AuthorizeCheckbox Name="back-channel-logout-uri-required" Label="@Localizer["back channel logout uri required"]" @bind-Value="@Model.BackChannelLogoutSessionRequired" />
                                 </div>
                             </div>
+                            <div class="mb-3 row">
+                                <label class="col col-form-label">
+                                </label>
+                                <div class="col-lg-10 col-sm-12">
+                                    <AuthorizeCheckbox Name="require-push-authorization-request" Label="@Localizer["require push authorization request"]" @bind-Value="@Model.RequirePushedAuthorization" />
+                                </div>
+                            </div>
+                            @if (Model.RequirePushedAuthorization)
+                            {
+                                <div class="mb-3 row">
+                                    <label class="col col-form-label" for="push-authorization-lifetime">
+                                        @Localizer["push authorization lifetime"]
+                                    </label>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <AuthorizeNumber Name="push-authorization-lifetime" @bind-Value="@Model.PushedAuthorizationLifetime" Min="1" />
+                                    </div>
+                                </div>
+                            }
                         }
                         else if (Model.ProtocolType != OIDC)
                         {

@@ -57,8 +57,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var iAdminStoreType = typeof(IAdminStore<>)
                     .MakeGenericType(entityType.GetTypeInfo()).GetTypeInfo();
             services.AddTransient(iAdminStoreType, cacheAdminStoreType);
-
-            
         }
 
         private static object GetCollection(Func<IServiceProvider, IMongoDatabase> getDatabase, IServiceProvider provider, Type entityType)
