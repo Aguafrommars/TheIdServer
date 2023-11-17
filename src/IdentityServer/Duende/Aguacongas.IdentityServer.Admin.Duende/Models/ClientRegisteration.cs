@@ -164,7 +164,13 @@ namespace Aguacongas.IdentityServer.Admin.Models
         /// The client secret expire at.
         /// </value>
         [JsonProperty("client_secret_expires_at")]
-        public int? ClientSecretExpireAt { get; internal set; }
+        public int? ClientSecretExpireAt { get; set; }
+
+        /// <summary>
+        /// Specifies whether pushed authorization requests are required for this client.
+        /// </summary>
+        [JsonProperty("require_pushed_authorization_requests")]
+        public bool RequirePushedAuthorizationRequests { get; set; }
     }
 
     /// <summary>

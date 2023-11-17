@@ -529,11 +529,6 @@ namespace Aguacongas.TheIdServer
                         UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
                         UserCodeType = client.UserCodeType,
                         UserSsoLifetime = client.UserSsoLifetime,
-                        AllowedIdentityTokenSigningAlgorithms = client.AllowedIdentityTokenSigningAlgorithms.Select(a => new Entity.ClientAllowedIdentityTokenSigningAlgorithm
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            Algorithm = a
-                        }).ToArray(),
                         CibaLifetime = client.CibaLifetime,
                         CoordinateLifetimeWithUserSession = client.CoordinateLifetimeWithUserSession,
                         PollingInterval = client.PollingInterval,
