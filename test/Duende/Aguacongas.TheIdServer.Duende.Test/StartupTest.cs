@@ -421,7 +421,7 @@ namespace Aguacongas.TheIdServer.Test
         }
 
         [Fact]
-        public async void Configure_should_configure_data_protection_storage_cert_protection()
+        public void Configure_should_configure_data_protection_storage_cert_protection()
         {
             var environementMock = new Mock<IWebHostEnvironment>();
             var storeMock = new Mock<IDynamicProviderStore<SchemeDefinition>>();

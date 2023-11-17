@@ -531,6 +531,7 @@ namespace Aguacongas.TheIdServer
                         UserSsoLifetime = client.UserSsoLifetime,
                         AllowedIdentityTokenSigningAlgorithms = client.AllowedIdentityTokenSigningAlgorithms.Select(a => new Entity.ClientAllowedIdentityTokenSigningAlgorithm
                         {
+                            Id = Guid.NewGuid().ToString(),
                             Algorithm = a
                         }).ToArray(),
                         CibaLifetime = client.CibaLifetime,

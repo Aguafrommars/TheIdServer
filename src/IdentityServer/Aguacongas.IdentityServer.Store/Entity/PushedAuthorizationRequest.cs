@@ -5,7 +5,7 @@ namespace Aguacongas.IdentityServer.Store.Entity;
 /// <summary>
 /// Represents a persisted Pushed Authorization Request.
 /// </summary>
-public class PushedAuthorizationRequest : IEntityId, IAuditable
+public class PushedAuthorizationRequest : IAuditable
 {
     /// <summary>
     /// Gets the identifier.
