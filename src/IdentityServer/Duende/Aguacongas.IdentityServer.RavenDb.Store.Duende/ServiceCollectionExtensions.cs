@@ -89,6 +89,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<AdminStore<Entity.RelyingParty>>()
                 .AddTransient<RelyingPartyClaimMappingStore>()
                 .AddTransient<AdminStore<Entity.Saml2PArtifact>>()
+                .AddTransient<AdminStore<Entity.PushedAuthorizationRequest>>()
                 .AddTransient<IAdminStore<Entity.ApiApiScope>, CacheAdminStore<ApiApiScopeStore, Entity.ApiApiScope>>()
                 .AddTransient<IAdminStore<Entity.ApiClaim>, CacheAdminStore<ApiClaimStore, Entity.ApiClaim>>()
                 .AddTransient<IAdminStore<Entity.ApiLocalizedResource>, CacheAdminStore<ApiLocalizedResourceStore, Entity.ApiLocalizedResource>>()
@@ -135,10 +136,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IAdminStore<Entity.RelyingParty>, CacheAdminStore<AdminStore<Entity.RelyingParty>, Entity.RelyingParty>>()
                 .AddTransient<IAdminStore<Entity.RelyingPartyClaimMapping>, CacheAdminStore<RelyingPartyClaimMappingStore, Entity.RelyingPartyClaimMapping>>()
                 .AddTransient<IAdminStore<Entity.Saml2PArtifact>, CacheAdminStore<AdminStore<Entity.Saml2PArtifact>, Entity.Saml2PArtifact>>()
+                .AddTransient<IAdminStore<Entity.PushedAuthorizationRequest>, CacheAdminStore<AdminStore<Entity.PushedAuthorizationRequest>, Entity.PushedAuthorizationRequest>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.User>, Entity.User>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.Role>, Entity.Role>>()
                 .AddTransient<CacheAdminStore<AdminStore<Entity.ExternalProvider>, Entity.ExternalProvider>>()
-                .AddTransient<CacheAdminStore<AdminStore<Entity.Saml2PArtifact>, Entity.Saml2PArtifact>>();                
+                .AddTransient<CacheAdminStore<AdminStore<Entity.Saml2PArtifact>, Entity.Saml2PArtifact>>();
         }
     }
 }

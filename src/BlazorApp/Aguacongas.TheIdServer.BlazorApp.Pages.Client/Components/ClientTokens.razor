@@ -233,6 +233,15 @@
             </div>
         </div>
     }
+    <div class="mb-3 row">
+        <label class="col col-form-label" for="push-authorization-lifetime">
+            @Localizer["push authorization lifetime"]
+        </label>
+        <div class="col-lg-8 col-sm-12">
+            <AuthorizeNumber Name="push-authorization-lifetime" @bind-Value="@Model.PushedAuthorizationLifetime" Min="1" />
+            <AuthorizeCheckbox Name="require-push-authorization-request" Label="@Localizer["require push authorization request"]" @bind-Value="@Model.RequirePushedAuthorization" />
+        </div>
+    </div>
 }
 else
 {

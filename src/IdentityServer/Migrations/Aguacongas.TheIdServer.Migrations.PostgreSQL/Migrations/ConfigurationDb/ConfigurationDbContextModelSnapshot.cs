@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -426,6 +426,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("integer");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("integer");
 
@@ -448,6 +451,9 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         .HasColumnType("boolean");
 
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("RequireRequestObject")
@@ -773,7 +779,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 5, 20, 8, 24, 40, 357, DateTimeKind.Utc).AddTicks(4532)
+                            CreatedAt = new DateTime(2023, 11, 16, 21, 2, 44, 684, DateTimeKind.Utc).AddTicks(8194)
                         });
                 });
 

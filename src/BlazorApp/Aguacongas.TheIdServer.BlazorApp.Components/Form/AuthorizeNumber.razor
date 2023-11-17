@@ -1,0 +1,13 @@
+﻿@typeparam T
+@inherits InputNumber<T>
+<AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
+    <Authorized>
+        <InputNumber id="@Id" class="form-control" max="@Max" min="@Min"
+                   ValueExpression="@ValueExpression" Value="@Value" ValueChanged="ValueChanged" />
+    </Authorized>
+    <NotAuthorized>
+        <div id="@Id" class="col-form-label">
+            @Value
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

@@ -28,15 +28,17 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
         public virtual DbSet<OneTimeToken> OneTimeTokens { get; set; }
 
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public virtual DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
-        public DbSet<KeyRotationKey> KeyRotationKeys { get; set; }
+        public virtual DbSet<KeyRotationKey> KeyRotationKeys { get; set; }
 
-        public DbSet<UserSession> UserSessions { get; set; }
+        public virtual DbSet<UserSession> UserSessions { get; set; }
 
-        public DbSet<Saml2PArtifact> Saml2pArtifact { get; set; }
+        public virtual DbSet<Saml2PArtifact> Saml2pArtifact { get; set; }
 
         public virtual DbSet<BackChannelAuthenticationRequest> BackChannelAuthenticationRequests { get; set; }
+
+        public virtual DbSet<PushedAuthorizationRequest> PushedAuthorizationRequests { get; set; }
 
         public override int SaveChanges()
         {

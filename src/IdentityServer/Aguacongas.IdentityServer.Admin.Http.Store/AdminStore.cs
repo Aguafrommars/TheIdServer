@@ -26,16 +26,12 @@ namespace Aguacongas.IdentityServer.Admin.Http.Store
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
             var httpClient = await HttpClientFactory
                 .ConfigureAwait(false);
-            using (var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json"))
-            {
-                using (var response = await httpClient.PostAsync(GetUri(httpClient, BaseUri), content, cancellationToken)
-                    .ConfigureAwait(false))
-                {
-                    await EnsureSuccess(response).ConfigureAwait(false);
-                    return await DeserializeResponse(response)
-                        .ConfigureAwait(false);
-                }
-            }
+            using var content = new StringContent(SerializeEntity(entity), Encoding.UTF8, "application/json");
+            using var response = await httpClient.PostAsync(GetUri(httpClient, BaseUri), content, cancellationToken)
+                .ConfigureAwait(false);
+            await EnsureSuccess(response).ConfigureAwait(false);
+            return await DeserializeResponse(response)
+                .ConfigureAwait(false);
         }
 
         public virtual async Task<object> CreateAsync(object entity, CancellationToken cancellationToken = default)

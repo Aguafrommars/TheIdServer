@@ -69,10 +69,7 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
         public async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            if (entity.Id == null)
-            {
-                entity.Id = Guid.NewGuid().ToString();
-            }
+            entity.Id ??= Guid.NewGuid().ToString();
             if (entity is IAuditable auditable)
             {
                 auditable.CreatedAt = DateTime.UtcNow;

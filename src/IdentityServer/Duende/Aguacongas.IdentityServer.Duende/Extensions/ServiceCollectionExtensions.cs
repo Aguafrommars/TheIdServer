@@ -64,7 +64,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<BackChannelAuthenticationRequestStore>()
                 .AddTransient<IBackChannelAuthenticationRequestStore>(p => p.GetRequiredService<BackChannelAuthenticationRequestStore>())
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
-                .AddTransient<IPersistedGrantStore, PersistedGrantStore>();
+                .AddTransient<IPersistedGrantStore, PersistedGrantStore>()
+                .AddTransient<IPushedAuthorizationRequestStore, PushedAuthorizationRequestStore>();
         }
 
         public static IServiceCollection AddTokenExchange(this IServiceCollection services)
