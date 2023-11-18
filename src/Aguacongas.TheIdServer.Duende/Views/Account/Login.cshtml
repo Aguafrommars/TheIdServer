@@ -80,7 +80,7 @@
             </div>
         }
 
-        @if (Model.VisibleExternalProviders.Any())
+        @if (Model.VisibleExternalProviders?.Any() == true)
         {
             <div class="col-sm-6 external-providers">
                 <div class="card">
@@ -107,7 +107,7 @@
             </div>
         }
 
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders?.Any() == true)
         {
             <div class="alert alert-warning">
                 <strong>

@@ -35,10 +35,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/>.</param>
         public EntityFrameworkCoreXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory)
         {
-            if (loggerFactory == null)
-            {
-                throw new ArgumentNullException(nameof(loggerFactory));
-            }
+            ArgumentNullException.ThrowIfNull(loggerFactory);
 
             _logger = loggerFactory.CreateLogger<EntityFrameworkCoreXmlRepository<TContext>>();
             _services = services ?? throw new ArgumentNullException(nameof(services));
@@ -67,7 +64,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore
             };
 
             context.KeyRotationKeys.Add(newKey); // generic context interface change from original IDataProtectionKeyContext
-            _logger.LogDebug("Saving key '{FriendlyName}' to '{DbContext}'.", typeof(TContext).Name);
+            _logger.LogDebug("Saving key '{FriendlyName}' to '{DbContext}'.", friendlyName, typeof(TContext).Name);
             context.SaveChanges();
         }
 

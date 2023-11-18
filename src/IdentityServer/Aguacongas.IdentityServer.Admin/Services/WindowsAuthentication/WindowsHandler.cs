@@ -18,10 +18,10 @@ public class WindowsHandler : AuthenticationHandler<WindowsOptions>, IAuthentica
     /// Creates a new <see cref="WindowsHandler"/>
     /// </summary>
     /// <inheritdoc />
-    public WindowsHandler(IOptionsMonitor<WindowsOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
-        : base(options, logger, encoder, clock)
+    public WindowsHandler(IOptionsMonitor<WindowsOptions> options, ILoggerFactory logger, UrlEncoder encoder)
+        : base(options, logger, encoder)
     {
-        _innerHanlder = new NegotiateHandler(options, logger, encoder, clock);        
+        _innerHanlder = new NegotiateHandler(options, logger, encoder);        
     }
 
     /// <inheritdoc/>

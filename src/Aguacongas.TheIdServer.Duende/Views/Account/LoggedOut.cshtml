@@ -20,7 +20,7 @@ Copyright (c) 2023 @Olivier Lefebvre
     @if (Model.PostLogoutRedirectUri != null)
     {
         <div>
-            @Localizer["Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.", Model.PostLogoutRedirectUri, Model.ClientName]
+            @Localizer["Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.", Model.PostLogoutRedirectUri, Model.ClientName!]
         </div>
     }
 

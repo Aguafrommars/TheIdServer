@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<UserSecretsId>51a7f0be-96e4-42d5-ad09-37e9adabfff6</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
-	</PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
@@ -32,6 +34,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.BlazorApp\Aguacongas.TheIdServer.BlazorApp.csproj" />
 		<ProjectReference Include="..\Aguacongas.TheIdServer\Aguacongas.TheIdServer.csproj" />
+		<ProjectReference Include="..\IdentityServer\Aguacongas.IdentityServer.Admin\Aguacongas.IdentityServer.Admin.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Admin.Duende\Aguacongas.IdentityServer.Admin.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende\Aguacongas.IdentityServer.EntityFramework.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.KeysRotation.Duende\Aguacongas.IdentityServer.KeysRotation.Duende.csproj" />
@@ -39,10 +42,15 @@
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.Saml2p.Duende\Aguacongas.IdentityServer.Saml2p.Duende.csproj" />
 		<ProjectReference Include="..\IdentityServer\Duende\Aguacongas.IdentityServer.WsFederation.Duende\Aguacongas.IdentityServer.WsFederation.Duende.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher\Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher\Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher\Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.csproj" />
+		<ProjectReference Include="..\Identity\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.13" />
-    <PackageReference Include="Duende.IdentityServer.Configuration" Version="6.3.5" />
+	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
+    <PackageReference Include="Duende.IdentityServer.Configuration" Version="7.0.0-preview.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 	</ItemGroup>
 </Project>

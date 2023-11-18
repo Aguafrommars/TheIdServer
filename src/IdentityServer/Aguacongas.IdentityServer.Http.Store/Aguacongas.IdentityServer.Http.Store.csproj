@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Duende IdentityServer HTTP stores implementation for TheIdServer API.</Description>
 		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
@@ -24,8 +24,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

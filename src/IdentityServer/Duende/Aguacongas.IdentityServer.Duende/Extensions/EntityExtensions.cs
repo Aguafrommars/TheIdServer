@@ -108,7 +108,9 @@ namespace Aguacongas.IdentityServer.Store
                 CoordinateLifetimeWithUserSession = client.CoordinateLifetimeWithUserSession,
                 PollingInterval = client.PollingInterval,
                 RequireRequestObject = client.RequireRequestObject,
-                RequireDPoP = client.RequireDPoP
+                RequireDPoP = client.RequireDPoP,
+                PushedAuthorizationLifetime = client.PushedAuthorizationLifetime,
+                RequirePushedAuthorization = client.RequirePushedAuthorization,
             };
         }
 

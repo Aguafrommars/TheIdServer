@@ -19,7 +19,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checkout the branch fix/dependencies with the PAT 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: fix/dependencies
           token: ${{ secrets.PAT }}
@@ -31,9 +31,10 @@ jobs:
           git merge origin/master --allow-unrelated-histories
       # Setup .NET Core SDK
       - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v2.1.0
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.*
+          dotnet-version: 8
+          include-prerelease: true
       # Restore workload
       - name: Restore workload
         run: dotnet workload restore

@@ -114,7 +114,11 @@ else
                                         }
                                         else
                                         {
-                                            <InputFile OnChange="@SetCertificateAsync" accept=".cer,.pem,.p7b" />
+                                            <InputFile OnChange="@SetCertificateAsync" accept=".cer,.crt,.pem,.p7b" />
+                                            if (_invalidCertError != null)
+                                            {
+                                                <span class="text-danger">@_invalidCertError</span>
+                                            }
                                         }
                                     </div>
                                     <div class="col-1">

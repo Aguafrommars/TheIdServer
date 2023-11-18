@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Authors>Olivier Lefebvre</Authors>
         <Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="4.1.1" />
+        <PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="5.0.0-preview0177" />
     </ItemGroup>
     
     <ItemGroup>

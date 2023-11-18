@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Aguacongas.IdentityServer.Admin.Configuration;
 
 namespace Aguacongas.IdentityServer.Admin
 {
@@ -16,7 +17,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// </summary>
     /// <seealso cref="Controller" />
     [Produces("application/json")]
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     public class EmailController : Controller
     {
         private readonly SendGridEmailSender _sender;

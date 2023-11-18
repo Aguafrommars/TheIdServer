@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.IdentityServer.Store;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// <typeparam name="T">Type of entity</typeparam>
     /// <seealso cref="Controller" />
     [Produces(JsonFileOutputFormatter.SupportedContentType, "application/json")]
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
     [GenericControllerNameConvention]
     public class GenericApiController<T> : Controller where T : class
     {

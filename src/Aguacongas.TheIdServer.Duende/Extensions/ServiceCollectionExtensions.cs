@@ -11,39 +11,32 @@ using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.Identity.Argon2PasswordHasher;
+using Aguacongas.TheIdServer.Identity.BcryptPasswordHasher;
+using Aguacongas.TheIdServer.Identity.ScryptPasswordHasher;
+using Aguacongas.TheIdServer.Identity.UpgradePasswordHasher;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer.Configuration;
-using Duende.IdentityServer.Configuration.Configuration;
 using Duende.IdentityServer.Services;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Raven.Client.Documents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -60,13 +53,18 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddConfigurationStores()
                 .AddOperationalStores()
                 .AddTokenExchange()
+                .Configure<PasswordHasherOptions>(configurationManager.GetSection(nameof(PasswordHasherOptions)))
                 .AddIdentity<ApplicationUser, IdentityRole>(
                     options =>
                     {
                         configurationManager.Bind(nameof(AspNetCore.Identity.IdentityOptions), options);
                     })
                 .AddTheIdServerStores()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddArgon2PasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(Argon2PasswordHasherOptions)))
+                .AddBcryptPasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(BcryptPasswordHasherOptions)))
+                .AddScryptPasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(ScryptPasswordHasherOptions)))
+                .AddUpgradePasswordHasher<ApplicationUser>(configurationManager.GetSection(nameof(UpgradePasswordHasherOptions)));
 
             if (isProxy)
             {
@@ -154,7 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var authenticationBuilder = services.Configure<ExternalLoginOptions>(configurationManager.GetSection("Google"))
                 .AddAuthorization(options =>
-                    options.AddIdentityServerPolicies(true))
+                    options.AddIdentityServerPolicies())
                 .AddAuthentication()
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
                 // reference tokens
@@ -164,7 +162,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (mutulaTlsOptions?.Enabled == true)
             {
                 // MutualTLS
-                authenticationBuilder.AddCertificate(mutulaTlsOptions?.ClientCertificateAuthenticationScheme, 
+                authenticationBuilder.AddCertificate(mutulaTlsOptions!.ClientCertificateAuthenticationScheme, 
                     options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
 
@@ -207,7 +205,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
             ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
-           
+
+            services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
+
             return services;
         }
 
@@ -394,12 +394,13 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureDataProtection(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureDataProtection(IServiceCollection services, ConfigurationManager configurationManager)
         {
-            var dataprotectionSection = configuration.GetSection(nameof(DataProtectionOptions));
-            if (dataprotectionSection != null)
+            var dataProtectionSection = configurationManager.GetSection(nameof(DataProtectionOptions));
+            if (dataProtectionSection != null)
             {
-                services.AddDataProtection(options => dataprotectionSection.Bind(options)).ConfigureDataProtection(dataprotectionSection);
+                services.AddDataProtection(options => dataProtectionSection.Bind(options))
+                    .ConfigureDataProtection(dataProtectionSection);
             }
         }
 
@@ -430,7 +431,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 switch (dbTypes)
                 {
                     case DbTypes.MongoDb:
-                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection"), tags: tags);
+                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection")!, tags: tags);
                         break;
                     case DbTypes.RavenDb:
                         builder.AddRavenDB(options =>

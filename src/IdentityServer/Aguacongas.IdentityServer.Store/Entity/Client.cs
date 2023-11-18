@@ -390,6 +390,16 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public bool RequireDPoP { get; set; }
 
         /// <summary>
+        /// Specifies whether pushed authorization requests are required for this client.
+        /// </summary>
+        public bool RequirePushedAuthorization { get; set; }
+
+        /// <summary>
+        /// Lifetime of pushed authorization requests for this client.
+        /// </summary>
+        public int? PushedAuthorizationLifetime { get; set; }
+
+        /// <summary>
         /// Gets or sets the relying.
         /// </summary>
         /// <value>

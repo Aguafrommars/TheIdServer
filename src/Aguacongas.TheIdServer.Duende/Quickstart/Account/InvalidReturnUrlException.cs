@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace Aguacongas.TheIdServer.UI
@@ -10,6 +11,7 @@ namespace Aguacongas.TheIdServer.UI
     /// </summary>
     /// <seealso cref="System.Exception" />
     [Serializable]
+    [SuppressMessage("Major Code Smell", "S3925:\"ISerializable\" should be implemented correctly", Justification = "Obsolete")]
     public class InvalidReturnUrlException : Exception
     {
         /// <summary>
@@ -23,12 +25,7 @@ namespace Aguacongas.TheIdServer.UI
         {
         }
 
-        public InvalidReturnUrlException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected InvalidReturnUrlException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
+        public InvalidReturnUrlException(string message, Exception? innerException) : base(message, innerException)
         {
         }
     }

@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace Aguacongas.IdentityServer.Admin
     /// </summary>
     /// <seealso cref="Controller" />
     [Produces("application/json")]
-    [Route("[controller]")]
+    [ApiRoute("[controller]")]
 
     public class ClaimsProviderController
     {

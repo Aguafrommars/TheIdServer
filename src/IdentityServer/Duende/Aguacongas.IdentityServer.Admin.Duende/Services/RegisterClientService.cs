@@ -275,7 +275,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 CibaLifetime = _defaultValues.CibaLifetime,
                 PollingInterval = _defaultValues.PollingInterval,
                 CoordinateLifetimeWithUserSession = _defaultValues.CoordinateLifetimeWithUserSession,
-                RegistrationToken = Guid.NewGuid()
+                RegistrationToken = Guid.NewGuid(),
+                RequirePushedAuthorization = registration.RequirePushedAuthorizationRequests
             };
 
             await _clientStore.CreateAsync(client).ConfigureAwait(false);
@@ -390,7 +391,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 {
                     Culture = r.CultureId,
                     Value = r.Value
-                }).Union(new[] { new LocalizableProperty { Value = client.TosUri } })
+                }).Union(new[] { new LocalizableProperty { Value = client.TosUri } }),
+                RequirePushedAuthorizationRequests = client.RequirePushedAuthorization
             };
         }
 

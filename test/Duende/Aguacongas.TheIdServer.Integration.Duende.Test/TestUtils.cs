@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["ProviderOptions:ResponseType"] = "code",
                 ["WelcomeContenUrl"] = "/welcome-fragment.html",
                 ["SettingsOptions:TypeName"] = "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
-                ["SettingsOptions:ApiUrl"] = new Uri(httpClient.BaseAddress, "api/api/configuration").ToString(),
+                ["SettingsOptions:ApiUrl"] = new Uri(httpClient.BaseAddress, "api/configuration").ToString(),
                 ["MenuOptions:ShowSettings"] = "true"
             };
             var appConfiguration = new ConfigurationBuilder().AddInMemoryCollection(appConfigurationDictionary).Build();
@@ -46,6 +46,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         public class FakeAuthenticationStateProvider : AuthenticationStateProvider, IAccessTokenProvider
         {
             private readonly AuthenticationState _state;
+            private static readonly string[] scopes = ["openid", "profile", "theidseveradminaoi"];
 
             public FakeAuthenticationStateProvider(string userName, IEnumerable<Claim> claims)
             {
@@ -69,7 +70,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                     new AccessToken
                     {
                         Expires = DateTimeOffset.Now.AddDays(1),
-                        GrantedScopes = new string[] { "openid", "profile", "theidseveradminaoi" },
+                        GrantedScopes = scopes,
                     },
                     "http://exemple.com", new InteractiveRequestOptions
                     {

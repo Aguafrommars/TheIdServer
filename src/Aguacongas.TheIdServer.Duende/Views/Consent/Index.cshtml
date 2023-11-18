@@ -14,7 +14,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                 <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="logo"></div>
             }
             <h1>
-                @Localizer["{0} <small>is requesting your permission</small>", @Model.ClientName]
+                @Localizer["{0} <small>is requesting your permission</small>", @Model.ClientName!]
             </h1>
         </div>
     </div>
@@ -28,7 +28,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 
                 <div>@Localizer["Uncheck the permissions you do not wish to grant."]</div>
 
-                @if (Model.IdentityScopes.Any())
+                @if (Model.IdentityScopes?.Any() == true)
                 {
                     <div class="panel panel-default consent-buttons">
                         <div class="panel-heading">
@@ -44,7 +44,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
-                @if (Model.ApiScopes.Any())
+                @if (Model.ApiScopes?.Any() == true)
                 {
                     <div class="panel panel-default">
                         <div class="panel-heading">

@@ -3,15 +3,21 @@
 using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.TheIdServer.Data;
+using Aguacongas.TheIdServer.UI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.WsFederation;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
 {
@@ -25,8 +31,14 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
         public TheIdServerTestFixture()
         {
             var dbName = Guid.NewGuid().ToString();
-            Sut = TestUtils.CreateTestServer(
-                services =>
+            var factory = new WebApplicationFactory<AccountController>().WithWebHostBuilder(webHostBuilder =>
+            {
+                webHostBuilder.ConfigureAppConfiguration(configurationManager =>
+                {
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\..\..\src\Aguacongas.TheIdServer.Duende\appsettings.json"));
+                    configurationManager.AddJsonFile(Path.Combine(Environment.CurrentDirectory, @"appsettings.Test.json"), true);
+                })
+                .ConfigureTestServices(services =>
                 {
                     services.AddTheIdServerAdminEntityFrameworkStores(options =>
                         options.UseInMemoryDatabase(dbName))
@@ -42,7 +54,7 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                             provider.GetRequiredService<IEnumerable<IPostConfigureOptions<CookieAuthenticationOptions>>>(),
                             (name, configure) =>
                             {
-                                
+
                             }
                         )
                     )
@@ -68,9 +80,24 @@ namespace Aguacongas.TheIdServer.Authentication.IntegrationTest
                             }
                         )
                     );
-                });
 
-            using var scope = Sut.Host.Services.CreateScope();
+                    services.AddSingleton<TestUserService>()
+                        .AddMvc().AddApplicationPart(typeof(Config).Assembly);
+                })
+                .Configure((context, builder) =>
+                {
+                    builder.Use(async (context, next) =>
+                    {
+                        var testService = context.RequestServices.GetRequiredService<TestUserService>();
+                        context.User = testService.User;
+                        await next();
+                    });
+                    builder.UseTheIdServer(context.HostingEnvironment, context.Configuration);
+                });
+            });
+            Sut = factory.Server;
+
+            using var scope = factory.Services.CreateScope();
             using var identityContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
             identityContext.Database.EnsureCreated();
             using var operationalContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();

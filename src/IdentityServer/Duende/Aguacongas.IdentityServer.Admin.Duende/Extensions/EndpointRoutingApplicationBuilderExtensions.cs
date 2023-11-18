@@ -17,6 +17,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Aguacongas.IdentityServer.Admin.Configuration;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -31,38 +32,17 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="builder">The builder.</param>
         /// <param name="basePath">The base path.</param>
         /// <param name="configure">The configure.</param>
-        /// <param name="authicationScheme">(Optional) authentication scheme to use</param>
         /// <param name="notAllowedApiRewritePath">(Optional) the rewritten path when an api route match outside the base path</param>
         /// <returns></returns>
         public static IApplicationBuilder UseIdentityServerAdminApi(this IApplicationBuilder builder,
             string basePath,
             Action<IApplicationBuilder> configure,
-            string authicationScheme = "Bearer",
             string notAllowedApiRewritePath = "not-allowed")
         {
-            var entityTypeList = Utils.GetEntityTypeList();
+            ApiBasePath.Value = basePath;
 
-            return builder.Map(basePath, child =>
-            {
-                configure(child);
-                AuthenticateUserMiddleware(child, basePath, authicationScheme);
-            })
-            .Use((context, next) =>
-            {
-                // avoid accessing the api outside the path.
-                var path = context.Request.Path;
-                if (path.HasValue)
-                {
-                    var segments = path.Value.Split('/');
-                    if (path.Equals(basePath, StringComparison.OrdinalIgnoreCase) ||
-                        (!path.StartsWithSegments(basePath) &&
-                            segments.Any(s => entityTypeList.Any(t => t.Name.Equals(s, StringComparison.OrdinalIgnoreCase)))))
-                    {
-                        context.Request.Path = new PathString($"/{notAllowedApiRewritePath}");
-                    }
-                }
-                return next();
-            });
+            configure(builder);
+            return builder;
         }
 
         /// <summary>
@@ -70,72 +50,69 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="basePath">The base path.</param>
-        /// <param name="authicationScheme">The authication scheme.</param>
         /// <returns></returns>
-        public static IApplicationBuilder UseIdentityServerAdminAuthentication(this IApplicationBuilder builder,
-            string basePath, string authicationScheme)
+        public static IApplicationBuilder UseIdentityServerAdminAuthentication(this IApplicationBuilder builder, string basePath = null)
         {
             return builder.Use((context, next) =>
             {
-                return Authenticate(context, next, basePath, authicationScheme);
+                return Authenticate(context, next, basePath ?? ApiBasePath.Value);
             });
         }
 
-        private static void AuthenticateUserMiddleware(IApplicationBuilder child, string basePath, string authicationScheme)
-        {
-            child
-                .UseRouting()
-                .UseIdentityServerAdminAuthentication(basePath, authicationScheme)
-                .UseAuthorization()
-                .UseEndpoints(enpoints =>
-                {
-                    enpoints.MapAdminApiControllers();
-                });
-        }
-
-        private static async Task Authenticate(HttpContext context, Func<Task> next, string basePath, string authicationScheme)
+        private static async Task Authenticate(HttpContext context, Func<Task> next, string basePath)
         {
             var request = context.Request;
             var path = request.Path;
 
-            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
-                (request.PathBase.HasValue && !request.PathBase.StartsWithSegments(basePath)) && !path.StartsWithSegments(basePath))
+            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) || 
+                !path.HasValue ||
+                !path.StartsWithSegments(basePath))
             {
                 await next().ConfigureAwait(false);
                 return;
             }
 
-            ByBassAuthentication(context, request, path);
+            if (!context.User.IsAuthenticated())
+            {
+                await AuthenticateUsingAuthorizationHeader(context, request).ConfigureAwait(false);
+            }
 
-            if (!await GetRegistrationTokenAsync(context, request, path).ConfigureAwait(false))
+            ByBassAuthentication(context, request, path, basePath);
+
+            if (!await GetRegistrationTokenAsync(context, request, path, basePath).ConfigureAwait(false))
             {
                 return;
             }
 
             var logger = context.RequestServices.GetRequiredService<ILogger<HttpContext>>();            
-            if (context.User.Identity.IsAuthenticated)
-            {
-                using var authscope = logger.BeginScope(new Dictionary<string, object> { ["User"] = context.User.GetDisplayName() });
-                await next().ConfigureAwait(false);
-                return;
-            }
-
-            var result = await context.AuthenticateAsync(authicationScheme)
-                    .ConfigureAwait(false);
-
-            context.User = result.Principal;
+            
             using var scope = logger.BeginScope(new Dictionary<string, object> { ["User"] = context.User.GetDisplayName() });
+            await next().ConfigureAwait(false);
 
-            if (!result.Succeeded && 
-                path.StartsWithSegments("/register", StringComparison.OrdinalIgnoreCase) &&
-                request.Method != HttpMethods.Post)
+            var response = context.Response;
+            if (context.Response.StatusCode == (int)HttpStatusCode.Redirect) 
             {
-                await SetForbiddenResponse(context).ConfigureAwait(false);
+                response.StatusCode = context.User.IsAuthenticated() ? (int)HttpStatusCode.Unauthorized : (int)HttpStatusCode.Forbidden;
+                await response.CompleteAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static async Task AuthenticateUsingAuthorizationHeader(HttpContext context, HttpRequest request)
+        {
+            var authorizationHeader = request.Headers.Authorization;
+            var authenticationScheme = authorizationHeader.FirstOrDefault();
+
+            if (authenticationScheme is null)
+            {
                 return;
             }
 
+            var result = await context.AuthenticateAsync(authenticationScheme.Split(' ')[0]).ConfigureAwait(false);
 
-            await next().ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                context.User = result.Principal;
+            }
         }
 
         private static async Task SetForbiddenResponse(HttpContext context)
@@ -146,11 +123,11 @@ namespace Microsoft.AspNetCore.Builder
                 .ConfigureAwait(false);
         }
 
-        private static void ByBassAuthentication(HttpContext context, HttpRequest request, PathString path)
+        private static void ByBassAuthentication(HttpContext context, HttpRequest request, PathString path, string basePath)
         {
-            if ((path.StartsWithSegments("/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
-                            path.StartsWithSegments($"/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
-                            path.StartsWithSegments($"/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) &&
+            if ((path.StartsWithSegments($"{basePath}/welcomefragment", StringComparison.OrdinalIgnoreCase) ||
+                            path.StartsWithSegments($"{basePath}/{nameof(Culture)}", StringComparison.OrdinalIgnoreCase) ||
+                            path.StartsWithSegments($"{basePath}/{nameof(LocalizedResource)}", StringComparison.OrdinalIgnoreCase)) &&
                             !context.User.IsInRole(SharedConstants.READERPOLICY) &&
                             !context.User.HasClaim(c => c.Type == JwtClaimTypes.Role && c.Value == SharedConstants.ADMINSCOPE) &&
                             request.Method == HttpMethods.Get)
@@ -165,9 +142,9 @@ namespace Microsoft.AspNetCore.Builder
             }
         }
 
-        private static async Task<bool> GetRegistrationTokenAsync(HttpContext context, HttpRequest request, PathString path)
+        private static async Task<bool> GetRegistrationTokenAsync(HttpContext context, HttpRequest request, PathString path, string basePath)
         {
-            if (path.StartsWithSegments("/register", StringComparison.OrdinalIgnoreCase) &&
+            if (path.StartsWithSegments($"{basePath}/register", StringComparison.OrdinalIgnoreCase) &&
                 request.Method != HttpMethods.Post)
             {
                 if (!request.Headers.TryGetValue(HeaderNames.Authorization, out StringValues authorizationHeaderValue))

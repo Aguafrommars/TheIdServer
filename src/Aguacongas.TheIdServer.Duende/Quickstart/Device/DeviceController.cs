@@ -1,9 +1,5 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
@@ -39,11 +35,14 @@ namespace Aguacongas.IdentityServer.UI.Device
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            string userCodeParamName = _options.Value.UserInteraction.DeviceVerificationUserCodeParameter;
-            string userCode = Request.Query[userCodeParamName];
-            if (string.IsNullOrWhiteSpace(userCode)) return View("UserCodeCapture");
+            var userCodeParamName = _options.Value.UserInteraction.DeviceVerificationUserCodeParameter;
+            var userCode = Request.Query[userCodeParamName];
+            if (string.IsNullOrWhiteSpace(userCode))
+            {
+                return View("UserCodeCapture");
+            }
 
-            var vm = await BuildViewModelAsync(userCode);
+            var vm = await BuildViewModelAsync(userCode!);
             if (vm == null) return View("Error");
 
             vm.ConfirmUserCode = true;
@@ -67,10 +66,7 @@ namespace Aguacongas.IdentityServer.UI.Device
         [ValidateAntiForgeryToken]
         public Task<IActionResult> Callback(DeviceAuthorizationInputModel model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
+            ArgumentNullException.ThrowIfNull(model);
 
             return CallbackInternal(model);
         }
@@ -90,10 +86,10 @@ namespace Aguacongas.IdentityServer.UI.Device
         {
             var result = new ProcessConsentResult();
 
-            var request = await _interaction.GetAuthorizationContextAsync(model.UserCode);
+            var request = await _interaction.GetAuthorizationContextAsync(model.UserCode!);
             if (request == null) return result;
 
-            ConsentResponse grantedConsent = null;
+            ConsentResponse? grantedConsent = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
             if (model.Button == "no")
@@ -138,7 +134,7 @@ namespace Aguacongas.IdentityServer.UI.Device
             if (grantedConsent != null)
             {
                 // communicate outcome of consent back to identityserver
-                await _interaction.HandleRequestAsync(model.UserCode, grantedConsent);
+                await _interaction.HandleRequestAsync(model.UserCode!, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
                 result.RedirectUri = model.ReturnUrl;
@@ -147,13 +143,13 @@ namespace Aguacongas.IdentityServer.UI.Device
             else
             {
                 // we need to redisplay the consent UI
-                result.ViewModel = await BuildViewModelAsync(model.UserCode, model);
+                result.ViewModel = await BuildViewModelAsync(model.UserCode!, model);
             }
 
             return result;
         }
 
-        private async Task<DeviceAuthorizationViewModel> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel model = null)
+        private async Task<DeviceAuthorizationViewModel?> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel? model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(userCode);
             if (request != null)
@@ -164,7 +160,7 @@ namespace Aguacongas.IdentityServer.UI.Device
             return null;
         }
 
-        private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel model, DeviceFlowAuthorizationRequest request)
+        private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel? model, DeviceFlowAuthorizationRequest request)
         {
             var client = request.Client;
             var vm = new DeviceAuthorizationViewModel
@@ -180,11 +176,11 @@ namespace Aguacongas.IdentityServer.UI.Device
                 ClientLogoUrl = client.LogoUri,
                 AllowRememberConsent = client.AllowRememberConsent
             };
-            if (client.Properties.TryGetValue("PolicyUrl", out string policyUrl))
+            if (client.Properties.TryGetValue("PolicyUrl", out var policyUrl))
             {
                 vm.PolicyUrl = policyUrl;
             }
-            if (client.Properties.TryGetValue("TosUrl", out string tosUrl))
+            if (client.Properties.TryGetValue("TosUrl", out var tosUrl))
             {
                 vm.TosUrl = tosUrl;
             }

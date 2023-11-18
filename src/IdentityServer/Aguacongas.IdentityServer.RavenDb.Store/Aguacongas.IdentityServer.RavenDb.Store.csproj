@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>RavenDb stores implementation for TheIdServer.</Description>
 		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="RavenDB.Client" Version="6.0.0" />
+		<PackageReference Include="RavenDB.Client" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy to Heroku
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    
+jobs:
+  # Build job
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install .NET sdk
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8
+          include-prerelease: true
+      - name: Setup wasm tools
+        run: dotnet workload install wasm-tools
+        env: 
+          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
+      - name: Publish
+        run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA /nr:false /m:1
+      - name: Deploy
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "theidserver-duende"
+          heroku_email: "aguacongas@gmail.com"
+          buildpack: https://github.com/Aguafrommars/theidserver-buildpack
+        

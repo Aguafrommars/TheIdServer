@@ -39,18 +39,19 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Install .NET sdk
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.*
+        dotnet-version: 8
+        include-prerelease: true
     - name: Setup wasm tools
       run: dotnet workload install wasm-tools
       env: 
         GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       env: 
         GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       with:
@@ -68,4 +69,4 @@ jobs:
       name: Build
       
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2

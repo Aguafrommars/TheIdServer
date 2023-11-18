@@ -4,28 +4,26 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
+using Duende.IdentityServer;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Serilog;
 using System.Security.Claims;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
-using Duende.IdentityServer;
 using ISModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.TheIdServer
 {
     public static class SeedData
     {
-        public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+    public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
         {            
             using var scope = services.CreateScope();
 
@@ -38,7 +36,7 @@ namespace Aguacongas.TheIdServer
                 var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
                 opContext.Database.Migrate();
 
-                var appcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                var appcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 appcontext.Database.Migrate();
             }
             
@@ -74,17 +72,17 @@ namespace Aguacongas.TheIdServer
             int index = 0;
             foreach (var user in userList)
             {
-                var existing = userMgr.FindByNameAsync(user.UserName).GetAwaiter().GetResult();
+                var existing = userMgr.FindByNameAsync(user.UserName!).GetAwaiter().GetResult();
                 if (existing != null)
                 {
                     logger.LogInformation("{UserName} already exists", user.UserName);
                     continue;
                 }
                 var pwd = configuration.GetValue<string>($"InitialData:Users:{index}:Password");
-                ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd))
+                ExcuteAndCheckResult(() => userMgr.CreateAsync(user, pwd!))
                     .GetAwaiter().GetResult();
 
-                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()
+                var claimList = configuration.GetSection($"InitialData:Users:{index}:Claims").Get<IEnumerable<Entity.UserClaim>>()!
                     .Select(c => new Claim(c.ClaimType, c.ClaimValue, c.OriginalType, c.Issuer))
                     .ToList();
                 claimList.Add(new Claim(JwtClaimTypes.UpdatedAt, DateTime.Now.ToEpochTime().ToString(), ClaimValueTypes.Integer64));
@@ -92,7 +90,7 @@ namespace Aguacongas.TheIdServer
                     .GetAwaiter().GetResult();
 
                 var roleList = configuration.GetSection($"InitialData:Users:{index}:Roles").Get<IEnumerable<string>>();
-                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList))
+                ExcuteAndCheckResult(() => userMgr.AddToRolesAsync(user, roleList!))
                     .GetAwaiter().GetResult();
 
                 logger.LogInformation("{UserName} created", user.UserName);
@@ -155,12 +153,9 @@ namespace Aguacongas.TheIdServer
             }
 
             var exsitings = culture.Resources.ToList();
-            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var resources = JsonSerializer.Deserialize<IEnumerable<Entity.LocalizedResource>>(File.ReadAllText(file), _jsonSerializerOptions);
 
-            foreach (var resource in resources)
+            foreach (var resource in resources!)
             {
                 if (!exsitings.Any(r => r.Key == resource.Key))
                 {
@@ -533,7 +528,14 @@ namespace Aguacongas.TheIdServer
                         SlidingRefreshTokenLifetime = client.SlidingRefreshTokenLifetime,
                         UpdateAccessTokenClaimsOnRefresh = client.UpdateAccessTokenClaimsOnRefresh,
                         UserCodeType = client.UserCodeType,
-                        UserSsoLifetime = client.UserSsoLifetime
+                        UserSsoLifetime = client.UserSsoLifetime,
+                        CibaLifetime = client.CibaLifetime,
+                        CoordinateLifetimeWithUserSession = client.CoordinateLifetimeWithUserSession,
+                        PollingInterval = client.PollingInterval,
+                        RequireRequestObject = client.RequireRequestObject,
+                        RequireDPoP = client.RequireDPoP,
+                        PushedAuthorizationLifetime = client.PushedAuthorizationLifetime,
+                        RequirePushedAuthorization = client.RequirePushedAuthorization
                     }).GetAwaiter().GetResult();
                 }
                 catch (ArgumentException)
