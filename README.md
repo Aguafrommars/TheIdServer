@@ -58,28 +58,30 @@ Choose your favorite:
 ### Server
 
 * [OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/), [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) and [Saml2P](http://docs.oasis-open.org/security/saml/v2.0/sstc-saml-approved-errata-2.0.html) server
-* [Large choice of database](https://github.com/Aguafrommars/TheIdServer/blob/master/src/Aguacongas.TheIdServer.Duende/README.md#using-entity-framework-core)
-* [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#configure-the-provider-hub)
-* [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#using-the-api)
-* [Docker support](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#from-docker)
+* [Large choice of database](https://github.com/Aguafrommars/TheIdServer/blob/master/doc/SERVER.md#using-entity-framework-core)
+* [Dynamic external provider configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#configure-the-provider-hub)
+* [Public / Private installation](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#using-the-api)
+* [Docker support](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#from-docker)
 * [Claims providers](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CLAIMS_PROVIDER.md)
 * [External claims mapping](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/EXTERNAL_CLAIMS_MAPPING.md)
 * [Localizable](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/LOCALIZATION.md)
 * [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html)
-* [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#configure-token-cleaner)
+* [Auto remove expired tokens](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#configure-token-cleaner)
 * [Keys rotation](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/KEYS_ROTATION.md)
 * [Create Personal Access Token](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/PAT.md)
 * [Duende CIBA integration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/CIBA.md)
 * [Token exchange](https://datatracker.ietf.org/doc/html/rfc8693)([RFC 8693](https://datatracker.ietf.org/doc/html/rfc8693))
-* [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md#health-checks)
+* [Health checks](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#health-checks)
 * [OpenTelemety](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/OPEN_TELEMETRY.md)
 * [Server side session](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER_SIDE_SESSIONS.md)
+* [Passwor hashing configuration](https://github.com/Aguafrommars/TheIdServer/tree/master/doc/SERVER.md#configure-password-hashers-options)
+  
   
 ## Setup
 
-* Read the [Duende server README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.Duende/README.md) to configure the Duende IdentityServer.  
+* Read the [TheIdServer Duende Web Server](doc/SERVER.md) to configure the Duende IdentityServer.  
 **You'll need to [acquire a license](https://duendesoftware.com/products/identityserver#pricing) for a commercial use of this version.**
-* Read the [application README](https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp/README.md) for application configuration.  
+* Read the [TheIdServer Admin Application](doc/ADMINAPP.md) for application configuration.  
 
 ## Build from source
 

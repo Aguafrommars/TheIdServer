@@ -1,4 +1,4 @@
-# DUENDE CIBA INTEGRATION
+# Dudende CIBA Integration
 
 The Duende version of TheIdServer integrate [Client Initiated Backchannel Authentication (CIBA)](https://docs.duendesoftware.com/identityserver/v6/ui/ciba/).
 
