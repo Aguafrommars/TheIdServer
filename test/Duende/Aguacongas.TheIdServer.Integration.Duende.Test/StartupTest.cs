@@ -167,7 +167,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest
         [InlineData(false, null, "test", "test.test")]
         [InlineData(false, "/providerhub", "test", null)]
         [InlineData(false, "/providerhub", "test", "test.test")]
-        public async Task ConfigureService_should_configure_proxy_services(bool disableStrictSll, string path, string otk, string token)
+        public async Task ConfigureService_should_configure_proxy_services(bool disableStrictSll, string? path, string? otk, string? token)
         {
             var sessionMock = new Mock<IAsyncDocumentSession>();
             var advancedMock = new Mock<IAsyncAdvancedSessionOperations>();
@@ -198,7 +198,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest
                 ["otk"] = otk
             });
             var mockOneTimeTokenRetriver = new Mock<IRetrieveOneTimeToken>();
+#pragma warning disable CS8604 // Possible null reference argument.
             mockOneTimeTokenRetriver.Setup(m => m.GetOneTimeToken(It.IsAny<string>())).Returns(token);
+#pragma warning restore CS8604 // Possible null reference argument.
             var requestServices = new ServiceCollection()
                 .AddTransient(p => mockOneTimeTokenRetriver.Object)
                 .BuildServiceProvider();
