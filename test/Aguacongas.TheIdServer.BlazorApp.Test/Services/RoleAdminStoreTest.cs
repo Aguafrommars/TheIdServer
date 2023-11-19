@@ -6,6 +6,7 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Moq;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Test.Services
@@ -19,23 +20,23 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Services
         }
 
         [Fact]
-        public void GetAsync_page_should_not_be_implememted()
+        public async Task GetAsync_page_should_not_be_implememted()
         {
             var storeMock = new Mock<IAdminStore<Role>>();
             var sut = new RoleAdminStore(storeMock.Object);
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest()));
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest(), CancellationToken.None));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest()));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(new PageRequest(), CancellationToken.None));
         }
 
         [Fact]
-        public void UpdateAsync_should_not_be_implememted()
+        public async Task UpdateAsync_should_not_be_implememted()
         {
             var storeMock = new Mock<IAdminStore<Role>>();
             var sut = new RoleAdminStore(storeMock.Object);
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role()));
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role(), CancellationToken.None));
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object()));
-            Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object(), CancellationToken.None));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role()));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new Role(), CancellationToken.None));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object()));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.UpdateAsync(new object(), CancellationToken.None));
         }
     }
 }
