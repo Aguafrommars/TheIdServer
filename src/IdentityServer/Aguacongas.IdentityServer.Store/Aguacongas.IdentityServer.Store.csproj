@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="11.8.0" />
+		<PackageReference Include="FluentValidation" Version="11.8.1" />
 	</ItemGroup>
 	<ItemGroup>
     <None Include="package-icon.png" Pack="true" PackagePath="" />
