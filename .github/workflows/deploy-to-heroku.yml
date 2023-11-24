@@ -12,7 +12,7 @@ on:
     
 jobs:
   # Build job
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,11 +28,20 @@ jobs:
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       - name: Publish
         run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA /nr:false /m:1
+
+  # Deployment job
+  deploy:
+    environment:
+      name: heroku
+      url: https://theidserver-duende.herokuapp.com/
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "theidserver-duende"
           heroku_email: "aguacongas@gmail.com"
-          buildpack: https://github.com/Aguafrommars/theidserver-buildpack
+          buildpack: https://github.com/Aguafrommars/theidserverbuildpack
         
