@@ -1,6 +1,4 @@
 ﻿<linker>
-  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly">
-    <type fullname="Microsoft.AspNetCore.Components.RootComponentOperationBatch" preserve="all">
-    </type>
-  </assembly>
+  <assembly fullname="Microsoft.Authentication.WebAssembly.Msal" preserve="all" />
+  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly.Authentication" preserve="all" />
 </linker>
