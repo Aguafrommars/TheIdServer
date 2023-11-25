@@ -16,8 +16,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="5.0.0-preview0177" />
-		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="2.0.0-preview1-0080" />
+		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="5.0.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="2.0.0" />
 
 		<PackageReference Include="IdentityModel" Version="6.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
