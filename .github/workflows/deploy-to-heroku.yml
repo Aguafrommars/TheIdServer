@@ -11,8 +11,11 @@ on:
   workflow_dispatch:
     
 jobs:
-  # Build job
+  # Deployment job
   deploy:
+    environment:
+      name: heroku
+      url: https://theidserver-duende.herokuapp.com/
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,5 +37,5 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "theidserver-duende"
           heroku_email: "aguacongas@gmail.com"
-          buildpack: https://github.com/Aguafrommars/theidserver-buildpack
+          buildpack: https://github.com/Aguafrommars/theidserverbuildpack
         
