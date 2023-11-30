@@ -51,11 +51,6 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         {
                             ApiKey = "test"
                         },
-                        Jaeger = new JaegerExporterOptions
-                        {
-                            AgentHost = "google.com",
-                            AgentPort = 443
-                        },
                         Zipkin = new ZipkinExporterOptions
                         {
                             Endpoint = new Uri("https://google.com")

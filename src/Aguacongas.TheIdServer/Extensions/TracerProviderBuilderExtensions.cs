@@ -107,18 +107,6 @@ namespace OpenTelemetry.Trace
                 return builder;
             }
 
-            if (!string.IsNullOrEmpty(options.Jaeger?.AgentHost))
-            {
-                builder = builder.AddJaegerExporter(o =>
-                {
-                    var jaegerOptions = options.Jaeger;
-                    o.AgentPort = jaegerOptions.AgentPort;
-                    o.AgentHost = jaegerOptions.AgentHost;
-                    o.BatchExportProcessorOptions = jaegerOptions.BatchExportProcessorOptions;
-                    o.ExportProcessorType = jaegerOptions.ExportProcessorType;
-                });
-            }
-
             if (options.OpenTelemetryProtocol?.Endpoint is not null)
             {
                 builder = builder.AddOtlpExporter(o =>
