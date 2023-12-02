@@ -66,7 +66,6 @@ namespace OpenTelemetry.Trace
                     }
 
                     o.RecordException = aspOptions.RecordException;
-                    o.EnableGrpcAspNetCoreSupport = aspOptions.EnableGrpcAspNetCoreSupport;
                 })
                 .AddSqlClientInstrumentation(o =>
                 {

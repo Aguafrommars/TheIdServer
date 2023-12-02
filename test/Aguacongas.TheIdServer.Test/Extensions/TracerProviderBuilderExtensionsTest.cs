@@ -76,12 +76,11 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         },
                         Instrumentation = new InstrumentationOptions
                         {
-                            AspNetCore = new AspNetCoreInstrumentationOptions
+                            AspNetCore = new AspNetCoreTraceInstrumentationOptions
                             {
-                                EnableGrpcAspNetCoreSupport = true,
                                 RecordException = true
                             },
-                            HttpClient = new HttpClientInstrumentationOptions
+                            HttpClient = new HttpClientTraceInstrumentationOptions
                             {
                                 RecordException = true
                             },
