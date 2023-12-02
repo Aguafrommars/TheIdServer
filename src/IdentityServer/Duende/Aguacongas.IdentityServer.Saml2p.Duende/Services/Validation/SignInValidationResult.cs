@@ -10,7 +10,7 @@ namespace Aguacongas.IdentityServer.Saml2p.Duende.Services.Validation;
 /// Signing validation result
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class SignInValidationResult<T> where T : Saml2Binding<T>
+public class SignInValidationResult<T> where T : Saml2Binding
 {
     /// <summary>
     /// Saml2P request

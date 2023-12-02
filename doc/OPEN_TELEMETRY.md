@@ -188,31 +188,6 @@ To enable the [OTLP endpoint or Collector](https://opentelemetry.io/docs/collect
 
 `OpenTelemetryProtocol` is deserialized into a [`OtlpExporterOptions`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/4b3ee96ffc39bc24c3b8377455b2c099bd9da6b0/src/OpenTelemetry.Exporter.OpenTelemetryProtocol/OtlpExporterOptions.cs) instance.
 
-#### Jaeger
-
-To enable the [Jaeger](https://www.jaegertracing.io/) exporter setup the `Jaeger` node:
-
-```json
-{
-  "OpenTelemetryOptions": {
-    "Trace": {
-      "Jaeger": {
-        "AgentHost": "exemple.com", //required
-        "AgentPort": 443 ,
-        "ExportProcessorType": "Batch",
-        "BatchExportProcessorOptions": {
-          "BatchExportProcessorOptions": 2048,
-          "ScheduledDelayMilliseconds": 5000,
-          "ExporterTimeoutMilliseconds": 30000,
-          "MaxExportBatchSize": 512
-        }
-      }
-    }
-  }
-}
-```
-
-`Jaeger` is deserialized into a [`JaegerExporterOptions`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Exporter.Jaeger/JaegerExporterOptionsExtensions.cs) instance.
 
 #### Zipkin
 
