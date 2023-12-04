@@ -1,5 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +23,7 @@ namespace Microsoft.AspNetCore.Builder
                     .UseHsts();
             }
 
+            ApiBasePath.Value = "/api";
             app.UseSerilogRequestLogging()
                 .UseHttpsRedirection()
                 .UseResponseCompression()
