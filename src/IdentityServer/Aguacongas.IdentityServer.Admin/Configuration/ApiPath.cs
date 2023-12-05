@@ -8,5 +8,5 @@ public static class ApiBasePath
     /// <summary>
     /// The api base path value
     /// </summary>
-    public static string Value { get; set; } = "api/";
+    public static string Value { get; set; } = "/api";
 }
