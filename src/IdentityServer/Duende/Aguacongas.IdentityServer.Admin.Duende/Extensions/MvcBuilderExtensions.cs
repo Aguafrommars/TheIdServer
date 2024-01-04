@@ -24,6 +24,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Generation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,7 +99,8 @@ namespace Microsoft.Extensions.DependencyInjection
                             Url = "https://github.com/aguacongas/TheIdServer/blob/master/LICENSE"
                         };
                     };
-                    config.SerializerSettings = new JsonSerializerSettings
+
+                    ((NewtonsoftJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerSettings = new JsonSerializerSettings
                     {
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     };
