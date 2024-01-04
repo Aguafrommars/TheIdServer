@@ -25,6 +25,7 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Generation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,7 +99,11 @@ namespace Microsoft.Extensions.DependencyInjection
                             Url = "https://github.com/aguacongas/TheIdServer/blob/master/LICENSE"
                         };
                     };
-                    ((SystemTextJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+
+                    ((NewtonsoftJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    };
                     var provider = builder.Services.BuildServiceProvider();
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var authority = configuration.GetValue<string>("ApiAuthentication:Authority").Trim('/');
