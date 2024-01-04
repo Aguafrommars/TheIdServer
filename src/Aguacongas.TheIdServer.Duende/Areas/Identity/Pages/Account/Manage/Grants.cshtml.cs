@@ -1,9 +1,5 @@
 // Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;

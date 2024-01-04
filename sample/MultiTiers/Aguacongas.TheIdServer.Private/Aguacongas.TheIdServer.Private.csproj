@@ -8,6 +8,7 @@
 		<UserSecretsId>f6987681-1871-440a-a6ea-a606c2c5ccf6</UserSecretsId>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>Aguacongas.TheIdServer.Private.ruleset</CodeAnalysisRuleSet>
