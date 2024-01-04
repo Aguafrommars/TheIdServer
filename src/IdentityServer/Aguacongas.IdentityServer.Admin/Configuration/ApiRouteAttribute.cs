@@ -18,7 +18,7 @@ public class ApiRouteAttribute : Attribute, IRouteTemplateProvider
     public ApiRouteAttribute([StringSyntax("Route")] string template)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(template);
-        var routeBasePath = $"{ApiBasePath.Value[1..]}";
+        var routeBasePath = $"{ApiBasePath.Value[1..]}/";
         Template = $"{routeBasePath}{template}";
     }
 

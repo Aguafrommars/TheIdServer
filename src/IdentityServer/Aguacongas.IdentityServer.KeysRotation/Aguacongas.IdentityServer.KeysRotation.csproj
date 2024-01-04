@@ -23,11 +23,11 @@
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Identity.Client" Version="4.58.0" />
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.58.1" />
+        <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
-        <PackageReference Include="RavenDB.Client" Version="6.0.1" />
-        <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+        <PackageReference Include="RavenDB.Client" Version="6.0.2" />
+        <PackageReference Include="StackExchange.Redis" Version="2.7.10" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />
