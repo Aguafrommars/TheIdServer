@@ -39,9 +39,7 @@ namespace Microsoft.AspNetCore.Builder
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             var services = webApplicationBuilder.Services;
-            services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(connectionString))
-                .AddTheIdServerAdminEntityFrameworkStores(options =>
+            services.AddTheIdServerAdminEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationEntityFrameworkStores(options =>
                     options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly)))

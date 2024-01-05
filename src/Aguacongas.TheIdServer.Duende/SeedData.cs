@@ -8,7 +8,6 @@ using Duende.IdentityServer;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using System.Security.Claims;
 using System.Text.Json;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
