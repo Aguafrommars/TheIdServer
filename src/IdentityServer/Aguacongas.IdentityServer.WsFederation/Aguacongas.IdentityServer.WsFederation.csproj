@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="7.0.3" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.WsFederation" Version="7.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
