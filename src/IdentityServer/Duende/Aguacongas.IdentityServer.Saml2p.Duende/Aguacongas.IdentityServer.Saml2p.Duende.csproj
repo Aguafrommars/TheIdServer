@@ -28,7 +28,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer" Version="7.0.0-preview.2" />
+    <PackageReference Include="Duende.IdentityServer" Version="7.0.0" />
     <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.10.8" />
   </ItemGroup>
 
