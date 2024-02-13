@@ -26,7 +26,7 @@
         <PackageReference Include="Microsoft.Identity.Client" Version="4.59.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
-        <PackageReference Include="RavenDB.Client" Version="6.0.4" />
+        <PackageReference Include="RavenDB.Client" Version="6.0.100" />
         <PackageReference Include="StackExchange.Redis" Version="2.7.17" />
     </ItemGroup>
 	<ItemGroup>
