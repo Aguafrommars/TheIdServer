@@ -44,7 +44,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.2" />
-    <PackageReference Include="SendGrid" Version="9.29.1" />
+    <PackageReference Include="SendGrid" Version="9.29.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aguacongas.IdentityServer.KeysRotation\Aguacongas.IdentityServer.KeysRotation.csproj" />
