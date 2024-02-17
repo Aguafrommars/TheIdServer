@@ -22,8 +22,8 @@ namespace Aguacongas.TheIdServer
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-    public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
-        {            
+        public static void EnsureSeedData(IConfiguration configuration, IServiceProvider services)
+        {
             using var scope = services.CreateScope();
 
             var dbType = configuration.GetValue<DbTypes>("DbType");
@@ -38,7 +38,7 @@ namespace Aguacongas.TheIdServer
                 var appcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 appcontext.Database.Migrate();
             }
-            
+
             SeedUsers(scope, configuration);
             SeedConfiguration(scope, configuration);
         }
@@ -198,7 +198,7 @@ namespace Aguacongas.TheIdServer
                         DisplayName = resource.DisplayName,
                         Enabled = resource.Enabled,
                         Id = resource.Name,
-                        
+
                         RequireResourceIndicator = resource.RequireResourceIndicator
                     }).GetAwaiter().GetResult();
                 }
@@ -210,7 +210,7 @@ namespace Aguacongas.TheIdServer
                 SeedApiSecrets(apiSecretStore, resource);
                 SeedApiApiScopes(apiApiScopeStore, resource);
                 SeedApiProperties(apiPropertyStore, resource);
-                
+
                 logger.LogInformation("Add api resource {DisplayName}", resource.DisplayName);
             }
         }
@@ -272,7 +272,7 @@ namespace Aguacongas.TheIdServer
                         Value = secret.Value
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -354,7 +354,7 @@ namespace Aguacongas.TheIdServer
                         Value = property.Value
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -374,7 +374,7 @@ namespace Aguacongas.TheIdServer
                         Type = claim
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -386,7 +386,7 @@ namespace Aguacongas.TheIdServer
             var identityStore = provider.GetRequiredService<IAdminStore<Entity.IdentityResource>>();
             var identityClaimStore = provider.GetRequiredService<IAdminStore<Entity.IdentityClaim>>();
             var identityPropertyStore = provider.GetRequiredService<IAdminStore<Entity.IdentityProperty>>();
-            
+
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("SeedIdentities");
 
@@ -457,7 +457,7 @@ namespace Aguacongas.TheIdServer
                         Type = claim
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -653,7 +653,7 @@ namespace Aguacongas.TheIdServer
                         Value = property.Value
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -696,7 +696,7 @@ namespace Aguacongas.TheIdServer
                         Value = secret.Value
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -793,7 +793,7 @@ namespace Aguacongas.TheIdServer
                         TokenType = relyingParty.TokenType
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
@@ -810,7 +810,7 @@ namespace Aguacongas.TheIdServer
                 return;
             }
 
-            foreach(var mapping in relyingParty.ClaimMappings)
+            foreach (var mapping in relyingParty.ClaimMappings)
             {
                 try
                 {
@@ -822,7 +822,7 @@ namespace Aguacongas.TheIdServer
                         ToClaimType = mapping.ToClaimType
                     }).GetAwaiter().GetResult();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     // silent
                 }
