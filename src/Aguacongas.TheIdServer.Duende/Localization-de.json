@@ -2160,7 +2160,7 @@
 	"value": "Entweder eine Metadaten- oder Redirect-URI muss festgelegt sein."
   },
   {
-	"key": "Either a metadata or redirect URI must be set.",
+	"key": "Either a metadata URI or a X509Certificate secret must be set.",
 	"value": "Entweder eine Metadaten-URI oder ein X509Certificate-Schlüssel muss festgelegt sein."
   }
 ]
