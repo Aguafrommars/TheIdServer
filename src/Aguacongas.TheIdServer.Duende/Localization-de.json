@@ -1,0 +1,2166 @@
+[
+  {
+	"key": "(required)",
+	"value": "(erforderlich)"
+  },
+  {
+	"key": "{0} <small>is requesting your permission</small>",
+	"value": "{0} <small>fordert Ihre Genehmigung an</small>"
+  },
+  {
+	"key": "'{0}' cannot be added to a client with grant type '{1}'.",
+	"value": "'{0}' kann nicht zu einem Client mit Gewährungstyp '{1}' hinzugefügt werden."
+  },
+  {
+	"key": "{0} is not a valid uri.",
+	"value": "{0} ist keine gültige URI."
+  },
+  {
+	"key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+	"value": "2FA wurde deaktiviert. Sie können 2FA wieder aktivieren, wenn Sie eine Authenticator-App einrichten."
+  },
+  {
+	"key": "About",
+	"value": "Über"
+  },
+  {
+	"key": "Absolute",
+	"value": "Absolut"
+  },
+  {
+	"key": "absolute refresh token lifetime",
+	"value": "Absolute Lebensdauer des Auffrischungstokens"
+  },
+  {
+	"key": "Access Denied",
+	"value": "Zugriff verweigert"
+  },
+  {
+	"key": "access failed count",
+	"value": "Zugriffsfehlanzahl"
+  },
+  {
+	"key": "access token lifetime",
+	"value": "Zugriffstoken-Lebensdauer"
+  },
+  {
+	"key": "access token type",
+	"value": "Zugriffstokentyp"
+  },
+  {
+	"key": "access type",
+	"value": "Zugriffstyp"
+  },
+  {
+	"key": "activation",
+	"value": "Aktivierung"
+  },
+  {
+	"key": "Add",
+	"value": "Hinzufügen"
+  },
+  {
+	"key": "Add another service to log in.",
+	"value": "Fügen Sie einen weiteren Dienst zum Einloggen hinzu."
+  },
+  {
+	"key": "Add authenticator app",
+	"value": "Authentifizierungs-App hinzufügen"
+  },
+  {
+	"key": "allow access tokens via browser",
+	"value": "Erlauben Sie den Zugriff auf Tokens über den Browser"
+  },
+  {
+	"key": "allow offline access",
+	"value": "Offline-Zugriff zulassen"
+  },
+  {
+	"key": "allow plain text PKCE",
+	"value": "Klartext-PKCE zulassen"
+  },
+  {
+	"key": "allow unsolicited logins",
+	"value": "Ungefragte Anmeldungen zulassen"
+  },
+  {
+	"key": "always include user claims in id token",
+	"value": "Benutzeransprüche immer im ID-Token einbeziehen"
+  },
+  {
+	"key": "always send claims",
+	"value": "Ansprüche immer senden"
+  },
+  {
+	"key": "An url cannot exceed 2000 char.",
+	"value": "Eine URL darf 2000 Zeichen nicht überschreiten."
+  },
+  {
+	"key": "api",
+	"value": "API"
+  },
+  {
+	"key": "API Grants",
+	"value": "API-Zuwendungen"
+  },
+  {
+	"key": "api id",
+	"value": "API-ID"
+  },
+  {
+	"key": "Apis",
+	"value": "APIs"
+  },
+  {
+	"key": "app id",
+	"value": "App-ID"
+  },
+  {
+	"key": "app secret",
+	"value": "App-Geheimnis"
+  },
+  {
+	"key": "Application Access",
+	"value": "Anwendungs-Zugriff"
+  },
+  {
+	"key": "Associate your {0} account.",
+	"value": "Verknüpfen Sie Ihr {0}-Konto."
+  },
+  {
+	"key": "Authentication in progress",
+	"value": "Authentifizierung läuft"
+  },
+  {
+	"key": "Authenticator app",
+	"value": "Authentifizierungs-App"
+  },
+  {
+	"key": "Authenticator code",
+	"value": "Authentifizierungscode"
+  },
+  {
+	"key": "authority",
+	"value": "Autorität"
+  },
+  {
+	"key": "Authority is required.",
+	"value": "Autorität ist erforderlich."
+  },
+  {
+	"key": "Authority must be a valid uir.",
+	"value": "Autorität muss eine gültige URI sein."
+  },
+  {
+	"key": "authorization code lifetime",
+	"value": "Autorisierungscode-Lebensdauer"
+  },
+  {
+	"key": "authorization endpoint",
+	"value": "Autorisierungsendpunkt"
+  },
+  {
+	"key": "Authorization endpoint is required.",
+	"value": "Autorisierungsendpunkt ist erforderlich."
+  },
+  {
+	"key": "Authorization endpoint must be a valid uri.",
+	"value": "Autorisierungsendpunkt muss eine gültige URI sein."
+  },
+  {
+	"key": "back channel logout uri",
+	"value": "URI für die Abmeldung im Hintergrundkanal"
+  },
+  {
+	"key": "back channel logout uri required",
+	"value": "URI für die Abmeldung im Hintergrundkanal erforderlich"
+  },
+  {
+	"key": "Below is the list of applications you have given access to and the names of the resources they have access to.",
+	"value": "Nachfolgend finden Sie eine Liste der Anwendungen, denen Sie Zugriff gewährt haben, und die Namen der Ressourcen, auf die sie zugreifen können."
+  },
+  {
+	"key": "Cancel",
+	"value": "Abbrechen"
+  },
+  {
+	"key": "Change email",
+	"value": "E-Mail ändern"
+  },
+  {
+	"key": "Change password",
+	"value": "Passwort ändern"
+  },
+  {
+	"key": "Change your account settings",
+	"value": "Ändern Sie Ihre Kontoeinstellungen"
+  },
+  {
+	"key": "Checking login state...",
+	"value": "Anmeldestatus wird überprüft..."
+  },
+  {
+	"key": "claim type",
+	"value": "Anspruchstyp"
+  },
+  {
+	"key": "Claims",
+	"value": "Ansprüche"
+  },
+  {
+	"key": "claims",
+	"value": "Ansprüche"
+  },
+  {
+	"key": "claims mapping",
+	"value": "Anspruchszuordnung"
+  },
+  {
+	"key": "Claims mapping",
+	"value": "Anspruchszuordnung"
+  },
+  {
+	"key": "claims prefix",
+	"value": "Anspruchs-Präfix"
+  },
+  {
+	"key": "claims transformations",
+	"value": "Anspruchstransformationen"
+  },
+  {
+	"key": "Claims transformations",
+	"value": "Anspruchstransformationen"
+  },
+  {
+	"key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
+	"value": "Klicken Sie <a class=\"PostLogoutRedirectUri\" href=\"{0}\">hier</a>, um zur Anwendung <span>{1}</span> zurückzukehren."
+  },
+  {
+	"key": "Client Application Access",
+	"value": "Accès aux applications clientes"
+  },
+  {
+	"key": "client id",
+	"value": "identité du client"
+  },
+  {
+	"key": "Client Id is required.",
+	"value": "Die Client-ID ist erforderlich."
+  },
+  {
+	"key": "client name",
+	"value": "Name des Kunden"
+  },
+  {
+	"key": "client secret",
+	"value": "Kunden-Geheimnis"
+  },
+  {
+	"key": "Client Secret is required.",
+	"value": "Das Client-Geheimnis ist erforderlich."
+  },
+  {
+	"key": "client uri",
+	"value": "Client-URI"
+  },
+  {
+	"key": "Clients",
+	"value": "Kunden"
+  },
+  {
+	"key": "Close",
+	"value": "Schließen"
+  },
+  {
+	"key": "Code",
+	"value": "Code"
+  },
+  {
+	"key": "Completing login...",
+	"value": "Anmeldung wird abgeschlossen..."
+  },
+  {
+	"key": "Configure authenticator app",
+	"value": "Authentifikator-App konfigurieren"
+  },
+  {
+	"key": "Confirm email",
+	"value": "Bestätigen Sie Ihre E-Mail"
+  },
+  {
+	"key": "Confirm email change",
+	"value": "Bestätigen Sie die Änderung der E-Mail"
+  },
+  {
+	"key": "Confirm new password",
+	"value": "Bestätigen Sie das neue Passwort"
+  },
+  {
+	"key": "Confirm password",
+	"value": "Bestätigen Sie das Passwort"
+  },
+  {
+	"key": "Confirm your email",
+	"value": "Bestätigen Sie Ihre E-Mail"
+  },
+  {
+	"key": "Confirmation link to change email sent. Please check your email.",
+	"value": "Bestätigungslink zum Ändern der E-Mail gesendet. Bitte überprüfen Sie Ihre E-Mails."
+  },
+  {
+	"key": "consent",
+	"value": "Zustimmung"
+  },
+  {
+	"key": "Consent",
+	"value": "Zustimmung"
+  },
+  {
+	"key": "consent lifetime",
+	"value": "Lebensdauer der Zustimmung"
+  },
+  {
+	"key": "consents",
+	"value": "Zustimmungen"
+  },
+  {
+	"key": "Consents",
+	"value": "Zustimmungen"
+  },
+  {
+	"key": "consumer key",
+	"value": "Verbraucher-Schlüssel"
+  },
+  {
+	"key": "Consumer Key is required.",
+	"value": "Der Verbraucher-Schlüssel ist erforderlich."
+  },
+  {
+	"key": "consumer secret",
+	"value": "Verbraucher-Geheimnis"
+  },
+  {
+	"key": "Consumer Secret is required.",
+	"value": "Das Verbraucher-Geheimnis ist erforderlich."
+  },
+  {
+	"key": "cors",
+	"value": "cors"
+  },
+  {
+	"key": "Create a new account.",
+	"value": "Ein neues Konto erstellen."
+  },
+  {
+	"key": "create at",
+	"value": "erstellt am"
+  },
+  {
+	"key": "Created:",
+	"value": "Erstellt:"
+  },
+  {
+	"key": "creation",
+	"value": "Erstellung"
+  },
+  {
+	"key": "culture",
+	"value": "Kultur"
+  },
+  {
+	"key": "Cultures",
+	"value": "Kulturen"
+  },
+  {
+	"key": "Current password",
+	"value": "Aktuelles Passwort"
+  },
+  {
+	"key": "data",
+	"value": "Daten"
+  },
+  {
+	"key": "Data Protection",
+	"value": "Datenschutz"
+  },
+  {
+	"key": "decription",
+	"value": "Beschreibung"
+  },
+  {
+	"key": "Delete",
+	"value": "Löschen"
+  },
+  {
+	"key": "Delete data and close my account",
+	"value": "Daten löschen und mein Konto schließen"
+  },
+  {
+	"key": "Delete Personal Data",
+	"value": "Persönliche Daten löschen"
+  },
+  {
+	"key": "Deleted",
+	"value": "Gelöscht"
+  },
+  {
+	"key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+	"value": "Durch das Löschen dieser Daten wird Ihr Konto dauerhaft entfernt, und dies kann nicht wiederhergestellt werden."
+  },
+  {
+	"key": "description",
+	"value": "Beschreibung"
+  },
+  {
+	"key": "device flow request lifetime",
+	"value": "Lebensdauer der Geräteflussanforderung"
+  },
+  {
+	"key": "Disable 2FA",
+	"value": "2FA deaktivieren"
+  },
+  {
+	"key": "disable telemetry",
+	"value": "Telemetrie deaktivieren"
+  },
+  {
+	"key": "Disable two-factor authentication (2FA)",
+	"value": "Zwei-Faktor-Authentifizierung (2FA) deaktivieren"
+  },
+  {
+	"key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+	"value": "Das Deaktivieren von 2FA ändert nicht die Schlüssel, die in Authentifikator-Apps verwendet werden. Wenn Sie den Schlüssel in einer Authentifikator-App ändern möchten, sollten Sie <a href=\"{0}\">Ihre Authentifikatorschlüssel zurücksetzen.</a>"
+  },
+  {
+	"key": "display name",
+	"value": "Anzeigename"
+  },
+  {
+	"key": "Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.",
+	"value": "Keinen Zugriff auf Ihr Authentifikator-Gerät? Sie können <a href=\"{0}\">mit einem Wiederherstellungscode anmelden</a>."
+  },
+  {
+	"key": "Download",
+	"value": "Herunterladen"
+  },
+  {
+	"key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>.",
+	"value": "Laden Sie eine Zwei-Faktor-Authentifikator-App wie Microsoft Authenticator für <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> und <a href=\"{2}\">iOS</a> oder Google Authenticator für <a href=\"{3}\">Android</a> und <a href=\"{4}\">iOS </a> herunter."
+  },
+  {
+	"key": "Download Your Data",
+	"value": "Laden Sie Ihre Daten herunter"
+  },
+  {
+	"key": "Editing the profile is not supported.",
+	"value": "Die Profilbearbeitung wird nicht unterstützt."
+  },
+  {
+	"key": "Email",
+	"value": "E-Mail"
+  },
+  {
+	"key": "email",
+	"value": "E-Mail"
+  },
+  {
+	"key": "email confirmed",
+	"value": "E-Mail bestätigt"
+  },
+  {
+	"key": "emphasize",
+	"value": "betonen"
+  },
+  {
+	"key": "enable local login",
+	"value": "lokale Anmeldung aktivieren"
+  },
+  {
+	"key": "enabled",
+	"value": "aktiviert"
+  },
+  {
+	"key": "encryption certificate",
+	"value": "Verschlüsselungszertifikat"
+  },
+  {
+	"key": "Enter your email.",
+	"value": "Geben Sie Ihre E-Mail ein."
+  },
+  {
+	"key": "Entities created",
+	"value": "Erstellte Entitäten"
+  },
+  {
+	"key": "Entities updated",
+	"value": "Aktualisierte Entitäten"
+  },
+  {
+	"key": "Error",
+	"value": "Fehler"
+  },
+  {
+	"key": "Error changing email.",
+	"value": "Fehler beim Ändern der E-Mail."
+  },
+  {
+	"key": "Error changing user name.",
+	"value": "Fehler beim Ändern des Benutzernamens."
+  },
+  {
+	"key": "Error confirming your email.",
+	"value": "Fehler beim Bestätigen Ihrer E-Mail."
+  },
+  {
+	"key": "Error from external provider: {0}",
+	"value": "Fehler vom externen Anbieter: {0}"
+  },
+  {
+	"key": "Error loading external login information during confirmation.",
+	"value": "Fehler beim Laden externer Anmeldeinformationen während der Bestätigung."
+  },
+  {
+	"key": "Error loading external login information.",
+	"value": "Fehler beim Laden externer Anmeldeinformationen."
+  },
+  {
+	"key": "Error when trying to revoke the key.",
+	"value": "Fehler beim Versuch, den Schlüssel zu widerrufen."
+  },
+  {
+	"key": "expiration",
+	"value": "Ablauf"
+  },
+  {
+	"key": "expire at",
+	"value": "Ablauf um"
+  },
+  {
+	"key": "Expires:",
+	"value": "Läuft ab:"
+  },
+  {
+	"key": "export",
+	"value": "exportieren"
+  },
+  {
+	"key": "External Login",
+	"value": "Externe Anmeldung"
+  },
+  {
+	"key": "External login tokens",
+	"value": "Externe Anmeldetoken"
+  },
+  {
+	"key": "external logins",
+	"value": "externe Anmeldungen"
+  },
+  {
+	"key": "External logins",
+	"value": "Externe Anmeldungen"
+  },
+  {
+	"key": "external logins tokens",
+	"value": "externe Anmeldetoken"
+  },
+  {
+	"key": "External provider restrictions",
+	"value": "Einschränkungen externer Anbieter"
+  },
+  {
+	"key": "field",
+	"value": "Feld"
+  },
+  {
+	"key": "fields",
+	"value": "Felder"
+  },
+  {
+	"key": "filter",
+	"value": "Filter"
+  },
+  {
+	"key": "Forget this browser",
+	"value": "Diesen Browser vergessen"
+  },
+  {
+	"key": "Forgot password confirmation",
+	"value": "Passwort vergessen Bestätigung"
+  },
+  {
+	"key": "Forgot your password?",
+	"value": "Passwort vergessen?"
+  },
+  {
+	"key": "from claim type",
+	"value": "vom Anspruchstyp"
+  },
+  {
+	"key": "front channel logout uri",
+	"value": "URI für Abmelden im Frontchannel"
+  },
+  {
+	"key": "front channel logout uri required",
+	"value": "URI für Abmelden im Frontchannel erforderlich"
+  },
+  {
+	"key": "Generate Recovery Codes",
+	"value": "Wiederherstellungscodes generieren"
+  },
+  {
+	"key": "Generate two-factor authentication (2FA) recovery codes",
+	"value": "Wiederherstellungscodes für die Zwei-Faktor-Authentifizierung (2FA) generieren"
+  },
+  {
+	"key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+	"value": "Das Generieren neuer Wiederherstellungscodes ändert nicht die Schlüssel, die in Authentifikator-Apps verwendet werden. Wenn Sie den Schlüssel in einer Authentifikator-App ändern möchten, sollten Sie <a href=\"{0}\">Ihre Authentifikatorschlüssel zurücksetzen.</a>"
+  },
+  {
+	"key": "grant type",
+	"value": "Subventionstyp"
+  },
+  {
+	"key": "grant types",
+	"value": "Subventionstypen"
+  },
+  {
+	"key": "Grant types",
+	"value": "Subventionstypen"
+  },
+  {
+	"key": "Grants",
+	"value": "Subventionen"
+  },
+  {
+	"key": "Hello {0}!",
+	"value": "Hallo {0}!"
+  },
+  {
+	"key": "Hello, {0}!",
+	"value": "Hallo, {0}!"
+  },
+  {
+	"key": "Home",
+	"value": "Startseite"
+  },
+  {
+	"key": "id",
+	"value": "ID"
+  },
+  {
+	"key": "id token lifetime",
+	"value": "Ablaufzeit des ID-Tokens"
+  },
+  {
+	"key": "Identities",
+	"value": "Identitäten"
+  },
+  {
+	"key": "identity",
+	"value": "Identität"
+  },
+  {
+	"key": "Identity Grants",
+	"value": "Identitätsgewährungen"
+  },
+  {
+	"key": "idp restrictions",
+	"value": "IDP-Beschränkungen"
+  },
+  {
+	"key": "If you lose your device and don't have the recovery codes you will lose access to your account.",
+	"value": "Wenn Sie Ihr Gerät verlieren und keine Wiederherstellungscodes haben, verlieren Sie den Zugriff auf Ihr Konto."
+  },
+  {
+	"key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
+	"value": "Wenn Sie Ihren Authentifikatorschlüssel zurücksetzen, funktioniert Ihre Authentifikator-App erst wieder, wenn Sie sie neu konfigurieren."
+  },
+  {
+	"key": "Import",
+	"value": "Importieren"
+  },
+  {
+	"key": "include JWT id",
+	"value": "JWT-ID einbeziehen"
+  },
+  {
+	"key": "Incorrect password.",
+	"value": "Falsches Passwort."
+  },
+  {
+	"key": "Invalid authenticator code.",
+	"value": "Ungültiger Authentifikationscode."
+  },
+  {
+	"key": "Invalid file",
+	"value": "Ungültige Datei"
+  },
+  {
+	"key": "Invalid login request",
+	"value": "Ungültige Anmeldeanfrage"
+  },
+  {
+	"key": "Invalid recovery code entered.",
+	"value": "Ungültiger eingegebener Wiederherstellungscode."
+  },
+  {
+	"key": "issuer",
+	"value": "Herausgeber"
+  },
+  {
+	"key": "key",
+	"value": "Schlüssel"
+  },
+  {
+	"key": "Keys",
+	"value": "Schlüssel"
+  },
+  {
+	"key": "lifetime",
+	"value": "Lebensdauer"
+  },
+  {
+	"key": "Loading...",
+	"value": "Laden..."
+  },
+  {
+	"key": "Local Login",
+	"value": "Lokale Anmeldung"
+  },
+  {
+	"key": "localized description",
+	"value": "lokale Beschreibung"
+  },
+  {
+	"key": "localized display name",
+	"value": "lokaler Anzeigename"
+  },
+  {
+	"key": "lockout enabled",
+	"value": "Sperrung aktiviert"
+  },
+  {
+	"key": "lockout end",
+	"value": "Sperrungsende"
+  },
+  {
+	"key": "Log in",
+	"value": "Anmelden"
+  },
+  {
+	"key": "Log in using your {0} account",
+	"value": "Melden Sie sich mit Ihrem {0}-Konto an"
+  },
+  {
+	"key": "Log out",
+	"value": "Abmelden"
+  },
+  {
+	"key": "Login",
+	"value": "Anmeldung"
+  },
+  {
+	"key": "Login form",
+	"value": "Anmeldeformular"
+  },
+  {
+	"key": "logo uri",
+	"value": "Logo-URI"
+  },
+  {
+	"key": "Logout",
+	"value": "Abmelden"
+  },
+  {
+	"key": "Logout form",
+	"value": "Abmeldeformular"
+  },
+  {
+	"key": "Manage Email",
+	"value": "E-Mails verwalten"
+  },
+  {
+	"key": "Manage your account",
+	"value": "Ihr Konto verwalten"
+  },
+  {
+	"key": "Manage your external logins",
+	"value": "Verwalten Sie Ihre externen Anmeldungen"
+  },
+  {
+	"key": "map default outbound JWT claim types",
+	"value": "Standardausgehende JWT-Anspruchstypen zuordnen"
+  },
+  {
+	"key": "metadata address",
+	"value": "Metadatenadresse"
+  },
+  {
+	"key": "Metadata address is required.",
+	"value": "Metadatenadresse ist erforderlich."
+  },
+  {
+	"key": "Metadata address must be a valid HTTPS url when 'required https metadata is true'.",
+	"value": "Die Metadatenadresse muss eine gültige HTTPS-URL sein, wenn 'erforderliche HTTPS-Metadaten wahr ist'."
+  },
+  {
+	"key": "Metadata address must be a valid uri.",
+	"value": "Metadatenadresse muss ein gültiges URI sein."
+  },
+  {
+	"key": "name",
+	"value": "Name"
+  },
+  {
+	"key": "name id format",
+	"value": "Namens-ID-Format"
+  },
+  {
+	"key": "New email",
+	"value": "Neue E-Mail"
+  },
+  {
+	"key": "New password",
+	"value": "Neues Passwort"
+  },
+  {
+	"key": "No changes",
+	"value": "Keine Änderungen"
+  },
+  {
+	"key": "No, Do Not Allow",
+	"value": "Nein, nicht zulassen"
+  },
+  {
+	"key": "Nothing here.",
+	"value": "Hier gibt es nichts."
+  },
+  {
+	"key": "Once complete, you may close this tab",
+	"value": "Sobald abgeschlossen, können Sie diesen Tab schließen"
+  },
+  {
+	"key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
+	"value": "Sobald Sie den QR-Code gescannt oder den oben eingegebenen Schlüssel eingegeben haben, wird Ihre Zwei-Faktor-Authentifizierungs-App Ihnen einen eindeutigen Code bereitstellen. Geben Sie den Code im unten stehenden Bestätigungsfeld ein."
+  },
+  {
+	"key": "One time only",
+	"value": "Nur einmal"
+  },
+  {
+	"key": "pairwise subject salt",
+	"value": "Paarweises Subjekt-Salz"
+  },
+  {
+	"key": "Password",
+	"value": "Passwort"
+  },
+  {
+	"key": "password",
+	"value": "Passwort"
+  },
+  {
+	"key": "Personal data",
+	"value": "Persönliche Daten"
+  },
+  {
+	"key": "Personal Information",
+	"value": "Persönliche Informationen"
+  },
+  {
+	"key": "phone number",
+	"value": "Telefonnummer"
+  },
+  {
+	"key": "Phone number",
+	"value": "Telefonnummer"
+  },
+	  {
+	"key": "phone number confirmed",
+	"value": "Telefonnummer bestätigt"
+  },
+  {
+	"key": "Please check your email to confirm your account.",
+	"value": "Bitte überprüfen Sie Ihre E-Mail, um Ihr Konto zu bestätigen."
+  },
+  {
+	"key": "Please check your email to reset your password.",
+	"value": "Bitte überprüfen Sie Ihre E-Mail, um Ihr Passwort zurückzusetzen."
+  },
+  {
+	"key": "Please confirm that the authorization request quotes the code: \"{0}\".",
+	"value": "Bitte bestätigen Sie, dass die Autorisierungsanfrage den Code zitiert: \"{0}\"."
+  },
+  {
+	"key": "Please confirm your account by <a href='{0}'>clicking here</a>.",
+	"value": "Bitte bestätigen Sie Ihr Konto, indem Sie <a href='{0}'>hier klicken</a>."
+  },
+  {
+	"key": "Please enter the code displayed on your device",
+	"value": "Bitte geben Sie den auf Ihrem Gerät angezeigten Code ein"
+  },
+  {
+	"key": "Please reset your password by <a href='{0}'>clicking here</a>.",
+	"value": "Bitte setzen Sie Ihr Passwort zurück, indem Sie <a href='{0}'>hier klicken</a>."
+  },
+  {
+	"key": "Policy",
+	"value": "Richtlinie"
+  },
+  {
+	"key": "policy uri",
+	"value": "Richtlinien-URI"
+  },
+  {
+	"key": "post logout",
+	"value": "Nach der Abmeldung"
+  },
+  {
+	"key": "prefix",
+	"value": "Präfix"
+  },
+  {
+	"key": "Processing logout callback...",
+	"value": "Verarbeitung des Abmelde-Rückrufs..."
+  },
+  {
+	"key": "Processing logout...",
+	"value": "Abmeldevorgang wird verarbeitet..."
+  },
+  {
+	"key": "Profile",
+	"value": "Profil"
+  },
+  {
+	"key": "prompt",
+	"value": "Aufforderung"
+  },
+  {
+	"key": "properties",
+	"value": "Eigenschaften"
+  },
+  {
+	"key": "Properties",
+	"value": "Eigenschaften"
+  },
+  {
+	"key": "protocol type",
+	"value": "Protokolltyp"
+  },
+  {
+	"key": "provider",
+	"value": "Anbieter"
+  },
+  {
+	"key": "Providers",
+	"value": "Anbieter"
+  },
+  {
+	"key": "Put these codes in a safe place.",
+	"value": "Bewahren Sie diese Codes sicher auf."
+  },
+  {
+	"key": "Re use",
+	"value": "Wiederverwendung"
+  },
+  {
+	"key": "reason",
+	"value": "Grund"
+  },
+  {
+	"key": "Recovery Code",
+	"value": "Wiederherstellungscode"
+  },
+  {
+	"key": "Recovery code verification",
+	"value": "Wiederherstellungskode-Verifizierung"
+  },
+  {
+	"key": "Recovery codes",
+	"value": "Wiederherstellungscodes"
+  },
+  {
+	"key": "redirect",
+	"value": "Umleitung"
+  },
+  {
+	"key": "redirect uri",
+	"value": "Umleitungs-URI"
+  },
+  {
+	"key": "Reference tokens",
+	"value": "Referenz-Token"
+  },
+  {
+	"key": "reference tokens",
+	"value": "Referenz-Token"
+  },
+  {
+	"key": "refresh on issuer key not found",
+	"value": "Auffrischung bei nicht gefundener Herausgeber-Schlüssel"
+  },
+  {
+	"key": "refresh token expiration",
+	"value": "Ablauf der Aktualisierungstoken"
+  },
+  {
+	"key": "refresh token usage",
+	"value": "Aktualisierungstoken-Nutzung"
+  },
+  {
+	"key": "Refresh tokens",
+	"value": "Aktualisierungstoken"
+  },
+  {
+	"key": "refresh tokens",
+	"value": "Aktualisierungstoken"
+  },
+  {
+	"key": "Register",
+	"value": "Registrieren"
+  },
+  {
+	"key": "Register confirmation",
+	"value": "Registrierungsbestätigung"
+  },
+  {
+	"key": "Registered Logins",
+	"value": "Registrierte Anmeldungen"
+  },
+  {
+	"key": "Registration is not supported.",
+	"value": "Die Registrierung wird nicht unterstützt."
+  },
+  {
+	"key": "Relying parties",
+	"value": "Vertrauende Parteien"
+  },
+  {
+	"key": "relying party",
+	"value": "vertrauende Partei"
+  },
+  {
+	"key": "Remember My Decision",
+	"value": "Meine Entscheidung merken"
+  },
+  {
+	"key": "Remember My Login",
+	"value": "Meine Anmeldung merken"
+  },
+  {
+	"key": "Remember this machine",
+	"value": "Diese Maschine merken"
+  },
+  {
+	"key": "remenber consent",
+	"value": "Zustimmung merken"
+  },
+  {
+	"key": "remote sign-out path ",
+	"value": "Pfad für die Fernabmeldung"
+  },
+  {
+	"key": "remote sign-out path",
+	"value": "Pfad für die Fernabmeldung"
+  },
+  {
+	"key": "Remove",
+	"value": "Entfernen"
+  },
+  {
+	"key": "require consent",
+	"value": "Zustimmung erforderlich"
+  },
+  {
+	"key": "require https metadata",
+	"value": "Erfordert HTTPS-Metadaten"
+  },
+  {
+	"key": "require PKCE",
+	"value": "Erfordert PKCE"
+  },
+  {
+	"key": "require secret",
+	"value": "Erfordert Geheimnis"
+  },
+  {
+	"key": "required",
+	"value": "Erforderlich"
+  },
+  {
+	"key": "Reset authenticator app",
+	"value": "Authenticator-App zurücksetzen"
+  },
+  {
+	"key": "Reset authenticator key",
+	"value": "Authenticator-Schlüssel zurücksetzen"
+  },
+  {
+	"key": "Reset Password",
+	"value": "Passwort zurücksetzen"
+  },
+  {
+	"key": "Reset recovery codes",
+	"value": "Wiederherstellungscodes zurücksetzen"
+  },
+  {
+	"key": "resource",
+	"value": "Ressource"
+  },
+  {
+	"key": "Resources",
+	"value": "Ressourcen"
+  },
+  {
+	"key": "response mode",
+	"value": "Antwortmodus"
+  },
+  {
+	"key": "response type",
+	"value": "Antworttyp"
+  },
+  {
+	"key": "retrieve user details",
+	"value": "Benutzerdetails abrufen"
+  },
+  {
+	"key": "Retype the \"{0}\" if you are sure to delete it.",
+	"value": "Geben Sie \"{0}\" erneut ein, wenn Sie sicher sind, dass Sie es löschen möchten."
+  },
+  {
+	"key": "Retype the \"{0}\" if you are sure to revoke it.",
+	"value": "Geben Sie \"{0}\" erneut ein, wenn Sie sicher sind, dass Sie es widerrufen möchten."
+  },
+  {
+	"key": "Revoke",
+	"value": "Widerrufen"
+  },
+  {
+	"key": "Revoke Access",
+	"value": "Zugriff widerrufen"
+  },
+  {
+	"key": "Revoked",
+	"value": "Widerrufen"
+  },
+  {
+	"key": "role",
+	"value": "Rolle"
+  },
+  {
+	"key": "roles",
+	"value": "Rollen"
+  },
+  {
+	"key": "Save",
+	"value": "Speichern"
+  },
+  {
+	"key": "save tokens",
+	"value": "Token speichern"
+  },
+  {
+	"key": "Saved",
+	"value": "Gespeichert"
+  },
+  {
+	"key": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.",
+	"value": "Scannen Sie den QR-Code oder geben Sie diesen Schlüssel <kbd>{0}</kbd> in Ihre Authenticator-App mit zwei Faktoren ein. Leerzeichen und Groß-/Kleinschreibung spielen keine Rolle."
+  },
+  {
+	"key": "scheme",
+	"value": "Schema"
+  },
+  {
+	"key": "scope",
+	"value": "Umfang"
+  },
+  {
+	"key": "scopes",
+	"value": "Umfänge"
+  },
+  {
+	"key": "Scopes",
+	"value": "Umfänge"
+  },
+  {
+	"key": "Scopes must be unique.",
+	"value": "Umfänge müssen eindeutig sein."
+  },
+  {
+	"key": "secrets",
+	"value": "Geheimnisse"
+  },
+  {
+	"key": "Select a kind of provider...",
+	"value": "Wählen Sie eine Art von Anbieter..."
+  },
+  {
+	"key": "send app secret proof",
+	"value": "App-Geheimnisnachweis senden"
+  },
+  {
+	"key": "Send verification email",
+	"value": "Verifizierungs-E-Mail senden"
+  },
+  {
+	"key": "Set password",
+	"value": "Passwort festlegen"
+  },
+  {
+	"key": "Set your password",
+	"value": "Setzen Sie Ihr Passwort"
+  },
+  {
+	"key": "Setup authenticator app",
+	"value": "Authenticator-App einrichten"
+  },
+  {
+	"key": "show all options",
+	"value": "Alle Optionen anzeigen"
+  },
+  {
+	"key": "show in discovery document",
+	"value": "Im Entdeckungsdokument anzeigen"
+  },
+  {
+	"key": "signature algorithm",
+	"value": "Signaturalgorithmus"
+  },
+  {
+	"key": "signature digest",
+	"value": "Signatur-Hashwert"
+  },
+  {
+	"key": "signed-out callback path",
+	"value": "Abgemeldeter Rückrufpfad"
+  },
+  {
+	"key": "signed-out redirect uri",
+	"value": "Abgemeldete Weiterleitungs-URI"
+  },
+  {
+	"key": "Signing",
+	"value": "Unterzeichnung"
+  },
+  {
+	"key": "sign-out scheme ",
+	"value": "Abmeldeschema"
+  },
+  {
+	"key": "sign-out scheme",
+	"value": "Abmeldeschema"
+  },
+  {
+	"key": "sign-out wreply ",
+	"value": "Abmeldeantwort wreply"
+  },
+  {
+	"key": "skip unrecognized requests",
+	"value": "Nicht erkannte Anfragen überspringen"
+  },
+  {
+	"key": "Sliding",
+	"value": "Schieberegler"
+  },
+  {
+	"key": "sliding refresh token lifetime",
+	"value": "Lebensdauer des gleitenden Auffrischungstokens"
+  },
+  {
+	"key": "Sorry, there was an error",
+	"value": "Entschuldigung, es gab einen Fehler"
+  },
+  {
+	"key": "Sorry, there's nothing at this address.",
+	"value": "Entschuldigung, hier ist nichts."
+  },
+  {
+	"key": "sso lifetime",
+	"value": "SSO-Lebensdauer"
+  },
+  {
+	"key": "store claims",
+	"value": "Ansprüche speichern"
+  },
+  {
+	"key": "Submit",
+	"value": "Einreichen"
+  },
+  {
+	"key": "Success",
+	"value": "Erfolg"
+  },
+  {
+	"key": "Supported cultures",
+	"value": "Unterstützte Kulturen"
+  },
+  {
+	"key": "Terms of service",
+	"value": "Nutzungsbedingungen"
+  },
+  {
+	"key": "terms of service uri",
+	"value": "Nutzungsbedingungen URI"
+  },
+  {
+	"key": "Thank you for confirming your email change.",
+	"value": "Vielen Dank, dass Sie Ihre E-Mail-Änderung bestätigt haben."
+  },
+  {
+	"key": "The {0} must be at least {2} and at max {1} characters long.",
+	"value": "{0} muss mindestens {2} und maximal {1} Zeichen lang sein."
+  },
+  {
+	"key": "The api property key cannot exceed 250 chars.",
+	"value": "Der API-Eigenschaftsschlüssel darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The api property key is required.",
+	"value": "Der API-Eigenschaftsschlüssel ist erforderlich."
+  },
+  {
+	"key": "The api property key must be unique.",
+	"value": "Der API-Eigenschaftsschlüssel muss eindeutig sein."
+  },
+  {
+	"key": "The api property value cannot exceed 2000 chars.",
+	"value": "Der API-Eigenschaftswert darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The api property value is required.",
+	"value": "Der API-Eigenschaftswert ist erforderlich."
+  },
+  {
+	"key": "The back channel logout url cannot exceed 2000 char.",
+	"value": "Die URL zum Abmelden vom Hintergrundkanal darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The back channel logout url is required.",
+	"value": "Die URL zum Abmelden vom Hintergrundkanal ist erforderlich."
+  },
+  {
+	"key": "The back logout url is not valid.",
+	"value": "Die URL zum Abmelden vom Hintergrundkanal ist ungültig."
+  },
+  {
+	"key": "The claim prefix cannot exceed 250 char.",
+	"value": "Das Präfix der Behauptung darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The claim type cannot exceed 2000 chars.",
+	"value": "Der Ansprüchetyp darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The claim type cannot exceed 250 chars.",
+	"value": "Der Ansprüchetyp darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The claim type is required.",
+	"value": "Der Ansprüchetyp ist erforderlich."
+  },
+  {
+	"key": "The claim type must be unique.",
+	"value": "Der Ansprüchetyp muss eindeutig sein."
+  },
+  {
+	"key": "The claim value cannot exceed 2000 chars.",
+	"value": "Der Anspruchswert darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The claim value is required.",
+	"value": "Der Anspruchswert ist erforderlich."
+  },
+  {
+	"key": "The client property key cannot exceed 250 chars.",
+	"value": "Der Eigenschaftsschlüssel des Clients darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The client property key is required.",
+	"value": "Der Eigenschaftsschlüssel des Clients ist erforderlich."
+  },
+  {
+	"key": "The client property key must be unique.",
+	"value": "Der Eigenschaftsschlüssel des Clients muss eindeutig sein."
+  },
+  {
+	"key": "The client property value cannot exceed 2000 chars.",
+	"value": "Der Eigenschaftswert des Clients darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The client property value is required.",
+	"value": "Der Eigenschaftswert des Clients ist erforderlich."
+  },
+  {
+	"key": "The client should contain at least one grant type.",
+	"value": "Der Client sollte mindestens einen Subventionstyp enthalten."
+  },
+  {
+	"key": "The culture is required.",
+	"value": "Die Kultur ist erforderlich."
+  },
+  {
+	"key": "The culture must be unique.",
+	"value": "Die Kultur muss eindeutig sein."
+  },
+  {
+	"key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
+	"value": "Der aktuelle Browser wurde vergessen. Wenn Sie sich erneut von diesem Browser aus anmelden, werden Sie zur Eingabe Ihres 2FA-Codes aufgefordert."
+  },
+  {
+	"key": "The description cannot exceed 200 chars.",
+	"value": "Die Beschreibung darf nicht mehr als 200 Zeichen enthalten."
+  },
+  {
+	"key": "The description cannot exceed 2000 chars.",
+	"value": "Die Beschreibung darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The description canoot exceed 1000 char.",
+	"value": "Die Beschreibung darf nicht mehr als 1000 Zeichen enthalten."
+  },
+  {
+	"key": "The digest algorithm is required",
+	"value": "Der Digest-Algorithmus ist erforderlich"
+  },
+  {
+	"key": "The display name cannot exceed 200 chars.",
+	"value": "Der Anzeigename darf nicht mehr als 200 Zeichen enthalten."
+  },
+  {
+	"key": "The display name is required.",
+	"value": "Der Anzeigename ist erforderlich."
+  },
+  {
+	"key": "The external login was added.",
+	"value": "Die externe Anmeldung wurde hinzugefügt."
+  },
+  {
+	"key": "The external login was not added. External logins can only be associated with one account.",
+	"value": "Die externe Anmeldung wurde nicht hinzugefügt. Externe Anmeldungen können nur mit einem Konto verknüpft werden."
+  },
+  {
+	"key": "The external login was not removed.",
+	"value": "Die externe Anmeldung wurde nicht entfernt."
+  },
+  {
+	"key": "The external login was removed.",
+	"value": "Die externe Anmeldung wurde entfernt."
+  },
+  {
+	"key": "The from claim tyoe is required.",
+	"value": "Die von Anspruchstyp ist erforderlich."
+  },
+  {
+	"key": "The from claim type is required.",
+	"value": "Der von Anspruchstyp ist erforderlich."
+  },
+  {
+	"key": "The from claim type must be unique.",
+	"value": "Der von Anspruchstyp muss eindeutig sein."
+  },
+  {
+	"key": "The front channel logout url cannot exceed 2000 char.",
+	"value": "Die URL zum Abmelden vom Frontend-Kanal darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The front channel logout url is not valid.",
+	"value": "Die URL zum Abmelden vom Frontend-Kanal ist ungültig."
+  },
+  {
+	"key": "The front channel logout url is required.",
+	"value": "Die URL zum Abmelden vom Frontend-Kanal ist erforderlich."
+  },
+  {
+	"key": "The grant type cannot contains space.",
+	"value": "Der Subventionstyp darf keine Leerzeichen enthalten."
+  },
+  {
+	"key": "The grant type must be unique.",
+	"value": "Der Subventionstyp muss eindeutig sein."
+  },
+  {
+	"key": "The id is required.",
+	"value": "Die ID ist erforderlich."
+  },
+  {
+	"key": "The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).",
+	"value": "Die ID muss eine URI sein, wenn das Protokoll WS-Föderation lautet. (z. B.: urn:wsfed)."
+  },
+  {
+	"key": "The identity claim type cannot exceed 2000 chars.",
+	"value": "Der Identitätsansprüchetyp darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The identity claim type is required.",
+	"value": "Der Identitätsansprüchetyp ist erforderlich."
+  },
+  {
+	"key": "The identity claim type must be unique.",
+	"value": "Der Identitätsansprüchetyp muss eindeutig sein."
+  },
+  {
+	"key": "The identity property key cannot exceed 250 chars.",
+	"value": "Der Identitätseigenschaftsschlüssel darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The identity property key is required.",
+	"value": "Der Identitätseigenschaftsschlüssel ist erforderlich."
+  },
+  {
+	"key": "The identity property key must be unique.",
+	"value": "Der Identitätseigenschaftsschlüssel muss eindeutig sein."
+  },
+  {
+	"key": "The identity property value cannot exceed 2000 chars.",
+	"value": "Der Identitätseigenschaftswert darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The identity property value is required.",
+	"value": "Der Identitätseigenschaftswert ist erforderlich."
+  },
+  {
+	"key": "The identity should provide at least one claim.",
+	"value": "Die Identität sollte mindestens eine Behauptung bereitstellen."
+  },
+  {
+	"key": "The key is required.",
+	"value": "Der Schlüssel ist erforderlich."
+  },
+  {
+	"key": "The key '{0}' must be unique.",
+	"value": "Der Schlüssel '{0}' muss eindeutig sein."
+  },
+  {
+	"key": "The kind of provider is required.",
+	"value": "Die Art des Anbieters ist erforderlich."
+  },
+  {
+	"key": "The logo url cannot exceed 2000 char.",
+	"value": "Die Logo-URL darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The logo url is not valid.",
+	"value": "Die Logo-URL ist ungültig."
+  },
+  {
+	"key": "The name cannot exceed 200 char.",
+	"value": "Der Name darf nicht mehr als 200 Zeichen enthalten."
+  },
+  {
+	"key": "The name cannot exceed 200 chars.",
+	"value": "Der Name darf nicht mehr als 200 Zeichen enthalten."
+  },
+  {
+	"key": "The name identifier is required",
+	"value": "Der Name-Identifikator ist erforderlich"
+  },
+  {
+	"key": "The name is required",
+	"value": "Der Name ist erforderlich"
+  },
+  {
+	"key": "The name is required.",
+	"value": "Der Name ist erforderlich."
+  },
+  {
+	"key": "The new password and confirmation password do not match.",
+	"value": "Das neue Passwort und das Bestätigungspasswort stimmen nicht überein."
+  },
+  {
+	"key": "The password and confirmation password do not match.",
+	"value": "Das Passwort und das Bestätigungspasswort stimmen nicht überein."
+  },
+  {
+	"key": "The policy url cannot exceed 2000 char.",
+	"value": "Die Richtlinien-URL darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The policy url is not valid.",
+	"value": "Die Richtlinien-URL ist ungültig."
+  },
+  {
+	"key": "The relying party is required.",
+	"value": "Die vertrauende Partei ist erforderlich."
+  },
+  {
+	"key": "The role must be unique",
+	"value": "Die Rolle muss eindeutig sein"
+  },
+  {
+	"key": "The role name is required",
+	"value": "Der Rollenname ist erforderlich"
+  },
+  {
+	"key": "The secret type is required.",
+	"value": "Der Geheimnistyp ist erforderlich."
+  },
+  {
+	"key": "The secret value is required.",
+	"value": "Der Geheimniswert ist erforderlich."
+  },
+  {
+	"key": "The sheme is required.",
+	"value": "Das Schema ist erforderlich."
+  },
+  {
+	"key": "The subject salt cannot exceed 250 char.",
+	"value": "Das Subjekt-Salz darf nicht mehr als 250 Zeichen enthalten."
+  },
+  {
+	"key": "The terms of service url cannot exceed 2000 char.",
+	"value": "Die Nutzungsbedingungen-URL darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The terms of service url is not valid.",
+	"value": "Die Nutzungsbedingungen-URL ist ungültig."
+  },
+  {
+	"key": "The to claim tyoe is required.",
+	"value": "Der zu beanspruchende Typ ist erforderlich."
+  },
+  {
+	"key": "The to claim type is required.",
+	"value": "Der zu beanspruchende Typ ist erforderlich."
+  },
+  {
+	"key": "The to claim type must be an URI.",
+	"value": "Der zu beanspruchende Typ muss ein URI sein."
+  },
+  {
+	"key": "The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second",
+	"value": "Der Token-Ausdruck entspricht keinem gültigen Format. Sie können die Formen d.hh:mm:ss, hh.mm:ss, mm:ss, eine Anzahl von Tagen (365d), eine Anzahl von Stunden (12h), eine Anzahl von Minuten (30m), eine Anzahl von Sekunden verwenden"
+  },
+  {
+	"key": "The token type is required",
+	"value": "Der Token-Typ ist erforderlich"
+  },
+  {
+	"key": "The type of protocol cannot exceed 200 char.",
+	"value": "Der Protokolltyp darf nicht mehr als 200 Zeichen enthalten."
+  },
+  {
+	"key": "The type of protocol is required",
+	"value": "Der Protokolltyp ist erforderlich"
+  },
+  {
+	"key": "The type of user code cannot exceed 100 char.",
+	"value": "Der Typ des Benutzercodes darf nicht mehr als 100 Zeichen enthalten."
+  },
+  {
+	"key": "The url cannot exceed 2000 char.",
+	"value": "Die URL darf nicht mehr als 2000 Zeichen enthalten."
+  },
+  {
+	"key": "The url is not valid.",
+	"value": "Die URL ist ungültig."
+  },
+  {
+	"key": "There are no login schemes configured for this client.",
+	"value": "Für diesen Client sind keine Anmeldepläne konfiguriert."
+  },
+  {
+	"key": "There was an error trying to log you in: '{0}'",
+	"value": "Beim Versuch, Sie anzumelden, ist ein Fehler aufgetreten: '{0}'"
+  },
+  {
+	"key": "There was an error trying to log you out: '{0}'",
+	"value": "Beim Versuch, Sie abzumelden, ist ein Fehler aufgetreten: '{0}'"
+  },
+  {
+	"key": "This action only disables 2FA.",
+	"value": "Diese Aktion deaktiviert nur 2FA."
+  },
+  {
+	"key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
+	"value": "Dieser Vorgang deaktiviert 2FA, bis Sie Ihre Authentifizierungs-App überprüfen. Wenn Sie die Konfiguration Ihrer Authentifizierungs-App nicht abschließen, können Sie den Zugriff auf Ihr Konto verlieren."
+  },
+  {
+	"key": "to claim type",
+	"value": "Typ der zu beanspruchenden"
+  },
+  {
+	"key": "To use an authenticator app go through the following steps:",
+	"value": "Gehen Sie folgendermaßen vor, um eine Authentifizierungs-App zu verwenden:"
+  },
+  {
+	"key": "Token endpoint is required.",
+	"value": "Der Token-Endpunkt ist erforderlich."
+  },
+  {
+	"key": "Token endpoint must be a valid uri.",
+	"value": "Der Token-Endpunkt muss ein gültiger URI sein."
+  },
+  {
+	"key": "token enpoint",
+	"value": "Token-Endpunkt"
+  },
+  {
+	"key": "token type",
+	"value": "Token-Typ"
+  },
+  {
+	"key": "Tokens",
+	"value": "Tokens"
+  },
+  {
+	"key": "tokens",
+	"value": "tokens"
+  },
+  {
+	"key": "two factor enabled",
+	"value": "Zwei-Faktor aktiviert"
+  },
+  {
+	"key": "Two-factor authentication",
+	"value": "Zwei-Faktor-Authentifizierung"
+  },
+  {
+	"key": "Two-factor authentication (2FA)",
+	"value": "Zwei-Faktor-Authentifizierung (2FA)"
+  },
+  {
+	"key": "type",
+	"value": "Typ"
+  },
+  {
+	"key": "Unable to load user with ID '{0}'.",
+	"value": "Benutzer mit der ID '{0}' konnte nicht geladen werden."
+  },
+  {
+	"key": "Uncheck the permissions you do not wish to grant.",
+	"value": "Deaktivieren Sie die Berechtigungen, die Sie nicht gewähren möchten."
+  },
+  {
+	"key": "Unexpected error when trying to set phone number.",
+	"value": "Unerwarteter Fehler beim Versuch, die Telefonnummer festzulegen."
+  },
+  {
+	"key": "update access token on refresh",
+	"value": "Aktualisieren Sie den Zugriffstoken beim Aktualisieren"
+  },
+  {
+	"key": "Update password",
+	"value": "Passwort aktualisieren"
+  },
+  {
+	"key": "uri",
+	"value": "uri"
+  },
+  {
+	"key": "Uri must be unique.",
+	"value": "Uri muss eindeutig sein."
+  },
+  {
+	"key": "urls",
+	"value": "URL"
+  },
+  {
+	"key": "Use another service to register.",
+	"value": "Verwenden Sie einen anderen Dienst, um sich zu registrieren."
+  },
+  {
+	"key": "use PKCE",
+	"value": "Verwenden Sie PKCE"
+  },
+  {
+	"key": "use token lifetime",
+	"value": "Verwenden Sie die Token-Lebensdauer"
+  },
+  {
+	"key": "User",
+	"value": "Benutzer"
+  },
+  {
+	"key": "user",
+	"value": "Benutzer"
+  },
+  {
+	"key": "User Code",
+	"value": "Benutzercode"
+  },
+  {
+	"key": "user enpoint",
+	"value": "Benutzer-Endpunkt"
+  },
+  {
+	"key": "User information endpoint is required.",
+	"value": "Der Endpunkt für Benutzerinformationen ist erforderlich."
+  },
+  {
+	"key": "User information endpoint must be a valid uri.",
+	"value": "Der Endpunkt für Benutzerinformationen muss ein gültiger URI sein."
+  },
+  {
+	"key": "user name",
+	"value": "Benutzername"
+  },
+  {
+	"key": "Username",
+	"value": "Benutzername"
+  },
+  {
+	"key": "Users",
+	"value": "Benutzer"
+  },
+  {
+	"key": "value",
+	"value": "Wert"
+  },
+  {
+	"key": "Verification Code",
+	"value": "Verifizierungscode"
+  },
+  {
+	"key": "Verification code is invalid.",
+	"value": "Der Verifizierungscode ist ungültig."
+  },
+  {
+	"key": "Verification email sent. Please check your email.",
+	"value": "Die Verifizierungs-E-Mail wurde gesendet. Bitte überprüfen Sie Ihre E-Mails."
+  },
+  {
+	"key": "Verify",
+	"value": "Überprüfen"
+  },
+  {
+	"key": "Welcome",
+	"value": "Willkommen"
+  },
+  {
+	"key": "Would you like to logout of {0}?",
+	"value": "Möchten Sie sich von {0} abmelden?"
+  },
+  {
+	"key": "wreply ",
+	"value": "wreply "
+  },
+  {
+	"key": "wtrealm ",
+	"value": "wtrealm "
+  },
+  {
+	"key": "Wtrealm is required.",
+	"value": "Wtrealm ist erforderlich."
+  },
+  {
+	"key": "Yes",
+	"value": "Ja"
+  },
+  {
+	"key": "Yes, Allow",
+	"value": "Ja, Erlauben"
+  },
+  {
+	"key": "You are logged out.",
+	"value": "Sie sind abgemeldet."
+  },
+  {
+	"key": "You are not authorize to import data.",
+	"value": "Sie sind nicht berechtigt, Daten zu importieren."
+  },
+  {
+	"key": "You are now being returned to the application.",
+	"value": "Sie werden nun zur Anwendung zurückgeleitet."
+  },
+  {
+	"key": "You are now logged out",
+	"value": "Sie sind jetzt abgemeldet"
+  },
+  {
+	"key": "You are revoking the key currently in use. Be sure what you're doing.",
+	"value": "Sie widerrufen den derzeit verwendeten Schlüssel. Seien Sie sicher, was Sie tun."
+  },
+  {
+	"key": "You can <a href=\"{0}\">generate a new set of recovery codes</a>.",
+	"value": "Sie können <a href=\"{0}\">einen neuen Satz Wiederherstellungscodes generieren</a>."
+  },
+  {
+	"key": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+	"value": "Sie haben keinen lokalen Benutzernamen/-passwort für diese Seite. Fügen Sie ein lokales Konto hinzu, um sich ohne externe Anmeldung anzumelden."
+  },
+  {
+	"key": "You do not have access to that resource.",
+	"value": "Sie haben keinen Zugriff auf diese Ressource."
+  },
+  {
+	"key": "You have 1 recovery code left.",
+	"value": "Sie haben noch 1 Wiederherstellungscode übrig."
+  },
+  {
+	"key": "You have generated new recovery codes.",
+	"value": "Sie haben neue Wiederherstellungscodes generiert."
+  },
+  {
+	"key": "You have no recovery codes left.",
+	"value": "Sie haben keine Wiederherstellungscodes mehr übrig."
+  },
+  {
+	"key": "You have not given access to any applications",
+	"value": "Sie haben keinen Anwendungen Zugriff gewährt"
+  },
+  {
+	"key": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.",
+	"value": "Sie haben beantragt, sich mit einem Wiederherstellungscodes anzumelden. Diese Anmeldung wird nicht gespeichert, bis Sie einen Authentifizierungs-App-Code bei der Anmeldung bereitstellen oder 2FA deaktivieren und sich erneut anmelden."
+  },
+  {
+	"key": "You have successfully authorized the device",
+	"value": "Sie haben das Gerät erfolgreich autorisiert"
+  },
+  {
+	"key": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+	"value": "Sie müssen <a href=\"{0}\">einen neuen Satz Wiederherstellungscodes generieren</a>, bevor Sie sich mit einem Wiederherstellungscodes anmelden können."
+  },
+  {
+	"key": "You should <a href=\"{0}\">generate a new set of recovery codes</a>",
+	"value": "Sie sollten <a href=\"{0}\">einen neuen Satz Wiederherstellungscodes generieren</a>."
+  },
+  {
+	"key": "Your account contains personal data that you have given us. This page allows you to download or delete that data.",
+	"value": "Ihr Konto enthält persönliche Daten, die Sie uns gegeben haben. Diese Seite ermöglicht es Ihnen, diese Daten herunterzuladen oder zu löschen."
+  },
+  {
+	"key": "Your authenticator app has been verified.",
+	"value": "Ihre Authentifizierungs-App wurde verifiziert."
+  },
+  {
+	"key": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+	"value": "Ihr Authentifizierungs-App-Schlüssel wurde zurückgesetzt. Sie müssen Ihre Authentifizierungs-App mit dem neuen Schlüssel konfigurieren."
+  },
+  {
+	"key": "Your email is unchanged.",
+	"value": "Ihre E-Mail-Adresse ist unverändert."
+  },
+  {
+	"key": "Your login is protected with an authenticator app. Enter your authenticator code below.",
+	"value": "Ihre Anmeldung ist durch eine Authentifizierungs-App geschützt. Geben Sie Ihren Authentifizierungscode unten ein."
+  },
+  {
+	"key": "Your password has been changed.",
+	"value": "Ihr Passwort wurde geändert."
+  },
+  {
+	"key": "Your password has been set.",
+	"value": "Ihr Passwort wurde festgelegt."
+  },
+  {
+	"key": "Your profile has been updated",
+	"value": "Ihr Profil wurde aktualisiert"
+  },
+  {
+	"key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
+	"value": "Sie haben sich erfolgreich authentifiziert mit <strong>{0}</strong>. Bitte geben Sie unten eine E-Mail-Adresse für diese Seite ein und klicken Sie auf die Schaltfläche Registrieren, um die Anmeldung abzuschließen."
+  },
+  {
+	"key": "{0} <small class=\"text-muted\">is requesting your permission</small>",
+	"value": "{0} <small class=\"text-muted\">fordert Ihre Erlaubnis an</small>"
+  },
+  {
+	"key": "Verify that this identifier matches what the client is displaying:",
+	"value": "Überprüfen Sie, ob dieser Bezeichner mit dem übereinstimmt, was der Client anzeigt:"
+  },
+  {
+	"key": "Description or name of device",
+	"value": "Beschreibung oder Name des Geräts"
+  },
+  {
+	"key": "Will be available to these resource servers:",
+	"value": "Wird für diese Ressourcenserver verfügbar sein:"
+  },
+  {
+	"key": "Binding Message",
+	"value": "Bindenachricht"
+  },
+  {
+	"key": "Pending Backchannel Login Requests",
+	"value": "Ausstehende Backchannel-Anmeldeanforderungen"
+  },
+  {
+	"key": "No Pending Login Requests",
+	"value": "Keine ausstehenden Anmeldeanforderungen"
+  },
+  {
+	"key": "Invalid login request id.",
+	"value": "Ungültige Anmeldeanforderungs-ID."
+  },
+  {
+	"key": "SubjectIds don't match.",
+	"value": "Die Subjekt-IDs stimmen nicht überein."
+  },
+  {
+	"key": "Backchannel login requests",
+	"value": "Backchannel-Anmeldeanforderungen"
+  },
+  {
+	"key": "ciba requests",
+	"value": "ciba-Anfragen"
+  },
+  {
+	"key": "ciba lifetime",
+	"value": "ciba-Lebensdauer"
+  },
+  {
+	"key": "polling interval",
+	"value": "Abfrageintervall"
+  },
+  {
+	"key": "Below is the list of sessions you have opened.",
+	"value": "Hier ist die Liste der von Ihnen geöffneten Sitzungen."
+  },
+  {
+	"key": "Below is the list of backchannel login requests awaiting your approbation.",
+	"value": "Hier ist die Liste der Backchannel-Anmeldeanforderungen, die auf Ihre Genehmigung warten."
+  },
+  {
+	"key": "Sessions",
+	"value": "Sitzungen"
+  },
+  {
+	"key": "Renewed",
+	"value": "Erneuert"
+  },
+  {
+	"key": "Created",
+	"value": "Erstellt"
+  },
+  {
+	"key": "Expires",
+	"value": "Läuft ab"
+  },
+  {
+	"key": "No session",
+	"value": "Keine Sitzung"
+  },
+  {
+	"key": "allowed identity token signing algorithms",
+	"value": "erlaubte Algorithmen zur Signierung von Identitätstoken"
+  },
+  {
+	"key": "Reset password",
+	"value": "Passwort zurücksetzen"
+  },
+  {
+	"key": "Reset your password.",
+	"value": "Setzen Sie Ihr Passwort zurück."
+  },
+  {
+	"key": "Reset",
+	"value": "Zurücksetzen"
+  },
+  {
+	"key": "Reset password confirmation",
+	"value": "Bestätigung des Passwortzurücksetzens"
+  },
+  {
+	"key": "Your password has been reset.",
+	"value": "Ihr Passwort wurde zurückgesetzt."
+  },
+  {
+	"key": "Please click here to log in",
+	"value": "Bitte klicken Sie hier, um sich anzumelden"
+  },
+  {
+	"key": "Register as a new user",
+	"value": "Als neuer Benutzer registrieren"
+  },
+  {
+	"key": "Resend email confirmation",
+	"value": "E-Mail-Bestätigung erneut senden"
+  },
+  {
+	"key": "Resend",
+	"value": "Erneut senden"
+  },
+  {
+	"key": "The machine account password is required.",
+	"value": "Das Maschinenkontokennwort ist erforderlich."
+  },
+  {
+	"key": "persist kerberos credentials",
+	"value": "kerberos-Anmeldeinformationen beibehalten"
+  },
+  {
+	"key": "persist ntlm credentials",
+	"value": "ntlm-Anmeldeinformationen beibehalten"
+  },
+  {
+	"key": "enable ldap",
+	"value": "ldap aktivieren"
+  },
+  {
+	"key": "domain",
+	"value": "Domäne"
+  },
+  {
+	"key": "machine account name",
+	"value": "Maschinenkontoname"
+  },
+  {
+	"key": "machine account password",
+	"value": "Maschinenkontokennwort"
+  },
+  {
+	"key": "enable ldap claim resolution",
+	"value": "ldap-Behauptungsauflösung aktivieren"
+  },
+  {
+	"key": "ignore nested groups",
+	"value": "verschachtelte Gruppen ignorieren"
+  },
+  {
+	"key": "claims cache absolute expiration",
+	"value": "Ablauf der absoluten Ansprüche-Cache"
+  },
+  {
+	"key": "claims cache sliding expiration",
+	"value": "Ablauf der gleitenden Ansprüche-Cache"
+  },
+  {
+	"key": "require resource indicator",
+	"value": "Ressourcenindikator erforderlich"
+  },
+  {
+	"key": "Are you sure you want to leave this page?",
+	"value": "Sind Sie sicher, dass Sie diese Seite verlassen möchten?"
+  },
+  {
+	"key": "clone",
+	"value": "klonen"
+  },
+  {
+	"key": "Clone of {0}",
+	"value": "Klon von {0}"
+  },
+  {
+	"key": "Scope of",
+	"value": "Umfang von"
+  },
+  {
+	"key": "Allowed to",
+	"value": "Erlaubt zu"
+  },
+  {
+	"key": "scope of",
+	"value": "Umfang von"
+  },
+  {
+	"key": "allowed to",
+	"value": "Erlaubt zu"
+  },
+  {
+	"key": "metadata",
+	"value": "Metadaten"
+  },
+  {
+	"key": "Cannot have more than one URI per kind.",
+	"value": "Kann nicht mehr als eine URI pro Art haben."
+  },
+  {
+	"key": "Either a metadata or redirect URI must be set.",
+	"value": "Entweder eine Metadaten- oder Redirect-URI muss festgelegt sein."
+  },
+  {
+	"key": "Either a metadata or redirect URI must be set.",
+	"value": "Entweder eine Metadaten-URI oder ein X509Certificate-Schlüssel muss festgelegt sein."
+  }
+]
