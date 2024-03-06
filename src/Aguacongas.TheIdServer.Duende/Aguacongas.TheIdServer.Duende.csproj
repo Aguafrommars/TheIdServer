@@ -23,10 +23,14 @@
 
 	<ItemGroup>
 	  <Content Remove="Localization-fr.json" />
+	  <Content Remove="Localization-de.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Localization-fr.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Localization-de.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
