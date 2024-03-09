@@ -15,6 +15,8 @@
     <Nullable>enable</Nullable>
 
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+
+    <UserSecretsId>620bb083-3fdb-426d-b01a-aefcfcf7a6f5</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>

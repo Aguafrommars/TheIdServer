@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aguacongas.TheIdServer.Oracle.Migrations.OperationalDb
 {
     [DbContext(typeof(OperationalDbContext))]
-    [Migration("20220408172728_ServerSideSession")]
+    [Migration("20230328205635_Saml2P")]
     partial class Saml2P
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
