@@ -23,10 +23,14 @@
 
 	<ItemGroup>
 	  <Content Remove="Localization-fr.json" />
+	  <Content Remove="Localization-de.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Localization-fr.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Localization-de.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
@@ -49,8 +53,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.1" />
-    <PackageReference Include="Duende.IdentityServer.Configuration" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.2" />
+    <PackageReference Include="Duende.IdentityServer.Configuration" Version="7.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 	</ItemGroup>
 </Project>
