@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.Builder
                     if (configuration.GetValue<bool>("EnableOpenApiDoc"))
                     {
                         child.UseOpenApi()
-                            .UseSwaggerUi3(options =>
+                            .UseSwaggerUi(options =>
                             {
                                 var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
                                 options.OAuth2Client = settings.OAuth2Client;
