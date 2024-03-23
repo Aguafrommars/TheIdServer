@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.Generation;
@@ -100,10 +101,20 @@ namespace Microsoft.Extensions.DependencyInjection
                         };
                     };
 
-                    ((SystemTextJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerOptions = new JsonSerializerOptions
+                    if (config.SchemaSettings is SystemTextJsonSchemaGeneratorSettings textJsonSchemaGeneratorSettings)
                     {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    };
+                        textJsonSchemaGeneratorSettings.SerializerOptions = new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                        };
+                    }
+                    if (config.SchemaSettings is NewtonsoftJsonSchemaGeneratorSettings jsonSchemaGeneratorSettings)
+                    {
+                        jsonSchemaGeneratorSettings.SerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        };
+                    }
                     var provider = builder.Services.BuildServiceProvider();
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var authority = configuration.GetValue<string>("ApiAuthentication:Authority").Trim('/');
