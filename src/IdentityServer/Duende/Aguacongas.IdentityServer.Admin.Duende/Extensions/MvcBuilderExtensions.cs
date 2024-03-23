@@ -100,9 +100,9 @@ namespace Microsoft.Extensions.DependencyInjection
                         };
                     };
 
-                    ((NewtonsoftJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerSettings = new JsonSerializerSettings
+                    ((SystemTextJsonSchemaGeneratorSettings)config.SchemaSettings).SerializerOptions = new JsonSerializerOptions
                     {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                     };
                     var provider = builder.Services.BuildServiceProvider();
                     var configuration = provider.GetRequiredService<IConfiguration>();
