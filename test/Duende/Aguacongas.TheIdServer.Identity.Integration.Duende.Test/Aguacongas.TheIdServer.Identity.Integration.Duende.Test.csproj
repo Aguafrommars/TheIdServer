@@ -17,11 +17,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.Specification.Tests" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.4" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
 		<PackageReference Include="Moq" Version="4.20.70" />
 		<PackageReference Include="xunit" Version="2.7.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
