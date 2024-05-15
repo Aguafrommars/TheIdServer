@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.5" />
 		<PackageReference Include="Serilog" Version="3.1.1" />
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
 	</ItemGroup>
