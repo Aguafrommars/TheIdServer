@@ -25,7 +25,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.28.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
         <PackageReference Include="RavenDB.Client" Version="6.0.105" />
         <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
     </ItemGroup>
