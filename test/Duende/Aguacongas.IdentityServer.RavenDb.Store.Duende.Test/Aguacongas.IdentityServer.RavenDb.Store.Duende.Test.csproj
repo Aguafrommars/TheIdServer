@@ -50,4 +50,9 @@
 	  <ProjectReference Include="..\..\..\src\IdentityServer\Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende\Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="RavenDBServer\license.json">
+ 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>
