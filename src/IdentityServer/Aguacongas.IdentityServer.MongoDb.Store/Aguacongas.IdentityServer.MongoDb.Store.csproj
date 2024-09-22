@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="2.24.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.29.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />

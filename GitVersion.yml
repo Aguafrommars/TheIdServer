@@ -1,16 +1,17 @@
 mode: ContinuousDelivery
 branches:
   master:
-    tag: ci
-    is-mainline: false
+    regex: master
+    label: ci
+    is-main-branch: false
   release:
     regex: release/
-    tag: ''
-    is-mainline: true
+    label: ''
+    is-main-branch: true
   preview:
     regex: preview/ 
-    tag: 'preview'
-    is-mainline: true
+    label: 'preview'
+    is-main-branch: true
     source-branches: ['master']
 ignore:
   sha: []
