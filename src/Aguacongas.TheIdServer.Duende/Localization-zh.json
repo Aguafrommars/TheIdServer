@@ -1,0 +1,2166 @@
+[
+	{
+		"key": "(required)",
+		"value": "(必填)"
+	},
+	{
+		"key": "{0} <small>is requesting your permission</small>",
+		"value": "{0} <small>正在请求您的许可</small>"
+	},
+	{
+		"key": "'{0}' cannot be added to a client with grant type '{1}'.",
+		"value": "'{0}' 无法添加到授权类型为 '{1}' 的客户端。"
+	},
+	{
+		"key": "{0} is not a valid uri.",
+		"value": "{0} 不是有效的 uri。"
+	},
+	{
+		"key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+		"value": "2fa 已被禁用。当您设置身份验证器应用程序时,可以重新启用 2fa"
+	},
+	{
+		"key": "About",
+		"value": "关于"
+	},
+	{
+		"key": "Absolute",
+		"value": "绝对"
+	},
+	{
+		"key": "absolute refresh token lifetime",
+		"value": "绝对刷新令牌生存期"
+	},
+	{
+		"key": "Access Denied",
+		"value": "拒绝访问"
+	},
+	{
+		"key": "access failed count",
+		"value": "访问失败计数"
+	},
+	{
+		"key": "access token lifetime",
+		"value": "访问令牌生存期"
+	},
+	{
+		"key": "access token type",
+		"value": "访问令牌类型"
+	},
+	{
+		"key": "access type",
+		"value": "访问类型"
+	},
+	{
+		"key": "activation",
+		"value": "激活"
+	},
+	{
+		"key": "Add",
+		"value": "添加"
+	},
+	{
+		"key": "Add another service to log in.",
+		"value": "添加另一个服务以登录。"
+	},
+	{
+		"key": "Add authenticator app",
+		"value": "添加身份验证器应用程序"
+	},
+	{
+		"key": "allow access tokens via browser",
+		"value": "允许通过浏览器访问令牌"
+	},
+	{
+		"key": "allow offline access",
+		"value": "允许离线访问"
+	},
+	{
+		"key": "allow plain text PKCE",
+		"value": "允许纯文本 PKCE"
+	},
+	{
+		"key": "allow unsolicited logins",
+		"value": "允许未经请求的登录"
+	},
+	{
+		"key": "always include user claims in id token",
+		"value": "始终在 id 令牌中包含用户声明"
+	},
+	{
+		"key": "always send claims",
+		"value": "始终发送声明"
+	},
+	{
+		"key": "An url cannot exceed 2000 char.",
+		"value": "URL 不能超过 2000 个字符。"
+	},
+	{
+		"key": "api",
+		"value": "api"
+	},
+	{
+		"key": "API Grants",
+		"value": "API 授权"
+	},
+	{
+		"key": "api id",
+		"value": "api id"
+	},
+	{
+		"key": "Apis",
+		"value": "Apis"
+	},
+	{
+		"key": "app id",
+		"value": "应用程序 id"
+	},
+	{
+		"key": "app secret",
+		"value": "应用程序密钥"
+	},
+	{
+		"key": "Application Access",
+		"value": "应用程序访问"
+	},
+	{
+		"key": "Associate your {0} account.",
+		"value": "关联您的 {0} 账户。"
+	},
+	{
+		"key": "Authentication in progress",
+		"value": "正在进行身份验证"
+	},
+	{
+		"key": "Authenticator app",
+		"value": "身份验证器应用程序"
+	},
+	{
+		"key": "Authenticator code",
+		"value": "验证码"
+	},
+	{
+		"key": "authority",
+		"value": "权限"
+	},
+	{
+		"key": "Authority is required.",
+		"value": "权限是必需的。"
+	},
+	{
+		"key": "Authority must be a valid uir.",
+		"value": "权限必须是有效的 uir。"
+	},
+	{
+		"key": "authorization code lifetime",
+		"value": "授权码生存期"
+	},
+	{
+		"key": "authorization endpoint",
+		"value": "授权端点"
+	},
+	{
+		"key": "Authorization endpoint is required.",
+		"value": "授权端点是必需的。"
+	},
+	{
+		"key": "Authorization endpoint must be a valid uri.",
+		"value": "授权端点必须是有效的 uri。"
+	},
+	{
+		"key": "back channel logout uri",
+		"value": "后端通道注销 uri"
+	},
+	{
+		"key": "back channel logout uri required",
+		"value": "需要后端通道注销 uri"
+	},
+	{
+		"key": "Below is the list of applications you have given access to and the names of the resources they have access to.",
+		"value": "以下是您已授予访问权限的应用程序列表以及它们有权访问的资源名称。"
+	},
+	{
+		"key": "Cancel",
+		"value": "取消"
+	},
+	{
+		"key": "Change email",
+		"value": "更改电子邮件"
+	},
+	{
+		"key": "Change password",
+		"value": "更改密码"
+	},
+	{
+		"key": "Change your account settings",
+		"value": "更改您的账户设置"
+	},
+	{
+		"key": "Checking login state...",
+		"value": "正在检查登录状态..."
+	},
+	{
+		"key": "claim type",
+		"value": "声明类型"
+	},
+	{
+		"key": "Claims",
+		"value": "声明"
+	},
+	{
+		"key": "claims",
+		"value": "声明"
+	},
+	{
+		"key": "claims mapping",
+		"value": "声明映射"
+	},
+	{
+		"key": "Claims mapping",
+		"value": "声明映射"
+	},
+	{
+		"key": "claims prefix",
+		"value": "声明前缀"
+	},
+	{
+		"key": "claims transformations",
+		"value": "声明转换"
+	},
+	{
+		"key": "Claims transformations",
+		"value": "声明转换"
+	},
+	{
+		"key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
+		"value": "点击<a class=\"PostLogoutRedirectUri\" href=\"{0}\">这里</a>返回到<span>{1}</span>应用程序。"
+	},
+	{
+		"key": "Client Application Access",
+		"value": "客户端应用程序访问"
+	},
+	{
+		"key": "client id",
+		"value": "客户端 ID"
+	},
+	{
+		"key": "Client Id is required.",
+		"value": "客户端 ID 是必需的。"
+	},
+	{
+		"key": "client name",
+		"value": "客户端名称"
+	},
+	{
+		"key": "client secret",
+		"value": "客户端密钥"
+	},
+	{
+		"key": "Client Secret is required.",
+		"value": "客户端密钥是必需的。"
+	},
+	{
+		"key": "client uri",
+		"value": "客户端 uri"
+	},
+	{
+		"key": "Clients",
+		"value": "客户端"
+	},
+	{
+		"key": "Close",
+		"value": "关闭"
+	},
+	{
+		"key": "Code",
+		"value": "代码"
+	},
+	{
+		"key": "Completing login...",
+		"value": "正在完成登录..."
+	},
+	{
+		"key": "Configure authenticator app",
+		"value": "配置身份验证器应用程序"
+	},
+	{
+		"key": "Confirm email",
+		"value": "确认电子邮件"
+	},
+	{
+		"key": "Confirm email change",
+		"value": "确认电子邮件更改"
+	},
+	{
+		"key": "Confirm new password",
+		"value": "确认新密码"
+	},
+	{
+		"key": "Confirm password",
+		"value": "确认密码"
+	},
+	{
+		"key": "Confirm your email",
+		"value": "确认您的电子邮件"
+	},
+	{
+		"key": "Confirmation link to change email sent. Please check your email.",
+		"value": "更改电子邮件的确认链接已发送。请检查您的电子邮件。"
+	},
+	{
+		"key": "consent",
+		"value": "同意"
+	},
+	{
+		"key": "Consent",
+		"value": "同意"
+	},
+	{
+		"key": "consent lifetime",
+		"value": "同意生存期"
+	},
+	{
+		"key": "consents",
+		"value": "同意"
+	},
+	{
+		"key": "Consents",
+		"value": "同意"
+	},
+	{
+		"key": "consumer key",
+		"value": "消费者密钥"
+	},
+	{
+		"key": "Consumer Key is required.",
+		"value": "消费者密钥是必需的。"
+	},
+	{
+		"key": "consumer secret",
+		"value": "消费者密钥"
+	},
+	{
+		"key": "Consumer Secret is required.",
+		"value": "消费者密钥是必需的。"
+	},
+	{
+		"key": "cors",
+		"value": "cors"
+	},
+	{
+		"key": "Create a new account.",
+		"value": "创建新账户。"
+	},
+	{
+		"key": "create at",
+		"value": "创建于"
+	},
+	{
+		"key": "Created:",
+		"value": "已创建："
+	},
+	{
+		"key": "creation",
+		"value": "创建"
+	},
+	{
+		"key": "culture",
+		"value": "文化"
+	},
+	{
+		"key": "Cultures",
+		"value": "文化"
+	},
+	{
+		"key": "Current password",
+		"value": "当前密码"
+	},
+	{
+		"key": "data",
+		"value": "数据"
+	},
+	{
+		"key": "Data Protection",
+		"value": "数据保护"
+	},
+	{
+		"key": "decription",
+		"value": "描述"
+	},
+	{
+		"key": "Delete",
+		"value": "删除"
+	},
+	{
+		"key": "Delete data and close my account",
+		"value": "删除数据并关闭我的账户"
+	},
+	{
+		"key": "Delete Personal Data",
+		"value": "删除个人数据"
+	},
+	{
+		"key": "Deleted",
+		"value": "已删除"
+	},
+	{
+		"key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+		"value": "删除这些数据将永久删除您的账户，且无法恢复。"
+	},
+	{
+		"key": "description",
+		"value": "描述"
+	},
+	{
+		"key": "device flow request lifetime",
+		"value": "设备流请求生存期"
+	},
+	{
+		"key": "Disable 2FA",
+		"value": "禁用双因素认证"
+	},
+	{
+		"key": "disable telemetry",
+		"value": "禁用遥测"
+	},
+	{
+		"key": "Disable two-factor authentication (2FA)",
+		"value": "禁用双因素认证（2FA）"
+	},
+	{
+		"key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+		"value": "禁用2FA不会更改身份验证器应用中使用的密钥。如果您希望更改身份验证器应用中使用的密钥，您应该<a href=\"{0}\">重置您的身份验证器密钥。</a>"
+	},
+	{
+		"key": "display name",
+		"value": "显示名称"
+	},
+	{
+		"key": "Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.",
+		"value": "无法访问您的身份验证器设备？您可以<a href=\"{0}\">使用恢复代码登录</a>。"
+	},
+	{
+		"key": "Download",
+		"value": "下载"
+	},
+	{
+		"key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>.",
+		"value": "下载双因素身份验证器应用，如适用于<a href=\"{0}\">Windows Phone</a>、<a href=\"{1}\">Android</a>和<a href=\"{2}\">iOS</a>的Microsoft Authenticator，或适用于<a href=\"{3}\">Android</a>和<a href=\"{4}\">iOS</a>的Google Authenticator。"
+	},
+	{
+		"key": "Download Your Data",
+		"value": "下载您的数据"
+	},
+	{
+		"key": "Editing the profile is not supported.",
+		"value": "不支持编辑个人资料。"
+	},
+	{
+		"key": "Email",
+		"value": "电子邮件"
+	},
+	{
+		"key": "email",
+		"value": "电子邮件"
+	},
+	{
+		"key": "email confirmed",
+		"value": "电子邮件已确认"
+	},
+	{
+		"key": "emphasize",
+		"value": "强调"
+	},
+	{
+		"key": "enable local login",
+		"value": "启用本地登录"
+	},
+	{
+		"key": "enabled",
+		"value": "已启用"
+	},
+	{
+		"key": "encryption certificate",
+		"value": "加密证书"
+	},
+	{
+		"key": "Enter your email.",
+		"value": "输入您的电子邮件。"
+	},
+	{
+		"key": "Entities created",
+		"value": "已创建实体"
+	},
+	{
+		"key": "Entities updated",
+		"value": "已更新实体"
+	},
+	{
+		"key": "Error",
+		"value": "错误"
+	},
+	{
+		"key": "Error changing email.",
+		"value": "更改电子邮件时出错。"
+	},
+	{
+		"key": "Error changing user name.",
+		"value": "更改用户名时出错。"
+	},
+	{
+		"key": "Error confirming your email.",
+		"value": "确认您的电子邮件时出错。"
+	},
+	{
+		"key": "Error from external provider: {0}",
+		"value": "外部提供商错误：{0}"
+	},
+	{
+		"key": "Error loading external login information during confirmation.",
+		"value": "确认期间加载外部登录信息时出错。"
+	},
+	{
+		"key": "Error loading external login information.",
+		"value": "加载外部登录信息时出错。"
+	},
+	{
+		"key": "Error when trying to revoke the key.",
+		"value": "尝试撤销密钥时出错。"
+	},
+	{
+		"key": "expiration",
+		"value": "过期"
+	},
+	{
+		"key": "expire at",
+		"value": "过期于"
+	},
+	{
+		"key": "Expires:",
+		"value": "过期："
+	},
+	{
+		"key": "export",
+		"value": "导出"
+	},
+	{
+		"key": "External Login",
+		"value": "外部登录"
+	},
+	{
+		"key": "External login tokens",
+		"value": "外部登录令牌"
+	},
+	{
+		"key": "external logins",
+		"value": "外部登录"
+	},
+	{
+		"key": "External logins",
+		"value": "外部登录"
+	},
+	{
+		"key": "external logins tokens",
+		"value": "外部登录令牌"
+	},
+	{
+		"key": "External provider restrictions",
+		"value": "外部提供商限制"
+	},
+	{
+		"key": "field",
+		"value": "字段"
+	},
+	{
+		"key": "fields",
+		"value": "字段"
+	},
+	{
+		"key": "filter",
+		"value": "过滤器"
+	},
+	{
+		"key": "Forget this browser",
+		"value": "忘记此浏览器"
+	},
+	{
+		"key": "Forgot password confirmation",
+		"value": "忘记密码确认"
+	},
+	{
+		"key": "Forgot your password?",
+		"value": "忘记密码？"
+	},
+	{
+		"key": "from claim type",
+		"value": "来自声明类型"
+	},
+	{
+		"key": "front channel logout uri",
+		"value": "前端通道注销uri"
+	},
+	{
+		"key": "front channel logout uri required",
+		"value": "需要前端通道注销uri"
+	},
+	{
+		"key": "Generate Recovery Codes",
+		"value": "生成恢复码"
+	},
+	{
+		"key": "Generate two-factor authentication (2FA) recovery codes",
+		"value": "生成双因素认证（2FA）恢复码"
+	},
+	{
+		"key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+		"value": "生成新的恢复码不会更改身份验证器应用中使用的密钥。如果您希望更改身份验证器应用中使用的密钥，您应该<a href=\"{0}\">重置您的身份验证器密钥。</a>"
+	},
+	{
+		"key": "grant type",
+		"value": "授权类型"
+	},
+	{
+		"key": "grant types",
+		"value": "授权类型"
+	},
+	{
+		"key": "Grant types",
+		"value": "授权类型"
+	},
+	{
+		"key": "Grants",
+		"value": "授权"
+	},
+	{
+		"key": "Hello {0}!",
+		"value": "你好 {0}！"
+	},
+	{
+		"key": "Hello, {0}!",
+		"value": "你好，{0}！"
+	},
+	{
+		"key": "Home",
+		"value": "首页"
+	},
+	{
+		"key": "id",
+		"value": "id"
+	},
+	{
+		"key": "id token lifetime",
+		"value": "id 令牌生存期"
+	},
+	{
+		"key": "Identities",
+		"value": "身份"
+	},
+	{
+		"key": "identity",
+		"value": "身份"
+	},
+	{
+		"key": "Identity Grants",
+		"value": "身份授权"
+	},
+	{
+		"key": "idp restrictions",
+		"value": "idp 限制"
+	},
+	{
+		"key": "If you lose your device and don't have the recovery codes you will lose access to your account.",
+		"value": "如果您丢失了设备且没有恢复码，您将无法访问您的账户。"
+	},
+	{
+		"key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
+		"value": "如果您重置身份验证器密钥，您的身份验证器应用将无法工作，直到您重新配置它。"
+	},
+	{
+		"key": "Import",
+		"value": "导入"
+	},
+	{
+		"key": "include JWT id",
+		"value": "包含 JWT id"
+	},
+	{
+		"key": "Incorrect password.",
+		"value": "密码不正确。"
+	},
+	{
+		"key": "Invalid authenticator code.",
+		"value": "无效的身份验证器代码。"
+	},
+	{
+		"key": "Invalid file",
+		"value": "无效文件"
+	},
+	{
+		"key": "Invalid login request",
+		"value": "无效的登录请求"
+	},
+	{
+		"key": "Invalid recovery code entered.",
+		"value": "输入的恢复码无效。"
+	},
+	{
+		"key": "issuer",
+		"value": "发行者"
+	},
+	{
+		"key": "key",
+		"value": "密钥"
+	},
+	{
+		"key": "Keys",
+		"value": "密钥"
+	},
+	{
+		"key": "lifetime",
+		"value": "生存期"
+	},
+	{
+		"key": "Loading...",
+		"value": "加载中..."
+	},
+	{
+		"key": "Local Login",
+		"value": "本地登录"
+	},
+	{
+		"key": "localized description",
+		"value": "本地化描述"
+	},
+	{
+		"key": "localized display name",
+		"value": "本地化显示名称"
+	},
+	{
+		"key": "lockout enabled",
+		"value": "已启用锁定"
+	},
+	{
+		"key": "lockout end",
+		"value": "锁定结束"
+	},
+	{
+		"key": "Log in",
+		"value": "登录"
+	},
+	{
+		"key": "Log in using your {0} account",
+		"value": "使用您的 {0} 账户登录"
+	},
+	{
+		"key": "Log out",
+		"value": "登出"
+	},
+	{
+		"key": "Login",
+		"value": "登录"
+	},
+	{
+		"key": "Login form",
+		"value": "登录表单"
+	},
+	{
+		"key": "logo uri",
+		"value": "logo uri"
+	},
+	{
+		"key": "Logout",
+		"value": "登出"
+	},
+	{
+		"key": "Logout form",
+		"value": "登出表单"
+	},
+	{
+		"key": "Manage Email",
+		"value": "管理电子邮件"
+	},
+	{
+		"key": "Manage your account",
+		"value": "管理您的账户"
+	},
+	{
+		"key": "Manage your external logins",
+		"value": "管理您的外部登录"
+	},
+	{
+		"key": "map default outbound JWT claim types",
+		"value": "映射默认出站 JWT 声明类型"
+	},
+	{
+		"key": "metadata address",
+		"value": "元数据地址"
+	},
+	{
+		"key": "Metadata address is required.",
+		"value": "元数据地址是必需的。"
+	},
+	{
+		"key": "Metadata address must be a valid HTTPS url when 'required https metadata is true'.",
+		"value": "当 '需要https元数据' 为 true 时，元数据地址必须是有效的HTTPS URL。"
+	},
+	{
+		"key": "Metadata address must be a valid uri.",
+		"value": "元数据地址必须是有效的uri。"
+	},
+	{
+		"key": "name",
+		"value": "名称"
+	},
+	{
+		"key": "name id format",
+		"value": "名称id格式"
+	},
+	{
+		"key": "New email",
+		"value": "新电子邮件"
+	},
+	{
+		"key": "New password",
+		"value": "新密码"
+	},
+	{
+		"key": "No changes",
+		"value": "无变化"
+	},
+	{
+		"key": "No, Do Not Allow",
+		"value": "否，不允许"
+	},
+	{
+		"key": "Nothing here.",
+		"value": "这里什么都没有。"
+	},
+	{
+		"key": "Once complete, you may close this tab",
+		"value": "完成后，您可以关闭此标签页"
+	},
+	{
+		"key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
+		"value": "一旦您扫描了QR码或输入了上面的密钥，您的双因素身份验证应用将为您提供一个唯一的代码。在下面的确认框中输入该代码。"
+	},
+	{
+		"key": "One time only",
+		"value": "仅一次"
+	},
+	{
+		"key": "pairwise subject salt",
+		"value": "成对主题盐"
+	},
+	{
+		"key": "Password",
+		"value": "密码"
+	},
+	{
+		"key": "password",
+		"value": "密码"
+	},
+	{
+		"key": "Personal data",
+		"value": "个人数据"
+	},
+	{
+		"key": "Personal Information",
+		"value": "个人信息"
+	},
+	{
+		"key": "phone number",
+		"value": "电话号码"
+	},
+	{
+		"key": "Phone number",
+		"value": "电话号码"
+	},
+	{
+		"key": "phone number confirmed",
+		"value": "电话号码已确认"
+	},
+	{
+		"key": "Please check your email to confirm your account.",
+		"value": "请检查您的电子邮件以确认您的账户。"
+	},
+	{
+		"key": "Please check your email to reset your password.",
+		"value": "请检查您的电子邮件以重置您的密码。"
+	},
+	{
+		"key": "Please confirm that the authorization request quotes the code: \"{0}\".",
+		"value": "请确认授权请求引用了代码：\"{0}\"。"
+	},
+	{
+		"key": "Please confirm your account by <a href='{0}'>clicking here</a>.",
+		"value": "请通过<a href='{0}'>点击此处</a>确认您的账户。"
+	},
+	{
+		"key": "Please enter the code displayed on your device",
+		"value": "请输入显示在您设备上的代码"
+	},
+	{
+		"key": "Please reset your password by <a href='{0}'>clicking here</a>.",
+		"value": "请通过<a href='{0}'>点击此处</a>重置您的密码。"
+	},
+	{
+		"key": "Policy",
+		"value": "策略"
+	},
+	{
+		"key": "policy uri",
+		"value": "策略 uri"
+	},
+	{
+		"key": "post logout",
+		"value": "登出后"
+	},
+	{
+		"key": "prefix",
+		"value": "前缀"
+	},
+	{
+		"key": "Processing logout callback...",
+		"value": "正在处理登出回调..."
+	},
+	{
+		"key": "Processing logout...",
+		"value": "正在处理登出..."
+	},
+	{
+		"key": "Profile",
+		"value": "个人资料"
+	},
+	{
+		"key": "prompt",
+		"value": "提示"
+	},
+	{
+		"key": "properties",
+		"value": "属性"
+	},
+	{
+		"key": "Properties",
+		"value": "属性"
+	},
+	{
+		"key": "protocol type",
+		"value": "协议类型"
+	},
+	{
+		"key": "provider",
+		"value": "提供商"
+	},
+	{
+		"key": "Providers",
+		"value": "提供商"
+	},
+	{
+		"key": "Put these codes in a safe place.",
+		"value": "将这些代码放在安全的地方。"
+	},
+	{
+		"key": "Re use",
+		"value": "重用"
+	},
+	{
+		"key": "reason",
+		"value": "原因"
+	},
+	{
+		"key": "Recovery Code",
+		"value": "恢复码"
+	},
+	{
+		"key": "Recovery code verification",
+		"value": "恢复码验证"
+	},
+	{
+		"key": "Recovery codes",
+		"value": "恢复码"
+	},
+	{
+		"key": "redirect",
+		"value": "重定向"
+	},
+	{
+		"key": "redirect uri",
+		"value": "重定向 uri"
+	},
+	{
+		"key": "Reference tokens",
+		"value": "引用令牌"
+	},
+	{
+		"key": "reference tokens",
+		"value": "引用令牌"
+	},
+	{
+		"key": "refresh on issuer key not found",
+		"value": "未找到发行者密钥时刷新"
+	},
+	{
+		"key": "refresh token expiration",
+		"value": "刷新令牌过期"
+	},
+	{
+		"key": "refresh token usage",
+		"value": "刷新令牌使用"
+	},
+	{
+		"key": "Refresh tokens",
+		"value": "刷新令牌"
+	},
+	{
+		"key": "refresh tokens",
+		"value": "刷新令牌"
+	},
+	{
+		"key": "Register",
+		"value": "注册"
+	},
+	{
+		"key": "Register confirmation",
+		"value": "注册确认"
+	},
+	{
+		"key": "Registered Logins",
+		"value": "已注册的登录"
+	},
+	{
+		"key": "Registration is not supported.",
+		"value": "不支持注册。"
+	},
+	{
+		"key": "Relying parties",
+		"value": "依赖方"
+	},
+	{
+		"key": "relying party",
+		"value": "依赖方"
+	},
+	{
+		"key": "Remember My Decision",
+		"value": "记住我的决定"
+	},
+	{
+		"key": "Remember My Login",
+		"value": "记住我的登录"
+	},
+	{
+		"key": "Remember this machine",
+		"value": "记住此设备"
+	},
+	{
+		"key": "remenber consent",
+		"value": "记住同意"
+	},
+	{
+		"key": "remote sign-out path ",
+		"value": "远程登出路径"
+	},
+	{
+		"key": "remote sign-out path",
+		"value": "远程登出路径"
+	},
+	{
+		"key": "Remove",
+		"value": "移除"
+	},
+	{
+		"key": "require consent",
+		"value": "需要同意"
+	},
+	{
+		"key": "require https metadata",
+		"value": "需要https元数据"
+	},
+	{
+		"key": "require PKCE",
+		"value": "需要PKCE"
+	},
+	{
+		"key": "require secret",
+		"value": "需要密钥"
+	},
+	{
+		"key": "required",
+		"value": "必需"
+	},
+	{
+		"key": "Reset authenticator app",
+		"value": "重置身份验证器应用"
+	},
+	{
+		"key": "Reset authenticator key",
+		"value": "重置身份验证器密钥"
+	},
+	{
+		"key": "Reset Password",
+		"value": "重置密码"
+	},
+	{
+		"key": "Reset recovery codes",
+		"value": "重置恢复码"
+	},
+	{
+		"key": "resource",
+		"value": "资源"
+	},
+	{
+		"key": "Resources",
+		"value": "资源"
+	},
+	{
+		"key": "response mode",
+		"value": "响应模式"
+	},
+	{
+		"key": "response type",
+		"value": "响应类型"
+	},
+	{
+		"key": "retrieve user details",
+		"value": "检索用户详情"
+	},
+	{
+		"key": "Retype the \"{0}\" if you are sure to delete it.",
+		"value": "如果您确定要删除它，请重新输入 \"{0}\"。"
+	},
+	{
+		"key": "Retype the \"{0}\" if you are sure to revoke it.",
+		"value": "如果您确定要撤销它，请重新输入 \"{0}\"。"
+	},
+	{
+		"key": "Revoke",
+		"value": "撤销"
+	},
+	{
+		"key": "Revoke Access",
+		"value": "撤销访问权限"
+	},
+	{
+		"key": "Revoked",
+		"value": "已撤销"
+	},
+	{
+		"key": "role",
+		"value": "角色"
+	},
+	{
+		"key": "roles",
+		"value": "角色"
+	},
+	{
+		"key": "Save",
+		"value": "保存"
+	},
+	{
+		"key": "save tokens",
+		"value": "保存令牌"
+	},
+	{
+		"key": "Saved",
+		"value": "已保存"
+	},
+	{
+		"key": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.",
+		"value": "扫描二维码或将此密钥 <kbd>{0}</kbd> 输入到您的双因素身份验证器应用中。忽略空格和大小写。"
+	},
+	{
+		"key": "scheme",
+		"value": "方案"
+	},
+	{
+		"key": "scope",
+		"value": "范围"
+	},
+	{
+		"key": "scopes",
+		"value": "范围"
+	},
+	{
+		"key": "Scopes",
+		"value": "范围"
+	},
+	{
+		"key": "Scopes must be unique.",
+		"value": "范围必须是唯一的。"
+	},
+	{
+		"key": "secrets",
+		"value": "密钥"
+	},
+	{
+		"key": "Select a kind of provider...",
+		"value": "选择一种提供商..."
+	},
+	{
+		"key": "send app secret proof",
+		"value": "发送应用密钥证明"
+	},
+	{
+		"key": "Send verification email",
+		"value": "发送验证邮件"
+	},
+	{
+		"key": "Set password",
+		"value": "设置密码"
+	},
+	{
+		"key": "Set your password",
+		"value": "设置您的密码"
+	},
+	{
+		"key": "Setup authenticator app",
+		"value": "设置身份验证器应用"
+	},
+	{
+		"key": "show all options",
+		"value": "显示所有选项"
+	},
+	{
+		"key": "show in discovery document",
+		"value": "在发现文档中显示"
+	},
+	{
+		"key": "signature algorithm",
+		"value": "签名算法"
+	},
+	{
+		"key": "signature digest",
+		"value": "签名摘要"
+	},
+	{
+		"key": "signed-out callback path",
+		"value": "登出回调路径"
+	},
+	{
+		"key": "signed-out redirect uri",
+		"value": "登出重定向uri"
+	},
+	{
+		"key": "Signing",
+		"value": "签名"
+	},
+	{
+		"key": "sign-out scheme ",
+		"value": "登出方案"
+	},
+	{
+		"key": "sign-out scheme",
+		"value": "登出方案"
+	},
+	{
+		"key": "sign-out wreply ",
+		"value": "登出wreply"
+	},
+	{
+		"key": "skip unrecognized requests",
+		"value": "跳过无法识别的请求"
+	},
+	{
+		"key": "Sliding",
+		"value": "滑动"
+	},
+	{
+		"key": "sliding refresh token lifetime",
+		"value": "滑动刷新令牌生存期"
+	},
+	{
+		"key": "Sorry, there was an error",
+		"value": "抱歉，出现了一个错误"
+	},
+	{
+		"key": "Sorry, there's nothing at this address.",
+		"value": "抱歉，此地址没有任何内容。"
+	},
+	{
+		"key": "sso lifetime",
+		"value": "单点登录生存期"
+	},
+	{
+		"key": "store claims",
+		"value": "存储声明"
+	},
+	{
+		"key": "Submit",
+		"value": "提交"
+	},
+	{
+		"key": "Success",
+		"value": "成功"
+	},
+	{
+		"key": "Supported cultures",
+		"value": "支持的文化"
+	},
+	{
+		"key": "Terms of service",
+		"value": "服务条款"
+	},
+	{
+		"key": "terms of service uri",
+		"value": "服务条款uri"
+	},
+	{
+		"key": "Thank you for confirming your email change.",
+		"value": "感谢您确认您的电子邮件更改。"
+	},
+	{
+		"key": "The {0} must be at least {2} and at max {1} characters long.",
+		"value": "{0} 必须至少 {2} 个字符长，最多 {1} 个字符。"
+	},
+	{
+		"key": "The api property key cannot exceed 250 chars.",
+		"value": "api属性键不能超过250个字符。"
+	},
+	{
+		"key": "The api property key is required.",
+		"value": "api属性键是必需的。"
+	},
+	{
+		"key": "The api property key must be unique.",
+		"value": "api属性键必须是唯一的。"
+	},
+	{
+		"key": "The api property value cannot exceed 2000 chars.",
+		"value": "api属性值不能超过2000个字符。"
+	},
+	{
+		"key": "The api property value is required.",
+		"value": "api属性值是必需的。"
+	},
+	{
+		"key": "The back channel logout url cannot exceed 2000 char.",
+		"value": "后端通道登出url不能超过2000个字符。"
+	},
+	{
+		"key": "The back channel logout url is required.",
+		"value": "后端通道登出url是必需的。"
+	},
+	{
+		"key": "The back logout url is not valid.",
+		"value": "后端登出url无效。"
+	},
+	{
+		"key": "The claim prefix cannot exceed 250 char.",
+		"value": "声明前缀不能超过250个字符。"
+	},
+	{
+		"key": "The claim type cannot exceed 2000 chars.",
+		"value": "声明类型不能超过2000个字符。"
+	},
+	{
+		"key": "The claim type cannot exceed 250 chars.",
+		"value": "声明类型不能超过250个字符。"
+	},
+	{
+		"key": "The claim type is required.",
+		"value": "声明类型是必需的。"
+	},
+	{
+		"key": "The claim type must be unique.",
+		"value": "声明类型必须是唯一的。"
+	},
+	{
+		"key": "The claim value cannot exceed 2000 chars.",
+		"value": "声明值不能超过2000个字符。"
+	},
+	{
+		"key": "The claim value is required.",
+		"value": "声明值是必需的。"
+	},
+	{
+		"key": "The client property key cannot exceed 250 chars.",
+		"value": "客户端属性键不能超过250个字符。"
+	},
+	{
+		"key": "The client property key is required.",
+		"value": "客户端属性键是必需的。"
+	},
+	{
+		"key": "The client property key must be unique.",
+		"value": "客户端属性键必须是唯一的。"
+	},
+	{
+		"key": "The client property value cannot exceed 2000 chars.",
+		"value": "客户端属性值不能超过2000个字符。"
+	},
+	{
+		"key": "The client property value is required.",
+		"value": "客户端属性值是必需的。"
+	},
+	{
+		"key": "The client should contain at least one grant type.",
+		"value": "客户端应至少包含一种授权类型。"
+	},
+	{
+		"key": "The culture is required.",
+		"value": "文化是必需的。"
+	},
+	{
+		"key": "The culture must be unique.",
+		"value": "文化必须是唯一的。"
+	},
+	{
+		"key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
+		"value": "当前浏览器已被忘记。当您从此浏览器再次登录时，系统将提示您输入2fa代码。"
+	},
+	{
+		"key": "The description cannot exceed 200 chars.",
+		"value": "描述不能超过200个字符。"
+	},
+	{
+		"key": "The description cannot exceed 2000 chars.",
+		"value": "描述不能超过2000个字符。"
+	},
+	{
+		"key": "The description canoot exceed 1000 char.",
+		"value": "描述不能超过1000个字符。"
+	},
+	{
+		"key": "The digest algorithm is required",
+		"value": "摘要算法是必需的"
+	},
+	{
+		"key": "The display name cannot exceed 200 chars.",
+		"value": "显示名称不能超过200个字符。"
+	},
+	{
+		"key": "The display name is required.",
+		"value": "显示名称是必需的。"
+	},
+	{
+		"key": "The external login was added.",
+		"value": "外部登录已添加。"
+	},
+	{
+		"key": "The external login was not added. External logins can only be associated with one account.",
+		"value": "外部登录未添加。外部登录只能与一个账户关联。"
+	},
+	{
+		"key": "The external login was not removed.",
+		"value": "外部登录未被移除。"
+	},
+	{
+		"key": "The external login was removed.",
+		"value": "外部登录已被移除。"
+	},
+	{
+		"key": "The from claim tyoe is required.",
+		"value": "来源声明类型是必需的。"
+	},
+	{
+		"key": "The from claim type is required.",
+		"value": "来源声明类型是必需的。"
+	},
+	{
+		"key": "The from claim type must be unique.",
+		"value": "来源声明类型必须是唯一的。"
+	},
+	{
+		"key": "The front channel logout url cannot exceed 2000 char.",
+		"value": "前端通道登出url不能超过2000个字符。"
+	},
+	{
+		"key": "The front channel logout url is not valid.",
+		"value": "前端通道登出url无效。"
+	},
+	{
+		"key": "The front channel logout url is required.",
+		"value": "前端通道登出url是必需的。"
+	},
+	{
+		"key": "The grant type cannot contains space.",
+		"value": "授权类型不能包含空格。"
+	},
+	{
+		"key": "The grant type must be unique.",
+		"value": "授权类型必须是唯一的。"
+	},
+	{
+		"key": "The id is required.",
+		"value": "id是必需的。"
+	},
+	{
+		"key": "The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).",
+		"value": "当协议为WS-Federation时，id必须是URI。（例如：urn:wsfed）"
+	},
+	{
+		"key": "The identity claim type cannot exceed 2000 chars.",
+		"value": "身份声明类型不能超过2000个字符。"
+	},
+	{
+		"key": "The identity claim type is required.",
+		"value": "身份声明类型是必需的。"
+	},
+	{
+		"key": "The identity claim type must be unique.",
+		"value": "身份声明类型必须是唯一的。"
+	},
+	{
+		"key": "The identity property key cannot exceed 250 chars.",
+		"value": "身份属性键不能超过250个字符。"
+	},
+	{
+		"key": "The identity property key is required.",
+		"value": "身份属性键是必需的。"
+	},
+	{
+		"key": "The identity property key must be unique.",
+		"value": "身份属性键必须是唯一的。"
+	},
+	{
+		"key": "The identity property value cannot exceed 2000 chars.",
+		"value": "身份属性值不能超过2000个字符。"
+	},
+	{
+		"key": "The identity property value is required.",
+		"value": "身份属性值是必需的。"
+	},
+	{
+		"key": "The identity should provide at least one claim.",
+		"value": "身份应提供至少一个声明。"
+	},
+	{
+		"key": "The key is required.",
+		"value": "密钥是必需的。"
+	},
+	{
+		"key": "The key '{0}' must be unique.",
+		"value": "密钥必须是唯一的。"
+	},
+	{
+		"key": "The kind of provider is required.",
+		"value": "需要提供商类型。"
+	},
+	{
+		"key": "The logo url cannot exceed 2000 char.",
+		"value": "标志URL不能超过2000个字符。"
+	},
+	{
+		"key": "The logo url is not valid.",
+		"value": "标志URL无效。"
+	},
+	{
+		"key": "The name cannot exceed 200 char.",
+		"value": "名称不能超过200个字符。"
+	},
+	{
+		"key": "The name cannot exceed 200 chars.",
+		"value": "名称不能超过200个字符。"
+	},
+	{
+		"key": "The name identifier is required",
+		"value": "名称标识符是必需的"
+	},
+	{
+		"key": "The name is required",
+		"value": "名称是必需的"
+	},
+	{
+		"key": "The name is required.",
+		"value": "名称是必需的。"
+	},
+	{
+		"key": "The new password and confirmation password do not match.",
+		"value": "新密码和确认密码不匹配。"
+	},
+	{
+		"key": "The password and confirmation password do not match.",
+		"value": "密码和确认密码不匹配。"
+	},
+	{
+		"key": "The policy url cannot exceed 2000 char.",
+		"value": "策略URL不能超过2000个字符。"
+	},
+	{
+		"key": "The policy url is not valid.",
+		"value": "策略URL无效。"
+	},
+	{
+		"key": "The relying party is required.",
+		"value": "需要依赖方。"
+	},
+	{
+		"key": "The role must be unique",
+		"value": "角色必须是唯一的"
+	},
+	{
+		"key": "The role name is required",
+		"value": "角色名称是必需的"
+	},
+	{
+		"key": "The secret type is required.",
+		"value": "需要密钥类型。"
+	},
+	{
+		"key": "The secret value is required.",
+		"value": "密钥值是必需的。"
+	},
+	{
+		"key": "The sheme is required.",
+		"value": "需要方案。"
+	},
+	{
+		"key": "The subject salt cannot exceed 250 char.",
+		"value": "主题盐不能超过250个字符。"
+	},
+	{
+		"key": "The terms of service url cannot exceed 2000 char.",
+		"value": "服务条款URL不能超过2000个字符。"
+	},
+	{
+		"key": "The terms of service url is not valid.",
+		"value": "服务条款URL无效。"
+	},
+	{
+		"key": "The to claim tyoe is required.",
+		"value": "需要声明类型。"
+	},
+	{
+		"key": "The to claim type is required.",
+		"value": "需要声明类型。"
+	},
+	{
+		"key": "The to claim type must be an URI.",
+		"value": "声明类型必须是URI。"
+	},
+	{
+		"key": "The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second",
+		"value": "令牌表达式不符合有效格式。您可以使用d.hh:mm:ss、hh.mm:ss、mm:ss格式，或天数（365d）、小时数（12h）、分钟数（30m）、秒数"
+	},
+	{
+		"key": "The token type is required",
+		"value": "需要令牌类型"
+	},
+	{
+		"key": "The type of protocol cannot exceed 200 char.",
+		"value": "协议类型不能超过200个字符。"
+	},
+	{
+		"key": "The type of protocol is required",
+		"value": "需要协议类型"
+	},
+	{
+		"key": "The type of user code cannot exceed 100 char.",
+		"value": "用户代码类型不能超过100个字符。"
+	},
+	{
+		"key": "The url cannot exceed 2000 char.",
+		"value": "URL不能超过2000个字符。"
+	},
+	{
+		"key": "The url is not valid.",
+		"value": "URL无效。"
+	},
+	{
+		"key": "There are no login schemes configured for this client.",
+		"value": "此客户端未配置登录方案。"
+	},
+	{
+		"key": "There was an error trying to log you in: '{0}'",
+		"value": "尝试登录时出错：'{0}'"
+	},
+	{
+		"key": "There was an error trying to log you out: '{0}'",
+		"value": "尝试注销时出错：'{0}'"
+	},
+	{
+		"key": "This action only disables 2FA.",
+		"value": "此操作仅禁用双因素认证。"
+	},
+	{
+		"key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
+		"value": "此过程会禁用双因素认证，直到您验证您的认证器应用。如果您未完成认证器应用配置，可能会失去对账户的访问权限。"
+	},
+	{
+		"key": "to claim type",
+		"value": "声明类型"
+	},
+	{
+		"key": "To use an authenticator app go through the following steps:",
+		"value": "要使用认证器应用，请执行以下步骤："
+	},
+	{
+		"key": "Token endpoint is required.",
+		"value": "需要令牌端点。"
+	},
+	{
+		"key": "Token endpoint must be a valid uri.",
+		"value": "令牌端点必须是有效的URI。"
+	},
+	{
+		"key": "token enpoint",
+		"value": "令牌端点"
+	},
+	{
+		"key": "token type",
+		"value": "令牌类型"
+	},
+	{
+		"key": "Tokens",
+		"value": "令牌"
+	},
+	{
+		"key": "tokens",
+		"value": "令牌"
+	},
+	{
+		"key": "two factor enabled",
+		"value": "已启用双因素认证"
+	},
+	{
+		"key": "Two-factor authentication",
+		"value": "双因素认证"
+	},
+	{
+		"key": "Two-factor authentication (2FA)",
+		"value": "双因素认证（2FA）"
+	},
+	{
+		"key": "type",
+		"value": "类型"
+	},
+	{
+		"key": "Unable to load user with ID '{0}'.",
+		"value": "无法加载ID为'{0}'的用户。"
+	},
+	{
+		"key": "Uncheck the permissions you do not wish to grant.",
+		"value": "取消选中您不希望授予的权限。"
+	},
+	{
+		"key": "Unexpected error when trying to set phone number.",
+		"value": "尝试设置电话号码时出现意外错误。"
+	},
+	{
+		"key": "update access token on refresh",
+		"value": "刷新时更新访问令牌"
+	},
+	{
+		"key": "Update password",
+		"value": "更新密码"
+	},
+	{
+		"key": "uri",
+		"value": "uri"
+	},
+	{
+		"key": "Uri must be unique.",
+		"value": "Uri必须是唯一的。"
+	},
+	{
+		"key": "urls",
+		"value": "URL"
+	},
+	{
+		"key": "Use another service to register.",
+		"value": "使用其他服务注册。"
+	},
+	{
+		"key": "use PKCE",
+		"value": "使用PKCE"
+	},
+	{
+		"key": "use token lifetime",
+		"value": "使用令牌生命周期"
+	},
+	{
+		"key": "User",
+		"value": "用户"
+	},
+	{
+		"key": "user",
+		"value": "用户"
+	},
+	{
+		"key": "User Code",
+		"value": "用户代码"
+	},
+	{
+		"key": "user enpoint",
+		"value": "用户端点"
+	},
+	{
+		"key": "User information endpoint is required.",
+		"value": "需要用户信息端点。"
+	},
+	{
+		"key": "User information endpoint must be a valid uri.",
+		"value": "用户信息端点必须是有效的URI。"
+	},
+	{
+		"key": "user name",
+		"value": "用户名"
+	},
+	{
+		"key": "Username",
+		"value": "用户名"
+	},
+	{
+		"key": "Users",
+		"value": "用户"
+	},
+	{
+		"key": "value",
+		"value": "值"
+	},
+	{
+		"key": "Verification Code",
+		"value": "验证码"
+	},
+	{
+		"key": "Verification code is invalid.",
+		"value": "验证码无效。"
+	},
+	{
+		"key": "Verification email sent. Please check your email.",
+		"value": "验证邮件已发送。请查看您的邮箱。"
+	},
+	{
+		"key": "Verify",
+		"value": "验证"
+	},
+	{
+		"key": "Welcome",
+		"value": "欢迎"
+	},
+	{
+		"key": "Would you like to logout of {0}?",
+		"value": "您想要退出{0}吗？"
+	},
+	{
+		"key": "wreply ",
+		"value": "wreply "
+	},
+	{
+		"key": "wtrealm ",
+		"value": "wtrealm "
+	},
+	{
+		"key": "Wtrealm is required.",
+		"value": "需要Wtrealm。"
+	},
+	{
+		"key": "Yes",
+		"value": "是"
+	},
+	{
+		"key": "Yes, Allow",
+		"value": "是，允许"
+	},
+	{
+		"key": "You are logged out.",
+		"value": "您已注销。"
+	},
+	{
+		"key": "You are not authorize to import data.",
+		"value": "您无权导入数据。"
+	},
+	{
+		"key": "You are now being returned to the application.",
+		"value": "您现在将返回应用程序。"
+	},
+	{
+		"key": "You are now logged out",
+		"value": "您现在已注销"
+	},
+	{
+		"key": "You are revoking the key currently in use. Be sure what you're doing.",
+		"value": "您正在撤销当前使用的密钥。请确保您知道自己在做什么。"
+	},
+	{
+		"key": "You can <a href=\"{0}\">generate a new set of recovery codes</a>.",
+		"value": "您可以<a href=\"{0}\">生成一组新的恢复码</a>。"
+	},
+	{
+		"key": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+		"value": "您没有此站点的本地用户名/密码。添加本地帐户，以便无需外部登录即可登录。"
+	},
+	{
+		"key": "You do not have access to that resource.",
+		"value": "您无权访问该资源。"
+	},
+	{
+		"key": "You have 1 recovery code left.",
+		"value": "您还剩1个恢复码。"
+	},
+	{
+		"key": "You have generated new recovery codes.",
+		"value": "您已生成新的恢复码。"
+	},
+	{
+		"key": "You have no recovery codes left.",
+		"value": "您没有剩余的恢复码。"
+	},
+	{
+		"key": "You have not given access to any applications",
+		"value": "您尚未授予任何应用程序访问权限"
+	},
+	{
+		"key": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.",
+		"value": "您已请求使用恢复码登录。在您提供认证器应用代码登录或禁用双因素认证并重新登录之前，此登录不会被记住。"
+	},
+	{
+		"key": "You have successfully authorized the device",
+		"value": "您已成功授权设备"
+	},
+	{
+		"key": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+		"value": "在使用恢复码登录之前，您必须<a href=\"{0}\">生成一组新的恢复码</a>。"
+	},
+	{
+		"key": "You should <a href=\"{0}\">generate a new set of recovery codes</a>",
+		"value": "您应该<a href=\"{0}\">生成一组新的恢复码</a>。"
+	},
+	{
+		"key": "Your account contains personal data that you have given us. This page allows you to download or delete that data.",
+		"value": "您的帐户包含您提供给我们的个人数据。此页面允许您下载或删除这些数据。"
+	},
+	{
+		"key": "Your authenticator app has been verified.",
+		"value": "您的认证器应用已验证。"
+	},
+	{
+		"key": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+		"value": "您的认证器应用密钥已重置，您需要使用新密钥配置您的认证器应用。"
+	},
+	{
+		"key": "Your email is unchanged.",
+		"value": "您的电子邮件未更改。"
+	},
+	{
+		"key": "Your login is protected with an authenticator app. Enter your authenticator code below.",
+		"value": "您的登录受认证器应用保护。请在下方输入您的认证器代码。"
+	},
+	{
+		"key": "Your password has been changed.",
+		"value": "您的密码已更改。"
+	},
+	{
+		"key": "Your password has been set.",
+		"value": "您的密码已设置。"
+	},
+	{
+		"key": "Your profile has been updated",
+		"value": "您的个人资料已更新"
+	},
+	{
+		"key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
+		"value": "您已成功通过<strong>{0}</strong>身份验证。请在下方输入此网站的电子邮件地址，然后点击注册按钮完成登录。"
+	},
+	{
+		"key": "{0} <small class=\"text-muted\">is requesting your permission</small>",
+		"value": "{0} <small class=\"text-muted\">正在请求您的许可</small>"
+	},
+	{
+		"key": "Verify that this identifier matches what the client is displaying:",
+		"value": "验证此标识符是否与客户端显示的内容匹配："
+	},
+	{
+		"key": "Description or name of device",
+		"value": "设备描述或名称"
+	},
+	{
+		"key": "Will be available to these resource servers:",
+		"value": "将可用于这些资源服务器："
+	},
+	{
+		"key": "Binding Message",
+		"value": "绑定消息"
+	},
+	{
+		"key": "Pending Backchannel Login Requests",
+		"value": "待处理的后通道登录请求"
+	},
+	{
+		"key": "No Pending Login Requests",
+		"value": "没有待处理的登录请求"
+	},
+	{
+		"key": "Invalid login request id.",
+		"value": "无效的登录请求ID。"
+	},
+	{
+		"key": "SubjectIds don't match.",
+		"value": "主体ID不匹配。"
+	},
+	{
+		"key": "Backchannel login requests",
+		"value": "后通道登录请求"
+	},
+	{
+		"key": "ciba requests",
+		"value": "CIBA请求"
+	},
+	{
+		"key": "ciba lifetime",
+		"value": "CIBA生命周期"
+	},
+	{
+		"key": "polling interval",
+		"value": "轮询间隔"
+	},
+	{
+		"key": "Below is the list of sessions you have opened.",
+		"value": "以下是您已打开的会话列表。"
+	},
+	{
+		"key": "Below is the list of backchannel login requests awaiting your approbation.",
+		"value": "以下是等待您批准的后通道登录请求列表。"
+	},
+	{
+		"key": "Sessions",
+		"value": "会话"
+	},
+	{
+		"key": "Renewed",
+		"value": "已续期"
+	},
+	{
+		"key": "Created",
+		"value": "已创建"
+	},
+	{
+		"key": "Expires",
+		"value": "过期"
+	},
+	{
+		"key": "No session",
+		"value": "无会话"
+	},
+	{
+		"key": "allowed identity token signing algorithms",
+		"value": "允许的身份令牌签名算法"
+	},
+	{
+		"key": "Reset password",
+		"value": "重置密码"
+	},
+	{
+		"key": "Reset your password.",
+		"value": "重置您的密码。"
+	},
+	{
+		"key": "Reset",
+		"value": "重置"
+	},
+	{
+		"key": "Reset password confirmation",
+		"value": "重置密码确认"
+	},
+	{
+		"key": "Your password has been reset.",
+		"value": "您的密码已重置。"
+	},
+	{
+		"key": "Please click here to log in",
+		"value": "请点击此处登录"
+	},
+	{
+		"key": "Register as a new user",
+		"value": "注册为新用户"
+	},
+	{
+		"key": "Resend email confirmation",
+		"value": "重新发送电子邮件确认"
+	},
+	{
+		"key": "Resend",
+		"value": "重新发送"
+	},
+	{
+		"key": "The machine account password is required.",
+		"value": "需要机器账户密码。"
+	},
+	{
+		"key": "persist kerberos credentials",
+		"value": "保留Kerberos凭证"
+	},
+	{
+		"key": "persist ntlm credentials",
+		"value": "保留NTLM凭证"
+	},
+	{
+		"key": "enable ldap",
+		"value": "启用LDAP"
+	},
+	{
+		"key": "domain",
+		"value": "域"
+	},
+	{
+		"key": "machine account name",
+		"value": "机器账户名"
+	},
+	{
+		"key": "machine account password",
+		"value": "机器账户密码"
+	},
+	{
+		"key": "enable ldap claim resolution",
+		"value": "启用LDAP声明解析"
+	},
+	{
+		"key": "ignore nested groups",
+		"value": "忽略嵌套组"
+	},
+	{
+		"key": "claims cache absolute expiration",
+		"value": "声明缓存绝对过期时间"
+	},
+	{
+		"key": "claims cache sliding expiration",
+		"value": "声明缓存滑动过期时间"
+	},
+	{
+		"key": "require resource indicator",
+		"value": "需要资源指示器"
+	},
+	{
+		"key": "Are you sure you want to leave this page?",
+		"value": "您确定要离开此页面吗？"
+	},
+	{
+		"key": "clone",
+		"value": "克隆"
+	},
+	{
+		"key": "Clone of {0}",
+		"value": "{0}的克隆"
+	},
+	{
+		"key": "Scope of",
+		"value": "范围"
+	},
+	{
+		"key": "Allowed to",
+		"value": "允许"
+	},
+	{
+		"key": "scope of",
+		"value": "范围"
+	},
+	{
+		"key": "allowed to",
+		"value": "允许"
+	},
+	{
+		"key": "metadata",
+		"value": "元数据"
+	},
+	{
+		"key": "Cannot have more than one URI per kind.",
+		"value": "每种类型不能有多个URI。"
+	},
+	{
+		"key": "Either a metadata or redirect URI must be set.",
+		"value": "必须设置元数据或重定向URI。"
+	},
+	{
+		"key": "Either a metadata URI or a X509Certificate secret must be set.",
+		"value": "必须设置元数据URI或X509证书密钥。"
+	}
+]
