@@ -21,7 +21,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services
         private IEnumerable<LocalizedResource> _resources;
         private IEnumerable<string> _cultureList;
 
-        protected Dictionary<string, LocalizedString> KeyValuePairs { get; set; } = new Dictionary<string, LocalizedString>();
+        protected Dictionary<string, LocalizedString> KeyValuePairs { get; set; } = new Dictionary<string, LocalizedString>(StringComparer.OrdinalIgnoreCase);
 
         protected ILogger<StringLocalizer> Logger { get; }
         public CultureInfo CurrentCulture { get; set; } = new CultureInfo("en");
