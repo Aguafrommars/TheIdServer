@@ -1,10 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
-using Microsoft.AspNetCore.Components;
-
-using System.Collections.Generic;
-using System.Linq;
-
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Pages.Users
