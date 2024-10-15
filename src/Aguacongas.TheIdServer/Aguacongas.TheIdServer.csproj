@@ -37,7 +37,7 @@
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.3.4" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.2.4" />
-		<PackageReference Include="Azure.Identity" Version="1.12.1" />
+		<PackageReference Include="Azure.Identity" Version="1.13.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="1.5.0" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="8.0.10" />
