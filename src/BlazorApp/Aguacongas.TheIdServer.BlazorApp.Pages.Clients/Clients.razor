@@ -8,7 +8,7 @@
     <div class="col-12 col-md">
         <Filter TermChanged="OnFilterChanged" />
     </div>
-    <EntitiesGrid Items="EntityList" TableClass="table mb-0">
+    <EntitiesGrid Items="PagedEntityList" TableClass="table mb-0">
         <TableHeader>
             <th><SelectAll GridState="GridState" /></th>
             <th class="w-25" scope="col">
@@ -31,7 +31,7 @@
 else
 {
     <div class="row">
-        <EntitiesGrid Items="EntityList" TableClass="table table-hover">
+        <EntitiesGrid Items="PagedEntityList" TableClass="table table-hover">
             <RowTemplate>
                 <SelectableItem GridState="GridState" Item="@context" Selected="value => OnItemSelected(context.Id, value)" Context="item">
                     <td class="w-25" @onclick="() => OnRowClicked(item)">@item.Id</td>
@@ -43,5 +43,9 @@ else
             </RowTemplate>
         </EntitiesGrid>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <Pagination TotalPages="@TotalPages" CurrentPage="@CurrentPage" OnPageChanged="@NavigateToPage" />
+        </div>
+    </div>
 }
-

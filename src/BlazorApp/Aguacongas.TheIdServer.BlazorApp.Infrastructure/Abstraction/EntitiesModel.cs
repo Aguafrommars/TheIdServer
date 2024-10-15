@@ -59,7 +59,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 Select = SelectProperties,
                 Expand = Expand,
-                Take = 10
+                //Take = 10
             };
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);

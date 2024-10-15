@@ -210,3 +210,24 @@ span.input-group-text.oi {
             display: block;
         }
 }
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.page-link {
+    color: #007bff;
+}
+
+    .page-link:hover {
+        color: #0056b3;
+    }
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+}

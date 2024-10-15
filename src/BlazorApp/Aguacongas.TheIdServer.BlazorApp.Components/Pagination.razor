@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+            <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage - 1)" disabled="@(CurrentPage == 1)">Previous</button>
+        </li>
+        @for (int i = 1; i <= TotalPages; i++)
+        {
+            var pageNumber = i;
+            <li class="page-item @(pageNumber == CurrentPage ? "active" : "")">
+                <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">@pageNumber</button>
+            </li>
+        }
+        <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
+            <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage + 1)" disabled="@(CurrentPage == TotalPages)">Next</button>
+        </li>
+    </ul>
+</nav>
+
+@code {
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+}
