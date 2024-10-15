@@ -5,13 +5,50 @@
         <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
             <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage - 1)" disabled="@(CurrentPage == 1)">Previous</button>
         </li>
-        @for (int i = 1; i <= TotalPages; i++)
+
+        @if (TotalPages <= 5)
         {
-            var pageNumber = i;
-            <li class="page-item @(pageNumber == CurrentPage ? "active" : "")">
-                <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">@pageNumber</button>
+            @for (int i = 1; i <= TotalPages; i++)
+            {
+                var pageNumber = i;
+                <li class="page-item @(pageNumber == CurrentPage ? "active" : "")">
+                    <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">@pageNumber</button>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="page-item @(CurrentPage == 1 ? "active" : "")">
+                <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(1)">1</button>
+            </li>
+
+            @if (CurrentPage > 3)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+
+            @for (int i = Math.Max(2, CurrentPage - 1); i <= Math.Min(TotalPages - 1, CurrentPage + 1); i++)
+            {
+                var pageNumber = i;
+                <li class="page-item @(pageNumber == CurrentPage ? "active" : "")">
+                    <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">@pageNumber</button>
+                </li>
+            }
+
+            @if (CurrentPage < TotalPages - 2)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+
+            <li class="page-item @(CurrentPage == TotalPages ? "active" : "")">
+                <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(TotalPages)">@TotalPages</button>
             </li>
         }
+
         <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
             <button class="page-link" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage + 1)" disabled="@(CurrentPage == TotalPages)">Next</button>
         </li>

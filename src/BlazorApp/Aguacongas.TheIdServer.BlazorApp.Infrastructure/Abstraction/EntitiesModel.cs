@@ -17,9 +17,8 @@ using System.Threading.Tasks;
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     [Authorize(Policy = SharedConstants.READERPOLICY)]
-    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
+    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T : class
     {
-        private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly List<string> _selectedIdList = new List<string>();
 
@@ -34,6 +33,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         [Inject]
         protected IAdminStore<OneTimeToken> OneTimeTokenAdminStore { get; set; }
+
         protected IEnumerable<T> EntityList { get; private set; }
 
         protected GridState GridState { get; } = new GridState();
@@ -51,47 +51,75 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             Expand = ExportExpand
         };
 
+        [Parameter]
+        public int PageSize { get; set; } = 10;
+
+        [Parameter]
+        public int CurrentPage { get; set; } = 1;
+
+        public int TotalItems { get; private set; }
+        public int TotalPages => (int)Math.Ceiling(TotalItems / (double)PageSize);
+
         protected override async Task OnInitializedAsync()
         {
             Localizer.OnResourceReady = () => InvokeAsync(StateHasChanged);
             await base.OnInitializedAsync().ConfigureAwait(false);
-            _pageRequest = new PageRequest
-            {
-                Select = SelectProperties,
-                Expand = Expand,
-                //Take = 10
-            };
-            await GetEntityList(_pageRequest)
-                .ConfigureAwait(false);
+            await LoadPage(1).ConfigureAwait(false);
 
             GridState.OnHeaderClicked += GridState_OnHeaderClicked;
         }
 
-        protected Task OnFilterChanged(string filter)
+        protected async Task LoadPage(int page)
+        {
+            var pageRequest = new PageRequest
+            {
+                Select = SelectProperties,
+                Expand = Expand,
+                Skip = (page - 1) * PageSize,
+                Take = PageSize
+            };
+
+            var result = await AdminStore.GetAsync(pageRequest).ConfigureAwait(false);
+            EntityList = result.Items;
+            TotalItems = result.Count;
+            CurrentPage = page;
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+        }
+
+        protected async Task OnFilterChanged(string filter)
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
-                       
-            return Task.Delay(500, token)
-                .ContinueWith(async task =>
-                {
-                    _pageRequest.Filter = CreateRequestFilter(filter);
 
-                    var page = await AdminStore.GetAsync(_pageRequest, token)
-                                .ConfigureAwait(false);
+            await Task.Delay(500, token).ConfigureAwait(false);
 
-                    if (task.IsCanceled)
-                    {
-                        return;
-                    }
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
 
-                    EntityList = page.Items;
+            var pageRequest = new PageRequest
+            {
+                Select = SelectProperties,
+                Expand = Expand,
+                Filter = CreateRequestFilter(filter),
+                Take = PageSize
+            };
 
-                    await InvokeAsync(() => StateHasChanged())
-                        .ConfigureAwait(false);
-                }, TaskScheduler.Default);
+            var result = await AdminStore.GetAsync(pageRequest, token).ConfigureAwait(false);
+
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
+            EntityList = result.Items;
+            TotalItems = result.Count;
+            CurrentPage = 1;
+
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
         protected virtual string CreateRequestFilter(string filter)
@@ -128,30 +156,32 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             NavigationManager.NavigateTo($"{typeof(T).Name.ToLower()}/{entityWithId.Id}");
         }
 
-
-
-        protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource: IEntityResource
+        protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource : IEntityResource
         {
             return entity.Resources.FirstOrDefault(r => r.ResourceKind == kind && r.CultureId == CultureInfo.CurrentCulture.Name)?.Value ?? value;
         }
 
-        private async Task GetEntityList(PageRequest pageRequest)
-        {
-            var page = await AdminStore.GetAsync(pageRequest)
-                            .ConfigureAwait(false);
-            EntityList = page.Items;
-        }
-
         private async Task GridState_OnHeaderClicked(SortEventArgs e)
         {
-            _pageRequest.OrderBy = e.OrderBy;
-            await GetEntityList(_pageRequest)
-                .ConfigureAwait(false);
-            StateHasChanged();
+            var pageRequest = new PageRequest
+            {
+                Select = SelectProperties,
+                Expand = Expand,
+                OrderBy = e.OrderBy,
+                Take = PageSize
+            };
+
+            var result = await AdminStore.GetAsync(pageRequest).ConfigureAwait(false);
+            EntityList = result.Items;
+            TotalItems = result.Count;
+            CurrentPage = 1;
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
+        public async Task OnPageChanged(int page) => await LoadPage(page).ConfigureAwait(false);
+
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -167,7 +197,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             }
         }
 
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
             Dispose(true);
