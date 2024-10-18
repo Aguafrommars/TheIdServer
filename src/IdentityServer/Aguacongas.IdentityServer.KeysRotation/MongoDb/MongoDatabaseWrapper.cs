@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using System;
+using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -10,7 +11,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.MongoDb
         where TKey : IXmlKey
     {
         public IMongoCollection<TKey> Collection { get; }
-        public IMongoQueryable<TKey> Queryable { get; }
+        public IQueryable<TKey> Queryable { get; }
 
 
         public MongoCollectionWrapper(IMongoCollection<TKey> collection)
@@ -18,7 +19,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.MongoDb
         {
         }
 
-        public MongoCollectionWrapper(IMongoCollection<TKey> collection, IMongoQueryable<TKey> queryable)
+        public MongoCollectionWrapper(IMongoCollection<TKey> collection, IQueryable<TKey> queryable)
         {
             Collection = collection ?? throw new ArgumentNullException(nameof(collection));
             Queryable = queryable ?? throw new ArgumentNullException(nameof(queryable));
