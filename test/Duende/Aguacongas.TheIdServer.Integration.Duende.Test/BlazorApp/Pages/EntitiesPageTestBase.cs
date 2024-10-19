@@ -1,4 +1,5 @@
 ﻿using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp.Pages;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,7 +14,9 @@ using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext where TComponent : IComponent
+    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext 
+        where TComponent : EntitiesModel<TEntity>
+        where TEntity: class
     {
         private readonly TheIdServerFactory _factory;
 
@@ -95,10 +98,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             AssertExportResponse(response);
         }
 
-        protected virtual void AssertExportResponse(HttpResponseMessage response)
-        {
-            Assert.False(response.IsSuccessStatusCode);
-        }
 
         [Fact]
         public async Task OnRowClicked_should_navigate_to_entity_page()
@@ -114,7 +113,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var tdList = component.FindAll(".table-hover tr td");
 
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+
             Assert.NotEmpty(tdList);
+
+            tdList = component.FindAll(".table-hover tr td");
 
             await tdList[tdList.Count - 1].ClickAsync(new MouseEventArgs());
 
@@ -176,6 +179,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
+            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+
+            selectAll = component.Find(".table.mb-0 th input");
+
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = true
@@ -218,6 +225,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
         }
 
         protected abstract Task PopulateList();
+
+        protected virtual void AssertExportResponse(HttpResponseMessage response)
+        {
+            Assert.False(response.IsSuccessStatusCode);
+        }
 
         protected IRenderedComponent<TComponent> CreateComponent(string userName,
             string role)
