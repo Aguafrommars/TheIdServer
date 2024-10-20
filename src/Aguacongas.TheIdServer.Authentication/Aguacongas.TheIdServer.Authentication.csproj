@@ -10,7 +10,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>theidserver;aspnetcore;authentication;security</PackageTags>
         <Description>Aguacongas.AspNetCore.Authentication store implementation for TheIdServer API.</Description>
-        <DebugType>Full</DebugType>
+        <DebugType>portable</DebugType>
         <PackageIcon>package-icon.png</PackageIcon>
     </PropertyGroup>
 
