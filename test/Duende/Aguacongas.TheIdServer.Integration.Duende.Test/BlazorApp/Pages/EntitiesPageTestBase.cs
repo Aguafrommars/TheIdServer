@@ -111,15 +111,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var navigationManager = Services.GetRequiredService<NavigationManager>();
 
-            var tdList = component.FindAll(".table-hover tr td");
-
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
-
-            Assert.NotEmpty(tdList);
-
-            tdList = component.FindAll(".table-hover tr td");
-
-            await tdList[tdList.Count - 1].ClickAsync(new MouseEventArgs());
+            await component.InvokeAsync(() =>
+            {
+                var tdList = component.FindAll(".table-hover tr td");
+                Assert.NotEmpty(tdList);
+                tdList[tdList.Count - 1].Click(new MouseEventArgs());
+            });
 
             Assert.Contains(typeof(TEntity).Name.ToLower(), navigationManager.Uri);
         }
@@ -235,13 +232,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             string role)
         {
             _factory.ConfigureTestContext(userName,
-                new Claim[]
-                {
+                [
                     new Claim("scope", SharedConstants.ADMINSCOPE),
                     new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())
-                },
+                ],
                 this);
 
             var component = RenderComponent<TComponent>();
