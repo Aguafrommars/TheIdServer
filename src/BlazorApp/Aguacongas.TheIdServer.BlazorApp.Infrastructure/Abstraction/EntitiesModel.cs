@@ -20,7 +20,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
     [Authorize(Policy = SharedConstants.READERPOLICY)]
     public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
     {
-        private bool _allItemsLoaded;
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly List<string> _selectedIdList = new List<string>();
@@ -103,7 +102,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ContinueWith(async task =>
                 {
                     _pageRequest.Filter = CreateRequestFilter(filter);
-                    _allItemsLoaded = false;
                     _pageRequest.Skip = 0;
                     EntityList = [];
 
@@ -168,19 +166,17 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ConfigureAwait(false);
 
             _pageRequest.Skip += _pageRequest.Take;
-            _allItemsLoaded = EntityList.Count() == page.Count;
 
-            if (!_allItemsLoaded && !await JSRuntime.InvokeAsync<bool>("browserInteropt.isScrollable", 0))
+            if (EntityList.Count() != page.Count && !await JSRuntime.InvokeAsync<bool>("browserInteropt.isScrollable", 0))
             {
                 // load next page if document heigth < windows heigth
-                await GetEntityList(_pageRequest).ConfigureAwait(false);
+                await GetEntityList(_pageRequest, token).ConfigureAwait(false);
             }
         }
 
         private async Task GridState_OnHeaderClicked(SortEventArgs e)
         {
             EntityList = [];
-            _allItemsLoaded = false;
             _pageRequest.Skip = 0;
             _pageRequest.OrderBy = e.OrderBy;
             await GetEntityList(_pageRequest)
