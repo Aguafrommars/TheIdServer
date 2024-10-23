@@ -11,7 +11,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver</PackageTags>		
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
-		<DebugType>Full</DebugType>
+		<DebugType>portable</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
