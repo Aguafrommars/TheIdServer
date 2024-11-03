@@ -22,8 +22,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema.Generation;
+using NJsonSchema.NewtonsoftJson.Generation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,10 +100,21 @@ namespace Microsoft.Extensions.DependencyInjection
                             Url = "https://github.com/aguacongas/TheIdServer/blob/master/LICENSE"
                         };
                     };
-                    config.SerializerSettings = new JsonSerializerSettings
+
+                    if (config.SchemaSettings is SystemTextJsonSchemaGeneratorSettings textJsonSchemaGeneratorSettings)
                     {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    };
+                        textJsonSchemaGeneratorSettings.SerializerOptions = new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                        };
+                    }
+                    if (config.SchemaSettings is NewtonsoftJsonSchemaGeneratorSettings jsonSchemaGeneratorSettings)
+                    {
+                        jsonSchemaGeneratorSettings.SerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        };
+                    }
                     var provider = builder.Services.BuildServiceProvider();
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var authority = configuration.GetValue<string>("ApiAuthentication:Authority").Trim('/');

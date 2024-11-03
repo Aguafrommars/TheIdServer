@@ -66,7 +66,6 @@ namespace OpenTelemetry.Trace
                     }
 
                     o.RecordException = aspOptions.RecordException;
-                    o.EnableGrpcAspNetCoreSupport = aspOptions.EnableGrpcAspNetCoreSupport;
                 })
                 .AddSqlClientInstrumentation(o =>
                 {
@@ -105,18 +104,6 @@ namespace OpenTelemetry.Trace
             if (options is null)
             {
                 return builder;
-            }
-
-            if (!string.IsNullOrEmpty(options.Jaeger?.AgentHost))
-            {
-                builder = builder.AddJaegerExporter(o =>
-                {
-                    var jaegerOptions = options.Jaeger;
-                    o.AgentPort = jaegerOptions.AgentPort;
-                    o.AgentHost = jaegerOptions.AgentHost;
-                    o.BatchExportProcessorOptions = jaegerOptions.BatchExportProcessorOptions;
-                    o.ExportProcessorType = jaegerOptions.ExportProcessorType;
-                });
             }
 
             if (options.OpenTelemetryProtocol?.Endpoint is not null)

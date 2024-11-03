@@ -49,6 +49,9 @@ window.browserInteropt = {
         pending = false
       }
     }
+  },
+  isScrollable: margin => {
+    return $(document).height() > $(window).height() - margin;
   }
 }
 window.setTheme = theme => {

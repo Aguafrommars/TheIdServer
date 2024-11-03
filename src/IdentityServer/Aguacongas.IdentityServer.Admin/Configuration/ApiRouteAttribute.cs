@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Configuration;
 
@@ -21,8 +17,9 @@ public class ApiRouteAttribute : Attribute, IRouteTemplateProvider
     /// <param name="template">The route template. May not be null.</param>
     public ApiRouteAttribute([StringSyntax("Route")] string template)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(template);
         var routeBasePath = $"{ApiBasePath.Value[1..]}/";
-        Template = $"{routeBasePath}{template ?? throw new ArgumentNullException(nameof(template))}";
+        Template = $"{routeBasePath}{template}";
     }
 
     /// <inheritdoc />

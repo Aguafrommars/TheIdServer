@@ -8,6 +8,10 @@ namespace Aguacongas.IdentityServer.Store.Entity
     {
         public static Role ToRole<TRole>(this TRole role) where TRole : IdentityRole
         {
+            if (role is null)
+            {
+                return null;
+            }
             return new Role
             {
                 ConcurrencyStamp = role.ConcurrencyStamp,
@@ -18,6 +22,10 @@ namespace Aguacongas.IdentityServer.Store.Entity
         }
         public static TRole ToIdentityRole<TRole>(this Role entity) where TRole: IdentityRole, new()
         {
+            if (entity is null)
+            {
+                return null;
+            }
             return new TRole
             {
                 ConcurrencyStamp = entity.ConcurrencyStamp,
@@ -29,6 +37,10 @@ namespace Aguacongas.IdentityServer.Store.Entity
 
         public static User ToUser<TUser>(this TUser user) where TUser: IdentityUser
         {
+            if (user is null)
+            {
+                return null;
+            }
             return new User
             {
                 AccessFailedCount = user.AccessFailedCount,
@@ -51,6 +63,10 @@ namespace Aguacongas.IdentityServer.Store.Entity
 
         public static UserToken ToEntity(this IdentityUserToken<string> token)
         {
+            if (token is null)
+            {
+                return null;
+            }
             return new UserToken
             {
                 Id = $"{token.UserId}@{token.LoginProvider}@{token.Name}",

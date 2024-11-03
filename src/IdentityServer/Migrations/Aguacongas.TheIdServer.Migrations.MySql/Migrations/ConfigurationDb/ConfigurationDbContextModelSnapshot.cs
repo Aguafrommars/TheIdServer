@@ -16,7 +16,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
@@ -423,6 +423,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("int");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("int");
 
@@ -445,6 +448,9 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("RequireRequestObject")
@@ -770,7 +776,7 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 5, 20, 8, 24, 17, 622, DateTimeKind.Utc).AddTicks(6681)
+                            CreatedAt = new DateTime(2024, 1, 28, 8, 46, 1, 739, DateTimeKind.Utc).AddTicks(6037)
                         });
                 });
 

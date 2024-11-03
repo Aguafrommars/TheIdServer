@@ -900,23 +900,23 @@ public class Saml2PControllerTest
                 entityDescriptor.SPSsoDescriptor = new SPSsoDescriptor
                 {
                     WantAssertionsSigned = true,
-                    SigningCertificates = new X509Certificate2[]
-                    {
+                    SigningCertificates =
+                    [
                         certificate
-                    },
-                    SingleLogoutServices = new SingleLogoutService[]
-                    {
+                    ],
+                    SingleLogoutServices =
+                    [
                         new SingleLogoutService { Binding = ProtocolBindings.HttpPost, Location = new Uri(defaultSite, "Auth/SingleLogout"), ResponseLocation = new Uri(defaultSite, "Auth/LoggedOut") }
-                    },
-                    NameIDFormats = new Uri[] { NameIdentifierFormats.X509SubjectName },
-                    AssertionConsumerServices = new AssertionConsumerService[]
-                    {
+                    ],
+                    NameIDFormats = [NameIdentifierFormats.X509SubjectName],
+                    AssertionConsumerServices =
+                    [
                         new AssertionConsumerService { Binding = ProtocolBindings.HttpArtifact, Location = new Uri(defaultSite, "Auth/AssertionConsumerService") },
-                    },
-                    AttributeConsumingServices = new AttributeConsumingService[]
-                    {
-                        new AttributeConsumingService { ServiceName = new ServiceName("Some SP", "en"), RequestedAttributes = CreateRequestedAttributes() }
-                    },
+                    ],
+                    AttributeConsumingServices =
+                    [
+                        new AttributeConsumingService { ServiceNames = [new("Some SP", "en")], RequestedAttributes = CreateRequestedAttributes() }
+                    ],
                 };
 
                 return new HttpResponseMessage(HttpStatusCode.OK)

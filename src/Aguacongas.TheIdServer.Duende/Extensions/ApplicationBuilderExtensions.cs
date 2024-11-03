@@ -187,9 +187,9 @@ namespace Microsoft.AspNetCore.Builder
                         options.Path = $"{settings.Path}{{documentName}}/swagger.json";
                     }
                 })
-                .UseSwaggerUi3(options =>
+                .UseSwaggerUi(options =>
                 {
-                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.SwaggerUiSettings>();
+                    var settings = configuration.GetSection("SwaggerUiSettings").Get<Aguacongas.TheIdServer.Duende.SwaggerUiSettings>();
                     options.OAuth2Client = settings?.OAuth2Client;
                     options.Path = settings?.Path;
                     if (settings?.Path is not null)

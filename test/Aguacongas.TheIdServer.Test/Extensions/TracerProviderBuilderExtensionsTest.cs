@@ -51,11 +51,6 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         {
                             ApiKey = "test"
                         },
-                        Jaeger = new JaegerExporterOptions
-                        {
-                            AgentHost = "google.com",
-                            AgentPort = 443
-                        },
                         Zipkin = new ZipkinExporterOptions
                         {
                             Endpoint = new Uri("https://google.com")
@@ -81,12 +76,11 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         },
                         Instrumentation = new InstrumentationOptions
                         {
-                            AspNetCore = new AspNetCoreInstrumentationOptions
+                            AspNetCore = new AspNetCoreTraceInstrumentationOptions
                             {
-                                EnableGrpcAspNetCoreSupport = true,
                                 RecordException = true
                             },
-                            HttpClient = new HttpClientInstrumentationOptions
+                            HttpClient = new HttpClientTraceInstrumentationOptions
                             {
                                 RecordException = true
                             },
