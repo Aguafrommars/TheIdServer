@@ -1,3 +1,11 @@
+## [8.1.1](https://github.com/Aguafrommars/TheIdServer/compare/8.1.0...8.1.1) (2024-11-09)
+
+
+### Bug Fixes
+
+* update packages ([fdbe1a5](https://github.com/Aguafrommars/TheIdServer/commit/fdbe1a5e78d66cc8e8b44c1300729c0ca16b74c2))
+* update packages ([aa419ac](https://github.com/Aguafrommars/TheIdServer/commit/aa419ac2182c1344c60e9e512739514e0488ff2e))
+
 ## [8.0.1](https://github.com/Aguafrommars/TheIdServer/compare/8.0.0...8.0.1) (2024-09-22)
 
 
