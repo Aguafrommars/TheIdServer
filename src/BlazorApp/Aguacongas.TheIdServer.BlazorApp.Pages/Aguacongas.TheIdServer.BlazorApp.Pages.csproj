@@ -11,12 +11,12 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;identityserver4;duende-identityserveroidc;oauth;identity,authentication;security</PackageTags>
 		<Description>TheIdServer administration application pages.</Description>
-		<DebugType>Full</DebugType>
+		<DebugType>portable</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 	</PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
     </ItemGroup>
 
     <ItemGroup>

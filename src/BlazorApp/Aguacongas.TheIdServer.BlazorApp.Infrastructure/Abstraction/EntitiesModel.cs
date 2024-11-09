@@ -7,6 +7,7 @@ using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,7 +35,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         [Inject]
         protected IAdminStore<OneTimeToken> OneTimeTokenAdminStore { get; set; }
-        protected IEnumerable<T> EntityList { get; private set; }
+
+        [Inject]
+        protected IJSRuntime JSRuntime { get; set; }
+
+        protected IEnumerable<T> EntityList { get; private set; } = [];
 
         protected GridState GridState { get; } = new GridState();
 
@@ -44,6 +49,12 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected abstract string ExportExpand { get; }
         protected virtual string Expand { get; }
+
+        [JSInvokable]
+        public async Task ScrollBottomReach()
+        {
+            await GetEntityList(_pageRequest).ConfigureAwait(false);
+        }
 
         protected PageRequest ExportRequest => new PageRequest
         {
@@ -59,13 +70,26 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             {
                 Select = SelectProperties,
                 Expand = Expand,
-                Take = 10
+                Skip = 0,
+                Take = 50
             };
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
 
             GridState.OnHeaderClicked += GridState_OnHeaderClicked;
         }
+
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                const int margin = 95;
+                return JSRuntime.InvokeVoidAsync("browserInteropt.onScrollEnd", DotNetObjectReference.Create(this), margin)
+                    .AsTask();
+            }
+            return Task.CompletedTask;
+        }
+
 
         protected Task OnFilterChanged(string filter)
         {
@@ -78,19 +102,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
                 .ContinueWith(async task =>
                 {
                     _pageRequest.Filter = CreateRequestFilter(filter);
+                    _pageRequest.Skip = 0;
+                    EntityList = [];
 
-                    var page = await AdminStore.GetAsync(_pageRequest, token)
-                                .ConfigureAwait(false);
-
-                    if (task.IsCanceled)
-                    {
-                        return;
-                    }
-
-                    EntityList = page.Items;
-
-                    await InvokeAsync(() => StateHasChanged())
-                        .ConfigureAwait(false);
+                    await GetEntityList(_pageRequest, token).ConfigureAwait(false);
                 }, TaskScheduler.Default);
         }
 
@@ -121,7 +136,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected virtual void OnRowClicked(T entity)
         {
-            if (!(entity is IEntityId entityWithId))
+            if (entity is not IEntityId entityWithId)
             {
                 throw new InvalidOperationException($"The identity type {typeof(T).Name} is not a 'IEntityId', override this method to navigate to the identity page.");
             }
@@ -135,19 +150,38 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             return entity.Resources.FirstOrDefault(r => r.ResourceKind == kind && r.CultureId == CultureInfo.CurrentCulture.Name)?.Value ?? value;
         }
 
-        private async Task GetEntityList(PageRequest pageRequest)
+        private async Task GetEntityList(PageRequest pageRequest, CancellationToken token = default)
         {
-            var page = await AdminStore.GetAsync(pageRequest)
+            var page = await AdminStore.GetAsync(pageRequest, token)
                             .ConfigureAwait(false);
-            EntityList = page.Items;
+
+            if (token.IsCancellationRequested )
+            {
+                return;
+            }
+
+            EntityList = EntityList.Concat(page.Items);
+
+            await InvokeAsync(() => StateHasChanged())
+                .ConfigureAwait(false);
+
+            _pageRequest.Skip += _pageRequest.Take;
+
+            if (EntityList.Count() != page.Count && !await JSRuntime.InvokeAsync<bool>("browserInteropt.isScrollable", 0))
+            {
+                // load next page if document heigth < windows heigth
+                await GetEntityList(_pageRequest, token).ConfigureAwait(false);
+            }
         }
 
         private async Task GridState_OnHeaderClicked(SortEventArgs e)
         {
+            EntityList = [];
+            _pageRequest.Skip = 0;
             _pageRequest.OrderBy = e.OrderBy;
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
-            StateHasChanged();
+            
         }
 
         #region IDisposable Support

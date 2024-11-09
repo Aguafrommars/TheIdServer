@@ -11,7 +11,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>theidserver;duede.identityserver</PackageTags>
 		<Description>TheIdServer IndentityServer4 abstraction and extensions.</Description>
-		<DebugType>Full</DebugType>
+		<DebugType>portable</DebugType>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<RootNamespace>Aguacongas.IdentityServer</RootNamespace>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
@@ -36,7 +36,7 @@
 		<None Include="package-icon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer" Version="7.0.7" />
+	  <PackageReference Include="Duende.IdentityServer" Version="7.0.8" />
 	</ItemGroup>
 
 	<ItemGroup>
