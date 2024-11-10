@@ -17,10 +17,10 @@
     <CodeAnalysisRuleSet>Aguacongas.TheIdServer.Public.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="8.0.1" />
-    <PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="8.0.1" />
-    <PackageReference Include="Aguacongas.TheIdServer.Identity" Version="8.0.1" />
-    <PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="8.0.1" />
+    <PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="8.2.0" />
+    <PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="8.2.0" />
+    <PackageReference Include="Aguacongas.TheIdServer.Identity" Version="8.2.0" />
+    <PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="8.2.0" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
