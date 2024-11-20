@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Models;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.EntityFrameworkCore
@@ -11,6 +12,9 @@ namespace Microsoft.EntityFrameworkCore
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var dbType = configuration.GetValue<DbTypes>("DbType");
+            // drop this line when issue https://github.com/dotnet/efcore/issues/35110 is fixed
+            options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+
             switch (dbType)
             {
                 case DbTypes.InMemory:
