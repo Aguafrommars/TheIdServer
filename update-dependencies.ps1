@@ -95,6 +95,7 @@ dotnet restore
 $projectList = dotnet sln list
 $updated = $false
 
+$exit = 0;
 foreach ($path in $projectList) {
     if ($path -eq "Project(s)" -or $path -eq "----------") {
         # The line doesn't contain a path, continue
@@ -106,10 +107,14 @@ foreach ($path in $projectList) {
         
     if ($LASTEXITCODE -ne 0) {
         #The update fail, exit
-        exit $LASTEXITCODE
+        $exit = $LASTEXITCODE
     }
 
     $updated = $updated -or $projectUpdated
+}
+
+if ($exit -ne 0) {
+    exit $exit
 }
 
 if (!$updated) {

@@ -14,15 +14,15 @@ services:
 environment:
   GITHUB_TOKEN:
     secure: /o9VAhx5ewGmdLR9qcgFJMzBaCuzOmGlsXAHu7khUJLdQzsv4gJzLUfYDghcRPHd
-  donetsdk: 8.0.403
+  donetsdk: 9.0.100
   JAVA_HOME: C:\Program Files\Java\jdk19
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node 20 x64
-  - ps: .\dotnet-install.ps1 -Version 7.0.16 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
-  - ps: .\dotnet-install.ps1 -Version 7.0.16 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 8.0.10 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 8.0.10 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet gitversion /l console /output buildserver
