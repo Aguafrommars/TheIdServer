@@ -141,7 +141,7 @@ services.AddIdentityServer()
 If the Duende IdentityServer is spread across multiple machines, it may be convenient to distribute a shared X.509 certificate across the machines and configure the hosted Duende IdentityServer to use the certificate for encryption of keys at rest:
 
 ```cs
-var certificate = new X509Certificate2("TestCert1.pfx", "password");
+var certificate = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
 
 services.AddIdentityServer()
     .AddKeysRotation()

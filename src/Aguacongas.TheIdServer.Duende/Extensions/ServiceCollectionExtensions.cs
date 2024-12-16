@@ -361,7 +361,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         };
                         if (!string.IsNullOrWhiteSpace(options.CertificatePath))
                         {
-                            documentStore.Certificate = new X509Certificate2(options.CertificatePath, options.CertificatePassword);
+                            documentStore.Certificate = X509CertificateLoader.LoadPkcs12FromFile(options.CertificatePath, options.CertificatePassword);
                         }
                         documentStore.SetFindIdentityPropertyForIdentityServerStores();
                         return documentStore.Initialize();
@@ -441,7 +441,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             var path = section.GetValue<string>(nameof(RavenDbOptions.CertificatePath));
                             if (!string.IsNullOrWhiteSpace(path))
                             {
-                                options.Certificate = new X509Certificate2(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));
+                                options.Certificate = X509CertificateLoader.LoadPkcs12FromFile(path, section.GetValue<string>(nameof(RavenDbOptions.CertificatePassword)));
                             }
                         }, tags: tags);
                         break;

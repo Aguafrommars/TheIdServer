@@ -40,7 +40,7 @@ namespace Aguacongas.IdentityServer.Admin.Configuration
                     throw new InvalidOperationException("There was an error loading the certificate. No password was provided.");
                 }
 
-                return new X509Certificate2(path, password, keyStorageFlags);
+                return X509CertificateLoader.LoadPkcs12FromFile(path, password, keyStorageFlags);
             }
             catch (CryptographicException e)
             {

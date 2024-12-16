@@ -95,7 +95,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => profileServiceMock.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -192,7 +192,7 @@ public class Saml2PControllerTest
     [SkipCiFact]
     public async Task Login_should_return_redirect_result_when_no_user_found()
     {
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -307,7 +307,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => profileServiceMock.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
 
         var issuer = $"urn:{Guid.NewGuid()}";
@@ -408,7 +408,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => profileServiceMock.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -538,7 +538,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => new Mock<IRelyingPartyStore>().Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -668,7 +668,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => profileServiceMock.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -882,7 +882,7 @@ public class Saml2PControllerTest
             })
             .Returns(Task.CompletedTask);
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         var httpFactoryMock = new Mock<IHttpClientFactory>();
         httpFactoryMock.Setup(m => m.CreateClient(It.IsAny<string>())).Returns(new HttpClient(new MockHttpMessageHandler
         {
@@ -1067,7 +1067,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => profileServiceMock.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
@@ -1218,7 +1218,7 @@ public class Saml2PControllerTest
                 .AddTransient(p => relyingPartyStore.Object);
         }));
 
-        var certificate = new X509Certificate2("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
+        var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
