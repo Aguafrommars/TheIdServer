@@ -56,7 +56,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         public void ThrowsIfProvidedCertificateDoesHavePrivateKey()
         {
             var fullCert = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
-            var publicKeyOnly = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.PublicKeyOnly.cer", "");
+            var publicKeyOnly = X509CertificateLoader.LoadCertificateFromFile("TestCert1.PublicKeyOnly.cer");
             var services = new ServiceCollection()
                 .Configure<XmlKeyDecryptionOptions>(o => o.AddKeyDecryptionCertificate(publicKeyOnly))
                 .BuildServiceProvider();
