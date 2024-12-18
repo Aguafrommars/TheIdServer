@@ -29,7 +29,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [Fact]
         public async Task GetCurrentKeyRing_should_create_keys_and_cache()
         {
-            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var certificate = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [SkipCiFact]
         public async Task GetCurrentKeyRing_should_not_return_revoked_keys()
         {
-            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var certificate = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))
@@ -79,7 +79,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         [Fact]
         public async Task GetCurrentKeyRing_should_create_keys_from_derived_RSA_algorythm()
         {
-            var certificate = new X509Certificate2("TestCert1.pfx", "password");
+            var certificate = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
             var dbName = Guid.NewGuid().ToString();
             var builder = new ServiceCollection()
                 .AddDbContext<OperationalDbContext>(options => options.UseInMemoryDatabase(dbName))

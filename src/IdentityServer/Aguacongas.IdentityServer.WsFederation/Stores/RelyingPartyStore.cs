@@ -53,7 +53,7 @@ namespace Aguacongas.IdentityServer.WsFederation.Stores
             {
                 ClaimMapping = entity.ClaimMappings.ToDictionary(m => m.FromClaimType, m => m.ToClaimType),
                 DigestAlgorithm = entity.DigestAlgorithm,
-                EncryptionCertificate = entity.EncryptionCertificate != null ? new X509Certificate2(entity.EncryptionCertificate) : null,
+                EncryptionCertificate = entity.EncryptionCertificate != null ? X509CertificateLoader.LoadCertificate(entity.EncryptionCertificate) : null,
                 Realm = entity.Id,
                 SamlNameIdentifierFormat = entity.SamlNameIdentifierFormat,
                 SignatureAlgorithm = entity.SignatureAlgorithm,

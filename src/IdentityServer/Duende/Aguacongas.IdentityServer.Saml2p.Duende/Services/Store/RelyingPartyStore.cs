@@ -64,7 +64,7 @@ public class RelyingPartyStore : IRelyingPartyStore
 
         var rp = client.RelyingParty;
         var encriptionCertificate = rp?.EncryptionCertificate is not null ?
-            new X509Certificate2(rp.EncryptionCertificate) : null;
+            X509CertificateLoader.LoadCertificate(rp.EncryptionCertificate) : null;
 
         var relyingParty = new RelyingParty
         {
@@ -93,7 +93,7 @@ public class RelyingPartyStore : IRelyingPartyStore
     }
 
     private static X509Certificate2 GetCertificateFromBase64(string value)
-    => new X509Certificate2(Convert.FromBase64String(value));
+    => X509CertificateLoader.LoadCertificate(Convert.FromBase64String(value));
 
     private static X509Certificate2? GetCertificateFromName(string value)
     => FindCertificate(value, X509FindType.FindBySubjectDistinguishedName);

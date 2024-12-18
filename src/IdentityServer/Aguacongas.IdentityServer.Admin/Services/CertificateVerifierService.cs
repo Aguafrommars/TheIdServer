@@ -30,7 +30,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         [SecuritySafeCritical]
         private static IEnumerable<string> Verify(MemoryStream ms)
         {
-            using var certificate = new X509Certificate2(ms.ToArray());
+            using var certificate = X509CertificateLoader.LoadCertificate(ms.ToArray());
             if (!certificate.Verify())
             {
                 using var chain = new X509Chain();

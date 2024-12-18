@@ -18,8 +18,8 @@ Console.ReadLine();
 
 async Task<TokenResponse> RequestTokenAsync()
 {
-    var handler = new SocketsHttpHandler();
-    var cert = new X509Certificate2("client.pks", "1234");
+    var handler = new SocketsHttpHandler();    
+    var cert = X509CertificateLoader.LoadPkcs12FromFile("client.pks", "1234");
     handler.SslOptions.ClientCertificates = new X509CertificateCollection { cert };
 
     using var client = new HttpClient(handler);

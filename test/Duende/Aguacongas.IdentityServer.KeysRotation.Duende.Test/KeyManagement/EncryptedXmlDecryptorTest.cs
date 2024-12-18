@@ -23,7 +23,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void ThrowsIfCannotDecrypt()
         {
-            var testCert1 = new X509Certificate2("TestCert1.pfx", "password");
+            var testCert1 = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
             var encryptor = new CertificateXmlEncryptor(testCert1, NullLoggerFactory.Instance);
             var data = new XElement("SampleData", "Lorem ipsum");
             var encryptedXml = encryptor.Encrypt(data);
@@ -37,8 +37,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void ThrowsIfProvidedCertificateDoesNotMatch()
         {
-            var testCert1 = new X509Certificate2("TestCert1.pfx", "password");
-            var testCert2 = new X509Certificate2("TestCert2.pfx", "password");
+            var testCert1 = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
+            var testCert2 = X509CertificateLoader.LoadPkcs12FromFile("TestCert2.pfx", "password");
             var services = new ServiceCollection()
                 .Configure<XmlKeyDecryptionOptions>(o => o.AddKeyDecryptionCertificate(testCert2))
                 .BuildServiceProvider();
@@ -55,8 +55,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void ThrowsIfProvidedCertificateDoesHavePrivateKey()
         {
-            var fullCert = new X509Certificate2("TestCert1.pfx", "password");
-            var publicKeyOnly = new X509Certificate2("TestCert1.PublicKeyOnly.cer", "");
+            var fullCert = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
+            var publicKeyOnly = X509CertificateLoader.LoadCertificateFromFile("TestCert1.PublicKeyOnly.cer");
             var services = new ServiceCollection()
                 .Configure<XmlKeyDecryptionOptions>(o => o.AddKeyDecryptionCertificate(publicKeyOnly))
                 .BuildServiceProvider();
@@ -73,8 +73,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.KeyManagement
         [Fact]
         public void XmlCanRoundTrip()
         {
-            var testCert1 = new X509Certificate2("TestCert1.pfx", "password");
-            var testCert2 = new X509Certificate2("TestCert2.pfx", "password");
+            var testCert1 = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
+            var testCert2 = X509CertificateLoader.LoadPkcs12FromFile("TestCert2.pfx", "password");
             var services = new ServiceCollection()
                 .Configure<XmlKeyDecryptionOptions>(o =>
                 {
