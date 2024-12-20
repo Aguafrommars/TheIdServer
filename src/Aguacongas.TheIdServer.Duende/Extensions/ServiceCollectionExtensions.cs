@@ -431,7 +431,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 switch (dbTypes)
                 {
                     case DbTypes.MongoDb:
-                        builder.AddMongoDb(configuration.GetConnectionString("DefaultConnection")!, tags: tags);
+                        builder.AddMongoDb(tags: tags);
                         break;
                     case DbTypes.RavenDb:
                         builder.AddRavenDB(options =>
