@@ -272,11 +272,17 @@ namespace Microsoft.AspNetCore.Builder
 
         private static void ConfigureInitialData(IApplicationBuilder app, IConfiguration configuration, DbTypes dbType)
         {
+            if (dbType == DbTypes.PostgreSQL)
+            {
+                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            }
+
             if (configuration.GetValue<bool>("Migrate") &&
                 dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
             {
                 using var scope = app.ApplicationServices.CreateScope();
                 var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                
                 configContext.Database.Migrate();
 
                 var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
