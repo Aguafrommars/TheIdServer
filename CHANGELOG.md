@@ -1,3 +1,10 @@
+## [8.2.1](https://github.com/Aguafrommars/TheIdServer/compare/8.2.0...8.2.1) (2024-12-28)
+
+
+### Bug Fixes
+
+* unable to login using postgreSQL ([803461c](https://github.com/Aguafrommars/TheIdServer/commit/803461c744db73c40c272131687ffec2eeafbb91)), closes [#1309](https://github.com/Aguafrommars/TheIdServer/issues/1309)
+
 ## [8.1.1](https://github.com/Aguafrommars/TheIdServer/compare/8.1.0...8.1.1) (2024-11-09)
 
 
