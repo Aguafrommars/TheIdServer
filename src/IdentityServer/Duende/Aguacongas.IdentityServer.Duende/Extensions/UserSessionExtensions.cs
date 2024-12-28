@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.Models;
+using System;
 
 namespace Aguacongas.IdentityServer.Store.Entity
 {
@@ -9,9 +10,9 @@ namespace Aguacongas.IdentityServer.Store.Entity
         {
             Created = session.Created,
             DisplayName = session.DisplayName,
-            Expires = session.Expires,
+            Expires = session.Expires.HasValue ? DateTime.SpecifyKind(session.Expires.Value, DateTimeKind.Unspecified) : null,
             Key = session.Id,
-            Renewed = session.Renewed,
+            Renewed = DateTime.SpecifyKind(session.Renewed, DateTimeKind.Unspecified),
             Scheme = session.Scheme,
             SessionId = session.SessionId,
             SubjectId = session.UserId,
