@@ -113,7 +113,9 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new Entity.UserSession
                 {
-                    Id = id
+                    Id = id,
+                    Renewed = DateTime.UtcNow,
+                    Expires = DateTime.UtcNow
                 })
                 .Verifiable();
 
@@ -124,6 +126,8 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             storeMock.Verify();
 
             Assert.Equal(id, session.Key);
+            Assert.Equal(DateTimeKind.Unspecified, session.Renewed.Kind);
+            Assert.Equal(DateTimeKind.Unspecified, session.Expires!.Value.Kind);
         }
 
         [Fact]
