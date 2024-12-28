@@ -31,6 +31,9 @@ jobs:
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       - name: Publish
         run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA /nr:false /m:1
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.13.15
         with:
