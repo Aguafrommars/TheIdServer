@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
-using Community.OData.Linq;
+using OData2Linq;
 using Microsoft.OData.Edm;
 using System.Linq;
 

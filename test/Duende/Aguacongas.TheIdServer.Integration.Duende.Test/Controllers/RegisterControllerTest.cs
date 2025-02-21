@@ -577,20 +577,20 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
         public async Task CreateAsync_should_validate_native_redirect_uri_scheme(string redirectUri)
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true, new Claim[]
-                    {
+                    .SetTestUser(true,
+                    [
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    });
+                    ]);
 
             var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
-                RedirectUris = new[]
-                {
+                RedirectUris =
+                [
                     redirectUri
-                },
+                ],
                 ApplicationType = "native"
             };
 
