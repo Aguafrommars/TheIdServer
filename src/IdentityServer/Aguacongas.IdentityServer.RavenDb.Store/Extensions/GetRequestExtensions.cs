@@ -1,8 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2023 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Extensions;
-using Community.OData.Linq;
 using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OData.UriParser;
 using System;
 using System.Collections.Generic;
