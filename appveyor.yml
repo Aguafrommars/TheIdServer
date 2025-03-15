@@ -1,7 +1,7 @@
 version: 1.0.{build}
 skip_tags: true
 skip_commits:
-  message: /^chore(release)/
+  message: /\[chore\]/
 branches:
   only:
   - master
