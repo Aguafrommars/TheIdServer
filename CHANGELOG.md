@@ -1,3 +1,16 @@
+## [9.1.1](https://github.com/Aguafrommars/TheIdServer/compare/9.1.0...9.1.1) (2025-03-18)
+
+
+### Bug Fixes
+
+* update packages ([0480b55](https://github.com/Aguafrommars/TheIdServer/commit/0480b55d5216e07a6e3bc625305e8b489df501e2))
+* update packages ([85fff31](https://github.com/Aguafrommars/TheIdServer/commit/85fff3142bf0ffabf140ade4cee1c7c1837ed917))
+* update packages ([258060d](https://github.com/Aguafrommars/TheIdServer/commit/258060d72568f09b3cdf92f21214967279539b20))
+* update packages ([165cc55](https://github.com/Aguafrommars/TheIdServer/commit/165cc55c73018b4438c9d3f31ad1c2e79bddc65c))
+* update packages ([a205d7c](https://github.com/Aguafrommars/TheIdServer/commit/a205d7c91c69f0be7a7e6ee4fc5b6c088048d308))
+* update packages ([7cf7d20](https://github.com/Aguafrommars/TheIdServer/commit/7cf7d20bba0a347f4ac12fb2aa31adcb5a96a7ff))
+* update packages ([a3368fb](https://github.com/Aguafrommars/TheIdServer/commit/a3368fb1a12b9c533bde30d95af5aa8755cc5842))
+
 # [9.0.0](https://github.com/Aguafrommars/TheIdServer/compare/8.3.0...9.0.0) (2025-02-22)
 
 
