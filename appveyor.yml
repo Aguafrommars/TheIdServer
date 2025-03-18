@@ -1,7 +1,7 @@
 version: 1.0.{build}
 skip_tags: true
 skip_commits:
-  message: /^chore(release)/
+  message: /chore\(release\)/
 branches:
   only:
   - master
@@ -48,7 +48,7 @@ artifacts:
 deploy:
   - provider: NuGet
     api_key:
-      secure: UCcGrUEujBVjkw4G9l6ebB4iWv8EBGNNP8FdzZQDT0GpGgCnaBRmmfdS+5ejk5EB
+      secure: bvkKhXIKsDM1ThfcWTbuusND0sOBiDoJGOoD2fYijGoj4C9xx22QKfR7Y9q+j7eX
     on:
       branch: 
       - /^preview\/\d+.\d+.\d+$/
