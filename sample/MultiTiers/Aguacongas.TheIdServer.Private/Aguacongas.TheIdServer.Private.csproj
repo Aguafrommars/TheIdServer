@@ -24,9 +24,9 @@
 		<NoWarn>1701;1702;NU1603</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="9.1.0" />
-		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="9.1.0" />
-		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="9.1.0" />
+		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="9.1.1" />
+		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="9.1.1" />
+		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="9.1.1" />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="9.0.3" />
