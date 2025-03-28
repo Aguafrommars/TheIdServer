@@ -8,6 +8,16 @@ namespace Aguacongas.IdentityServer.RavenDb.Store.Test
 {
     class RavenDbTestDriverWrapper : RavenTestDriver
     {
+        static RavenDbTestDriverWrapper() 
+        { 
+            ConfigureServer(new TestServerOptions
+            {
+                Licensing = new Raven.Embedded.ServerOptions.LicensingOptions
+                {
+                    ThrowOnInvalidOrMissingLicense = false
+                }
+            });
+        }
         public new IDocumentStore GetDocumentStore(GetDocumentStoreOptions options = null, string database = null)
             => base.GetDocumentStore(options, database ?? Guid.NewGuid().ToString());
 
