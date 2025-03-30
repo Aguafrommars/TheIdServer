@@ -13,6 +13,7 @@
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=aguacongas_TheIdServer)](https://sonarcloud.io/dashboard?id=aguacongas_TheIdServer)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver) [![Docker](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml/badge.svg)](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
+[![libs.tech recommends](https://libs.tech/project/206938663/badge.svg)](https://libs.tech/project/206938663/theidserver)
 
 ### Documentation
 
