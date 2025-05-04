@@ -207,6 +207,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
 
+            selectAll = component.Find(".table.mb-0 th input");
             await selectAll.ChangeAsync(new ChangeEventArgs
             {
                 Value = true

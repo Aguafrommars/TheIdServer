@@ -34,6 +34,8 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest
         [Fact]
         public async Task Metrics_should_return_unauthorized_when_protected()
         {
+            var userService = _factory.Services.GetRequiredService<TestUserService>();
+            userService.SetTestUser(false);
             using var client = _factory.CreateClient();
             using var response = await client.GetAsync("/metrics");
             var content = await response.Content.ReadAsStringAsync();
