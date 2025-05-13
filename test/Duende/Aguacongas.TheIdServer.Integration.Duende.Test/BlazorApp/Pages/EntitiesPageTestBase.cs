@@ -75,10 +75,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").Change(new ChangeEventArgs
             {
                 Value = true
-            });
+            }));
 
             button = component.Find("button.btn-secondary");
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
