@@ -10,7 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
