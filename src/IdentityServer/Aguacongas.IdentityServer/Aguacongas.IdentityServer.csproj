@@ -37,7 +37,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.5" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.10.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
 	</ItemGroup>
 
 	<ItemGroup>
