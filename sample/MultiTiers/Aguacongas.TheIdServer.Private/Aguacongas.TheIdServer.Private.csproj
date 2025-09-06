@@ -27,7 +27,7 @@
 		<PackageReference Include="Aguacongas.IdentityServer.Admin.Duende" Version="9.1.1" />
 		<PackageReference Include="Aguacongas.IdentityServer.EntityFramework.Store.Duende" Version="9.1.1" />
 		<PackageReference Include="Aguacongas.TheIdServer.Migrations.SqlServer" Version="9.1.1" />
-		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
+		<PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="6.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="9.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.6" />
