@@ -75,10 +75,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").Change(new ChangeEventArgs
             {
                 Value = true
-            });
+            }));
 
             button = component.Find("button.btn-secondary");
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
@@ -172,32 +172,26 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
-            var selectAll = component.Find(".table.mb-0 th input");
-
-            Assert.NotNull(selectAll);
+            Assert.NotNull(component.Find(".table.mb-0 th input"));
 
             component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
-            selectAll = component.Find(".table.mb-0 th input");
-
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            });
+            }));
 
             var selected = component.Find(".table.table-hover td input");
 
             Assert.NotNull(selected);
             Assert.Contains(selected.Attributes, a => a.Name == "checked");
 
-            selectAll = component.Find(".table.mb-0 th input");
+            Assert.NotNull(component.Find(".table.mb-0 th input"));
 
-            Assert.NotNull(selectAll);
-
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
             {
                 Value = false
-            });
+            }));
 
             selected = component.Find(".table.table-hover td input");
 
@@ -207,10 +201,10 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
 
-            await selectAll.ChangeAsync(new ChangeEventArgs
+            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            });
+            }));
 
             selected = component.Find(".table.table-hover td input");
 

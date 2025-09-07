@@ -7,7 +7,7 @@ using Aguacongas.IdentityServer.Admin.Services;
 using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.TheIdServer.Models;
 using Duende.IdentityServer.Services;
-using IdentityModel.AspNetCore.OAuth2Introspection;
+using Duende.AspNetCore.Authentication.OAuth2Introspection;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Duende.AspNetCore.Authentication.OAuth2Introspection.Infrastructure;
 
 namespace Microsoft.AspNetCore.Builder
 {

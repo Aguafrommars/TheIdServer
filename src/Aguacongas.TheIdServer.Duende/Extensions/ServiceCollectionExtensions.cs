@@ -20,7 +20,7 @@ using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
-using IdentityModel.AspNetCore.OAuth2Introspection;
+using Duende.AspNetCore.Authentication.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +38,7 @@ using Newtonsoft.Json;
 using Raven.Client.Documents;
 using System.Security.Cryptography.X509Certificates;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Duende.AspNetCore.Authentication.OAuth2Introspection.Infrastructure;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
