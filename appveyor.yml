@@ -18,7 +18,7 @@ environment:
 init:
   - cmd: git config --global core.autocrlf true
 install:
-  - ps: Install-Product node 20 x64
+  - ps: Install-Product node 23 x64
   - ps: .\dotnet-install.ps1 -Version 8.0.18 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version 8.0.18 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
