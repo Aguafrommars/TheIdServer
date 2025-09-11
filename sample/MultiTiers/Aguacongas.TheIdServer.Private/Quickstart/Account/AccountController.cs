@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using IdentityModel;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;

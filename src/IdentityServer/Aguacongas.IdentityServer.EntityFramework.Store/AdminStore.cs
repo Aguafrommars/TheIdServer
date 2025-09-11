@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.EntityFrameworkCore;
