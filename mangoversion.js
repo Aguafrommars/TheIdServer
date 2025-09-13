@@ -1,4 +1,4 @@
-mango = connect( 'mongodb://localhost:27018' );
+mango = connect( 'mongodb://localhost' );
 
 printjson(mango.version());
 

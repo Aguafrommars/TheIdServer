@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
         protected AdminStoreTestBase()
         {
-            var settings = MongoClientSettings.FromConnectionString("mongodb://localhost:27018");
+            var settings = MongoClientSettings.FromConnectionString("mongodb://localhost");
             _client = new MongoClient(settings);
             _database = _client.GetDatabase(Guid.NewGuid().ToString());
         }

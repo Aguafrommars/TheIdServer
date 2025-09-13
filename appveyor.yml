@@ -19,6 +19,7 @@ init:
   - cmd: git config --global core.autocrlf true
 install:
   - ps: Install-Product node 23 x64
+  - ps: ./Install-MongoDb.ps1
   - ps: .\dotnet-install.ps1 -Version 8.0.18 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version 8.0.18 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
@@ -30,7 +31,6 @@ install:
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install
   - cmd: redis-64\tools\redis-server.exe --service-start
-  - ps: ./Install-MongoDb.ps1
   - ps: ./appveyorinit.ps1
   - ps: dotnet --list-runtimes
 build_script:
