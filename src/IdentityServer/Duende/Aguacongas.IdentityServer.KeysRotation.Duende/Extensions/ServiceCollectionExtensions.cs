@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.DataProtection.Internal;

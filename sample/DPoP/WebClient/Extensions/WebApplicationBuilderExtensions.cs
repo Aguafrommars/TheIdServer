@@ -1,7 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 
-using Microsoft.AspNetCore.Authentication;
+using Duende.AccessTokenManagement.DPoP;
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -70,8 +71,6 @@ public static class WebApplicationBuilderExtensions
                 };
             });
 
-        // this is only needed if you want to override/prevent dpop from being used on certain API endpoints
-        //services.AddTransient<IDPoPProofService, CustomProofService>();
 
         // add automatic token management
         services.AddOpenIdConnectAccessTokenManagement(options =>
@@ -80,7 +79,7 @@ public static class WebApplicationBuilderExtensions
             var rsaKey = new RsaSecurityKey(RSA.Create(2048));
             var jwk = JsonWebKeyConverter.ConvertFromSecurityKey(rsaKey);
             jwk.Alg = "PS256";
-            options.DPoPJsonWebKey = JsonSerializer.Serialize(jwk);
+            options.DPoPJsonWebKey = DPoPProofKey.Parse(JsonSerializer.Serialize(jwk));
         });
 
         // add HTTP client to call protected API

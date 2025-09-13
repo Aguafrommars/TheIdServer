@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation;
 using Aguacongas.IdentityServer.WsFederation.Metadata;
 using Aguacongas.IdentityServer.WsFederation.Stores;

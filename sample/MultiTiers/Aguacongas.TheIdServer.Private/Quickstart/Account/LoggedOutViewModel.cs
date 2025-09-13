@@ -1,5 +1,5 @@
 // Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 namespace IdentityServerHost.Quickstart.UI
 {
     public class LoggedOutViewModel
