@@ -23,12 +23,6 @@ Start-Sleep -Seconds 5
 # Start mongodb service
 net start MongoDB
 
-# Download zipped mongosh binaries to mongodbdir
-Invoke-WebRequest https://downloads.mongodb.com/compass/mongosh-2.5.8-win32-x64.zip -OutFile mongosh.zip
-
-# Extract mongodb zip
-cmd /c 7za e mongosh.zip
-
 # Return to last location, to run the build
 Pop-Location
 
