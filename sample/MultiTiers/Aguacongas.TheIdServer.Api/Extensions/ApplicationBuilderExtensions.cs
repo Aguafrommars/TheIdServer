@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Microsoft.AspNetCore.Hosting;

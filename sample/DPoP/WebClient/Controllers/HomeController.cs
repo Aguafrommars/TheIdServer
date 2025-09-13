@@ -1,22 +1,16 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2025 @Olivier Lefebvre
+
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Duende.AccessTokenManagement.OpenIdConnect;
 
 namespace WebClient.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IHttpClientFactory httpClientFactory) : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public HomeController(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
-
         [AllowAnonymous]
         public IActionResult Index() => View();
 
@@ -24,7 +18,7 @@ namespace WebClient.Controllers
         
         public async Task<IActionResult> Renew()
         {
-            await HttpContext.GetUserAccessTokenAsync(new UserTokenRequestParameters { ForceRenewal = true });
+            await HttpContext.GetUserAccessTokenAsync(new UserTokenRequestParameters { ForceTokenRenewal = true });
             return RedirectToAction(nameof(Secure));
         }
 
@@ -32,7 +26,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> CallApi()
         {
-            var client = _httpClientFactory.CreateClient("client");
+            var client = httpClientFactory.CreateClient("client");
 
             var response = await client.GetStringAsync("identity");
             ViewBag.Json = response.PrettyPrintJson();

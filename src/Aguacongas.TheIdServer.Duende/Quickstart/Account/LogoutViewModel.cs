@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 namespace Aguacongas.TheIdServer.UI
 {
     public class LogoutViewModel : LogoutInputModel

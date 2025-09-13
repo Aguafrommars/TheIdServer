@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2025 @Olivier Lefebvre
+
+using System.Text.Json;
 
 namespace WebClient
 {

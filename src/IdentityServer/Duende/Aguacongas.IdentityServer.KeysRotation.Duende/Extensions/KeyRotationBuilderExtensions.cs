@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2023 @Olivier Lefebvre
+// Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;

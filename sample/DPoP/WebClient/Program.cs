@@ -1,3 +1,6 @@
+// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2025 @Olivier Lefebvre
+
 using Microsoft.AspNetCore.Builder;
 using Serilog;
 using Serilog.Events;
