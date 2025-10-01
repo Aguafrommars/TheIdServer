@@ -50,20 +50,20 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
             var oDataQuery = _collection.AsQueryable().OData();
             oDataQuery = !string.IsNullOrWhiteSpace(request.Filter) ? oDataQuery.Filter(request.Filter) : oDataQuery;
 
-            var query = oDataQuery.Inner as IQueryable<TEntity>;
+            var query = oDataQuery as IQueryable<TEntity>;
 
             int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
             var orderBy = request.OrderBy ?? nameof(IEntityId.Id);
             oDataQuery = oDataQuery.OrderBy(orderBy);
-            query = oDataQuery.Inner as IQueryable<TEntity>;
+            query = oDataQuery;
 
             if (request.Take.HasValue)
             {
                 query = query.Skip(request.Skip ?? 0).Take(request.Take.Value);
             }
 
-            var items = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var items = query.ToList();
 
             
             foreach (var item in items)

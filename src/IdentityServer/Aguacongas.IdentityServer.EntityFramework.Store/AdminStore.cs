@@ -39,13 +39,14 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var query = _context.Set<TEntity>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
-            query = odataQuery.Inner as IQueryable<TEntity>;
+            
+            int? count = request.Take.HasValue || request.Skip.HasValue ? await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
-            int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
+            var page = odataQuery.GetPage(request);
 
-            var page = query.GetPage(request);
-
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+#pragma warning disable S6966 // Awaitable method should be used. Not supported by odata2linq
+            var items = page.ToList();
+#pragma warning restore S6966 // Awaitable method should be used
 
             return new PageResponse<TEntity>
             {
