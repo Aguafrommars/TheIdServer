@@ -44,7 +44,9 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
 
             var page = odataQuery.GetPage(request);
 
-            var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
+#pragma warning disable S6966 // Awaitable method should be used. Not supported by odata2linq
+            var items = page.ToList();
+#pragma warning restore S6966 // Awaitable method should be used
 
             return new PageResponse<TEntity>
             {
