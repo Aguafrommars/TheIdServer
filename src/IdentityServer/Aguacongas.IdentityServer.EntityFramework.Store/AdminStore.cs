@@ -39,11 +39,10 @@ namespace Aguacongas.IdentityServer.EntityFramework.Store
             var query = _context.Set<TEntity>().AsNoTracking();
             var odataQuery = query.GetODataQuery(request);
 
-            query = odataQuery.Inner as IQueryable<TEntity>;
+            
+            int? count = request.Take.HasValue || request.Skip.HasValue ? await odataQuery.CountAsync(cancellationToken).ConfigureAwait(false) : null;
 
-            int? count = request.Take.HasValue || request.Skip.HasValue ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : null;
-
-            var page = query.GetPage(request);
+            var page = odataQuery.GetPage(request);
 
             var items = await page.ToListAsync(cancellationToken).ConfigureAwait(false);
 
