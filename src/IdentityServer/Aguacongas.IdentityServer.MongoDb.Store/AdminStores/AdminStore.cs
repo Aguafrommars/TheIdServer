@@ -63,7 +63,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
                 query = query.Skip(request.Skip ?? 0).Take(request.Take.Value);
             }
 
-            var items = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+            var items = query.ToList();
 
             
             foreach (var item in items)
