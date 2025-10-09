@@ -2,6 +2,9 @@
 
 namespace Aguacongas.TheIdServer.Duende;
 
+/// <summary>
+/// Represents settings for configuring the Swagger UI in the application.
+/// </summary>
 public class SwaggerUiSettings
 {
     /// <summary>

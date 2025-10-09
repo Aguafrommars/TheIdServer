@@ -1,14 +1,31 @@
 ﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    -----------------------------------------------------------------------------
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+    -----------------------------------------------------------------------------
+    File: Error.cshtml
+    Purpose: Displays a localized error page with details for the user.
+    Model: ErrorViewModel
+    -----------------------------------------------------------------------------
+    Documentation:
+    - Injects IViewLocalizer for localization support.
+    - Uses ErrorViewModel to retrieve error information.
+    - Displays a localized error message and description if available.
+    - Shows the request ID for troubleshooting if present.
+    - Uses Bootstrap classes for styling.
+    -----------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 @model ErrorViewModel
 
 @{
+    // Localized error message if available
     var error = Model?.Error?.Error != null ? Localizer[Model.Error.Error] : null;
+    // Localized error description if available
     var errorDescription = Model?.Error?.ErrorDescription != null ? Localizer[Model.Error.ErrorDescription] : null;
+    // Request ID for troubleshooting
     var request_id = Model?.Error?.RequestId;
 }
 
@@ -20,6 +37,7 @@ Copyright (c) 2023 @Olivier Lefebvre
     <div class="row">
         <div class="col-sm-6">
             <div class="alert alert-danger">
+                @* Main error message *@
                 @Localizer["Sorry, there was an error"]
 
                 @if (error != null)
@@ -30,6 +48,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                         </em>
                     </strong>
 
+                    @* Additional error description if available *@
                     if (errorDescription != null)
                     {
                         <div>@errorDescription</div>
@@ -37,6 +56,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                 }
             </div>
 
+            @* Display request ID for debugging purposes *@
             @if (request_id != null)
             {
                 <div class="request-id">Request Id: @request_id</div>

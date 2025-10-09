@@ -1,16 +1,31 @@
 ﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    Partial view for login/logout and user management links in the navigation bar.
+
+    - Displays user greeting and logout button if signed in.
+    - Displays register and login links if not signed in.
+    - Uses ASP.NET Core Identity for authentication.
+    - Localizes all displayed text using IViewLocalizer.
+    - Intended for inclusion in shared layout views.
+
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
 *@
+
 @using Microsoft.AspNetCore.Identity
 @using Aguacongas.TheIdServer.Models
+
+@* Injects the localizer for view text localization *@
 @inject IViewLocalizer Localizer
 
+@* Injects the SignInManager to check user sign-in status *@
 @inject SignInManager<ApplicationUser> SignInManager
+
+@* Injects the UserManager to retrieve user information *@
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
+    @* If the user is signed in, show greeting and logout button *@
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
@@ -24,6 +39,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 }
 else
 {
+    @* If the user is not signed in, show register and login links *@
     <ul class="nav navbar-nav navbar-right">
         <li class="nav-item"><a asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a></li>
         <li class="nav-item"><a asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a></li>

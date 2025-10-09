@@ -1,7 +1,23 @@
 ﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    Partial view: _ValidationSummary
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    Purpose:
+    Displays a validation summary when the model state is invalid.
+    Shows a localized error message and lists all validation errors.
+
+    Usage:
+    Include this partial in views where you want to display validation errors.
+
+    Dependencies:
+    - IViewLocalizer: Used for localizing the error message.
+    - ViewContext.ModelState: Determines if the model state is valid.
+
+    Output:
+    Renders a Bootstrap alert with validation errors if any exist.
 *@
+
 @inject IViewLocalizer Localizer
 
 @if (ViewContext.ModelState.IsValid == false)

@@ -1,7 +1,40 @@
 @* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    -----------------------------------------------------------------------------
+    Consent Page View
+
+    This Razor view renders the consent page for OAuth/OpenID Connect flows.
+    It displays the client requesting permissions, the scopes being requested,
+    and allows the user to grant or deny consent. The view supports localization
+    and dynamic rendering of client information, requested scopes, and policy links.
+
+    Model: ConsentViewModel
+        - ClientLogoUrl: string? - URL of the requesting client's logo.
+        - ClientName: string - Name of the requesting client.
+        - IdentityScopes: IEnumerable<ScopeViewModel>? - Personal information scopes.
+        - ApiScopes: IEnumerable<ScopeViewModel>? - Application access scopes.
+        - AllowRememberConsent: bool - Whether the user can remember their decision.
+        - ClientUrl: string? - URL to client information.
+        - PolicyUrl: string? - URL to privacy policy.
+        - TosUrl: string? - URL to terms of service.
+        - ReturnUrl: string - URL to return after consent.
+        - RememberConsent: bool - Indicates if consent should be remembered.
+
+    Localization: Uses IViewLocalizer for all user-facing text.
+
+    UI Elements:
+        - Client logo and name
+        - Validation summary
+        - List of requested scopes (personal and application)
+        - Remember consent checkbox
+        - Consent buttons (Allow, Do Not Allow)
+        - Links to client info, policy, and terms of service
+
+    -----------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 @model ConsentViewModel
@@ -9,11 +42,13 @@ Copyright (c) 2023 @Olivier Lefebvre
 <div class="page-consent">
     <div class="row page-header">
         <div class="col-sm-10">
+            @* Display client logo if available *@
             @if (Model.ClientLogoUrl != null)
             {
                 <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="logo"></div>
             }
             <h1>
+                @* Display client name and consent request message *@
                 @Localizer["{0} <small>is requesting your permission</small>", @Model.ClientName!]
             </h1>
         </div>
@@ -21,13 +56,16 @@ Copyright (c) 2023 @Olivier Lefebvre
 
     <div class="row">
         <div class="col-sm-8">
+            @* Display validation summary for form errors *@
             <partial name="_ValidationSummary" />
 
             <form asp-action="Index" class="consent-form">
+                @* Hidden field for return URL after consent *@
                 <input type="hidden" asp-for="ReturnUrl" />
 
                 <div>@Localizer["Uncheck the permissions you do not wish to grant."]</div>
 
+                @* Render identity scopes if available *@
                 @if (Model.IdentityScopes?.Any() == true)
                 {
                     <div class="panel panel-default consent-buttons">
@@ -44,6 +82,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Render API scopes if available *@
                 @if (Model.ApiScopes?.Any() == true)
                 {
                     <div class="panel panel-default">
@@ -60,6 +99,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Option to remember consent decision *@
                 @if (Model.AllowRememberConsent)
                 {
                     <div class="consent-remember">
@@ -70,9 +110,11 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Consent action buttons *@
                 <div class="consent-buttons">
                     <button name="button" value="yes" class="btn btn-primary" autofocus>@Localizer["Yes, Allow"]</button>
                     <button name="button" value="no" class="btn">@Localizer["No, Do Not Allow"]</button>
+                    @* Link to client information if available *@
                     @if (Model.ClientUrl != null)
                     {
                         <a class="pull-right btn btn-secondary" target="_blank" href="@Model.ClientUrl" rel="noopener noreferrer">
@@ -82,6 +124,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     }
                 </div>
                 <div class="consent-buttons">
+                    @* Link to privacy policy if available *@
                     @if (Model.PolicyUrl != null)
                     {
                         <div>
@@ -90,6 +133,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                             </a>
                         </div>
                     }
+                    @* Link to terms of service if available *@
                     @if (Model.TosUrl != null)
                     {
                         <a target="_blank" href="@Model.TosUrl" rel="noopener noreferrer">

@@ -5,68 +5,74 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
 
-namespace Aguacongas.TheIdServer.UI
+namespace Aguacongas.TheIdServer.Duende.Quickstart;
+
+/// <summary>
+/// An action filter attribute that adds security-related HTTP headers to responses for <see cref="ViewResult"/>.
+/// </summary>
+public class SecurityHeadersAttribute : ActionFilterAttribute
 {
-    public class SecurityHeadersAttribute : ActionFilterAttribute
+    /// <summary>
+    /// Called before the action result executes. Adds security headers to the HTTP response if the result is a <see cref="ViewResult"/>.
+    /// </summary>
+    /// <param name="context">The <see cref="ResultExecutingContext"/> for the current request.</param>
+    public override void OnResultExecuting(ResultExecutingContext context)
     {
-        public override void OnResultExecuting(ResultExecutingContext context)
+        var result = context.Result;
+        if (result is ViewResult)
         {
-            var result = context.Result;
-            if (result is ViewResult)
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+            if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Type-Options"))
             {
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
-                if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Type-Options"))
-                {
-                    context.HttpContext.Response.Headers.XContentTypeOptions = "nosniff";
-                }
+                context.HttpContext.Response.Headers.XContentTypeOptions = "nosniff";
+            }
 
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-                if (!context.HttpContext.Response.Headers.ContainsKey("X-Frame-Options"))
-                {
-                    context.HttpContext.Response.Headers.XFrameOptions = "SAMEORIGIN";
-                }
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+            if (!context.HttpContext.Response.Headers.ContainsKey("X-Frame-Options"))
+            {
+                context.HttpContext.Response.Headers.XFrameOptions = "SAMEORIGIN";
+            }
 
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-                var builder = new StringBuilder("default-src 'self'");
-                builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
-                builder.Append("img-src 'self' data:; style-src 'self' ");
-                builder.Append(SiteOptions.BOOTSTRAPCSSURL);
-                builder.Append(';');
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+            var builder = new StringBuilder("default-src 'self'");
+            builder.Append("; object-src 'none'; frame-ancestors 'self'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';upgrade-insecure-requests;");
+            builder.Append("img-src 'self' data:; style-src 'self' ");
+            builder.Append(SiteOptions.BOOTSTRAPCSSURL);
+            builder.Append(';');
 
-                var autorizeScriptsUrl = new[]
-                {
-                    "'sha256-vwa3kDBkD7mP1Y0njpcyAH7GXn3/HkE72HGlVShVMUg='",
-                    SiteOptions.BOOTSTRAPJSURL,
-                    SiteOptions.JQUERYURL,
-                };
-                builder.Append("script-src 'self'");
-                foreach(var url in autorizeScriptsUrl)
-                {
-                    builder.Append(' ');
-                    builder.Append(url);
-                }
+            var autorizeScriptsUrl = new[]
+            {
+                "'sha256-vwa3kDBkD7mP1Y0njpcyAH7GXn3/HkE72HGlVShVMUg='",
+                SiteOptions.BOOTSTRAPJSURL,
+                SiteOptions.JQUERYURL,
+            };
+            builder.Append("script-src 'self'");
+            foreach(var url in autorizeScriptsUrl)
+            {
+                builder.Append(' ');
+                builder.Append(url);
+            }
 #if DEBUG
-                builder.Append("; connect-src *");
+            builder.Append("; connect-src *");
 #endif
-                var csp = builder.ToString();
-                
-                // once for standards compliant browsers
-                if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
-                {
-                    context.HttpContext.Response.Headers.ContentSecurityPolicy = csp;
-                }
-                // and once again for IE
-                if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Security-Policy"))
-                {
-                    context.HttpContext.Response.Headers["X-Content-Security-Policy"] = csp;
-                }
+            var csp = builder.ToString();
+            
+            // once for standards compliant browsers
+            if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
+            {
+                context.HttpContext.Response.Headers.ContentSecurityPolicy = csp;
+            }
+            // and once again for IE
+            if (!context.HttpContext.Response.Headers.ContainsKey("X-Content-Security-Policy"))
+            {
+                context.HttpContext.Response.Headers["X-Content-Security-Policy"] = csp;
+            }
 
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-                var referrer_policy = "no-referrer";
-                if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
-                {
-                    context.HttpContext.Response.Headers["Referrer-Policy"] = referrer_policy;
-                }
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+            var referrer_policy = "no-referrer";
+            if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
+            {
+                context.HttpContext.Response.Headers["Referrer-Policy"] = referrer_policy;
             }
         }
     }

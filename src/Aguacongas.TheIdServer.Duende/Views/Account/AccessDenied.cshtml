@@ -1,7 +1,20 @@
 ﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    ----------------------------------------------------------------------------
+    View: AccessDenied
+    Purpose:
+        Displays an access denied message to users who attempt to access a resource
+        for which they do not have sufficient permissions.
+    Usage:
+        This view is typically rendered when authorization fails for a protected
+        resource in the application.
+    Localization:
+        Uses IViewLocalizer to provide localized strings for the header and message.
+    ----------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 <div class="container">

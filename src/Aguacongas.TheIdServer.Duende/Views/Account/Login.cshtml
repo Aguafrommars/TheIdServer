@@ -1,21 +1,52 @@
 ﻿@*
+    -----------------------------------------------------------------------------
+    File: Login.cshtml
     Project: Aguafrommars/TheIdServer
-    Copyright (c) 2023 @Olivier Lefebvre
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    Summary:
+        This Razor Page renders the login interface for the application.
+        It supports both local and external authentication providers.
+        The page displays validation messages, login forms, and links for
+        password recovery, registration, and email confirmation as needed.
+
+    Model:
+        LoginViewModel
+            - EnableLocalLogin: Determines if local login is enabled.
+            - AllowRememberLogin: Determines if "Remember Me" is shown.
+            - ShowForgotPassworLink: Determines if "Forgot Password" is shown.
+            - ShowRegisterLink: Determines if registration is shown.
+            - ShowResendEmailConfirmationLink: Determines if email confirmation is shown.
+            - VisibleExternalProviders: List of available external authentication providers.
+            - ReturnUrl: URL to redirect after login.
+
+    Localization:
+        Uses IViewLocalizer for localizing UI strings.
+
+    UI Structure:
+        - Validation summary partial.
+        - Local login form (if enabled).
+        - External login providers (if available).
+        - Warning if no login schemes are configured.
+
+    -----------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 @model LoginViewModel
-
 
 <div class="login-page">
     <div class="page-header">
         <h1>@Localizer["Login"]</h1>
     </div>
 
+    @* Displays validation errors for the login form *@
     <partial name="_ValidationSummary" />
 
     <div class="row">
 
+        @* Local login form section *@
         @if (Model.EnableLocalLogin)
         {
             <div class="col-sm-6 mb-2">
@@ -31,17 +62,21 @@
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="form-floating mb-2">
+                                            @* Username input *@
                                             <input class="form-control" placeholder="@Localizer["Username"]" asp-for="Username" autofocus>
                                             <label class="form-label" asp-for="Username">@Localizer["Username"]</label>
                                         </div>
                                         <div class="form-floating mb-2">
+                                            @* Password input *@
                                             <input type="password" class="form-control" placeholder="@Localizer["Password"]" asp-for="Password" autocomplete="off">
                                             <label class="form-label" asp-for="Password">@Localizer["Password"]</label>
                                         </div>
+                                        @* Login and Cancel buttons *@
                                         <button class="w-100 btn btn-lg btn-primary mb-2" name="button" value="login">
                                             @Localizer["Login"]
                                         </button>
                                         <button class="w-100 btn btn-lg btn btn-secondary mb-3" name="button" value="cancel">@Localizer["Cancel"]</button>
+                                        @* Remember Me option *@
                                         @if (Model.AllowRememberLogin)
                                         {
                                             <div class="login-remember mb-3">
@@ -52,18 +87,21 @@
                                             </div>
                                         }
                                         <div>
+                                            @* Forgot password link *@
                                             @if (Model.ShowForgotPassworLink)
                                             {
                                                 <p>
                                                     <a asp-area="Identity" asp-page="/Account/ForgotPassword" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["Forgot your password?"]</a>
                                                 </p>
                                             }
+                                            @* Register link *@
                                             @if (Model.ShowRegisterLink)
                                             {
                                                 <p>
                                                     <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["Register as a new user"]</a>
                                                 </p>
                                             }
+                                            @* Resend email confirmation link *@
                                             @if (Model.ShowResendEmailConfirmationLink)
                                             {
                                                 <p>
@@ -80,6 +118,7 @@
             </div>
         }
 
+        @* External login providers section *@
         @if (Model.VisibleExternalProviders?.Any() == true)
         {
             <div class="col-sm-6 external-providers">
@@ -92,6 +131,7 @@
                             @foreach (var provider in Model.VisibleExternalProviders)
                             {
                                 <li class="list-inline-item">
+                                    @* External provider login button *@
                                     <a class="btn btn-lg btn-secondary mb-2"
                                asp-controller="External"
                                asp-action="Challenge"
@@ -107,6 +147,7 @@
             </div>
         }
 
+        @* Warning if no login schemes are configured *@
         @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders?.Any() == true)
         {
             <div class="alert alert-warning">

@@ -1,7 +1,29 @@
 @* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    -----------------------------------------------------------------------------
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    File: Redirect.cshtml
+    Purpose: 
+        This Razor view is responsible for handling user redirection after a 
+        sign-in or authentication process. It displays a localized message 
+        informing the user that they are being returned to the application, and 
+        provides instructions to close the tab once complete. The view uses a 
+        meta refresh tag and a JavaScript file to perform the redirect to the 
+        specified URL.
+
+    Model:
+        RedirectViewModel - Contains the RedirectUrl property used for redirection.
+
+    Localization:
+        Uses IViewLocalizer to provide localized messages.
+
+    Usage:
+        This view is typically rendered after a successful authentication or 
+        sign-in event, redirecting the user back to the client application.
+    -----------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 @model RedirectViewModel

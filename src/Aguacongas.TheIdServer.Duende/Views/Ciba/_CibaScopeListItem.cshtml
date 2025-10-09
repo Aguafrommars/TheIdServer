@@ -1,12 +1,48 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+-------------------------------------------------------------------------------
+File: _CibaScopeListItem.cshtml
+
+Description:
+Partial view for rendering a single CIBA scope item in a consent list.
+Displays scope name, description, required status, and associated resources.
+Used in CIBA (Client-Initiated Backchannel Authentication) consent flows.
+
+Model:
+Aguacongas.TheIdServer.Duende.Quickstart.Ciba.ScopeViewModel
+
+Parameters:
+- Model.Value: Scope identifier value.
+- Model.Checked: Indicates if the scope is pre-selected.
+- Model.Required: Indicates if the scope is required (cannot be deselected).
+- Model.DisplayName: Display name for the scope.
+- Model.Emphasize: If true, emphasizes the scope visually.
+- Model.Description: Optional description for the scope.
+- Model.Resources: List of resource servers associated with the scope.
+
+Localization:
+Uses IViewLocalizer for localizing UI strings.
+
+UI Elements:
+- Checkbox for scope selection.
+- Hidden input for required scopes.
+- Display name and emphasis icon.
+- Description and resource server list.
+- Required scope indicator.
+
+Usage:
+Rendered as a list item in a consent form for CIBA authentication.
+-------------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 @model Aguacongas.TheIdServer.Duende.Quickstart.Ciba.ScopeViewModel
 
 <li class="list-group-item">
     <label>
+        @* Scope selection checkbox. Disabled if required. Checked if pre-selected. *@
         <input class="consent-scopecheck"
                type="checkbox"
                name="Input.ScopesConsented"
@@ -14,28 +50,33 @@ Copyright (c) 2023 @Olivier Lefebvre
                value="@Model.Value"
                checked="@Model.Checked"
                disabled="@Model.Required" />
+        @* Hidden input for required scopes to ensure value is posted. *@
         @if (Model.Required)
         {
             <input type="hidden"
                    name="Input.ScopesConsented"
                    value="@Model.Value" />
         }
+        @* Scope display name and emphasis icon if needed. *@
         <strong>@Model.DisplayName</strong>
         @if (Model.Emphasize)
         {
             <span class="glyphicon glyphicon-exclamation-sign"></span>
         }
     </label>
+    @* Required scope indicator. *@
     @if (Model.Required)
     {
         <span><em>@Localizer["(required)"]</em></span>
     }
+    @* Scope description if provided. *@
     @if (Model.Description != null)
     {
         <div class="consent-description">
             <label for="scopes_@Model.Value">@Model.Description</label>
         </div>
     }
+    @* List of resource servers associated with the scope. *@
     @if (Model.Resources?.Any() == true)
     {
         <div class="consent-description">

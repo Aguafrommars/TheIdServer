@@ -1,6 +1,13 @@
 @* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+View: UserCodeCapture
+Purpose: Displays a form for the user to enter the code shown on their device as part of the device authorization flow.
+- Injects IViewLocalizer for localization of UI strings.
+- Uses a string model to bind the user code.
+- Renders a header, instructions, and a form with a single input for the user code.
+- The form posts to the UserCodeCapture action.
 *@
 @inject IViewLocalizer Localizer
 
@@ -8,13 +15,13 @@ Copyright (c) 2023 @Olivier Lefebvre
 
 <div class="page-header">
     <h1>
-        @Localizer["User Code"]
+        @Localizer["User Code"] @* Localized header for the user code entry page *@
     </h1>
     <p>
-        @Localizer["Please enter the code displayed on your device"]
+        @Localizer["Please enter the code displayed on your device"] @* Localized instructions for the user *@
     </p>
     <form asp-action="UserCodeCapture" method="post">
-        <input for="userCode" name="userCode" />
-        <button class="btn btn-primary">@Localizer["Submit"]</button>
+        <input for="userCode" name="userCode" /> @* Input field for the user to enter their code *@
+        <button class="btn btn-primary">@Localizer["Submit"]</button> @* Localized submit button *@
     </form>
 </div>

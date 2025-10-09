@@ -1,36 +1,78 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+-----------------------------------------------------------------------------
+
+View: Consent.cshtml
+
+Purpose:
+    Displays the CIBA (Client Initiated Backchannel Authentication) consent page.
+    Allows users to review and grant or deny permissions requested by a client.
+    Shows client information, requested identity and API scopes, and a description field.
+    Localizes all user-facing text using IViewLocalizer.
+    Uses the ViewModel: Aguacongas.TheIdServer.Duende.Quickstart.Ciba.ViewModel.
+
+-----------------------------------------------------------------------------
+
+Key Elements:
+    - Client logo and name
+    - Binding message for verification
+    - List of requested identity and API scopes
+    - Description input for device or context
+    - Buttons to allow or deny consent
+    - Link to client information (if available)
+
+-----------------------------------------------------------------------------
+
+Usage:
+    This view is rendered as part of the CIBA consent flow in TheIdServer.
+    It is intended for Razor Pages (.NET 9, C# 13.0).
+
+-----------------------------------------------------------------------------
 *@
+
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @model Aguacongas.TheIdServer.Duende.Quickstart.Ciba.ViewModel
 
 <div class="ciba-consent">
     <div class="lead">
+        @* Display client logo if available *@
         @if (Model.ClientLogoUrl != null)
         {
             <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="client logo"></div>
         }
         <h1>
+            @* Show client name and request message *@
             @Html.Raw(string.Format(Localizer["{0} <small class=\"text-muted\">is requesting your permission</small>"].Value, Model.ClientName))
         </h1>
         
-        <h3>@Localizer["Verify that this identifier matches what the client is displaying:"] <em  class="text-primary">@Model.BindingMessage</em></h3>
+        <h3>
+            @* Display binding message for user verification *@
+            @Localizer["Verify that this identifier matches what the client is displaying:"] 
+            <em class="text-primary">@Model.BindingMessage</em>
+        </h3>
 
-        <p>@Localizer["Uncheck the permissions you do not wish to grant."]</p>
+        <p>
+            @* Instruction to uncheck unwanted permissions *@
+            @Localizer["Uncheck the permissions you do not wish to grant."]
+        </p>
     </div>
 
     <div class="row">
         <div class="col-sm-8">
+            @* Validation summary partial for displaying errors *@
             <partial name="_ValidationSummary" />
         </div>
     </div>
 
     <form asp-page="/Ciba/Consent">
+        @* Hidden field for consent Id *@
         <input type="hidden" asp-for="Input!.Id!" />
         <div class="row">
             <div class="col-sm-8">
+                @* List identity scopes if any *@
                 @if (Model.IdentityScopes?.Any() == true)
                 {
                     <div class="form-group">
@@ -49,6 +91,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* List API scopes if any *@
                 @if (Model.ApiScopes?.Any() == true)
                 {
                     <div class="form-group">
@@ -67,6 +110,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Description input for device or context *@
                 <div class="form-group">
                     <div class="card">
                         <div class="card-header">
@@ -83,10 +127,12 @@ Copyright (c) 2023 @Olivier Lefebvre
 
         <div class="row">
             <div class="col-sm-4">
+                @* Consent buttons *@
                 <button name="Input.button" value="yes" class="btn btn-primary" autofocus>@Localizer["Yes, Allow"]</button>
                 <button name="Input.button" value="no" class="btn btn-secondary">@Localizer["No, Do Not Allow"]</button>
             </div>
             <div class="col-sm-4 col-lg-auto">
+                @* Link to client information if available *@
                 @if (Model.ClientUrl != null)
                 {
                     <a class="btn btn-outline-info" href="@Model.ClientUrl">

@@ -1,7 +1,33 @@
 @* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+------------------------------------------------------------------------------
+View: Device/UserCodeConfirmation.cshtml
+
+Purpose:
+Renders the device authorization confirmation page for OAuth2 device flow.
+Displays client information, requested scopes, and allows the user to confirm
+the user code and grant or deny consent for requested permissions.
+
+Model:
+Aguacongas.IdentityServer.UI.Device.DeviceAuthorizationViewModel
+
+Key Features:
+- Shows client logo and name.
+- Prompts user to confirm the authorization code if required.
+- Lists identity and API scopes for user consent.
+- Allows user to remember consent decision.
+- Provides links to client, policy, and terms of service.
+- Uses IViewLocalizer for localization of UI strings.
+
+Usage:
+This view is rendered when a device requests authorization and the user must
+confirm the code and grant permissions.
+
+------------------------------------------------------------------------------
 *@
+
 @inject IViewLocalizer Localizer
 
 @model Aguacongas.IdentityServer.UI.Device.DeviceAuthorizationViewModel
@@ -9,16 +35,19 @@ Copyright (c) 2023 @Olivier Lefebvre
 <div class="page-header">
     <div class="row page-header">
         <div class="col-sm-10">
+            @* Display client logo if available *@
             @if (Model.ClientLogoUrl != null)
             {
                 <div class="client-logo"><img src="@Model.ClientLogoUrl" alt="logo"></div>
             }
+            @* Display client name and request message *@
             <h1>
                 @Localizer["{0} <small>is requesting your permission</small>", @Model.ClientName!]
             </h1>
         </div>
     </div>
 
+    @* Prompt user to confirm the authorization code if required *@
     @if (Model.ConfirmUserCode)
     {
         <div class="row">
@@ -32,13 +61,17 @@ Copyright (c) 2023 @Olivier Lefebvre
 
     <div class="row">
         <div class="col-sm-8">
+            @* Display validation summary *@
             <partial name="_ValidationSummary" />
 
+            @* Consent form for granting permissions *@
             <form asp-action="Callback" class="consent-form">
+                @* Hidden field for user code *@
                 <input asp-for="UserCode" type="hidden" value="@Model.UserCode" />
 
                 <div>@Localizer["Uncheck the permissions you do not wish to grant."]</div>
 
+                @* List identity scopes for consent *@
                 @if (Model.IdentityScopes?.Any() == true)
                 {
                     <div class="panel panel-default consent-buttons">
@@ -55,6 +88,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* List API scopes for consent *@
                 @if (Model.ApiScopes?.Any() == true)
                 {
                     <div class="panel panel-default">
@@ -71,6 +105,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Option to remember consent decision *@
                 @if (Model.AllowRememberConsent)
                 {
                     <div class="consent-remember">
@@ -81,6 +116,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                     </div>
                 }
 
+                @* Consent action buttons and client info link *@
                 <div class="consent-buttons">
                     <button name="button" value="yes" class="btn btn-primary" autofocus>@Localizer["Yes, Allow"]</button>
                     <button name="button" value="no" class="btn">@Localizer["No, Do Not Allow"]</button>
@@ -92,6 +128,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                         </a>
                     }
                 </div>
+                @* Policy and terms of service links *@
                 <div class="consent-buttons">
                     @if (Model.PolicyUrl != null)
                     {

@@ -14,6 +14,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Aguacongas.TheIdServer.Duende.Quickstart;
 
 namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account
 {

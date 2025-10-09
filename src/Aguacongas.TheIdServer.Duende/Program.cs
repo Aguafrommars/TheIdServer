@@ -22,7 +22,7 @@ services.AddTheIdServer(configuration);
 var seed = args.Any(x => x == "/seed");
 if (seed)
 {
-    args = args.Except(Config.SeedPage).ToArray();
+    args = [.. args.Except(Config.SeedPage)];
 }
 
 services.AddOpenTelemetry(configuration.GetSection(nameof(OpenTelemetryOptions)));

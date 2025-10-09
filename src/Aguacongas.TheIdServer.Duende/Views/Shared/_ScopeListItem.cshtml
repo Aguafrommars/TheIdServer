@@ -1,7 +1,26 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+This partial view renders a single scope item for consent screens.
+It displays a checkbox for the scope, its display name, description, and visual cues for required or emphasized scopes.
+
+Parameters:
+- Model (ScopeViewModel): The scope to render. Properties used:
+    - Value: The scope identifier.
+    - Checked: Whether the scope is pre-selected.
+    - Required: If true, the scope is required and cannot be deselected.
+    - DisplayName: The display name of the scope.
+    - Emphasize: If true, adds an exclamation icon for emphasis.
+    - Description: Optional description of the scope.
+
+Services:
+- IViewLocalizer Localizer: Used to localize the "(required)" label.
+
+Usage:
+- Used in consent views to list available scopes for user approval.
 *@
+
 @inject IViewLocalizer Localizer
 
 @model ScopeViewModel
@@ -15,6 +34,7 @@ Copyright (c) 2023 @Olivier Lefebvre
                value="@Model.Value"
                checked="@Model.Checked"
                disabled="@Model.Required" />
+        @* If the scope is required, add a hidden input to ensure its value is posted even if disabled *@
         @if (Model.Required)
         {
             <input type="hidden"
@@ -22,15 +42,18 @@ Copyright (c) 2023 @Olivier Lefebvre
                    value="@Model.Value" />
         }
         <strong>@Model.DisplayName</strong>
+        @* Show an exclamation icon if the scope is emphasized *@
         @if (Model.Emphasize)
         {
             <span class="glyphicon glyphicon-exclamation-sign"></span>
         }
     </label>
+    @* Show a localized "(required)" label if the scope is required *@
     @if (Model.Required)
     {
         <span><em>@Localizer["(required)"]</em></span>
     }
+    @* Show the scope description if provided *@
     @if (Model.Description != null)
     {
         <div class="consent-description">

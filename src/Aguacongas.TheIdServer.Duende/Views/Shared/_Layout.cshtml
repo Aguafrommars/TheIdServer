@@ -1,19 +1,47 @@
 ﻿@* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
 *@
+@* 
+    -----------------------------------------------------------------------------
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+    -----------------------------------------------------------------------------
+    File: _Layout.cshtml
+    Description:
+        This is the main layout view for the application. It defines the HTML
+        structure, includes required CSS and JS resources, and renders the
+        navigation bar, header, and body content for all pages using this layout.
+        It also handles user display name and theme toggling.
+    -----------------------------------------------------------------------------
+    Dependencies:
+        - Microsoft.Extensions.Options: For accessing site options.
+        - Aguacongas.TheIdServer.Models: For user and site model types.
+        - System.Globalization: For culture info.
+        - IViewLocalizer: For localizing view content.
+        - SiteOptions: For site configuration values.
+    -----------------------------------------------------------------------------
+    Usage:
+        All views referencing this layout will inherit its structure and resources.
+    -----------------------------------------------------------------------------
+*@
+
 @using Microsoft.Extensions.Options
 @using Aguacongas.TheIdServer.Models
 @using System.Globalization;
 @inject IViewLocalizer Localizer
 @inject IOptions<SiteOptions> Options
+
 @{
+    // Holds the display name of the current user unless signed out.
     string? name = null;
     if (!true.Equals(ViewData["signed-out"]))
     {
+        // GetDisplayName() is an extension method to retrieve the user's display name.
         name = Context.User?.GetDisplayName();
     }
 }
+
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.Name" data-bs-theme="dark">
 <head>
@@ -23,19 +51,24 @@ Copyright (c) 2023 @Olivier Lefebvre
     <title>@Options.Value.Name</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    @* Bootstrap CSS *@
     <link rel="stylesheet"
           href="@SiteOptions.BOOTSTRAPCSSURL"
           integrity="@SiteOptions.BOOTSTRAPCSSURLINTEGRITY"
           crossorigin="anonymous" 
-        referrerpolicy="no-referrer" /> 
+          referrerpolicy="no-referrer" /> 
+    @* Site CSS *@
     <link rel="stylesheet" href="~/css/site.min.css" />
+    @* Open Iconic CSS *@
     <link rel="stylesheet" href="~/css/open-iconic/font/css/open-iconic-bootstrap.min.css" />
+    @* jQuery JS *@
     <script src="@SiteOptions.JQUERYURL"
         asp-fallback-src="~/lib/jquery/jquery.min.js"
         asp-fallback-test="window.jQuery"   
         integrity="@SiteOptions.JQUERYURLINTEGRITY" 
         crossorigin="anonymous" 
         referrerpolicy="no-referrer"></script>
+    @* Bootstrap JS *@
     <script src="@SiteOptions.BOOTSTRAPJSURL"
             integrity="@SiteOptions.BOOTSTRAPJSURLINTEGRITY"
             crossorigin="anonymous"
@@ -43,6 +76,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 </head>
 <body>
     <header>
+        @* Navigation bar with site branding and user menu *@
         <nav class="bg-body-secondary navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" href="~/">
@@ -57,17 +91,19 @@ Copyright (c) 2023 @Olivier Lefebvre
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
+                        @* Show user dropdown if signed in *@
                         @if (!string.IsNullOrWhiteSpace(name))
-                    {
+                        {
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">@name <strong class="caret"></strong></a>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-item"><a asp-action="Logout" asp-controller="Account">@Localizer["Logout"]</a></li>
                                 </ul>
                             </li>
-                    }
+                        }
                     </ul>
                     <div class="d-flex">
+                        @* Theme toggle button *@
                         <button class="btn btn-outline-secondary text-body-emphasis" id="theme-toggle-button">
                             <span class="oi oi-moon" id="theme-icon"></span>
                         </button>
@@ -78,9 +114,11 @@ Copyright (c) 2023 @Olivier Lefebvre
     </header>
 
     <div class="container body-content">
+        @* Main body content rendered here *@
         @RenderBody()
     </div>
 
+    @* Optional scripts section for page-specific scripts *@
     @RenderSection("scripts", required: false)
     <script src="/js/theme.js"></script>
 </body>

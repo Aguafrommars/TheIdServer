@@ -1,7 +1,29 @@
 ﻿@* 
-Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+    -----------------------------------------------------------------------------
+    Project: Aguafrommars/TheIdServer
+    Copyright (c) 2025 @Olivier Lefebvre
+
+    File: Logout.cshtml
+    Description:
+        This Razor view renders the logout confirmation page for the application.
+        It displays a prompt asking the user if they wish to log out of the current site,
+        and provides a form to confirm the logout action.
+
+    Usage:
+        - Injects localization and site options for dynamic content.
+        - Uses the LogoutViewModel to pass the logoutId required for the logout process.
+        - The form posts to the Logout action to complete the logout.
+
+    Parameters:
+        - @model LogoutViewModel: Contains the logoutId for the current logout request.
+
+    Dependencies:
+        - IViewLocalizer: For localizing UI strings.
+        - IOptions<SiteOptions>: For accessing site configuration (e.g., site name).
+
+    -----------------------------------------------------------------------------
 *@
+
 @using Microsoft.Extensions.Options
 @using Aguacongas.TheIdServer.Models
 

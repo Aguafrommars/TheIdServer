@@ -5,7 +5,7 @@
 
     <Authors>Olivier Lefebvre</Authors>
 		<Description>Add Saml2P controller to your Duende.IdentityServer server.</Description>
-		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2025 @Olivier Lefebvre</Copyright>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/aguacongas/TheIdServer</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

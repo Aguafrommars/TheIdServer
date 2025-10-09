@@ -1,13 +1,37 @@
 @* 
 Project: Aguafrommars/TheIdServer
-Copyright (c) 2023 @Olivier Lefebvre
+Copyright (c) 2025 @Olivier Lefebvre
+
+-------------------------------------------------------------------------------
+View: Diagnostics/Index.cshtml
+
+Purpose:
+Displays diagnostic information about the current authentication cookie,
+including claims, authentication properties, and optionally a list of clients.
+
+Model:
+- DiagnosticsViewModel: Contains the authentication result and client list.
+
+Sections:
+- Authentication cookie: Header for the diagnostics view.
+- Claims: Lists all claims from the authenticated principal.
+- Properties: Lists all authentication properties.
+- Clients: Optionally lists clients if available.
+
+Usage:
+This view is intended for diagnostic purposes to help administrators or
+developers inspect the authentication state and related data.
+
+-------------------------------------------------------------------------------
 *@
+
 @model DiagnosticsViewModel
 
 <h1>Authentication cookie</h1>
 
 <h3>Claims</h3>
 <dl>
+    @* Iterate through all claims and display their type and value *@
     @foreach (var claim in Model.AuthenticateResult!.Principal!.Claims)
     {
         <dt>@claim.Type</dt>
@@ -17,6 +41,7 @@ Copyright (c) 2023 @Olivier Lefebvre
 
 <h3>Properties</h3>
 <dl>
+    @* Iterate through all authentication properties and display their key and value *@
     @foreach (var prop in Model.AuthenticateResult!.Properties!.Items)
     {
         <dt>@prop.Key</dt>
@@ -24,6 +49,7 @@ Copyright (c) 2023 @Olivier Lefebvre
     }
 </dl>
 
+@* Display the list of clients if any are present in the model *@
 @if (Model.Clients?.Any() ?? true)
 {
     <h3>Clients</h3>

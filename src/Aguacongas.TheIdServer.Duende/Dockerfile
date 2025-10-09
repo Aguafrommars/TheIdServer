@@ -1,6 +1,28 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# -----------------------------------------------------------------------------
+# Dockerfile for Aguacongas.TheIdServer.Duende
+#
+# This Dockerfile defines a multi-stage build for a .NET 9 IdentityServer
+# implementation. It is used by Visual Studio for fast debugging and production
+# container builds.
+#
+# Stages:
+#   1. base: Sets up the runtime environment.
+#   2. build: Installs dependencies, restores packages, and builds the app.
+#   3. publish: Publishes the app for deployment.
+#   4. final: Prepares the final image for running the application.
+#
+# Key Features:
+#   - Uses .NET 9 images for both SDK and ASP.NET runtime.
+#   - Installs required system dependencies (python3, gcc).
+#   - Installs .NET WebAssembly tools workload.
+#   - Copies all relevant project files for multi-project solutions.
+#   - Supports custom build and publish arguments for versioning.
+#   - Exposes HTTP and HTTPS ports.
+#   - Runs the application as a non-root user for security.
+# -----------------------------------------------------------------------------
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+# Use non-root user 'app' for improved security.
 USER app
 WORKDIR /app
 EXPOSE 80
@@ -9,6 +31,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+# Copy NuGet configuration and all project files required for build.
 COPY ["nuget.config", "."]
 COPY ["src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj", "src/Aguacongas.TheIdServer.Duende/"]
 COPY ["src/Aguacongas.TheIdServer.BlazorApp/Aguacongas.TheIdServer.BlazorApp.csproj", "src/Aguacongas.TheIdServer.BlazorApp/"]
@@ -62,18 +85,26 @@ COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/Aguacongas.IdentityServer.Saml2p.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
+# Install required system dependencies for build and WebAssembly support.
 RUN apt-get update -y && apt-get install -y python3 gcc && apt-get clean
+# Install .NET WebAssembly tools workload.
 RUN dotnet workload install wasm-tools
+# Restore NuGet packages for the main project.
 RUN dotnet restore "./src/Aguacongas.TheIdServer.Duende/./Aguacongas.TheIdServer.Duende.csproj"
+# Copy all source files for build.
 COPY . .
 WORKDIR "/src/src/Aguacongas.TheIdServer.Duende"
+# Build the main project with custom versioning arguments.
 RUN dotnet build "./Aguacongas.TheIdServer.Duende.csproj" -c "$BUILD_CONFIGURATION" -o /app/build -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
+# Publish the application for deployment, disabling app host for containerization.
 RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false -p:FileVersion="$FILE_VERSION" -p:SourceRevisionId="$SOURCE_VERSION"
 
 FROM base AS final
 WORKDIR /app
+# Copy published output from the publish stage.
 COPY --from=publish /app/publish .
+# Set the entrypoint to run the IdentityServer application.
 ENTRYPOINT ["dotnet", "Aguacongas.TheIdServer.Duende.dll"]
