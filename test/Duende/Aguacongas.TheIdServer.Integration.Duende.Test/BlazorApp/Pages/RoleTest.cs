@@ -16,7 +16,7 @@ using RolePage = Aguacongas.TheIdServer.BlazorApp.Pages.Role.Role;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RoleTest : EntityPageTestBase<RolePage>
+    public class RoleTest : EntityPageTestBase<RolePage, TheIdServer.BlazorApp.Models.Role>
     {
         public override string Entity => "role";
 

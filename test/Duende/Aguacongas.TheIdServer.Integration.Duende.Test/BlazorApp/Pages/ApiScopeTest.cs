@@ -17,7 +17,7 @@ using ApiScopePage = Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.ApiScope;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiScopeTest : EntityPageTestBase<ApiScopePage>
+    public class ApiScopeTest : EntityPageTestBase<ApiScopePage, ApiScope>
     {
         public override string Entity => "apiscope";
         public ApiScopeTest(TheIdServerFactory factory):base(factory)

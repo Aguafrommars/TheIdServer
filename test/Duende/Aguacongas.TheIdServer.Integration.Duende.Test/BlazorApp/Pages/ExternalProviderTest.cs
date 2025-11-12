@@ -16,7 +16,7 @@ using ExternalProviderPage = Aguacongas.TheIdServer.BlazorApp.Pages.ExternalProv
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ExternalProviderTest : EntityPageTestBase<ExternalProviderPage>
+    public class ExternalProviderTest : EntityPageTestBase<ExternalProviderPage, TheIdServer.BlazorApp.Models.ExternalProvider>
     {
         public ExternalProviderTest(TheIdServerFactory factory) : base(factory)
         {

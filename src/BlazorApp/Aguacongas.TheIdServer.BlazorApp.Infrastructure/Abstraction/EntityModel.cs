@@ -8,8 +8,6 @@ using Aguacongas.TheIdServer.BlazorApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -453,8 +451,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var store = GetStore(entityType);
             return action.Invoke(store, entity);
         }
-
-        
 
         protected virtual void Dispose(bool disposing)
         {

@@ -1,10 +1,12 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store;
+using Aguacongas.TheIdServer.BlazorApp.Pages;
 using AngleSharp.Dom;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,9 @@ using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntityPageTestBase<TComnponent> : TestContext where TComnponent : IComponent
+    public abstract class EntityPageTestBase<TComnponent, TEntity> : BunitContext 
+        where TComnponent : EntityModel<TEntity>, IComponent
+        where TEntity: class, ICloneable<TEntity>, new()
     {
         public abstract string Entity { get; }
 
@@ -43,16 +47,18 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             bool clone = false)
         {
             Factory.ConfigureTestContext(userName,
-               new Claim[]
-               {
+               [
                     new Claim("scope", SharedConstants.ADMINSCOPE),
                     new Claim("role", SharedConstants.READERPOLICY),
                     new Claim("role", role),
                     new Claim("sub", Guid.NewGuid().ToString())
-               },
+               ],
                this);
 
-            var component = RenderComponent<TComnponent>(ComponentParameter.CreateParameter("Id", id), ComponentParameter.CreateParameter("Clone", clone));
+            var navigationManager = Services.GetRequiredService<NavigationManager>();
+            var uri = navigationManager.GetUriWithQueryParameter("Clone", clone);
+            navigationManager.NavigateTo(uri);
+            var component = Render<TComnponent>(builder => builder.Add(c => c.Id, id));
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

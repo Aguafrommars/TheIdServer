@@ -7,7 +7,6 @@ using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.UI;
 using Bunit;
-using Bunit.TestDoubles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -44,12 +43,12 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
 
         public void ConfigureTestContext(string userName,
             IEnumerable<Claim> claims,
-            TestContext testContext)
+            BunitContext testContext)
         {
             testContext.JSInterop.Mode = JSRuntimeMode.Loose;
             testContext.Services.AddScoped<JSRuntimeImpl>();
 
-            var authContext = testContext.AddTestAuthorization();
+            var authContext = testContext.AddAuthorization();
             authContext.SetAuthorized(userName);
             authContext.SetClaims(claims.ToArray());
             authContext.SetPolicies(claims.Where(c => c.Type == "role").Select(c => c.Value).ToArray());
@@ -62,7 +61,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp
             var httpClient = CreateClient();
             var appConfiguration = TestUtils.CreateApplicationConfiguration(httpClient);
 
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, appConfiguration, appConfiguration.Get<Settings>());           
+            services.ConfigureServices(appConfiguration, appConfiguration.Get<Settings>());           
 
             Services.GetRequiredService<TestUserService>()
                 .SetTestUser(true, claims.Select(c => new Claim(c.Type, c.Value)));

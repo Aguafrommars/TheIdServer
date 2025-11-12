@@ -20,7 +20,7 @@ using KeysPage = Aguacongas.TheIdServer.BlazorApp.Pages.Keys.Keys;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class KeysTests : TestContext
+    public class KeysTests : BunitContext
     {
         public TheIdServerFactory Factory { get; }
 
@@ -125,7 +125,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<KeysPage>();
+            var component = Render<KeysPage>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

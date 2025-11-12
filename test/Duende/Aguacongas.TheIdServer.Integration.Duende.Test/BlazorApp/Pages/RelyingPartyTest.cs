@@ -20,7 +20,7 @@ using RelyingPartyPage = Aguacongas.TheIdServer.BlazorApp.Pages.RelyingParty.Rel
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RelyingPartyTest : EntityPageTestBase<RelyingPartyPage>
+    public class RelyingPartyTest : EntityPageTestBase<RelyingPartyPage, RelyingParty>
     {
         public override string Entity => "relyingparty";
         public RelyingPartyTest(TheIdServerFactory factory) : base(factory)

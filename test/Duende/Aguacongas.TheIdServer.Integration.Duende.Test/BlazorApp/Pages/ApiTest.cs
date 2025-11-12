@@ -20,7 +20,7 @@ using ApiPage = Aguacongas.TheIdServer.BlazorApp.Pages.Api.Api;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ApiTest : EntityPageTestBase<ApiPage>
+    public class ApiTest : EntityPageTestBase<ApiPage, ProtectResource>
     {
         public override string Entity => "protectresource";
         public ApiTest(TheIdServerFactory factory) : base(factory)

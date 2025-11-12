@@ -12,7 +12,7 @@ image:
 environment:
   GITHUB_TOKEN:
     secure: /o9VAhx5ewGmdLR9qcgFJMzBaCuzOmGlsXAHu7khUJLdQzsv4gJzLUfYDghcRPHd
-  donetsdk: 9.0.305
+  donetsdk: 10.0.100
   JAVA_HOME: C:\Program Files\Java\jdk19
   PATH: $(JAVA_HOME)\bin;$(PATH)
 init:
@@ -22,11 +22,10 @@ install:
   - ps: ./Install-MongoDb.ps1
   - ps: .\dotnet-install.ps1 -Version 8.0.20 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: .\dotnet-install.ps1 -Version 8.0.20 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
-  - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
-  - ps: dotnet gitversion /l console /output buildserver
   - ps: dotnet tool install --global dotnet-sonarscanner
-  - ps: dotnet workload restore
+  - ps: dotnet gitversion /l console /output buildserver
+  - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
   - cmd: redis-64\tools\redis-server.exe --service-install

@@ -19,7 +19,7 @@ using Xunit;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ImportTest : TestContext
+    public class ImportTest : BunitContext
     {
         public TheIdServerFactory Factory { get; }
 
@@ -44,7 +44,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 fileMock.Object
             })));
 
-            component.WaitForState(() => component.Markup.Contains("text-success"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("text-success"));
             Assert.Contains("text-success", component.Markup);
         }
 
@@ -61,7 +61,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<Import>();
+            var component = Render<Import>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

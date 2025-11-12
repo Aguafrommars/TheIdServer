@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>TheIdServer administration HTTP stores.</Description>
 		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
@@ -23,11 +23,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
-		<PackageReference Include="System.Text.Json" Version="9.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+		<PackageReference Include="System.Text.Json" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

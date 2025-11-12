@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntitiesPageTestBase<TEntity, TComponent> : TestContext 
+    public abstract class EntitiesPageTestBase<TEntity, TComponent> : BunitContext 
         where TComponent : EntitiesModel<TEntity>
         where TEntity: class
     {
@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var filterInput = component.Find("input[placeholder=\"filter\"]");
 
@@ -53,7 +53,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = GenerateId()
             });
 
-            component.WaitForState(() => !component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => !component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             Assert.DoesNotContain(FilteredString, component.Markup);
         }
@@ -66,7 +66,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
@@ -75,12 +75,13 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(selectAll);
 
-            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").Change(new ChangeEventArgs
+            component.Render();
+            await (await component.InvokeAsync(() => component.Find(".table.mb-0 th input"))).ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }));
+            });
 
-            button = component.Find("button.btn-secondary");
+            button = await component.InvokeAsync(() => component.Find("button.btn-secondary"));
             Assert.DoesNotContain(button.Attributes, a => a.Name == "disabled");
 
             Assert.NotNull(button);
@@ -107,7 +108,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var navigationManager = Services.GetRequiredService<NavigationManager>();
 
@@ -129,7 +130,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             var th = component.Find(".table.mb-0 th div");
 
@@ -170,29 +171,30 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
 
             Assert.NotNull(component.Find(".table.mb-0 th input"));
 
-            component.WaitForState(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            await component.WaitForStateAsync(() => component.Markup.Contains(FilteredString), TimeSpan.FromMinutes(1));
+            component.Render();
 
-            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
+            await (await component.InvokeAsync(() => component.Find(".table.mb-0 th input"))).ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }));
-
+            });
+            component.Render();
             var selected = component.Find(".table.table-hover td input");
 
             Assert.NotNull(selected);
             Assert.Contains(selected.Attributes, a => a.Name == "checked");
+            var input = await component.InvokeAsync(() => component.Find(".table.mb-0 th input"));
+            Assert.NotNull(input);
 
-            Assert.NotNull(component.Find(".table.mb-0 th input"));
-
-            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
+            await input.ChangeAsync(new ChangeEventArgs
             {
                 Value = false
-            }));
-
+            });
+            component.Render();
             selected = component.Find(".table.table-hover td input");
 
             Assert.NotNull(selected);
@@ -201,11 +203,11 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var button = component.Find("button.btn-secondary");
             Assert.Contains(button.Attributes, a => a.Name == "disabled");
 
-            await component.InvokeAsync(() => component.Find(".table.mb-0 th input").ChangeAsync(new ChangeEventArgs
+            await (await component.InvokeAsync(() => component.Find(".table.mb-0 th input"))).ChangeAsync(new ChangeEventArgs
             {
                 Value = true
-            }));
-
+            });
+            component.Render();
             selected = component.Find(".table.table-hover td input");
 
             Assert.NotNull(selected);
@@ -234,7 +236,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 ],
                 this);
 
-            var component = RenderComponent<TComponent>();
+            var component = Render<TComponent>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

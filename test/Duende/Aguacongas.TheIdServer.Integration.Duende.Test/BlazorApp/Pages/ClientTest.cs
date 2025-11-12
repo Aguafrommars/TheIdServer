@@ -22,7 +22,7 @@ using ClientPage = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ClientTest : EntityPageTestBase<ClientPage>
+    public class ClientTest : EntityPageTestBase<ClientPage, Client>
     {
         public override string Entity => "client";
         public ClientTest(TheIdServerFactory factory) : base(factory)
@@ -75,8 +75,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await header.ClickAsync(new MouseEventArgs());
 
             urls = component.FindAll("#urls tr");
-
-            Assert.NotEqual(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
+            Assert.Throws<HtmlEqualException>(() => firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml));
+            
 
             var headers = component.FindAll("#urls th div");
 
@@ -84,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             urls = component.FindAll("#urls tr");
 
-            Assert.Equal(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
+            firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml);
 
             headers = component.FindAll("#urls th div");
 
@@ -92,7 +92,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             urls = component.FindAll("#urls tr");
 
-            Assert.NotEqual(firstUrl.ToDiffMarkup(), urls.ToArray()[1].ToDiffMarkup());
+            Assert.Throws<HtmlEqualException>(() => firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml));
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The grant type cannot contains space.", message.ToMarkup());
+            Assert.Contains("The grant type cannot contains space.", message.OuterHtml);
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
@@ -120,7 +120,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The grant type must be unique.", message.ToMarkup());
+            Assert.Contains("The grant type must be unique.", message.OuterHtml);
 
             input = component.Find("#grantTypes input");
             Assert.NotNull(input);
@@ -130,7 +130,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("'Code' cannot be added to a client with grant type 'Hybrid'.", message.ToMarkup());
+            Assert.Contains("'Code' cannot be added to a client with grant type 'Hybrid'.", message.OuterHtml);
 
             var form = component.Find("form");
 
@@ -270,7 +270,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var message = component.Find(".validation-message");
 
             Assert.NotNull(message);
-            Assert.Contains("The client should contain at least one grant type.", message.ToMarkup());
+            Assert.Contains("The client should contain at least one grant type.", message.OuterHtml);
         }
 
         [Fact]
@@ -776,21 +776,21 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                     ProtocolType = "oidc",
                     AllowedGrantTypes = new List<ClientGrantType>
                     {
-                        new ClientGrantType{ Id = GenerateId(), GrantType = grantType }
+                        new() { Id = GenerateId(), GrantType = grantType }
                     },
                     AllowedScopes = new List<ClientScope>
                     {
-                        new ClientScope{ Id = GenerateId(), Scope = "filtered"}
+                        new() { Id = GenerateId(), Scope = "filtered"}
                     },
                     AllowOfflineAccess = allowOfflineAccess,
                     RedirectUris = new List<ClientUri>
                     {
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },
-                        new ClientUri{ Id = GenerateId(), Uri = "http://filtered/filtered", Kind = UriKinds.Cors | UriKinds.PostLogout }
+                        new() { Id = GenerateId(), Uri = "http://filtered", Kind = UriKinds.Redirect },
+                        new() { Id = GenerateId(), Uri = "http://filtered/filtered", Kind = UriKinds.Cors | UriKinds.PostLogout }
                     },
                     ClientClaims = new List<ClientClaim>
                     {
-                        new ClientClaim { Id = GenerateId(), Type = "filtered", Value="filtered" }
+                        new() { Id = GenerateId(), Type = "filtered", Value="filtered" }
                     },
                     ClientSecrets = new List<ClientSecret>
                     {
