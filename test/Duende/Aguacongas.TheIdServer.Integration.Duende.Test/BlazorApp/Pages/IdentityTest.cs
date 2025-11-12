@@ -16,7 +16,7 @@ using IndentyPage = Aguacongas.TheIdServer.BlazorApp.Pages.Identity.Identity;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class IdentityTest : EntityPageTestBase<IndentyPage>
+    public class IdentityTest : EntityPageTestBase<IndentyPage, IdentityResource>
     {
         public override string Entity => "identityresource";
         public IdentityTest(TheIdServerFactory factory) : base(factory)

@@ -22,7 +22,7 @@ using UserPage = Aguacongas.TheIdServer.BlazorApp.Pages.User.User;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class UserTest : EntityPageTestBase<UserPage>
+    public class UserTest : EntityPageTestBase<UserPage, TheIdServer.BlazorApp.Models.User>
     {
         public override string Entity => "user";
 

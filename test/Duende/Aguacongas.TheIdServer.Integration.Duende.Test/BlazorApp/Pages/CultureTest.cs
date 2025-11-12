@@ -15,7 +15,7 @@ using CulturePage = Aguacongas.TheIdServer.BlazorApp.Pages.Culture.Culture;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class CultureTest : EntityPageTestBase<CulturePage>
+    public class CultureTest : EntityPageTestBase<CulturePage, Culture>
     {
         public override string Entity => "culture";
         public CultureTest(TheIdServerFactory factory) : base(factory)

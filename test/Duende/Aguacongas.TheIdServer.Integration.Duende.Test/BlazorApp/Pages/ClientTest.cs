@@ -22,7 +22,7 @@ using ClientPage = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ClientTest : EntityPageTestBase<ClientPage>
+    public class ClientTest : EntityPageTestBase<ClientPage, Client>
     {
         public override string Entity => "client";
         public ClientTest(TheIdServerFactory factory) : base(factory)
@@ -75,7 +75,8 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await header.ClickAsync(new MouseEventArgs());
 
             urls = component.FindAll("#urls tr");
-            Assert.NotEqual(firstUrl.OuterHtml, urls.ToArray()[1].OuterHtml);
+            Assert.Throws<HtmlEqualException>(() => firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml));
+            
 
             var headers = component.FindAll("#urls th div");
 
@@ -83,7 +84,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             urls = component.FindAll("#urls tr");
 
-            Assert.Equal(firstUrl.OuterHtml, urls.ToArray()[1].OuterHtml);
+            firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml);
 
             headers = component.FindAll("#urls th div");
 
@@ -91,7 +92,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             urls = component.FindAll("#urls tr");
 
-            Assert.NotEqual(firstUrl.OuterHtml, urls.ToArray()[1].OuterHtml);
+            Assert.Throws<HtmlEqualException>(() => firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml));
         }
 
         [Fact]
