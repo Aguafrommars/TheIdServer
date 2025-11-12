@@ -27,7 +27,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         {
             var configuration = builder.Configuration;
             var settings = configuration.Get<Settings>();
-            ConfigureLogging(builder.Logging, settings);
+            builder.Logging.ConfigureLogging(settings);
             builder.Services.ConfigureServices(configuration, settings);
             return builder;
         }
@@ -98,7 +98,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 });
         }
 
-        private static void ConfigureLogging(ILoggingBuilder logging, Settings settings)
+        public static void ConfigureLogging(this ILoggingBuilder logging, Settings settings)
         {
             var options = settings.LoggingOptions;
             var filters = options.Filters;
