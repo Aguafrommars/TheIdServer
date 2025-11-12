@@ -24,7 +24,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Extensions
                 .AddTransient<NavigationManager>(p => new NavManager())
                 .AddTransient(p => jsRuntimeMock.Object);
 
-            WebAssemblyHostBuilderExtensions.ConfigureServices(services, configuration, new Models.Settings
+            services.ConfigureServices(configuration, new Models.Settings
             {
                 ApiBaseUrl = "https://exemple.com/"
             });

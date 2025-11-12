@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
-    public abstract class EntityPageTestBase<TComnponent> : TestContext where TComnponent : IComponent
+    public abstract class EntityPageTestBase<TComnponent> : BunitContext where TComnponent : IComponent
     {
         public abstract string Entity { get; }
 
@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<TComnponent>(ComponentParameter.CreateParameter("Id", id), ComponentParameter.CreateParameter("Clone", clone));
+            var component = Render<TComnponent>(builder => builder.AddUnmatched("Id", id).AddUnmatched("Clone", clone));
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

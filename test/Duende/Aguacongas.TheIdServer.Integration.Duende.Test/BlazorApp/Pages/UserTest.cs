@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var filterInput = WaitForNode(component, "input[placeholder=\"filter\"]");
 
@@ -56,7 +56,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -78,7 +78,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(tokensDiv);
 
-            Assert.DoesNotContain("filtered", tokensDiv.ToMarkup());
+            Assert.DoesNotContain("filtered", tokensDiv.OuterHtml);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -94,7 +94,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -116,7 +116,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(tokensDiv);
 
-            Assert.DoesNotContain("filtered", tokensDiv.ToMarkup());
+            Assert.DoesNotContain("filtered", tokensDiv.OuterHtml);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -132,7 +132,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<OperationalDbContext>(async context =>
             {
@@ -154,7 +154,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(tokensDiv);
 
-            Assert.DoesNotContain("filtered", tokensDiv.ToMarkup());
+            Assert.DoesNotContain("filtered", tokensDiv.OuterHtml);
 
             await DbActionAsync<OperationalDbContext>(async context =>
             {
@@ -170,7 +170,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -192,7 +192,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(tokensDiv);
 
-            Assert.DoesNotContain("filtered", tokensDiv.ToMarkup());
+            Assert.DoesNotContain("filtered", tokensDiv.OuterHtml);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -207,7 +207,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
             
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var roleId = GenerateId();
             await DbActionAsync<ApplicationDbContext>(context =>
@@ -247,7 +247,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             Assert.NotNull(rolessDiv);
 
-            Assert.Contains(roleId, rolessDiv.ToMarkup());
+            Assert.Contains(roleId, rolessDiv.OuterHtml);
 
             await DbActionAsync<ApplicationDbContext>(async context =>
             {
@@ -262,7 +262,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var addButton = WaitForNode(component, "#claims button");
 
@@ -310,7 +310,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var rows = WaitForAllNodes(component, "#claims tr td");
 
@@ -352,7 +352,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var button = WaitForNode(component, "#claims tr td button");
 
@@ -403,7 +403,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var tuple = await SetupPage();
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var input = WaitForNode(component, "#email");
 
@@ -432,7 +432,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var userId = tuple.Item1;
             var component = tuple.Item2;
 
-            component.WaitForState(() => component.Markup.Contains("filtered"));
+            await component.WaitForStateAsync(() => component.Markup.Contains("filtered"));
 
             var input = component.Find("#delete-entity input");
 

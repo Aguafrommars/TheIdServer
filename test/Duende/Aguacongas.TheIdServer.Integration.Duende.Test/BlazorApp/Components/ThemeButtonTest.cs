@@ -11,7 +11,7 @@ using Xunit;
 namespace Aguacongas.TheIdServer.Integration.Duende.Test.BlazorApp.Components;
 
 [Collection(BlazorAppCollection.Name)]
-public class ThemeButtonTest : TestContext
+public class ThemeButtonTest : BunitContext
 {
     [Fact]
     public void Click_should_toggle_theme()
@@ -20,7 +20,7 @@ public class ThemeButtonTest : TestContext
         Services.AddSingleton<ThemeService>();
         var invocation = JSInterop.SetupVoid("setTheme", expected);
 
-        var cut = RenderComponent<ThemeButton>();
+        var cut = Render<ThemeButton>();
 
         var button = cut.Find("button");
 

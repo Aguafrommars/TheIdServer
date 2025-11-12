@@ -33,10 +33,10 @@
 	<ItemGroup>
 		<PackageReference Include="OData2Linq" Version="2.2.1" />
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.10" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
 

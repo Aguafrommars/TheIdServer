@@ -12,7 +12,7 @@ using SettingsPage = Aguacongas.TheIdServer.BlazorApp.Pages.Settings.Settings;
 namespace Aguacongas.TheIdServer.Duende.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class SettingsTest : TestContext
+    public class SettingsTest : BunitContext
     {
         public TheIdServerFactory Factory { get; }
 
@@ -27,7 +27,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY);
 
-            var form = component.WaitForElement("form");
+            var form = await component.WaitForElementAsync("form");
 
             var notifier = Services.GetRequiredService<Notifier>();
             notifier.Show = n =>
@@ -52,7 +52,7 @@ namespace Aguacongas.TheIdServer.Duende.IntegrationTest.BlazorApp.Pages
                },
                this);
 
-            var component = RenderComponent<SettingsPage>();
+            var component = Render<SettingsPage>();
             component.WaitForState(() => !component.Markup.Contains("Loading..."), TimeSpan.FromMinutes(1));
             return component;
         }

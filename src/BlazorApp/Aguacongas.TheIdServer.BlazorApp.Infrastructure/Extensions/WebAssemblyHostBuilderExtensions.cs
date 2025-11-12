@@ -28,25 +28,11 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             var configuration = builder.Configuration;
             var settings = configuration.Get<Settings>();
             ConfigureLogging(builder.Logging, settings);
-            ConfigureServices(builder.Services, configuration, settings);
+            builder.Services.ConfigureServices(configuration, settings);
             return builder;
         }
-
-        private static void ConfigureLogging(ILoggingBuilder logging, Settings settings)
-        {
-            var options = settings.LoggingOptions;
-            var filters = options.Filters;
-            if (filters != null)
-            {
-                foreach (var filter in filters)
-                {
-                    logging.AddFilter(filter.Category, filter.Level);
-                }
-            }
-            logging.SetMinimumLevel(options.Minimum);
-        }
-
-        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, Settings settings)
+        
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, Settings settings)
         {
             var scopes = new List<string>();
             configuration.Bind("ProviderOptions:DefaultScopes", scopes);
@@ -110,6 +96,20 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     var apiUri = new Uri(settings.ApiBaseUrl);
                     httpClient.BaseAddress = apiUri;
                 });
+        }
+
+        private static void ConfigureLogging(ILoggingBuilder logging, Settings settings)
+        {
+            var options = settings.LoggingOptions;
+            var filters = options.Filters;
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    logging.AddFilter(filter.Category, filter.Level);
+                }
+            }
+            logging.SetMinimumLevel(options.Minimum);
         }
 
         // Workaround https://github.com/dotnet/aspnetcore/issues/41998#issuecomment-1144812047
