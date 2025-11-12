@@ -24,8 +24,8 @@ install:
   - ps: .\dotnet-install.ps1 -Version 8.0.20 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet tool install --global dotnet-sonarscanner
-  - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet gitversion /l console /output buildserver
+  - ps: .\dotnet-install.ps1 -Version $env:donetsdk -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet workload restore
   - cmd: nuget install ReportGenerator -ExcludeVersion
   - cmd: nuget install redis-64 -excludeversion
