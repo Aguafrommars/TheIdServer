@@ -43,7 +43,7 @@ jobs:
     - name: Install .NET sdk
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 9
+        dotnet-version: 10
         include-prerelease: true
     - name: Setup wasm tools
       run: dotnet workload restore

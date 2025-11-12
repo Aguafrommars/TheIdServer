@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
 		<Description>Add WS-Federation controller to your Duende.IdentityServer server.</Description>
 		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
