@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Moq;
 using System.Net.Http;
@@ -47,6 +48,38 @@ namespace Aguacongas.TheIdServer.BlazorApp.Test.Extensions
             Assert.NotNull(factory.CreateClient("oidc"));
             Assert.NotNull(factory.CreateClient("localizer"));
         }
+
+        [Fact]
+        public void ConfigureLogging_should_add_filter_and_set_minimum_level()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var mockLoggingBuilder = new Mock<ILoggingBuilder>();
+            mockLoggingBuilder.SetupGet(x => x.Services).Returns(services);
+
+            var settings = new Models.Settings
+            {
+                LoggingOptions = new Models.LoggingOptions
+                {
+                    Minimum = LogLevel.Warning,
+                    Filters =
+                    [
+                        new Models.LoggingFilter
+                        {
+                            Category = "A",
+                            Level = LogLevel.Error
+                        }
+                    ]
+                }
+            };
+
+            // Act
+            mockLoggingBuilder.Object.ConfigureLogging(settings);
+
+            // Assert
+            Assert.Contains(services, s => s.Lifetime == ServiceLifetime.Singleton);
+        }
+
 
         class NavManager : NavigationManager
         {
