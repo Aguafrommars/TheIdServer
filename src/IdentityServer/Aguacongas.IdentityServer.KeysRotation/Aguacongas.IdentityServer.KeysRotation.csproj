@@ -23,7 +23,7 @@
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.0" />
         <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Identity.Client" Version="4.79.0" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.79.1" />
         <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
         <PackageReference Include="RavenDB.Client" Version="7.1.4" />
