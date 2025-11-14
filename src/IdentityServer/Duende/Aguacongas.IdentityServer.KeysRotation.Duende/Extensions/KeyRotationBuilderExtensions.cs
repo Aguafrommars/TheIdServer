@@ -416,8 +416,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        #region Azure KeyVault - New SDK Methods
-
         /// <summary>
         /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
         /// Uses DefaultAzureCredential for authentication.
@@ -617,41 +615,6 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Configures the key rotation system to protect keys with Azure KeyVault using Managed Identity.
-        /// </summary>
-        /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
-        /// <param name="keyName">The name of the key to use for encryption</param>
-        /// <param name="managedIdentityClientId">Optional client ID of the user-assigned managed identity</param>
-        /// <returns>The value <paramref name="builder"/>.</returns>
-        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVaultManagedIdentity(
-            this IKeyRotationBuilder builder,
-            string keyVaultUri,
-            string keyName,
-            string managedIdentityClientId = null)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
-            if (string.IsNullOrEmpty(keyVaultUri))
-            {
-                throw new ArgumentNullException(nameof(keyVaultUri));
-            }
-            if (string.IsNullOrEmpty(keyName))
-            {
-                throw new ArgumentNullException(nameof(keyName));
-            }
-
-            var credential = string.IsNullOrEmpty(managedIdentityClientId)
-                ? new ManagedIdentityCredential()
-                : new ManagedIdentityCredential(managedIdentityClientId);
-
-            return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
-        }
-
-        #endregion
-
-        #region Azure KeyVault - Legacy Methods (Obsolete)
-
-        /// <summary>
         /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
@@ -741,7 +704,36 @@ namespace Microsoft.Extensions.DependencyInjection
             return ProtectKeysWithAzureKeyVault(builder, vaultUri, keyName, tenantId, clientId, clientSecret);
         }
 
-        #endregion
+        /// <summary>
+        /// Configures the key rotation system to protect keys with Azure KeyVault using Managed Identity.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <param name="managedIdentityClientId">Optional client ID of the user-assigned managed identity</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVaultManagedIdentity(
+            this IKeyRotationBuilder builder,
+            string keyVaultUri,
+            string keyName,
+            string managedIdentityClientId = null)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyVaultUri))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUri));
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+
+            var credential = string.IsNullOrEmpty(managedIdentityClientId)
+                ? new ManagedIdentityCredential()
+                : new ManagedIdentityCredential(managedIdentityClientId);
+
+            return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
+        }
 
         private static IKeyRotationBuilder PersistKeysToStackExchangeRedisInternal(IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
         {
