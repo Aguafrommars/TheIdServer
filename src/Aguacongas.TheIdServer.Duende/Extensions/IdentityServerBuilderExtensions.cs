@@ -20,17 +20,17 @@ namespace Microsoft.Extensions.DependencyInjection
             identityServerBuilder.Services.Configure<IdentityServerOptions>(options =>
             {
                 var discovery = options.Discovery;
-                var customEntriesOfStringArray = configuration.GetSection("CustomEntriesOfStringArray").Get<Dictionary<string, string[]>>() ?? new Dictionary<string, string[]>(0);
+                var customEntriesOfStringArray = configuration.GetSection("CustomEntriesOfStringArray").Get<Dictionary<string, string[]>>() ?? [];
                 foreach (var entry in customEntriesOfStringArray)
                 {
                     discovery.CustomEntries.Add(entry.Key, entry.Value);
                 }
-                var customEntriesOfString = configuration.GetSection("CustomEntriesOfString").Get<Dictionary<string, string>>() ?? new Dictionary<string, string>(0);
+                var customEntriesOfString = configuration.GetSection("CustomEntriesOfString").Get<Dictionary<string, string>>() ?? [];
                 foreach (var entry in customEntriesOfString)
                 {
                     discovery.CustomEntries.Add(entry.Key, entry.Value);
                 }
-                var customEntriesOfBool = configuration.GetSection("CustomEntriesOfBool").Get<Dictionary<string, bool>>() ?? new Dictionary<string, bool>(0);
+                var customEntriesOfBool = configuration.GetSection("CustomEntriesOfBool").Get<Dictionary<string, bool>>() ?? [];
                 foreach (var entry in customEntriesOfBool)
                 {
                     discovery.CustomEntries.Add(entry.Key, entry.Value);

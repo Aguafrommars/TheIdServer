@@ -41,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared.csproj" Link="Aguacongas.IdentityServer.KeysRotation.Test.Shared.csproj" />
     <None Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\TestCert1.pfx" Link="TestCert1.pfx" />
     <None Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\TestCert1.PublicKeyOnly.cer" Link="TestCert1.PublicKeyOnly.cer" />
     <None Include="..\..\Shared\Aguacongas.IdentityServer.KeysRotation.Test.Shared\TestCert2.pfx" Link="TestCert2.pfx" />

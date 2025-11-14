@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,7 +101,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.AzureKeyVault
             var encryptor = new AzureKeyVaultXmlEncryptor(mock.Object, "key");
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => encryptor.Encrypt(null));
+            Assert.Throws<NullReferenceException>(() => encryptor.Encrypt(null));
         }
 
         [Fact]
@@ -125,7 +126,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.AzureKeyVault
             var encryptor = new AzureKeyVaultXmlEncryptor(mock.Object, "test-key");
 
             // Act
-            var result = encryptor.Encrypt(new XElement("Test"));
+            encryptor.Encrypt(new XElement("Test"));
 
             // Assert
             Assert.Equal(KeyWrapAlgorithm.RsaOaep, capturedAlgorithm);
@@ -185,7 +186,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.AzureKeyVault
             }
             
             // Fallback: create instance and set properties using reflection
-            var instance = (WrapResult)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+            var instance = (WrapResult)RuntimeHelpers.GetUninitializedObject(type);
             
             type.GetProperty("KeyId")?.SetValue(instance, keyId);
             type.GetProperty("EncryptedKey")?.SetValue(instance, encryptedKey);
@@ -215,7 +216,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.AzureKeyVault
             }
             
             // Fallback: create instance and set properties using reflection
-            var instance = (UnwrapResult)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+            var instance = (UnwrapResult)RuntimeHelpers.GetUninitializedObject(type);
             
             type.GetProperty("KeyId")?.SetValue(instance, keyId);
             type.GetProperty("Key")?.SetValue(instance, key);

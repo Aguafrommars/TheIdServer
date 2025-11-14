@@ -66,7 +66,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             var clientId = "client-id";
 
             // Load test certificate
-            using var cert = new X509Certificate2("TestCert1.pfx", "test");
+            using var cert = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
 
             // Act
             builder.ProtectKeysWithAzureKeyVault(vaultUri, keyName, tenantId, clientId, cert);
