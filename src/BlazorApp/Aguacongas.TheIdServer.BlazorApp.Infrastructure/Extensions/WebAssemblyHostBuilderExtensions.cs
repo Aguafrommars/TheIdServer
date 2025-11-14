@@ -1,6 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
-using Aguacongas.AspNetCore.Authentication;
 using Aguacongas.IdentityServer.Admin.Http.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
@@ -124,7 +123,6 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
         {
             return services.AddScoped(p => settings)
                 .AddScoped<Notifier>()
-                .AddScoped<IAuthenticationSchemeOptionsSerializer, AuthenticationSchemeOptionsSerializer>()                
                 .AddTransient<IAdminStore<User>, UserAdminStore>()
                 .AddTransient<IAdminStore<Role>, RoleAdminStore>()
                 .AddTransient<IAdminStore<ExternalProvider>, ExternalProviderStore>()

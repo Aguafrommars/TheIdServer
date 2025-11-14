@@ -16,7 +16,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.AspNetCore.Authentication" Version="6.1.0" />
 		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="3.0.0" />
 
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
