@@ -3,8 +3,12 @@
 // Updated for Azure.Security.KeyVault.Keys SDK
 
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
+using Azure.Core;
 using Azure.Identity;
+using Azure.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using StackExchange.Redis;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Xunit;
@@ -243,6 +247,80 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() =>
                 builder.ProtectKeysWithAzureKeyVault(vaultUri, keyName, tenantId, clientId, certificate));
+        }
+
+        [Fact]
+        public void PersistKeysToAzureBlobStorage_WithBlobUriAndTokenCredential_RegistersServices()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            // Act
+            builder.PersistKeysToAzureBlobStorage(new Uri("https://test.blob.core.windows.net/keys?sv=test"), new Mock<TokenCredential>().Object);
+            // Assert
+            services.BuildServiceProvider();
+            Assert.NotEmpty(services);
+        }
+
+        [Fact]
+        public void PersistKeysToAzureBlobStorage_WithBlobUriAndStorageSharedKeyCredential_RegistersServices()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            // Act
+            builder.PersistKeysToAzureBlobStorage(new Uri("https://test.blob.core.windows.net/keys?sv=test"), new StorageSharedKeyCredential("test", "test"));
+            // Assert
+            services.BuildServiceProvider();
+            Assert.NotEmpty(services);
+        }
+
+        [Fact]
+        public void PersistKeysToAzureBlobStorage_WithInvalideConnectionString_ShouldThrow()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            // Assert
+            Assert.Throws<FormatException>(() => builder.PersistKeysToAzureBlobStorage("DefaultEndpointsProtocol=https;AccountName=test;AccountKey=key;EndpointSuffix=core.windows.net", "keys/container/blob", "test"));
+        }
+
+        [Fact]
+        public void PersistKeysToStackExchangeRedis_WithDbFactory_RegistersServices()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            // Act
+            builder.PersistKeysToStackExchangeRedis(() => new Mock<IDatabase>().Object, "testInstance");
+            // Assert
+            services.BuildServiceProvider();
+            Assert.NotEmpty(services);
+        }
+
+        [Fact]
+        public void PersistKeysToStackExchangeRedis_WithConnectionMultiplexer_RegistersServices()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            // Act
+            builder.PersistKeysToStackExchangeRedis(new Mock<IConnectionMultiplexer>().Object);
+            // Assert
+            services.BuildServiceProvider();
+            Assert.NotEmpty(services);
+        }
+
+        [Fact]
+        public void ProtectKeysWithCertificate_WithThumbprint_RegistersServices()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var builder = new KeyRotationBuilder { Services = services };
+            var certificate = X509CertificateLoader.LoadPkcs12FromFile("TestCert1.pfx", "password");
+
+            // Assert
+            Assert.Throws<InvalidOperationException>(() => builder.ProtectKeysWithCertificate(certificate.Thumbprint));            
         }
 
         // Helper class for testing
