@@ -30,8 +30,8 @@
 		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.DynamicConfiguration.Redis" Version="2.0.0" />
-		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="2.0.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.Redis" Version="3.0.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="3.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.RavenDb" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
@@ -48,7 +48,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.0" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" PrivateAssets="All" />
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
@@ -57,8 +56,8 @@
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.8.0-rc.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.14.0" />
 		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.13.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.13.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.0.0-rc9.14" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.15" />
 		<PackageReference Include="SendGrid" Version="9.29.3" />

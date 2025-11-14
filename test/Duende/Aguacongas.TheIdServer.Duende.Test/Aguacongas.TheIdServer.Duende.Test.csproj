@@ -45,6 +45,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="TestCert1.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="theidserver.pfx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

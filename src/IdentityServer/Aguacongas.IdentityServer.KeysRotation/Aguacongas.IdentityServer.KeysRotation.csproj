@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -21,7 +21,8 @@
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+		<PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.8.0" />
+		<PackageReference Include="Azure.Identity" Version="1.14.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.79.0" />
         <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
@@ -31,9 +32,6 @@
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="KeyManagement\" />
 	</ItemGroup>
 
 </Project>
