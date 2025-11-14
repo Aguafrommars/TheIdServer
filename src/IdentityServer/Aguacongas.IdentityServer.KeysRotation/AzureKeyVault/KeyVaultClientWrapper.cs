@@ -36,10 +36,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
         /// <param name="credential">The TokenCredential for authentication</param>
         public KeyVaultClientWrapper(Uri vaultUri, TokenCredential credential)
         {
-            if (vaultUri == null)
-            {
-                throw new ArgumentNullException(nameof(vaultUri));
-            }
+            ArgumentNullException.ThrowIfNull(vaultUri);
 
             _credential = credential ?? throw new ArgumentNullException(nameof(credential));
             _keyClient = new KeyClient(vaultUri, credential);

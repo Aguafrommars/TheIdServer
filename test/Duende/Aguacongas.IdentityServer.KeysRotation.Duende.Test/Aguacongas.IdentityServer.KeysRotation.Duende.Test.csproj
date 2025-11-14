@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AzureKeyVault\" />
     <Folder Include="EntityFrameworkCore\" />
     <Folder Include="Extensions\" />
     <Folder Include="KeyManagement\" />
