@@ -5,6 +5,7 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.Extensions;
 using Aguacongas.TheIdServer.Models;
+using Azure.Identity;
 using Duende.IdentityServer.Configuration;
 using StackExchange.Redis;
 using System.Security.Cryptography.X509Certificates;
@@ -20,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var discovery = options.Discovery;
                 var customEntriesOfStringArray = configuration.GetSection("CustomEntriesOfStringArray").Get<Dictionary<string, string[]>>() ?? new Dictionary<string, string[]>(0);
-                foreach(var entry in customEntriesOfStringArray)
+                foreach (var entry in customEntriesOfStringArray)
                 {
                     discovery.CustomEntries.Add(entry.Key, entry.Value);
                 }
@@ -37,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
             return identityServerBuilder;
         }
+
         public static IIdentityServerBuilder ConfigureKey(this IIdentityServerBuilder identityServerBuilder, IConfiguration configuration)
         {
             if (configuration.GetValue<KeyKinds>("Type") != KeyKinds.KeysRotation)
@@ -48,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var keyRotationSection = configuration.GetSection(nameof(KeyRotationOptions));
             var defaultRsaEncryptionSection = configuration.GetSection(nameof(RsaEncryptorConfiguration));
             var defaultSigingAlgortithm = defaultRsaEncryptionSection?.GetValue<RsaSigningAlgorithm>(nameof(RsaEncryptorConfiguration.SigningAlgorithm)) ?? RsaSigningAlgorithm.RS256;
-            var builder = identityServerBuilder.AddKeysRotation(defaultSigingAlgortithm, 
+            var builder = identityServerBuilder.AddKeysRotation(defaultSigingAlgortithm,
                 options => keyRotationSection?.Bind(options))
                 .AddRsaEncryptorConfiguration(defaultSigingAlgortithm, options => configuration.GetSection(nameof(RsaEncryptorConfiguration))?.Bind(options));
 
@@ -102,13 +104,14 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.PersistKeysToStackExchangeRedis(redis, dataProtectionsOptions.RedisKey);
                     break;
             }
+
             var protectOptions = dataProtectionsOptions?.KeyProtectionOptions;
             if (protectOptions != null)
             {
                 switch (protectOptions.KeyProtectionKind)
                 {
                     case KeyProtectionKind.AzureKeyVault:
-                        builder.ProtectKeysWithAzureKeyVault(protectOptions.AzureKeyVaultKeyId, protectOptions.AzureKeyVaultClientId, protectOptions.AzureKeyVaultClientSecret);
+                        ConfigureAzureKeyVaultProtection(builder, protectOptions);
                         break;
                     case KeyProtectionKind.X509:
                         if (!string.IsNullOrEmpty(protectOptions.X509CertificatePath))
@@ -122,6 +125,119 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             }
             return identityServerBuilder;
+        }
+
+        private static void ConfigureAzureKeyVaultProtection(IKeyRotationBuilder builder, KeyProtectionOptions protectOptions)
+        {
+            // Parse the key identifier to extract vault URI and key name
+            // Format: https://vault-name.vault.azure.net/keys/key-name or https://vault-name.vault.azure.net/keys/key-name/version
+            if (!Uri.TryCreate(protectOptions.AzureKeyVaultKeyId, UriKind.Absolute, out var keyUri))
+            {
+                throw new InvalidOperationException($"Invalid Azure Key Vault key identifier: {protectOptions.AzureKeyVaultKeyId}");
+            }
+
+            var vaultUri = $"{keyUri.Scheme}://{keyUri.Host}";
+            var pathParts = keyUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            if (pathParts.Length < 2 || pathParts[0] != "keys")
+            {
+                throw new InvalidOperationException($"Invalid Azure Key Vault key identifier format: {protectOptions.AzureKeyVaultKeyId}. Expected format: https://vault.vault.azure.net/keys/key-name");
+            }
+
+            var keyName = pathParts[1];
+
+            // Determine authentication method based on provided credentials
+            if (!string.IsNullOrEmpty(protectOptions.AzureKeyVaultClientId) &&
+                !string.IsNullOrEmpty(protectOptions.AzureKeyVaultClientSecret))
+            {
+                // Service Principal with Client Secret
+                // Need tenant ID - if not provided, try to extract from config or use common
+                var tenantId = protectOptions.AzureKeyVaultTenantId;
+
+                if (string.IsNullOrEmpty(tenantId))
+                {
+                    throw new InvalidOperationException(
+                        "Azure Key Vault TenantId is required when using ClientId and ClientSecret. " +
+                        "Please add 'AzureKeyVaultTenantId' to your KeyProtectionOptions configuration.");
+                }
+
+                builder.ProtectKeysWithAzureKeyVault(
+                    vaultUri,
+                    keyName,
+                    tenantId,
+                    protectOptions.AzureKeyVaultClientId,
+                    protectOptions.AzureKeyVaultClientSecret);
+            }
+            else if (!string.IsNullOrEmpty(protectOptions.AzureKeyVaultClientId) &&
+                     !string.IsNullOrEmpty(protectOptions.AzureKeyVaultCertificateThumbprint))
+            {
+                // Service Principal with Certificate
+                var tenantId = protectOptions.AzureKeyVaultTenantId;
+
+                if (string.IsNullOrEmpty(tenantId))
+                {
+                    throw new InvalidOperationException(
+                        "Azure Key Vault TenantId is required when using ClientId and Certificate. " +
+                        "Please add 'AzureKeyVaultTenantId' to your KeyProtectionOptions configuration.");
+                }
+
+                var certificate = LoadCertificateByThumbprint(protectOptions.AzureKeyVaultCertificateThumbprint);
+
+                builder.ProtectKeysWithAzureKeyVault(
+                    vaultUri,
+                    keyName,
+                    tenantId,
+                    protectOptions.AzureKeyVaultClientId,
+                    certificate);
+            }
+            else if (!string.IsNullOrEmpty(protectOptions.AzureKeyVaultManagedIdentityClientId))
+            {
+                // User-assigned Managed Identity
+                builder.ProtectKeysWithAzureKeyVaultManagedIdentity(
+                    vaultUri,
+                    keyName,
+                    protectOptions.AzureKeyVaultManagedIdentityClientId);
+            }
+            else
+            {
+                // DefaultAzureCredential (recommended)
+                // Works with:
+                // - Managed Identity (system-assigned or user-assigned)
+                // - Azure CLI (development)
+                // - Visual Studio (development)
+                // - Environment variables
+                builder.ProtectKeysWithAzureKeyVault(vaultUri, keyName);
+            }
+        }
+
+        private static X509Certificate2 LoadCertificateByThumbprint(string thumbprint)
+        {
+            using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+
+            var certificates = store.Certificates.Find(
+                X509FindType.FindByThumbprint,
+                thumbprint,
+                validOnly: false);
+
+            if (certificates.Count == 0)
+            {
+                // Try LocalMachine if not found in CurrentUser
+                using var machineStore = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+                machineStore.Open(OpenFlags.ReadOnly);
+
+                certificates = machineStore.Certificates.Find(
+                    X509FindType.FindByThumbprint,
+                    thumbprint,
+                    validOnly: false);
+            }
+
+            if (certificates.Count == 0)
+            {
+                throw new InvalidOperationException($"Certificate with thumbprint '{thumbprint}' not found in CurrentUser or LocalMachine certificate store.");
+            }
+
+            return certificates[0];
         }
     }
 }

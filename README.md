@@ -2,7 +2,7 @@
 
 [OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/), [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) and [SAML 2.0](http://docs.oasis-open.org/security/saml/v2.0/sstc-saml-approved-errata-2.0.html) server based on [Duende IdentityServer](https://duendesoftware.com/products/identityserver) and [ITfoxtec Identity SAML 2.0](https://www.itfoxtec.com/IdentitySaml2).
 
-> [OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/), [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) and [SAML 2.0](http://docs.oasis-open.org/security/saml/v2.0/sstc-saml-approved-errata-2.0.html) are protocols that enable secure authentication and authorization of users and applications on the web. They allow users to sign in with their existing credentials from an identity provider (such as Google, Facebook, Microsoft, Twitter ans so-on) and grant access to their data and resources on different platforms and services. These protocols also enable developers to create applications that can interact with various APIs and resources without exposing the user’s credentials or compromising their privacy. Some examples of applications that use these protocols are web browsers, mobile apps, web APIs, and single-page applications.
+> [OpenID/Connect](https://openid.net/connect/), [OAuth2](https://oauth.net/2/), [WS-Federation](https://docs.oasis-open.org/wsfed/federation/v1.2/os/ws-federation-1.2-spec-os.html) and [SAML 2.0](http://docs.oasis-open.org/security/saml/v2.0/sstc-saml-approved-errata-2.0.html) are protocols that enable secure authentication and authorization of users and applications on the web. They allow users to sign in with their existing credentials from an identity provider (such as Google, Facebook, Microsoft, Twitter ans so-on) and grant access to their data and resources on different platforms and services. These protocols also enable developers to create applications that can interact with various APIs and resources without exposing the user's credentials or compromising their privacy. Some examples of applications that use these protocols are web browsers, mobile apps, web APIs, and single-page applications.
 
 > [Duende IdentityServer](https://duendesoftware.com/products/identityserver) is a framework that implements OpenID Connect and OAuth 2.0 protocols for ASP.NET Core applications. It allows you to create your own identity and access management solution that can integrate with various identity providers and APIs.
 
@@ -14,6 +14,17 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hutfs4sy38fy9ca7?svg=true)](https://ci.appveyor.com/project/aguacongas/theidserver) [![Docker](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml/badge.svg)](https://github.com/Aguafrommars/TheIdServer/actions/workflows/docker.yml) [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/aguafrommars)](https://artifacthub.io/packages/search?repo=aguafrommars)
 [![libs.tech recommends](https://libs.tech/project/206938663/badge.svg)](https://libs.tech/project/206938663/theidserver)
+
+## ⚠️ Azure Key Vault Update
+
+TheIdServer now uses the modern **Azure.Security.KeyVault.Keys** SDK. The old `Microsoft.Azure.KeyVault` SDK is obsolete.
+
+**Key changes:**
+- `AzureKeyVaultTenantId` is now **required** when using Service Principal authentication
+- New **DefaultAzureCredential** support (recommended) - works with Managed Identity and Azure CLI
+- Existing encrypted data remains **100% compatible**
+
+See [Data Protection](doc/DATA_PROTECTION.md#azure-key-vault) and [Keys Rotation](doc/KEYS_ROTATION.md#azure-key-vault) documentation for migration details.
 
 ### Documentation
 

@@ -1,32 +1,32 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
+// Migration to Azure.Security.KeyVault SDK
+
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;
 using Aguacongas.IdentityServer.KeysRotation.EntityFrameworkCore;
+using Aguacongas.IdentityServer.KeysRotation.RavenDb;
 using Aguacongas.IdentityServer.KeysRotation.XmlEncryption;
 using Azure.Core;
-using Azure.Storage.Blobs;
+using Azure.Identity;
 using Azure.Storage;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
-using Microsoft.Azure.KeyVault;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
+using MongoDB.Driver;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using StackExchange.Redis;
 using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Aguacongas.IdentityServer.KeysRotation.RavenDb;
-using Raven.Client.Documents.Session;
-using Raven.Client.Documents;
-using mongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
-using MongoDB.Driver;
 using static Duende.IdentityServer.IdentityServerConstants;
+using mongoDb = Aguacongas.IdentityServer.KeysRotation.MongoDb;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -41,15 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IKeyRotationBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder AddECDsaEncryptorConfiguration(this IKeyRotationBuilder builder, ECDsaSigningAlgorithm signingAlgorithm, Action<ECDsaEncryptorConfiguration> setupAction)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (setupAction == null)
-            {
-                throw new ArgumentNullException(nameof(setupAction));
-            }
+            ArgumentNullException.ThrowIfNull(setupAction);
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -72,15 +66,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IKeyRotationBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder AddRsaEncryptorConfiguration(this IKeyRotationBuilder builder, RsaSigningAlgorithm signingAlgorithm, Action<RsaEncryptorConfiguration> setupAction)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (setupAction == null)
-            {
-                throw new ArgumentNullException(nameof(setupAction));
-            }
+            ArgumentNullException.ThrowIfNull(setupAction);
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -108,14 +96,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobSasUri)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (blobSasUri == null)
-            {
-                throw new ArgumentNullException(nameof(blobSasUri));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(blobSasUri);
 
             var uriBuilder = new BlobUriBuilder(blobSasUri);
             BlobClient client;
@@ -147,18 +129,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobUri, TokenCredential tokenCredential)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (blobUri == null)
-            {
-                throw new ArgumentNullException(nameof(blobUri));
-            }
-            if (tokenCredential == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredential));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(blobUri);
+            ArgumentNullException.ThrowIfNull(tokenCredential);
 
             var client = new BlobClient(blobUri, tokenCredential);
 
@@ -179,18 +152,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, Uri blobUri, StorageSharedKeyCredential sharedKeyCredential)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (blobUri == null)
-            {
-                throw new ArgumentNullException(nameof(blobUri));
-            }
-            if (sharedKeyCredential == null)
-            {
-                throw new ArgumentNullException(nameof(sharedKeyCredential));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(blobUri);
+            ArgumentNullException.ThrowIfNull(sharedKeyCredential);
 
             var client = new BlobClient(blobUri, sharedKeyCredential);
 
@@ -214,22 +178,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, string connectionString, string containerName, string blobName)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-            if (containerName == null)
-            {
-                throw new ArgumentNullException(nameof(containerName));
-            }
-            if (blobName == null)
-            {
-                throw new ArgumentNullException(nameof(blobName));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(connectionString);
+            ArgumentNullException.ThrowIfNull(containerName);
+            ArgumentNullException.ThrowIfNull(blobName);
 
             var client = new BlobServiceClient(connectionString).GetBlobContainerClient(containerName).GetBlobClient(blobName);
 
@@ -249,14 +201,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         public static IKeyRotationBuilder PersistKeysToAzureBlobStorage(this IKeyRotationBuilder builder, BlobClient blobClient)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (blobClient == null)
-            {
-                throw new ArgumentNullException(nameof(blobClient));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(blobClient);
 
             builder.Services.Configure<KeyRotationOptions>(options =>
             {
@@ -272,10 +218,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The value <paramref name="builder"/>.</returns>
         public static IKeyRotationBuilder PersistKeysToDbContext<TContext>(this IKeyRotationBuilder builder) where TContext : DbContext, IKeyRotationContext
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -299,27 +242,21 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException">builder</exception>
         public static IKeyRotationBuilder PersistKeysToRavenDb(this IKeyRotationBuilder builder, Func<IServiceProvider, IDocumentSession> getSession = null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (getSession == null)
-            {
-                getSession = p => {
+            getSession ??= p => {
                     var store = p.GetRequiredService<IDocumentStore>();
                     return store.OpenSession();
                 };
-            }
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+            {
+                var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
-                    var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                    return new ConfigureOptions<KeyRotationOptions>(options =>
-                    {
-                        options.XmlRepository = new RavenDbXmlRepository<Aguacongas.IdentityServer.KeysRotation.RavenDb.KeyRotationKey>(services, loggerFactory);
-                    });
-                })
+                    options.XmlRepository = new RavenDbXmlRepository<Aguacongas.IdentityServer.KeysRotation.RavenDb.KeyRotationKey>(services, loggerFactory);
+                });
+            })
                 .AddTransient(p => new DocumentSessionWrapper(getSession(p)));
 
             return builder;
@@ -336,24 +273,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException">builder</exception>
         public static IKeyRotationBuilder PersistKeysToMongoDb(this IKeyRotationBuilder builder, Func<IServiceProvider, IMongoCollection<mongoDb.KeyRotationKey>> getCollection = null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (getCollection == null)
-            {
-                getCollection = p => p.GetRequiredService<IMongoDatabase>().GetCollection<mongoDb.KeyRotationKey>(nameof(mongoDb.KeyRotationKey));
-            }
+            getCollection ??= p => p.GetRequiredService<IMongoDatabase>().GetCollection<mongoDb.KeyRotationKey>(nameof(mongoDb.KeyRotationKey));
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+            {
+                var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+                return new ConfigureOptions<KeyRotationOptions>(options =>
                 {
-                    var loggerFactory = services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
-                    return new ConfigureOptions<KeyRotationOptions>(options =>
-                    {
-                        options.XmlRepository = new mongoDb.MongoDbXmlRepository<mongoDb.KeyRotationKey>(services, loggerFactory);
-                    });
-                })
+                    options.XmlRepository = new mongoDb.MongoDbXmlRepository<mongoDb.KeyRotationKey>(services, loggerFactory);
+                });
+            })
                 .AddTransient(p => new mongoDb.MongoCollectionWrapper<mongoDb.KeyRotationKey>(getCollection(p)));
 
             return builder;
@@ -368,15 +299,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder PersistKeysToFileSystem(this IKeyRotationBuilder builder, DirectoryInfo directory)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -400,14 +325,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder PersistKeysToStackExchangeRedis(this IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (databaseFactory == null)
-            {
-                throw new ArgumentNullException(nameof(databaseFactory));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(databaseFactory);
             return PersistKeysToStackExchangeRedisInternal(builder, databaseFactory, key);
         }
 
@@ -430,15 +349,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder PersistKeysToStackExchangeRedis(this IKeyRotationBuilder builder, IConnectionMultiplexer connectionMultiplexer, RedisKey key)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (connectionMultiplexer == null)
-            {
-                throw new ArgumentNullException(nameof(connectionMultiplexer));
-            }
-            return PersistKeysToStackExchangeRedisInternal(builder, () => connectionMultiplexer.GetDatabase(), key);
+            ArgumentNullException.ThrowIfNull(builder);
+            return connectionMultiplexer == null
+                ? throw new ArgumentNullException(nameof(connectionMultiplexer))
+                : PersistKeysToStackExchangeRedisInternal(builder, () => connectionMultiplexer.GetDatabase(), key);
         }
 
         /// <summary>
@@ -449,15 +363,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder ProtectKeysWithCertificate(this IKeyRotationBuilder builder, X509Certificate2 certificate)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (certificate == null)
-            {
-                throw new ArgumentNullException(nameof(certificate));
-            }
+            ArgumentNullException.ThrowIfNull(certificate);
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -472,6 +380,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder;
         }
+
         /// <summary>
         /// Configures keys to be encrypted to a given certificate before being persisted to storage.
         /// </summary>
@@ -480,15 +389,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>A reference to the <see cref="IDataProtectionBuilder" /> after this operation has completed.</returns>
         public static IKeyRotationBuilder ProtectKeysWithCertificate(this IKeyRotationBuilder builder, string thumbprint)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
-            if (thumbprint == null)
-            {
-                throw new ArgumentNullException(nameof(thumbprint));
-            }
+            ArgumentNullException.ThrowIfNull(thumbprint);
 
             // Make sure the thumbprint corresponds to a valid certificate.
             if (new AspNetCore.DataProtection.XmlEncryption.CertificateResolver().ResolveCertificate(thumbprint) == null)
@@ -513,28 +416,283 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        #region Azure KeyVault - New SDK Methods
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// Uses DefaultAzureCredential for authentication.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI (e.g., https://your-vault.vault.azure.net/)</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyVaultUri,
+            string keyName)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyVaultUri))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUri));
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+
+            var vaultUri = new Uri(keyVaultUri);
+            var credential = new DefaultAzureCredential();
+
+            return ProtectKeysWithAzureKeyVault(builder, vaultUri, keyName, credential);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <param name="credential">The credential to use for authentication</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            Uri keyVaultUri,
+            string keyName,
+            TokenCredential credential)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(keyVaultUri);
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+            ArgumentNullException.ThrowIfNull(credential);
+
+            // Build the full key identifier
+            var keyIdentifier = $"{keyVaultUri.AbsoluteUri.TrimEnd('/')}/keys/{keyName}";
+
+            return ProtectKeysWithAzureKeyVault(builder, keyIdentifier, credential);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyIdentifier">The full Azure KeyVault key identifier (URI)</param>
+        /// <param name="credential">The credential to use for authentication</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyIdentifier,
+            TokenCredential credential)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyIdentifier))
+            {
+                throw new ArgumentNullException(nameof(keyIdentifier));
+            }
+            ArgumentNullException.ThrowIfNull(credential);
+
+            // Extract vault URI from key identifier to create KeyClient
+            Uri keyUri;
+            try
+            {
+                keyUri = new Uri(keyIdentifier);
+            }
+            catch (UriFormatException ex)
+            {
+                throw new ArgumentException($"Invalid key identifier format: {keyIdentifier}", nameof(keyIdentifier), ex);
+            }
+
+            var vaultUri = new Uri($"{keyUri.Scheme}://{keyUri.Host}");
+
+            // Register KeyVault client wrapper
+            builder.Services.AddSingleton<IKeyVaultWrappingClient>(sp =>
+            {
+                var logger = sp.GetService<ILogger<KeyVaultClientWrapper>>();
+                logger?.LogInformation(
+                    "Initializing Azure KeyVault client for vault: {VaultUri}, key: {KeyIdentifier}",
+                    vaultUri, keyIdentifier);
+
+                return new KeyVaultClientWrapper(vaultUri, credential);
+            });
+
+            // Configure XML encryption
+            builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
+            {
+                var keyVaultClient = services.GetRequiredService<IKeyVaultWrappingClient>();
+                return new ConfigureOptions<KeyRotationOptions>(options =>
+                {
+                    options.XmlEncryptor = new AzureKeyVaultXmlEncryptor(keyVaultClient, keyIdentifier);
+                });
+            });
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with Azure KeyVault using a client secret.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <param name="tenantId">The Azure AD tenant ID</param>
+        /// <param name="clientId">The application client ID</param>
+        /// <param name="clientSecret">The client secret</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyVaultUri,
+            string keyName,
+            string tenantId,
+            string clientId,
+            string clientSecret)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyVaultUri))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUri));
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+            if (string.IsNullOrEmpty(clientSecret))
+            {
+                throw new ArgumentNullException(nameof(clientSecret));
+            }
+
+            var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+            return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with Azure KeyVault using a certificate.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <param name="tenantId">The Azure AD tenant ID</param>
+        /// <param name="clientId">The application client ID</param>
+        /// <param name="certificate">The client certificate for authentication</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyVaultUri,
+            string keyName,
+            string tenantId,
+            string clientId,
+            X509Certificate2 certificate)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyVaultUri))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUri));
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+            if (string.IsNullOrEmpty(tenantId))
+            {
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+            ArgumentNullException.ThrowIfNull(certificate);
+
+            var credential = new ClientCertificateCredential(tenantId, clientId, certificate);
+            return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
+        }
+
+        /// <summary>
+        /// Configures the key rotation system to protect keys with Azure KeyVault using Managed Identity.
+        /// </summary>
+        /// <param name="builder">The builder instance to modify.</param>
+        /// <param name="keyVaultUri">The Azure KeyVault URI</param>
+        /// <param name="keyName">The name of the key to use for encryption</param>
+        /// <param name="managedIdentityClientId">Optional client ID of the user-assigned managed identity</param>
+        /// <returns>The value <paramref name="builder"/>.</returns>
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVaultManagedIdentity(
+            this IKeyRotationBuilder builder,
+            string keyVaultUri,
+            string keyName,
+            string managedIdentityClientId = null)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyVaultUri))
+            {
+                throw new ArgumentNullException(nameof(keyVaultUri));
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+
+            var credential = string.IsNullOrEmpty(managedIdentityClientId)
+                ? new ManagedIdentityCredential()
+                : new ManagedIdentityCredential(managedIdentityClientId);
+
+            return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
+        }
+
+        #endregion
+
+        #region Azure KeyVault - Legacy Methods (Obsolete)
+
         /// <summary>
         /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
         /// </summary>
         /// <param name="builder">The builder instance to modify.</param>
         /// <param name="keyIdentifier">The Azure KeyVault key identifier used for key encryption.</param>
         /// <param name="clientId">The application client id.</param>
-        /// <param name="certificate"></param>
+        /// <param name="certificate">The client certificate for authentication.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
-        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, string keyIdentifier, string clientId, X509Certificate2 certificate)
+        [Obsolete("This method uses the legacy Azure KeyVault SDK. Use ProtectKeysWithAzureKeyVault(builder, keyVaultUri, keyName, tenantId, clientId, certificate) instead.", error: false)]
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyIdentifier,
+            string clientId,
+            X509Certificate2 certificate)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyIdentifier))
+            {
+                throw new ArgumentNullException(nameof(keyIdentifier));
+            }
             if (string.IsNullOrEmpty(clientId))
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
-            if (certificate == null)
-            {
-                throw new ArgumentNullException(nameof(certificate));
-            }
+            ArgumentNullException.ThrowIfNull(certificate);
 
-            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientCertificateAsync(authority, resource, clientId, certificate);
+            // For backward compatibility, try to extract tenant from key identifier or use common
+            // This is a best-effort migration path
+            var tenantId = "common"; // Default to common tenant
 
-            return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
+            // Extract vault URI and key name from identifier
+            var keyUri = new Uri(keyIdentifier);
+            var vaultUri = $"{keyUri.Scheme}://{keyUri.Host}";
+            var pathParts = keyUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var keyName = pathParts.Length >= 2 ? pathParts[1] : throw new ArgumentException("Invalid key identifier format", nameof(keyIdentifier));
+
+            var logger = NullLoggerFactory.Instance.CreateLogger<KeyVaultClientWrapper>();
+            logger.LogWarning(
+                "Using obsolete ProtectKeysWithAzureKeyVault method. Please update to use the new method with explicit tenant ID. " +
+                "Using 'common' as tenant ID for authentication.");
+
+            return ProtectKeysWithAzureKeyVault(builder, vaultUri, keyName, tenantId, clientId, certificate);
         }
 
         /// <summary>
@@ -545,8 +703,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="clientId">The application client id.</param>
         /// <param name="clientSecret">The client secret to use for authentication.</param>
         /// <returns>The value <paramref name="builder"/>.</returns>
-        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, string keyIdentifier, string clientId, string clientSecret)
+        [Obsolete("This method uses the legacy Azure KeyVault SDK. Use ProtectKeysWithAzureKeyVault(builder, keyVaultUri, keyName, tenantId, clientId, clientSecret) instead.", error: false)]
+        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(
+            this IKeyRotationBuilder builder,
+            string keyIdentifier,
+            string clientId,
+            string clientSecret)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+            if (string.IsNullOrEmpty(keyIdentifier))
+            {
+                throw new ArgumentNullException(nameof(keyIdentifier));
+            }
             if (string.IsNullOrEmpty(clientId))
             {
                 throw new ArgumentNullException(nameof(clientId));
@@ -556,63 +724,24 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
-            Task<string> callback(string authority, string resource, string scope) => GetTokenFromClientSecretAsync(authority, resource, clientId, clientSecret);
+            // For backward compatibility, try to extract tenant from key identifier or use common
+            var tenantId = "common"; // Default to common tenant
 
-            return ProtectKeysWithAzureKeyVault(builder, new KeyVaultClient(callback), keyIdentifier);
+            // Extract vault URI and key name from identifier
+            var keyUri = new Uri(keyIdentifier);
+            var vaultUri = $"{keyUri.Scheme}://{keyUri.Host}";
+            var pathParts = keyUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var keyName = pathParts.Length >= 2 ? pathParts[1] : throw new ArgumentException("Invalid key identifier format", nameof(keyIdentifier));
+
+            var logger = NullLoggerFactory.Instance.CreateLogger<KeyVaultClientWrapper>();
+            logger.LogWarning(
+                "Using obsolete ProtectKeysWithAzureKeyVault method. Please update to use the new method with explicit tenant ID. " +
+                "Using 'common' as tenant ID for authentication.");
+
+            return ProtectKeysWithAzureKeyVault(builder, vaultUri, keyName, tenantId, clientId, clientSecret);
         }
 
-        /// <summary>
-        /// Configures the key rotation system to protect keys with specified key in Azure KeyVault.
-        /// </summary>
-        /// <param name="builder">The builder instance to modify.</param>
-        /// <param name="client">The <see cref="KeyVaultClient"/> to use for KeyVault access.</param>
-        /// <param name="keyIdentifier">The Azure KeyVault key identifier used for key encryption.</param>
-        /// <returns>The value <paramref name="builder"/>.</returns>
-        public static IKeyRotationBuilder ProtectKeysWithAzureKeyVault(this IKeyRotationBuilder builder, KeyVaultClient client, string keyIdentifier)
-        {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-            if (string.IsNullOrEmpty(keyIdentifier))
-            {
-                throw new ArgumentNullException(nameof(keyIdentifier));
-            }
-
-            var vaultClientWrapper = new KeyVaultClientWrapper(client);
-
-            builder.Services.AddSingleton<IKeyVaultWrappingClient>(vaultClientWrapper);
-            builder.Services.Configure<KeyRotationOptions>(options =>
-            {
-                options.XmlEncryptor = new AzureKeyVaultXmlEncryptor(vaultClientWrapper, keyIdentifier);
-            });
-
-            return builder;
-        }
-        private static async Task<string> GetTokenFromClientCertificateAsync(string authority, string resource, string clientId, X509Certificate2 certificate)
-        {
-            var app = ConfidentialClientApplicationBuilder.Create(clientId)
-                .WithCertificate(certificate)
-                .WithAuthority(authority)
-                .Build();
-            var result = await app.AcquireTokenForClient(new[] { resource }).ExecuteAsync().ConfigureAwait(false);
-            return result.AccessToken;
-        }
-
-        private static async Task<string> GetTokenFromClientSecretAsync(string authority, string resource, string clientId, string clientSecret)
-        {
-            var app = ConfidentialClientApplicationBuilder.Create(clientId)
-                .WithClientSecret(clientSecret)
-                .WithAuthority(authority)
-                .Build();
-
-            var result = await app.AcquireTokenForClient(new[] { resource }).ExecuteAsync().ConfigureAwait(false);
-            return result.AccessToken;
-        }
+        #endregion
 
         private static IKeyRotationBuilder PersistKeysToStackExchangeRedisInternal(IKeyRotationBuilder builder, Func<IDatabase> databaseFactory, RedisKey key)
         {

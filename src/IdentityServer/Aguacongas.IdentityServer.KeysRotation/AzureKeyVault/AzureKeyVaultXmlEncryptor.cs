@@ -2,23 +2,21 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 // Modifications copyright (c) 2021 @Olivier Lefebvre
+// Migration to Azure.Security.KeyVault 2025
 
-// This file is a copy of https://github.com/dotnet/aspnetcore/blob/v3.1.8/src/DataProtection/AzureKeyVault/src/AzureKeyVaultXmlEncryptor.cs
-// with namespace change from original Microsoft.AspNetCore.DataProtection.AzureKeyVault
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Azure.Security.KeyVault.Keys.Cryptography;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
-using Microsoft.Azure.KeyVault.WebKey;
 
-// namespace change from original Microsoft.AspNetCore.DataProtection.AzureKeyVault
 namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
 {
     internal class AzureKeyVaultXmlEncryptor : IXmlEncryptor
     {
-        internal static readonly string DefaultKeyEncryption = JsonWebKeyEncryptionAlgorithm.RSAOAEP;
+        internal static readonly KeyWrapAlgorithm DefaultKeyEncryption = KeyWrapAlgorithm.RsaOaep;
         internal static readonly Func<SymmetricAlgorithm> DefaultSymmetricAlgorithmFactory = Aes.Create;
 
         private readonly RandomNumberGenerator _randomNumberGenerator;
@@ -68,13 +66,12 @@ namespace Aguacongas.IdentityServer.KeysRotation.AzureKeyVault
 
             var element = new XElement("encryptedKey",
                 new XComment(" This key is encrypted with Azure KeyVault. "),
-                new XElement("kid", wrappedKey.Kid),
-                new XElement("key", Convert.ToBase64String(wrappedKey.Result)),
+                new XElement("kid", wrappedKey.KeyId),
+                new XElement("key", Convert.ToBase64String(wrappedKey.EncryptedKey)),
                 new XElement("iv", Convert.ToBase64String(symmetricIV)),
                 new XElement("value", Convert.ToBase64String(encryptedValue)));
 
             return new EncryptedXmlInfo(element, typeof(AzureKeyVaultXmlDecryptor));
-
         }
     }
 }
