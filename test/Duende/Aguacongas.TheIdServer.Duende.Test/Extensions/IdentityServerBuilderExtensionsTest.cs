@@ -237,7 +237,7 @@ namespace Aguacongas.TheIdServer.Duende.Test.Extensions
                     ["StorageKind"] = "EntityFramework",
                     ["KeyProtectionOptions:KeyProtectionKind"] = "X509",
                     ["KeyProtectionOptions:X509CertificatePath"] = "TestCert1.pfx",
-                    ["KeyProtectionOptions:X509CertificatePassword"] = "test"
+                    ["KeyProtectionOptions:X509CertificatePassword"] = "password"
                 })
                 .Build();
 
@@ -269,7 +269,7 @@ namespace Aguacongas.TheIdServer.Duende.Test.Extensions
 
             if (storageKind == "AzureStorage")
             {
-                config["StorageConnectionString"] = "https://test.blob.core.windows.net/keys";
+                config["StorageConnectionString"] = "https://test.blob.core.windows.net/keys?sv=test";
             }
             else if (storageKind == "Redis")
             {
@@ -588,7 +588,7 @@ namespace Aguacongas.TheIdServer.Duende.Test.Extensions
                     .Build();
 
                 // Act
-                builder.ConfigureKey(configuration);
+                Assert.Throws<InvalidOperationException>(() => builder.ConfigureKey(configuration));
             }
             finally
             {
