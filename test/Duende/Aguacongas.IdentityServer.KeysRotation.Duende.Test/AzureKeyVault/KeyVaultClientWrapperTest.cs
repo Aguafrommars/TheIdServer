@@ -130,32 +130,6 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test.AzureKeyVault
                 wrapper.UnwrapKeyAsync(string.Empty, KeyWrapAlgorithm.RsaOaep, new byte[256]));
         }
 
-        [Fact]
-        public async Task WrapKeyAsync_WithFullUri_ShouldSucceed()
-        {
-            // Arrange
-            var vaultUri = new Uri("https://test-vault.vault.azure.net/");
-            var mockCredential = new Mock<TokenCredential>();
-            var wrapper = new KeyVaultClientWrapper(vaultUri, mockCredential.Object);
-            var keyIdentifier = "https://test-vault.vault.azure.net/keys/test-key/version";
-
-            // Note: This test will fail at runtime because we can't easily mock CryptographyClient
-            // but it tests the input validation and method signature
-            // In a real scenario, you'd need integration tests or more complex mocking
-        }
-
-        [Fact]
-        public async Task UnwrapKeyAsync_WithFullUri_ShouldSucceed()
-        {
-            // Arrange
-            var vaultUri = new Uri("https://test-vault.vault.azure.net/");
-            var mockCredential = new Mock<TokenCredential>();
-            var wrapper = new KeyVaultClientWrapper(vaultUri, mockCredential.Object);
-            var keyIdentifier = "https://test-vault.vault.azure.net/keys/test-key/version";
-
-            // Note: Similar to WrapKeyAsync, this tests validation
-        }
-
         [Theory]
         [InlineData("https://vault1.vault.azure.net/keys/key1")]
         [InlineData("https://vault2.vault.azure.net/keys/key2/version123")]
@@ -195,7 +169,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test.AzureKeyVault
             var vaultUri = new Uri("https://test-vault.vault.azure.net/");
             var mockCredential = new Mock<TokenCredential>();
             var wrapper = new KeyVaultClientWrapper(vaultUri, mockCredential.Object);
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             // Act
             var task = wrapper.WrapKeyAsync("test-key", KeyWrapAlgorithm.RsaOaep, new byte[32], cts.Token);
@@ -212,7 +186,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Duende.Test.AzureKeyVault
             var vaultUri = new Uri("https://test-vault.vault.azure.net/");
             var mockCredential = new Mock<TokenCredential>();
             var wrapper = new KeyVaultClientWrapper(vaultUri, mockCredential.Object);
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
 
             // Act
             var task = wrapper.UnwrapKeyAsync("test-key", KeyWrapAlgorithm.RsaOaep, new byte[256], cts.Token);

@@ -332,13 +332,11 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test.Extensions
             // Arrange
             var services = new ServiceCollection();
             var builder = new KeyRotationBuilder { Services = services };
-            var configured = false;
-
+            
             // Act
             builder.AddRsaEncryptorConfiguration(RsaSigningAlgorithm.RS256, options =>
             {
                 options.EncryptionAlgorithmKeySize = 4096;
-                configured = true;
             });
 
             // Assert
