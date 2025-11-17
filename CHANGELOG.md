@@ -1,3 +1,60 @@
+# [10.0.0](https://github.com/Aguafrommars/TheIdServer/compare/9.1.2...10.0.0) (2025-11-17)
+
+
+* feat!: migrate Azure KeyVault to modern SDK ([69ff153](https://github.com/Aguafrommars/TheIdServer/commit/69ff153fc5c9b7c20e7aba129cf8ca6a949ba7f6))
+
+
+### Bug Fixes
+
+* sample compilation ([c72e6fa](https://github.com/Aguafrommars/TheIdServer/commit/c72e6fa2561ed3cff4d87b0c040ba08acce94832))
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([4560707](https://github.com/Aguafrommars/TheIdServer/commit/4560707144e22113df5de180066ccc55b0dac9c2))
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([6cf57d4](https://github.com/Aguafrommars/TheIdServer/commit/6cf57d498a48a3b3a4d6ed3e8aef7707f645f0b7))
+* src/Aguacongas.TheIdServer.BlazorApp/Dockerfile to reduce vulnerabilities ([35208f3](https://github.com/Aguafrommars/TheIdServer/commit/35208f37b7e82b3eea2edba55e77e7239d91423f))
+* update packages ([91623bc](https://github.com/Aguafrommars/TheIdServer/commit/91623bc06f1833bb0d7e7ef326e27ae351079c34))
+* update packages ([11bb2bf](https://github.com/Aguafrommars/TheIdServer/commit/11bb2bf946066b8110c86502efe49a1776173892))
+* update packages ([e45a753](https://github.com/Aguafrommars/TheIdServer/commit/e45a75397a237af6c3d2a5dce79ca4855bb28902))
+* update packages ([49e802c](https://github.com/Aguafrommars/TheIdServer/commit/49e802c004a41d7a94f076b6b743a0d93ef8dc4c))
+* update packages ([88f1315](https://github.com/Aguafrommars/TheIdServer/commit/88f1315485a9dec9197c1fd10b27645ed2a53096))
+* update packages ([0fba51e](https://github.com/Aguafrommars/TheIdServer/commit/0fba51e1d64c34c41836cbd33beb30db8f2ae7cf))
+* update packages ([99599cc](https://github.com/Aguafrommars/TheIdServer/commit/99599cc2ba4aaff0a5ff42783720f6b1506c6bdf))
+* update packages ([3be61c3](https://github.com/Aguafrommars/TheIdServer/commit/3be61c398e9033785e2b08841e8ee5bde9aa0eff))
+* update packages ([d7ebbb1](https://github.com/Aguafrommars/TheIdServer/commit/d7ebbb14b95348f5cb14f83f18d23279f006fe18))
+* update packages ([e50254b](https://github.com/Aguafrommars/TheIdServer/commit/e50254b6089d3f27453009192edd2ca0c367e875))
+* update packages ([bf29369](https://github.com/Aguafrommars/TheIdServer/commit/bf29369d7a39c4201b509fa1008219aa8cf43579))
+* update packages ([b1f731a](https://github.com/Aguafrommars/TheIdServer/commit/b1f731a82e086637cd84755c4cb25665a4fb25b4))
+* update packages ([fe24409](https://github.com/Aguafrommars/TheIdServer/commit/fe24409bb7ef59ab8002aae467cecddf2866979d))
+* update packages ([eaac7b2](https://github.com/Aguafrommars/TheIdServer/commit/eaac7b2500024c6bf519558a16eafdb92768f312))
+* update packages ([8bdc319](https://github.com/Aguafrommars/TheIdServer/commit/8bdc319b0a56f1e5d3b97b6688bd15f7ad5a4e8f))
+* update packages ([e045c61](https://github.com/Aguafrommars/TheIdServer/commit/e045c614acd5534c49e58597431cb23342348bb2))
+* update packages ([9063fbd](https://github.com/Aguafrommars/TheIdServer/commit/9063fbd599d0c45340840972c4c7c90df6b299cc))
+* update packages ([742478f](https://github.com/Aguafrommars/TheIdServer/commit/742478f4bb401f2e087dce6b45fc59a61a0e76c7))
+* update packages ([08bc58c](https://github.com/Aguafrommars/TheIdServer/commit/08bc58c3d0f039d30eb12bc8fd2d76a2394876f8))
+* update packages ([3cede3e](https://github.com/Aguafrommars/TheIdServer/commit/3cede3e3ab4899950cd1ef97bb5c2d9bb0d20a1b))
+* update packages ([41782b4](https://github.com/Aguafrommars/TheIdServer/commit/41782b4e5b0b31cd8b00f2c6e425ad9f48290256))
+* update packages ([1b636d1](https://github.com/Aguafrommars/TheIdServer/commit/1b636d1e99185084db4b6ee62ecad5bf47b7f9b0))
+* update packages ([aa79ce3](https://github.com/Aguafrommars/TheIdServer/commit/aa79ce31c609ad8a3b614cdd5bffb2b416dece09))
+* update packages ([6288e64](https://github.com/Aguafrommars/TheIdServer/commit/6288e64ea1fc10fce49ca32dbf8608ec0df3a744))
+* update packages ([34e29f0](https://github.com/Aguafrommars/TheIdServer/commit/34e29f01d0065a9cc0a8daeb0bdf252da9ede817))
+* update packages ([f598857](https://github.com/Aguafrommars/TheIdServer/commit/f59885721a73a98c9ab764a3132fcb02d1311764))
+
+
+### BREAKING CHANGES
+
+* TenantId now required for Service Principal auth
+
+Replace obsolete Microsoft.Azure.KeyVault with Azure.Security.KeyVault.Keys v4.8.0
+Add support for DefaultAzureCredential, Managed Identity, and certificate-based auth
+Update all KeyVault-related code and documentation
+Maintain 100% backward compatibility for encrypted data
+
+- feat(keyvault): add DefaultAzureCredential support
+- feat(keyvault): add Managed Identity authentication
+- feat(keyvault): add certificate-based authentication
+- refactor(keyvault): migrate to Azure.Identity from MSAL
+- docs: update Azure KeyVault configuration guides
+- test: update tests for new SDK types
+- chore: mark old methods as obsolete
+
 ## [9.1.2](https://github.com/Aguafrommars/TheIdServer/compare/9.1.1...9.1.2) (2025-09-07)
 
 
