@@ -430,11 +430,11 @@ namespace Microsoft.Extensions.DependencyInjection
             string keyName)
         {
             ArgumentNullException.ThrowIfNull(builder);
-            if (string.IsNullOrEmpty(keyVaultUri))
+            if (string.IsNullOrWhiteSpace(keyVaultUri))
             {
                 throw new ArgumentNullException(nameof(keyVaultUri));
             }
-            if (string.IsNullOrEmpty(keyName))
+            if (string.IsNullOrWhiteSpace(keyName))
             {
                 throw new ArgumentNullException(nameof(keyName));
             }
@@ -548,23 +548,23 @@ namespace Microsoft.Extensions.DependencyInjection
             string clientSecret)
         {
             ArgumentNullException.ThrowIfNull(builder);
-            if (string.IsNullOrEmpty(keyVaultUri))
+            if (string.IsNullOrWhiteSpace(keyVaultUri))
             {
                 throw new ArgumentNullException(nameof(keyVaultUri));
             }
-            if (string.IsNullOrEmpty(keyName))
+            if (string.IsNullOrWhiteSpace(keyName))
             {
                 throw new ArgumentNullException(nameof(keyName));
             }
-            if (string.IsNullOrEmpty(tenantId))
+            if (string.IsNullOrWhiteSpace(tenantId))
             {
                 throw new ArgumentNullException(nameof(tenantId));
             }
-            if (string.IsNullOrEmpty(clientId))
+            if (string.IsNullOrWhiteSpace(clientId))
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
-            if (string.IsNullOrEmpty(clientSecret))
+            if (string.IsNullOrWhiteSpace(clientSecret))
             {
                 throw new ArgumentNullException(nameof(clientSecret));
             }
