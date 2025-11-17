@@ -110,7 +110,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts = new CancellationTokenSource();
+            using var expirationCts = new CancellationTokenSource();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
@@ -148,7 +148,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts = new CancellationTokenSource();
+            using var expirationCts = new CancellationTokenSource();
 
             var now = StringToDateTime("2016-02-29 20:00:00Z");
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
@@ -186,8 +186,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts1 = new CancellationTokenSource();
-            var expirationCts2 = new CancellationTokenSource();
+            using var expirationCts1 = new CancellationTokenSource();
+            using var expirationCts2 = new CancellationTokenSource();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var allKeys1 = Array.Empty<IKey>();
@@ -236,8 +236,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts1 = new CancellationTokenSource();
-            var expirationCts2 = new CancellationTokenSource();
+            using var expirationCts1 = new CancellationTokenSource();
+            using var expirationCts2 = new CancellationTokenSource();
 
             var now = StringToDateTime("2015-03-01 00:00:00Z");
             var allKeys = Array.Empty<IKey>();
@@ -317,8 +317,8 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts1 = new CancellationTokenSource();
-            var expirationCts2 = new CancellationTokenSource();
+            using var expirationCts1 = new CancellationTokenSource();
+            using var expirationCts2 = new CancellationTokenSource();
 
             var now = StringToDateTime("2016-02-01 00:00:00Z");
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
@@ -367,7 +367,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts = new CancellationTokenSource();
+            using var expirationCts = new CancellationTokenSource();
 
             var now = StringToDateTime("2016-02-01 00:00:00Z");
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2016-03-01 00:00:00Z");
@@ -405,7 +405,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         {
             // Arrange
             var callSequence = new List<string>();
-            var expirationCts = new CancellationTokenSource();
+            using var expirationCts = new CancellationTokenSource();
 
             var now = StringToDateTime("2016-02-01 00:00:00Z");
             var key1 = CreateKey("2015-03-01 00:00:00Z", "2015-03-01 00:00:00Z");
@@ -631,7 +631,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
         public void GetCurrentKeyRing_WithExpiredExistingKeyRing_UpdateFails_ThrowsButCachesOldKeyRing()
         {
             // Arrange
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             var mockCacheableKeyRingProvider = new Mock<ICacheableKeyRingProvider<RsaEncryptorConfiguration, RsaEncryptor>>();
             var originalKeyRing = new Mock<IKeyRing>().Object;
             var originalKeyRingTime = StringToDateTime("2015-03-01 00:00:00Z");

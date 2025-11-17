@@ -112,12 +112,151 @@ The configuartion support all kind of encryption systems.
 
 ### Azure Key Vault
 
+> **⚠️ Important Update**: TheIdServer now uses the modern `Azure.Security.KeyVault.Keys` SDK. The old `Microsoft.Azure.KeyVault` SDK is obsolete.
+
+#### Option 1: DefaultAzureCredential (Recommended)
+
+The simplest configuration. Works with Managed Identity in production and Azure CLI in development:
+
 ```js
   "KeyProtectionOptions": {
     "KeyProtectionKind": "AzureKeyVault",
-    "AzureKeyVaultKeyId": "<keyIdentifier>",
-    "AzureKeyVaultClientId": "<clientId>",
-    "AzureKeyVaultClientSecret": "<clientSecret>"
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name"
+  }
+```
+
+This automatically uses:
+- **Managed Identity** when running on Azure
+- **Azure CLI** credentials when developing locally (after `az login`)
+- **Visual Studio** credentials when debugging
+- **Environment variables** for CI/CD pipelines
+
+#### Option 2: Service Principal with Client Secret
+
+For explicit authentication with Service Principal:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "your-tenant-id",
+    "AzureKeyVaultClientId": "your-client-id",
+    "AzureKeyVaultClientSecret": "your-client-secret"
+  }
+```
+
+**⚠️ Note**: `AzureKeyVaultTenantId` is now **required** when using `ClientId` and `ClientSecret` (previously optional).
+
+#### Option 3: Service Principal with Certificate
+
+More secure than client secrets:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "your-tenant-id",
+    "AzureKeyVaultClientId": "your-client-id",
+    "AzureKeyVaultCertificateThumbprint": "certificate-thumbprint"
+  }
+```
+
+The certificate must be installed in the certificate store (CurrentUser\My or LocalMachine\My).
+
+#### Option 4: User-Assigned Managed Identity
+
+For Azure resources with user-assigned Managed Identity:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultManagedIdentityClientId": "managed-identity-client-id"
+  }
+```
+
+#### Configuration by Environment
+
+Recommended approach for multiple environments:
+
+**appsettings.json (base):**
+```js
+{
+  "DataProtectionOptions": {
+    "StorageKind": "AzureStorage",
+    "StorageConnectionString": "<connection-string>",
+    "KeyProtectionOptions": {
+      "KeyProtectionKind": "AzureKeyVault",
+      "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name"
+    }
+  }
+}
+```
+
+**appsettings.Development.json:**
+```js
+{
+  "DataProtectionOptions": {
+    "KeyProtectionOptions": {
+      "AzureKeyVaultKeyId": "https://dev-vault.vault.azure.net/keys/dev-key"
+    }
+  }
+}
+```
+
+Uses Azure CLI in development.
+
+**appsettings.Production.json:**
+```js
+{
+  "DataProtectionOptions": {
+    "KeyProtectionOptions": {
+      "AzureKeyVaultKeyId": "https://prod-vault.vault.azure.net/keys/prod-key"
+    }
+  }
+}
+```
+
+Uses Managed Identity in production.
+
+#### Azure Key Vault Permissions
+
+Your identity (Service Principal or Managed Identity) needs these permissions:
+
+- **Get** (keys)
+- **Wrap Key**
+- **Unwrap Key**
+
+Configure in Azure Portal: **Key Vault** > **Access policies**
+
+#### Migration from Old Configuration
+
+**Before (obsolete):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultClientId": "client-id",
+    "AzureKeyVaultClientSecret": "client-secret"
+  }
+```
+
+**After (add TenantId):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "tenant-id",
+    "AzureKeyVaultClientId": "client-id",
+    "AzureKeyVaultClientSecret": "client-secret"
+  }
+```
+
+**Or better (use DefaultAzureCredential):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name"
   }
 ```
 
@@ -217,3 +356,5 @@ You can change alrorithms with the section *AuthenticatedEncryptorConfiguration*
 * [Key management in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-management?view=aspnetcore-3.1)
 * [Key storage providers in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers?view=aspnetcore-3.1&tabs=visual-studio)
 * [Key encryption at rest in Windows and Azure using ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-encryption-at-rest?view=aspnetcore-3.1)
+* [Azure Key Vault Keys SDK](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/security.keyvault.keys-readme)
+* [Azure Identity SDK](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme)

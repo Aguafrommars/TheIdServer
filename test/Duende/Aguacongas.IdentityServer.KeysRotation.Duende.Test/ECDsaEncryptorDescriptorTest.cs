@@ -27,7 +27,7 @@ namespace Aguacongas.IdentityServer.KeysRotation.Test
             var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Directory.CreateDirectory(tempDir);
             var services = new ServiceCollection();
-            var builder = services.AddKeysRotation(RsaSigningAlgorithm.RS256)
+            services.AddKeysRotation(RsaSigningAlgorithm.RS256)
                 .AddECDsaKeysRotation(ECDsaSigningAlgorithm.ES256)
                 .AddECDsaEncryptorConfiguration(ECDsaSigningAlgorithm.ES256, options => { })
                 .PersistKeysToFileSystem(new DirectoryInfo(tempDir));

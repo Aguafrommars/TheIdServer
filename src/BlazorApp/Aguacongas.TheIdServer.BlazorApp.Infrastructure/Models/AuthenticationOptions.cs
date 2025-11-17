@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.Net.Http.Headers;
 using System;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Models

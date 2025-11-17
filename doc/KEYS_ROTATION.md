@@ -34,56 +34,56 @@ To use the keys rotation mechanism, the *Type* must be **KeysRotation**.
     },
     "RsaEncryptorConfiguration": {
       "EncryptionAlgorithmKeySize": 2048,
-      "SigningAlgorithm": "RS256"
+      "SigningAlgorithm": "RS256",
       "KeyIdSize": 128,
       "KeyRetirement": "180.00:00:00"
     },
     "AdditionalSigningKeyType": {
       "RS384": {
         "EncryptionAlgorithmKeySize": 2048,
-        "SigningAlgorithm": "RS384"
+        "SigningAlgorithm": "RS384",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "RS512": {
         "EncryptionAlgorithmKeySize": 2048,
-        "SigningAlgorithm": "RS512"
+        "SigningAlgorithm": "RS512",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "PS256": {
         "EncryptionAlgorithmKeySize": 2048,
-        "SigningAlgorithm": "PS256"
+        "SigningAlgorithm": "PS256",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "PS384": {
         "EncryptionAlgorithmKeySize": 2048,
-        "SigningAlgorithm": "PS384"
+        "SigningAlgorithm": "PS384",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "PS512": {
         "EncryptionAlgorithmKeySize": 2048,
-        "SigningAlgorithm": "PS512"
+        "SigningAlgorithm": "PS512",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "ES256": {
         "EncryptionAlgorithmKeySize": 521,
-        "SigningAlgorithm": "ES256"
+        "SigningAlgorithm": "ES256",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "ES384": {
         "EncryptionAlgorithmKeySize": 521,
-        "SigningAlgorithm": "ES384"
+        "SigningAlgorithm": "ES384",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       },
       "ES512": {
         "EncryptionAlgorithmKeySize": 521,
-        "SigningAlgorithm": "ES512"
+        "SigningAlgorithm": "ES512",
         "KeyIdSize": 128,
         "KeyRetirement": "180.00:00:00"
       }
@@ -160,12 +160,157 @@ For *MongoDb* storage king, keys are store in the **KeyRotationKeys** collection
 
 ### Azure Key Vault
 
+> **⚠️ Important Update**: TheIdServer now uses the modern `Azure.Security.KeyVault.Keys` SDK. The old `Microsoft.Azure.KeyVault` SDK is obsolete.
+
+#### Option 1: DefaultAzureCredential (Recommended)
+
+The simplest configuration. Works with Managed Identity in production and Azure CLI in development:
+
 ```js
   "KeyProtectionOptions": {
     "KeyProtectionKind": "AzureKeyVault",
-    "AzureKeyVaultKeyId": "<keyIdentifier>",
-    "AzureKeyVaultClientId": "<clientId>",
-    "AzureKeyVaultClientSecret": "<clientSecret>"
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name"
+  }
+```
+
+This automatically uses:
+- **Managed Identity** when running on Azure
+- **Azure CLI** credentials when developing locally (after `az login`)
+- **Visual Studio** credentials when debugging
+- **Environment variables** for CI/CD pipelines
+
+#### Option 2: Service Principal with Client Secret
+
+For explicit authentication with Service Principal:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "your-tenant-id",
+    "AzureKeyVaultClientId": "your-client-id",
+    "AzureKeyVaultClientSecret": "your-client-secret"
+  }
+```
+
+**⚠️ Note**: `AzureKeyVaultTenantId` is now **required** when using `ClientId` and `ClientSecret` (previously optional).
+
+#### Option 3: Service Principal with Certificate
+
+More secure than client secrets:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "your-tenant-id",
+    "AzureKeyVaultClientId": "your-client-id",
+    "AzureKeyVaultCertificateThumbprint": "certificate-thumbprint"
+  }
+```
+
+The certificate must be installed in the certificate store (CurrentUser\My or LocalMachine\My).
+
+#### Option 4: User-Assigned Managed Identity
+
+For Azure resources with user-assigned Managed Identity:
+
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://your-vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultManagedIdentityClientId": "managed-identity-client-id"
+  }
+```
+
+#### Configuration by Environment
+
+Recommended approach for multiple environments:
+
+**appsettings.json (base):**
+```js
+{
+  "IdentityServer": {
+    "Key": {
+      "Type": "KeysRotation",
+      "StorageKind": "EntityFramework",
+      "KeyProtectionOptions": {
+        "KeyProtectionKind": "AzureKeyVault",
+        "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name"
+      }
+    }
+  }
+}
+```
+
+**appsettings.Development.json:**
+```js
+{
+  "IdentityServer": {
+    "Key": {
+      "KeyProtectionOptions": {
+        "AzureKeyVaultKeyId": "https://dev-vault.vault.azure.net/keys/dev-key"
+      }
+    }
+  }
+}
+```
+
+Uses Azure CLI in development.
+
+**appsettings.Production.json:**
+```js
+{
+  "IdentityServer": {
+    "Key": {
+      "KeyProtectionOptions": {
+        "AzureKeyVaultKeyId": "https://prod-vault.vault.azure.net/keys/prod-key"
+      }
+    }
+  }
+}
+```
+
+Uses Managed Identity in production.
+
+#### Azure Key Vault Permissions
+
+Your identity (Service Principal or Managed Identity) needs these permissions:
+
+- **Get** (keys)
+- **Wrap Key**
+- **Unwrap Key**
+
+Configure in Azure Portal: **Key Vault** > **Access policies**
+
+#### Migration from Old Configuration
+
+**Before (obsolete):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultClientId": "client-id",
+    "AzureKeyVaultClientSecret": "client-secret"
+  }
+```
+
+**After (add TenantId):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name",
+    "AzureKeyVaultTenantId": "tenant-id",
+    "AzureKeyVaultClientId": "client-id",
+    "AzureKeyVaultClientSecret": "client-secret"
+  }
+```
+
+**Or better (use DefaultAzureCredential):**
+```js
+  "KeyProtectionOptions": {
+    "KeyProtectionKind": "AzureKeyVault",
+    "AzureKeyVaultKeyId": "https://vault.vault.azure.net/keys/key-name"
   }
 ```
 
@@ -220,6 +365,7 @@ The section *RsaEncryptorConfiguration* congrols the default RSA key generation 
       "KeyRetirement": "180.00:00:00"
     }
 ```
+
 ## Additional key type genration options
 
 The section *AdditionalSigningKeyType* controls additional key type generation options. It's a dictionary of ['SigningAlgorithmConfiguration`](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#signingalgorithmconfiguration-properties) indexed by signing algorithm.  
@@ -234,7 +380,7 @@ For exemple if you want to support **ES512** and **PS384** in addition of the de
     "Type": "KeysRotation",
     "StorageKind": "EntityFramework",
     "RsaEncryptorConfiguration": {
-      "SigningAlgorithm": "RS256",
+      "SigningAlgorithm": "RS256"
     },
     "AdditionalSigningKeyType": {
       "PS384": {
@@ -252,3 +398,5 @@ For exemple if you want to support **ES512** and **PS384** in addition of the de
 
 * [IdentityServer and Signing Key Rotation](https://brockallen.com/2019/08/09/identityserver-and-signing-key-rotation/)
 * [Aguacongas.IdentityServer.KeysRotation](../src/IdentityServer/Aguacongas.IdentityServer.KeysRotation#aguacongasidentityserverkeysrotation)
+* [Azure Key Vault Keys SDK](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/security.keyvault.keys-readme)
+* [Azure Identity SDK](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme)
