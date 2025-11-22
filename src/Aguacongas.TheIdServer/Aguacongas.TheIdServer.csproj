@@ -30,8 +30,8 @@
 		<NoWarn>1701;1702;CA1416;NU1603;NU1608</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aguacongas.DynamicConfiguration.Redis" Version="3.0.0" />
-		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="3.0.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.Redis" Version="3.1.0" />
+		<PackageReference Include="Aguacongas.DynamicConfiguration.WebApi" Version="3.1.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.RavenDb" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
