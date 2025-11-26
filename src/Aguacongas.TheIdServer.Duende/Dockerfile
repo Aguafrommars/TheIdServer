@@ -62,6 +62,11 @@ COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.MongoDb.Store.Duende/
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.RavenDb.Store.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/Aguacongas.IdentityServer.Saml2p.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.Saml2p.Duende/"]
 COPY ["src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/Aguacongas.IdentityServer.WsFederation.Duende.csproj", "src/IdentityServer/Duende/Aguacongas.IdentityServer.WsFederation.Duende/"]
+COPY ["src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher.csproj", "src/Identity/Aguacongas.TheIdServer.Identity.Argon2PasswordHasher/"]
+COPY ["src/Identity/Aguacongas.TheIdServer.Identity.BcryptPasswordHasher/Aguacongas.TheIdServer.Identity.BcryptPasswordHasher.csproj", "src/Identity/Aguacongas.TheIdServer.Identity.BcryptPasswordHasher/"]
+COPY ["src/Identity/Aguacongas.TheIdServer.Identity.ScryptPasswordHasher/Aguacongas.TheIdServer.Identity.ScryptPasswordHasher.csproj", "src/Identity/Aguacongas.TheIdServer.Identity.ScryptPasswordHasher/"]
+COPY ["src/Identity/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.csproj", "src/Identity/Aguacongas.TheIdServer.Identity.UpgradePasswordHasher/"]
+
 RUN apt-get update -y && apt-get install -y python3 gcc && apt-get clean
 RUN dotnet workload install wasm-tools
 RUN dotnet restore "./src/Aguacongas.TheIdServer.Duende/./Aguacongas.TheIdServer.Duende.csproj"
@@ -76,4 +81,20 @@ RUN dotnet publish "./Aguacongas.TheIdServer.Duende.csproj" -c "$BUILD_CONFIGURA
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Aguacongas.TheIdServer.Duende.dll"]
+
+# Set permissions for wwwroot and keys folders
+USER root
+RUN chown -R app:app /app/wwwroot
+# back to non-root user
+USER app
+
+ENTRYPOINT [ "sh", "-c", "\
+if [ -n \"$APPSETTINGS_JSON\" ]; then \
+  echo \"$APPSETTINGS_JSON\" > /app/wwwroot/appsettings.json && \
+  echo \"Created appsettings.json\"; \
+else \
+  echo \"APPSETTINGS_JSON is empty, skipping file creation\"; \
+fi && \
+dotnet Aguacongas.TheIdServer.Duende.dll" ]
+
+
