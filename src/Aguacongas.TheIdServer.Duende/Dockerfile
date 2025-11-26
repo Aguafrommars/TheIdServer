@@ -85,15 +85,13 @@ COPY --from=publish /app/publish .
 # Set permissions for wwwroot and keys folders
 USER root
 RUN chown -R app:app /app/wwwroot
-# Set permissions for keys folder
-RUN mkdir -p /app/keys && chown -R app:app /app/keys
 # back to non-root user
 USER app
 
 ENTRYPOINT [ "sh", "-c", "\
 if [ -n \"$APPSETTINGS_JSON\" ]; then \
   echo \"$APPSETTINGS_JSON\" > /app/wwwroot/appsettings.json && \
-  echo \"Created appsettings.${ASPNETCORE_ENVIRONMENT}.json\"; \
+  echo \"Created appsettings.json\"; \
 else \
   echo \"APPSETTINGS_JSON is empty, skipping file creation\"; \
 fi && \
