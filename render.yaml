@@ -84,7 +84,7 @@ projects:
       dockerfilePath: src/Aguacongas.TheIdServer.Duende/Dockerfile
       dockerCommand: |
         sh -c '
-          CONNECTION_STRING="Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD};"
+          CONNECTION_STRING=Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD};
 
           cat > /app/wwwroot/appsettings.json <<EOF
           {
