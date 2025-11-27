@@ -59,12 +59,55 @@ projects:
       dockerfilePath: src/Aguacongas.TheIdServer.Duende/Dockerfile
       dockerCommand: |
         sh -c '
-          export ConnectionStrings__DefaultConnection="Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}" && \
-          export InitialData__Clients__0__RedirectUris__0="${RENDER_EXTERNAL_URL}/authentication/login-callback" && \
-          export InitialData__Clients__0__PostLogoutRedirectUris__0="${RENDER_EXTERNAL_URL}/authentication/logout-callback" && \
-          export InitialData__Clients__0__ClientUri=${RENDER_EXTERNAL_URL} && \
-          export InitialData__Clients__0__AllowedCorsOrigins__0=${RENDER_EXTERNAL_URL} && \
-          echo "{\"prerendered\":true,\"administratorEmail\":\"aguacongas@gmail.com\",\"apiBaseUrl\":\"${RENDER_EXTERNAL_URL}/api\",\"loggingOptions\":{\"minimum\":\"Warning\"},\"authenticationPaths\":{\"remoteRegisterPath\":\"/identity/account/register\",\"remoteProfilePath\":\"/identity/account/manage\"},\"userOptions\":{\"roleClaim\":\"role\"},\"providerOptions\":{\"authority\":\"${RENDER_EXTERNAL_URL}/\",\"clientId\":\"theidserveradmin\",\"defaultScopes\":[\"openid\",\"profile\",\"theidserveradminapi\"],\"postLogoutRedirectUri\":\"${RENDER_EXTERNAL_URL}/authentication/logout-callback\",\"redirectUri\":\"${RENDER_EXTERNAL_URL}/authentication/login-callback\",\"responseType\":\"code\"},\"welcomeContenUrl\":\"${RENDER_EXTERNAL_URL}/api/welcomefragment\",\"settingsOptions\":{\"typeName\":\"Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure\",\"apiUrl\":\"${RENDER_EXTERNAL_URL}/api/configuration\"},\"menuOptions\":{\"showSettings\":true},\"serverSideSessionEnabled\":true,\"cibaEnabled\":true}" > /app/wwwroot/appsettings.json && \
+          echo "export ConnectionStrings__DefaultConnection=Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
+          export ConnectionStrings__DefaultConnection="Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
+          echo "export InitialData__Clients__0__RedirectUris__0=${RENDER_EXTERNAL_URL}/authentication/login-callback"
+          export InitialData__Clients__0__RedirectUris__0="${RENDER_EXTERNAL_URL}/authentication/login-callback"
+          echo "export InitialData__Clients__0__PostLogoutRedirectUris__0=${RENDER_EXTERNAL_URL}/authentication/logout-callback"
+          export InitialData__Clients__0__PostLogoutRedirectUris__0="${RENDER_EXTERNAL_URL}/authentication/logout-callback"
+          echo "export InitialData__Clients__0__ClientUri=${RENDER_EXTERNAL_URL}"
+          export InitialData__Clients__0__ClientUri=${RENDER_EXTERNAL_URL}
+          echo "export InitialData__Clients__0__AllowedCorsOrigins__0=${RENDER_EXTERNAL_URL}"
+          export InitialData__Clients__0__AllowedCorsOrigins__0=${RENDER_EXTERNAL_URL}
+
+          echo "create /app/wwwroot/appsettings.json"
+          
+          cat > /app/wwwroot/appsettings.json <<EOF
+          {
+            "prerendered": true,
+            "administratorEmail": "aguacongas@gmail.com",
+            "apiBaseUrl": "${RENDER_EXTERNAL_URL}/api",
+            "loggingOptions": {
+              "minimum": "Warning"
+            },
+            "authenticationPaths": {
+              "remoteRegisterPath": "/identity/account/register",
+              "remoteProfilePath": "/identity/account/manage"
+            },
+            "userOptions": {
+              "roleClaim": "role"
+            },
+            "providerOptions": {
+              "authority": "${RENDER_EXTERNAL_URL}/",
+              "clientId": "theidserveradmin",
+              "defaultScopes": ["openid", "profile", "theidserveradminapi"],
+              "postLogoutRedirectUri": "${RENDER_EXTERNAL_URL}/authentication/logout-callback",
+              "redirectUri": "${RENDER_EXTERNAL_URL}/authentication/login-callback",
+              "responseType": "code"
+            },
+            "welcomeContenUrl": "${RENDER_EXTERNAL_URL}/api/welcomefragment",
+            "settingsOptions": {
+              "typeName": "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
+              "apiUrl": "${RENDER_EXTERNAL_URL}/api/configuration"
+            },
+            "menuOptions": {
+              "showSettings": true
+            },
+            "serverSideSessionEnabled": true,
+            "cibaEnabled": true
+          }
+          EOF
+
           exec dotnet Aguacongas.TheIdServer.Duende.dll
         '
       autoDeployTrigger: commit
