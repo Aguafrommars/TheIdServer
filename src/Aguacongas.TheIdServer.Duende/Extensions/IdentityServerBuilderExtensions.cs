@@ -5,7 +5,6 @@ using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.KeysRotation;
 using Aguacongas.IdentityServer.KeysRotation.Extensions;
 using Aguacongas.TheIdServer.Models;
-using Azure.Identity;
 using Duende.IdentityServer.Configuration;
 using StackExchange.Redis;
 using System.Security.Cryptography.X509Certificates;
