@@ -4,16 +4,6 @@ projects:
 - name: TheIdServer
   environments:
   - name: Production
-    databases:
-    - name: theidserverdb
-      databaseName: theidserverdb
-      user: theidserverdb_user
-      plan: free
-      region: frankfurt
-      ipAllowList:
-      - source: 0.0.0.0/0
-        description: everywhere
-      postgresMajorVersion: "18"
     services:
     - type: web
       name: TheIdServer
@@ -22,24 +12,8 @@ projects:
       branch: master
       plan: free
       envVars:
-      - key: DB_HOST
-        fromDatabase:
-          name: theidserverdb
-          property: host
-      - key: DB_NAME
-        fromDatabase:
-          name: theidserverdb
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: theidserverdb
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: theidserverdb
-          property: password
       - key: DbType
-        value: PostgreSQL
+        value: InMemory
       - key: DynamicConfigurationOptions__ProviderType
         value: Microsoft.Extensions.Configuration.Memory.MemoryConfigurationProvider, Microsoft.Extensions.Configuration
       - key: RedisConfigurationOptions__ConnectionString
@@ -77,54 +51,7 @@ projects:
           property: host
           prefix: "https://"
           suffix: "/authentication/login-callback"
-      - key: ADMIN_EMAIL
-        sync: false
       region: frankfurt
       dockerContext: .
       dockerfilePath: src/Aguacongas.TheIdServer.Duende/Dockerfile
-      dockerCommand: |
-        sh -c '
-          # Définir la chaîne de connexion
-          export ConnectionStrings__DefaultConnection="Host=${DB_HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
-
-          # Créer le fichier appsettings.json
-          cat > /app/wwwroot/appsettings.json <<EOF
-          {
-            "prerendered": true,
-            "administratorEmail": "${ADMIN_EMAIL}",
-            "apiBaseUrl": "${RENDER_EXTERNAL_URL}/api",
-            "loggingOptions": {
-              "minimum": "Warning"
-            },
-            "authenticationPaths": {
-              "remoteRegisterPath": "/identity/account/register",
-              "remoteProfilePath": "/identity/account/manage"
-            },
-            "userOptions": {
-              "roleClaim": "role"
-            },
-            "providerOptions": {
-              "authority": "${RENDER_EXTERNAL_URL}/",
-              "clientId": "theidserveradmin",
-              "defaultScopes": ["openid", "profile", "theidserveradminapi"],
-              "postLogoutRedirectUri": "${RENDER_EXTERNAL_URL}/authentication/logout-callback",
-              "redirectUri": "${RENDER_EXTERNAL_URL}/authentication/login-callback",
-              "responseType": "code"
-            },
-            "welcomeContenUrl": "${RENDER_EXTERNAL_URL}/api/welcomefragment",
-            "settingsOptions": {
-              "typeName": "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
-              "apiUrl": "${RENDER_EXTERNAL_URL}/api/configuration"
-            },
-            "menuOptions": {
-              "showSettings": true
-            },
-            "serverSideSessionEnabled": true,
-            "cibaEnabled": true
-          }
-          EOF
-
-          # Démarrer l\'application
-          exec dotnet Aguacongas.TheIdServer.Duende.dll
-        '
       autoDeployTrigger: commit
