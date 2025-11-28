@@ -1,4 +1,0 @@
-﻿<linker>
-  <assembly fullname="Microsoft.Authentication.WebAssembly.Msal" preserve="all" />
-  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly.Authentication" preserve="all" />
-</linker>
