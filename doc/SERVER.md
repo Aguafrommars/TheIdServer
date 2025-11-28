@@ -62,11 +62,18 @@ A [server's Linux image](https://hub.docker.com/r/aguacongas/theidserver.duende)
 
 Read [Hosting ASP.NET Core images with Docker over HTTPS](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https) to set up the HTTPS certificate.
 
+#### Deployment on Render (Infrastructure-as-Code)
+
+A full deployment guide is available for hosting TheIdServer on the Render platform using the provided `render.yaml` blueprint and Docker. This guide covers the initial deployment, URL configuration, and setting up persistent storage with either Render PostgreSQL or Neon.
+
+[**View the step-by-step deployment guide on Render**](DEPLOY_ON_RENDER.md)
+
 #### Kubernetes sample
 
 [/sample/Kubernetes/README.md](/sample/Kubernetes/README.md) contains a sample to set up a solution with Kubernetes.
 
 > The sample use the IS4 version but you just need to use `aguacongas/theidserver.duende` as docker image in the deployement file.
+
 
 ### From dotnet new template
 
