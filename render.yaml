@@ -1,0 +1,79 @@
+# Exported from Render on 2025-11-27T09:51:02Z
+version: "1"
+projects:
+- name: TheIdServer
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: TheIdServer
+      runtime: docker
+      repo: https://github.com/Aguafrommars/TheIdServer
+      branch: master
+      plan: free
+      envVars:
+      - key: DbType #use in-memory db for 1st deploy
+        value: InMemory
+      - key: ConnectionStrings__DefaultConnection 
+        value: "{your db connection string}"
+      - key: DynamicConfigurationOptions__ProviderType #disable redis dynamic configuration
+        value: Microsoft.Extensions.Configuration.Memory.MemoryConfigurationProvider, Microsoft.Extensions.Configuration
+      - key: RedisConfigurationOptions__ConnectionString #disable redis
+        value: ""
+      - key: Seed
+        value: "true"
+      - key: InitialData__Users__0__UserName
+        value: Admin
+      - key: InitialData__Users__0__Password
+        sync: false
+      - key: InitialData__Clients__0__AllowedCorsOrigins__0 #must be set after 1st deploy
+        value: "{your web service url}"
+      - key: InitialData__Clients__0__ClientUri #must be set after 1st deploy
+        value: "{your web service url}"
+      - key: InitialData__Clients__0__PostLogoutRedirectUris__0 #must be set after 1st deploy
+        value: "{your web service url}/authentication/logout-callback"
+      - key: InitialData__Clients__0__RedirectUris__0 #must be set after 1st deploy
+        value: "{your web service url}/authentication/login-callback"
+      - key: APPSETTINGS_JSON #must be set after 1st deploy
+        value: |
+          {
+            "prerendered": true,
+            "administratorEmail": "aguacongas@gmail.com",
+            "apiBaseUrl": "{your web service url}/api",
+            "loggingOptions": {
+                "minimum": "Warning"
+            },
+            "authenticationPaths": {
+                "remoteRegisterPath": "/identity/account/register",
+                "remoteProfilePath": "/identity/account/manage"
+            },
+            "userOptions": {
+                "roleClaim": "role"
+            },
+            "providerOptions": {
+                "authority": "{your web service url}/",
+                "clientId": "theidserveradmin",
+                "defaultScopes": [
+                    "openid",
+                    "profile",
+                    "theidserveradminapi"
+                ],
+                "postLogoutRedirectUri": "{your web service url}/authentication/logout-callback",
+                "redirectUri": "{your web service url}/authentication/login-callback",
+                "responseType": "code"
+            },
+            "welcomeContenUrl": "{your web service url}/api/welcomefragment",
+            "settingsOptions": {
+                "typeName": "Aguacongas.TheIdServer.BlazorApp.Models.ServerConfig, Aguacongas.TheIdServer.BlazorApp.Infrastructure",
+                "apiUrl": "{your web service url}/api/configuration"
+            },
+            "menuOptions": {
+                "showSettings": true
+            },
+            "serverSideSessionEnabled": true,
+            "cibaEnabled": true
+          }
+      region: frankfurt
+      dockerContext: .
+      dockerfilePath: src/Aguacongas.TheIdServer.Duende/Dockerfile
+      autoDeployTrigger: commit
