@@ -1,3 +1,18 @@
+## [10.0.1](https://github.com/Aguafrommars/TheIdServer/compare/10.0.0...10.0.1) (2025-11-28)
+
+
+### Bug Fixes
+
+* file sytem permission in docker file to create keys and store blazor app settings ([89d8b3b](https://github.com/Aguafrommars/TheIdServer/commit/89d8b3be3f96cf345509cbd67e1e0ec6a6d19cf4))
+* update packages ([57cfd4f](https://github.com/Aguafrommars/TheIdServer/commit/57cfd4f94fff22d6c986bf918c75963c5acba751))
+* update packages ([3f4928e](https://github.com/Aguafrommars/TheIdServer/commit/3f4928ee9baba0eb0effecf765e5339f4bec6ab8))
+* update packages ([cdf2a65](https://github.com/Aguafrommars/TheIdServer/commit/cdf2a652b20745ebea78419b080852e6c8bcac50))
+* update packages ([2f6631f](https://github.com/Aguafrommars/TheIdServer/commit/2f6631f81ad1a474a4f6974e65460d5e97972ce3))
+* update packages ([c28db1e](https://github.com/Aguafrommars/TheIdServer/commit/c28db1e429cefcb441dbcd08758b8136cebb9b2e))
+* update packages ([4d32156](https://github.com/Aguafrommars/TheIdServer/commit/4d3215649f00fd10155a7b555312e9b251107b72))
+* update packages ([5c57fb7](https://github.com/Aguafrommars/TheIdServer/commit/5c57fb7eea29d4dbcb3795f63e39d3ba8994ff7b))
+* update packages ([b0b8701](https://github.com/Aguafrommars/TheIdServer/commit/b0b870162d4f9630ccc13eadb90a88aeb68eab76))
+
 # [10.0.0](https://github.com/Aguafrommars/TheIdServer/compare/9.1.2...10.0.0) (2025-11-17)
 
 
