@@ -21,7 +21,7 @@
     <PackageReference Include="Aguacongas.TheIdServer.Authentication" Version="10.0.1" />
     <PackageReference Include="Aguacongas.TheIdServer.Identity" Version="10.0.1" />
     <PackageReference Include="Aguacongas.IdentityServer.Http.Store" Version="10.0.1" />
-    <PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="6.3.0" />
+    <PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
