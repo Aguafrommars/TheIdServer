@@ -20,8 +20,8 @@ init:
 install:
   - ps: Install-Product node 23 x64
   - ps: ./Install-MongoDb.ps1
-  - ps: .\dotnet-install.ps1 -Version 8.0.20 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
-  - ps: .\dotnet-install.ps1 -Version 8.0.20 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 8.0.22 -Runtime dotnet -Architecture x64 -InstallDir "C:\Program Files\dotnet"
+  - ps: .\dotnet-install.ps1 -Version 8.0.22 -Runtime aspnetcore -Architecture x64 -InstallDir "C:\Program Files\dotnet"
   - ps: dotnet tool install --global GitVersion.Tool
   - ps: dotnet tool install --global dotnet-sonarscanner
   - ps: dotnet gitversion /l console /output buildserver
