@@ -16,7 +16,7 @@
 	</PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.2" />
     </ItemGroup>
 
     <ItemGroup>
