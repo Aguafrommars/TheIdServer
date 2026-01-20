@@ -32,7 +32,7 @@ namespace OpenTelemetry.Trace
 
             var serviceOptions = traceOptions.Service;
             if (!string.IsNullOrEmpty(serviceOptions?.Name))
-            {                
+            {
                 builder = builder.AddSource(serviceOptions.Name)
                                 .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceOptions.Name,
                                     serviceOptions.Namespace,
@@ -41,7 +41,7 @@ namespace OpenTelemetry.Trace
                                     serviceOptions.InstanceId));
             }
 
-            return builder.AddExporters(traceOptions)                
+            return builder.AddExporters(traceOptions)
                 .AddInstrumentation(traceOptions.Instrumentation);
         }
 
@@ -76,9 +76,6 @@ namespace OpenTelemetry.Trace
                     }
 
                     o.RecordException = sqlClientOptions.RecordException;
-                    o.EnableConnectionLevelAttributes = sqlClientOptions.EnableConnectionLevelAttributes;
-                    o.SetDbStatementForText = sqlClientOptions.SetDbStatementForText;
-                    o.SetDbStatementForStoredProcedure = sqlClientOptions.SetDbStatementForStoredProcedure;
                 });
 
             if (!string.IsNullOrEmpty(options?.Redis?.ConnectionString))
@@ -116,7 +113,7 @@ namespace OpenTelemetry.Trace
                     o.TimeoutMilliseconds = otlpOptions.TimeoutMilliseconds;
                     o.ExportProcessorType = otlpOptions.ExportProcessorType;
                     o.Endpoint = otlpOptions.Endpoint;
-                    o.Headers = otlpOptions.Headers;                    
+                    o.Headers = otlpOptions.Headers;
                 });
             }
 

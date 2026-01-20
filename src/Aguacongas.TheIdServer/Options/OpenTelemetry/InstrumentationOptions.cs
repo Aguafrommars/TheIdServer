@@ -8,7 +8,7 @@ namespace Aguacongas.TheIdServer.Options.OpenTelemetry
     {
         public AspNetCoreTraceInstrumentationOptions AspNetCore { get; set; }
         public HttpClientTraceInstrumentationOptions HttpClient { get; set; }
-        public SqlClientInstrumentationOptions SqlClient { get; set; }
+        public SqlClientTraceInstrumentationOptions SqlClient { get; set; }
         public RedisOptions Redis { get; set; }
     }
 }
