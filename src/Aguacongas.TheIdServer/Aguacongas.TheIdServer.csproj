@@ -49,15 +49,15 @@
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.2" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.8.0-rc.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.8.0-rc.1" />
-		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.14.0-rc.1" />
+		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.15.0-rc.1" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.15" />
 		<PackageReference Include="SendGrid" Version="9.29.3" />
 		<PackageReference Include="Serilog" Version="4.3.0" />
