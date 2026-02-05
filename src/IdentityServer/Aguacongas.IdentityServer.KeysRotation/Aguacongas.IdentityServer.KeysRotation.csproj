@@ -28,7 +28,7 @@
         <PackageReference Include="MongoDB.Driver" Version="3.6.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
         <PackageReference Include="RavenDB.Client" Version="7.2.0" />
-        <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
+        <PackageReference Include="StackExchange.Redis" Version="2.10.14" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />
