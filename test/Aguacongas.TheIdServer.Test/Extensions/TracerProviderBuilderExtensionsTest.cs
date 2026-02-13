@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                     }
                 })
                 .Build();
-            
+
             Assert.NotNull(provider);
         }
 
@@ -90,12 +90,9 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                                 FlushInterval = TimeSpan.FromSeconds(1),
                                 SetVerboseDatabaseStatements = true
                             },
-                            SqlClient = new SqlClientInstrumentationOptions
+                            SqlClient = new SqlClientTraceInstrumentationOptions
                             {
-                                EnableConnectionLevelAttributes = true,
-                                RecordException = true,
-                                SetDbStatementForStoredProcedure = true,
-                                SetDbStatementForText = true
+                                RecordException = true
                             }
                         }
                     }
