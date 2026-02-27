@@ -22,7 +22,7 @@
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.3" />
 		<PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.8.0" />
-		<PackageReference Include="Azure.Identity" Version="1.17.1" />
+		<PackageReference Include="Azure.Identity" Version="1.18.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.82.1" />
         <PackageReference Include="MongoDB.Driver" Version="3.6.0" />
