@@ -37,7 +37,7 @@
 		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.1" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.6.1" />
-		<PackageReference Include="Azure.Identity" Version="1.18.0" />
+		<PackageReference Include="Azure.Identity" Version="1.19.0" />
 		<PackageReference Include="Honeycomb.OpenTelemetry" Version="1.5.0" />
 		<PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="7.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="10.0.4" />
@@ -55,7 +55,7 @@
 		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.8.0-rc.1" />
 		<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.15.0" />
 		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
-		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.1" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.15.1" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.15" />
