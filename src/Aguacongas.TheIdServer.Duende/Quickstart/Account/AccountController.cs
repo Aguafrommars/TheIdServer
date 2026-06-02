@@ -63,10 +63,19 @@ public class AccountController(
         // check if we are in the context of an authorization request
         var context = await interaction.GetAuthorizationContextAsync(model.ReturnUrl, HttpContext.RequestAborted).ConfigureAwait(false);
 
-        // the user clicked the "cancel" button
-        if (button != "login")
+        var action = button?.Trim();
+
+        // explicit allow-list for user-submitted actions
+        if (string.Equals(action, "cancel", StringComparison.Ordinal))
         {
             return await OnCancel(model, context!).ConfigureAwait(false);
+        }
+
+        if (!string.Equals(action, "login", StringComparison.Ordinal))
+        {
+            ModelState.AddModelError(string.Empty, _localizer.GetString(options.Value.InvalidCredentialsErrorMessage));
+            var invalidVm = await BuildLoginViewModelAsync(model).ConfigureAwait(false);
+            return View(invalidVm);
         }
 
         if (ModelState.IsValid)
