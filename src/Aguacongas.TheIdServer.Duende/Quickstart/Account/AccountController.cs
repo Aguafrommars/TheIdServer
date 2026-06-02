@@ -114,8 +114,12 @@ public class AccountController(
                 return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
             }
 
-            // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-            return Redirect(model.ReturnUrl!);
+            if (interaction.IsValidReturnUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl!);
+            }
+
+            throw new InvalidReturnUrlException();
         }
 
         // request for a local page
