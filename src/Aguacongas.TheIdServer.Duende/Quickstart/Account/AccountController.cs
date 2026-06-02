@@ -153,7 +153,12 @@ public class AccountController(
                 return this.LoadingPage("Redirect", model.ReturnUrl!);
             }
 
-            return Redirect(model.ReturnUrl!);
+            if (Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl!);
+            }
+
+            return Redirect("~/");
         }
         else
         {
