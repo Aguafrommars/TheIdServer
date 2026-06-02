@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Validators
@@ -18,7 +19,7 @@ namespace Aguacongas.IdentityServer.Validators
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<BackchannelAuthenticationUserValidationResult> ValidateRequestAsync(BackchannelAuthenticationUserValidatorContext userValidatorContext)
+        public async Task<BackchannelAuthenticationUserValidationResult> ValidateRequestAsync(BackchannelAuthenticationUserValidatorContext userValidatorContext, CancellationToken ct)
         {
             var sub = userValidatorContext.LoginHintToken ?? userValidatorContext.IdTokenHintClaims?.SingleOrDefault(c => c.Type == JwtClaimTypes.Subject)?.Value;
 

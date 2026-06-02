@@ -8,22 +8,17 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
 using IdentityModel;
 using ITfoxtec.Identity.Saml2;
-using ITfoxtec.Identity.Saml2.MvcCore;
 using ITfoxtec.Identity.Saml2.Schemas;
 using ITfoxtec.Identity.Saml2.Schemas.Metadata;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel.Security;
@@ -36,14 +31,9 @@ using ISModels = Duende.IdentityServer.Models;
 namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers;
 
 [Collection(BlazorAppCollection.Name)]
-public class Saml2PControllerTest
+public class Saml2PControllerTest(TheIdServerFactory factory)
 {
-    private WebApplicationFactory<AccountController> _factory;
-
-    public Saml2PControllerTest(TheIdServerFactory factory)
-    {
-        _factory = factory;
-    }
+    private WebApplicationFactory<AccountController> _factory = factory;
 
     [Fact]
     public async Task Metadata_should_return_saml2_metadata()
@@ -68,25 +58,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -105,8 +94,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -114,9 +103,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -124,7 +113,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -202,8 +191,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -211,9 +200,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -221,7 +210,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -280,25 +269,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -381,25 +369,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
-                    new Claim(JwtClaimTypes.Name, name),
-                    new Claim(JwtClaimTypes.Subject, sub),
-                    new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
+                new Claim(JwtClaimTypes.Name, name),
+                new Claim(JwtClaimTypes.Subject, sub),
+                new Claim("http://exemple.com", Guid.NewGuid().ToString()),
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -418,8 +405,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -427,9 +414,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -437,7 +424,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -510,25 +497,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -548,8 +534,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -557,9 +543,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -567,7 +553,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -640,26 +626,25 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("amr", Guid.NewGuid().ToString()),
                     new Claim("test", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -678,8 +663,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -687,9 +672,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -697,32 +682,32 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            },
-            AllowedScopes = new[]
-            {
+            ],
+            AllowedScopes =
+            [
                 new ClientScope
                 {
                     Id = Guid.NewGuid().ToString(),
                     Scope = "profile"
                 }
-            },
+            ],
             RelyingPartyId = "test",
-            Properties = new[]
-            {
+            Properties =
+            [
                 new ClientProperty
                 {
                     Id = Guid.NewGuid().ToString(),
                     Key = nameof(IdentityServer.Saml2p.Duende.Services.Store.RelyingParty.UseAcsArtifact),
                     Value = true.ToString()
                 }
-            }
+            ]
         });
         await context.Identities.AddAsync(new IdentityResource
         {
             Id = "profile",
             Enabled = true,
-            IdentityClaims = new[]
-            {
+            IdentityClaims =
+            [
                 new IdentityClaim
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -733,7 +718,7 @@ public class Saml2PControllerTest
                     Id = Guid.NewGuid().ToString(),
                     Type = "test"
                 }
-            }
+            ]
         });
         await context.RelyingParties.AddAsync(new IdentityServer.Store.Entity.RelyingParty
         {
@@ -741,15 +726,15 @@ public class Saml2PControllerTest
             TokenType = Guid.NewGuid().ToString(),
             DigestAlgorithm = Guid.NewGuid().ToString(),
             SignatureAlgorithm = Guid.NewGuid().ToString(),
-            ClaimMappings = new[]
-            {
+            ClaimMappings =
+            [
                 new RelyingPartyClaimMapping
                 {
                     Id = Guid.NewGuid().ToString(),
                     FromClaimType = "amr",
                     ToClaimType = "urm:amr"
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -816,10 +801,10 @@ public class Saml2PControllerTest
 
         var location = response.Headers.Location;
         Assert.NotNull(location);
-        var query = location.Query.Substring(1);
+        var query = location.Query[1..];
 
         var nv = new NameValueCollection();
-        foreach(var segment in query.Split('&'))
+        foreach (var segment in query.Split('&'))
         {
             var kv = segment.Split('=');
             nv.Add(kv[0], Uri.UnescapeDataString(kv[1]));
@@ -861,25 +846,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, _) => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         var certificate = X509CertificateLoader.LoadPkcs12FromFile("itfoxtec.identity.saml2.testwebappcore_Certificate.pfx", "!QAZ2wsx");
@@ -895,28 +879,30 @@ public class Saml2PControllerTest
                     Issuer = issuer
                 };
 
-                var entityDescriptor = new EntityDescriptor(config);
-                entityDescriptor.ValidUntil = 365;
-                entityDescriptor.SPSsoDescriptor = new SPSsoDescriptor
+                var entityDescriptor = new EntityDescriptor(config)
                 {
-                    WantAssertionsSigned = true,
-                    SigningCertificates =
-                    [
-                        certificate
-                    ],
-                    SingleLogoutServices =
-                    [
-                        new SingleLogoutService { Binding = ProtocolBindings.HttpPost, Location = new Uri(defaultSite, "Auth/SingleLogout"), ResponseLocation = new Uri(defaultSite, "Auth/LoggedOut") }
-                    ],
-                    NameIDFormats = [NameIdentifierFormats.X509SubjectName],
-                    AssertionConsumerServices =
-                    [
-                        new AssertionConsumerService { Binding = ProtocolBindings.HttpArtifact, Location = new Uri(defaultSite, "Auth/AssertionConsumerService") },
-                    ],
-                    AttributeConsumingServices =
-                    [
-                        new AttributeConsumingService { ServiceNames = [new("Some SP", "en")], RequestedAttributes = CreateRequestedAttributes() }
-                    ],
+                    ValidUntil = 365,
+                    SPSsoDescriptor = new SPSsoDescriptor
+                    {
+                        WantAssertionsSigned = true,
+                        SigningCertificates =
+                        [
+                            certificate
+                        ],
+                        SingleLogoutServices =
+                        [
+                            new SingleLogoutService { Binding = ProtocolBindings.HttpPost, Location = new Uri(defaultSite, "Auth/SingleLogout"), ResponseLocation = new Uri(defaultSite, "Auth/LoggedOut") }
+                        ],
+                        NameIDFormats = [NameIdentifierFormats.X509SubjectName],
+                        AssertionConsumerServices =
+                        [
+                            new AssertionConsumerService { Binding = ProtocolBindings.HttpArtifact, Location = new Uri(defaultSite, "Auth/AssertionConsumerService") },
+                        ],
+                        AttributeConsumingServices =
+                        [
+                            new AttributeConsumingService { ServiceNames = [new("Some SP", "en")], RequestedAttributes = CreateRequestedAttributes() }
+                        ],
+                    }
                 };
 
                 return new HttpResponseMessage(HttpStatusCode.OK)
@@ -941,8 +927,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -957,9 +943,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Saml2Metadata,
                     Uri = "http://exemple.com/metadata"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -967,7 +953,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -1040,25 +1026,24 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("http://schemas.itfoxtec.com/ws/2014/02/identity/claims/saml2nameid", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         _factory = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
@@ -1077,8 +1062,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -1086,9 +1071,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -1096,7 +1081,7 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            }
+            ]
         });
         await context.SaveChangesAsync();
 
@@ -1147,7 +1132,7 @@ public class Saml2PControllerTest
         });
 
         binding.Bind(new Saml2LogoutRequest(config, user));
-        using var logoutContent = new FormUrlEncodedContent(new Dictionary<string, string> 
+        using var logoutContent = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["SAMLRequest"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(binding.XmlDocument.OuterXml)),
             ["RelayState"] = binding.RelayState
@@ -1170,30 +1155,30 @@ public class Saml2PControllerTest
         var name = Guid.NewGuid().ToString();
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(
-                new[]
-                {
+                [
                         new Claim("name", name),
                         new Claim("sub", sub),
                         new Claim("amr", Guid.NewGuid().ToString())
-                },
+                ],
                 "saml2p",
                 "name",
                 "role"));
-        userSessionMock.Setup(m => m.GetUserAsync()).ReturnsAsync(user);
+        userSessionMock.Setup(m => m.GetUserAsync(It.IsAny<CancellationToken>())).ReturnsAsync(user);
 
         var profileServiceMock = new Mock<IProfileService>();
-        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims = new List<Claim>
-            {
+        profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
+            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims =
+            [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
                     new Claim("http://exemple.com", Guid.NewGuid().ToString()),
-            })
+            ])
             .Returns(Task.CompletedTask);
 
         var relyingPartyStore = new Mock<IRelyingPartyStore>();
         bool called = false;
-        relyingPartyStore.Setup(m => m.FindRelyingPartyAsync(issuer)).ReturnsAsync(() => {
+        relyingPartyStore.Setup(m => m.FindRelyingPartyAsync(issuer)).ReturnsAsync(() =>
+        {
             if (called)
             {
                 return null;
@@ -1205,7 +1190,7 @@ public class Saml2PControllerTest
                 UseAcsArtifact = true,
                 AcsDestination = new Uri("https://exemple.com/artifact"),
                 SingleLogoutDestination = new Uri("https://exemple.com"),
-                SignatureValidationCertificate = Array.Empty<X509Certificate2>(),
+                SignatureValidationCertificate = [],
                 EncryptionCertificate = null,
                 SignatureAlgorithm = null
             };
@@ -1227,8 +1212,8 @@ public class Saml2PControllerTest
             Id = issuer,
             Enabled = true,
             ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
-            RedirectUris = new[]
-            {
+            RedirectUris =
+            [
                 new ClientUri
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -1236,9 +1221,9 @@ public class Saml2PControllerTest
                     Kind = UriKinds.Redirect,
                     Uri = "http://exemple.com"
                 }
-            },
-            ClientSecrets = new[]
-            {
+            ],
+            ClientSecrets =
+            [
                 new ClientSecret
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -1246,16 +1231,16 @@ public class Saml2PControllerTest
                     Type = "X509CertificateBase64",
                     Value = Convert.ToBase64String(certificate.Export(X509ContentType.Cert))
                 }
-            },
-            Properties = new[]
-            {
+            ],
+            Properties =
+            [
                 new ClientProperty
                 {
                     Id = Guid.NewGuid().ToString(),
                     Key = nameof(IdentityServer.Saml2p.Duende.Services.Store.RelyingParty.UseAcsArtifact),
                     Value = true.ToString()
                 }
-            }
+            ]
         };
 
         await context.Clients.AddAsync(app);
@@ -1324,7 +1309,7 @@ public class Saml2PControllerTest
 
         var location = response.Headers.Location;
         Assert.NotNull(location);
-        var query = location.Query.Substring(1);
+        var query = location.Query[1..];
 
         var nv = new NameValueCollection();
         foreach (var segment in query.Split('&'))
@@ -1358,15 +1343,15 @@ public class Saml2PControllerTest
         app.ProtocolType = IdentityServerConstants.ProtocolTypes.WsFederation;
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object, 
-            saml2ArtifactResolve, 
+        await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object,
+            saml2ArtifactResolve,
             saml2AuthnResponse));
 
         app.Enabled = false;
         await context.SaveChangesAsync();
 
-        await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object, 
-            saml2ArtifactResolve, 
+        await Assert.ThrowsAsync<Exception>(() => soapEnvelope.ResolveAsync(httpFactoryMock.Object,
+            saml2ArtifactResolve,
             saml2AuthnResponse));
     }
 
@@ -1384,7 +1369,7 @@ public class Saml2PControllerTest
         return descriptor;
     }
 
-    private IEnumerable<RequestedAttribute> CreateRequestedAttributes()
+    private static IEnumerable<RequestedAttribute> CreateRequestedAttributes()
     {
         yield return new RequestedAttribute("urn:oid:2.5.4.4");
         yield return new RequestedAttribute("urn:oid:2.5.4.3", false);

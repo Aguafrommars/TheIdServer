@@ -36,7 +36,7 @@
 		<None Include="package-icon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer" Version="7.4.7" />
+	  <PackageReference Include="Duende.IdentityServer" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

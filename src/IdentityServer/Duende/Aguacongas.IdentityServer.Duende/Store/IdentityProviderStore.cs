@@ -4,7 +4,7 @@ using Duende.IdentityServer.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -29,9 +29,14 @@ namespace Aguacongas.IdentityServer.Store
             });
         }
 
-        public async Task<IdentityProvider> GetBySchemeAsync(string scheme)
+        public Task<IReadOnlyCollection<IdentityProviderName>> GetAllSchemeNamesAsync(CancellationToken ct)
         {
-            var provider = await _store.GetAsync(scheme, new GetRequest()).ConfigureAwait(false);
+            throw new NotImplementedException();
+        }
+
+        public async Task<IdentityProvider> GetBySchemeAsync(string scheme, CancellationToken ct)
+        {
+            var provider = await _store.GetAsync(scheme, new GetRequest(), ct).ConfigureAwait(false);
             return new IdentityProvider("oidc")
             {
                 DisplayName = provider.DisplayName,
@@ -39,7 +44,5 @@ namespace Aguacongas.IdentityServer.Store
                 Scheme = scheme
             };
         }
-
-        
     }
 }

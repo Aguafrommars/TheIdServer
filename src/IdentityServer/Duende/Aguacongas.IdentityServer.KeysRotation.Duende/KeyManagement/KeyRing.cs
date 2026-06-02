@@ -26,7 +26,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
     /// A basic implementation of <see cref="IKeyRingStore"/>.
     /// </summary>
     internal sealed class KeyRing<TC, TE> : IKeyRingStore<TC, TE> // interface implementation change from orignal IKeyRing
-        where TC : SigningAlgorithmConfiguration 
+        where TC : SigningAlgorithmConfiguration
         where TE : ISigningAlgortithmEncryptor
     {
         private readonly KeyHolder _defaultKeyHolder;
@@ -75,7 +75,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             return holder?.GetEncryptorInstance(out isRevoked);
         }
 
-        public Task<SigningCredentials> GetSigningCredentialsAsync() // interface implementation chance from orignal IKeyRing
+        public Task<SigningCredentials> GetSigningCredentialsAsync(CancellationToken ct) // interface implementation chance from orignal IKeyRing
         {
             if (_defaultKeyHolder.GetEncryptorInstance(out bool isRevoked) is TE encryptor)
             {
@@ -84,16 +84,17 @@ namespace Aguacongas.IdentityServer.KeysRotation
             throw new InvalidOperationException($"The default key is not an Rsa nor an ECDsa key. Revoked : {isRevoked}");
         }
 
-        public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
+
+        public Task<IReadOnlyCollection<SecurityKeyInfo>> GetValidationKeysAsync(CancellationToken ct)
         {
             var signingCredentialsList = _keyIdToKeyHolderMap.Values
                 .Where(h => h.GetEncryptorInstance(out bool isRevoked) is TC && !isRevoked && h.Key.ExpirationDate <= DateTimeOffset.UtcNow + _configuration.KeyRetirement)
                 .Select(h => (TE)h.GetEncryptorInstance(out _))
                 .Where(e => e != null)
-                .Select((TE e) => e.GetSecurityKeyInfo(_configuration.SigningAlgorithm));
-            return Task.FromResult(signingCredentialsList);
+                .Select((TE e) => e.GetSecurityKeyInfo(_configuration.SigningAlgorithm))
+                .ToArray();
+            return Task.FromResult(signingCredentialsList as IReadOnlyCollection<SecurityKeyInfo>);
         }
-
         // used for providing lazy activation of the authenticated encryptor instance
         private sealed class KeyHolder
         {

@@ -8,6 +8,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Services
@@ -21,7 +22,7 @@ namespace Aguacongas.IdentityServer.Services
 
         public BackchannelAuthenticationUserNotificationService(IIssuerNameService nameService,
             IStringLocalizer<BackchannelAuthenticationUserNotificationService> localizer,
-            HttpClient httpClient, 
+            HttpClient httpClient,
             IOptions<BackchannelAuthenticationUserNotificationServiceOptions> options)
         {
             _nameService = nameService ?? throw new ArgumentNullException(nameof(nameService));
@@ -30,23 +31,23 @@ namespace Aguacongas.IdentityServer.Services
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task SendLoginRequestAsync(BackchannelUserLoginRequest request)
+        public async Task SendLoginRequestAsync(BackchannelUserLoginRequest request, CancellationToken ct)
         {
-            var htmlMessage = await CreateMessage(request).ConfigureAwait(false);
+            var htmlMessage = await CreateMessage(request, ct).ConfigureAwait(false);
             var subject = _localizer["Authorization request"];
 
             using var content = new StringContent(JsonSerializer.Serialize(new Email
             {
-                Addresses = new string[] { request.Subject.FindFirst(c => c.Type == JwtClaimTypes.Email)?.Value },
+                Addresses = [request.Subject.FindFirst(c => c.Type == JwtClaimTypes.Email)?.Value],
                 Message = htmlMessage,
                 Subject = subject
             }), Encoding.UTF8, "application/json");
-            using var response = await _httpClient.PostAsync(_options.Value.ApiUrl, content)
+            using var response = await _httpClient.PostAsync(_options.Value.ApiUrl, content, ct)
                 .ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
-        private async Task<string> CreateMessage(BackchannelUserLoginRequest request)
+        private async Task<string> CreateMessage(BackchannelUserLoginRequest request, CancellationToken ct)
         {
             var client = request.Client;
             var builder = new StringBuilder();
@@ -70,7 +71,7 @@ namespace Aguacongas.IdentityServer.Services
             builder.Append(_localizer[" Do you wish to continue?", client.ClientName]);
             builder.Append("</div>");
 
-            var issuer = await _nameService.GetCurrentAsync().ConfigureAwait(false);
+            var issuer = await _nameService.GetCurrentAsync(ct).ConfigureAwait(false);
             if (!issuer.EndsWith('/'))
             {
                 issuer += "/";

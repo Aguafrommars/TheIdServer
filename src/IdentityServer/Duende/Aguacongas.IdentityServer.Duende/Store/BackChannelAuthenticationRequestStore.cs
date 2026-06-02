@@ -5,6 +5,7 @@ using IdentityModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using IsModels = Duende.IdentityServer.Models;
 
@@ -19,33 +20,33 @@ namespace Aguacongas.IdentityServer.Store
             _store = store;
         }
 
-        public async Task<string> CreateRequestAsync(IsModels.BackChannelAuthenticationRequest request)
+        public async Task<string> CreateRequestAsync(IsModels.BackChannelAuthenticationRequest request, CancellationToken ct)
         {
             var clientId = GetClientId(request);
             var subjectId = GetSubjectId(request);
             request.InternalId ??= Guid.NewGuid().ToString();
 
             var entity = CreateEntity(request, clientId, subjectId, request.CreationTime.AddSeconds(request.Lifetime));
-            entity = await _store.CreateAsync(entity).ConfigureAwait(false);
+            entity = await _store.CreateAsync(entity, ct).ConfigureAwait(false);
 
             return entity.SessionId;
         }
 
-        public async Task<IsModels.BackChannelAuthenticationRequest> GetByAuthenticationRequestIdAsync(string requestId)
+        public async Task<IsModels.BackChannelAuthenticationRequest> GetByAuthenticationRequestIdAsync(string requestId, CancellationToken ct)
         {
             var page = await _store.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(BackChannelAuthenticationRequest.SessionId)} eq '{requestId}'"
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             return CreateDto(page.Items.FirstOrDefault()?.Data);
         }
 
-        public Task<IsModels.BackChannelAuthenticationRequest> GetByInternalIdAsync(string id)
-        => GetAsync(id);
-        
+        public Task<IsModels.BackChannelAuthenticationRequest> GetByInternalIdAsync(string id, CancellationToken ct)
+        => GetAsync(id, ct);
 
-        public async Task<IEnumerable<IsModels.BackChannelAuthenticationRequest>> GetLoginsForUserAsync(string subjectId, string clientId = null)
+
+        public async Task<IReadOnlyCollection<IsModels.BackChannelAuthenticationRequest>> GetLoginsForUserAsync(string subjectId, CancellationToken ct, string clientId = null)
         {
             var filter = $"{nameof(BackChannelAuthenticationRequest.UserId)} eq '{subjectId}'";
             if (clientId is not null)
@@ -56,16 +57,16 @@ namespace Aguacongas.IdentityServer.Store
             var page = await _store.GetAsync(new PageRequest
             {
                 Filter = filter
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
-            return page.Items.Select(e => CreateDto(e.Data));
+            return [.. page.Items.Select(e => CreateDto(e.Data))];
         }
 
-        public Task RemoveByInternalIdAsync(string id)
-        => RemoveAsync(id);
+        public Task RemoveByInternalIdAsync(string id, CancellationToken ct)
+        => RemoveAsync(id, ct);
 
-        public Task UpdateByInternalIdAsync(string id, IsModels.BackChannelAuthenticationRequest request)
-        => UpdateAsync(id, request, request.CreationTime.AddSeconds(request.Lifetime));
+        public Task UpdateByInternalIdAsync(string id, IsModels.BackChannelAuthenticationRequest request, CancellationToken ct)
+        => UpdateAsync(id, request, request.CreationTime.AddSeconds(request.Lifetime), ct);
 
         protected override string GetClientId(IsModels.BackChannelAuthenticationRequest dto)
         => dto.ClientId;
@@ -75,11 +76,10 @@ namespace Aguacongas.IdentityServer.Store
 
         protected override BackChannelAuthenticationRequest CreateEntity(IsModels.BackChannelAuthenticationRequest dto, string clientId, string subjectId, DateTime? expiration)
         {
-            var entity = base.CreateEntity(dto, clientId, subjectId, expiration);            
+            var entity = base.CreateEntity(dto, clientId, subjectId, expiration);
             entity.Id = dto.InternalId;
             entity.SessionId = dto.SessionId ?? Guid.NewGuid().ToString();
             return entity;
         }
-        
     }
 }

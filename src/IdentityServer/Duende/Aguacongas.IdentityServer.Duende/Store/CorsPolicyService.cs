@@ -3,6 +3,7 @@
 using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Services;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -30,7 +31,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <returns></returns>
-        public async Task<bool> IsOriginAllowedAsync(string origin)
+        public async Task<bool> IsOriginAllowedAsync(string origin, CancellationToken ct)
         {
             var corsUri = new Uri(origin);
             var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
@@ -38,9 +39,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = $"{nameof(ClientUri.SanetizedCorsUri)} eq '{sanetized}'",
                 Select = nameof(ClientUri.SanetizedCorsUri)
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
             return response.Count > 0;
         }
-
     }
 }

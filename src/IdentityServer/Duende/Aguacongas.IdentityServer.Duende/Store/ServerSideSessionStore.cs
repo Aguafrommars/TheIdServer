@@ -44,7 +44,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = $"{nameof(Entity.UserSession.Expires)} lt {DateTime.UtcNow:o}",
                 OrderBy = nameof(Entity.UserSession.Created),
-                Take = count    
+                Take = count
             }, cancellationToken).ConfigureAwait(false);
 
             var items = pageResponse.Items;
@@ -53,23 +53,23 @@ namespace Aguacongas.IdentityServer.Store
                 await _store.DeleteAsync(sessionId, cancellationToken).ConfigureAwait(false);
             }
 
-            return items.Select(s => s.ToServerSideSession()).ToArray();
+            return [.. items.Select(s => s.ToServerSideSession())];
         }
 
-        public async Task<ServerSideSession> GetSessionAsync(string key, CancellationToken cancellationToken = default)
-        => (await _store.GetAsync(key, new GetRequest(), cancellationToken).ConfigureAwait(false))?.ToServerSideSession();
+        public async Task<ServerSideSession> GetSessionAsync(string key, CancellationToken ct)
+        => (await _store.GetAsync(key, new GetRequest(), ct).ConfigureAwait(false))?.ToServerSideSession();
 
-        public async Task<IReadOnlyCollection<ServerSideSession>> GetSessionsAsync(SessionFilter filter, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyCollection<ServerSideSession>> GetSessionsAsync(SessionFilter filter, CancellationToken ct)
         {
             var pageResponse = await _store.GetAsync(new PageRequest
             {
                 Filter = CreateODataFilterExpression(filter),
-            }, cancellationToken).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
-            return pageResponse.Items.Select(s => s.ToServerSideSession()).ToArray();
+            return [.. pageResponse.Items.Select(s => s.ToServerSideSession())];
         }
 
-        public async  Task<QueryResult<ServerSideSession>> QuerySessionsAsync(SessionQuery filter = null, CancellationToken cancellationToken = default)
+        public async Task<QueryResult<ServerSideSession>> QuerySessionsAsync(CancellationToken ct, SessionQuery filter = null)
         {
             filter ??= new();
 
@@ -93,11 +93,11 @@ namespace Aguacongas.IdentityServer.Store
                 Filter = string.IsNullOrEmpty(odataFilter) ? null : odataFilter,
                 Take = take,
                 Skip = skip
-            }, cancellationToken).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             var items = pageResponse.Items;
             var skipNext = skip + items.Count();
-           
+
             var totalPage = pageResponse.Count == 0 ? null : (int?)Math.Floor((double)pageResponse.Count / take);
             if (pageResponse.Count % take > 0)
             {

@@ -2,11 +2,12 @@
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Stores;
-using IsModels = Duende.IdentityServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using IsModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.Store
 {
@@ -38,11 +39,11 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="apiResourceNames">The name.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<IsModels.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
+        public async Task<IReadOnlyCollection<IsModels.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames, CancellationToken ct)
         {
             if (apiResourceNames == null || !apiResourceNames.Any())
             {
-                return Array.Empty<IsModels.ApiResource>();
+                return [];
             }
 
             var filter = string.Join(" or ", apiResourceNames.Select(s => $"{nameof(ProtectResource.Id)} eq '{s}'"));
@@ -50,9 +51,9 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = filter,
                 Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
-            return response.Items.Select(a => a.ToApi());
+            return [.. response.Items.Select(a => a.ToApi())];
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IsModels.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IReadOnlyCollection<IsModels.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames, CancellationToken ct)
         {
             if (scopeNames == null || !scopeNames.Any())
             {
@@ -76,7 +77,7 @@ namespace Aguacongas.IdentityServer.Store
 
             if (!apiIdListResponse.Items.Any())
             {
-                return Array.Empty<IsModels.ApiResource>();
+                return [];
             }
 
             filter = string.Join(" or ", apiIdListResponse.Items.Select(i => $"{nameof(ProtectResource.Id)} eq '{i.ApiId}'"));
@@ -84,9 +85,9 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = filter,
                 Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
-            }).ConfigureAwait(false);
-            
-            return apiResposne.Items.Select(r => r.ToApi());
+            }, ct).ConfigureAwait(false);
+
+            return [.. apiResposne.Items.Select(r => r.ToApi())];
         }
 
         /// <summary>
@@ -94,11 +95,11 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IsModels.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IReadOnlyCollection<IsModels.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames, CancellationToken ct)
         {
             if (scopeNames == null || !scopeNames.Any())
             {
-                return Array.Empty<IsModels.ApiScope>();
+                return [];
             }
 
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(ApiScope.Id)} eq '{s}'"));
@@ -106,8 +107,8 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = filter,
                 Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
-            }).ConfigureAwait(false);
-            return response.Items.Select(s => s.ToApiScope());
+            }, ct).ConfigureAwait(false);
+            return [.. response.Items.Select(s => s.ToApiScope())];
         }
 
         /// <summary>
@@ -115,11 +116,11 @@ namespace Aguacongas.IdentityServer.Store
         /// </summary>
         /// <param name="scopeNames"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IsModels.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IReadOnlyCollection<IsModels.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames, CancellationToken ct)
         {
             if (scopeNames == null || !scopeNames.Any())
             {
-                return Array.Empty<IsModels.IdentityResource>();
+                return [];
             }
 
             var filter = string.Join(" or ", scopeNames.Select(s => $"{nameof(IdentityResource.Id)} eq '{s}'"));
@@ -127,31 +128,31 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = filter,
                 Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
-            return response.Items.Select(e => e.ToIdentity());
+            return [.. response.Items.Select(e => e.ToIdentity())];
         }
 
         /// <summary>
         /// Gets all resources.
         /// </summary>
         /// <returns></returns>
-        public async Task<IsModels.Resources> GetAllResourcesAsync()
+        public async Task<IsModels.Resources> GetAllResourcesAsync(CancellationToken ct)
         {
             return new IsModels.Resources
             {
                 ApiResources = (await _apiStore.GetAsync(new PageRequest
                 {
                     Expand = $"{nameof(ProtectResource.ApiClaims)},{nameof(ProtectResource.Secrets)},{nameof(ProtectResource.ApiScopes)},{nameof(ProtectResource.Properties)},{nameof(ProtectResource.Resources)}"
-                }).ConfigureAwait(false)).Items.Select(a => a.ToApi()).ToList(),
+                }, ct).ConfigureAwait(false)).Items.Select(a => a.ToApi()).ToList(),
                 IdentityResources = (await _identityStore.GetAsync(new PageRequest
                 {
                     Expand = $"{nameof(IdentityResource.IdentityClaims)},{nameof(IdentityResource.Properties)},{nameof(IdentityResource.Resources)}"
-                }).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList(),
+                }, ct).ConfigureAwait(false)).Items.Select(i => i.ToIdentity()).ToList(),
                 ApiScopes = (await _apiScopeStore.GetAsync(new PageRequest
                 {
                     Expand = $"{nameof(ApiScope.ApiScopeClaims)},{nameof(ApiScope.Properties)},{nameof(ApiScope.Resources)}"
-                }).ConfigureAwait(false)).Items.Select(s => s.ToApiScope()).ToList()
+                }, ct).ConfigureAwait(false)).Items.Select(s => s.ToApiScope()).ToList()
             };
         }
     }

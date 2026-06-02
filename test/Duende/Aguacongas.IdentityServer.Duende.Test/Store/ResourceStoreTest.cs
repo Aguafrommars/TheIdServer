@@ -5,39 +5,38 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Duende.Test.Store
+namespace Aguacongas.IdentityServer.Duende.Test.Store;
+
+public class ResourceStoreTest
 {
-    public class ResourceStoreTest
+    [Fact]
+    public void Constructor_should_check_arguments()
     {
-        [Fact]
-        public void Constructor_should_check_arguments()
+        Assert.Throws<ArgumentNullException>(() => new ResourceStore(null, null, null, null));
+        Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object, null, null, null));
+        Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object,
+            new Mock<IAdminStore<IdentityResource>>().Object, null, null));
+        Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object,
+            new Mock<IAdminStore<IdentityResource>>().Object, new Mock<IAdminStore<ApiScope>>().Object, null));
+    }
+
+    [Fact]
+    public async Task FindApiResourcesByScopeNameAsync_should_return_empty_when_not_relation_found()
+    {
+        var storeMock = new Mock<IAdminStore<ApiApiScope>>();
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<ApiApiScope>
         {
-            Assert.Throws<ArgumentNullException>(() => new ResourceStore(null, null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object, null, null, null));
-            Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object,
-                new Mock<IAdminStore<IdentityResource>>().Object, null, null));
-            Assert.Throws<ArgumentNullException>(() => new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object, 
-                new Mock<IAdminStore<IdentityResource>>().Object, new Mock<IAdminStore<ApiScope>>().Object, null));
-        }
+            Items = [],
+            Count = 0
+        });
 
-        [Fact]
-        public async Task FindApiResourcesByScopeNameAsync_should_return_empty_when_not_relation_found()
-        {
-            var storeMock = new Mock<IAdminStore<ApiApiScope>>();
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default)).ReturnsAsync(new PageResponse<ApiApiScope>
-            {
-                Items = Array.Empty<ApiApiScope>(),
-                Count = 0
-            });
+        var sut = new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object,
+            new Mock<IAdminStore<IdentityResource>>().Object,
+            new Mock<IAdminStore<ApiScope>>().Object,
+            storeMock.Object);
 
-            var sut = new ResourceStore(new Mock<IAdminStore<ProtectResource>>().Object,
-                new Mock<IAdminStore<IdentityResource>>().Object,
-                new Mock<IAdminStore<ApiScope>>().Object,
-                storeMock.Object);
+        var result = await sut.FindApiResourcesByScopeNameAsync([Guid.NewGuid().ToString()], default);
 
-            var result = await sut.FindApiResourcesByScopeNameAsync(new[] { Guid.NewGuid().ToString() });
-
-            Assert.Empty(result);
-        }
+        Assert.Empty(result);
     }
 }

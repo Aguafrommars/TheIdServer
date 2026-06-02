@@ -13,136 +13,126 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Configuration = Duende.IdentityServer.Configuration;
 
-namespace Aguacongas.IdentityServer.WsFederation
+namespace Aguacongas.IdentityServer.WsFederation;
+
+/// <summary>
+/// 
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="WsFederationService"/> class.
+/// </remarks>
+/// <param name="signinValidator">The signin validator.</param>
+/// <param name="options">The options.</param>
+/// <param name="generator">The generator.</param>
+/// <param name="userSession">The user session.</param>
+/// <param name="logger">The logger.</param>
+/// <exception cref="ArgumentNullException">
+/// signinValidator
+/// or
+/// options
+/// or
+/// generator
+/// or
+/// userSession
+/// or
+/// logger
+/// </exception>
+public class WsFederationService(ISignInValidator signinValidator,
+    Configuration.IdentityServerOptions options,
+    ISignInResponseGenerator generator,
+    IUserSession userSession,
+    ILogger<WsFederationService> logger) : IWsFederationService
 {
+    private readonly IUserSession _userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
+    private readonly ISignInResponseGenerator _generator = generator ?? throw new ArgumentNullException(nameof(generator));
+    private readonly ILogger<WsFederationService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly Configuration.IdentityServerOptions _options = options ?? throw new ArgumentNullException(nameof(options));
+    private readonly ISignInValidator _signinValidator = signinValidator ?? throw new ArgumentNullException(nameof(signinValidator));
+
     /// <summary>
-    /// 
+    /// Processes the request.
     /// </summary>
-    public class WsFederationService : IWsFederationService
+    /// <param name="request">The request.</param>
+    /// <param name="helper">The helper.</param>
+    /// <returns></returns>
+    public async Task<IActionResult> ProcessRequestAsync(HttpRequest request, IUrlHelper helper)
     {
-        private readonly IUserSession _userSession;
-        private readonly ISignInResponseGenerator _generator;
-        private readonly ILogger<WsFederationController> _logger;
-        private readonly Configuration.IdentityServerOptions _options;
-        private readonly ISignInValidator _signinValidator;
+        var queryString = request.QueryString;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WsFederationService"/> class.
-        /// </summary>
-        /// <param name="signinValidator">The signin validator.</param>
-        /// <param name="options">The options.</param>
-        /// <param name="generator">The generator.</param>
-        /// <param name="userSession">The user session.</param>
-        /// <param name="logger">The logger.</param>
-        /// <exception cref="ArgumentNullException">
-        /// signinValidator
-        /// or
-        /// options
-        /// or
-        /// generator
-        /// or
-        /// userSession
-        /// or
-        /// logger
-        /// </exception>
-        public WsFederationService(ISignInValidator signinValidator,
-            Configuration.IdentityServerOptions options,
-            ISignInResponseGenerator generator,
-            IUserSession userSession,
-            ILogger<WsFederationController> logger)
+        var user = await _userSession.GetUserAsync(request.HttpContext.RequestAborted).ConfigureAwait(false);
+        var message = WsFederationMessage.FromQueryString(queryString.ToString());
+
+        if (message.IsSignInMessage)
         {
-            _signinValidator = signinValidator ?? throw new ArgumentNullException(nameof(signinValidator));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _generator = generator ?? throw new ArgumentNullException(nameof(generator));
-            _userSession = userSession ?? throw new ArgumentNullException(nameof(userSession));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            return await ProcessSignInAsync(message, user, request, helper).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Processes the request.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="helper">The helper.</param>
-        /// <returns></returns>
-        public async Task<IActionResult> ProcessRequestAsync(HttpRequest request, IUrlHelper helper)
+        if (message.IsSignOutMessage)
         {
-            var queryString = request.QueryString;
-
-            var user = await _userSession.GetUserAsync().ConfigureAwait(false);
-            var message = WsFederationMessage.FromQueryString(queryString.ToString());
-
-            if (message.IsSignInMessage)
-            {
-                return await ProcessSignInAsync(message, user, request, helper).ConfigureAwait(false);
-            }
-
-            if (message.IsSignOutMessage)
-            {
-                return new RedirectResult($"~/connect/endsession{queryString}");
-            }
-
-            return new BadRequestObjectResult("Invalid WS-Federation request");
+            return new RedirectResult($"~/connect/endsession{queryString}");
         }
 
-        private async Task<IActionResult> ProcessSignInAsync(WsFederationMessage signin, ClaimsPrincipal user, HttpRequest request, IUrlHelper helper)
+        return new BadRequestObjectResult("Invalid WS-Federation request");
+    }
+
+    private async Task<IActionResult> ProcessSignInAsync(WsFederationMessage signin, ClaimsPrincipal user, HttpRequest request, IUrlHelper helper)
+    {
+        if (user != null && user.Identity.IsAuthenticated)
         {
-            if (user != null && user.Identity.IsAuthenticated)
-            {
-                _logger.LogDebug("User in WS-Federation signin request: {subjectId}", user.GetSubjectId());
-            }
-            else
-            {
-                _logger.LogDebug("No user present in WS-Federation signin request");
-            }
-
-            // validate request
-            var result = await _signinValidator.ValidateAsync(signin, user).ConfigureAwait(false);
-
-            if (result.IsError)
-            {
-                return new BadRequestObjectResult(result);
-            }
-
-            if (result.SignInRequired)
-            {
-                var returnUrl = helper.Action(nameof(WsFederationController.Index));
-                returnUrl = AddQueryString(returnUrl, request.QueryString.Value);
-
-                var loginUrl = request.PathBase + _options.UserInteraction.LoginUrl;
-                var url = AddQueryString(loginUrl, _options.UserInteraction.LoginReturnUrlParameter, returnUrl);
-
-                return new RedirectResult(url);
-            }
-            else
-            {
-                // create protocol response
-                var responseMessage = await _generator.GenerateResponseAsync(result).ConfigureAwait(false);
-                await _userSession.AddClientIdAsync(result.Client.ClientId).ConfigureAwait(false);
-
-                return new SignInResult(responseMessage);
-            }
+            _logger.LogDebug("User in WS-Federation signin request: {SubjectId}", user.GetSubjectId());
+        }
+        else
+        {
+            _logger.LogDebug("No user present in WS-Federation signin request");
         }
 
-        private static string AddQueryString(string url, string query)
-        {
-            if (!url.Contains('?'))
-            {
-                if (!query.StartsWith("?"))
-                {
-                    url += "?";
-                }
-            }
-            else if (!url.EndsWith("&"))
-            {
-                url += "&";
-            }
+        // validate request
+        var result = await _signinValidator.ValidateAsync(signin, user, request.HttpContext.RequestAborted).ConfigureAwait(false);
 
-            return url + query;
+        if (result.IsError)
+        {
+            return new BadRequestObjectResult(result);
         }
 
-        private static string AddQueryString(string url, string name, string value)
+        if (result.SignInRequired)
         {
-            return AddQueryString(url, $"{name}={UrlEncoder.Default.Encode(value)}");
+            var returnUrl = helper.Action(nameof(WsFederationController.Index));
+            returnUrl = AddQueryString(returnUrl, request.QueryString.Value);
+
+            var loginUrl = request.PathBase + _options.UserInteraction.LoginUrl;
+            var url = AddQueryString(loginUrl, _options.UserInteraction.LoginReturnUrlParameter, returnUrl);
+
+            return new RedirectResult(url);
         }
+        else
+        {
+            // create protocol response
+            var responseMessage = await _generator.GenerateResponseAsync(result, request.HttpContext.RequestAborted).ConfigureAwait(false);
+            await _userSession.AddClientIdAsync(result.Client.ClientId, request.HttpContext.RequestAborted).ConfigureAwait(false);
+
+            return new SignInResult(responseMessage);
+        }
+    }
+
+    private static string AddQueryString(string url, string query)
+    {
+        if (!url.Contains('?'))
+        {
+            if (!query.StartsWith('?'))
+            {
+                url += "?";
+            }
+        }
+        else if (!url.EndsWith('&'))
+        {
+            url += "&";
+        }
+
+        return url + query;
+    }
+
+    private static string AddQueryString(string url, string name, string value)
+    {
+        return AddQueryString(url, $"{name}={UrlEncoder.Default.Encode(value)}");
     }
 }

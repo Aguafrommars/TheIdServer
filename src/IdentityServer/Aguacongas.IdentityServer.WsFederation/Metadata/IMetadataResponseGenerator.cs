@@ -1,6 +1,6 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
-using Microsoft.IdentityModel.Protocols.WsFederation;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.WsFederation
@@ -14,7 +14,8 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// Generates the asynchronous.
         /// </summary>
         /// <param name="wsfedEndpoint">The wsfed endpoint.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<WsFederationConfiguration> GenerateAsync(string wsfedEndpoint);
+        Task<WsFederationConfiguration> GenerateAsync(string wsfedEndpoint, CancellationToken cancellationToken);
     }
 }

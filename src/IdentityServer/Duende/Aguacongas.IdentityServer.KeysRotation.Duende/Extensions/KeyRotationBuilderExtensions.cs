@@ -244,10 +244,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ArgumentNullException.ThrowIfNull(builder);
 
-            getSession ??= p => {
-                    var store = p.GetRequiredService<IDocumentStore>();
-                    return store.OpenSession();
-                };
+            getSession ??= p =>
+            {
+                var store = p.GetRequiredService<IDocumentStore>();
+                return store.OpenSession();
+            };
 
             builder.Services.AddSingleton<IConfigureOptions<KeyRotationOptions>>(services =>
             {
@@ -728,9 +729,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(keyName));
             }
 
-            var credential = string.IsNullOrEmpty(managedIdentityClientId)
-                ? new ManagedIdentityCredential()
-                : new ManagedIdentityCredential(managedIdentityClientId);
+            var managedIdentityId = string.IsNullOrEmpty(managedIdentityClientId)
+                ? ManagedIdentityId.SystemAssigned
+                : ManagedIdentityId.FromUserAssignedClientId(managedIdentityClientId);
+            var credential = new ManagedIdentityCredential(managedIdentityId);
 
             return ProtectKeysWithAzureKeyVault(builder, new Uri(keyVaultUri), keyName, credential);
         }

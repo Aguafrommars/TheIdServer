@@ -5,12 +5,13 @@ using Duende.IdentityServer.Stores.Serialization;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
 {
     public abstract class GrantStore<TEntity, TDto>
-        where TEntity: class, IGrant, new()
+        where TEntity : class, IGrant, new()
     {
         private readonly IAdminStore<TEntity> _store;
         private readonly IPersistentGrantSerializer _serializer;
@@ -21,25 +22,25 @@ namespace Aguacongas.IdentityServer.Store
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
-        protected async Task<TDto> GetAsync(string handle)
+        protected async Task<TDto> GetAsync(string handle, CancellationToken ct)
         {
-            var entity = await GetEntityByHandle(handle)
+            var entity = await GetEntityByHandle(handle, ct)
                 .ConfigureAwait(false);
 
             return CreateDto(entity?.Data);
         }
 
-        protected async Task<TDto> GetAsync(string subjectId, string clientId)
+        protected async Task<TDto> GetAsync(string subjectId, string clientId, CancellationToken ct)
         {
-            var entity = await GetEntityBySubjectAndClient(subjectId, clientId)
+            var entity = await GetEntityBySubjectAndClient(subjectId, clientId, ct)
                 .ConfigureAwait(false);
 
             return CreateDto(entity?.Data);
         }
 
-        protected async Task UpdateAsync(string handle, TDto dto, DateTime? expiration)
+        protected async Task UpdateAsync(string handle, TDto dto, DateTime? expiration, CancellationToken ct)
         {
-            var entity = await GetEntityByHandle(handle)
+            var entity = await GetEntityByHandle(handle, ct)
                 .ConfigureAwait(false);
 
             if (entity == null)
@@ -48,29 +49,29 @@ namespace Aguacongas.IdentityServer.Store
             }
 
             var subjectId = GetSubjectId(dto);
-            var clientId = GetClientId(dto); 
+            var clientId = GetClientId(dto);
 
             var newEntity = CreateEntity(dto, clientId, subjectId, expiration);
             entity.Data = newEntity.Data;
 
-            await _store.UpdateAsync(entity).ConfigureAwait(false);
+            await _store.UpdateAsync(entity, ct).ConfigureAwait(false);
         }
 
-        protected async Task RemoveAsync(string handle)
+        protected async Task RemoveAsync(string handle, CancellationToken ct)
         {
-            var entity = await GetEntityByHandle(handle)
+            var entity = await GetEntityByHandle(handle, ct)
                 .ConfigureAwait(false);
 
             if (entity != null)
             {
-                await _store.DeleteAsync(entity.Id)
+                await _store.DeleteAsync(entity.Id, ct)
                     .ConfigureAwait(false);
             }
         }
 
-        protected async Task RemoveAsync(string subjectId, string clientId)
+        protected async Task RemoveAsync(string subjectId, string clientId, CancellationToken ct)
         {
-            var entity = await GetEntityBySubjectAndClient(subjectId, clientId)
+            var entity = await GetEntityBySubjectAndClient(subjectId, clientId, ct)
                 .ConfigureAwait(false);
 
             await RemoveEntityAsync(entity)
@@ -87,7 +88,7 @@ namespace Aguacongas.IdentityServer.Store
             return _store.DeleteAsync(entity.Id);
         }
 
-        protected async Task<string> StoreAsync(TDto dto, DateTime? expiration)
+        protected async Task<string> StoreAsync(TDto dto, DateTime? expiration, CancellationToken ct)
         {
             dto = dto ?? throw new ArgumentNullException(nameof(dto));
 
@@ -95,18 +96,18 @@ namespace Aguacongas.IdentityServer.Store
 
             var subjectId = GetSubjectId(dto);
 
-            var entity = await GetEntityBySubjectAndClient(subjectId, clientId)
+            var entity = await GetEntityBySubjectAndClient(subjectId, clientId, ct)
                 .ConfigureAwait(false);
 
             if (entity == null)
             {
                 entity = CreateEntity(dto, clientId, subjectId, expiration);
-                entity = await _store.CreateAsync(entity).ConfigureAwait(false);
+                entity = await _store.CreateAsync(entity, ct).ConfigureAwait(false);
             }
             else
             {
                 entity.Data = _serializer.Serialize(dto);
-                await _store.UpdateAsync(entity).ConfigureAwait(false);
+                await _store.UpdateAsync(entity, ct).ConfigureAwait(false);
             }
 
             return entity.Id;
@@ -116,15 +117,15 @@ namespace Aguacongas.IdentityServer.Store
 
         protected abstract string GetSubjectId(TDto dto);
 
-        protected virtual Task<TEntity> GetEntityByHandle(string handle)
-        => _store.GetAsync(handle, null);
+        protected virtual Task<TEntity> GetEntityByHandle(string handle, CancellationToken ct)
+        => _store.GetAsync(handle, null, ct);
 
-        protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId)
+        protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId, CancellationToken ct)
         {
             return (await _store.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(UserConsent.UserId)} eq '{subjectId}' and {nameof(UserConsent.ClientId)} eq '{clientId}'"
-            }).ConfigureAwait(false)).Items.FirstOrDefault();
+            }, ct).ConfigureAwait(false)).Items.FirstOrDefault();
         }
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]
@@ -141,7 +142,7 @@ namespace Aguacongas.IdentityServer.Store
         }
 
         protected virtual TDto CreateDto(string data)
-        {            
+        {
             if (data == null)
             {
                 return default;

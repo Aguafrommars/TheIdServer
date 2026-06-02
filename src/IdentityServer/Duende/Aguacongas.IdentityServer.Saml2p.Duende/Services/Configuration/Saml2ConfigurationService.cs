@@ -45,8 +45,8 @@ public class Saml2ConfigurationService : ISaml2ConfigurationService
         var request = (_httpContextAccessor.HttpContext?.Request) ?? throw new InvalidOperationException("Http request cannot be null");
         var location = Location(request);
         var settings = _options.Value;
-        var credentials = await _signingCredentialStore.GetSigningCredentialsAsync().ConfigureAwait(false);
-        
+        var credentials = await _signingCredentialStore.GetSigningCredentialsAsync(CancellationToken.None).ConfigureAwait(false);
+
         return new Saml2Configuration
         {
             ArtifactResolutionService = new Saml2IndexedEndpoint
@@ -56,7 +56,7 @@ public class Saml2ConfigurationService : ISaml2ConfigurationService
             },
             SingleSignOnDestination = new Uri($"{location}/login"),
             SingleLogoutDestination = new Uri($"{location}/logout"),
-            Issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false),
+            Issuer = await _issuerNameService.GetCurrentAsync(CancellationToken.None).ConfigureAwait(false),
             SignatureAlgorithm = settings.SignatureAlgorithm,
             SigningCertificate = credentials.Key.GetX509Certificate(_signingCredentialStore),
             CertificateValidationMode = settings.CertificateValidationMode,

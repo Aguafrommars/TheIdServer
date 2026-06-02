@@ -7,83 +7,71 @@ using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage
+namespace Aguacongas.TheIdServer.Areas.Identity.Pages.Account.Manage;
+
+public class GrantsModel(IIdentityServerInteractionService interaction,
+    IClientStore clients,
+    IResourceStore resources,
+    IEventService events) : PageModel
 {
-    public class GrantsModel : PageModel
+    private readonly IResourceStore _resources = resources;
+
+    public IEnumerable<GrantViewModel>? Grants { get; set; }
+
+    public async Task<IActionResult> OnGetAsync()
     {
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clients;
-        private readonly IResourceStore _resources;
-        private readonly IEventService _events;
+        await BuildViewModelAsync().ConfigureAwait(false);
+        return Page();
+    }
 
-        public IEnumerable<GrantViewModel>? Grants { get; set; }
+    public async Task<IActionResult> OnPostRevokeAsync(string clientId)
+    {
+        await interaction.RevokeUserConsentAsync(clientId.Normalize(), HttpContext.RequestAborted);
+        await events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId), HttpContext.RequestAborted);
 
-        public GrantsModel(IIdentityServerInteractionService interaction,
-            IClientStore clients,
-            IResourceStore resources,
-            IEventService events)
+        return RedirectToPage();
+    }
+
+    private async Task BuildViewModelAsync()
+    {
+        var grants = await interaction.GetAllUserGrantsAsync(HttpContext.RequestAborted);
+
+        var list = new List<GrantViewModel>();
+        foreach (var grant in grants)
         {
-            _interaction = interaction;
-            _clients = clients;
-            _resources = resources;
-            _events = events;
-        }
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            await BuildViewModelAsync().ConfigureAwait(false);
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostRevokeAsync(string clientId)
-        {
-            await _interaction.RevokeUserConsentAsync(clientId);
-            await _events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId));
-
-            return RedirectToPage();
-        }
-
-        private async Task BuildViewModelAsync()
-        {
-            var grants = await _interaction.GetAllUserGrantsAsync();
-
-            var list = new List<GrantViewModel>();
-            foreach (var grant in grants)
+            var client = await clients.FindClientByIdAsync(grant.ClientId, HttpContext.RequestAborted);
+            if (client != null)
             {
-                var client = await _clients.FindClientByIdAsync(grant.ClientId);
-                if (client != null)
+                var resourcesByScope = await _resources.FindResourcesByScopeAsync(grant.Scopes, HttpContext.RequestAborted);
+
+                var item = new GrantViewModel()
                 {
-                    var resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
+                    ClientId = client.ClientId,
+                    ClientName = client.ClientName ?? client.ClientId,
+                    ClientLogoUrl = client.LogoUri,
+                    ClientUrl = client.ClientUri,
+                    Created = grant.CreationTime,
+                    Expires = grant.Expiration,
+                    IdentityGrantNames = [.. resourcesByScope.IdentityResources.Select(x => x.DisplayName ?? x.Name)],
+                    ApiGrantNames = [.. resourcesByScope.ApiResources.Select(x => x.DisplayName ?? x.Name)]
+                };
 
-                    var item = new GrantViewModel()
-                    {
-                        ClientId = client.ClientId,
-                        ClientName = client.ClientName ?? client.ClientId,
-                        ClientLogoUrl = client.LogoUri,
-                        ClientUrl = client.ClientUri,
-                        Created = grant.CreationTime,
-                        Expires = grant.Expiration,
-                        IdentityGrantNames = resources.IdentityResources.Select(x => x.DisplayName ?? x.Name).ToArray(),
-                        ApiGrantNames = resources.ApiResources.Select(x => x.DisplayName ?? x.Name).ToArray()
-                    };
-
-                    list.Add(item);
-                }
+                list.Add(item);
             }
-
-            Grants = list;
         }
 
-        public class GrantViewModel
-        {
-            public string? ClientId { get; set; }
-            public string? ClientName { get; set; }
-            public string? ClientUrl { get; set; }
-            public string? ClientLogoUrl { get; set; }
-            public DateTime Created { get; set; }
-            public DateTime? Expires { get; set; }
-            public IEnumerable<string>? IdentityGrantNames { get; set; }
-            public IEnumerable<string>? ApiGrantNames { get; set; }
-        }
+        Grants = list;
+    }
+
+    public class GrantViewModel
+    {
+        public string? ClientId { get; set; }
+        public string? ClientName { get; set; }
+        public string? ClientUrl { get; set; }
+        public string? ClientLogoUrl { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Expires { get; set; }
+        public IEnumerable<string>? IdentityGrantNames { get; set; }
+        public IEnumerable<string>? ApiGrantNames { get; set; }
     }
 }
