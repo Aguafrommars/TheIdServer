@@ -159,10 +159,19 @@ public class ConsentController(
         }
         else
         {
-            logger.LogError("No consent request matching request: {ReturnUrl}", returnUrl);
+            var sanitizedReturnUrl = SanitizeForLog(returnUrl);
+            logger.LogError("No consent request matching request: {ReturnUrl}", sanitizedReturnUrl);
         }
 
         return null;
+    }
+
+    private static string SanitizeForLog(string? value)
+    {
+        return value?
+            .Replace("\r", string.Empty, StringComparison.Ordinal)
+            .Replace("\n", string.Empty, StringComparison.Ordinal)
+            ?? string.Empty;
     }
 
     private ConsentViewModel CreateConsentViewModel(
