@@ -58,7 +58,13 @@ public class ConsentController(
                 return this.LoadingPage("Redirect", result.RedirectUri);
             }
 
-            return Redirect(result.RedirectUri!);
+            if (!string.IsNullOrEmpty(result.RedirectUri) && Url.IsLocalUrl(result.RedirectUri))
+            {
+                return Redirect(result.RedirectUri);
+            }
+
+            logger.LogWarning("Invalid non-local redirect URI blocked in consent flow: {RedirectUri}", result.RedirectUri);
+            return View("Error");
         }
 
         if (result.HasValidationError)
