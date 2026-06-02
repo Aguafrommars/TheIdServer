@@ -117,19 +117,6 @@ namespace OpenTelemetry.Trace
                 });
             }
 
-            if (options.Zipkin?.Endpoint is not null)
-            {
-                builder = builder.AddZipkinExporter(o =>
-                {
-                    var zipkinOptions = options.Zipkin;
-                    o.ExportProcessorType = zipkinOptions.ExportProcessorType;
-                    o.BatchExportProcessorOptions = zipkinOptions.BatchExportProcessorOptions;
-                    o.Endpoint = zipkinOptions.Endpoint;
-                    o.MaxPayloadSizeInBytes = zipkinOptions.MaxPayloadSizeInBytes;
-                    o.UseShortTraceIds = zipkinOptions.UseShortTraceIds;
-                });
-            }
-
             if (options.Honeycomb?.ApiKey is not null)
             {
                 builder = builder.AddHoneycomb(o =>
