@@ -194,7 +194,12 @@ public class ProfileServiceTest
         };
         await manager.CreateAsync(user);
 
-        var context = new ProfileDataRequestContext(new ClaimsPrincipal(new ClaimsIdentity([new Claim(JwtClaimTypes.Subject, "not_found")])),
+        var context = new ProfileDataRequestContext(new ClaimsPrincipal(new ClaimsIdentity(
+            [
+                new Claim(JwtClaimTypes.Subject, "test"),
+                new Claim(JwtClaimTypes.AuthenticationMethod, OidcConstants.GrantTypes.TokenExchange),
+                new Claim(JwtClaimTypes.Actor, "test"),
+            ])),
             new Client(), "test",
             ["test"])
         {

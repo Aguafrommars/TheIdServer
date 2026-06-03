@@ -89,7 +89,7 @@ public class ProfileService<TUser>(UserManager<TUser> userManager,
         context.IssuedClaims = SanetizeIssuedClaims(context.IssuedClaims);
 
         // add actor claim if needed
-        if (context.Subject.HasClaim(c => c.Type == "amr") && context.Subject.GetAuthenticationMethod() == OidcConstants.GrantTypes.TokenExchange)
+        if (context.Subject.HasClaim(c => c.Type == JwtClaimTypes.AuthenticationMethod) && context.Subject.GetAuthenticationMethod() == OidcConstants.GrantTypes.TokenExchange)
         {
             var act = context.Subject.FindFirst(JwtClaimTypes.Actor);
             if (act != null)

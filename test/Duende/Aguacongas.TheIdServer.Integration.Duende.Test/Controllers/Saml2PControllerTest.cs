@@ -1038,7 +1038,7 @@ public class Saml2PControllerTest(TheIdServerFactory factory)
 
         var profileServiceMock = new Mock<IProfileService>();
         profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims =
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, ct) => ctx.IssuedClaims =
             [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
@@ -1167,7 +1167,7 @@ public class Saml2PControllerTest(TheIdServerFactory factory)
 
         var profileServiceMock = new Mock<IProfileService>();
         profileServiceMock.Setup(m => m.GetProfileDataAsync(It.IsAny<ISModels.ProfileDataRequestContext>(), It.IsAny<CancellationToken>()))
-            .Callback<ISModels.ProfileDataRequestContext>(ctx => ctx.IssuedClaims =
+            .Callback<ISModels.ProfileDataRequestContext, CancellationToken>((ctx, ct) => ctx.IssuedClaims =
             [
                     new Claim(JwtClaimTypes.Name, name),
                     new Claim(JwtClaimTypes.Subject, sub),
