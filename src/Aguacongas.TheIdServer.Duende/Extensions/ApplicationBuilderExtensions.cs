@@ -208,9 +208,10 @@ public static class ApplicationBuilderExtensions
             var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
 
             var headers = context.Request.Headers;
+            var headerNames = string.Join(",", headers.Keys);
             using var scope = requestLogger.BeginScope(new Dictionary<string, object>
             {
-                ["Headers"] = headers
+                ["HeaderNames"] = headerNames
             });
 
             if (headers.TryGetValue(certificateHeader, out StringValues values))
