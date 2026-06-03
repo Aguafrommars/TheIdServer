@@ -116,7 +116,8 @@ public class AccountController(
 
             var returnUrl = model.ReturnUrl;
             if (!string.IsNullOrEmpty(returnUrl)
-                && (Url.IsLocalUrl(returnUrl) || interaction.IsValidReturnUrl(returnUrl)))
+                && interaction.IsValidReturnUrl(returnUrl)
+                && Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
