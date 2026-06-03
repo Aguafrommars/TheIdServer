@@ -63,7 +63,8 @@ public class ConsentController(
                 return Redirect(result.RedirectUri);
             }
 
-            logger.LogWarning("Invalid non-local redirect URI blocked in consent flow: {RedirectUri}", result.RedirectUri);
+            var sanitizedRedirectUri = SanitizeForLog(result.RedirectUri);
+            logger.LogWarning("Invalid non-local redirect URI blocked in consent flow: {RedirectUri}", sanitizedRedirectUri);
             return View("Error");
         }
 
