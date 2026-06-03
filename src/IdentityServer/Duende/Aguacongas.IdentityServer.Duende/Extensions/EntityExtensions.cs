@@ -108,6 +108,8 @@ public static class EntityExtensions
             PollingInterval = client.PollingInterval,
             RequireRequestObject = client.RequireRequestObject,
             RequireDPoP = client.RequireDPoP,
+            DPoPClockSkew = client.DPoPClockSkew,
+            DPoPValidationMode = (DPoPTokenExpirationValidationMode)client.DPoPValidationMode,
             PushedAuthorizationLifetime = client.PushedAuthorizationLifetime,
             RequirePushedAuthorization = client.RequirePushedAuthorization,
         };

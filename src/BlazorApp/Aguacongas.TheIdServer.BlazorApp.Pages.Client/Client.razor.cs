@@ -19,13 +19,25 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
         private bool _filtered;
         private bool _isWebClient;
 
+        private string DPoPClockSkew
+        {
+            get => Model.DPoPClockSkew.ToString();
+            set
+            {
+                if (TimeSpan.TryParse(value, out TimeSpan result))
+                {
+                    Model.DPoPClockSkew = result;
+                }
+            }
+        }
+
         protected override string Expand => $"{nameof(Entity.Client.IdentityProviderRestrictions)},{nameof(Entity.Client.ClientClaims)},{nameof(Entity.Client.ClientSecrets)},{nameof(Entity.Client.AllowedGrantTypes)},{nameof(Entity.Client.RedirectUris)},{nameof(Entity.Client.AllowedScopes)},{nameof(Entity.Client.Properties)},{nameof(Entity.Client.Resources)},{nameof(Entity.Client.AllowedIdentityTokenSigningAlgorithms)}";
 
         protected override bool NonEditable => false;
 
         protected override string BackUrl => "clients";
 
-        protected override  async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync().ConfigureAwait(false);
             HandleModificationState.OnStateChange += OnStateChange;
@@ -155,7 +167,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
         private Entity.ClientSecret CreateSecret()
             => new()
             {
-                Type = Model.ProtocolType == SAML2P ? "X509Thumbprint" :  "SharedSecret"
+                Type = Model.ProtocolType == SAML2P ? "X509Thumbprint" : "SharedSecret"
             };
 
         private static Entity.ClientClaim CreateClaim()
@@ -178,6 +190,34 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client
         private void SetProtcolType(string protocolType)
         {
             Model.ProtocolType = protocolType;
+            StateHasChanged();
+        }
+
+        private void TogleDPoPValidationIatMode()
+        {
+            if ((Model.DPoPValidationMode & 1) == 1)
+            {
+                Model.DPoPValidationMode &= ~1;
+            }
+            else
+            {
+                Model.DPoPValidationMode |= 1;
+            }
+            HandleModificationState.EntityUpdated(Model);
+            StateHasChanged();
+        }
+
+        private void TogleDPoPValidationNonceMode()
+        {
+            if ((Model.DPoPValidationMode & 2) == 2)
+            {
+                Model.DPoPValidationMode &= ~2;
+            }
+            else
+            {
+                Model.DPoPValidationMode |= 2;
+            }
+            HandleModificationState.EntityUpdated(Model);
             StateHasChanged();
         }
     }

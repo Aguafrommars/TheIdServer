@@ -22,7 +22,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
@@ -31,324 +30,324 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Microsoft.AspNetCore.Builder;
+
+public static class ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
     {
-        private static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        WriteIndented = true
+    };
+
+    public static IApplicationBuilder UseTheIdServer(this IApplicationBuilder app, IWebHostEnvironment environment, IConfiguration configuration)
+    {
+        var isProxy = configuration.GetValue<bool>("Proxy");
+        var dbType = configuration.GetValue<DbTypes>("DbType");
+
+        var disableHttps = configuration.GetValue<bool>("DisableHttps");
+
+        var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger("ApplicationBuilderExtensions");
+        var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
+
+        if (!string.IsNullOrEmpty(certificateHeader))
         {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = true
-        };
+            logger.LogDebug("Get client certificate from header {ClientCertificateHeader}", certificateHeader);
+            app.UseClientCerificate(certificateHeader);
+        }
 
-        public static IApplicationBuilder UseTheIdServer(this IApplicationBuilder app, IWebHostEnvironment environment, IConfiguration configuration)
+        app.UseForwardedHeaders();
+        AddForceHttpsSchemeMiddleware(app, configuration);
+
+        if (!isProxy)
         {
-            var isProxy = configuration.GetValue<bool>("Proxy");
-            var dbType = configuration.GetValue<DbTypes>("DbType");
+            ConfigureInitialData(app, configuration, dbType);
+        }
 
-            var disableHttps = configuration.GetValue<bool>("DisableHttps");
-
-            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger("ApplicationBuilderExtensions");
-            var certificateHeader = configuration.GetValue<string>($"{nameof(IdentityServerOptions)}:{nameof(IdentityServerOptions.MutualTls)}:PEMHeader");
-
-            if (!string.IsNullOrEmpty(certificateHeader))
-            {
-                logger.LogDebug("Get client certificate from header {ClientCertificateHeader}", certificateHeader);
-                app.UseClientCerificate(certificateHeader);
-            }
-
-            app.UseForwardedHeaders();
-            AddForceHttpsSchemeMiddleware(app, configuration);
-
-            if (!isProxy)
-            {
-                ConfigureInitialData(app, configuration, dbType);
-            }
-
-            if (environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage()
-                    .UseMigrationsEndPoint()
-                    .UseWebAssemblyDebugging();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                if (!disableHttps)
-                {
-                    app.UseHsts();
-                }
-            }
-
-            var scope = app.ApplicationServices.CreateScope();
-            var scopedProvider = scope.ServiceProvider;
-            var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
-
-            app.UseRequestLocalization(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en");
-                options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
-                options.SupportedUICultures = options.SupportedCultures;
-                options.FallBackToParentCultures = true;
-                options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
-            })
-                .UseSerilogRequestLogging();
-
+        if (environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage()
+                .UseMigrationsEndPoint()
+                .UseWebAssemblyDebugging();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Home/Error");
             if (!disableHttps)
             {
-                app.UseHttpsRedirection();
+                app.UseHsts();
             }
-
-            app.UseBlazorFrameworkFiles()
-               .UseStaticFiles()
-               .UseIdentityServerAdminApi("/api", child =>
-               {
-                   ConfigureAdminApiHandler(configuration, child);
-               });
-
-            app.UseIdentityServer()
-                .UseRouting()
-                .UseAuthentication();
-
-            if (!isProxy)
-            {
-                app.UseIdentityServerAdminAuthentication("/providerhub");
-            }
-
-            app.UseIdentityServerAdminAuthentication()
-                .UseAuthorization()
-                .Use((context, next) =>
-                {
-                    var service = context.RequestServices;
-                    var settings = service.GetRequiredService<Settings>();
-                    var request = context.Request;
-                    settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
-                    var remotePathOptions = service.GetRequiredService<IOptions<RemoteAuthenticationApplicationPathsOptions>>().Value;
-                    remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
-                    remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
-                    return next();
-                })
-                .UsePrometheus(configuration)
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapAdminApiControllers();
-                    endpoints.MapHealthChecks("healthz", new HealthCheckOptions
-                    {
-                        ResponseWriter = WriteHealtResponse
-                    });
-
-                    endpoints.MapRazorPages();
-                    endpoints.MapDefaultControllerRoute();
-                    if (!isProxy)
-                    {
-                        endpoints.MapHub<ProviderHub>("/providerhub");
-                    }
-                    endpoints.MapFallbackToPage("/_Host");
-                    endpoints.MapRazorComponents<App>()
-                        .AddInteractiveWebAssemblyRenderMode();
-                });
-                
-
-            return app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
         }
 
-        private static void ConfigureAdminApiHandler(IConfiguration configuration, IApplicationBuilder child)
-        {
-            if (configuration.GetValue<bool>("EnableOpenApiDoc"))
-            {
-                ConfigureOpentApi(configuration, child);
-            }
-            var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
-            if (allowedOrigin is null)
-            {
-                return;
-            }
+        var scope = app.ApplicationServices.CreateScope();
+        var scopedProvider = scope.ServiceProvider;
+        var supportedCulture = scopedProvider.GetRequiredService<ISupportCultures>().CulturesNames.ToArray();
 
-            child.UseCors(configure =>
-            {
-                configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-            });
+        app.UseRequestLocalization(options =>
+        {
+            options.DefaultRequestCulture = new RequestCulture("en");
+            options.SupportedCultures = supportedCulture.Select(c => new CultureInfo(c)).ToList();
+            options.SupportedUICultures = options.SupportedCultures;
+            options.FallBackToParentCultures = true;
+            options.AddInitialRequestCultureProvider(new SetCookieFromQueryStringRequestCultureProvider());
+        })
+            .UseSerilogRequestLogging();
+
+        if (!disableHttps)
+        {
+            app.UseHttpsRedirection();
         }
 
-        private static void ConfigureOpentApi(IConfiguration configuration, IApplicationBuilder child)
+        app.UseBlazorFrameworkFiles()
+           .UseStaticFiles()
+           .UseIdentityServerAdminApi("/api", child =>
+           {
+               ConfigureAdminApiHandler(configuration, child);
+           });
+
+        app.UseIdentityServer()
+            .UseRouting()
+            .UseAuthentication();
+
+        if (!isProxy)
         {
-            child.UseOpenApi(
-                options =>
-                {
-                    var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
-                    if (settings?.Path is not null)
-                    {
-                        var path = settings.Path;
-                        path = path.EndsWith('/') ? path : $"{path}/";
-                        options.Path = $"{settings.Path}{{documentName}}/swagger.json";
-                    }
-                })
-                .UseSwaggerUi(options =>
-                {
-                    var settings = configuration.GetSection("SwaggerUiSettings").Get<Aguacongas.TheIdServer.Duende.SwaggerUiSettings>();
-                    options.OAuth2Client = settings?.OAuth2Client;
-                    options.Path = settings?.Path;
-                    if (settings?.Path is not null)
-                    {
-                        var path = settings.Path;
-                        path = path.EndsWith('/') ? path : $"{path}/";
-                        options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
-                    }
-                });
+            app.UseIdentityServerAdminAuthentication("/providerhub");
         }
 
-        private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
-        {
-            return app.Use(async (context, next) =>
+        app.UseIdentityServerAdminAuthentication()
+            .UseAuthorization()
+            .Use((context, next) =>
             {
-                var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
-                var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
-
-                var headers = context.Request.Headers;
-                using var scope = requestLogger.BeginScope(new Dictionary<string, object>
+                var service = context.RequestServices;
+                var settings = service.GetRequiredService<Settings>();
+                var request = context.Request;
+                settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
+                var remotePathOptions = service.GetRequiredService<IOptions<RemoteAuthenticationApplicationPathsOptions>>().Value;
+                remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
+                remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
+                return next();
+            })
+            .UsePrometheus(configuration)
+            .UseEndpoints(endpoints =>
+            {
+                endpoints.MapAdminApiControllers();
+                endpoints.MapHealthChecks("healthz", new HealthCheckOptions
                 {
-                    ["Headers"] = headers
+                    ResponseWriter = WriteHealtResponse
                 });
 
-                if (headers.TryGetValue(certificateHeader, out StringValues values))
+                endpoints.MapRazorPages();
+                endpoints.MapDefaultControllerRoute();
+                if (!isProxy)
                 {
-                    requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
-                    try
-                    {
-                        context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]!));
-                    }
-                    catch (CryptographicException e)
-                    {
-                        requestLogger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
-                    }
+                    endpoints.MapHub<ProviderHub>("/providerhub");
                 }
-                await next();
+                endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapRazorComponents<App>()
+                    .AddInteractiveWebAssemblyRenderMode();
             });
-        }
-        private static IApplicationBuilder UsePrometheus(this IApplicationBuilder app, IConfiguration configuration)
+
+
+        return app.LoadDynamicAuthenticationConfiguration<SchemeDefinition>();
+    }
+
+    private static void ConfigureAdminApiHandler(IConfiguration configuration, IApplicationBuilder child)
+    {
+        if (configuration.GetValue<bool>("EnableOpenApiDoc"))
         {
-            var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
-            var prometheusOtions = otlpOptions?.Metrics?.Prometheus;
-            if (prometheusOtions is not null)
+            ConfigureOpentApi(configuration, child);
+        }
+        var allowedOrigin = configuration.GetSection("CorsAllowedOrigin").Get<IEnumerable<string>>();
+        if (allowedOrigin is null)
+        {
+            return;
+        }
+
+        child.UseCors(configure =>
+        {
+            configure.SetIsOriginAllowed(origin => allowedOrigin.Any(o => o == origin))
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+    }
+
+    private static void ConfigureOpentApi(IConfiguration configuration, IApplicationBuilder child)
+    {
+        child.UseOpenApi(
+            options =>
             {
-                if (prometheusOtions.Protected)
+                var settings = configuration.GetSection("SwaggerUiSettings").Get<NSwag.AspNetCore.OpenApiDocumentMiddlewareSettings>();
+                if (settings?.Path is not null)
                 {
-                    app.Use((context, next) =>
-                    {
-                        if (context.Request.Path.StartsWithSegments(prometheusOtions.ScrapeEndpointPath) &&
-                            context.User?.IsInRole(SharedConstants.READERPOLICY) != true)
-                        {
-                            var response = context.Response;
-                            response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            return response.CompleteAsync();
-                        }
-                        return next();
-                    });
+                    var path = settings.Path;
+                    path = path.EndsWith('/') ? path : $"{path}/";
+                    options.Path = $"{settings.Path}{{documentName}}/swagger.json";
                 }
+            })
+            .UseSwaggerUi(options =>
+            {
+                var settings = configuration.GetSection("SwaggerUiSettings").Get<Aguacongas.TheIdServer.Duende.SwaggerUiSettings>();
+                options.OAuth2Client = settings?.OAuth2Client;
+                options.Path = settings?.Path;
+                if (settings?.Path is not null)
+                {
+                    var path = settings.Path;
+                    path = path.EndsWith('/') ? path : $"{path}/";
+                    options.DocumentPath = $"{settings.Path}{{documentName}}/swagger.json";
+                }
+            });
+    }
 
-                app.UseOpenTelemetryPrometheusScrapingEndpoint();
-            }
-
-            return app;
-        }
-
-        private static void AddForceHttpsSchemeMiddleware(IApplicationBuilder app, IConfiguration configuration)
+    private static IApplicationBuilder UseClientCerificate(this IApplicationBuilder app, string certificateHeader)
+    {
+        return app.Use(async (context, next) =>
         {
-            var forceHttpsScheme = configuration.GetValue<bool>("ForceHttpsScheme");
+            var requestLoggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+            var requestLogger = requestLoggerFactory.CreateLogger("GetClientCertificateMiddleware");
 
-            if (forceHttpsScheme)
+            var headers = context.Request.Headers;
+            var headerNames = string.Join(",", headers.Keys);
+            using var scope = requestLogger.BeginScope(new Dictionary<string, object>
+            {
+                ["HeaderNames"] = headerNames
+            });
+
+            if (headers.TryGetValue(certificateHeader, out StringValues values))
+            {
+                requestLogger.LogInformation("Get certificate from header {ClientCertificateHeader}", certificateHeader);
+                try
+                {
+                    context.Connection.ClientCertificate = X509Certificate2.CreateFromPem(Uri.UnescapeDataString(values[0]!));
+                }
+                catch (CryptographicException e)
+                {
+                    requestLogger.LogWarning("Failed to get certificate fron header {ClientCertificateHeader}. Error: {Error}", certificateHeader, e.Message);
+                }
+            }
+            await next();
+        });
+    }
+    private static IApplicationBuilder UsePrometheus(this IApplicationBuilder app, IConfiguration configuration)
+    {
+        var otlpOptions = configuration.GetSection(nameof(OpenTelemetryOptions)).Get<OpenTelemetryOptions>();
+        var prometheusOtions = otlpOptions?.Metrics?.Prometheus;
+        if (prometheusOtions is not null)
+        {
+            if (prometheusOtions.Protected)
             {
                 app.Use((context, next) =>
                 {
-                    context.Request.Scheme = "https";
+                    if (context.Request.Path.StartsWithSegments(prometheusOtions.ScrapeEndpointPath) &&
+                        context.User?.IsInRole(SharedConstants.READERPOLICY) != true)
+                    {
+                        var response = context.Response;
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return response.CompleteAsync();
+                    }
                     return next();
                 });
             }
+
+            app.UseOpenTelemetryPrometheusScrapingEndpoint();
         }
 
-        private static void ConfigureInitialData(IApplicationBuilder app, IConfiguration configuration, DbTypes dbType)
+        return app;
+    }
+
+    private static void AddForceHttpsSchemeMiddleware(IApplicationBuilder app, IConfiguration configuration)
+    {
+        var forceHttpsScheme = configuration.GetValue<bool>("ForceHttpsScheme");
+
+        if (forceHttpsScheme)
         {
-            if (dbType == DbTypes.PostgreSQL)
+            app.Use((context, next) =>
             {
-                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            }
+                context.Request.Scheme = "https";
+                return next();
+            });
+        }
+    }
 
-            if (configuration.GetValue<bool>("Migrate") &&
-                dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                
-                configContext.Database.Migrate();
-
-                var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
-                opContext.Database.Migrate();
-
-                var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                appContext.Database.Migrate();
-            }
-
-            if (configuration.GetValue<bool>("Seed"))
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                SeedData.SeedConfiguration(scope, configuration);
-                SeedData.SeedUsers(scope, configuration);
-            }
-
+    private static void ConfigureInitialData(IApplicationBuilder app, IConfiguration configuration, DbTypes dbType)
+    {
+        if (dbType == DbTypes.PostgreSQL)
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        private static Task WriteHealtResponse(HttpContext context, HealthReport healthReport)
+        if (configuration.GetValue<bool>("Migrate") &&
+            dbType != DbTypes.InMemory && dbType != DbTypes.RavenDb && dbType != DbTypes.MongoDb)
         {
-            context.Response.ContentType = "application/json; charset=utf-8";
+            using var scope = app.ApplicationServices.CreateScope();
+            var configContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
-            var options = new JsonWriterOptions { Indented = true };
-            
-            using var memoryStream = new MemoryStream();
-            using var jsonWriter = new Utf8JsonWriter(memoryStream, options);
-            jsonWriter.WriteStartObject();
-            jsonWriter.WriteString("status", healthReport.Status.ToString());
-            jsonWriter.WriteStartObject("results");
+            configContext.Database.Migrate();
 
-            foreach (var healthReportEntry in healthReport.Entries)
+            var opContext = scope.ServiceProvider.GetRequiredService<OperationalDbContext>();
+            opContext.Database.Migrate();
+
+            var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            appContext.Database.Migrate();
+        }
+
+        if (configuration.GetValue<bool>("Seed"))
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            SeedData.SeedConfiguration(scope, configuration);
+            SeedData.SeedUsers(scope, configuration);
+        }
+
+    }
+
+    private static Task WriteHealtResponse(HttpContext context, HealthReport healthReport)
+    {
+        context.Response.ContentType = "application/json; charset=utf-8";
+
+        var options = new JsonWriterOptions { Indented = true };
+
+        using var memoryStream = new MemoryStream();
+        using var jsonWriter = new Utf8JsonWriter(memoryStream, options);
+        jsonWriter.WriteStartObject();
+        jsonWriter.WriteString("status", healthReport.Status.ToString());
+        jsonWriter.WriteStartObject("results");
+
+        foreach (var healthReportEntry in healthReport.Entries)
+        {
+            jsonWriter.WriteStartObject(healthReportEntry.Key);
+            var value = healthReportEntry.Value;
+
+            jsonWriter.WriteString("status", value.Status.ToString());
+
+            if (value.Description is not null)
             {
-                jsonWriter.WriteStartObject(healthReportEntry.Key);
-                var value = healthReportEntry.Value;
+                jsonWriter.WriteString("description",
+                value.Description);
+            }
 
-                jsonWriter.WriteString("status", value.Status.ToString());
+            if (value.Data.Any())
+            {
+                jsonWriter.WriteStartObject("data");
 
-                if (value.Description is not null)
+                foreach (var item in value.Data)
                 {
-                    jsonWriter.WriteString("description",
-                    value.Description);
-                }
+                    jsonWriter.WritePropertyName(item.Key);
 
-                if (value.Data.Any())
-                {
-                    jsonWriter.WriteStartObject("data");
-
-                    foreach (var item in value.Data)
-                    {
-                        jsonWriter.WritePropertyName(item.Key);
-
-                        JsonSerializer.Serialize(jsonWriter, item.Value,
-                            item.Value?.GetType() ?? typeof(object), _serializerOptions);
-                    }
-
-                    jsonWriter.WriteEndObject();
+                    JsonSerializer.Serialize(jsonWriter, item.Value,
+                        item.Value?.GetType() ?? typeof(object), _serializerOptions);
                 }
 
                 jsonWriter.WriteEndObject();
             }
 
             jsonWriter.WriteEndObject();
-            jsonWriter.WriteEndObject();
-            jsonWriter.Flush();
-
-            return context.Response.WriteAsync(Encoding.UTF8.GetString(memoryStream.ToArray()));
         }
+
+        jsonWriter.WriteEndObject();
+        jsonWriter.WriteEndObject();
+        jsonWriter.Flush();
+
+        return context.Response.WriteAsync(Encoding.UTF8.GetString(memoryStream.ToArray()));
     }
 }

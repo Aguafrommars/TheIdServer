@@ -493,6 +493,16 @@ namespace Aguacongas.IdentityServer.Store.Entity
         public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
+        /// Clock skew used in validating the client’s DPoP proof token ‘iat’ claim value. Defaults to 5 minutes.
+        /// </summary>
+        public TimeSpan DPoPClockSkew { get; set; }
+
+        /// <summary>
+        /// Setting to control validation for the DPoP proof token expiration
+        /// </summary>
+        public int DPoPValidationMode { get; set; }
+
+        /// <summary>
         /// Clones this instance.
         /// </summary>
         /// <returns></returns>
