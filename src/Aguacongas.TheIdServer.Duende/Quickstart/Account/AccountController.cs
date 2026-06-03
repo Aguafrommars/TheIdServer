@@ -114,9 +114,11 @@ public class AccountController(
                 return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
             }
 
-            if (interaction.IsValidReturnUrl(model.ReturnUrl))
+            var returnUrl = model.ReturnUrl;
+            if (!string.IsNullOrEmpty(returnUrl)
+                && (Url.IsLocalUrl(returnUrl) || interaction.IsValidReturnUrl(returnUrl)))
             {
-                return Redirect(model.ReturnUrl!);
+                return Redirect(returnUrl);
             }
 
             throw new InvalidReturnUrlException();
