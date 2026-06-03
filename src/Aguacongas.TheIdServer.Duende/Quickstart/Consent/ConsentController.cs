@@ -58,7 +58,13 @@ public class ConsentController(
                 return this.LoadingPage("Redirect", result.RedirectUri);
             }
 
-            return Redirect(result.RedirectUri!);
+            if (!string.IsNullOrEmpty(result.RedirectUri) && Url.IsLocalUrl(result.RedirectUri))
+            {
+                return Redirect(result.RedirectUri);
+            }
+
+            logger.LogWarning("Invalid non-local redirect URI blocked in consent flow: {RedirectUri}", result.RedirectUri);
+            return View("Error");
         }
 
         if (result.HasValidationError)
@@ -159,10 +165,19 @@ public class ConsentController(
         }
         else
         {
-            logger.LogError("No consent request matching request: {ReturnUrl}", returnUrl);
+            var sanitizedReturnUrl = SanitizeForLog(returnUrl);
+            logger.LogError("No consent request matching request: {ReturnUrl}", sanitizedReturnUrl);
         }
 
         return null;
+    }
+
+    private static string SanitizeForLog(string? value)
+    {
+        return value?
+            .Replace("\r", string.Empty, StringComparison.Ordinal)
+            .Replace("\n", string.Empty, StringComparison.Ordinal)
+            ?? string.Empty;
     }
 
     private ConsentViewModel CreateConsentViewModel(
