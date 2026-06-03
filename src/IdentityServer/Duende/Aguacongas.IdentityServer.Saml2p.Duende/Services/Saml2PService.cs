@@ -68,7 +68,7 @@ public class Saml2PService : ISaml2PService
     /// <returns></returns>
     public async Task<IActionResult> LoginAsync(HttpRequest request, IUrlHelper helper)
     {
-        var user = await _userSession.GetUserAsync().ConfigureAwait(false) ?? 
+        var user = await _userSession.GetUserAsync(CancellationToken.None).ConfigureAwait(false) ??
             throw new InvalidOperationException("No user found in session");
 
         var signinResult = await _signInValidator.ValidateLoginAsync(request, user).ConfigureAwait(false);

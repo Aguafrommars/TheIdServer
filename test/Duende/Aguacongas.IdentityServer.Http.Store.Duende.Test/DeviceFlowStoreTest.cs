@@ -3,169 +3,167 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Stores.Serialization;
-using ISModels = Duende.IdentityServer.Models;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using ISModels = Duende.IdentityServer.Models;
 
-namespace Aguacongas.IdentityServer.Http.Store.Test
+namespace Aguacongas.IdentityServer.Http.Store.Test;
+
+public class DeviceFlowStoreTest
 {
-    public class DeviceFlowStoreTest
+    [Fact]
+    public async Task FindByDeviceCodeAsync_should_call_store_GetAsync()
     {
-        [Fact]
-        public async Task FindByDeviceCodeAsync_should_call_store_GetAsync()
-        {
-            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-                out DeviceFlowStore sut);
+        CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+            out DeviceFlowStore sut);
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Items = Array.Empty<DeviceCode>()
-                })
-                .Verifiable();
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Items = []
+            })
+            .Verifiable();
 
-            await sut.FindByDeviceCodeAsync("test");
+        await sut.FindByDeviceCodeAsync("test", default);
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Count = 1,
-                    Items = new List<DeviceCode>
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Count = 1,
+                Items =
+                [
+                    new()
+                ]
+            })
+            .Verifiable();
+
+        await sut.FindByDeviceCodeAsync("test", default);
+
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
+    }
+
+    [Fact]
+    public async Task FindByUserCodeAsync_should_call_store_GetAsync()
+    {
+        CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+            out DeviceFlowStore sut);
+
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Items = []
+            })
+            .Verifiable();
+
+        await sut.FindByUserCodeAsync("test", default);
+
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
+
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Count = 1,
+                Items =
+                [
+                    new DeviceCode()
+                ]
+            })
+            .Verifiable();
+
+        await sut.FindByUserCodeAsync("test", default);
+
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
+    }
+
+    [Fact]
+    public async Task RemoveDeviceCodeAsync_should_call_store_DeleteAsync()
+    {
+        CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+            out DeviceFlowStore sut);
+
+        storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Count = 1,
+                Items =
+                [
+                    new DeviceCode
                     {
-                        new DeviceCode()
+                        Id = "id"
                     }
-                })
-                .Verifiable();
+                ]
+            })
+            .Verifiable();
 
-            await sut.FindByDeviceCodeAsync("test");
+        await sut.RemoveByDeviceCodeAsync("test", default);
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
-        }
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
+        storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
+    }
 
-        [Fact]
-        public async Task FindByUserCodeAsync_should_call_store_GetAsync()
-        {
-            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-                out DeviceFlowStore sut);
+    [Fact]
+    public async Task StoreDeviceCodeAsync_should_call_store_CreateAsync()
+    {
+        CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+            out DeviceFlowStore sut);
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Items = Array.Empty<DeviceCode>()
-                })
-                .Verifiable();
+        storeMock.Setup(m => m.CreateAsync(It.IsAny<DeviceCode>(), default))
+            .ReturnsAsync(new DeviceCode())
+            .Verifiable();
 
-            await sut.FindByUserCodeAsync("test");
+        await sut.StoreDeviceAuthorizationAsync("test", "test", new ISModels.DeviceCode(), default);
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
+        storeMock.Verify(m => m.CreateAsync(It.IsAny<DeviceCode>(), default));
+    }
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Count = 1,
-                    Items = new List<DeviceCode>
+    [Fact]
+    public async Task UpdateByUserCodeAsync_should_call_store_CreateAsync()
+    {
+        CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+            out DeviceFlowStore sut);
+
+        storeMock.Setup(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default))
+            .ReturnsAsync(new DeviceCode())
+            .Verifiable();
+
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Items =
+                [
+                    new DeviceCode
                     {
-                        new DeviceCode()
+                        Id = "id"
                     }
-                })
-                .Verifiable();
+                ]
+            })
+            .Verifiable();
 
-            await sut.FindByUserCodeAsync("test");
+        await sut.UpdateByUserCodeAsync("test", new ISModels.DeviceCode(), default);
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
-        }
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
+        storeMock.Verify(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default));
 
-        [Fact]
-        public async Task RemoveDeviceCodeAsync_should_call_store_DeleteAsync()
-        {
-            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-                out DeviceFlowStore sut);
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<DeviceCode>
+            {
+                Items = []
+            })
+            .Verifiable();
 
-            storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Count = 1,
-                    Items = new List<DeviceCode>
-                    {
-                        new DeviceCode
-                        {
-                            Id = "id"
-                        }
-                    }
-                })
-                .Verifiable();
+        await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateByUserCodeAsync("test", new ISModels.DeviceCode(), default));
+    }
 
-            await sut.RemoveByDeviceCodeAsync("test");
-
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "Code eq 'test'"), default));
-            storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
-        }
-
-        [Fact]
-        public async Task StoreDeviceCodeAsync_should_call_store_CreateAsync()
-        {
-            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-                out DeviceFlowStore sut);
-
-            storeMock.Setup(m => m.CreateAsync(It.IsAny<DeviceCode>(), default))
-                .ReturnsAsync(new DeviceCode())
-                .Verifiable();
-
-            await sut.StoreDeviceAuthorizationAsync("test", "test", new ISModels.DeviceCode());
-
-            storeMock.Verify(m => m.CreateAsync(It.IsAny<DeviceCode>(), default));
-        }
-
-        [Fact]
-        public async Task UpdateByUserCodeAsync_should_call_store_CreateAsync()
-        {
-            CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-                out DeviceFlowStore sut);
-
-            storeMock.Setup(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default))
-                .ReturnsAsync(new DeviceCode())
-                .Verifiable();
-
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Items = new List<DeviceCode>
-                    {
-                        new DeviceCode
-                        {
-                            Id = "id"
-                        }
-                    }
-                })
-                .Verifiable();
-
-            await sut.UpdateByUserCodeAsync("test", new ISModels.DeviceCode());
-
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(r => r.Filter == "UserCode eq 'test'"), default));
-            storeMock.Verify(m => m.UpdateAsync(It.IsAny<DeviceCode>(), default));
-
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<DeviceCode>
-                {
-                    Items = Array.Empty<DeviceCode>()
-                })
-                .Verifiable();
-
-            await Assert.ThrowsAsync<InvalidOperationException>(() => sut.UpdateByUserCodeAsync("test", new ISModels.DeviceCode()));
-        }
-
-        private static void CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
-            out DeviceFlowStore sut)
-        {
-            storeMock = new Mock<IAdminStore<DeviceCode>>();
-            var serializerMock = new Mock<IPersistentGrantSerializer>();
-            sut = new DeviceFlowStore(storeMock.Object, serializerMock.Object);
-        }
+    private static void CreateSut(out Mock<IAdminStore<DeviceCode>> storeMock,
+        out DeviceFlowStore sut)
+    {
+        storeMock = new Mock<IAdminStore<DeviceCode>>();
+        var serializerMock = new Mock<IPersistentGrantSerializer>();
+        sut = new DeviceFlowStore(storeMock.Object, serializerMock.Object);
     }
 }

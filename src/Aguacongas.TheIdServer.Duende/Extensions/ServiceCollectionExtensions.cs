@@ -18,9 +18,10 @@ using Aguacongas.TheIdServer.Identity.UpgradePasswordHasher;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
+using Duende.AspNetCore.Authentication.OAuth2Introspection;
+using Duende.AspNetCore.Authentication.OAuth2Introspection.Infrastructure;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Services;
-using Duende.AspNetCore.Authentication.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +39,6 @@ using Newtonsoft.Json;
 using Raven.Client.Documents;
 using System.Security.Cryptography.X509Certificates;
 using ConfigurationModel = Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
-using Duende.AspNetCore.Authentication.OAuth2Introspection.Infrastructure;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -163,7 +163,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (mutulaTlsOptions?.Enabled == true)
             {
                 // MutualTLS
-                authenticationBuilder.AddCertificate(mutulaTlsOptions!.ClientCertificateAuthenticationScheme, 
+                authenticationBuilder.AddCertificate(mutulaTlsOptions!.ClientCertificateAuthenticationScheme,
                     options => configurationManager.Bind(nameof(CertificateAuthenticationOptions), options));
             }
 
@@ -253,7 +253,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureIdentityServerJwtBearerOptions(JwtBearerOptions options, IConfiguration configuration)
+        private static void ConfigureIdentityServerJwtBearerOptions(JwtBearerOptions options, ConfigurationManager configuration)
         {
             configuration.Bind("ApiAuthentication", options);
             if (configuration.GetValue<bool>("DisableStrictSsl"))
@@ -323,7 +323,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configuration.Bind("ApiAuthentication", options);
             options.ClientId = configuration.GetValue<string>("ApiAuthentication:ApiName");
             options.ClientSecret = configuration.GetValue<string>("ApiAuthentication:ApiSecret");
-            static string tokenRetriever(HttpRequest request)
+            static string? tokenRetriever(HttpRequest request)
             {
                 var path = request.Path;
                 var accessToken = TokenRetrieval.FromQueryString()(request);
@@ -405,7 +405,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        private static void ConfigureHealthChecks(IServiceCollection services,DbTypes dbTypes, bool isProxy, IConfiguration configuration)
+        private static void ConfigureHealthChecks(IServiceCollection services, DbTypes dbTypes, bool isProxy, IConfiguration configuration)
         {
             var builder = services.AddHealthChecks();
             ConfigureDbHealthChecks(dbTypes, isProxy, configuration, builder);

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Entity = Aguacongas.IdentityServer.Store.Entity;
 
@@ -68,14 +69,15 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="clientId">The client identifier.</param>
         /// <param name="caller">The caller.</param>
         /// <param name="providerTypeName">Name of the provider type.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<PageResponse<Entity.UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName)
+        public async Task<PageResponse<Entity.UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName, CancellationToken cancellationToken)
         {
-            var identityResourceList = await _resourceStore.FindEnabledIdentityResourcesByScopeAsync(new string[] { resourceName })
+            var identityResourceList = await _resourceStore.FindEnabledIdentityResourcesByScopeAsync([resourceName], cancellationToken)
                 .ConfigureAwait(false);
-            var apiResourceList = await _resourceStore.FindApiResourcesByNameAsync(new[] { resourceName }).ConfigureAwait(false);
+            var apiResourceList = await _resourceStore.FindApiResourcesByNameAsync([resourceName], cancellationToken).ConfigureAwait(false);
             var apiResource = apiResourceList.FirstOrDefault();
-            var client = await _clientStore.FindClientByIdAsync(clientId).ConfigureAwait(false);
+            var client = await _clientStore.FindClientByIdAsync(clientId, cancellationToken).ConfigureAwait(false);
             var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
             var claimList = new List<Claim>();

@@ -3,10 +3,10 @@
 using Aguacongas.IdentityServer;
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Duende.Validators;
-using Aguacongas.IdentityServer.Store;
-using Aguacongas.TheIdServer.Authentication;
 using Aguacongas.IdentityServer.Services;
+using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Validators;
+using Aguacongas.TheIdServer.Authentication;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
@@ -65,7 +65,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IBackChannelAuthenticationRequestStore>(p => p.GetRequiredService<BackChannelAuthenticationRequestStore>())
                 .AddTransient<IDeviceFlowStore>(p => p.GetRequiredService<DeviceFlowStore>())
                 .AddTransient<IPersistedGrantStore, PersistedGrantStore>()
-                .AddTransient<IPushedAuthorizationRequestStore, PushedAuthorizationRequestStore>();
+                .AddTransient<IPushedAuthorizationRequestStore, PushedAuthorizationRequestStore>()
+                .AddTransient<IIdentityProviderStore, IdentityProviderStore>();
         }
 
         public static IServiceCollection AddTokenExchange(this IServiceCollection services)
@@ -74,7 +75,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddCibaServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<BackchannelAuthenticationUserNotificationServiceOptions>(configuration)
-                .AddSingleton<OAuthTokenManager<BackchannelAuthenticationUserNotificationServiceOptions>>()                
+                .AddSingleton<OAuthTokenManager<BackchannelAuthenticationUserNotificationServiceOptions>>()
                 .AddTransient(p =>
                 {
                     var settings = p.GetRequiredService<IOptions<BackchannelAuthenticationUserNotificationServiceOptions>>().Value;
@@ -115,7 +116,7 @@ namespace Microsoft.Extensions.DependencyInjection
 #pragma warning restore S3885 // "Assembly.Load" should be used
                 return assembly.GetType(settings.ServiceType, true);
             }
-            
+
             return Type.GetType(settings.ServiceType, true);
         }
     }

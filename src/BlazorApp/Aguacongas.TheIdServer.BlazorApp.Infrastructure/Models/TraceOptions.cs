@@ -11,7 +11,6 @@ namespace Aguacongas.TheIdServer.BlazorApp.Models
         public bool ConsoleEnabled { get; set; }
 
         public OtlpExporterOptions OpenTelemetryProtocol { get; set; }
-        public ZipkinExporterOptions Zipkin { get; set; }
         public HoneycombOptions Honeycomb { get; set; }
 
         public IEnumerable<string> Sources { get; set; }

@@ -9,39 +9,38 @@ using System.Threading.Tasks;
 using Xunit;
 using static Duende.IdentityServer.IdentityServerConstants;
 
-namespace Aguacongas.IdentityServer.KeysRotation.Test
+namespace Aguacongas.IdentityServer.KeysRotation.Test;
+
+public class ECDsaEncryptorDescriptorTest
 {
-    public class ECDsaEncryptorDescriptorTest
+    [Fact]
+    public void Constructor_should_throw_on_args_null()
     {
-        [Fact]
-        public void Constructor_should_throw_on_args_null()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null));
-            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null, null));
-            Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), null));
-        }
+        Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null));
+        Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(null, null));
+        Assert.Throws<ArgumentNullException>(() => new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), null));
+    }
 
-        [Fact]
-        public async Task ExportToXml_should_export_key_without_ECDsa()
-        {
-            var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Directory.CreateDirectory(tempDir);
-            var services = new ServiceCollection();
-            services.AddKeysRotation(RsaSigningAlgorithm.RS256)
-                .AddECDsaKeysRotation(ECDsaSigningAlgorithm.ES256)
-                .AddECDsaEncryptorConfiguration(ECDsaSigningAlgorithm.ES256, options => { })
-                .PersistKeysToFileSystem(new DirectoryInfo(tempDir));
+    [Fact]
+    public async Task ExportToXml_should_export_key_without_ECDsa()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.CreateDirectory(tempDir);
+        var services = new ServiceCollection();
+        services.AddKeysRotation(RsaSigningAlgorithm.RS256)
+            .AddECDsaKeysRotation(ECDsaSigningAlgorithm.ES256)
+            .AddECDsaEncryptorConfiguration(ECDsaSigningAlgorithm.ES256, options => { })
+            .PersistKeysToFileSystem(new DirectoryInfo(tempDir));
 
-            var provider = services.BuildServiceProvider();
-            var keyProvider = provider.GetRequiredService<IKeyRingStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>>();
+        var provider = services.BuildServiceProvider();
+        var keyProvider = provider.GetRequiredService<IKeyRingStore<ECDsaEncryptorConfiguration, ECDsaEncryptor>>();
 
-            var cred = await keyProvider.GetSigningCredentialsAsync();
+        var cred = await keyProvider.GetSigningCredentialsAsync(default);
 
-            var sut = new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), cred.Key as ECDsaSecurityKey);
+        var sut = new ECDsaEncryptorDescriptor(new ECDsaEncryptorConfiguration(), cred.Key as ECDsaSecurityKey);
 
-            var result = sut.ExportToXml();
+        var result = sut.ExportToXml();
 
-            Assert.NotNull(result);
-        }
+        Assert.NotNull(result);
     }
 }

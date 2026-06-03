@@ -6,6 +6,7 @@ using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Store
@@ -19,32 +20,32 @@ namespace Aguacongas.IdentityServer.Store
             _store = store;
         }
 
-        public Task<Token> GetReferenceTokenAsync(string handle)
-            => GetAsync(handle);
+        public Task<Token> GetReferenceTokenAsync(string handle, CancellationToken ct)
+            => GetAsync(handle, ct);
 
-        public Task RemoveReferenceTokenAsync(string handle)
-            => RemoveAsync(handle);
+        public Task RemoveReferenceTokenAsync(string handle, CancellationToken ct)
+            => RemoveAsync(handle, ct);
 
-        public async Task RemoveReferenceTokensAsync(string subjectId, string clientId, string sessionId = null)
+        public async Task RemoveReferenceTokensAsync(string subjectId, string clientId, string sessionId, CancellationToken ct)
         {
             if (sessionId is not null)
             {
                 var entity = (await _store.GetAsync(new PageRequest
                 {
                     Filter = $"{nameof(ReferenceToken.UserId)} eq '{subjectId}' and {nameof(ReferenceToken.ClientId)} eq '{clientId}' and {nameof(ReferenceToken.SessionId)} eq '{sessionId}'"
-                }).ConfigureAwait(false)).Items.FirstOrDefault();
+                }, ct).ConfigureAwait(false)).Items.FirstOrDefault();
 
                 await RemoveEntityAsync(entity).ConfigureAwait(false);
             }
 
-            await RemoveAsync(subjectId, clientId).ConfigureAwait(false);
+            await RemoveAsync(subjectId, clientId, ct).ConfigureAwait(false);
         }
-            
 
-        public Task<string> StoreReferenceTokenAsync(Token token)
-            => StoreAsync(token, token.CreationTime.AddSeconds(token.Lifetime));
 
-        protected override string GetClientId(Token dto) 
+        public Task<string> StoreReferenceTokenAsync(Token token, CancellationToken ct)
+            => StoreAsync(token, token.CreationTime.AddSeconds(token.Lifetime), ct);
+
+        protected override string GetClientId(Token dto)
             => dto?.ClientId;
 
         protected override string GetSubjectId(Token dto)

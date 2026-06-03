@@ -1,32 +1,33 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-using IdentityModel;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-using IsModels = Duende.IdentityServer.Models;
+using IdentityModel;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
+using IsModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.Store
 {
     public class AuthorizationCodeStore : GrantStore<AuthorizationCode, IsModels.AuthorizationCode>, IAuthorizationCodeStore
     {
-        public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store, 
+        public AuthorizationCodeStore(IAdminStore<AuthorizationCode> store,
             IPersistentGrantSerializer serializer) : base(store, serializer)
         {
         }
 
-        public Task<IsModels.AuthorizationCode> GetAuthorizationCodeAsync(string code)
-            => GetAsync(code);
+        public Task<IsModels.AuthorizationCode> GetAuthorizationCodeAsync(string code, CancellationToken ct)
+            => GetAsync(code, ct);
 
-        public Task RemoveAuthorizationCodeAsync(string code)
-            => RemoveAsync(code);
+        public Task RemoveAuthorizationCodeAsync(string code, CancellationToken ct)
+            => RemoveAsync(code, ct);
 
-        public Task<string> StoreAuthorizationCodeAsync(IsModels.AuthorizationCode code)
-            => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime));
+        public Task<string> StoreAuthorizationCodeAsync(IsModels.AuthorizationCode code, CancellationToken ct)
+            => StoreAsync(code, code.CreationTime.AddSeconds(code.Lifetime), ct);
 
         protected override string GetClientId(IsModels.AuthorizationCode dto)
             => dto?.ClientId;

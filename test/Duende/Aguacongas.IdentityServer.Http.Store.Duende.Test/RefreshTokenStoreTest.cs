@@ -3,138 +3,136 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Stores.Serialization;
-using ISModels = Duende.IdentityServer.Models;
 using Moq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using ISModels = Duende.IdentityServer.Models;
 
-namespace Aguacongas.IdentityServer.Http.Store.Test
+namespace Aguacongas.IdentityServer.Http.Store.Test;
+
+public class RefreshTokenStoreTest
 {
-    public class RefreshTokenStoreTest
+    [Fact]
+    public async Task GetRefreshTokenAsync_should_call_store_GetAsync()
     {
-        [Fact]
-        public async Task GetRefreshTokenAsync_should_call_store_GetAsync()
-        {
-            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-                out RefreshTokenStore sut);
+        CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+            out RefreshTokenStore sut);
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
-                .ReturnsAsync(new RefreshToken())
-                .Verifiable();
+        storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
+            .ReturnsAsync(new RefreshToken())
+            .Verifiable();
 
-            await sut.GetRefreshTokenAsync("test");
+        await sut.GetRefreshTokenAsync("test", default);
 
-            storeMock.Verify(m => m.GetAsync("test", null, default));
-        }
+        storeMock.Verify(m => m.GetAsync("test", null, default));
+    }
 
-        [Fact]
-        public async Task RemoveRefreshTokenAsync_should_call_store_DeleteAsync()
-        {
-            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-                out RefreshTokenStore sut);
+    [Fact]
+    public async Task RemoveRefreshTokenAsync_should_call_store_DeleteAsync()
+    {
+        CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+            out RefreshTokenStore sut);
 
-            storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
+        storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
-                .ReturnsAsync(new RefreshToken
-                {
-                    Id = "id"
-                })
-                .Verifiable();
+        storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
+            .ReturnsAsync(new RefreshToken
+            {
+                Id = "id"
+            })
+            .Verifiable();
 
-            await sut.RemoveRefreshTokenAsync("test");
+        await sut.RemoveRefreshTokenAsync("test", default);
 
-            storeMock.Verify(m => m.GetAsync("test", null, default));
-            storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
-        }
+        storeMock.Verify(m => m.GetAsync("test", null, default));
+        storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
+    }
 
-        [Fact]
-        public async Task RemoveRefreshTokensAsync_should_call_store_DeleteAsync()
-        {
-            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-                out RefreshTokenStore sut);
+    [Fact]
+    public async Task RemoveRefreshTokensAsync_should_call_store_DeleteAsync()
+    {
+        CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+            out RefreshTokenStore sut);
 
-            storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
+        storeMock.Setup(m => m.DeleteAsync(It.IsAny<string>(), default)).Verifiable();
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<RefreshToken>
-                {
-                    Count = 1,
-                    Items = new List<RefreshToken>
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<RefreshToken>
+            {
+                Count = 1,
+                Items =
+                [
+                    new RefreshToken
                     {
-                        new RefreshToken
-                        {
-                            Id = "id"
-                        }
+                        Id = "id"
                     }
-                })
-                .Verifiable();
+                ]
+            })
+            .Verifiable();
 
-            await sut.RemoveRefreshTokensAsync("test", "test");
+        await sut.RemoveRefreshTokensAsync("test", "test", default);
 
-            storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' and ClientId eq 'test'"), default));
-            storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
-        }
+        storeMock.Verify(m => m.GetAsync(It.Is<PageRequest>(p => p.Filter == "UserId eq 'test' and ClientId eq 'test'"), default));
+        storeMock.Verify(m => m.DeleteAsync(It.Is<string>(r => r == "id"), default));
+    }
 
-        [Fact]
-        public async Task StoreRefreshTokenAsync_should_call_store_CreateAsync()
-        {
-            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-                out RefreshTokenStore sut);
+    [Fact]
+    public async Task StoreRefreshTokenAsync_should_call_store_CreateAsync()
+    {
+        CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+            out RefreshTokenStore sut);
 
-            storeMock.Setup(m => m.CreateAsync(It.IsAny<RefreshToken>(), default))
-                .ReturnsAsync(new RefreshToken())
-                .Verifiable();
+        storeMock.Setup(m => m.CreateAsync(It.IsAny<RefreshToken>(), default))
+            .ReturnsAsync(new RefreshToken())
+            .Verifiable();
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
-                .ReturnsAsync(new PageResponse<RefreshToken>
-                {
-                    Count = 0,
-                    Items = new List<RefreshToken>(0)
-                })
-                .Verifiable();
-            var refreshToken = new ISModels.RefreshToken();
-            refreshToken.SetAccessToken(new ISModels.Token
+        storeMock.Setup(m => m.GetAsync(It.IsAny<PageRequest>(), default))
+            .ReturnsAsync(new PageResponse<RefreshToken>
             {
-                ClientId = "test"
-            });
-            await sut.StoreRefreshTokenAsync(refreshToken);
-
-            storeMock.Verify(m => m.GetAsync(It.IsAny<PageRequest>(), default));
-            storeMock.Verify(m => m.CreateAsync(It.IsAny<RefreshToken>(), default));
-        }
-
-        [Fact]
-        public async Task UpdateRefreshTokenAsync_should_call_store_UpdateAsync()
+                Count = 0,
+                Items = []
+            })
+            .Verifiable();
+        var refreshToken = new ISModels.RefreshToken();
+        refreshToken.SetAccessToken(new ISModels.Token
         {
-            CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-                out RefreshTokenStore sut);
+            ClientId = "test"
+        });
+        await sut.StoreRefreshTokenAsync(refreshToken, default);
 
-            storeMock.Setup(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default))
-                .ReturnsAsync(new RefreshToken())
-                .Verifiable();
+        storeMock.Verify(m => m.GetAsync(It.IsAny<PageRequest>(), default));
+        storeMock.Verify(m => m.CreateAsync(It.IsAny<RefreshToken>(), default));
+    }
 
-            storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
-                .ReturnsAsync(new RefreshToken())
-                .Verifiable();
-            var refreshToken = new ISModels.RefreshToken();
-            refreshToken.SetAccessToken(new ISModels.Token
-            {
-                ClientId = "test"
-            });
-            await sut.UpdateRefreshTokenAsync("test", refreshToken);
+    [Fact]
+    public async Task UpdateRefreshTokenAsync_should_call_store_UpdateAsync()
+    {
+        CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+            out RefreshTokenStore sut);
 
-            storeMock.Verify(m => m.GetAsync("test", null, default));
-            storeMock.Verify(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default));
-        }
+        storeMock.Setup(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default))
+            .ReturnsAsync(new RefreshToken())
+            .Verifiable();
 
-        private static void CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
-            out RefreshTokenStore sut)
+        storeMock.Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<GetRequest>(), default))
+            .ReturnsAsync(new RefreshToken())
+            .Verifiable();
+        var refreshToken = new ISModels.RefreshToken();
+        refreshToken.SetAccessToken(new ISModels.Token
         {
-            storeMock = new Mock<IAdminStore<RefreshToken>>();
-            var serializerMock = new Mock<IPersistentGrantSerializer>();
-            sut = new RefreshTokenStore(storeMock.Object, serializerMock.Object);
-        }
+            ClientId = "test"
+        });
+        await sut.UpdateRefreshTokenAsync("test", refreshToken, default);
+
+        storeMock.Verify(m => m.GetAsync("test", null, default));
+        storeMock.Verify(m => m.UpdateAsync(It.IsAny<RefreshToken>(), default));
+    }
+
+    private static void CreateSut(out Mock<IAdminStore<RefreshToken>> storeMock,
+        out RefreshTokenStore sut)
+    {
+        storeMock = new Mock<IAdminStore<RefreshToken>>();
+        var serializerMock = new Mock<IPersistentGrantSerializer>();
+        sut = new RefreshTokenStore(storeMock.Object, serializerMock.Object);
     }
 }

@@ -369,7 +369,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
                 Assert.Equal("invalid_grant_type", error?.Error);
-                Assert.Equal("GrantType 'invalid' is not supported.", error?.Error_description);
+                Assert.Equal("GrantTypes 'invalid' are not supported.", error?.Error_description);
             }
 
             registration.GrantTypes = null;

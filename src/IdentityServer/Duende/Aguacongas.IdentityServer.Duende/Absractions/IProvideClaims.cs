@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.Abstractions
+namespace Aguacongas.IdentityServer.Abstractions;
+
+public interface IProvideClaims
 {
-    public interface IProvideClaims
-    {
-        Task<IEnumerable<Claim>> ProvideClaims(ClaimsPrincipal subject, Client client, string caller, Resource resource);
-    }
+    Task<IEnumerable<Claim>> ProvideClaims(ClaimsPrincipal subject, IConnectedApplication application, string caller, Resource resource);
 }

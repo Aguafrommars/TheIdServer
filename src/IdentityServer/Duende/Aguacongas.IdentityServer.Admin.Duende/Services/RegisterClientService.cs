@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 using static Duende.IdentityServer.IdentityServerConstants;
 using IsConfiguration = Duende.IdentityServer.Configuration;
@@ -81,7 +82,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         public async Task<ClientRegisteration> RegisterAsync(ClientRegisteration registration, HttpContext httpContext)
         {
             var uri = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/";
-            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
+            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri, httpContext.RequestAborted).ConfigureAwait(false);
             ValidateCaller(registration, httpContext);
             Validate(registration, discovery);
 
@@ -91,7 +92,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
             registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
             string secret = null;
-            
+
             var serializerSettings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -285,7 +286,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             registration.RegistrationUri = $"{discovery["registration_endpoint"]}/{client.Id}";
             registration.JwksUri = discovery["jwks_uri"].ToString();
             registration.ClientSecret = secret;
-            registration.ClientSecretExpireAt = 0 ;
+            registration.ClientSecretExpireAt = 0;
 
             return registration;
         }
@@ -296,13 +297,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="clientId">The client identifier.</param>
         /// <param name="registration">The client.</param>
         /// <param name="uri">The URI.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ClientRegisteration> UpdateRegistrationAsync(string clientId, ClientRegisteration registration, string uri)
+        public async Task<ClientRegisteration> UpdateRegistrationAsync(string clientId, ClientRegisteration registration, string uri, CancellationToken cancellationToken)
         {
             var client = await GetClientAsync(clientId).ConfigureAwait(false);
 
-            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
+            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri, cancellationToken).ConfigureAwait(false);
             Validate(registration, discovery);
             await UpdateClient(registration, client).ConfigureAwait(false);
             await UpdateRedirectUris(clientId, registration).ConfigureAwait(false);
@@ -348,13 +350,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// </summary>
         /// <param name="clientId">The client identifier.</param>
         /// <param name="uri">The URI.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<ClientRegisteration> GetRegistrationAsync(string clientId, string uri)
+        public async Task<ClientRegisteration> GetRegistrationAsync(string clientId, string uri, CancellationToken cancellationToken)
         {
             var client = await GetClientAsync(clientId).ConfigureAwait(false);
 
-            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri).ConfigureAwait(false);
+            var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri, cancellationToken).ConfigureAwait(false);
 
             return new ClientRegisteration
             {
@@ -400,9 +403,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// Deletes the registration asynchronous.
         /// </summary>
         /// <param name="clientId">The client identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task DeleteRegistrationAsync(string clientId)
-            => _clientStore.DeleteAsync(clientId);
+        public Task DeleteRegistrationAsync(string clientId, CancellationToken cancellationToken)
+            => _clientStore.DeleteAsync(clientId, cancellationToken);
 
         private void ValidateCaller(ClientRegisteration registration, HttpContext httpContext)
         {
@@ -503,19 +507,17 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private async Task AddResourceAsync(string clientId, IEnumerable<ClientLocalizedResource> items, IEnumerable<LocalizableProperty> propertyList)
         {
-            foreach (var property in propertyList)
+            foreach (var property in propertyList
+                .Where(property => !items.Any(i => i.ResourceKind == EntityResourceKind.DisplayName && i.Value != property.Value)))
             {
-                if (!items.Any(i => i.ResourceKind == EntityResourceKind.DisplayName && i.Value != property.Value))
+                await _clientResourceStore.CreateAsync(new ClientLocalizedResource
                 {
-                    await _clientResourceStore.CreateAsync(new ClientLocalizedResource
-                    {
-                        ClientId = clientId,
-                        Id = Guid.NewGuid().ToString(),
-                        ResourceKind = EntityResourceKind.DisplayName,
-                        CultureId = property.Culture,
-                        Value = property.Value
-                    }).ConfigureAwait(false);
-                }
+                    ClientId = clientId,
+                    Id = Guid.NewGuid().ToString(),
+                    ResourceKind = EntityResourceKind.DisplayName,
+                    CultureId = property.Culture,
+                    Value = property.Value
+                }).ConfigureAwait(false);
             }
         }
 
@@ -525,26 +527,19 @@ namespace Aguacongas.IdentityServer.Admin.Services
             {
                 Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
             }).ConfigureAwait(false);
-
-            foreach (var item in grantTypeResponse.Items)
+            foreach (var item in grantTypeResponse.Items.Where(item => !registration.GrantTypes.Any(g => g == item.GrantType)))
             {
-                if (!registration.GrantTypes.Any(g => g == item.GrantType))
-                {
-                    await _clientGrantTypeStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
+                await _clientGrantTypeStore.DeleteAsync(item.Id).ConfigureAwait(false);
             }
 
-            foreach (var grantType in registration.GrantTypes)
+            foreach (var grantType in registration.GrantTypes.Where(grantType => !grantTypeResponse.Items.Any(u => u.GrantType == grantType)))
             {
-                if (!grantTypeResponse.Items.Any(u => u.GrantType == grantType))
+                await _clientGrantTypeStore.CreateAsync(new ClientGrantType
                 {
-                    await _clientGrantTypeStore.CreateAsync(new ClientGrantType
-                    {
-                        ClientId = clientId,
-                        Id = Guid.NewGuid().ToString(),
-                        GrantType = grantType
-                    }).ConfigureAwait(false);
-                }
+                    ClientId = clientId,
+                    Id = Guid.NewGuid().ToString(),
+                    GrantType = grantType
+                }).ConfigureAwait(false);
             }
         }
 
@@ -555,26 +550,20 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 Filter = $"{nameof(ClientUri.ClientId)} eq '{clientId}'"
             }).ConfigureAwait(false);
 
-            foreach (var item in redirectUriResponse.Items)
+            foreach (var item in redirectUriResponse.Items.Where(item => !registration.RedirectUris.Any(u => u == item.Uri)))
             {
-                if (!registration.RedirectUris.Any(u => u == item.Uri))
-                {
-                    await _clientUriStore.DeleteAsync(item.Id).ConfigureAwait(false);
-                }
+                await _clientUriStore.DeleteAsync(item.Id).ConfigureAwait(false);
             }
 
-            foreach (var redirectUri in registration.RedirectUris)
+            foreach (var redirectUri in registration.RedirectUris.Where(redirectUri => !redirectUriResponse.Items.Any(u => u.Uri == redirectUri)))
             {
-                if (!redirectUriResponse.Items.Any(u => u.Uri == redirectUri))
+                await _clientUriStore.CreateAsync(new ClientUri
                 {
-                    await _clientUriStore.CreateAsync(new ClientUri
-                    {
-                        ClientId = clientId,
-                        Id = Guid.NewGuid().ToString(),
-                        Kind = UriKinds.Cors | UriKinds.Redirect,
-                        Uri = redirectUri
-                    }).ConfigureAwait(false);
-                }
+                    ClientId = clientId,
+                    Id = Guid.NewGuid().ToString(),
+                    Kind = UriKinds.Cors | UriKinds.Redirect,
+                    Uri = redirectUri
+                }).ConfigureAwait(false);
             }
         }
 
@@ -594,7 +583,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private void Validate(ClientRegisteration registration, Dictionary<string, object> discovery)
         {
-            registration.GrantTypes ??= new []
+            registration.GrantTypes ??= new[]
             {
                 "authorization_code"
             };
@@ -713,12 +702,10 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private static void ValidateGrantType(IEnumerable<string> grantTypes, IEnumerable<string> grantTypesSupported)
         {
-            foreach (var grantType in grantTypes)
+            var unsupported = grantTypes.Where(grantType => !grantTypesSupported.Contains(grantType));
+            if (unsupported.Any())
             {
-                if (!grantTypesSupported.Contains(grantType))
-                {
-                    throw new RegistrationException("invalid_grant_type", $"GrantType '{grantType}' is not supported.");
-                }
+                throw new RegistrationException("invalid_grant_type", $"GrantTypes '{string.Join(", ", unsupported)}' are not supported.");
             }
         }
 

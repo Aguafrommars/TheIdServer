@@ -7,6 +7,7 @@ using Aguacongas.IdentityServer.Store.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin
@@ -40,10 +41,11 @@ namespace Aguacongas.IdentityServer.Admin
         /// <param name="clientId">The client identifier.</param>
         /// <param name="caller">The caller.</param>
         /// <param name="providerTypeName">Name of the provider type.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpGet]
         [Authorize(Policy = SharedConstants.READERPOLICY)]
-        public Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName)
-            => _proxyClaimsProvider.GetAsync(resourceName, userId, clientId, caller, providerTypeName);
+        public Task<PageResponse<UserClaim>> GetAsync(string resourceName, string userId, string clientId, string caller, string providerTypeName, CancellationToken cancellationToken)
+            => _proxyClaimsProvider.GetAsync(resourceName, userId, clientId, caller, providerTypeName, cancellationToken);
     }
 }

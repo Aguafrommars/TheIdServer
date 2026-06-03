@@ -10,52 +10,51 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Aguacongas.IdentityServer.Admin.Test.Extensions
+namespace Aguacongas.IdentityServer.Admin.Test.Extensions;
+
+public class ServiceCollectionExtensionsTest
 {
-    public class ServiceCollectionExtensionsTest
+    [Fact]
+    public void AddClaimsProviders_should_not_throw_when_section_not_exists()
     {
-        [Fact]
-        public void AddClaimsProviders_should_not_throw_when_section_not_exists()
-        {
-            var configuration = new ConfigurationBuilder().Build();
-            var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().Build();
+        var services = new ServiceCollection();
 
-            services.AddClaimsProviders(configuration);
+        services.AddClaimsProviders(configuration);
 
-            Assert.Empty(services);
-        }
+        Assert.Empty(services);
+    }
 
-        [Fact]
-        public void AddClaimsProviders_should_load_claims_provider_setup_from_assembly_path()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    ["ClaimsProviderOptions:0:AssemblyPath"] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll",
-                    ["ClaimsProviderOptions:0:TypeName"] = $"{typeof(ClaimsProviderSetup).FullName}"
-                })
-                .Build();
-            var services = new ServiceCollection();
-
-            services.AddClaimsProviders(configuration);
-
-            Assert.NotEmpty(services);
-        }
-
-        class ClaimsProviderSetup : ISetupClaimsProvider
-        {
-            public IServiceCollection SetupClaimsProvider(IServiceCollection services, IConfiguration configuration)
+    [Fact]
+    public void AddClaimsProviders_should_load_claims_provider_setup_from_assembly_path()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
             {
-                return services.AddTransient<IProvideClaims, ClaimsProvider>();
-            }
-        }
+                ["ClaimsProviderOptions:0:AssemblyPath"] = $"{typeof(ClaimsProvider).Assembly.GetName().Name}.dll",
+                ["ClaimsProviderOptions:0:TypeName"] = $"{typeof(ClaimsProviderSetup).FullName}"
+            })
+            .Build();
+        var services = new ServiceCollection();
 
-        class ClaimsProvider : IProvideClaims
+        services.AddClaimsProviders(configuration);
+
+        Assert.NotEmpty(services);
+    }
+
+    class ClaimsProviderSetup : ISetupClaimsProvider
+    {
+        public IServiceCollection SetupClaimsProvider(IServiceCollection services, IConfiguration configuration)
         {
-            public Task<IEnumerable<Claim>> ProvideClaims(ClaimsPrincipal subject, Client client, string caller, Resource resource)
-            {
-                throw new NotImplementedException();
-            }
+            return services.AddTransient<IProvideClaims, ClaimsProvider>();
+        }
+    }
+
+    class ClaimsProvider : IProvideClaims
+    {
+        public Task<IEnumerable<Claim>> ProvideClaims(ClaimsPrincipal subject, IConnectedApplication application, string caller, Resource resource)
+        {
+            throw new NotImplementedException();
         }
     }
 }

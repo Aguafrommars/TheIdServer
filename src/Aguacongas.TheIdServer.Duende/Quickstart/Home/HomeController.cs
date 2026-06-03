@@ -2,47 +2,35 @@
 // Copyright (c) 2025 @Olivier Lefebvre
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 
-namespace Aguacongas.TheIdServer.UI
+namespace Aguacongas.TheIdServer.UI;
+
+[SecurityHeaders]
+[AllowAnonymous]
+public class HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment environment) : Controller
 {
-    [SecurityHeaders]
-    [AllowAnonymous]
-    public class HomeController : Controller
+
+    /// <summary>
+    /// Shows the error page
+    /// </summary>
+    public async Task<IActionResult> Error(string errorId)
     {
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IWebHostEnvironment _environment;
+        var vm = new ErrorViewModel();
 
-        public HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment environment)
+        // retrieve error details from identityserver
+        var message = await interaction.GetErrorContextAsync(errorId, HttpContext.RequestAborted);
+        if (message != null)
         {
-            _interaction = interaction;
-            _environment = environment;
-        }
+            vm.Error = message;
 
-        /// <summary>
-        /// Shows the error page
-        /// </summary>
-        public async Task<IActionResult> Error(string errorId)
-        {
-            var vm = new ErrorViewModel();
-
-            // retrieve error details from identityserver
-            var message = await _interaction.GetErrorContextAsync(errorId);
-            if (message != null)
+            if (!environment.IsDevelopment())
             {
-                vm.Error = message;
-
-                if (!_environment.IsDevelopment())
-                {
-                    // only show in development
-                    message.ErrorDescription = null;
-                }
+                // only show in development
+                message.ErrorDescription = null;
             }
-
-            return View("Error", vm);
         }
+
+        return View("Error", vm);
     }
 }

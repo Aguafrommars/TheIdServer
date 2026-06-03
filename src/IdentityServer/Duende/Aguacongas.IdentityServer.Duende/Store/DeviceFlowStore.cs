@@ -1,13 +1,14 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Store.Entity;
-using IdentityModel;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Stores.Serialization;
-using IsModels = Duende.IdentityServer.Models;
+using IdentityModel;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using IsModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.Store
 {
@@ -23,7 +24,7 @@ namespace Aguacongas.IdentityServer.Store
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
-        public async Task<IsModels.DeviceCode> FindByDeviceCodeAsync(string deviceCode)
+        public async Task<IsModels.DeviceCode> FindByDeviceCodeAsync(string deviceCode, CancellationToken ct)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
 
@@ -31,7 +32,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = $"{nameof(DeviceCode.Code)} eq '{deviceCode}'",
                 Select = nameof(DeviceCode.Data)
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             if (response.Items.Any())
             {
@@ -41,7 +42,7 @@ namespace Aguacongas.IdentityServer.Store
             return null;
         }
 
-        public async Task<IsModels.DeviceCode> FindByUserCodeAsync(string userCode)
+        public async Task<IsModels.DeviceCode> FindByUserCodeAsync(string userCode, CancellationToken ct)
         {
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
 
@@ -49,7 +50,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = $"{nameof(DeviceCode.UserCode)} eq '{userCode}'",
                 Select = nameof(DeviceCode.Data)
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             if (response.Items.Any())
             {
@@ -59,7 +60,7 @@ namespace Aguacongas.IdentityServer.Store
             return null;
         }
 
-        public async Task RemoveByDeviceCodeAsync(string deviceCode)
+        public async Task RemoveByDeviceCodeAsync(string deviceCode, CancellationToken ct)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
 
@@ -67,16 +68,16 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Filter = $"{nameof(DeviceCode.Code)} eq '{deviceCode}'",
                 Select = nameof(DeviceCode.Id)
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
 
-            foreach(var entity in response.Items)
+            foreach (var entity in response.Items)
             {
-                await _store.DeleteAsync(entity.Id).ConfigureAwait(false);
+                await _store.DeleteAsync(entity.Id, ct).ConfigureAwait(false);
             }
         }
 
-        public Task StoreDeviceAuthorizationAsync(string deviceCode, string userCode, IsModels.DeviceCode data)
+        public Task StoreDeviceAuthorizationAsync(string deviceCode, string userCode, IsModels.DeviceCode data, CancellationToken ct)
         {
             deviceCode = deviceCode ?? throw new ArgumentNullException(nameof(deviceCode));
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
@@ -92,10 +93,10 @@ namespace Aguacongas.IdentityServer.Store
                 Expiration = data.CreationTime.AddSeconds(data.Lifetime),
             };
 
-            return _store.CreateAsync(entity);
+            return _store.CreateAsync(entity, ct);
         }
 
-        public async Task UpdateByUserCodeAsync(string userCode, IsModels.DeviceCode data)
+        public async Task UpdateByUserCodeAsync(string userCode, IsModels.DeviceCode data, CancellationToken ct)
         {
             userCode = userCode ?? throw new ArgumentNullException(nameof(userCode));
             data = data ?? throw new ArgumentNullException(nameof(data));
@@ -103,7 +104,7 @@ namespace Aguacongas.IdentityServer.Store
             var response = await _store.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(DeviceCode.UserCode)} eq '{userCode}'"
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             if (response.Items.Any())
             {
@@ -111,13 +112,12 @@ namespace Aguacongas.IdentityServer.Store
                 entity.Data = _serializer.Serialize(data);
                 entity.Expiration = data.CreationTime.AddSeconds(data.Lifetime);
                 entity.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value;
-                await _store.UpdateAsync(entity).ConfigureAwait(false);
+                await _store.UpdateAsync(entity, ct).ConfigureAwait(false);
                 return;
             }
 
-            throw new InvalidOperationException($"Device code for {userCode} not found");         
+            throw new InvalidOperationException($"Device code for {userCode} not found");
         }
-
         private IsModels.DeviceCode ToModel(DeviceCode entity)
         {
             if (entity != null)

@@ -2,20 +2,21 @@
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation.Validation;
 using Microsoft.IdentityModel.Protocols.WsFederation;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aguacongas.IdentityServer.WsFederation
+namespace Aguacongas.IdentityServer.WsFederation;
+
+/// <summary>
+/// 
+/// </summary>
+public interface ISignInResponseGenerator
 {
     /// <summary>
-    /// 
+    /// Generates the response asynchronous.
     /// </summary>
-    public interface ISignInResponseGenerator
-    {
-        /// <summary>
-        /// Generates the response asynchronous.
-        /// </summary>
-        /// <param name="validationResult">The validation result.</param>
-        /// <returns></returns>
-        Task<WsFederationMessage> GenerateResponseAsync(SignInValidationResult validationResult);
-    }
+    /// <param name="validationResult">The validation result.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns></returns>
+    Task<WsFederationMessage> GenerateResponseAsync(SignInValidationResult validationResult, CancellationToken cancellationToken);
 }

@@ -50,10 +50,6 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         Honeycomb = new HoneycombOptions
                         {
                             ApiKey = "test"
-                        },
-                        Zipkin = new ZipkinExporterOptions
-                        {
-                            Endpoint = new Uri("https://google.com")
                         }
                     }
                 })
