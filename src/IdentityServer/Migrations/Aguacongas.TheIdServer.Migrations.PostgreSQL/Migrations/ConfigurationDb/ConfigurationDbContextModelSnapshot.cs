@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "10.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -374,6 +374,12 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("interval");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -779,7 +785,7 @@ namespace Aguacongas.TheIdServer.PostgreSQL.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 11, 16, 21, 2, 44, 684, DateTimeKind.Utc).AddTicks(8194)
+                            CreatedAt = new DateTime(2026, 6, 3, 14, 20, 5, 633, DateTimeKind.Utc).AddTicks(5184)
                         });
                 });
 

@@ -2,6 +2,7 @@
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
+using Duende.ConformanceReport.Endpoints;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -54,5 +55,6 @@ app.Use(async (context, next) =>
     await next().ConfigureAwait(false);
 });
 app.UseTheIdServer(app.Environment, configuration);
+app.MapConformanceReport();
 
 await app.RunAsync().ConfigureAwait(false);

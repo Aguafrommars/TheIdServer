@@ -32,7 +32,7 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp");
-
+                    
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("timestamp");
 
@@ -369,6 +369,12 @@ namespace Aguacongas.TheIdServer.Oracle.Migrations.ConfigurationDb
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp");
+
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("INTERVAL DAY(2) TO SECOND(6)");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)

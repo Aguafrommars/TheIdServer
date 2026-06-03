@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Aguacongas.TheIdServer.BlazorApp.Pages
 {
     [Authorize(Policy = SharedConstants.READERPOLICY)]
-    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T: class
+    public abstract class EntitiesModel<T> : ComponentBase, IDisposable where T : class
     {
         private PageRequest _pageRequest;
         private CancellationTokenSource _cancellationTokenSource;
@@ -53,6 +53,11 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
         [JSInvokable]
         public async Task ScrollBottomReach()
         {
+            if (_pageRequest.Skip == 0)
+            {
+                // avoid to get 1st page 2 times
+                return;
+            }
             await GetEntityList(_pageRequest).ConfigureAwait(false);
         }
 
@@ -97,7 +102,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
-                       
+
             return Task.Delay(500, token)
                 .ContinueWith(async task =>
                 {
@@ -145,7 +150,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
 
 
-        protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource: IEntityResource
+        protected virtual string LocalizeEntityProperty<TEntityResource>(ILocalizable<TEntityResource> entity, string value, EntityResourceKind kind) where TEntityResource : IEntityResource
         {
             return entity.Resources.FirstOrDefault(r => r.ResourceKind == kind && r.CultureId == CultureInfo.CurrentCulture.Name)?.Value ?? value;
         }
@@ -155,7 +160,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             var page = await AdminStore.GetAsync(pageRequest, token)
                             .ConfigureAwait(false);
 
-            if (token.IsCancellationRequested )
+            if (token.IsCancellationRequested)
             {
                 return;
             }
@@ -181,7 +186,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
             _pageRequest.OrderBy = e.OrderBy;
             await GetEntityList(_pageRequest)
                 .ConfigureAwait(false);
-            
+
         }
 
         #region IDisposable Support
