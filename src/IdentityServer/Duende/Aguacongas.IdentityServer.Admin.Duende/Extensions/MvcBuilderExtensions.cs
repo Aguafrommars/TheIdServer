@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.Generation;
@@ -47,9 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns></returns>
-        public static DynamicAuthenticationBuilder AddIdentityServerAdmin<TUser, TSchemeDefinition>(this IMvcBuilder builder) 
+        public static DynamicAuthenticationBuilder AddIdentityServerAdmin<TUser, TSchemeDefinition>(this IMvcBuilder builder)
             where TUser : IdentityUser, new()
-            where TSchemeDefinition: SchemeDefinitionBase, new()
+            where TSchemeDefinition : SchemeDefinitionBase, new()
         {
             var services = builder.Services;
             var assembly = typeof(MvcBuilderExtensions).Assembly;
@@ -60,7 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<ISupportCultures>(p => p.GetRequiredService<StringLocalizerFactory>())
                 .AddTransient<IPersistedGrantService, PersistedGrantService>()
                 .AddTransient<SendGridEmailSender>()
-                .AddTransient<IProviderClient, ProviderClient>()                
+                .AddTransient<IProviderClient, ProviderClient>()
                 .AddTransient(p => new HubHttpMessageHandlerAccessor { Handler = p.GetRequiredService<HttpClientHandler>() })
                 .AddTransient<ExternalClaimsTransformer<TUser>>()
                 .AddTransient<IProxyClaimsProvider, ProxyClaimsProvider<TUser>>()
@@ -68,8 +67,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddTransient<IImportService, ImportService>()
                 .AddTransient<ICertificateVerifierService, CertificateVerifierService>()
                 .AddTransient<ICreatePersonalAccessToken, CreatePersonalAccessTokenService>()
-                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string, IEnumerable<IKey>>(p.GetRequiredService<IKeyManager>(), "dataprotection", p.GetRequiredService<IKeyManager>().GetAllKeys()) }, 
-                    p.GetRequiredService<IDefaultKeyResolver>(), 
+                .AddTransient(p => new KeyManagerWrapper<IAuthenticatedEncryptorDescriptor>(new[] { new Tuple<IKeyManager, string, IEnumerable<IKey>>(p.GetRequiredService<IKeyManager>(), "dataprotection", p.GetRequiredService<IKeyManager>().GetAllKeys()) },
+                    p.GetRequiredService<IDefaultKeyResolver>(),
                     p.GetRequiredService<IProviderClient>()))
                 .AddTransient(p => new KeyManagerWrapper<RsaEncryptorDescriptor>(p.GetService<IEnumerable<Aguacongas.IdentityServer.KeysRotation.ICacheableKeyRingProvider>>()
                         .Where(rp => rp.GetType().GenericTypeArguments[0] == typeof(RsaEncryptorConfiguration))
@@ -121,7 +120,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     var apiName = configuration.GetValue<string>("ApiAuthentication:ApiName");
                     config.AddSecurity("oauth", new NSwag.OpenApiSecurityScheme
                     {
-                        Flow = NSwag.OpenApiOAuth2Flow.Application,
                         Flows = new NSwag.OpenApiOAuthFlows(),
                         Scopes = new Dictionary<string, string>
                         {

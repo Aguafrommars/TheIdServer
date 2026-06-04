@@ -30,7 +30,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
             builder.Services.ConfigureServices(configuration, settings);
             return builder;
         }
-        
+
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, Settings settings)
         {
             var scopes = new List<string>();
@@ -45,7 +45,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     var providerOptions = options.ProviderOptions;
                     configuration.Bind("ProviderOptions", providerOptions);
                     providerOptions.DefaultScopes.Clear();
-                    foreach(var scope in scopes)
+                    foreach (var scope in scopes)
                     {
                         providerOptions.DefaultScopes.Add(scope);
                     }

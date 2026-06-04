@@ -32,6 +32,11 @@ public class IdentityProviderStore(IAdminStore<ExternalProvider> store) : IIdent
     public async Task<IdentityProvider> GetBySchemeAsync(string scheme, CancellationToken ct)
     {
         var provider = await _store.GetAsync(scheme, new GetRequest(), ct).ConfigureAwait(false);
+        if (provider == null)
+        {
+            return null;
+        }
+
         return new IdentityProvider("oidc")
         {
             DisplayName = provider.DisplayName,
