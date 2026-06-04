@@ -1,6 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
 using Aguacongas.IdentityServer.KeysRotation;
+using Aguacongas.IdentityServer.KeysRotation.Duende;
+using Duende.IdentityServer.Services.KeyManagement;
 using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.DataProtection.Internal;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -40,12 +42,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDataProtection();
             services.TryAddEnumerable(
                     ServiceDescriptor.Singleton<IConfigureOptions<KeyRotationOptions>, KeyRotationOptionsSetup>());
-
+            services.AddTransient<IAutomaticKeyManagerKeyStore, NullKeyManagerKeyStore>();
             return new KeyRotationBuilder
             {
                 Services = services
                     .AddKeysRotation<RsaEncryptorConfiguration, RsaEncryptor>(rsaSigningAlgorithm.ToString(), configureKeysRotation)
-                    
+
             }.AddRsaEncryptorConfiguration(rsaSigningAlgorithm, options =>
             {
                 options.SigningAlgorithm = rsaSigningAlgorithm.ToString();
@@ -53,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
         }
 
-        public static IServiceCollection AddKeysRotation<TC,TE>(this IServiceCollection services, string signingAlgorithm, Action<KeyRotationOptions> configureKeysRotation = null)
+        public static IServiceCollection AddKeysRotation<TC, TE>(this IServiceCollection services, string signingAlgorithm, Action<KeyRotationOptions> configureKeysRotation = null)
             where TC : SigningAlgorithmConfiguration, new()
             where TE : ISigningAlgortithmEncryptor
         {
@@ -71,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var configueOptionsList = p.GetRequiredService<IEnumerable<IConfigureOptions<KeyRotationOptions>>>();
                     var settings = optionsFactory.Create(signingAlgorithm);
 
-                    foreach(var configure in configueOptionsList)
+                    foreach (var configure in configueOptionsList)
                     {
                         configure.Configure(settings);
                     }
@@ -95,7 +97,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     var list = p.GetRequiredService<IEnumerable<IKeyRingStore<TC, TE>>>();
                     return list.First(s => s.Algorithm == signingAlgorithm) as IValidationKeysStore;
                 })
-                .AddTransient(p => {
+                .AddTransient(p =>
+                {
                     var list = p.GetRequiredService<IEnumerable<IKeyRingStore<TC, TE>>>();
                     return list.First(s => s.Algorithm == signingAlgorithm) as ISigningCredentialStore;
                 });

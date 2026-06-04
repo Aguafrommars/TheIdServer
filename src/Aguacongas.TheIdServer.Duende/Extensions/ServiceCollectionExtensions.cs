@@ -92,17 +92,13 @@ public static class ServiceCollectionExtensions
             .Configure<IdentityServerOptions>(configurationManager.GetSection(nameof(IdentityServerOptions)))
             .Configure<DynamicProviderOptions>(options => { })
             .AddTransient(p => p.GetRequiredService<IOptions<DynamicProviderOptions>>().Value)
-            .AddIdentityServerBuilder()
-            .AddRequiredPlatformServices()
-            .AddCookieAuthentication()
-            .AddCoreServices()
-            .AddDefaultEndpoints()
-            .AddPluggableServices()
-            .AddKeyManagement()
-            .AddValidators()
-            .AddResponseGenerators()
-            .AddDefaultSecretParsers()
-            .AddDefaultSecretValidators()
+            .AddIdentityServer(options =>
+            {
+                options.DPoP.SupportedDPoPSigningAlgorithms = [];
+                options.SupportedClientAssertionSigningAlgorithms = [];
+                options.SupportedRequestObjectSigningAlgorithms = [];
+                configurationManager.Bind(nameof(IdentityServerOptions), options);
+            })
             .AddCiba(configurationManager.GetSection(nameof(BackchannelAuthenticationUserNotificationServiceOptions)))
             .AddAspNetIdentity<ApplicationUser>()
             .AddDynamicClientRegistration()

@@ -6,6 +6,7 @@ using Aguacongas.IdentityServer.Admin.Options;
 using Aguacongas.IdentityServer.Admin.Services;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Services.KeyManagement;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Validation;
 using Microsoft.Extensions.Configuration;
@@ -56,6 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 });
             });
+
+            builder.Services.AddTransient<IAutomaticKeyManagerKeyStore, AutomaticKeyManagerKeyStore>();
 
             return builder;
         }
