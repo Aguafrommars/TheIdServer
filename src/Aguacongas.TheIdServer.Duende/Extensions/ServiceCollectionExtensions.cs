@@ -27,10 +27,6 @@ using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +81,6 @@ public static class ServiceCollectionExtensions
             .Configure<AccountOptions>(configurationManager.GetSection(nameof(AccountOptions)))
             .Configure<Aguacongas.IdentityServer.Admin.Options.DynamicClientRegistrationOptions>(configurationManager.GetSection(nameof(Aguacongas.IdentityServer.Admin.Options.DynamicClientRegistrationOptions)))
             .Configure<TokenValidationParameters>(configurationManager.GetSection(nameof(TokenValidationParameters)))
-            .Configure<SiteOptions>(configurationManager.GetSection(nameof(SiteOptions)))
             .Configure<ConformanceReportOptions>(configurationManager.GetSection(nameof(ConformanceReportOptions)))
             .ConfigureNonBreakingSameSiteCookies()
             .AddOidcStateDataFormatterCache()
@@ -187,27 +182,18 @@ public static class ServiceCollectionExtensions
         ConfigureDynamicProviderManager(mvcBuilder, isProxy, dbType);
         ConfigureDynamicConfiguration(mvcBuilder, configurationManager);
 
-        services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
-        services.Configure<HostModelOptions>(configurationManager.GetSection(nameof(HostModelOptions)))
-            .AddScoped<ThemeService>()
+        services.AddScoped<ThemeService>()
             .AddScoped<LazyAssemblyLoader>()
-            .AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
-            .AddScoped<NavigationManager, PreRenderNavigationManager>()
-            .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
             .AddTransient<IReadOnlyCultureStore, PreRenderCultureStore>()
             .AddTransient<IReadOnlyLocalizedResourceStore, PreRenderLocalizedResourceStore>()
-            .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
-            .AddTransient<JSInterop.IJSRuntime, JSRuntime>()
+            .AddScoped<ISharedStringLocalizerAsync, Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services.StringLocalizer>()
             .AddTransient<IKeyStore<ECDsaEncryptorDescriptor>, KeyStore<ECDsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.ECDsaEncryptorDescriptor>>()
             .AddTransient<IKeyStore<RsaEncryptorDescriptor>, KeyStore<RsaEncryptorDescriptor, Aguacongas.IdentityServer.KeysRotation.RsaEncryptorDescriptor>>()
             .AddTransient<IKeyStore<IAuthenticatedEncryptorDescriptor>, KeyStore<IAuthenticatedEncryptorDescriptor, ConfigurationModel.IAuthenticatedEncryptorDescriptor>>()
-            .AddAdminApplication(new Settings())
             .AddDatabaseDeveloperPageExceptionFilter()
             .AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("Identity", "/Account"));
 
         ConfigureHealthChecks(services, dbType, isProxy, configurationManager);
-
-        services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
 
         return services;
     }

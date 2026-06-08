@@ -5,13 +5,13 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.BlazorApp.Infrastructure.Services;
 using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.BlazorApp.Services;
+using Duende.Bff.Blazor.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
@@ -33,50 +33,28 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
 
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, Settings settings)
         {
-            var scopes = new List<string>();
-            configuration.Bind("ProviderOptions:DefaultScopes", scopes);
-            services.Configure<OidcProviderOptions>(options => configuration.Bind("ProviderOptions", options))
-                .Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
-                .AddOidcAuthentication(options =>
+            services.Configure<RemoteAuthenticationApplicationPathsOptions>(options => configuration.Bind("AuthenticationPaths", options))
+                .AddAuthorizationCore(options =>
                 {
-                    SetDefaultAuthenticationOptions(options);
-                    configuration.GetSection("AuthenticationPaths").Bind(options.AuthenticationPaths);
-                    configuration.GetSection("UserOptions").Bind(options.UserOptions);
-                    var providerOptions = options.ProviderOptions;
-                    configuration.Bind("ProviderOptions", providerOptions);
-                    providerOptions.DefaultScopes.Clear();
-                    foreach (var scope in scopes)
-                    {
-                        providerOptions.DefaultScopes.Add(scope);
-                    }
+                    options.AddIdentityServerPolicies(showSettings: configuration.GetValue<bool>($"{nameof(MenuOptions)}:{nameof(MenuOptions.ShowSettings)}"));
                 })
-                .AddAccountClaimsPrincipalFactory<ClaimsPrincipalFactory>();
+                .AddBffBlazorClient()
+                .AddCascadingAuthenticationState();
 
             services.Configure<Settings>(configuration.Bind)
                 .Configure<MenuOptions>(options => configuration.GetSection(nameof(MenuOptions)).Bind(options))
                 .AddScoped<ThemeService>()
                 .AddScoped<DynamicConfiguration.ConfigurationService>()
                 .AddScoped<DynamicConfiguration.IConfigurationService, ConfigurationService>()
-                .AddConfigurationService(configuration.GetSection("settingsOptions"))
-                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
-            services.AddAuthorizationCore(options =>
-            {
-                options.AddIdentityServerPolicies(showSettings: configuration.GetValue<bool>($"{nameof(MenuOptions)}:{nameof(MenuOptions.ShowSettings)}"));
-            });
+                .AddConfigurationService(configuration.GetSection("settingsOptions"));
 
             services.AddAdminHttpStores(p =>
                 {
                     return Task.FromResult(CreateApiHttpClient(p));
                 })
                 .AddAdminApplication(settings)
-                .AddHttpClient("oidc")
-                .ConfigureHttpClient(httpClient =>
-                {
-                    var apiUri = new Uri(settings.ApiBaseUrl);
-                    httpClient.BaseAddress = apiUri;
-                })
-                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+                .AddLocalApiHttpClient("oidc");
+
 
             services.AddScoped<ISharedStringLocalizerAsync, StringLocalizer>()
                 .AddTransient<IReadOnlyLocalizedResourceStore>(p =>
@@ -89,12 +67,7 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                     var factory = p.GetRequiredService<IHttpClientFactory>();
                     return new ReadOnlyCultureStore(new AdminStore<Entity.Culture>(Task.FromResult(factory.CreateClient("localizer")), p.GetRequiredService<ILogger<AdminStore<Entity.Culture>>>()));
                 })
-                .AddHttpClient("localizer")
-                .ConfigureHttpClient(httpClient =>
-                {
-                    var apiUri = new Uri(settings.ApiBaseUrl);
-                    httpClient.BaseAddress = apiUri;
-                });
+                .AddLocalApiHttpClient("localizer");
         }
 
         public static void ConfigureLogging(this ILoggingBuilder logging, Settings settings)
@@ -109,14 +82,6 @@ namespace Microsoft.AspNetCore.Components.WebAssembly.Hosting
                 }
             }
             logging.SetMinimumLevel(options.Minimum);
-        }
-
-        // Workaround https://github.com/dotnet/aspnetcore/issues/41998#issuecomment-1144812047
-        private static void SetDefaultAuthenticationOptions(RemoteAuthenticationOptions<OidcProviderOptions> options)
-        {
-            options.AuthenticationPaths.RemoteRegisterPath = "/identity/account/register";
-            options.AuthenticationPaths.RemoteProfilePath = "/identity/account/manage";
-            options.UserOptions.RoleClaim = "role";
         }
 
         public static IServiceCollection AddAdminApplication(this IServiceCollection services, Settings settings)

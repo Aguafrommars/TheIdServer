@@ -3,12 +3,8 @@
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Aguacongas.TheIdServer.Services;
+namespace Aguacongas.TheIdServer.BlazorApp.BFF.Services;
 
 public class PreRenderLocalizedResourceStore(IServiceProvider provider) : IReadOnlyLocalizedResourceStore
 {

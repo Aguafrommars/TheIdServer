@@ -2,7 +2,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DynamicConfiguration = Aguacongas.DynamicConfiguration.Razor.Services;
 
 namespace Aguacongas.TheIdServer.BlazorApp.Services
 {
@@ -28,9 +27,9 @@ namespace Aguacongas.TheIdServer.BlazorApp.Services
         {
             try
             {
-                await _parent.SaveAsync(key,cancellationToken).ConfigureAwait(false);
+                await _parent.SaveAsync(key, cancellationToken).ConfigureAwait(false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await _notifier.NotifyAsync(new Models.Notification
                 {

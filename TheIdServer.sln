@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11304.161 d18.3
+VisualStudioVersion = 18.3.11304.161
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DF545B54-78FB-42D0-A842-A1490A579B37}"
 EndProject
@@ -259,6 +259,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.UpgradePasswordHasher", "src\Identity\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher\Aguacongas.TheIdServer.Identity.UpgradePasswordHasher.csproj", "{C04EAFE6-0E01-4792-A113-B98AE76466D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.Identity.UpgradePasswordHasherTest", "test\Identity\Aguacongas.TheIdServer.Identity.UpgradePasswordHasherTest\Aguacongas.TheIdServer.Identity.UpgradePasswordHasherTest.csproj", "{18F49B30-17EC-4365-9F34-4D963D23FFE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aguacongas.TheIdServer.BlazorApp.BFF", "src\Aguacongas.TheIdServer.BlazorApp.BFF\Aguacongas.TheIdServer.BlazorApp.BFF.csproj", "{42C59170-7D79-C071-4A87-2B566FE44E0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1434,6 +1436,18 @@ Global
 		{18F49B30-17EC-4365-9F34-4D963D23FFE1}.Release|x64.Build.0 = Release|Any CPU
 		{18F49B30-17EC-4365-9F34-4D963D23FFE1}.Release|x86.ActiveCfg = Release|Any CPU
 		{18F49B30-17EC-4365-9F34-4D963D23FFE1}.Release|x86.Build.0 = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|x64.Build.0 = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Debug|x86.Build.0 = Debug|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|x64.ActiveCfg = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|x64.Build.0 = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|x86.ActiveCfg = Release|Any CPU
+		{42C59170-7D79-C071-4A87-2B566FE44E0B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1546,6 +1560,7 @@ Global
 		{34F746F3-152C-426F-B91F-02DE10F15518} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
 		{C04EAFE6-0E01-4792-A113-B98AE76466D1} = {1FC87EDC-78E7-465E-9721-D7B481D64ED7}
 		{18F49B30-17EC-4365-9F34-4D963D23FFE1} = {5CDF0690-B16C-4A75-80C2-F1EDC7C26514}
+		{42C59170-7D79-C071-4A87-2B566FE44E0B} = {DF545B54-78FB-42D0-A842-A1490A579B37}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5283BE0B-F6F2-4458-B12F-64C78CFF8CBA}

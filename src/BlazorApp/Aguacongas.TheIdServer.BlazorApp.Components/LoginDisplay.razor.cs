@@ -1,7 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Duende.Bff.Blazor.Client;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -37,9 +37,10 @@ namespace Aguacongas.TheIdServer.BlazorApp.Components
 
         }
 
-        private Task BeginSignOut(MouseEventArgs args)
+        private Task BeginSignOut(AuthenticationState context)
         {
-            _navigationManager.NavigateToLogout(_options.Value.LogOutPath);
+            var logoutUrl = context.User.FindFirst(Constants.ClaimTypes.LogoutUrl);
+            _navigationManager.NavigateTo(logoutUrl.Value, true);
             return Task.CompletedTask;
         }
 

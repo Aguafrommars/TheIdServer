@@ -1,0 +1,24 @@
+﻿using System.Text.Json.Serialization;
+
+namespace Aguacongas.TheIdServer.BlazorApp.BFF.Models;
+
+internal class ClaimRecord()
+{
+    /// <summary>
+    /// The type
+    /// </summary>
+    [JsonPropertyName("type")]
+    public string? Type { get; set; }
+
+    /// <summary>
+    /// The value
+    /// </summary>
+    [JsonPropertyName("value")]
+    public object? Value { get; set; }
+
+    /// <summary>
+    /// The value type
+    /// </summary>
+    [JsonPropertyName("valueType")]
+    public string? ValueType { get; set; }
+}

@@ -7,19 +7,15 @@ using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer;
 using Aguacongas.TheIdServer.Admin.Hubs;
 using Aguacongas.TheIdServer.Authentication;
-using Aguacongas.TheIdServer.BlazorApp;
-using Aguacongas.TheIdServer.BlazorApp.Models;
 using Aguacongas.TheIdServer.Data;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Duende.IdentityServer.Configuration;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Serilog;
 using System.Globalization;
@@ -68,8 +64,7 @@ public static class ApplicationBuilderExtensions
         if (environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage()
-                .UseMigrationsEndPoint()
-                .UseWebAssemblyDebugging();
+                .UseMigrationsEndPoint();
         }
         else
         {
@@ -99,8 +94,7 @@ public static class ApplicationBuilderExtensions
             app.UseHttpsRedirection();
         }
 
-        app.UseBlazorFrameworkFiles()
-           .UseStaticFiles()
+        app.UseStaticFiles()
            .UseIdentityServerAdminApi("/api", child =>
            {
                ConfigureAdminApiHandler(configuration, child);
@@ -117,17 +111,6 @@ public static class ApplicationBuilderExtensions
 
         app.UseIdentityServerAdminAuthentication()
             .UseAuthorization()
-            .Use((context, next) =>
-            {
-                var service = context.RequestServices;
-                var settings = service.GetRequiredService<Settings>();
-                var request = context.Request;
-                settings.WelcomeContenUrl = $"{request.Scheme}://{request.Host}/api/welcomefragment";
-                var remotePathOptions = service.GetRequiredService<IOptions<RemoteAuthenticationApplicationPathsOptions>>().Value;
-                remotePathOptions.RemoteProfilePath = $"{request.Scheme}://{request.Host}/identity/account/manage";
-                remotePathOptions.RemoteRegisterPath = $"{request.Scheme}://{request.Host}/identity/account/register";
-                return next();
-            })
             .UsePrometheus(configuration)
             .UseEndpoints(endpoints =>
             {
@@ -143,9 +126,6 @@ public static class ApplicationBuilderExtensions
                 {
                     endpoints.MapHub<ProviderHub>("/providerhub");
                 }
-                endpoints.MapFallbackToPage("/_Host");
-                endpoints.MapRazorComponents<App>()
-                    .AddInteractiveWebAssemblyRenderMode();
             });
 
 
