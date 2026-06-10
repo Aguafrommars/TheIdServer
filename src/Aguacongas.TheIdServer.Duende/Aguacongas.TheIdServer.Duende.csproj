@@ -52,6 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="1.0.2" />
 	  <PackageReference Include="Duende.IdentityServer.ConformanceReport" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.8" />
     <PackageReference Include="Duende.IdentityServer.Configuration" Version="8.0.0" />

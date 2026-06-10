@@ -1,10 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2025 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Admin;
+using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using IdentityModel;
 using Duende.IdentityServer.Extensions;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Aguacongas.IdentityServer.Admin.Configuration;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -62,7 +61,7 @@ namespace Microsoft.AspNetCore.Builder
             var request = context.Request;
             var path = request.Path;
 
-            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) || 
+            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
                 !path.HasValue ||
                 !path.StartsWithSegments(basePath))
             {
@@ -82,13 +81,13 @@ namespace Microsoft.AspNetCore.Builder
                 return;
             }
 
-            var logger = context.RequestServices.GetRequiredService<ILogger<HttpContext>>();            
-            
+            var logger = context.RequestServices.GetRequiredService<ILogger<HttpContext>>();
+
             using var scope = logger.BeginScope(new Dictionary<string, object> { ["User"] = context.User.GetDisplayName() });
             await next().ConfigureAwait(false);
 
             var response = context.Response;
-            if (context.Response.StatusCode == (int)HttpStatusCode.Redirect) 
+            if (context.Response.StatusCode == (int)HttpStatusCode.Redirect)
             {
                 response.StatusCode = context.User.IsAuthenticated() ? (int)HttpStatusCode.Unauthorized : (int)HttpStatusCode.Forbidden;
                 await response.CompleteAsync().ConfigureAwait(false);
@@ -105,11 +104,28 @@ namespace Microsoft.AspNetCore.Builder
                 return;
             }
 
-            var result = await context.AuthenticateAsync(authenticationScheme.Split(' ')[0]).ConfigureAwait(false);
-
-            if (result.Succeeded)
+            var scheme = authenticationScheme.Split(' ')[0];
+            try
             {
-                context.User = result.Principal;
+                var result = await context.AuthenticateAsync(scheme).ConfigureAwait(false);
+
+                if (result.Succeeded)
+                {
+                    context.User = result.Principal;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                if (scheme == OidcConstants.AuthenticationSchemes.AuthorizationHeaderDPoP)
+                {
+                    scheme = OidcConstants.AuthenticationSchemes.AuthorizationHeaderBearer;
+                }
+                var result = await context.AuthenticateAsync(scheme).ConfigureAwait(false);
+
+                if (result.Succeeded)
+                {
+                    context.User = result.Principal;
+                }
             }
         }
 

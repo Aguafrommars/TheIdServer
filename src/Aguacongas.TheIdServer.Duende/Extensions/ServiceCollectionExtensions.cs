@@ -18,6 +18,7 @@ using Aguacongas.TheIdServer.Identity.UpgradePasswordHasher;
 using Aguacongas.TheIdServer.Models;
 using Aguacongas.TheIdServer.Services;
 using Aguacongas.TheIdServer.UI;
+using Duende.AspNetCore.Authentication.JwtBearer.DPoP;
 using Duende.AspNetCore.Authentication.OAuth2Introspection;
 using Duende.AspNetCore.Authentication.OAuth2Introspection.Infrastructure;
 using Duende.ConformanceReport;
@@ -153,7 +154,11 @@ public static class ServiceCollectionExtensions
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => ConfigureIdentityServerJwtBearerOptions(options, configurationManager))
             // reference tokens
             .AddOAuth2Introspection("introspection", options => ConfigureIdentityServerOAuth2IntrospectionOptions(options, configurationManager));
-
+        services.ConfigureDPoPTokensForScheme(JwtBearerDefaults.AuthenticationScheme, options =>
+        {
+            options.AllowBearerTokens = true;
+        });
+        services.AddKeyedHybridCache(Duende.AspNetCore.Authentication.JwtBearer.DPoP.ServiceProviderKeys.ProofTokenReplayHybridCache);
         var mutulaTlsOptions = configurationManager.GetSection("IdentityServerOptions:MutualTls").Get<Aguacongas.TheIdServer.BlazorApp.Models.MutualTlsOptions>();
         if (mutulaTlsOptions?.Enabled == true)
         {

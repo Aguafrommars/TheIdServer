@@ -1,3 +1,4 @@
+using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.BlazorApp.BFF.Models;
 using Aguacongas.TheIdServer.BlazorApp.BFF.Models.Models;
@@ -9,7 +10,6 @@ using Duende.AccessTokenManagement;
 using Duende.AccessTokenManagement.OpenIdConnect;
 using Duende.Bff;
 using Duende.Bff.AccessTokenManagement;
-using Duende.Bff.Blazor;
 using Duende.Bff.Yarp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,10 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
@@ -53,34 +56,41 @@ services.Configure<HostModelOptions>(configuration.GetSection(nameof(HostModelOp
             .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
             .AddTransient<IJSRuntime, Aguacongas.TheIdServer.BlazorApp.BFF.Services.JSRuntime>()
             .AddTransient<IClaimsTransformation, CustomClaimsTransformer>()
+            .AddTransient<IClientAssertionService, ClientAssertionService>()
+            .AddSingleton<AssertionService>()
             .AddAdminApplication(new Settings
             {
                 ApiBaseUrl = baseAdress,
             })
             .AddRazorPages();
 
-services.AddBff()
-        .ConfigureOpenIdConnect(options =>
+var jwk = CreateDPoPJsonWebKey();
+services.AddBff(options =>
+    {
+        options.DPoPJsonWebKey = jwk;
+    })
+    .ConfigureOpenIdConnect(options =>
+    {
+        options.Scope.Clear();
+        configuration.Bind("ProviderOptions", options);
+        options.ClaimActions.MapAll();
+        options.BackchannelHttpHandler = new AssertionInjectionHandler(new AssertionService(configuration))
         {
-            options.ResponseMode = "query";
-            options.Scope.Clear();
-            configuration.Bind("ProviderOptions", options);
-            options.MapInboundClaims = false;
-            options.ClaimActions.MapAll();
-            options.GetClaimsFromUserInfoEndpoint = true;
-            options.SaveTokens = true;
+            InnerHandler = options.BackchannelHttpHandler ?? new HttpClientHandler()
+        };
+    })
+    .ConfigureCookies(options =>
+    {
+        options.Cookie.Name = "__Host-blazor";
+        options.Cookie.SameSite = SameSiteMode.Strict;
+    })
+    .AddServerSideSessions()
+    .AddRemoteApis();
 
-            options.TokenValidationParameters.NameClaimType = "name";
-            options.TokenValidationParameters.RoleClaimType = "role";
-        })
-        .ConfigureCookies(options =>
-        {
-            options.Cookie.Name = "__Host-blazor";
-            options.Cookie.SameSite = SameSiteMode.Strict;
-        })
-        .AddServerSideSessions()
-        .AddBlazorServer()
-        .AddRemoteApis();
+services.AddOpenIdConnectAccessTokenManagement(options =>
+    {
+        options.DPoPJsonWebKey = jwk;
+    });
 
 services.AddCascadingAuthenticationState()
     .AddAuthorization(options =>
@@ -148,8 +158,30 @@ app.UseStaticFiles()
         endpoints.MapStaticAssets();
         endpoints.MapRazorComponents<App>()
             .AddInteractiveWebAssemblyRenderMode();
-        endpoints.MapRemoteBffApiEndpoint("/api", new Uri(baseAdress))
-            .WithAccessToken(RequiredTokenType.UserOrNone);
+        var entitiesType = GetEntityTypes();
+        foreach (var entityType in entitiesType)
+        {
+            var endpoint = $"/{entityType.Name.ToLower()}";
+            endpoints.MapRemoteBffApiEndpoint(endpoint, new Uri($"{baseAdress}{endpoint}"))
+                .WithAccessToken(RequiredTokenType.UserOrNone);
+        }
     });
 
 await app.RunAsync().ConfigureAwait(false);
+
+static IEnumerable<Type> GetEntityTypes()
+{
+    var assembly = typeof(IEntityId).GetTypeInfo().Assembly;
+    var entityTypeList = assembly.GetTypes().Where(t => t.IsClass &&
+        !t.IsAbstract &&
+        t.GetInterface("IEntityId") != null);
+    return entityTypeList;
+}
+
+static DPoPProofKey CreateDPoPJsonWebKey()
+{
+    var rsaKey = new RsaSecurityKey(RSA.Create(2048));
+    var jwk = JsonWebKeyConverter.ConvertFromSecurityKey(rsaKey);
+    jwk.Alg = "PS256";
+    return DPoPProofKey.Parse(JsonSerializer.Serialize(jwk));
+}
