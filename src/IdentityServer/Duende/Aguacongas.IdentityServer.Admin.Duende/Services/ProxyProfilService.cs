@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
 using Aguacongas.IdentityServer.Store;
 using Duende.IdentityServer.Extensions;
