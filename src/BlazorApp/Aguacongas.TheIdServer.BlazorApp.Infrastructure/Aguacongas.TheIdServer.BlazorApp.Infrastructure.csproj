@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<Authors>Olivier Lefebvre</Authors>
-		<Copyright>Copyright (c) 2023 @Olivier Lefebvre</Copyright>
+		<Copyright>Copyright (c) 2026 @Olivier Lefebvre</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Aguafrommars/TheIdServer/tree/master/src/Aguacongas.TheIdServer.BlazorApp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Aguafrommars/TheIdServer</RepositoryUrl>
@@ -19,10 +19,10 @@
 		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="3.1.0" />
 		<PackageReference Include="Duende.BFF.Blazor.Client" Version="4.1.2" />
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.8" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.8" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.9" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 

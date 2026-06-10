@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Duende.Bff.Blazor.Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;

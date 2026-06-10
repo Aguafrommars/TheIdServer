@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
