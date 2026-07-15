@@ -6,10 +6,10 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
 
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants)TRACE</DefineConstants>
@@ -22,16 +22,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="Localization-fr.json" />
-	  <Content Remove="Localization-de.json" />
+		<Content Remove="Localization-fr.json" />
+		<Content Remove="Localization-de.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Localization-fr.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Include="Localization-de.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
@@ -52,11 +52,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Duende.IdentityServer.ConformanceReport" Version="8.0.2" />
-	  <PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="1.0.2" />
-	  
-	  <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
-    <PackageReference Include="Duende.IdentityServer.Configuration" Version="8.0.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+		<PackageReference Include="Duende.IdentityServer.ConformanceReport" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.10" />
+		<PackageReference Include="Duende.AspNetCore.Authentication.JwtBearer" Version="1.0.2" />
+		<PackageReference Include="Duende.IdentityServer.Configuration" Version="8.0.2" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
 	</ItemGroup>
 </Project>
