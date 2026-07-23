@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.10" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.20.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.21.0" />
   </ItemGroup>
 
   <ItemGroup>
