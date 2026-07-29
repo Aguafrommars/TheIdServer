@@ -80,7 +80,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddTransient<RegisterClientStores>()
                 .AddTransient<IRegisterClientService, RegisterClientService>()
-                .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>();
+                .AddTransient<JwtRequestValidator, CustomJwtRequestValidator>()
+                .AddScoped<IVerifyRegistrationToken, VerifyRegistrationTokenService>();
             return builder;
         }
 

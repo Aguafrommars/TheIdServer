@@ -1,6 +1,7 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
+using Aguacongas.IdentityServer.Admin.Duende.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Duende.IdentityServer.Extensions;
@@ -50,9 +51,25 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns></returns>
         public static IApplicationBuilder UseIdentityServerAdminAuthentication(this IApplicationBuilder builder, string basePath = null)
         {
-            return builder.Use((context, next) =>
+            return builder.Use(async (context, next) =>
             {
-                return Authenticate(context, next, basePath ?? ApiBasePath.Value);
+                var request = context.Request;
+                var path = request.Path;
+                var basePathOrDefault = basePath ?? ApiBasePath.Value;
+                if (path.StartsWithSegments($"{basePathOrDefault}/register", StringComparison.OrdinalIgnoreCase) &&
+                    request.Method != HttpMethods.Post)
+                {
+                    var clientId = path.Value.Split('/')[^1];
+                    var verifyRegistrationToken = context.RequestServices.GetRequiredService<IVerifyRegistrationToken>();
+                    if (!await verifyRegistrationToken.ClientExistsAsync(clientId).ConfigureAwait(false))
+                    {
+                        var response = context.Response;
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        await response.CompleteAsync().ConfigureAwait(false);
+                        return;
+                    }
+                }
+                await Authenticate(context, next, basePathOrDefault).ConfigureAwait(false);
             });
         }
 
@@ -151,27 +168,19 @@ namespace Microsoft.AspNetCore.Builder
                 }
 
                 // get token for registration end point
-                if (!Guid.TryParse(authorizationHeaderValue.First().Split(' ')[1], out Guid token))
+                if (!Guid.TryParse(authorizationHeaderValue[0].Split(' ')[1], out Guid token))
                 {
                     // The token is not au GUID
                     await SetForbiddenResponse(context).ConfigureAwait(false);
                     return false;
                 }
 
-                var store = context.RequestServices.GetRequiredService<IAdminStore<Client>>();
-                var clientResponse = await store.GetAsync(new PageRequest
-                {
-                    Filter = $"{nameof(Client.RegistrationToken)} eq {token}",
-                    Select = nameof(Client.Id),
-                    Take = 1
-                }).ConfigureAwait(false);
-
-                var client = clientResponse.Items.FirstOrDefault();
-                if (client != null && path.Value.EndsWith(client.Id))
+                var verifyRegistrationToken = context.RequestServices.GetRequiredService<IVerifyRegistrationToken>();
+                if (verifyRegistrationToken.VerifyRegistrationTokenAsync(token, out string currentClientId))
                 {
                     context.User = new ClaimsPrincipal(new ClaimsIdentity(
                     [
-                        new Claim(JwtClaimTypes.Name, client?.Id ?? "not found"),
+                        new Claim(JwtClaimTypes.Name, currentClientId ?? "not found"),
                         new Claim(JwtClaimTypes.Role, SharedConstants.REGISTRATIONPOLICY)
                     ], "registration", JwtClaimTypes.Name, "role"));
                     return true;
