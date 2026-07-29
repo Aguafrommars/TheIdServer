@@ -313,7 +313,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var resourceResponse = await _clientResourceStore.GetAsync(new PageRequest
             {
                 Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
-            }).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(false);
 
             var items = resourceResponse.Items;
             var clientNameList = registration.ClientNames?.Where(n => n.Culture != null) ?? Array.Empty<LocalizableProperty>();
