@@ -24,9 +24,13 @@ using Xunit;
 namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 {
     [Collection(BlazorAppCollection.Name)]
-    public class RegisterControllerTest(TheIdServerFactory factory)
+    public class RegisterControllerTest
     {
-        private readonly WebApplicationFactory<AccountController> _factory = factory;
+        private readonly WebApplicationFactory<AccountController> _factory;
+        public RegisterControllerTest(TheIdServerFactory factory)
+        {
+            _factory = factory;
+        }
 
         [Fact]
         public async Task CreateAsync_should_register_a_new_client()
@@ -34,21 +38,21 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             using var client = _factory.CreateClient();
 
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true,
-                    [
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim("role",SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    ]);
+                    });
 
             var registration = new ClientRegisteration
             {
-                ClientNames =
-                [
+                ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "test"
                     },
-                ],
+                },
                 RedirectUris = new List<string>
                 {
                     "http://localhost"
@@ -69,8 +73,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 
             registration.Jwks = new JsonWebKeys
             {
-                Keys =
-                [
+                Keys = new[]
+                {
                     new JsonWebKey
                     {
                         kty = "RSA",
@@ -83,22 +87,23 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                             "MIICyTCCAbGgAwIBAgIGAYCfoKwLMA0GCSqGSIb3DQEBCwUAMBsxGTAXBgNVBAMMEG9pZGNfY2VydF9jbGllbnQwHhcNMjIwNTA3MTc0NTQ4WhcNMjMwNTA3MTc0NTQ4WjAbMRkwFwYDVQQDDBBvaWRjX2NlcnRfY2xpZW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1YSRksvd9cIrWXhtCphHTQQ0GfjTApePNUoCEPq6aXlGOV0S3NJWgbozpYfqsK6QSHRm5kUtHlM1VIFa1AXa1zwL5BKMkkbLbwEgPJEhMAt0uURn0/vu5YaiNA/gIBJstSaNJpb0dSr7/RomWa9hVU3TTaDJE9xPs/FJjaLdbKQDaITCGA7fXmrngfAGMCEfEY36TJ6heULdshKD3AbBaCc36gNLDgld8FFgBJD4Cq/ARBaumtTEfRpyEn8ryU0+J0aS8LHrFQ4vIogeAXsWmtL+tPCU5C0NbDZ6zsbE5nw6OQvTf9fAI3O5cu2XbEP4b7hEo5S0TdWS8jHCZL9WcwIDAQABoxMwETAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQA19YAQvB2nRFL1pxeo2MphARg39vgZUQ1lJW6QyvvG8tu2DaSFhzxoTrRAeJEYqc9r01k1fDVm20fD0JPN5I497JbMoqN1DLlkrLwlr8wCtYYkj5yz72st+LnB1ytTFyrjKsP3pfuwiC69E4+Vg1KyY3QgzGFrnZ5zWPvUAWLTz05CyDagMLeJiF5DZW3eN51A+muxsyRXoyI95lTNMzw7mOYEIqns0H8ZOsqRAXGkzY8Mv0IzU71IRCtuWd6JiUPKrE1JbwcYOt2WNGeQFD0qMEi7RmSBi6kVexaadIA7qAeBibSuBkj764OjG7WHd51O4ZiRDsfJGmh47yZ5dw1R"
                         }
                     }
-                ]
+                }
             };
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new List<string>
+            {
                 "https://localhost"
-            ];
-            registration.ClientNames =
-                [
-                    new() {
+            };
+            registration.ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
                         Culture = "fr-FR",
                         Value = "test"
                     },
-                ];
+                };
 
-            registration.ClientUris =
-                [
+            registration.ClientUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -108,10 +113,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.LogoUris =
-                [
+            registration.LogoUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -121,10 +126,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.PolicyUris =
-                [
+            registration.PolicyUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -134,10 +139,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.TosUris =
-                [
+            registration.TosUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -147,7 +152,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
             registration.JwksUri = "https://jwk";
 
@@ -164,11 +169,11 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
         public async Task CreateAsync_should_validate_request()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true,
-                    [
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim("role", SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    ]);
+                    });
 
             var client = _factory.CreateClient();
 
@@ -192,7 +197,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("RedirectUri is required.", error?.Error_description);
             }
 
-            registration.RedirectUris = [];
+            registration.RedirectUris = new List<string>
+            {
+            };
 
             // empty redirect uris
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -250,17 +257,17 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("RedirectUri 'ssh:test' uses invalid scheme. If this scheme should be allowed, then configure it via ValidationOptions.", error?.Error_description);
             }
 
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new List<string>
+            {
                 "http://localhost"
-            ];
-            registration.LogoUris =
-            [
+            };
+            registration.LogoUris = new List<LocalizableProperty>
+            {
                 new LocalizableProperty
                 {
                     Value = "test"
                 }
-            ];
+            };
 
             // invalid logo uris
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -277,13 +284,13 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("LogoUri 'test' is not valid.", error?.Error_description);
             }
 
-            registration.LogoUris =
-            [
+            registration.LogoUris = new List<LocalizableProperty>
+            {
                 new LocalizableProperty
                 {
                     Value = "http://test"
                 }
-            ];
+            };
 
             // logo uri don't match redirect uri host
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -301,13 +308,13 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
 
             registration.LogoUris = null;
-            registration.PolicyUris =
-            [
+            registration.PolicyUris = new List<LocalizableProperty>
+            {
                 new LocalizableProperty
                 {
                     Value = "test"
                 }
-            ];
+            };
 
             // invalid logo uris
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -324,13 +331,13 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("PolicyUri 'test' is not valid.", error?.Error_description);
             }
 
-            registration.PolicyUris =
-            [
+            registration.PolicyUris = new List<LocalizableProperty>
+            {
                 new LocalizableProperty
                 {
                     Value = "http://test"
                 }
-            ];
+            };
 
             // policy uri don't match redirect uri host
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -348,7 +355,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
 
             registration.PolicyUris = null;
-            registration.GrantTypes = ["invalid"];
+            registration.GrantTypes = new[] { "invalid" };
 
             // invalid grant type
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -366,7 +373,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
 
             registration.GrantTypes = null;
-            registration.ResponseTypes = ["invalid"];
+            registration.ResponseTypes = new[] { "invalid" };
 
             // invalid reponse type
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -383,12 +390,12 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("ResponseType 'invalid' is not supported.", error?.Error_description);
             }
 
-            registration.GrantTypes = ["implicit"];
-            registration.RedirectUris =
-            [
+            registration.GrantTypes = new[] { "implicit" };
+            registration.RedirectUris = new[]
+            {
                 "https://test"
-            ];
-            registration.ResponseTypes = ["code"];
+            };
+            registration.ResponseTypes = new[] { "code" };
 
             // invalid reponse type
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -406,7 +413,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
 
             registration.GrantTypes = null;
-            registration.ResponseTypes = ["id_token"];
+            registration.ResponseTypes = new[] { "id_token" };
 
             // reponse / grant type doesn't match
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -423,7 +430,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("No GrantType 'implicit' for ResponseType 'id_token' found in grant_types.", error?.Error_description);
             }
 
-            registration.ResponseTypes = ["token id_token"];
+            registration.ResponseTypes = new[] { "token id_token" };
 
             // reponse / grant type doesn't match
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -440,8 +447,8 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("No GrantType 'implicit' for ResponseType 'token id_token' found in grant_types.", error?.Error_description);
             }
 
-            registration.ResponseTypes = ["code token id_token"];
-            registration.GrantTypes = ["implicit"];
+            registration.ResponseTypes = new[] { "code token id_token" };
+            registration.GrantTypes = new[] { "implicit" };
 
             // reponse / grant type doesn't match
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -458,11 +465,11 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("No GrantType 'authorization_code' for ResponseType 'code token id_token' found in grant_types.", error?.Error_description);
             }
 
-            registration.ResponseTypes = ["token"];
-            registration.RedirectUris =
-            [
+            registration.ResponseTypes = new[] { "token" };
+            registration.RedirectUris = new[]
+            {
                 "http://test"
-            ];
+            };
             // invalid scheme for grant type implicit
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -479,10 +486,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("Invalid RedirectUri 'http://test'. Implicit client must use 'https' scheme only.", error?.Error_description);
             }
 
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new[]
+            {
                 "https://localhost"
-            ];
+            };
             // invalid host for grant type implicit
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -499,10 +506,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal("Invalid RedirectUri 'https://localhost'. Implicit client cannot use 'localhost' host.", error?.Error_description);
             }
 
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new[]
+            {
                 "https://localhost"
-            ];
+            };
             // invalid host for grant type implicit
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -523,10 +530,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             registration.GrantTypes = null;
 
             registration.ApplicationType = "native";
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new[]
+            {
                 "http://test"
-            ];
+            };
 
             // invalid host for native client
 
@@ -611,21 +618,21 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
 
             var registration = new ClientRegisteration
             {
-                ClientNames =
-                [
+                ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "test"
                     },
-                ],
-                RedirectUris =
-                [
+                },
+                RedirectUris = new List<string>
+                {
                     "http://www.certification.openid.net"
-                ],
-                Contacts =
-                [
+                },
+                Contacts = new[]
+                {
                     "certification@oidf.org"
-                ]
+                }
             };
 
             var configuration = _factory.Services.GetRequiredService<IConfiguration>();
@@ -646,10 +653,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.NotNull(result?.RegistrationUri);
             }
 
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new[]
+            {
                 "http://forbidenn"
-            ];
+            };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
             {
@@ -658,10 +665,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
             }
 
-            registration.Contacts =
-            [
+            registration.Contacts = new[]
+            {
                 "forbidenn"
-            ];
+            };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
             {
@@ -677,27 +684,27 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
         public async Task UpdateAsync_should_update_client()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true,
-                    [
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    ]);
+                    });
 
             var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
-                ClientNames =
-                [
+                ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "test"
                     },
-                ],
-                RedirectUris =
-                [
+                },
+                RedirectUris = new List<string>
+                {
                     "http://localhost"
-                ]
+                }
             };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -732,21 +739,21 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Null(result?.RegistrationUri);
             }
 
-            registration.RedirectUris =
-            [
+            registration.RedirectUris = new List<string>
+            {
                 "https://localhost"
-            ];
-            registration.ClientNames =
-                [
+            };
+            registration.ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Culture = "fr-FR",
                         Value = "test"
                     },
-                ];
+                };
 
-            registration.ClientUris =
-                [
+            registration.ClientUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -756,10 +763,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.LogoUris =
-                [
+            registration.LogoUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -769,10 +776,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.PolicyUris =
-                [
+            registration.PolicyUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -782,10 +789,10 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
-            registration.TosUris =
-                [
+            registration.TosUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -795,17 +802,17 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ];
+                };
 
             registration.JwksUri = "https://jwk";
-            registration.Contacts =
-            [
+            registration.Contacts = new[]
+            {
                 "test@test.com"
-            ];
-            registration.ResponseTypes =
-            [
+            };
+            registration.ResponseTypes = new[]
+            {
                 "code"
-            ];
+            };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
             {
@@ -881,29 +888,29 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
         public async Task GetAsync_should_return_registration()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true,
-                    [
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    ]);
+                    });
 
             var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
-                ClientNames =
-                [
+                ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "test"
                     },
-                ],
-                RedirectUris =
-                [
+                },
+                RedirectUris = new List<string>
+                {
                     "https://localhost"
-                ],
-                ClientUris =
-                [
+                },
+                ClientUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -913,9 +920,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ],
-                LogoUris =
-                [
+                },
+                LogoUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -925,9 +932,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ],
-                PolicyUris =
-                [
+                },
+                PolicyUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -937,9 +944,9 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ],
-                TosUris =
-                [
+                },
+                TosUris = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "https://localhost"
@@ -949,11 +956,11 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                         Culture = "fr-FR",
                         Value = "https://localhost/fr-FR"
                     },
-                ],
-                ResponseTypes =
-                [
+                },
+                ResponseTypes = new[]
+                {
                     "code"
-                ]
+                }
             };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -991,27 +998,27 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
         public async Task DeleteAsync_should_delete_client()
         {
             _factory.Services.GetRequiredService<TestUserService>()
-                    .SetTestUser(true,
-                    [
+                    .SetTestUser(true, new Claim[]
+                    {
                         new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
                         new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
-                    ]);
+                    });
 
             var client = _factory.CreateClient();
 
             var registration = new ClientRegisteration
             {
-                ClientNames =
-                [
+                ClientNames = new List<LocalizableProperty>
+                {
                     new LocalizableProperty
                     {
                         Value = "test"
                     },
-                ],
-                RedirectUris =
-                [
+                },
+                RedirectUris = new List<string>
+                {
                     "http://localhost"
-                ]
+                }
             };
 
             using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
@@ -1036,6 +1043,19 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 using var response = await client.SendAsync(message);
 
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(registration.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             }
         }
     }
