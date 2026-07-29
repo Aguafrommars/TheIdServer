@@ -1,10 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2026 @Olivier Lefebvre
-using Aguacongas.IdentityServer.Admin;
+using Aguacongas.IdentityServer.Admin.Configuration;
+using Aguacongas.IdentityServer.Admin.Duende.Services;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using IdentityModel;
 using Duende.IdentityServer.Extensions;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Aguacongas.IdentityServer.Admin.Configuration;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -51,9 +51,25 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns></returns>
         public static IApplicationBuilder UseIdentityServerAdminAuthentication(this IApplicationBuilder builder, string basePath = null)
         {
-            return builder.Use((context, next) =>
+            return builder.Use(async (context, next) =>
             {
-                return Authenticate(context, next, basePath ?? ApiBasePath.Value);
+                var request = context.Request;
+                var path = request.Path;
+                var basePathOrDefault = basePath ?? ApiBasePath.Value;
+                if (path.StartsWithSegments($"{basePathOrDefault}/register", StringComparison.OrdinalIgnoreCase) &&
+                    request.Method != HttpMethods.Post)
+                {
+                    var clientId = path.Value.Split('/')[^1];
+                    var verifyRegistrationToken = context.RequestServices.GetRequiredService<IVerifyRegistrationToken>();
+                    if (!await verifyRegistrationToken.ClientExistsAsync(clientId).ConfigureAwait(false))
+                    {
+                        var response = context.Response;
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        await response.CompleteAsync().ConfigureAwait(false);
+                        return;
+                    }
+                }
+                await Authenticate(context, next, basePathOrDefault).ConfigureAwait(false);
             });
         }
 
@@ -62,7 +78,7 @@ namespace Microsoft.AspNetCore.Builder
             var request = context.Request;
             var path = request.Path;
 
-            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) || 
+            if (request.Method.Equals("option", StringComparison.OrdinalIgnoreCase) ||
                 !path.HasValue ||
                 !path.StartsWithSegments(basePath))
             {
@@ -82,13 +98,13 @@ namespace Microsoft.AspNetCore.Builder
                 return;
             }
 
-            var logger = context.RequestServices.GetRequiredService<ILogger<HttpContext>>();            
-            
+            var logger = context.RequestServices.GetRequiredService<ILogger<HttpContext>>();
+
             using var scope = logger.BeginScope(new Dictionary<string, object> { ["User"] = context.User.GetDisplayName() });
             await next().ConfigureAwait(false);
 
             var response = context.Response;
-            if (context.Response.StatusCode == (int)HttpStatusCode.Redirect) 
+            if (context.Response.StatusCode == (int)HttpStatusCode.Redirect)
             {
                 response.StatusCode = context.User.IsAuthenticated() ? (int)HttpStatusCode.Unauthorized : (int)HttpStatusCode.Forbidden;
                 await response.CompleteAsync().ConfigureAwait(false);
@@ -152,29 +168,21 @@ namespace Microsoft.AspNetCore.Builder
                 }
 
                 // get token for registration end point
-                if (!Guid.TryParse(authorizationHeaderValue.First().Split(' ')[1], out Guid token))
+                if (!Guid.TryParse(authorizationHeaderValue[0].Split(' ')[1], out Guid token))
                 {
                     // The token is not au GUID
                     await SetForbiddenResponse(context).ConfigureAwait(false);
                     return false;
                 }
 
-                var store = context.RequestServices.GetRequiredService<IAdminStore<Client>>();
-                var clientResponse = await store.GetAsync(new PageRequest
+                var verifyRegistrationToken = context.RequestServices.GetRequiredService<IVerifyRegistrationToken>();
+                if (verifyRegistrationToken.VerifyRegistrationTokenAsync(token, out string currentClientId))
                 {
-                    Filter = $"{nameof(Client.RegistrationToken)} eq {token}",
-                    Select = nameof(Client.Id),
-                    Take = 1
-                }).ConfigureAwait(false);
-
-                var client = clientResponse.Items.FirstOrDefault();
-                if (client == null || path.Value.EndsWith(client.Id))
-                {
-                    context.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                    {
-                                new Claim(JwtClaimTypes.Name, client?.Id ?? "not found"),
-                                new Claim(JwtClaimTypes.Role, SharedConstants.REGISTRATIONPOLICY)
-                    }, "registration", JwtClaimTypes.Name, "role"));
+                    context.User = new ClaimsPrincipal(new ClaimsIdentity(
+                    [
+                        new Claim(JwtClaimTypes.Name, currentClientId ?? "not found"),
+                        new Claim(JwtClaimTypes.Role, SharedConstants.REGISTRATIONPOLICY)
+                    ], "registration", JwtClaimTypes.Name, "role"));
                     return true;
                 }
                 await SetForbiddenResponse(context).ConfigureAwait(false);
