@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Resources;
@@ -114,19 +114,6 @@ namespace OpenTelemetry.Trace
                     o.ExportProcessorType = otlpOptions.ExportProcessorType;
                     o.Endpoint = otlpOptions.Endpoint;
                     o.Headers = otlpOptions.Headers;
-                });
-            }
-
-            if (options.Zipkin?.Endpoint is not null)
-            {
-                builder = builder.AddZipkinExporter(o =>
-                {
-                    var zipkinOptions = options.Zipkin;
-                    o.ExportProcessorType = zipkinOptions.ExportProcessorType;
-                    o.BatchExportProcessorOptions = zipkinOptions.BatchExportProcessorOptions;
-                    o.Endpoint = zipkinOptions.Endpoint;
-                    o.MaxPayloadSizeInBytes = zipkinOptions.MaxPayloadSizeInBytes;
-                    o.UseShortTraceIds = zipkinOptions.UseShortTraceIds;
                 });
             }
 

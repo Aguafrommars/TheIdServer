@@ -49,7 +49,7 @@ public class SignInValidator : ISignInValidator
         var issuer = samlRequest.Issuer;
 
         // check client
-        var client = await _clientStore.FindEnabledClientByIdAsync(issuer);
+        var client = await _clientStore.FindEnabledClientByIdAsync(issuer, default);
 
         if (client == null)
         {
@@ -96,7 +96,7 @@ public class SignInValidator : ISignInValidator
     /// <returns></returns>
     public async Task<SignInValidationResult<Saml2RedirectBinding>> ValidateLoginAsync(HttpRequest request, ClaimsPrincipal user)
     {
-        var genericRequest = request.ToGenericHttpRequest();
+        var genericRequest = await request.ToGenericHttpRequestAsync().ConfigureAwait(false);
         var settings = await _configurationService.GetConfigurationAsync().ConfigureAwait(false);
         var saml2AuthnRequest = new Saml2AuthnRequest(settings);
         var requestBinding = new Saml2RedirectBinding();
@@ -117,7 +117,7 @@ public class SignInValidator : ISignInValidator
         var issuer = saml2AuthnRequest.Issuer;
 
         // check client
-        var client = await _clientStore.FindEnabledClientByIdAsync(issuer);
+        var client = await _clientStore.FindEnabledClientByIdAsync(issuer, default);
 
         if (client == null)
         {
@@ -165,17 +165,17 @@ public class SignInValidator : ISignInValidator
     /// <returns></returns>
     public async Task<SignInValidationResult<Saml2PostBinding>> ValidateLogoutAsync(HttpRequest request)
     {
-        var genericRequest = request.ToGenericHttpRequest();
+        var genericRequest = await request.ToGenericHttpRequestAsync().ConfigureAwait(false);
         var settings = await _configurationService.GetConfigurationAsync().ConfigureAwait(false);
         var saml2LogoutRequest = new Saml2LogoutRequest(settings);
         var requestBinding = new Saml2PostBinding();
-        
+
         var samlRequest = requestBinding.ReadSamlRequest(genericRequest, saml2LogoutRequest);
 
         var issuer = samlRequest.Issuer;
 
         // check client
-        var client = await _clientStore.FindEnabledClientByIdAsync(issuer);
+        var client = await _clientStore.FindEnabledClientByIdAsync(issuer, default);
 
         if (client == null)
         {

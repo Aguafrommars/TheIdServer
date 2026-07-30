@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.WsFederation.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -41,7 +41,7 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// <returns></returns>
         [HttpGet("metadata")]
         public async Task<IActionResult> Metadata()
-        => new MetadataResult(await _metadata.GenerateAsync(Url.Action(nameof(Index), "WsFederation", null, Request.Scheme, Request.Host.Value)).ConfigureAwait(false), _serializer);
+        => new MetadataResult(await _metadata.GenerateAsync(Url.Action(nameof(Index), "WsFederation", null, Request.Scheme, Request.Host.Value), HttpContext.RequestAborted).ConfigureAwait(false), _serializer);
 
         /// <summary>
         /// 

@@ -15,7 +15,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>
                 {
@@ -369,6 +369,12 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -774,7 +780,7 @@ namespace Aguacongas.TheIdServer.Sqlite.Migrations.ConfigurationDb
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 11, 16, 21, 2, 54, 734, DateTimeKind.Utc).AddTicks(8256)
+                            CreatedAt = new DateTime(2026, 6, 3, 14, 21, 0, 786, DateTimeKind.Utc).AddTicks(583)
                         });
                 });
 

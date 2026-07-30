@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.TheIdServer.Options.OpenTelemetry;
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry;
@@ -50,10 +50,6 @@ namespace Aguacongas.TheIdServer.Test.Extensions
                         Honeycomb = new HoneycombOptions
                         {
                             ApiKey = "test"
-                        },
-                        Zipkin = new ZipkinExporterOptions
-                        {
-                            Endpoint = new Uri("https://google.com")
                         }
                     }
                 })

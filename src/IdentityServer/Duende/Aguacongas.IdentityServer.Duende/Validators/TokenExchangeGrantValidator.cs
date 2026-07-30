@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Validation;
+using IdentityModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using Duende.IdentityServer;
-using Duende.IdentityServer.Models;
-using Duende.IdentityServer.Validation;
-using IdentityModel;
 
 namespace Aguacongas.IdentityServer.Duende.Validators
 {
@@ -20,7 +21,7 @@ namespace Aguacongas.IdentityServer.Duende.Validators
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
-        public async Task ValidateAsync(ExtensionGrantValidationContext context)
+        public async Task ValidateAsync(ExtensionGrantValidationContext context, CancellationToken ct)
         {
             // defaults
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidRequest);
@@ -31,7 +32,7 @@ namespace Aguacongas.IdentityServer.Duende.Validators
 
             var subjectToken = context.Request.Raw.Get(OidcConstants.TokenRequest.SubjectToken);
             var subjectTokenType = context.Request.Raw.Get(OidcConstants.TokenRequest.SubjectTokenType);
-
+            var scopes = context.Request.Raw.Get(OidcConstants.TokenRequest.Scope);
             // mandatory parameters
             if (string.IsNullOrWhiteSpace(subjectToken))
             {
@@ -43,7 +44,7 @@ namespace Aguacongas.IdentityServer.Duende.Validators
                 return;
             }
 
-            var validationResult = await _validator.ValidateAccessTokenAsync(subjectToken);
+            var validationResult = await _validator.ValidateAccessTokenAsync(subjectToken, scopes, ct);
             if (validationResult.IsError)
             {
                 return;

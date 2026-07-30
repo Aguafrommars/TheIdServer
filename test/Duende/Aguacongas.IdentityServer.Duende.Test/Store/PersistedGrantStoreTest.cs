@@ -28,22 +28,22 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
         public async Task GetAllAsync_should_not_be_implemented()
         {
             var sut = new PersistedGrantStore(new Mock<IAdminStore<BackChannelAuthenticationRequest>>().Object,
-                new Mock<IAdminStore<AuthorizationCode>>().Object, 
-                new Mock<IAdminStore<ReferenceToken>>().Object, 
-                new Mock<IAdminStore<RefreshToken>>().Object, 
+                new Mock<IAdminStore<AuthorizationCode>>().Object,
+                new Mock<IAdminStore<ReferenceToken>>().Object,
+                new Mock<IAdminStore<RefreshToken>>().Object,
                 new Mock<IAdminStore<UserConsent>>().Object);
-            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAllAsync(null));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAllAsync(null, default));
         }
 
         [Fact]
         public async Task GetAsync_should_not_be_implemented()
         {
             var sut = new PersistedGrantStore(new Mock<IAdminStore<BackChannelAuthenticationRequest>>().Object,
-                new Mock<IAdminStore<AuthorizationCode>>().Object, 
-                new Mock<IAdminStore<ReferenceToken>>().Object, 
-                new Mock<IAdminStore<RefreshToken>>().Object, 
+                new Mock<IAdminStore<AuthorizationCode>>().Object,
+                new Mock<IAdminStore<ReferenceToken>>().Object,
+                new Mock<IAdminStore<RefreshToken>>().Object,
                 new Mock<IAdminStore<UserConsent>>().Object);
-            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(null));
+            await Assert.ThrowsAsync<NotImplementedException>(() => sut.GetAsync(null, default));
         }
 
         [Fact]
@@ -60,19 +60,19 @@ namespace Aguacongas.IdentityServer.Duende.Test.Store
             var userConsentStoreMock = new Mock<IAdminStore<UserConsent>>();
             SetupMock(userConsentStoreMock);
             var sut = new PersistedGrantStore(backChannelAuthenticationRequestStoreMock.Object,
-                authorizationCodeStoreMock.Object, 
-                referenceTokenStoreMock.Object, 
-                refreshTokenStoreMock.Object, 
+                authorizationCodeStoreMock.Object,
+                referenceTokenStoreMock.Object,
+                refreshTokenStoreMock.Object,
                 userConsentStoreMock.Object);
             await sut.RemoveAllAsync(new PersistedGrantFilter
             {
                 ClientId = "test",
-                ClientIds = new[] { "test" },
+                ClientIds = ["test"],
                 SessionId = "test",
                 SubjectId = "test",
                 Type = PersistedGrantTypes.AuthorizationCode,
-                Types = new[] { PersistedGrantTypes.ReferenceToken, PersistedGrantTypes.RefreshToken, PersistedGrantTypes.BackChannelAuthenticationRequest, PersistedGrantTypes.UserConsent }
-            });
+                Types = [PersistedGrantTypes.ReferenceToken, PersistedGrantTypes.RefreshToken, PersistedGrantTypes.BackChannelAuthenticationRequest, PersistedGrantTypes.UserConsent]
+            }, default);
             authorizationCodeStoreMock.Verify();
         }
 

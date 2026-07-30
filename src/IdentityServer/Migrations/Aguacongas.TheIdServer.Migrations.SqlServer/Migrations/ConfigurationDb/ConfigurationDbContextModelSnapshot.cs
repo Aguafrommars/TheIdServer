@@ -17,7 +17,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "10.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,7 +47,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ApiScopeId");
 
-                    b.ToTable("ApiApiScope", (string)null);
+                    b.ToTable("ApiApiScope");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiClaim", b =>
@@ -75,7 +75,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ApiId", "Type")
                         .IsUnique();
 
-                    b.ToTable("ApiClaims", (string)null);
+                    b.ToTable("ApiClaims");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiLocalizedResource", b =>
@@ -107,7 +107,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ApiId");
 
-                    b.ToTable("ApiLocalizedResources", (string)null);
+                    b.ToTable("ApiLocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiProperty", b =>
@@ -139,7 +139,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ApiId", "Key")
                         .IsUnique();
 
-                    b.ToTable("ApiProperty", (string)null);
+                    b.ToTable("ApiProperty");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScope", b =>
@@ -176,7 +176,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApiScopes", (string)null);
+                    b.ToTable("ApiScopes");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeClaim", b =>
@@ -204,7 +204,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ApiScopeId", "Type")
                         .IsUnique();
 
-                    b.ToTable("ApiScopeClaims", (string)null);
+                    b.ToTable("ApiScopeClaims");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeLocalizedResource", b =>
@@ -236,7 +236,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ApiScopeId");
 
-                    b.ToTable("ApiScopeLocalizedResources", (string)null);
+                    b.ToTable("ApiScopeLocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiScopeProperty", b =>
@@ -268,7 +268,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ApiScopeId", "Key")
                         .IsUnique();
 
-                    b.ToTable("ApiScopeProperty", (string)null);
+                    b.ToTable("ApiScopeProperty");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiSecret", b =>
@@ -306,7 +306,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ApiId");
 
-                    b.ToTable("ApiSecrets", (string)null);
+                    b.ToTable("ApiSecrets");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Client", b =>
@@ -374,6 +374,12 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("time");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -479,7 +485,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("RelyingPartyId");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientAllowedIdentityTokenSigningAlgorithm", b =>
@@ -506,7 +512,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "Algorithm")
                         .IsUnique();
 
-                    b.ToTable("ClientAllowedIdentityTokenSigningAlgorithms", (string)null);
+                    b.ToTable("ClientAllowedIdentityTokenSigningAlgorithms");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientClaim", b =>
@@ -536,7 +542,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientClaims", (string)null);
+                    b.ToTable("ClientClaims");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientGrantType", b =>
@@ -564,7 +570,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "GrantType")
                         .IsUnique();
 
-                    b.ToTable("ClientGrantTypes", (string)null);
+                    b.ToTable("ClientGrantTypes");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientIdpRestriction", b =>
@@ -592,7 +598,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "Provider")
                         .IsUnique();
 
-                    b.ToTable("ClientIdpRestriction", (string)null);
+                    b.ToTable("ClientIdpRestriction");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientLocalizedResource", b =>
@@ -624,7 +630,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientLocalizedResources", (string)null);
+                    b.ToTable("ClientLocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientProperty", b =>
@@ -656,7 +662,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "Key")
                         .IsUnique();
 
-                    b.ToTable("ClientProperties", (string)null);
+                    b.ToTable("ClientProperties");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientScope", b =>
@@ -684,7 +690,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "Scope")
                         .IsUnique();
 
-                    b.ToTable("ClientScopes", (string)null);
+                    b.ToTable("ClientScopes");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientSecret", b =>
@@ -722,7 +728,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientSecrets", (string)null);
+                    b.ToTable("ClientSecrets");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ClientUri", b =>
@@ -757,7 +763,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("ClientId", "Uri")
                         .IsUnique();
 
-                    b.ToTable("ClientUris", (string)null);
+                    b.ToTable("ClientUris");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.Culture", b =>
@@ -773,13 +779,13 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cultures", (string)null);
+                    b.ToTable("Cultures");
 
                     b.HasData(
                         new
                         {
                             Id = "en",
-                            CreatedAt = new DateTime(2023, 11, 16, 21, 3, 5, 62, DateTimeKind.Utc).AddTicks(2489)
+                            CreatedAt = new DateTime(2026, 6, 3, 14, 21, 57, 145, DateTimeKind.Utc).AddTicks(3664)
                         });
                 });
 
@@ -814,7 +820,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("Scheme", "FromClaimType")
                         .IsUnique();
 
-                    b.ToTable("ExternalClaimTransformations", (string)null);
+                    b.ToTable("ExternalClaimTransformations");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ExternalProvider", b =>
@@ -846,7 +852,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Providers", (string)null);
+                    b.ToTable("Providers");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityClaim", b =>
@@ -874,7 +880,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                         .IsUnique()
                         .HasFilter("[Type] IS NOT NULL");
 
-                    b.ToTable("IdentityClaims", (string)null);
+                    b.ToTable("IdentityClaims");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityLocalizedResource", b =>
@@ -906,7 +912,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("IdentityId");
 
-                    b.ToTable("IdentityLocalizedResources", (string)null);
+                    b.ToTable("IdentityLocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityProperty", b =>
@@ -938,7 +944,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
                     b.HasIndex("IdentityId", "Key")
                         .IsUnique();
 
-                    b.ToTable("IdentityProperties", (string)null);
+                    b.ToTable("IdentityProperties");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.IdentityResource", b =>
@@ -977,7 +983,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Identities", (string)null);
+                    b.ToTable("Identities");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.LocalizedResource", b =>
@@ -1012,7 +1018,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("CultureId");
 
-                    b.ToTable("LocalizedResources", (string)null);
+                    b.ToTable("LocalizedResources");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ProtectResource", b =>
@@ -1046,7 +1052,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Apis", (string)null);
+                    b.ToTable("Apis");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RelyingParty", b =>
@@ -1083,7 +1089,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("RelyingParties", (string)null);
+                    b.ToTable("RelyingParties");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.RelyingPartyClaimMapping", b =>
@@ -1112,7 +1118,7 @@ namespace Aguacongas.TheIdServer.SqlServer.Migrations.ConfigurationDb
 
                     b.HasIndex("RelyingPartyId");
 
-                    b.ToTable("RelyingPartyClaimMappings", (string)null);
+                    b.ToTable("RelyingPartyClaimMappings");
                 });
 
             modelBuilder.Entity("Aguacongas.IdentityServer.Store.Entity.ApiApiScope", b =>

@@ -1,10 +1,11 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Xml;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.WsFederation
@@ -36,13 +37,14 @@ namespace Aguacongas.IdentityServer.WsFederation
         /// Generates the asynchronous.
         /// </summary>
         /// <param name="wsfedEndpoint">The wsfed endpoint.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<WsFederationConfiguration> GenerateAsync(string wsfedEndpoint)
+        public async Task<WsFederationConfiguration> GenerateAsync(string wsfedEndpoint, CancellationToken cancellationToken)
         {
-            var credentials = await _keys.GetSigningCredentialsAsync().ConfigureAwait(false);
+            var credentials = await _keys.GetSigningCredentialsAsync(cancellationToken).ConfigureAwait(false);
             var key = credentials.Key;
             var keyInfo = new KeyInfo(key.GetX509Certificate(_keys));
-            var issuer = await _issuerNameService.GetCurrentAsync().ConfigureAwait(false);
+            var issuer = await _issuerNameService.GetCurrentAsync(cancellationToken).ConfigureAwait(false);
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256Signature, SecurityAlgorithms.Sha256Digest);
             var config = new WsFederationConfiguration()
             {

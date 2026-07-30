@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 // Updated for Azure.Security.KeyVault.Keys SDK
 
 using Aguacongas.IdentityServer.KeysRotation.AzureKeyVault;

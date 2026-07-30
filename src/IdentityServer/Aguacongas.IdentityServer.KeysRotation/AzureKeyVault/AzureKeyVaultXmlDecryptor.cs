@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-// Modifications Copyright (c) 2023 @Olivier Lefebvre
+// Modifications Copyright (c) 2026 @Olivier Lefebvre
 // Migration to Azure.Security.KeyVault 2025
 
 using System;

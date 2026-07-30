@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Configuration;
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Admin.Services;
@@ -52,7 +52,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public Task<ClientRegisteration> GetAsync(string clientId)
-            => _registerClientService.GetRegistrationAsync(clientId, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+            => _registerClientService.GetRegistrationAsync(clientId, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/", HttpContext.RequestAborted);
 
         /// <summary>
         /// Updates registration the asynchronous.
@@ -65,7 +65,7 @@ namespace Aguacongas.IdentityServer.Admin
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public Task<ClientRegisteration> UpdateAsync(string clientId, [FromBody] ClientRegisteration registeration)
-            => _registerClientService.UpdateRegistrationAsync(clientId, registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/");
+            => _registerClientService.UpdateRegistrationAsync(clientId, registeration, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/", HttpContext.RequestAborted);
 
         /// <summary>
         /// Updates registration the asynchronous.
@@ -76,6 +76,6 @@ namespace Aguacongas.IdentityServer.Admin
         [Authorize(Policy = SharedConstants.REGISTRATIONPOLICY)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public Task DeleteAsync(string clientId)
-            => _registerClientService.DeleteRegistrationAsync(clientId);
+            => _registerClientService.DeleteRegistrationAsync(clientId, HttpContext.RequestAborted);
     }
 }

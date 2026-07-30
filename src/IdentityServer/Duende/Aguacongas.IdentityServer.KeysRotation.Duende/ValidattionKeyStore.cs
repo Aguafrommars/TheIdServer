@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.KeysRotation
@@ -17,7 +18,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
             _keyringProvider = keyringProvider ?? throw new ArgumentNullException(nameof(keyringProvider));
         }
 
-        public Task<IEnumerable<SecurityKeyInfo>> GetValidationKeysAsync()
+        public Task<IReadOnlyCollection<SecurityKeyInfo>> GetValidationKeysAsync(CancellationToken ct)
         {
             var keyInfos = _keyringProvider.GetAllKeys().Where(k => !k.IsRevoked);
 
@@ -29,7 +30,7 @@ namespace Aguacongas.IdentityServer.KeysRotation
                 }
 
                 return CreateEcdSingingKey(i);
-            }));
+            }).ToArray() as IReadOnlyCollection<SecurityKeyInfo>);
         }
 
         private SecurityKeyInfo CreateEcdSingingKey(IKey i)

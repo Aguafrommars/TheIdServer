@@ -372,6 +372,12 @@ namespace Aguacongas.TheIdServer.MySql.Migrations.ConfigurationDb
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("time");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");

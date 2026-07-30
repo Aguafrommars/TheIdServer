@@ -1,7 +1,8 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Microsoft.AspNetCore.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Services
@@ -24,22 +25,25 @@ namespace Aguacongas.IdentityServer.Admin.Services
         /// <param name="clientId">The client identifier.</param>
         /// <param name="registration">The registration.</param>
         /// <param name="uri">The URI.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<ClientRegisteration> UpdateRegistrationAsync(string clientId, ClientRegisteration registration, string uri);
+        Task<ClientRegisteration> UpdateRegistrationAsync(string clientId, ClientRegisteration registration, string uri, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the registration asynchronous.
         /// </summary>
         /// <param name="clientId">The client identifier.</param>
         /// <param name="uri">The URI.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<ClientRegisteration> GetRegistrationAsync(string clientId, string uri);
+        Task<ClientRegisteration> GetRegistrationAsync(string clientId, string uri, CancellationToken cancellationToken);
 
         /// <summary>
         /// Deletes the registration asynchronous.
         /// </summary>
         /// <param name="clientId">The client identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task DeleteRegistrationAsync(string clientId);
+        Task DeleteRegistrationAsync(string clientId, CancellationToken cancellationToken);
     }
 }

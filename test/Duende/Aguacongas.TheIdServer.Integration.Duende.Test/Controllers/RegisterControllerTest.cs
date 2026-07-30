@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Admin.Models;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.TheIdServer.IntegrationTest;
@@ -369,7 +369,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 var error = JsonConvert.DeserializeObject<RegistrationProblemDetail>(content);
 
                 Assert.Equal("invalid_grant_type", error?.Error);
-                Assert.Equal("GrantType 'invalid' is not supported.", error?.Error_description);
+                Assert.Equal("GrantTypes 'invalid' are not supported.", error?.Error_description);
             }
 
             registration.GrantTypes = null;
@@ -884,6 +884,67 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
         }
 
+        // Verify GHSA-r375-gp8f-mm36 is fixed
+        [Fact]
+        public async Task UpdateAsync_with_random_registration_token_should_not_update_client()
+        {
+            _factory.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
+
+            var client = _factory.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "http://localhost"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration?.RegistrationToken);
+            }
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri(registration!.RegistrationUri)
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Guid.NewGuid().ToString());
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
+            }
+        }
+
         [Fact]
         public async Task GetAsync_should_return_registration()
         {
@@ -994,6 +1055,117 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
         }
 
+        // Verify GHSA-r375-gp8f-mm36 is fixed
+        [Fact]
+        public async Task GetAsync_with_random_registration_token_should_not_return_registration()
+        {
+            _factory.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
+
+            var client = _factory.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "https://localhost"
+                },
+                ClientUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                LogoUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                PolicyUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                TosUris = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "https://localhost"
+                    },
+                    new LocalizableProperty
+                    {
+                        Culture = "fr-FR",
+                        Value = "https://localhost/fr-FR"
+                    },
+                },
+                ResponseTypes = new[]
+                {
+                    "code"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration?.RegistrationToken);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(registration!.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Guid.NewGuid().ToString());
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                Assert.Null(result?.RegistrationToken);
+                Assert.Null(result?.RegistrationUri);
+            }
+        }
+
         [Fact]
         public async Task DeleteAsync_should_delete_client()
         {
@@ -1058,5 +1230,59 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             }
         }
+
+        // Verify GHSA-r375-gp8f-mm36 is fixed
+        [Fact]
+        public async Task DeleteAsync_random_registration_token__should_not_delete_client()
+        {
+            _factory.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
+
+            var client = _factory.CreateClient();
+
+            var registration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = "test"
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "http://localhost"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(registration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registration?.RegistrationToken);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(registration!.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", Guid.NewGuid().ToString());
+
+                using var response = await client.SendAsync(message);
+
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            }
+        }
+
     }
 }

@@ -12,6 +12,7 @@ using ISConfiguration = Duende.IdentityServer.Configuration;
 using ISModels = Duende.IdentityServer.Models;
 
 namespace Aguacongas.IdentityServer.EntityFramework.Store.Duende.Test;
+
 public class PushedAuthorizationRequestStoreTest
 {
     [Fact]
@@ -28,7 +29,7 @@ public class PushedAuthorizationRequestStoreTest
         });
         await context.SaveChangesAsync();
 
-        await sut.ConsumeByHashAsync(id);
+        await sut.ConsumeByHashAsync(id, default);
 
         var deleted = await context.PushedAuthorizationRequests.FirstOrDefaultAsync(par => par.Id == id);
 
@@ -49,11 +50,11 @@ public class PushedAuthorizationRequestStoreTest
         });
         await context.SaveChangesAsync();
 
-        var result = await sut.GetByHashAsync(id);
+        var result = await sut.GetByHashAsync(id, default);
 
         Assert.NotNull(result);
 
-        Assert.Null(await sut.GetByHashAsync(GenerateId()));
+        Assert.Null(await sut.GetByHashAsync(GenerateId(), default));
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class PushedAuthorizationRequestStoreTest
             ExpiresAtUtc = DateTime.UtcNow,
             Parameters = GenerateId(),
             ReferenceValueHash = id
-        });
+        }, default);
 
         var stored = await context.PushedAuthorizationRequests.FirstOrDefaultAsync(par => par.Id == id);
 

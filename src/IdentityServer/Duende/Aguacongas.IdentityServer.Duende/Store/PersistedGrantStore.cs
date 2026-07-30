@@ -2,11 +2,10 @@
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Stores.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static Duende.IdentityServer.IdentityServerConstants;
 
@@ -34,17 +33,17 @@ namespace Aguacongas.IdentityServer.Store
             _userConsentStore = userConsentStore ?? throw new ArgumentNullException(nameof(userConsentStore));
         }
 
-        public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)
+        public Task<IReadOnlyCollection<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PersistedGrant> GetAsync(string key)
+        public Task<PersistedGrant> GetAsync(string key, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RemoveAllAsync(PersistedGrantFilter filter)
+        public async Task RemoveAllAsync(PersistedGrantFilter filter, CancellationToken ct)
         {
             filter.Validate();
 
@@ -56,31 +55,31 @@ namespace Aguacongas.IdentityServer.Store
                 switch (type)
                 {
                     case PersistedGrantTypes.AuthorizationCode:
-                        await DeleteAllAsync(query, _authorizationCodeStore).ConfigureAwait(false);
+                        await DeleteAllAsync(query, _authorizationCodeStore, ct).ConfigureAwait(false);
                         break;
                     case PersistedGrantTypes.RefreshToken:
-                        await DeleteAllAsync(query, _refreshTokenStore).ConfigureAwait(false);
+                        await DeleteAllAsync(query, _refreshTokenStore, ct).ConfigureAwait(false);
                         break;
                     case PersistedGrantTypes.ReferenceToken:
-                        await DeleteAllAsync(query, _referenceTokenStore).ConfigureAwait(false);
+                        await DeleteAllAsync(query, _referenceTokenStore, ct).ConfigureAwait(false);
                         break;
                     case PersistedGrantTypes.UserConsent:
-                        await DeleteAllAsync(query, _userConsentStore).ConfigureAwait(false);
+                        await DeleteAllAsync(query, _userConsentStore, ct).ConfigureAwait(false);
                         break;
                     case PersistedGrantTypes.BackChannelAuthenticationRequest:
-                        await DeleteAllAsync(query, _backChannelAuthenticationRequestStore).ConfigureAwait(false);
+                        await DeleteAllAsync(query, _backChannelAuthenticationRequestStore, ct).ConfigureAwait(false);
                         break;
                     default: throw new InvalidOperationException($"Grant type '{type}' unsupported.");
                 }
             }
         }
 
-        public Task RemoveAsync(string key)
+        public Task RemoveAsync(string key, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public Task StoreAsync(PersistedGrant grant)
+        public Task StoreAsync(PersistedGrant grant, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
@@ -152,16 +151,16 @@ namespace Aguacongas.IdentityServer.Store
             return responseList;
         }
 
-        private static async Task DeleteAllAsync<T>(string query, IAdminStore<T> store) where T : class, IEntityId
+        private static async Task DeleteAllAsync<T>(string query, IAdminStore<T> store, CancellationToken ct) where T : class, IEntityId
         {
             var response = await store.GetAsync(new PageRequest
             {
                 Filter = query,
                 Select = nameof(IEntityId.Id)
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
             foreach (var id in response.Items.Select(e => e.Id))
             {
-                await store.DeleteAsync(id);
+                await store.DeleteAsync(id, ct);
             }
         }
     }

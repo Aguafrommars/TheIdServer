@@ -293,6 +293,40 @@ else
                             <div class="col">
                                 <AuthorizeCheckbox Name="require-dpop" Label="@Localizer["require DPoP"]" @bind-Value="@Model.RequireDPoP" />
                             </div>
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="push-authorization-lifetime">
+                                    @Localizer["DPoP validation mode"]
+                                </label>
+                                <div class="col-lg-8 col-sm-12">
+                                    <AuthorizeView Policy="@SharedConstants.WRITERPOLICY">
+                                        <Authorized Context="dPoPValidationMode">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="iat"
+                                                       checked="@((Model.DPoPValidationMode & 1) == 1)"
+                                                       @onchange="@(() => TogleDPoPValidationIatMode())" />
+                                                <label class="form-check-label" for="iat" @onclick="@(() => TogleDPoPValidationIatMode())">Iat</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="nonce"
+                                                       checked="@((Model.DPoPValidationMode & 2) == 2)"
+                                                       @onchange="@(() => TogleDPoPValidationNonceMode())" />
+                                                <label class="form-check-label" for="nonce" @onclick="@(() => TogleDPoPValidationNonceMode())">Nonce</label>
+                                            </div>
+                                        </Authorized>
+                                        <NotAuthorized Context="dPoPValidationMode">
+                                            @((Model.DPoPValidationMode & 1) == 1 ? "Iat" : "") @((Model.DPoPValidationMode & 2) == 2 ? "Nonce" : "")
+                                        </NotAuthorized>
+                                    </AuthorizeView>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col col-form-label" for="dpop-clock-skew">
+                                    @Localizer["dpop clock skew"]
+                                </label>
+                                <div class="col-lg-8 col-sm-12">
+                                    <AuthorizeText Name="dpop-clock-skew" @bind-Value="@DPoPClockSkew" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 }

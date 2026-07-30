@@ -1,5 +1,5 @@
 ﻿// Project: Aguafrommars/TheIdServer
-// Copyright (c) 2025 @Olivier Lefebvre
+// Copyright (c) 2026 @Olivier Lefebvre
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -491,6 +491,16 @@ namespace Aguacongas.IdentityServer.Store.Entity
         /// The modified at.
         /// </value>
         public DateTime? ModifiedAt { get; set; }
+
+        /// <summary>
+        /// Clock skew used in validating the client’s DPoP proof token ‘iat’ claim value. Defaults to 5 minutes.
+        /// </summary>
+        public TimeSpan DPoPClockSkew { get; set; }
+
+        /// <summary>
+        /// Setting to control validation for the DPoP proof token expiration
+        /// </summary>
+        public int DPoPValidationMode { get; set; }
 
         /// <summary>
         /// Clones this instance.

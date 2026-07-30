@@ -189,33 +189,6 @@ To enable the [OTLP endpoint or Collector](https://opentelemetry.io/docs/collect
 `OpenTelemetryProtocol` is deserialized into a [`OtlpExporterOptions`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/4b3ee96ffc39bc24c3b8377455b2c099bd9da6b0/src/OpenTelemetry.Exporter.OpenTelemetryProtocol/OtlpExporterOptions.cs) instance.
 
 
-#### Zipkin
-
-To enable [Zipkin](https://zipkin.io/) exporter setup the `Zipkin` node:
-
-```json
-{
-  "OpenTelemetryOptions": {
-    "Trace": {
-      "Zipkin": {
-        "Endpoint": "https://exemple.com", //required
-        "ExportProcessorType": "Batch",
-        "MaxPayloadSizeInBytes": 4096,
-        "UseShortTraceIds": true,
-        "BatchExportProcessorOptions": {
-          "BatchExportProcessorOptions": 2048,
-          "ScheduledDelayMilliseconds": 5000,
-          "ExporterTimeoutMilliseconds": 30000,
-          "MaxExportBatchSize": 512
-        }
-      }
-    }
-  }
-}
-```
-
-`Zipkin` is deserialized into a [`ZipkinExporterOptions`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/bc0e8afd96e9051dee328ab9a60bdf896a7709b4/src/OpenTelemetry.Exporter.Zipkin/ZipkinExporterOptions.cs) instance.
-
 #### Honeycomb
 
 To enable [Honeycomb](https://www.honeycomb.io/) exporter setup the `Honeycomb` node:

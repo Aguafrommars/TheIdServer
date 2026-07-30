@@ -71,7 +71,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         var relyingParty = result.RelyingParty;
         var relyingPartyConfig = await GetRelyingPartySaml2ConfigurationAsync(relyingParty).ConfigureAwait(false);
         var saml2ArtifactResolve = new Saml2ArtifactResolve(relyingPartyConfig);
-        
+
         var soapEnvelope = result.Saml2Binding ?? throw new InvalidOperationException("SoapEnvelope cannot be null.");
         soapEnvelope.Unbind(result.GerericRequest, saml2ArtifactResolve);
 
@@ -88,8 +88,8 @@ public class SignInResponseGenerator : ISignInResponseGenerator
 
         if (result.Client?.ClientId is not null)
         {
-            await _userSession.AddClientIdAsync(result.Client.ClientId).ConfigureAwait(false);
-        }        
+            await _userSession.AddClientIdAsync(result.Client.ClientId, default).ConfigureAwait(false);
+        }
 
         return soapEnvelope.ToActionResult();
     }
@@ -149,7 +149,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             SessionIndex = samlLogoutRequest?.SessionIndex
         };
 
-        await _userSession.RemoveSessionIdCookieAsync().ConfigureAwait(false);
+        await _userSession.RemoveSessionIdCookieAsync(default).ConfigureAwait(false);
 
         return responseBinding.Bind(saml2LogoutResponse).ToActionResult();
     }
@@ -179,14 +179,14 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
             var settings = _options.Value;
-            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer, 
-                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime, 
+            saml2AuthnResponse.CreateSecurityToken(relyingParty?.Issuer,
+                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime,
                 issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
 
         if (status == Saml2StatusCodes.Success && clientId is not null)
         {
-            await _userSession.AddClientIdAsync(clientId).ConfigureAwait(false);
+            await _userSession.AddClientIdAsync(clientId, default).ConfigureAwait(false);
         }
 
         return responseBinding.Bind(saml2AuthnResponse).ToActionResult();
@@ -227,7 +227,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             saml2AuthnResponse.ClaimsIdentity = claimsIdentity;
 
             saml2AuthnResponse.CreateSecurityToken(relyingParty.Issuer,
-                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime, 
+                subjectConfirmationLifetime: settings.SubjectConfirmationLifetime,
                 issuedTokenLifetime: settings.IssuedTokenLifetime);
         }
 
@@ -238,7 +238,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
             Id = saml2ArtifactResolve.Artifact,
             ClientId = clientId,
             CreatedAt = DateTime.UtcNow,
-            SessionId = await _userSession.GetSessionIdAsync().ConfigureAwait(false),
+            SessionId = await _userSession.GetSessionIdAsync(default).ConfigureAwait(false),
             UserId = userId,
             Data = xml.OuterXml,
             Expiration = DateTime.UtcNow.AddMinutes(settings.SubjectConfirmationLifetime),
@@ -294,7 +294,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
 
         var requestedClaimTypes = new List<string>();
 
-        var resources = await _resources.FindEnabledIdentityResourcesByScopeAsync(result.Client?.AllowedScopes).ConfigureAwait(false);
+        var resources = await _resources.FindEnabledIdentityResourcesByScopeAsync(result.Client?.AllowedScopes, default).ConfigureAwait(false);
         foreach (var resource in resources)
         {
             foreach (var claim in resource.UserClaims)
@@ -309,7 +309,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         {
             Subject = user,
             RequestedClaimTypes = requestedClaimTypes,
-            Client = client,
+            Application = client,
             Caller = "SAML 2.0",
             RequestedResources = new ISValidation.ResourceValidationResult
             {
@@ -321,7 +321,7 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-        await _profile.GetProfileDataAsync(ctx).ConfigureAwait(false);
+        await _profile.GetProfileDataAsync(ctx, default).ConfigureAwait(false);
 
         if (client is not null)
         {
@@ -331,12 +331,12 @@ public class SignInResponseGenerator : ISignInResponseGenerator
         var relyParty = result.RelyingParty;
         var mapping = relyParty.ClaimMapping;
 
-        
+
         var nameidFormat = relyParty.SamlNameIdentifierFormat?.ToString() ?? NameIdentifierFormats.Persistent.ToString();
         var nameid = new Claim(nameidFormat, user.GetDisplayName());
 
-        var outboundClaims = new List<Claim> 
-        { 
+        var outboundClaims = new List<Claim>
+        {
             nameid,
         };
         foreach (var claim in ctx.IssuedClaims)
