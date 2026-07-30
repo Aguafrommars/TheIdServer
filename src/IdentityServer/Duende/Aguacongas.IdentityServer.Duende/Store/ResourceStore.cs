@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 Select = nameof(ApiApiScope.ApiId),
                 Filter = filter
-            }).ConfigureAwait(false);
+            }, ct).ConfigureAwait(false);
 
             if (!apiIdListResponse.Items.Any())
             {
