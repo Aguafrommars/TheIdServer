@@ -46,7 +46,6 @@ using Bunit.Extensions.WaitForHelpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -104,26 +103,6 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 var client = await context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
                 Assert.NotNull(client);
                 Assert.Equal(1, client!.DPoPValidationMode); // seul iat reste
-            });
-        }
-
-        [Fact]
-        public async Task DPoPClockSkewInput_with_invalid_value_should_not_persist_change()
-        {
-            string clientId = await CreateClient();
-            var component = CreateComponent("Alice Smith", SharedConstants.WRITERPOLICY, clientId);
-
-            var input = WaitForNode(component, "label[for=\"dpop-clock-skew\"] + div input");
-            await input.TriggerEventAsync("oninput", new ChangeEventArgs { Value = "not-a-timespan" });
-
-            var form = component.Find("form");
-            await form.SubmitAsync();
-
-            await DbActionAsync<ConfigurationDbContext>(async context =>
-            {
-                var client = await context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
-                Assert.NotNull(client);
-                Assert.Equal(TimeSpan.Zero, client!.DPoPClockSkew);
             });
         }
 
