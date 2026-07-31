@@ -3,7 +3,6 @@
 using Aguacongas.IdentityServer.EntityFramework.Store;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
-using Aguacongas.TheIdServer.BlazorApp;
 using Aguacongas.TheIdServer.Integration.Duende.Test;
 using AngleSharp.Dom;
 using Bunit;
@@ -11,18 +10,16 @@ using Bunit.Extensions.WaitForHelpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 using ClientPage = Aguacongas.TheIdServer.BlazorApp.Pages.Client.Client;
 
 namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 {
     [Collection(BlazorAppCollection.Name)]
-    public class ClientTest : EntityPageTestBase<ClientPage, Client>
+    public partial class ClientTest : EntityPageTestBase<ClientPage, Client>
     {
         public override string Entity => "client";
         public ClientTest(TheIdServerFactory factory) : base(factory)
@@ -76,7 +73,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             urls = component.FindAll("#urls tr");
             Assert.Throws<HtmlEqualException>(() => firstUrl.MarkupMatches(urls.ToArray()[1].OuterHtml));
-            
+
 
             var headers = component.FindAll("#urls th div");
 
@@ -137,7 +134,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(form);
 
             await form.SubmitAsync();
-        }        
+        }
 
         [Theory]
         [InlineData("0.01:00:00")]
@@ -154,7 +151,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             var component = CreateComponent("Alice Smith",
                 SharedConstants.WRITERPOLICY,
                 clientId);
-            
+
             var input = component.Find("#access-token");
 
             await input.ChangeAsync(new ChangeEventArgs
@@ -173,7 +170,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 Value = value
             });
 
-            Assert.Throws<ElementNotFoundException>(()=> component.Find(".validation-message"));
+            Assert.Throws<ElementNotFoundException>(() => component.Find(".validation-message"));
         }
 
         [Fact]
@@ -194,7 +191,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
                 await c.Identities.AddAsync(new IdentityResource
                 {
                     Id = secondId,
-                    DisplayName = secondId,                    
+                    DisplayName = secondId,
                 });
 
                 await c.SaveChangesAsync();
@@ -516,7 +513,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             await input.TriggerEventAsync("onfocus", new FocusEventArgs());
 
             var button = WaitForNode(component, "#grantTypes .dropdown-item.m-0.p-0.pl-1.pr-1");
-            
+
             await button.ClickAsync(new MouseEventArgs());
 
             var idInput = component.Find("#id");
@@ -528,7 +525,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             });
 
             var nameInput = component.Find("#name");
-            
+
             Assert.NotNull(nameInput);
             await nameInput.ChangeAsync(new ChangeEventArgs
             {
@@ -645,7 +642,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
 
             var protocolTypeInputs = WaitForAllNodes(component, "input[type=radio]");
             Assert.NotNull(protocolTypeInputs);
-            
+
             var protocolTypeInput = protocolTypeInputs[1];
             await protocolTypeInput.ChangeAsync(new ChangeEventArgs
             {
@@ -656,9 +653,9 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(redirectUriInput);
 
             await redirectUriInput
-                .ChangeAsync(new ChangeEventArgs 
-                { 
-                    Value = clientId 
+                .ChangeAsync(new ChangeEventArgs
+                {
+                    Value = clientId
                 })
                 ;
 
@@ -712,7 +709,7 @@ namespace Aguacongas.TheIdServer.IntegrationTest.BlazorApp.Pages
             Assert.NotNull(addButton);
 
             await addButton.ClickAsync(new MouseEventArgs());
-            
+
             var urlInputs = WaitForAllNodes(component, "#urls input.form-control");
 
             await urlInputs[0].ChangeAsync(new ChangeEventArgs
