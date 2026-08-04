@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="bunit" Version="2.8.6" />
+		<PackageReference Include="bunit" Version="2.9.0" />
 		<PackageReference Include="coverlet.collector" Version="10.0.1">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
