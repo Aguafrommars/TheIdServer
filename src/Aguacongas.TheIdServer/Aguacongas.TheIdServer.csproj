@@ -64,6 +64,7 @@
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.1.0" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Aguacongas.TheIdServer.Authentication\Aguacongas.TheIdServer.Authentication.csproj" />
