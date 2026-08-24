@@ -24,6 +24,8 @@
 	<ItemGroup>
 	  <Content Remove="Localization-fr.json" />
 	  <Content Remove="Localization-de.json" />
+	  <Content Remove="Localization-zh.json" />
+	  <Content Remove="Localization-hi.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,6 +33,12 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Include="Localization-de.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Localization-zh.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Localization-hi.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
