@@ -1,0 +1,2166 @@
+[
+	{
+		"key": "(required)",
+		"value": "(आवश्यक)"
+	},
+	{
+		"key": "{0} <small>is requesting your permission</small>",
+		"value": "{0} <small>आपकी अनुमति का अनुरोध कर रहा है</small>"
+	},
+	{
+		"key": "'{0}' cannot be added to a client with grant type '{1}'.",
+		"value": "'{0}' को '{1}' ग्रांट प्रकार वाले क्लाइंट में नहीं जोड़ा जा सकता।"
+	},
+	{
+		"key": "{0} is not a valid uri.",
+		"value": "{0} एक मान्य uri नहीं है।"
+	},
+	{
+		"key": "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+		"value": "2fa अक्षम कर दिया गया है। जब आप कोई प्रमाणक ऐप सेट करेंगे तब आप 2fa को पुनः सक्षम कर सकते हैं"
+	},
+	{
+		"key": "About",
+		"value": "परिचय"
+	},
+	{
+		"key": "Absolute",
+		"value": "निरपेक्ष"
+	},
+	{
+		"key": "absolute refresh token lifetime",
+		"value": "निरपेक्ष रिफ्रेश टोकन जीवनकाल"
+	},
+	{
+		"key": "Access Denied",
+		"value": "पहुँच अस्वीकृत"
+	},
+	{
+		"key": "access failed count",
+		"value": "विफल पहुँच प्रयासों की संख्या"
+	},
+	{
+		"key": "access token lifetime",
+		"value": "एक्सेस टोकन जीवनकाल"
+	},
+	{
+		"key": "access token type",
+		"value": "एक्सेस टोकन प्रकार"
+	},
+	{
+		"key": "access type",
+		"value": "पहुँच प्रकार"
+	},
+	{
+		"key": "activation",
+		"value": "सक्रियण"
+	},
+	{
+		"key": "Add",
+		"value": "जोड़ें"
+	},
+	{
+		"key": "Add another service to log in.",
+		"value": "लॉग इन करने के लिए कोई अन्य सेवा जोड़ें।"
+	},
+	{
+		"key": "Add authenticator app",
+		"value": "प्रमाणक ऐप जोड़ें"
+	},
+	{
+		"key": "allow access tokens via browser",
+		"value": "ब्राउज़र के माध्यम से एक्सेस टोकन की अनुमति दें"
+	},
+	{
+		"key": "allow offline access",
+		"value": "ऑफ़लाइन पहुँच की अनुमति दें"
+	},
+	{
+		"key": "allow plain text PKCE",
+		"value": "सादे टेक्स्ट PKCE की अनुमति दें"
+	},
+	{
+		"key": "allow unsolicited logins",
+		"value": "अनचाहे लॉगिन की अनुमति दें"
+	},
+	{
+		"key": "always include user claims in id token",
+		"value": "आईडी टोकन में उपयोगकर्ता क्लेम हमेशा शामिल करें"
+	},
+	{
+		"key": "always send claims",
+		"value": "क्लेम हमेशा भेजें"
+	},
+	{
+		"key": "An url cannot exceed 2000 char.",
+		"value": "कोई url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "api",
+		"value": "api"
+	},
+	{
+		"key": "API Grants",
+		"value": "API ग्रांट"
+	},
+	{
+		"key": "api id",
+		"value": "api आईडी"
+	},
+	{
+		"key": "Apis",
+		"value": "Apis"
+	},
+	{
+		"key": "app id",
+		"value": "ऐप आईडी"
+	},
+	{
+		"key": "app secret",
+		"value": "ऐप सीक्रेट"
+	},
+	{
+		"key": "Application Access",
+		"value": "एप्लिकेशन पहुँच"
+	},
+	{
+		"key": "Associate your {0} account.",
+		"value": "अपना {0} खाता संबद्ध करें।"
+	},
+	{
+		"key": "Authentication in progress",
+		"value": "प्रमाणीकरण जारी है"
+	},
+	{
+		"key": "Authenticator app",
+		"value": "प्रमाणक ऐप"
+	},
+	{
+		"key": "Authenticator code",
+		"value": "प्रमाणक कोड"
+	},
+	{
+		"key": "authority",
+		"value": "अथॉरिटी"
+	},
+	{
+		"key": "Authority is required.",
+		"value": "अथॉरिटी आवश्यक है।"
+	},
+	{
+		"key": "Authority must be a valid uir.",
+		"value": "अथॉरिटी एक मान्य uir होनी चाहिए।"
+	},
+	{
+		"key": "authorization code lifetime",
+		"value": "प्राधिकरण कोड जीवनकाल"
+	},
+	{
+		"key": "authorization endpoint",
+		"value": "प्राधिकरण एंडपॉइंट"
+	},
+	{
+		"key": "Authorization endpoint is required.",
+		"value": "प्राधिकरण एंडपॉइंट आवश्यक है।"
+	},
+	{
+		"key": "Authorization endpoint must be a valid uri.",
+		"value": "प्राधिकरण एंडपॉइंट एक मान्य uri होना चाहिए।"
+	},
+	{
+		"key": "back channel logout uri",
+		"value": "बैक चैनल लॉगआउट uri"
+	},
+	{
+		"key": "back channel logout uri required",
+		"value": "बैक चैनल लॉगआउट uri आवश्यक"
+	},
+	{
+		"key": "Below is the list of applications you have given access to and the names of the resources they have access to.",
+		"value": "नीचे उन एप्लिकेशन की सूची है जिन्हें आपने पहुँच दी है और उन संसाधनों के नाम हैं जिन तक उनकी पहुँच है।"
+	},
+	{
+		"key": "Cancel",
+		"value": "रद्द करें"
+	},
+	{
+		"key": "Change email",
+		"value": "ईमेल बदलें"
+	},
+	{
+		"key": "Change password",
+		"value": "पासवर्ड बदलें"
+	},
+	{
+		"key": "Change your account settings",
+		"value": "अपने खाते की सेटिंग्स बदलें"
+	},
+	{
+		"key": "Checking login state...",
+		"value": "लॉगिन स्थिति जाँची जा रही है..."
+	},
+	{
+		"key": "claim type",
+		"value": "क्लेम प्रकार"
+	},
+	{
+		"key": "Claims",
+		"value": "क्लेम"
+	},
+	{
+		"key": "claims",
+		"value": "क्लेम"
+	},
+	{
+		"key": "claims mapping",
+		"value": "क्लेम मैपिंग"
+	},
+	{
+		"key": "Claims mapping",
+		"value": "क्लेम मैपिंग"
+	},
+	{
+		"key": "claims prefix",
+		"value": "क्लेम उपसर्ग"
+	},
+	{
+		"key": "claims transformations",
+		"value": "क्लेम रूपांतरण"
+	},
+	{
+		"key": "Claims transformations",
+		"value": "क्लेम रूपांतरण"
+	},
+	{
+		"key": "Click <a class=\"PostLogoutRedirectUri\" href=\"{0}\">here</a> to return to the <span>{1}</span> application.",
+		"value": "<span>{1}</span> एप्लिकेशन पर लौटने के लिए <a class=\"PostLogoutRedirectUri\" href=\"{0}\">यहाँ</a> क्लिक करें।"
+	},
+	{
+		"key": "Client Application Access",
+		"value": "क्लाइंट एप्लिकेशन पहुँच"
+	},
+	{
+		"key": "client id",
+		"value": "क्लाइंट आईडी"
+	},
+	{
+		"key": "Client Id is required.",
+		"value": "क्लाइंट आईडी आवश्यक है।"
+	},
+	{
+		"key": "client name",
+		"value": "क्लाइंट नाम"
+	},
+	{
+		"key": "client secret",
+		"value": "क्लाइंट सीक्रेट"
+	},
+	{
+		"key": "Client Secret is required.",
+		"value": "क्लाइंट सीक्रेट आवश्यक है।"
+	},
+	{
+		"key": "client uri",
+		"value": "क्लाइंट uri"
+	},
+	{
+		"key": "Clients",
+		"value": "क्लाइंट"
+	},
+	{
+		"key": "Close",
+		"value": "बंद करें"
+	},
+	{
+		"key": "Code",
+		"value": "कोड"
+	},
+	{
+		"key": "Completing login...",
+		"value": "लॉगिन पूरा किया जा रहा है..."
+	},
+	{
+		"key": "Configure authenticator app",
+		"value": "प्रमाणक ऐप कॉन्फ़िगर करें"
+	},
+	{
+		"key": "Confirm email",
+		"value": "ईमेल की पुष्टि करें"
+	},
+	{
+		"key": "Confirm email change",
+		"value": "ईमेल परिवर्तन की पुष्टि करें"
+	},
+	{
+		"key": "Confirm new password",
+		"value": "नए पासवर्ड की पुष्टि करें"
+	},
+	{
+		"key": "Confirm password",
+		"value": "पासवर्ड की पुष्टि करें"
+	},
+	{
+		"key": "Confirm your email",
+		"value": "अपने ईमेल की पुष्टि करें"
+	},
+	{
+		"key": "Confirmation link to change email sent. Please check your email.",
+		"value": "ईमेल बदलने के लिए पुष्टिकरण लिंक भेज दिया गया है। कृपया अपना ईमेल देखें।"
+	},
+	{
+		"key": "consent",
+		"value": "सहमति"
+	},
+	{
+		"key": "Consent",
+		"value": "सहमति"
+	},
+	{
+		"key": "consent lifetime",
+		"value": "सहमति जीवनकाल"
+	},
+	{
+		"key": "consents",
+		"value": "सहमतियाँ"
+	},
+	{
+		"key": "Consents",
+		"value": "सहमतियाँ"
+	},
+	{
+		"key": "consumer key",
+		"value": "कंज्यूमर कुंजी"
+	},
+	{
+		"key": "Consumer Key is required.",
+		"value": "कंज्यूमर कुंजी आवश्यक है।"
+	},
+	{
+		"key": "consumer secret",
+		"value": "कंज्यूमर सीक्रेट"
+	},
+	{
+		"key": "Consumer Secret is required.",
+		"value": "कंज्यूमर सीक्रेट आवश्यक है।"
+	},
+	{
+		"key": "cors",
+		"value": "cors"
+	},
+	{
+		"key": "Create a new account.",
+		"value": "नया खाता बनाएँ।"
+	},
+	{
+		"key": "create at",
+		"value": "बनाया गया"
+	},
+	{
+		"key": "Created:",
+		"value": "बनाया गया:"
+	},
+	{
+		"key": "creation",
+		"value": "निर्माण"
+	},
+	{
+		"key": "culture",
+		"value": "संस्कृति"
+	},
+	{
+		"key": "Cultures",
+		"value": "संस्कृतियाँ"
+	},
+	{
+		"key": "Current password",
+		"value": "वर्तमान पासवर्ड"
+	},
+	{
+		"key": "data",
+		"value": "डेटा"
+	},
+	{
+		"key": "Data Protection",
+		"value": "डेटा सुरक्षा"
+	},
+	{
+		"key": "decription",
+		"value": "विवरण"
+	},
+	{
+		"key": "Delete",
+		"value": "हटाएँ"
+	},
+	{
+		"key": "Delete data and close my account",
+		"value": "डेटा हटाएँ और मेरा खाता बंद करें"
+	},
+	{
+		"key": "Delete Personal Data",
+		"value": "व्यक्तिगत डेटा हटाएँ"
+	},
+	{
+		"key": "Deleted",
+		"value": "हटाया गया"
+	},
+	{
+		"key": "Deleting this data will permanently remove your account, and this cannot be recovered.",
+		"value": "यह डेटा हटाने से आपका खाता स्थायी रूप से हट जाएगा, और इसे पुनर्प्राप्त नहीं किया जा सकता।"
+	},
+	{
+		"key": "description",
+		"value": "विवरण"
+	},
+	{
+		"key": "device flow request lifetime",
+		"value": "डिवाइस फ्लो अनुरोध जीवनकाल"
+	},
+	{
+		"key": "Disable 2FA",
+		"value": "2FA अक्षम करें"
+	},
+	{
+		"key": "disable telemetry",
+		"value": "टेलीमेट्री अक्षम करें"
+	},
+	{
+		"key": "Disable two-factor authentication (2FA)",
+		"value": "दो-चरणीय प्रमाणीकरण (2FA) अक्षम करें"
+	},
+	{
+		"key": "Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+		"value": "2FA अक्षम करने से प्रमाणक ऐप्स में उपयोग की जाने वाली कुंजियाँ नहीं बदलतीं। यदि आप किसी प्रमाणक ऐप में उपयोग की जाने वाली कुंजी बदलना चाहते हैं तो आपको <a href=\"{0}\">अपनी प्रमाणक कुंजियाँ रीसेट करनी चाहिए।</a>"
+	},
+	{
+		"key": "display name",
+		"value": "प्रदर्शन नाम"
+	},
+	{
+		"key": "Don't have access to your authenticator device? You can <a href=\"{0}\">log in with a recovery code</a>.",
+		"value": "अपने प्रमाणक डिवाइस तक पहुँच नहीं है? आप <a href=\"{0}\">रिकवरी कोड से लॉग इन कर सकते हैं</a>।"
+	},
+	{
+		"key": "Download",
+		"value": "डाउनलोड करें"
+	},
+	{
+		"key": "Download a two-factor authenticator app like Microsoft Authenticator for <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> and <a href=\"{2}\">iOS</a> or Google Authenticator for <a href=\"{3}\">Android</a> and <a href=\"{4}\">iOS</a>.",
+		"value": "Microsoft Authenticator जैसा दो-चरणीय प्रमाणक ऐप <a href=\"{0}\">Windows Phone</a>, <a href=\"{1}\">Android</a> और <a href=\"{2}\">iOS</a> के लिए, या Google Authenticator <a href=\"{3}\">Android</a> और <a href=\"{4}\">iOS</a> के लिए डाउनलोड करें।"
+	},
+	{
+		"key": "Download Your Data",
+		"value": "अपना डेटा डाउनलोड करें"
+	},
+	{
+		"key": "Editing the profile is not supported.",
+		"value": "प्रोफ़ाइल संपादित करना समर्थित नहीं है।"
+	},
+	{
+		"key": "Email",
+		"value": "ईमेल"
+	},
+	{
+		"key": "email",
+		"value": "ईमेल"
+	},
+	{
+		"key": "email confirmed",
+		"value": "ईमेल पुष्ट"
+	},
+	{
+		"key": "emphasize",
+		"value": "जोर दें"
+	},
+	{
+		"key": "enable local login",
+		"value": "स्थानीय लॉगिन सक्षम करें"
+	},
+	{
+		"key": "enabled",
+		"value": "सक्षम"
+	},
+	{
+		"key": "encryption certificate",
+		"value": "एन्क्रिप्शन प्रमाणपत्र"
+	},
+	{
+		"key": "Enter your email.",
+		"value": "अपना ईमेल दर्ज करें।"
+	},
+	{
+		"key": "Entities created",
+		"value": "एंटिटी बनाई गईं"
+	},
+	{
+		"key": "Entities updated",
+		"value": "एंटिटी अपडेट की गईं"
+	},
+	{
+		"key": "Error",
+		"value": "त्रुटि"
+	},
+	{
+		"key": "Error changing email.",
+		"value": "ईमेल बदलने में त्रुटि।"
+	},
+	{
+		"key": "Error changing user name.",
+		"value": "उपयोगकर्ता नाम बदलने में त्रुटि।"
+	},
+	{
+		"key": "Error confirming your email.",
+		"value": "आपके ईमेल की पुष्टि करने में त्रुटि।"
+	},
+	{
+		"key": "Error from external provider: {0}",
+		"value": "बाहरी प्रदाता से त्रुटि: {0}"
+	},
+	{
+		"key": "Error loading external login information during confirmation.",
+		"value": "पुष्टि के दौरान बाहरी लॉगिन जानकारी लोड करने में त्रुटि।"
+	},
+	{
+		"key": "Error loading external login information.",
+		"value": "बाहरी लॉगिन जानकारी लोड करने में त्रुटि।"
+	},
+	{
+		"key": "Error when trying to revoke the key.",
+		"value": "कुंजी निरस्त करने का प्रयास करते समय त्रुटि।"
+	},
+	{
+		"key": "expiration",
+		"value": "समाप्ति"
+	},
+	{
+		"key": "expire at",
+		"value": "समाप्त होगा"
+	},
+	{
+		"key": "Expires:",
+		"value": "समाप्ति:"
+	},
+	{
+		"key": "export",
+		"value": "निर्यात"
+	},
+	{
+		"key": "External Login",
+		"value": "बाहरी लॉगिन"
+	},
+	{
+		"key": "External login tokens",
+		"value": "बाहरी लॉगिन टोकन"
+	},
+	{
+		"key": "external logins",
+		"value": "बाहरी लॉगिन"
+	},
+	{
+		"key": "External logins",
+		"value": "बाहरी लॉगिन"
+	},
+	{
+		"key": "external logins tokens",
+		"value": "बाहरी लॉगिन टोकन"
+	},
+	{
+		"key": "External provider restrictions",
+		"value": "बाहरी प्रदाता प्रतिबंध"
+	},
+	{
+		"key": "field",
+		"value": "फ़ील्ड"
+	},
+	{
+		"key": "fields",
+		"value": "फ़ील्ड"
+	},
+	{
+		"key": "filter",
+		"value": "फ़िल्टर"
+	},
+	{
+		"key": "Forget this browser",
+		"value": "इस ब्राउज़र को भूल जाएँ"
+	},
+	{
+		"key": "Forgot password confirmation",
+		"value": "पासवर्ड भूलने की पुष्टि"
+	},
+	{
+		"key": "Forgot your password?",
+		"value": "अपना पासवर्ड भूल गए?"
+	},
+	{
+		"key": "from claim type",
+		"value": "स्रोत क्लेम प्रकार"
+	},
+	{
+		"key": "front channel logout uri",
+		"value": "फ्रंट चैनल लॉगआउट uri"
+	},
+	{
+		"key": "front channel logout uri required",
+		"value": "फ्रंट चैनल लॉगआउट uri आवश्यक"
+	},
+	{
+		"key": "Generate Recovery Codes",
+		"value": "रिकवरी कोड जनरेट करें"
+	},
+	{
+		"key": "Generate two-factor authentication (2FA) recovery codes",
+		"value": "दो-चरणीय प्रमाणीकरण (2FA) रिकवरी कोड जनरेट करें"
+	},
+	{
+		"key": "Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key used in an authenticator app you should <a href=\"{0}\">reset your authenticator keys.</a>",
+		"value": "नए रिकवरी कोड जनरेट करने से प्रमाणक ऐप्स में उपयोग की जाने वाली कुंजियाँ नहीं बदलतीं। यदि आप किसी प्रमाणक ऐप में उपयोग की जाने वाली कुंजी बदलना चाहते हैं तो आपको <a href=\"{0}\">अपनी प्रमाणक कुंजियाँ रीसेट करनी चाहिए।</a>"
+	},
+	{
+		"key": "grant type",
+		"value": "ग्रांट प्रकार"
+	},
+	{
+		"key": "grant types",
+		"value": "ग्रांट प्रकार"
+	},
+	{
+		"key": "Grant types",
+		"value": "ग्रांट प्रकार"
+	},
+	{
+		"key": "Grants",
+		"value": "ग्रांट"
+	},
+	{
+		"key": "Hello {0}!",
+		"value": "नमस्ते {0}!"
+	},
+	{
+		"key": "Hello, {0}!",
+		"value": "नमस्ते, {0}!"
+	},
+	{
+		"key": "Home",
+		"value": "होम"
+	},
+	{
+		"key": "id",
+		"value": "आईडी"
+	},
+	{
+		"key": "id token lifetime",
+		"value": "आईडी टोकन जीवनकाल"
+	},
+	{
+		"key": "Identities",
+		"value": "पहचानें"
+	},
+	{
+		"key": "identity",
+		"value": "पहचान"
+	},
+	{
+		"key": "Identity Grants",
+		"value": "पहचान ग्रांट"
+	},
+	{
+		"key": "idp restrictions",
+		"value": "idp प्रतिबंध"
+	},
+	{
+		"key": "If you lose your device and don't have the recovery codes you will lose access to your account.",
+		"value": "यदि आप अपना डिवाइस खो देते हैं और आपके पास रिकवरी कोड नहीं हैं तो आप अपने खाते तक पहुँच खो देंगे।"
+	},
+	{
+		"key": "If you reset your authenticator key your authenticator app will not work until you reconfigure it.",
+		"value": "यदि आप अपनी प्रमाणक कुंजी रीसेट करते हैं तो आपका प्रमाणक ऐप तब तक काम नहीं करेगा जब तक आप इसे पुनः कॉन्फ़िगर नहीं करते।"
+	},
+	{
+		"key": "Import",
+		"value": "आयात करें"
+	},
+	{
+		"key": "include JWT id",
+		"value": "JWT आईडी शामिल करें"
+	},
+	{
+		"key": "Incorrect password.",
+		"value": "गलत पासवर्ड।"
+	},
+	{
+		"key": "Invalid authenticator code.",
+		"value": "अमान्य प्रमाणक कोड।"
+	},
+	{
+		"key": "Invalid file",
+		"value": "अमान्य फ़ाइल"
+	},
+	{
+		"key": "Invalid login request",
+		"value": "अमान्य लॉगिन अनुरोध"
+	},
+	{
+		"key": "Invalid recovery code entered.",
+		"value": "अमान्य रिकवरी कोड दर्ज किया गया।"
+	},
+	{
+		"key": "issuer",
+		"value": "जारीकर्ता"
+	},
+	{
+		"key": "key",
+		"value": "कुंजी"
+	},
+	{
+		"key": "Keys",
+		"value": "कुंजियाँ"
+	},
+	{
+		"key": "lifetime",
+		"value": "जीवनकाल"
+	},
+	{
+		"key": "Loading...",
+		"value": "लोड हो रहा है..."
+	},
+	{
+		"key": "Local Login",
+		"value": "स्थानीय लॉगिन"
+	},
+	{
+		"key": "localized description",
+		"value": "स्थानीयकृत विवरण"
+	},
+	{
+		"key": "localized display name",
+		"value": "स्थानीयकृत प्रदर्शन नाम"
+	},
+	{
+		"key": "lockout enabled",
+		"value": "लॉकआउट सक्षम"
+	},
+	{
+		"key": "lockout end",
+		"value": "लॉकआउट समाप्ति"
+	},
+	{
+		"key": "Log in",
+		"value": "लॉग इन करें"
+	},
+	{
+		"key": "Log in using your {0} account",
+		"value": "अपने {0} खाते से लॉग इन करें"
+	},
+	{
+		"key": "Log out",
+		"value": "लॉग आउट करें"
+	},
+	{
+		"key": "Login",
+		"value": "लॉगिन"
+	},
+	{
+		"key": "Login form",
+		"value": "लॉगिन फ़ॉर्म"
+	},
+	{
+		"key": "logo uri",
+		"value": "लोगो uri"
+	},
+	{
+		"key": "Logout",
+		"value": "लॉगआउट"
+	},
+	{
+		"key": "Logout form",
+		"value": "लॉगआउट फ़ॉर्म"
+	},
+	{
+		"key": "Manage Email",
+		"value": "ईमेल प्रबंधित करें"
+	},
+	{
+		"key": "Manage your account",
+		"value": "अपना खाता प्रबंधित करें"
+	},
+	{
+		"key": "Manage your external logins",
+		"value": "अपने बाहरी लॉगिन प्रबंधित करें"
+	},
+	{
+		"key": "map default outbound JWT claim types",
+		"value": "डिफ़ॉल्ट आउटबाउंड JWT क्लेम प्रकार मैप करें"
+	},
+	{
+		"key": "metadata address",
+		"value": "मेटाडेटा पता"
+	},
+	{
+		"key": "Metadata address is required.",
+		"value": "मेटाडेटा पता आवश्यक है।"
+	},
+	{
+		"key": "Metadata address must be a valid HTTPS url when 'required https metadata is true'.",
+		"value": "जब 'require https metadata' सही हो तो मेटाडेटा पता एक मान्य HTTPS url होना चाहिए।"
+	},
+	{
+		"key": "Metadata address must be a valid uri.",
+		"value": "मेटाडेटा पता एक मान्य uri होना चाहिए।"
+	},
+	{
+		"key": "name",
+		"value": "नाम"
+	},
+	{
+		"key": "name id format",
+		"value": "नेम आईडी प्रारूप"
+	},
+	{
+		"key": "New email",
+		"value": "नया ईमेल"
+	},
+	{
+		"key": "New password",
+		"value": "नया पासवर्ड"
+	},
+	{
+		"key": "No changes",
+		"value": "कोई परिवर्तन नहीं"
+	},
+	{
+		"key": "No, Do Not Allow",
+		"value": "नहीं, अनुमति न दें"
+	},
+	{
+		"key": "Nothing here.",
+		"value": "यहाँ कुछ नहीं है।"
+	},
+	{
+		"key": "Once complete, you may close this tab",
+		"value": "पूरा होने पर, आप यह टैब बंद कर सकते हैं"
+	},
+	{
+		"key": "Once you have scanned the QR code or input the key above, your two factor authentication app will provide youm with a unique code.Enter the code in the confirmation box below.",
+		"value": "QR कोड स्कैन करने या ऊपर दी गई कुंजी दर्ज करने के बाद, आपका दो-चरणीय प्रमाणीकरण ऐप आपको एक विशिष्ट कोड देगा। नीचे दिए गए पुष्टिकरण बॉक्स में वह कोड दर्ज करें।"
+	},
+	{
+		"key": "One time only",
+		"value": "केवल एक बार"
+	},
+	{
+		"key": "pairwise subject salt",
+		"value": "पेयरवाइज़ सब्जेक्ट सॉल्ट"
+	},
+	{
+		"key": "Password",
+		"value": "पासवर्ड"
+	},
+	{
+		"key": "password",
+		"value": "पासवर्ड"
+	},
+	{
+		"key": "Personal data",
+		"value": "व्यक्तिगत डेटा"
+	},
+	{
+		"key": "Personal Information",
+		"value": "व्यक्तिगत जानकारी"
+	},
+	{
+		"key": "phone number",
+		"value": "फ़ोन नंबर"
+	},
+	{
+		"key": "Phone number",
+		"value": "फ़ोन नंबर"
+	},
+	{
+		"key": "phone number confirmed",
+		"value": "फ़ोन नंबर पुष्ट"
+	},
+	{
+		"key": "Please check your email to confirm your account.",
+		"value": "अपने खाते की पुष्टि करने के लिए कृपया अपना ईमेल देखें।"
+	},
+	{
+		"key": "Please check your email to reset your password.",
+		"value": "अपना पासवर्ड रीसेट करने के लिए कृपया अपना ईमेल देखें।"
+	},
+	{
+		"key": "Please confirm that the authorization request quotes the code: \"{0}\".",
+		"value": "कृपया पुष्टि करें कि प्राधिकरण अनुरोध में यह कोड दिया गया है: \"{0}\"।"
+	},
+	{
+		"key": "Please confirm your account by <a href='{0}'>clicking here</a>.",
+		"value": "कृपया <a href='{0}'>यहाँ क्लिक करके</a> अपने खाते की पुष्टि करें।"
+	},
+	{
+		"key": "Please enter the code displayed on your device",
+		"value": "कृपया अपने डिवाइस पर प्रदर्शित कोड दर्ज करें"
+	},
+	{
+		"key": "Please reset your password by <a href='{0}'>clicking here</a>.",
+		"value": "कृपया <a href='{0}'>यहाँ क्लिक करके</a> अपना पासवर्ड रीसेट करें।"
+	},
+	{
+		"key": "Policy",
+		"value": "नीति"
+	},
+	{
+		"key": "policy uri",
+		"value": "नीति uri"
+	},
+	{
+		"key": "post logout",
+		"value": "लॉगआउट के बाद"
+	},
+	{
+		"key": "prefix",
+		"value": "उपसर्ग"
+	},
+	{
+		"key": "Processing logout callback...",
+		"value": "लॉगआउट कॉलबैक संसाधित हो रहा है..."
+	},
+	{
+		"key": "Processing logout...",
+		"value": "लॉगआउट संसाधित हो रहा है..."
+	},
+	{
+		"key": "Profile",
+		"value": "प्रोफ़ाइल"
+	},
+	{
+		"key": "prompt",
+		"value": "प्रॉम्प्ट"
+	},
+	{
+		"key": "properties",
+		"value": "गुण"
+	},
+	{
+		"key": "Properties",
+		"value": "गुण"
+	},
+	{
+		"key": "protocol type",
+		"value": "प्रोटोकॉल प्रकार"
+	},
+	{
+		"key": "provider",
+		"value": "प्रदाता"
+	},
+	{
+		"key": "Providers",
+		"value": "प्रदाता"
+	},
+	{
+		"key": "Put these codes in a safe place.",
+		"value": "इन कोड को सुरक्षित स्थान पर रखें।"
+	},
+	{
+		"key": "Re use",
+		"value": "पुनः उपयोग"
+	},
+	{
+		"key": "reason",
+		"value": "कारण"
+	},
+	{
+		"key": "Recovery Code",
+		"value": "रिकवरी कोड"
+	},
+	{
+		"key": "Recovery code verification",
+		"value": "रिकवरी कोड सत्यापन"
+	},
+	{
+		"key": "Recovery codes",
+		"value": "रिकवरी कोड"
+	},
+	{
+		"key": "redirect",
+		"value": "रीडायरेक्ट"
+	},
+	{
+		"key": "redirect uri",
+		"value": "रीडायरेक्ट uri"
+	},
+	{
+		"key": "Reference tokens",
+		"value": "रेफरेंस टोकन"
+	},
+	{
+		"key": "reference tokens",
+		"value": "रेफरेंस टोकन"
+	},
+	{
+		"key": "refresh on issuer key not found",
+		"value": "जारीकर्ता कुंजी न मिलने पर रिफ्रेश करें"
+	},
+	{
+		"key": "refresh token expiration",
+		"value": "रिफ्रेश टोकन समाप्ति"
+	},
+	{
+		"key": "refresh token usage",
+		"value": "रिफ्रेश टोकन उपयोग"
+	},
+	{
+		"key": "Refresh tokens",
+		"value": "रिफ्रेश टोकन"
+	},
+	{
+		"key": "refresh tokens",
+		"value": "रिफ्रेश टोकन"
+	},
+	{
+		"key": "Register",
+		"value": "पंजीकरण करें"
+	},
+	{
+		"key": "Register confirmation",
+		"value": "पंजीकरण पुष्टि"
+	},
+	{
+		"key": "Registered Logins",
+		"value": "पंजीकृत लॉगिन"
+	},
+	{
+		"key": "Registration is not supported.",
+		"value": "पंजीकरण समर्थित नहीं है।"
+	},
+	{
+		"key": "Relying parties",
+		"value": "रिलाइंग पार्टियाँ"
+	},
+	{
+		"key": "relying party",
+		"value": "रिलाइंग पार्टी"
+	},
+	{
+		"key": "Remember My Decision",
+		"value": "मेरा निर्णय याद रखें"
+	},
+	{
+		"key": "Remember My Login",
+		"value": "मेरा लॉगिन याद रखें"
+	},
+	{
+		"key": "Remember this machine",
+		"value": "इस मशीन को याद रखें"
+	},
+	{
+		"key": "remenber consent",
+		"value": "सहमति याद रखें"
+	},
+	{
+		"key": "remote sign-out path ",
+		"value": "दूरस्थ साइन-आउट पथ"
+	},
+	{
+		"key": "remote sign-out path",
+		"value": "दूरस्थ साइन-आउट पथ"
+	},
+	{
+		"key": "Remove",
+		"value": "हटाएँ"
+	},
+	{
+		"key": "require consent",
+		"value": "सहमति आवश्यक करें"
+	},
+	{
+		"key": "require https metadata",
+		"value": "https मेटाडेटा आवश्यक करें"
+	},
+	{
+		"key": "require PKCE",
+		"value": "PKCE आवश्यक करें"
+	},
+	{
+		"key": "require secret",
+		"value": "सीक्रेट आवश्यक करें"
+	},
+	{
+		"key": "required",
+		"value": "आवश्यक"
+	},
+	{
+		"key": "Reset authenticator app",
+		"value": "प्रमाणक ऐप रीसेट करें"
+	},
+	{
+		"key": "Reset authenticator key",
+		"value": "प्रमाणक कुंजी रीसेट करें"
+	},
+	{
+		"key": "Reset Password",
+		"value": "पासवर्ड रीसेट करें"
+	},
+	{
+		"key": "Reset recovery codes",
+		"value": "रिकवरी कोड रीसेट करें"
+	},
+	{
+		"key": "resource",
+		"value": "संसाधन"
+	},
+	{
+		"key": "Resources",
+		"value": "संसाधन"
+	},
+	{
+		"key": "response mode",
+		"value": "प्रतिक्रिया मोड"
+	},
+	{
+		"key": "response type",
+		"value": "प्रतिक्रिया प्रकार"
+	},
+	{
+		"key": "retrieve user details",
+		"value": "उपयोगकर्ता विवरण प्राप्त करें"
+	},
+	{
+		"key": "Retype the \"{0}\" if you are sure to delete it.",
+		"value": "यदि आप इसे हटाने के लिए निश्चित हैं तो \"{0}\" पुनः टाइप करें।"
+	},
+	{
+		"key": "Retype the \"{0}\" if you are sure to revoke it.",
+		"value": "यदि आप इसे निरस्त करने के लिए निश्चित हैं तो \"{0}\" पुनः टाइप करें।"
+	},
+	{
+		"key": "Revoke",
+		"value": "निरस्त करें"
+	},
+	{
+		"key": "Revoke Access",
+		"value": "पहुँच निरस्त करें"
+	},
+	{
+		"key": "Revoked",
+		"value": "निरस्त"
+	},
+	{
+		"key": "role",
+		"value": "भूमिका"
+	},
+	{
+		"key": "Roles",
+		"value": "भूमिकाएँ"
+	},
+	{
+		"key": "Save",
+		"value": "सहेजें"
+	},
+	{
+		"key": "save tokens",
+		"value": "टोकन सहेजें"
+	},
+	{
+		"key": "Saved",
+		"value": "सहेजा गया"
+	},
+	{
+		"key": "Scan the QR Code or enter this key <kbd>{0}</kbd> into your two factor authenticator app. Spaces and casing do not matter.",
+		"value": "QR कोड स्कैन करें या यह कुंजी <kbd>{0}</kbd> अपने दो-चरणीय प्रमाणक ऐप में दर्ज करें। स्पेस और अक्षरों का बड़ा-छोटा होना मायने नहीं रखता।"
+	},
+	{
+		"key": "scheme",
+		"value": "स्कीम"
+	},
+	{
+		"key": "scope",
+		"value": "स्कोप"
+	},
+	{
+		"key": "scopes",
+		"value": "स्कोप"
+	},
+	{
+		"key": "Scopes",
+		"value": "स्कोप"
+	},
+	{
+		"key": "Scopes must be unique.",
+		"value": "स्कोप अद्वितीय होने चाहिए।"
+	},
+	{
+		"key": "secrets",
+		"value": "सीक्रेट"
+	},
+	{
+		"key": "Select a kind of provider...",
+		"value": "प्रदाता का प्रकार चुनें..."
+	},
+	{
+		"key": "send app secret proof",
+		"value": "ऐप सीक्रेट प्रूफ भेजें"
+	},
+	{
+		"key": "Send verification email",
+		"value": "सत्यापन ईमेल भेजें"
+	},
+	{
+		"key": "Set password",
+		"value": "पासवर्ड सेट करें"
+	},
+	{
+		"key": "Set your password",
+		"value": "अपना पासवर्ड सेट करें"
+	},
+	{
+		"key": "Setup authenticator app",
+		"value": "प्रमाणक ऐप सेटअप करें"
+	},
+	{
+		"key": "show all options",
+		"value": "सभी विकल्प दिखाएँ"
+	},
+	{
+		"key": "show in discovery document",
+		"value": "डिस्कवरी दस्तावेज़ में दिखाएँ"
+	},
+	{
+		"key": "signature algorithm",
+		"value": "हस्ताक्षर एल्गोरिदम"
+	},
+	{
+		"key": "signature digest",
+		"value": "हस्ताक्षर डाइजेस्ट"
+	},
+	{
+		"key": "signed-out callback path",
+		"value": "साइन-आउट कॉलबैक पथ"
+	},
+	{
+		"key": "signed-out redirect uri",
+		"value": "साइन-आउट रीडायरेक्ट uri"
+	},
+	{
+		"key": "Signing",
+		"value": "हस्ताक्षर"
+	},
+	{
+		"key": "sign-out scheme ",
+		"value": "साइन-आउट स्कीम"
+	},
+	{
+		"key": "sign-out scheme",
+		"value": "साइन-आउट स्कीम"
+	},
+	{
+		"key": "sign-out wreply ",
+		"value": "साइन-आउट wreply"
+	},
+	{
+		"key": "skip unrecognized requests",
+		"value": "अपरिचित अनुरोध छोड़ें"
+	},
+	{
+		"key": "Sliding",
+		"value": "स्लाइडिंग"
+	},
+	{
+		"key": "sliding refresh token lifetime",
+		"value": "स्लाइडिंग रिफ्रेश टोकन जीवनकाल"
+	},
+	{
+		"key": "Sorry, there was an error",
+		"value": "क्षमा करें, एक त्रुटि हुई"
+	},
+	{
+		"key": "Sorry, there's nothing at this address.",
+		"value": "क्षमा करें, इस पते पर कुछ नहीं है।"
+	},
+	{
+		"key": "sso lifetime",
+		"value": "sso जीवनकाल"
+	},
+	{
+		"key": "store claims",
+		"value": "क्लेम संग्रहीत करें"
+	},
+	{
+		"key": "Submit",
+		"value": "सबमिट करें"
+	},
+	{
+		"key": "Success",
+		"value": "सफलता"
+	},
+	{
+		"key": "Supported cultures",
+		"value": "समर्थित संस्कृतियाँ"
+	},
+	{
+		"key": "Terms of service",
+		"value": "सेवा की शर्तें"
+	},
+	{
+		"key": "terms of service uri",
+		"value": "सेवा की शर्तें uri"
+	},
+	{
+		"key": "Thank you for confirming your email change.",
+		"value": "अपने ईमेल परिवर्तन की पुष्टि करने के लिए धन्यवाद।"
+	},
+	{
+		"key": "The {0} must be at least {2} and at max {1} characters long.",
+		"value": "{0} कम से कम {2} और अधिकतम {1} वर्ण लंबा होना चाहिए।"
+	},
+	{
+		"key": "The api property key cannot exceed 250 chars.",
+		"value": "api गुण कुंजी 250 वर्णों से अधिक नहीं हो सकती।"
+	},
+	{
+		"key": "The api property key is required.",
+		"value": "api गुण कुंजी आवश्यक है।"
+	},
+	{
+		"key": "The api property key must be unique.",
+		"value": "api गुण कुंजी अद्वितीय होनी चाहिए।"
+	},
+	{
+		"key": "The api property value cannot exceed 2000 chars.",
+		"value": "api गुण मान 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The api property value is required.",
+		"value": "api गुण मान आवश्यक है।"
+	},
+	{
+		"key": "The back channel logout url cannot exceed 2000 char.",
+		"value": "बैक चैनल लॉगआउट url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The back channel logout url is required.",
+		"value": "बैक चैनल लॉगआउट url आवश्यक है।"
+	},
+	{
+		"key": "The back logout url is not valid.",
+		"value": "बैक लॉगआउट url मान्य नहीं है।"
+	},
+	{
+		"key": "The claim prefix cannot exceed 250 char.",
+		"value": "क्लेम उपसर्ग 250 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The claim type cannot exceed 2000 chars.",
+		"value": "क्लेम प्रकार 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The claim type cannot exceed 250 chars.",
+		"value": "क्लेम प्रकार 250 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The claim type is required.",
+		"value": "क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The claim type must be unique.",
+		"value": "क्लेम प्रकार अद्वितीय होना चाहिए।"
+	},
+	{
+		"key": "The claim value cannot exceed 2000 chars.",
+		"value": "क्लेम मान 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The claim value is required.",
+		"value": "क्लेम मान आवश्यक है।"
+	},
+	{
+		"key": "The client property key cannot exceed 250 chars.",
+		"value": "क्लाइंट गुण कुंजी 250 वर्णों से अधिक नहीं हो सकती।"
+	},
+	{
+		"key": "The client property key is required.",
+		"value": "क्लाइंट गुण कुंजी आवश्यक है।"
+	},
+	{
+		"key": "The client property key must be unique.",
+		"value": "क्लाइंट गुण कुंजी अद्वितीय होनी चाहिए।"
+	},
+	{
+		"key": "The client property value cannot exceed 2000 chars.",
+		"value": "क्लाइंट गुण मान 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The client property value is required.",
+		"value": "क्लाइंट गुण मान आवश्यक है।"
+	},
+	{
+		"key": "The client should contain at least one grant type.",
+		"value": "क्लाइंट में कम से कम एक ग्रांट प्रकार होना चाहिए।"
+	},
+	{
+		"key": "The culture is required.",
+		"value": "संस्कृति आवश्यक है।"
+	},
+	{
+		"key": "The culture must be unique.",
+		"value": "संस्कृति अद्वितीय होनी चाहिए।"
+	},
+	{
+		"key": "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.",
+		"value": "वर्तमान ब्राउज़र को भुला दिया गया है। जब आप इस ब्राउज़र से दोबारा लॉगिन करेंगे तो आपसे आपका 2fa कोड माँगा जाएगा।"
+	},
+	{
+		"key": "The description cannot exceed 200 chars.",
+		"value": "विवरण 200 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The description cannot exceed 2000 chars.",
+		"value": "विवरण 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The description canoot exceed 1000 char.",
+		"value": "विवरण 1000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The digest algorithm is required",
+		"value": "डाइजेस्ट एल्गोरिदम आवश्यक है"
+	},
+	{
+		"key": "The display name cannot exceed 200 chars.",
+		"value": "प्रदर्शन नाम 200 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The display name is required.",
+		"value": "प्रदर्शन नाम आवश्यक है।"
+	},
+	{
+		"key": "The external login was added.",
+		"value": "बाहरी लॉगिन जोड़ दिया गया।"
+	},
+	{
+		"key": "The external login was not added. External logins can only be associated with one account.",
+		"value": "बाहरी लॉगिन नहीं जोड़ा गया। बाहरी लॉगिन केवल एक ही खाते से संबद्ध किए जा सकते हैं।"
+	},
+	{
+		"key": "The external login was not removed.",
+		"value": "बाहरी लॉगिन हटाया नहीं गया।"
+	},
+	{
+		"key": "The external login was removed.",
+		"value": "बाहरी लॉगिन हटा दिया गया।"
+	},
+	{
+		"key": "The from claim tyoe is required.",
+		"value": "स्रोत क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The from claim type is required.",
+		"value": "स्रोत क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The from claim type must be unique.",
+		"value": "स्रोत क्लेम प्रकार अद्वितीय होना चाहिए।"
+	},
+	{
+		"key": "The front channel logout url cannot exceed 2000 char.",
+		"value": "फ्रंट चैनल लॉगआउट url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The front channel logout url is not valid.",
+		"value": "फ्रंट चैनल लॉगआउट url मान्य नहीं है।"
+	},
+	{
+		"key": "The front channel logout url is required.",
+		"value": "फ्रंट चैनल लॉगआउट url आवश्यक है।"
+	},
+	{
+		"key": "The grant type cannot contains space.",
+		"value": "ग्रांट प्रकार में स्पेस नहीं हो सकता।"
+	},
+	{
+		"key": "The grant type must be unique.",
+		"value": "ग्रांट प्रकार अद्वितीय होना चाहिए।"
+	},
+	{
+		"key": "The id is required.",
+		"value": "आईडी आवश्यक है।"
+	},
+	{
+		"key": "The id must be an URI when protocol is WS-Federation. (ex: urn:wsfed).",
+		"value": "जब प्रोटोकॉल WS-Federation हो तो आईडी एक URI होनी चाहिए। (उदा.: urn:wsfed)।"
+	},
+	{
+		"key": "The identity claim type cannot exceed 2000 chars.",
+		"value": "पहचान क्लेम प्रकार 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The identity claim type is required.",
+		"value": "पहचान क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The identity claim type must be unique.",
+		"value": "पहचान क्लेम प्रकार अद्वितीय होना चाहिए।"
+	},
+	{
+		"key": "The identity property key cannot exceed 250 chars.",
+		"value": "पहचान गुण कुंजी 250 वर्णों से अधिक नहीं हो सकती।"
+	},
+	{
+		"key": "The identity property key is required.",
+		"value": "पहचान गुण कुंजी आवश्यक है।"
+	},
+	{
+		"key": "The identity property key must be unique.",
+		"value": "पहचान गुण कुंजी अद्वितीय होनी चाहिए।"
+	},
+	{
+		"key": "The identity property value cannot exceed 2000 chars.",
+		"value": "पहचान गुण मान 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The identity property value is required.",
+		"value": "पहचान गुण मान आवश्यक है।"
+	},
+	{
+		"key": "The identity should provide at least one claim.",
+		"value": "पहचान को कम से कम एक क्लेम प्रदान करना चाहिए।"
+	},
+	{
+		"key": "The key is required.",
+		"value": "कुंजी आवश्यक है।"
+	},
+	{
+		"key": "The key '{0}' must be unique.",
+		"value": "कुंजी '{0}' अद्वितीय होनी चाहिए।"
+	},
+	{
+		"key": "The kind of provider is required.",
+		"value": "प्रदाता का प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The logo url cannot exceed 2000 char.",
+		"value": "लोगो url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The logo url is not valid.",
+		"value": "लोगो url मान्य नहीं है।"
+	},
+	{
+		"key": "The name cannot exceed 200 char.",
+		"value": "नाम 200 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The name cannot exceed 200 chars.",
+		"value": "नाम 200 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The name identifier is required",
+		"value": "नाम पहचानकर्ता आवश्यक है"
+	},
+	{
+		"key": "The name is required",
+		"value": "नाम आवश्यक है"
+	},
+	{
+		"key": "The name is required.",
+		"value": "नाम आवश्यक है।"
+	},
+	{
+		"key": "The new password and confirmation password do not match.",
+		"value": "नया पासवर्ड और पुष्टिकरण पासवर्ड मेल नहीं खाते।"
+	},
+	{
+		"key": "The password and confirmation password do not match.",
+		"value": "पासवर्ड और पुष्टिकरण पासवर्ड मेल नहीं खाते।"
+	},
+	{
+		"key": "The policy url cannot exceed 2000 char.",
+		"value": "नीति url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The policy url is not valid.",
+		"value": "नीति url मान्य नहीं है।"
+	},
+	{
+		"key": "The relying party is required.",
+		"value": "रिलाइंग पार्टी आवश्यक है।"
+	},
+	{
+		"key": "The role must be unique",
+		"value": "भूमिका अद्वितीय होनी चाहिए"
+	},
+	{
+		"key": "The role name is required",
+		"value": "भूमिका का नाम आवश्यक है"
+	},
+	{
+		"key": "The secret type is required.",
+		"value": "सीक्रेट प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The secret value is required.",
+		"value": "सीक्रेट मान आवश्यक है।"
+	},
+	{
+		"key": "The sheme is required.",
+		"value": "स्कीम आवश्यक है।"
+	},
+	{
+		"key": "The subject salt cannot exceed 250 char.",
+		"value": "सब्जेक्ट सॉल्ट 250 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The terms of service url cannot exceed 2000 char.",
+		"value": "सेवा की शर्तें url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The terms of service url is not valid.",
+		"value": "सेवा की शर्तें url मान्य नहीं है।"
+	},
+	{
+		"key": "The to claim tyoe is required.",
+		"value": "लक्ष्य क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The to claim type is required.",
+		"value": "लक्ष्य क्लेम प्रकार आवश्यक है।"
+	},
+	{
+		"key": "The to claim type must be an URI.",
+		"value": "लक्ष्य क्लेम प्रकार एक URI होना चाहिए।"
+	},
+	{
+		"key": "The token expression doesn't match a valid format. You can use the forms d.hh:mm:ss, hh.mm:ss, mm:ss, a number of days (365d), a number of hours (12h), a number of minutes (30m), a number of second",
+		"value": "टोकन अभिव्यक्ति किसी मान्य प्रारूप से मेल नहीं खाती। आप d.hh:mm:ss, hh.mm:ss, mm:ss प्रारूप, दिनों की संख्या (365d), घंटों की संख्या (12h), मिनटों की संख्या (30m), सेकंड की संख्या का उपयोग कर सकते हैं"
+	},
+	{
+		"key": "The token type is required",
+		"value": "टोकन प्रकार आवश्यक है"
+	},
+	{
+		"key": "The type of protocol cannot exceed 200 char.",
+		"value": "प्रोटोकॉल प्रकार 200 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The type of protocol is required",
+		"value": "प्रोटोकॉल प्रकार आवश्यक है"
+	},
+	{
+		"key": "The type of user code cannot exceed 100 char.",
+		"value": "उपयोगकर्ता कोड प्रकार 100 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The url cannot exceed 2000 char.",
+		"value": "url 2000 वर्णों से अधिक नहीं हो सकता।"
+	},
+	{
+		"key": "The url is not valid.",
+		"value": "url मान्य नहीं है।"
+	},
+	{
+		"key": "There are no login schemes configured for this client.",
+		"value": "इस क्लाइंट के लिए कोई लॉगिन स्कीम कॉन्फ़िगर नहीं की गई है।"
+	},
+	{
+		"key": "There was an error trying to log you in: '{0}'",
+		"value": "आपको लॉग इन कराने का प्रयास करते समय त्रुटि हुई: '{0}'"
+	},
+	{
+		"key": "There was an error trying to log you out: '{0}'",
+		"value": "आपको लॉग आउट कराने का प्रयास करते समय त्रुटि हुई: '{0}'"
+	},
+	{
+		"key": "This action only disables 2FA.",
+		"value": "यह क्रिया केवल 2FA को अक्षम करती है।"
+	},
+	{
+		"key": "This process disables 2FA until you verify your authenticator app. If you do not complete your authenticator app configuration you may lose access to your account.",
+		"value": "यह प्रक्रिया 2FA को तब तक अक्षम कर देती है जब तक आप अपने प्रमाणक ऐप को सत्यापित नहीं करते। यदि आप अपने प्रमाणक ऐप का कॉन्फ़िगरेशन पूरा नहीं करते हैं तो आप अपने खाते तक पहुँच खो सकते हैं।"
+	},
+	{
+		"key": "to claim type",
+		"value": "लक्ष्य क्लेम प्रकार"
+	},
+	{
+		"key": "To use an authenticator app go through the following steps:",
+		"value": "प्रमाणक ऐप का उपयोग करने के लिए निम्नलिखित चरणों का पालन करें:"
+	},
+	{
+		"key": "Token endpoint is required.",
+		"value": "टोकन एंडपॉइंट आवश्यक है।"
+	},
+	{
+		"key": "Token endpoint must be a valid uri.",
+		"value": "टोकन एंडपॉइंट एक मान्य uri होना चाहिए।"
+	},
+	{
+		"key": "token enpoint",
+		"value": "टोकन एंडपॉइंट"
+	},
+	{
+		"key": "token type",
+		"value": "टोकन प्रकार"
+	},
+	{
+		"key": "Tokens",
+		"value": "टोकन"
+	},
+	{
+		"key": "tokens",
+		"value": "टोकन"
+	},
+	{
+		"key": "two factor enabled",
+		"value": "दो-चरणीय सक्षम"
+	},
+	{
+		"key": "Two-factor authentication",
+		"value": "दो-चरणीय प्रमाणीकरण"
+	},
+	{
+		"key": "Two-factor authentication (2FA)",
+		"value": "दो-चरणीय प्रमाणीकरण (2FA)"
+	},
+	{
+		"key": "type",
+		"value": "प्रकार"
+	},
+	{
+		"key": "Unable to load user with ID '{0}'.",
+		"value": "आईडी '{0}' वाले उपयोगकर्ता को लोड नहीं किया जा सका।"
+	},
+	{
+		"key": "Uncheck the permissions you do not wish to grant.",
+		"value": "जो अनुमतियाँ आप देना नहीं चाहते उन्हें अनचेक करें।"
+	},
+	{
+		"key": "Unexpected error when trying to set phone number.",
+		"value": "फ़ोन नंबर सेट करने का प्रयास करते समय अप्रत्याशित त्रुटि।"
+	},
+	{
+		"key": "update access token on refresh",
+		"value": "रिफ्रेश पर एक्सेस टोकन अपडेट करें"
+	},
+	{
+		"key": "Update password",
+		"value": "पासवर्ड अपडेट करें"
+	},
+	{
+		"key": "uri",
+		"value": "uri"
+	},
+	{
+		"key": "Uri must be unique.",
+		"value": "Uri अद्वितीय होना चाहिए।"
+	},
+	{
+		"key": "urls",
+		"value": "url"
+	},
+	{
+		"key": "Use another service to register.",
+		"value": "पंजीकरण के लिए कोई अन्य सेवा उपयोग करें।"
+	},
+	{
+		"key": "use PKCE",
+		"value": "PKCE उपयोग करें"
+	},
+	{
+		"key": "use token lifetime",
+		"value": "टोकन जीवनकाल उपयोग करें"
+	},
+	{
+		"key": "User",
+		"value": "उपयोगकर्ता"
+	},
+	{
+		"key": "user",
+		"value": "उपयोगकर्ता"
+	},
+	{
+		"key": "User Code",
+		"value": "उपयोगकर्ता कोड"
+	},
+	{
+		"key": "user enpoint",
+		"value": "उपयोगकर्ता एंडपॉइंट"
+	},
+	{
+		"key": "User information endpoint is required.",
+		"value": "उपयोगकर्ता जानकारी एंडपॉइंट आवश्यक है।"
+	},
+	{
+		"key": "User information endpoint must be a valid uri.",
+		"value": "उपयोगकर्ता जानकारी एंडपॉइंट एक मान्य uri होना चाहिए।"
+	},
+	{
+		"key": "user name",
+		"value": "उपयोगकर्ता नाम"
+	},
+	{
+		"key": "Username",
+		"value": "उपयोगकर्ता नाम"
+	},
+	{
+		"key": "Users",
+		"value": "उपयोगकर्ता"
+	},
+	{
+		"key": "value",
+		"value": "मान"
+	},
+	{
+		"key": "Verification Code",
+		"value": "सत्यापन कोड"
+	},
+	{
+		"key": "Verification code is invalid.",
+		"value": "सत्यापन कोड अमान्य है।"
+	},
+	{
+		"key": "Verification email sent. Please check your email.",
+		"value": "सत्यापन ईमेल भेज दिया गया। कृपया अपना ईमेल देखें।"
+	},
+	{
+		"key": "Verify",
+		"value": "सत्यापित करें"
+	},
+	{
+		"key": "Welcome",
+		"value": "स्वागत है"
+	},
+	{
+		"key": "Would you like to logout of {0}?",
+		"value": "क्या आप {0} से लॉगआउट करना चाहेंगे?"
+	},
+	{
+		"key": "wreply ",
+		"value": "wreply"
+	},
+	{
+		"key": "wtrealm ",
+		"value": "wtrealm"
+	},
+	{
+		"key": "Wtrealm is required.",
+		"value": "Wtrealm आवश्यक है।"
+	},
+	{
+		"key": "Yes",
+		"value": "हाँ"
+	},
+	{
+		"key": "Yes, Allow",
+		"value": "हाँ, अनुमति दें"
+	},
+	{
+		"key": "You are logged out.",
+		"value": "आप लॉग आउट हो गए हैं।"
+	},
+	{
+		"key": "You are not authorize to import data.",
+		"value": "आप डेटा आयात करने के लिए अधिकृत नहीं हैं।"
+	},
+	{
+		"key": "You are now being returned to the application.",
+		"value": "अब आपको एप्लिकेशन पर वापस भेजा जा रहा है।"
+	},
+	{
+		"key": "You are now logged out",
+		"value": "अब आप लॉग आउट हो गए हैं"
+	},
+	{
+		"key": "You are revoking the key currently in use. Be sure what you're doing.",
+		"value": "आप वर्तमान में उपयोग में आ रही कुंजी निरस्त कर रहे हैं। सुनिश्चित करें कि आप क्या कर रहे हैं।"
+	},
+	{
+		"key": "You can <a href=\"{0}\">generate a new set of recovery codes</a>.",
+		"value": "आप <a href=\"{0}\">रिकवरी कोड का नया सेट जनरेट कर सकते हैं</a>।"
+	},
+	{
+		"key": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+		"value": "इस साइट के लिए आपके पास कोई स्थानीय उपयोगकर्ता नाम/पासवर्ड नहीं है। एक स्थानीय खाता जोड़ें ताकि आप बाहरी लॉगिन के बिना लॉग इन कर सकें।"
+	},
+	{
+		"key": "You do not have access to that resource.",
+		"value": "आपके पास उस संसाधन तक पहुँच नहीं है।"
+	},
+	{
+		"key": "You have 1 recovery code left.",
+		"value": "आपके पास 1 रिकवरी कोड शेष है।"
+	},
+	{
+		"key": "You have generated new recovery codes.",
+		"value": "आपने नए रिकवरी कोड जनरेट किए हैं।"
+	},
+	{
+		"key": "You have no recovery codes left.",
+		"value": "आपके पास कोई रिकवरी कोड शेष नहीं है।"
+	},
+	{
+		"key": "You have not given access to any applications",
+		"value": "आपने किसी भी एप्लिकेशन को पहुँच नहीं दी है"
+	},
+	{
+		"key": "You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.",
+		"value": "आपने रिकवरी कोड से लॉग इन करने का अनुरोध किया है। यह लॉगिन तब तक याद नहीं रखा जाएगा जब तक आप लॉग इन के समय प्रमाणक ऐप कोड नहीं देते या 2FA अक्षम करके फिर से लॉग इन नहीं करते।"
+	},
+	{
+		"key": "You have successfully authorized the device",
+		"value": "आपने डिवाइस को सफलतापूर्वक अधिकृत कर दिया है"
+	},
+	{
+		"key": "You must <a href=\"{0}\">generate a new set of recovery codes</a> before you can log in with a recovery code.",
+		"value": "रिकवरी कोड से लॉग इन करने से पहले आपको <a href=\"{0}\">रिकवरी कोड का नया सेट जनरेट करना</a> होगा।"
+	},
+	{
+		"key": "You should <a href=\"{0}\">generate a new set of recovery codes</a>",
+		"value": "आपको <a href=\"{0}\">रिकवरी कोड का नया सेट जनरेट करना चाहिए</a>"
+	},
+	{
+		"key": "Your account contains personal data that you have given us. This page allows you to download or delete that data.",
+		"value": "आपके खाते में वह व्यक्तिगत डेटा है जो आपने हमें दिया है। यह पृष्ठ आपको वह डेटा डाउनलोड करने या हटाने की सुविधा देता है।"
+	},
+	{
+		"key": "Your authenticator app has been verified.",
+		"value": "आपका प्रमाणक ऐप सत्यापित कर दिया गया है।"
+	},
+	{
+		"key": "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+		"value": "आपकी प्रमाणक ऐप कुंजी रीसेट कर दी गई है, आपको नई कुंजी से अपना प्रमाणक ऐप कॉन्फ़िगर करना होगा।"
+	},
+	{
+		"key": "Your email is unchanged.",
+		"value": "आपका ईमेल अपरिवर्तित है।"
+	},
+	{
+		"key": "Your login is protected with an authenticator app. Enter your authenticator code below.",
+		"value": "आपका लॉगिन एक प्रमाणक ऐप से सुरक्षित है। नीचे अपना प्रमाणक कोड दर्ज करें।"
+	},
+	{
+		"key": "Your password has been changed.",
+		"value": "आपका पासवर्ड बदल दिया गया है।"
+	},
+	{
+		"key": "Your password has been set.",
+		"value": "आपका पासवर्ड सेट कर दिया गया है।"
+	},
+	{
+		"key": "Your profile has been updated",
+		"value": "आपकी प्रोफ़ाइल अपडेट कर दी गई है"
+	},
+	{
+		"key": "You've successfully authenticated with <strong>{0}</strong>. Please enter an email address for this site below and click the Register button to finish logging in.",
+		"value": "आपने <strong>{0}</strong> से सफलतापूर्वक प्रमाणीकरण कर लिया है। कृपया नीचे इस साइट के लिए एक ईमेल पता दर्ज करें और लॉग इन पूरा करने के लिए पंजीकरण बटन पर क्लिक करें।"
+	},
+	{
+		"key": "{0} <small class=\"text-muted\">is requesting your permission</small>",
+		"value": "{0} <small class=\"text-muted\">आपकी अनुमति का अनुरोध कर रहा है</small>"
+	},
+	{
+		"key": "Verify that this identifier matches what the client is displaying:",
+		"value": "सत्यापित करें कि यह पहचानकर्ता उससे मेल खाता है जो क्लाइंट दिखा रहा है:"
+	},
+	{
+		"key": "Description or name of device",
+		"value": "डिवाइस का विवरण या नाम"
+	},
+	{
+		"key": "Will be available to these resource servers:",
+		"value": "इन संसाधन सर्वरों को उपलब्ध होगा:"
+	},
+	{
+		"key": "Binding Message",
+		"value": "बाइंडिंग संदेश"
+	},
+	{
+		"key": "Pending Backchannel Login Requests",
+		"value": "लंबित बैकचैनल लॉगिन अनुरोध"
+	},
+	{
+		"key": "No Pending Login Requests",
+		"value": "कोई लंबित लॉगिन अनुरोध नहीं"
+	},
+	{
+		"key": "Invalid login request id.",
+		"value": "अमान्य लॉगिन अनुरोध आईडी।"
+	},
+	{
+		"key": "SubjectIds don't match.",
+		"value": "SubjectId मेल नहीं खाते।"
+	},
+	{
+		"key": "Backchannel login requests",
+		"value": "बैकचैनल लॉगिन अनुरोध"
+	},
+	{
+		"key": "ciba requests",
+		"value": "ciba अनुरोध"
+	},
+	{
+		"key": "ciba lifetime",
+		"value": "ciba जीवनकाल"
+	},
+	{
+		"key": "polling interval",
+		"value": "पोलिंग अंतराल"
+	},
+	{
+		"key": "Below is the list of sessions you have opened.",
+		"value": "नीचे उन सत्रों की सूची है जो आपने खोले हैं।"
+	},
+	{
+		"key": "Below is the list of backchannel login requests awaiting your approbation.",
+		"value": "नीचे उन बैकचैनल लॉगिन अनुरोधों की सूची है जो आपकी स्वीकृति की प्रतीक्षा कर रहे हैं।"
+	},
+	{
+		"key": "Sessions",
+		"value": "सत्र"
+	},
+	{
+		"key": "Renewed",
+		"value": "नवीनीकृत"
+	},
+	{
+		"key": "Created",
+		"value": "बनाया गया"
+	},
+	{
+		"key": "Expires",
+		"value": "समाप्ति"
+	},
+	{
+		"key": "No session",
+		"value": "कोई सत्र नहीं"
+	},
+	{
+		"key": "allowed identity token signing algorithms",
+		"value": "अनुमत पहचान टोकन हस्ताक्षर एल्गोरिदम"
+	},
+	{
+		"key": "Reset password",
+		"value": "पासवर्ड रीसेट करें"
+	},
+	{
+		"key": "Reset your password.",
+		"value": "अपना पासवर्ड रीसेट करें।"
+	},
+	{
+		"key": "Reset",
+		"value": "रीसेट करें"
+	},
+	{
+		"key": "Reset password confirmation",
+		"value": "पासवर्ड रीसेट पुष्टि"
+	},
+	{
+		"key": "Your password has been reset.",
+		"value": "आपका पासवर्ड रीसेट कर दिया गया है।"
+	},
+	{
+		"key": "Please click here to log in",
+		"value": "लॉग इन करने के लिए कृपया यहाँ क्लिक करें"
+	},
+	{
+		"key": "Register as a new user",
+		"value": "नए उपयोगकर्ता के रूप में पंजीकरण करें"
+	},
+	{
+		"key": "Resend email confirmation",
+		"value": "ईमेल पुष्टिकरण पुनः भेजें"
+	},
+	{
+		"key": "Resend",
+		"value": "पुनः भेजें"
+	},
+	{
+		"key": "The machine account password is required.",
+		"value": "मशीन खाता पासवर्ड आवश्यक है।"
+	},
+	{
+		"key": "persist kerberos credentials",
+		"value": "kerberos क्रेडेंशियल्स सहेजे रखें"
+	},
+	{
+		"key": "persist ntlm credentials",
+		"value": "ntlm क्रेडेंशियल्स सहेजे रखें"
+	},
+	{
+		"key": "enable ldap",
+		"value": "ldap सक्षम करें"
+	},
+	{
+		"key": "domain",
+		"value": "डोमेन"
+	},
+	{
+		"key": "machine account name",
+		"value": "मशीन खाता नाम"
+	},
+	{
+		"key": "machine account password",
+		"value": "मशीन खाता पासवर्ड"
+	},
+	{
+		"key": "enable ldap claim resolution",
+		"value": "ldap क्लेम रिज़ॉल्यूशन सक्षम करें"
+	},
+	{
+		"key": "ignore nested groups",
+		"value": "नेस्टेड समूहों को अनदेखा करें"
+	},
+	{
+		"key": "claims cache absolute expiration",
+		"value": "क्लेम कैश निरपेक्ष समाप्ति"
+	},
+	{
+		"key": "claims cache sliding expiration",
+		"value": "क्लेम कैश स्लाइडिंग समाप्ति"
+	},
+	{
+		"key": "require resource indicator",
+		"value": "संसाधन संकेतक आवश्यक करें"
+	},
+	{
+		"key": "Are you sure you want to leave this page?",
+		"value": "क्या आप वाकई यह पृष्ठ छोड़ना चाहते हैं?"
+	},
+	{
+		"key": "clone",
+		"value": "क्लोन"
+	},
+	{
+		"key": "Clone of {0}",
+		"value": "{0} का क्लोन"
+	},
+	{
+		"key": "Scope of",
+		"value": "किसका स्कोप"
+	},
+	{
+		"key": "Allowed to",
+		"value": "किसे अनुमत"
+	},
+	{
+		"key": "scope of",
+		"value": "किसका स्कोप"
+	},
+	{
+		"key": "allowed to",
+		"value": "किसे अनुमत"
+	},
+	{
+		"key": "metadata",
+		"value": "मेटाडेटा"
+	},
+	{
+		"key": "Cannot have more than one URI per kind.",
+		"value": "प्रति प्रकार एक से अधिक URI नहीं हो सकते।"
+	},
+	{
+		"key": "Either a metadata or redirect URI must be set.",
+		"value": "या तो मेटाडेटा या रीडायरेक्ट URI सेट होना चाहिए।"
+	},
+	{
+		"key": "Either a metadata URI or a X509Certificate secret must be set.",
+		"value": "या तो मेटाडेटा URI या X509Certificate सीक्रेट सेट होना चाहिए।"
+	}
+]
