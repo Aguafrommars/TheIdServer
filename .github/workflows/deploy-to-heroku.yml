@@ -22,22 +22,17 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Install .NET sdk
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: 10
-          include-prerelease: true
-      - name: Setup wasm tools
-        run: dotnet workload install wasm-tools
-        env: 
-          GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
-      - name: Publish
-        run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA /nr:false /m:1
-      - name: Deploy to Heroku via Git
+      - name: Build and Push Docker image to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: "theidserver-duende"
         run: |
-          git remote add heroku https://x:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git
-          git push heroku HEAD:main --force
+          # 1. Installation rapide de la CLI Heroku
+          curl -s https://cli-assets.heroku.com/install.sh | sh
+      
+          # 2. Authentification et Build Docker (déjà disponible)
+          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
+          docker build -t registry.heroku.com/${HEROKU_APP_NAME}/web -f src/Aguacongas.TheIdServer.Duende/Dockerfile .
+          docker push registry.heroku.com/${HEROKU_APP_NAME}/web
+          heroku container:release web --app ${HEROKU_APP_NAME}
         
