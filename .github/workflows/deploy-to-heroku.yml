@@ -33,7 +33,6 @@ jobs:
           # 2. Authentification et Build Docker (déjà disponible)
           echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
           docker build -t registry.heroku.com/${HEROKU_APP_NAME}/web -f src/Aguacongas.TheIdServer.Duende/Dockerfile .
-          docker push registry.heroku.com/${HEROKU_APP_NAME}/web
-          heroku stack:set container
+          docker push registry.heroku.com/${HEROKU_APP_NAME}/web          
           heroku container:release web --app ${HEROKU_APP_NAME}
         
