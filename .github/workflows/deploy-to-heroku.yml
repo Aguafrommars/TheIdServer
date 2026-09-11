@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Install .NET sdk
         uses: actions/setup-dotnet@v6
         with:
@@ -31,9 +33,6 @@ jobs:
           GITHIB_FEED_TOKEN: ${{ secrets.GITHIB_FEED_TOKEN }}
       - name: Publish
         run: dotnet publish ./src/Aguacongas.TheIdServer.Duende/Aguacongas.TheIdServer.Duende.csproj --output ./heroku_output --configuration Release --runtime linux-x64 --sc -p:SourceRevisionId=$GITHUB_SHA /nr:false /m:1
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
       - name: Deploy to Heroku via Git
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
