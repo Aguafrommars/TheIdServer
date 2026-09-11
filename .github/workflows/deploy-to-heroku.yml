@@ -34,10 +34,11 @@ jobs:
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-      - name: Deploy
-        uses: akhileshns/heroku-deploy@v4
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "theidserver-duende"
-          heroku_email: "aguacongas@gmail.com"
+      - name: Deploy to Heroku via Git
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: "theidserver-duende"
+        run: |
+          git remote add heroku https://x:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git
+          git push heroku HEAD:main --force
         
