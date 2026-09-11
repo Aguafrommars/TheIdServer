@@ -35,10 +35,9 @@ jobs:
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
       - name: Deploy
-        uses: akhileshns/heroku-deploy@v4
+        uses: akhileshns/heroku-deploy@v3.15.15
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "theidserver-duende"
           heroku_email: "aguacongas@gmail.com"
-          branch: master
         
