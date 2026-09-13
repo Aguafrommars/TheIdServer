@@ -31,7 +31,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Api.Components
 
         protected override async Task<IEnumerable<string>> GetFilteredValues(string term, CancellationToken cancellationToken)
         {
-            _pageRequest.Filter = $"contains({nameof(Entity.Id)},'{term}')";
+            _pageRequest.Filter = ODataFilter.Contains(nameof(Entity.Id), term);
             var response = await _store.GetAsync(_pageRequest, cancellationToken)
                 .ConfigureAwait(false);
 

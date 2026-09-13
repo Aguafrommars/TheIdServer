@@ -36,7 +36,7 @@ namespace Aguacongas.IdentityServer.Store
         {
             var page = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(BackChannelAuthenticationRequest.SessionId)} eq '{requestId}'"
+                Filter = $"{nameof(BackChannelAuthenticationRequest.SessionId)} eq {ODataFilter.Literal(requestId)}"
             }, ct).ConfigureAwait(false);
 
             return CreateDto(page.Items.FirstOrDefault()?.Data);
@@ -48,10 +48,10 @@ namespace Aguacongas.IdentityServer.Store
 
         public async Task<IReadOnlyCollection<IsModels.BackChannelAuthenticationRequest>> GetLoginsForUserAsync(string subjectId, CancellationToken ct, string clientId = null)
         {
-            var filter = $"{nameof(BackChannelAuthenticationRequest.UserId)} eq '{subjectId}'";
+            var filter = $"{nameof(BackChannelAuthenticationRequest.UserId)} eq {ODataFilter.Literal(subjectId)}";
             if (clientId is not null)
             {
-                filter += $" And {nameof(BackChannelAuthenticationRequest.UserId)} eq '{clientId}'";
+                filter += $" And {nameof(BackChannelAuthenticationRequest.UserId)} eq {ODataFilter.Literal(clientId)}";
             }
 
             var page = await _store.GetAsync(new PageRequest

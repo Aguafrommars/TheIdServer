@@ -187,7 +187,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _userStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(User.Id)} eq '{userId}'"
+                Filter = $"{nameof(User.Id)} eq {ODataFilter.Literal(userId)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -212,7 +212,7 @@ namespace Aguacongas.TheIdServer.Identity
             ThrowIfDisposed();
             var response = await _userStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(User.NormalizedUserName)} eq '{normalizedUserName}'"
+                Filter = $"{nameof(User.NormalizedUserName)} eq {ODataFilter.Literal(normalizedUserName)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -238,7 +238,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserClaim.UserId)} eq '{user.Id}'"
+                Filter = $"{nameof(UserClaim.UserId)} eq {ODataFilter.Literal(user.Id)}"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(CreateClaim).ToList();
@@ -282,7 +282,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserClaim.UserId)} eq '{user.Id}' and {nameof(UserClaim.ClaimType)} eq '{claim.Type}' and {nameof(UserClaim.ClaimValue)} eq '{claim.Value}'"
+                Filter = $"{nameof(UserClaim.UserId)} eq {ODataFilter.Literal(user.Id)} and {nameof(UserClaim.ClaimType)} eq {ODataFilter.Literal(claim.Type)} and {nameof(UserClaim.ClaimValue)} eq {ODataFilter.Literal(claim.Value)}"
             }, cancellationToken).ConfigureAwait(false);
 
             foreach (var roleClaim in response.Items)
@@ -349,7 +349,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _loginStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserLogin.UserId)} eq '{user.Id}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
+                Filter = $"{nameof(UserLogin.UserId)} eq {ODataFilter.Literal(user.Id)} and {nameof(UserLogin.LoginProvider)} eq {ODataFilter.Literal(loginProvider)} and {nameof(UserLogin.ProviderKey)} eq {ODataFilter.Literal(providerKey)}"
             }, cancellationToken).ConfigureAwait(false);
 
             foreach (var login in response.Items)
@@ -374,7 +374,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _loginStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserLogin.UserId)} eq '{user.Id}'"
+                Filter = $"{nameof(UserLogin.UserId)} eq {ODataFilter.Literal(user.Id)}"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(l => new UserLoginInfo
@@ -424,7 +424,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _userStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(User.NormalizedEmail)} eq '{normalizedEmail}'"
+                Filter = $"{nameof(User.NormalizedEmail)} eq {ODataFilter.Literal(normalizedEmail)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -451,7 +451,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserClaim.ClaimType)} eq '{claim.Type}' and {nameof(UserClaim.ClaimValue)} eq '{claim.Value}'"
+                Filter = $"{nameof(UserClaim.ClaimType)} eq {ODataFilter.Literal(claim.Type)} and {nameof(UserClaim.ClaimValue)} eq {ODataFilter.Literal(claim.Value)}"
             }, cancellationToken).ConfigureAwait(false);
 
             var userList = new List<TUser>();
@@ -555,7 +555,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var response = await _loginStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserLogin.UserId)} eq '{userId}' and {nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
+                Filter = $"{nameof(UserLogin.UserId)} eq {ODataFilter.Literal(userId)} and {nameof(UserLogin.LoginProvider)} eq {ODataFilter.Literal(loginProvider)} and {nameof(UserLogin.ProviderKey)} eq {ODataFilter.Literal(providerKey)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -577,7 +577,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _loginStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserLogin.LoginProvider)} eq '{loginProvider}' and {nameof(UserLogin.ProviderKey)} eq '{providerKey}'"
+                Filter = $"{nameof(UserLogin.LoginProvider)} eq {ODataFilter.Literal(loginProvider)} and {nameof(UserLogin.ProviderKey)} eq {ODataFilter.Literal(providerKey)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -597,7 +597,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var response = await _tokenStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserToken.UserId)} eq '{user.Id}'"
+                Filter = $"{nameof(UserToken.UserId)} eq {ODataFilter.Literal(user.Id)}"
             }, cancellationToken).ConfigureAwait(false);
             return response.Items.Select(IdentityUserToken).ToList();
         }
@@ -623,7 +623,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             return _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserClaim.UserId)} eq '{user.Id}'"
+                Filter = $"{nameof(UserClaim.UserId)} eq {ODataFilter.Literal(user.Id)}"
             });
         }
 
@@ -631,7 +631,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var response = await _loginStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserLogin.UserId)} eq '{userId}'"
+                Filter = $"{nameof(UserLogin.UserId)} eq {ODataFilter.Literal(userId)}"
             }).ConfigureAwait(false);
             return response.Items.Select(CreateIdentityUserLogin).ToList();
         }

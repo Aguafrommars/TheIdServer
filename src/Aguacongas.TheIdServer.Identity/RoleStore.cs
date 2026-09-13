@@ -189,7 +189,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _roleStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(Role.Id)} eq '{roleId}'"
+                Filter = $"{nameof(Role.Id)} eq {ODataFilter.Literal(roleId)}"
             }, cancellationToken).ConfigureAwait(false);
             if (response.Items.Any())
             {
@@ -211,7 +211,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _roleStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
+                Filter = $"{nameof(Role.NormalizedName)} eq {ODataFilter.Literal(normalizedRoleName)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (response.Items.Any())
@@ -289,7 +289,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}'"
+                Filter = $"{nameof(RoleClaim.RoleId)} eq {ODataFilter.Literal(role.Id)}"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(CreateClaim).ToList();
@@ -326,7 +326,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var response = await _claimStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(RoleClaim.RoleId)} eq '{role.Id}' and {nameof(RoleClaim.ClaimType)} eq '{claim.Type}' and {nameof(RoleClaim.ClaimValue)} eq '{claim.Value}'"
+                Filter = $"{nameof(RoleClaim.RoleId)} eq {ODataFilter.Literal(role.Id)} and {nameof(RoleClaim.ClaimType)} eq {ODataFilter.Literal(claim.Type)} and {nameof(RoleClaim.ClaimValue)} eq {ODataFilter.Literal(claim.Value)}"
             }, cancellationToken).ConfigureAwait(false);
 
             foreach(var roleClaim in response.Items)

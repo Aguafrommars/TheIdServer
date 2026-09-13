@@ -360,7 +360,7 @@ namespace Aguacongas.TheIdServer.Identity
 
             var userRoles = await _userRoleStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserRole.RoleId)} eq '{roleEntity.Id}'"
+                Filter = $"{nameof(UserRole.RoleId)} eq {ODataFilter.Literal(roleEntity.Id)}"
             }, cancellationToken).ConfigureAwait(false);
             
             var userList = new List<TUser>();
@@ -421,7 +421,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var respone = await _roleStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(Role.NormalizedName)} eq '{normalizedRoleName}'"
+                Filter = $"{nameof(Role.NormalizedName)} eq {ODataFilter.Literal(normalizedRoleName)}"
             }, cancellationToken).ConfigureAwait(false);
 
             if (respone.Items.Any())
@@ -513,7 +513,7 @@ namespace Aguacongas.TheIdServer.Identity
         {
             var response = await _userRoleStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserRole.UserId)} eq '{userId}'"
+                Filter = $"{nameof(UserRole.UserId)} eq {ODataFilter.Literal(userId)}"
             }, cancellationToken).ConfigureAwait(false);
 
             return response.Items.Select(CreateIdentityUserRole).ToList();
