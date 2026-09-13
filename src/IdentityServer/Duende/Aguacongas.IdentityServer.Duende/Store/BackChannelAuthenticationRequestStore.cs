@@ -51,7 +51,7 @@ namespace Aguacongas.IdentityServer.Store
             var filter = $"{nameof(BackChannelAuthenticationRequest.UserId)} eq {ODataFilter.Literal(subjectId)}";
             if (clientId is not null)
             {
-                filter += $" And {nameof(BackChannelAuthenticationRequest.UserId)} eq {ODataFilter.Literal(clientId)}";
+                filter += $" and {nameof(BackChannelAuthenticationRequest.ClientId)} eq {ODataFilter.Literal(clientId)}";
             }
 
             var page = await _store.GetAsync(new PageRequest
