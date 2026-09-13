@@ -122,10 +122,14 @@ namespace Aguacongas.IdentityServer.Store
 
         protected virtual async Task<TEntity> GetEntityBySubjectAndClient(string subjectId, string clientId, CancellationToken ct)
         {
-            return (await _store.GetAsync(new PageRequest
+            var entity = (await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(UserConsent.UserId)} eq '{subjectId}' and {nameof(UserConsent.ClientId)} eq '{clientId}'"
+                Filter = $"{nameof(UserConsent.UserId)} eq {ODataFilter.Literal(subjectId)} and {nameof(UserConsent.ClientId)} eq {ODataFilter.Literal(clientId)}"
             }, ct).ConfigureAwait(false)).Items.FirstOrDefault();
+
+            // The store contract is to return the row matching the requested subject and client.
+            // Verify it in case a defensive regression ever makes the query wider.
+            return entity != null && entity.UserId == subjectId && entity.ClientId == clientId ? entity : null;
         }
 
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Cannot be null")]

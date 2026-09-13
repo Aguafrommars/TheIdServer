@@ -64,7 +64,9 @@ public class RefreshTokenStoreTest
                 [
                     new RefreshToken
                     {
-                        Id = "id"
+                        Id = "id",
+                        UserId = "test",
+                        ClientId = "test"
                     }
                 ]
             })

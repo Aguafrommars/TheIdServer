@@ -90,7 +90,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
                     registration.ClientNames?.FirstOrDefault()?.Value ?? Guid.NewGuid().ToString();
             var existing = await _clientStore.GetAsync(clientName, null).ConfigureAwait(false);
             registration.Id = existing != null ? Guid.NewGuid().ToString() : clientName;
-            registration.Id = registration.Id.Contains(' ') ? Guid.NewGuid().ToString() : registration.Id;
+            registration.Id = string.IsNullOrWhiteSpace(registration.Id) || registration.Id.Any(char.IsWhiteSpace)
+                ? Guid.NewGuid().ToString()
+                : registration.Id;
             string secret = null;
 
             var serializerSettings = new JsonSerializerSettings
@@ -307,12 +309,12 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var discovery = await _discoveryResponseGenerator.CreateDiscoveryDocumentAsync(uri, uri, cancellationToken).ConfigureAwait(false);
             Validate(registration, discovery);
             await UpdateClient(registration, client).ConfigureAwait(false);
-            await UpdateRedirectUris(clientId, registration).ConfigureAwait(false);
-            await UpdateGrantTypes(clientId, registration).ConfigureAwait(false);
+            await UpdateRedirectUris(client.Id, registration).ConfigureAwait(false);
+            await UpdateGrantTypes(client.Id, registration).ConfigureAwait(false);
 
             var resourceResponse = await _clientResourceStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
+                Filter = $"{nameof(ClientLocalizedResource.ClientId)} eq {ODataFilter.Literal(client.Id)}"
             }, cancellationToken).ConfigureAwait(false);
 
             var items = resourceResponse.Items;
@@ -333,7 +335,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             await AddResourceAsync(clientId, items, policyUriList).ConfigureAwait(false);
             await AddResourceAsync(clientId, items, tosUriList).ConfigureAwait(false);
 
-            await UpdatePropertiesAsync(clientId, registration).ConfigureAwait(false);
+            await UpdatePropertiesAsync(client.Id, registration).ConfigureAwait(false);
 
             registration.RegistrationToken = null;
             registration.RegistrationUri = null;
@@ -471,7 +473,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             var propertiesResponse = await _clientPropertyStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ClientProperty.ClientId)} eq '{clientId}' and ({nameof(ClientProperty.Key)} eq 'contacts' or {nameof(ClientProperty.Key)} eq 'responseTypes')"
+                Filter = $"{nameof(ClientProperty.ClientId)} eq {ODataFilter.Literal(clientId)} and ({nameof(ClientProperty.Key)} eq 'contacts' or {nameof(ClientProperty.Key)} eq 'responseTypes')"
             }).ConfigureAwait(false);
             await UpdatePropertyAsync(clientId, registration, propertiesResponse, registration.Contacts != null ? string.Join("; ", registration.Contacts) : null, "contacts").ConfigureAwait(false);
             await UpdatePropertyAsync(clientId, registration, propertiesResponse, registration.ResponseTypes != null ? string.Join("; ", registration.ResponseTypes) : null, "responseType").ConfigureAwait(false);
@@ -525,7 +527,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             var grantTypeResponse = await _clientGrantTypeStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ClientGrantType.ClientId)} eq '{clientId}'"
+                Filter = $"{nameof(ClientGrantType.ClientId)} eq {ODataFilter.Literal(clientId)}"
             }).ConfigureAwait(false);
             foreach (var item in grantTypeResponse.Items.Where(item => !registration.GrantTypes.Any(g => g == item.GrantType)))
             {
@@ -547,7 +549,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
         {
             var redirectUriResponse = await _clientUriStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ClientUri.ClientId)} eq '{clientId}'"
+                Filter = $"{nameof(ClientUri.ClientId)} eq {ODataFilter.Literal(clientId)}"
             }).ConfigureAwait(false);
 
             foreach (var item in redirectUriResponse.Items.Where(item => !registration.RedirectUris.Any(u => u == item.Uri)))

@@ -36,7 +36,7 @@ namespace Aguacongas.TheIdServer.Authentication
 
         public async Task<TSchemeDefinition> FindBySchemeAsync(string scheme, CancellationToken cancellationToken = default)
         {
-            var response = await _store.GetAsync(new PageRequest { Filter = $"{nameof(ExternalProvider.Id)} eq '{scheme}'" }, cancellationToken)
+            var response = await _store.GetAsync(new PageRequest { Filter = $"{nameof(ExternalProvider.Id)} eq {ODataFilter.Literal(scheme)}" }, cancellationToken)
                 .ConfigureAwait(false);
 
             return response.Items.Select(FromEntity).FirstOrDefault();

@@ -89,7 +89,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                 };
             }
 
-            _idPageRequest.Filter = $"contains({nameof(EntityNS.IdentityResource.Id)},'{term}') or contains({nameof(EntityNS.IdentityResource.DisplayName)},'{term}')";
+            _idPageRequest.Filter = $"{ODataFilter.Contains(nameof(EntityNS.IdentityResource.Id), term)} or {ODataFilter.Contains(nameof(EntityNS.IdentityResource.DisplayName), term)}";
             var identityResponse = await _identityStore.GetAsync(_idPageRequest, cancellationToken).ConfigureAwait(false);
             return identityResponse;
         }
@@ -105,7 +105,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
                 };
             }
 
-            _scopeRequest.Filter = $"contains({nameof(EntityNS.ApiScope.Id)},'{term}') or contains({nameof(EntityNS.ApiScope.DisplayName)},'{term}')";
+            _scopeRequest.Filter = $"{ODataFilter.Contains(nameof(EntityNS.ApiScope.Id), term)} or {ODataFilter.Contains(nameof(EntityNS.ApiScope.DisplayName), term)}";
             return await _apiScopeStore.GetAsync(_scopeRequest, cancellationToken).ConfigureAwait(false);
         }
 
@@ -131,7 +131,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
         {
             var identityResponse = await _identityStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(EntityNS.IdentityResource.Id)} eq '{Entity.Scope}'",
+                Filter = $"{nameof(EntityNS.IdentityResource.Id)} eq {ODataFilter.Literal(Entity.Scope)}",
                 Take = 0
             }).ConfigureAwait(false);
             if (identityResponse.Count != 0)
@@ -142,7 +142,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.Client.Components
 
             var apiScopeResponse = await _apiScopeStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(EntityNS.ApiScope.Id)} eq '{Entity.Scope}'",
+                Filter = $"{nameof(EntityNS.ApiScope.Id)} eq {ODataFilter.Literal(Entity.Scope)}",
                 Take = 0
             }).ConfigureAwait(false);
             if (apiScopeResponse.Count != 0)

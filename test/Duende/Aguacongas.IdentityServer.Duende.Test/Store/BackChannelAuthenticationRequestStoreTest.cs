@@ -223,9 +223,7 @@ public class BackChannelAuthenticationRequestStoreTest
 
         await sut.GetLoginsForUserAsync(subjectId, default, clientId);
 
-        // Reflects the current implementation, which appends a second "UserId eq" clause
-        // rather than filtering on ClientId. Update this assertion if that is fixed.
-        Assert.Equal($"UserId eq '{subjectId}' And UserId eq '{clientId}'", capturedRequest.Filter);
+        Assert.Equal($"UserId eq '{subjectId}' and ClientId eq '{clientId}'", capturedRequest.Filter);
     }
 
     [Fact]

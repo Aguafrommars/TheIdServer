@@ -26,7 +26,9 @@ public class UserConsentStoreTest
                 [
                     new UserConsent
                     {
-                        Id = "id"
+                        Id = "id",
+                        UserId = "test",
+                        ClientId = "test"
                     }
                 ]
             })
@@ -53,7 +55,9 @@ public class UserConsentStoreTest
                 [
                     new UserConsent
                     {
-                        Id = "id"
+                        Id = "id",
+                        UserId = "test",
+                        ClientId = "test"
                     }
                 ]
             })

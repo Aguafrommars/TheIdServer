@@ -68,7 +68,7 @@ namespace Aguacongas.IdentityServer.Admin.Services
             var claims = new List<Claim>(externalUser.Claims.Count());
             var transformationsResponse = await _claimTransformationStore.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ExternalClaimTransformation.Scheme)} eq '{provider}'"
+                Filter = $"{nameof(ExternalClaimTransformation.Scheme)} eq {ODataFilter.Literal(provider)}"
             }).ConfigureAwait(false);
             
             var externalProvider = await _externalProviderStore.GetAsync(provider, new GetRequest()).ConfigureAwait(false);
