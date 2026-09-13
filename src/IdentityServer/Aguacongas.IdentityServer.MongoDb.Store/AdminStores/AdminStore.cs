@@ -223,7 +223,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store
             {
                     new PageRequest
                     {
-                        Filter = $"{GetSubEntityParentIdName(_entityType)} eq '{entity.Id}'",
+                        Filter = $"{GetSubEntityParentIdName(_entityType)} eq {ODataFilter.Literal(entity.Id)}",
                         Take = null
                     },
                     null

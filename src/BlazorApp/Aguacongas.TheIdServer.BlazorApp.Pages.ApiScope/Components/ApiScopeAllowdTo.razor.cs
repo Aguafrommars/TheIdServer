@@ -37,7 +37,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages.ApiScope.Components
             var page = await ClientStore.GetAsync(new PageRequest
             {
                 Select = nameof(Entity.Client.Id),
-                Filter = $"{nameof(Entity.ClientScope.Scope)} eq '{Model.Id}'"
+                Filter = $"{nameof(Entity.ClientScope.Scope)} eq {ODataFilter.Literal(Model.Id)}"
             }).ConfigureAwait(false);
             _clients = page.Items;
             await base.OnParametersSetAsync().ConfigureAwait(false);

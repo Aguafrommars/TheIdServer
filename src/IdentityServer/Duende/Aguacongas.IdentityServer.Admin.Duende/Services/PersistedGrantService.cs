@@ -71,7 +71,7 @@ public class PersistedGrantService(IAdminStore<Entity.AuthorizationCode> authori
     {
         var request = new PageRequest
         {
-            Filter = $"{nameof(Entity.IGrant.UserId)} eq '{subjectId}'"
+            Filter = $"{nameof(Entity.IGrant.UserId)} eq {ODataFilter.Literal(subjectId)}"
         };
 
         var consentList = (await _userConsentStore.GetAsync(request, ct).ConfigureAwait(false)).Items
@@ -135,14 +135,14 @@ public class PersistedGrantService(IAdminStore<Entity.AuthorizationCode> authori
     /// <returns></returns>
     public async Task RemoveAllGrantsAsync(string subjectId, CancellationToken ct, string clientId = null, string sessionId = null)
     {
-        var filter = $"{nameof(Entity.IGrant.UserId)} eq '{subjectId}'";
+        var filter = $"{nameof(Entity.IGrant.UserId)} eq {ODataFilter.Literal(subjectId)}";
         if (clientId != null)
         {
-            filter += $" and {nameof(Entity.IGrant.ClientId)} eq '{clientId}'";
+            filter += $" and {nameof(Entity.IGrant.ClientId)} eq {ODataFilter.Literal(clientId)}";
         }
         if (sessionId != null)
         {
-            filter += $" and {nameof(Entity.IGrant.SessionId)} eq '{sessionId}'";
+            filter += $" and {nameof(Entity.IGrant.SessionId)} eq {ODataFilter.Literal(sessionId)}";
         }
         var request = new PageRequest
         {

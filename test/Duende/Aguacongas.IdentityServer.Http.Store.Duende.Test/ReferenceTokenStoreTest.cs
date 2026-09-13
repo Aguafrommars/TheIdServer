@@ -108,7 +108,10 @@ public class ReferenceTokenStoreTest
                 Count = 1,
                 Items =
                 [
-                    new ReferenceToken()
+                    new ReferenceToken
+                    {
+                        ClientId = "test"
+                    }
                 ]
             })
             .Verifiable();

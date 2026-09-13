@@ -1,7 +1,6 @@
 ﻿using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aguacongas.IdentityServer.Admin.Duende.Services;
@@ -24,14 +23,7 @@ internal class VerifyRegistrationTokenService(IAdminStore<Client> store) : IVeri
     /// <returns></returns>
     public async Task<bool> ClientExistsAsync(string clientId)
     {
-        var clientResponse = await store.GetAsync(new PageRequest
-        {
-            Filter = $"{nameof(Client.Id)} eq '{clientId}'",
-            Select = $"{nameof(Client.Id)},{nameof(Client.RegistrationToken)}",
-            Take = 1
-        }).ConfigureAwait(false);
-
-        var client = clientResponse.Items.FirstOrDefault();
+        var client = await store.GetAsync(clientId, new GetRequest()).ConfigureAwait(false);
         if (client != null)
         {
             CurrentClient = client;

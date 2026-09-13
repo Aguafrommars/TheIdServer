@@ -32,7 +32,7 @@ namespace Aguacongas.IdentityServer.Store
             {
                 var entity = (await _store.GetAsync(new PageRequest
                 {
-                    Filter = $"{nameof(ReferenceToken.UserId)} eq '{subjectId}' and {nameof(ReferenceToken.ClientId)} eq '{clientId}' and {nameof(ReferenceToken.SessionId)} eq '{sessionId}'"
+                    Filter = $"{nameof(ReferenceToken.UserId)} eq {ODataFilter.Literal(subjectId)} and {nameof(ReferenceToken.ClientId)} eq {ODataFilter.Literal(clientId)} and {nameof(ReferenceToken.SessionId)} eq {ODataFilter.Literal(sessionId)}"
                 }, ct).ConfigureAwait(false)).Items.FirstOrDefault();
 
                 await RemoveEntityAsync(entity).ConfigureAwait(false);

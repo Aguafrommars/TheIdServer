@@ -1231,6 +1231,119 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
             }
         }
 
+        // Verify GHSA-hrqg-j45w-mx92 is fixed
+        [Fact]
+        public async Task Register_should_not_delete_other_clients_with_filter_injection()
+        {
+            _factory.Services.GetRequiredService<TestUserService>()
+                    .SetTestUser(true, new Claim[]
+                    {
+                        new Claim(JwtClaimTypes.Role, SharedConstants.WRITERPOLICY),
+                        new Claim(JwtClaimTypes.Scope, SharedConstants.ADMINSCOPE)
+                    });
+
+            var client = _factory.CreateClient();
+            var victimId = $"victim-{Guid.NewGuid():N}";
+
+            var victimRegistration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = victimId
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "https://localhost/victim/cb"
+                },
+                GrantTypes = new List<string>
+                {
+                    "authorization_code"
+                }
+            };
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(victimRegistration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                victimRegistration = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(victimRegistration?.RegistrationToken);
+                Assert.Equal(victimId, victimRegistration.Id);
+            }
+
+            var payload = "!a'\u00A0or\u00A0Id\u00A0ne\u00A0'zzz";
+            var attackerRegistration = new ClientRegisteration
+            {
+                ClientNames = new List<LocalizableProperty>
+                {
+                    new LocalizableProperty
+                    {
+                        Value = payload
+                    },
+                },
+                RedirectUris = new List<string>
+                {
+                    "https://localhost/attacker/cb"
+                },
+                GrantTypes = new List<string>
+                {
+                    "authorization_code"
+                }
+            };
+
+            ClientRegisteration registeredAttacker = null;
+            using (var request = new StringContent(JsonConvert.SerializeObject(attackerRegistration), Encoding.UTF8, "application/json"))
+            {
+                using var response = await client.PostAsync("/api/register", request);
+
+                var content = await response.Content.ReadAsStringAsync();
+                registeredAttacker = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+                Assert.NotNull(registeredAttacker?.RegistrationToken);
+                Assert.NotEqual(payload, registeredAttacker.Id);
+                Assert.DoesNotContain(registeredAttacker.Id, static c => char.IsWhiteSpace(c));
+            }
+
+            using (var request = new StringContent(JsonConvert.SerializeObject(attackerRegistration), Encoding.UTF8, "application/json"))
+            {
+                using var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    Content = request,
+                    RequestUri = new Uri($"{registeredAttacker!.RegistrationUri!.Split("/api/register/")[0]}/api/register/{Uri.EscapeDataString(payload)}")
+                };
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", registeredAttacker.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            }
+
+            using (var message = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(victimRegistration!.RegistrationUri)
+            })
+            {
+                message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", victimRegistration.RegistrationToken);
+
+                using var response = await client.SendAsync(message);
+
+                var content = await response.Content.ReadAsStringAsync();
+                var victim = JsonConvert.DeserializeObject<ClientRegisteration>(content);
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Assert.Contains("https://localhost/victim/cb", victim?.RedirectUris);
+                Assert.Contains("authorization_code", victim?.GrantTypes);
+            }
+        }
+
         // Verify GHSA-r375-gp8f-mm36 is fixed
         [Fact]
         public async Task DeleteAsync_random_registration_token__should_not_delete_client()

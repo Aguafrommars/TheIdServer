@@ -71,7 +71,7 @@ namespace Aguacongas.TheIdServer.BlazorApp.Pages
 
         protected PageRequest ExportRequest => new()
         {
-            Filter = $"{nameof(IEntityId.Id)} eq '{Id}'",
+            Filter = $"{nameof(IEntityId.Id)} eq {ODataFilter.Literal(Id)}",
             Expand = Expand
         };
 

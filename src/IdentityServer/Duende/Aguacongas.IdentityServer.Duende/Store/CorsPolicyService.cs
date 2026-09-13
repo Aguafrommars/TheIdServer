@@ -37,7 +37,7 @@ namespace Aguacongas.IdentityServer.Store
             var sanetized = $"{corsUri.Scheme.ToUpperInvariant()}://{corsUri.Host.ToUpperInvariant()}:{corsUri.Port}";
             var response = await _store.GetAsync(new PageRequest
             {
-                Filter = $"{nameof(ClientUri.SanetizedCorsUri)} eq '{sanetized}'",
+                Filter = $"{nameof(ClientUri.SanetizedCorsUri)} eq {ODataFilter.Literal(sanetized)}",
                 Select = nameof(ClientUri.SanetizedCorsUri)
             }, ct).ConfigureAwait(false);
             return response.Count > 0;
