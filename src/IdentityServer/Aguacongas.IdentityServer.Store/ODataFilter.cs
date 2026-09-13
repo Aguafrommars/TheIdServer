@@ -15,7 +15,7 @@ namespace Aguacongas.IdentityServer.Store
         /// <returns>The escaped literal.</returns>
         public static string Literal(string value)
         {
-            return value == null ? "null" : $"'{value.Replace("'", "''")}'";
+            return value == null ? "''" : $"'{value.Replace("'", "''")}'";
         }
 
         /// <summary>
