@@ -170,7 +170,7 @@ locals {
         }
         # override dynamic client registration options
         DynamicClientRegistrationOptions = {
-          Protected = false
+          Protected = true
         }
         # override serilog settings
         Serilog = {
