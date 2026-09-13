@@ -1,3 +1,32 @@
+## [11.0.2](https://github.com/Aguafrommars/TheIdServer/compare/11.0.1...11.0.2) (2026-09-13)
+
+
+### Bug Fixes
+
+* **security:** escape OData filter values to prevent injection ([63d7f46](https://github.com/Aguafrommars/TheIdServer/commit/63d7f46db30245d5bebfa5d303740a4b42636879))
+* filter backchannel authentication requests by client id ([17e314c](https://github.com/Aguafrommars/TheIdServer/commit/17e314c8e30a35907a8140fb5b3ef122fbedfe2b))
+* restore empty string literal for null OData filter values ([58b6e4c](https://github.com/Aguafrommars/TheIdServer/commit/58b6e4ccb7087caaf26331b348d30794cd3b28b7))
+* **docker:** update nginx base image to patched version ([c267c8a](https://github.com/Aguafrommars/TheIdServer/commit/c267c8a193c6639cb309f9f6a95ef87f8dea1d74))
+* update pacakges ([62259d0](https://github.com/Aguafrommars/TheIdServer/commit/62259d0d9196ebb55d326d4bef3f8b3c87807b38))
+* update pacakges ([38bdb5b](https://github.com/Aguafrommars/TheIdServer/commit/38bdb5befc737e6adb0b0098178d53293dcb32ca))
+* update packages ([3513171](https://github.com/Aguafrommars/TheIdServer/commit/3513171315f6b4c4a8eedc1db8f5f5fa023ddb1f))
+* update packages ([f5ffc52](https://github.com/Aguafrommars/TheIdServer/commit/f5ffc521253e883f588ac63fe2a9b56ba10b8853))
+* update packages ([403fe20](https://github.com/Aguafrommars/TheIdServer/commit/403fe205c14785a4d854d9426fe31517094088de))
+* update packages ([6522289](https://github.com/Aguafrommars/TheIdServer/commit/65222897c348a42e9a2bc7cac09307a068234e82))
+* update packages ([2dd37a0](https://github.com/Aguafrommars/TheIdServer/commit/2dd37a00b4628d13311194f4f7910c70306bc1ed))
+* update packages ([6ed67a0](https://github.com/Aguafrommars/TheIdServer/commit/6ed67a0fc625c5cf04c1f76fafd704dbaf83fb6e))
+* update packages ([6006079](https://github.com/Aguafrommars/TheIdServer/commit/6006079b44d4f10d56a6785e37c051efddd0fb95))
+* update packages ([b3ec451](https://github.com/Aguafrommars/TheIdServer/commit/b3ec45178f71d4562b7eb477000cce61be81bf69))
+* update packages ([5d4605c](https://github.com/Aguafrommars/TheIdServer/commit/5d4605c63e8f601b339966a843c9f1d5242c87c6))
+* update packages ([a97b7d0](https://github.com/Aguafrommars/TheIdServer/commit/a97b7d011e929fdd347e3e9523f66d4531da81c7))
+* update packages ([cd78300](https://github.com/Aguafrommars/TheIdServer/commit/cd783007bb92c28b874e9f75c29d64bc87132aa7))
+* update packages ([a11e073](https://github.com/Aguafrommars/TheIdServer/commit/a11e0731650ecf7b4008b0ab2d8996673d0b3571))
+* update packages ([7c70b65](https://github.com/Aguafrommars/TheIdServer/commit/7c70b6501b793cde1b370854e6508582b5713de6))
+* update packages ([0f5dc18](https://github.com/Aguafrommars/TheIdServer/commit/0f5dc18d70b7e693ae52e89a84c11005855e7bb3))
+* update packages ([1c0e47f](https://github.com/Aguafrommars/TheIdServer/commit/1c0e47f0cdfe90f1ad18ae7cd58dd29c15438416))
+* update packages ([f1d7a49](https://github.com/Aguafrommars/TheIdServer/commit/f1d7a49b1f24e5627a5e578649b3a78ce366764e))
+* update packages ([32cd0e6](https://github.com/Aguafrommars/TheIdServer/commit/32cd0e608402ee4483c7a6963dc4d2fbacd4d7b8))
+
 ## [11.0.1](https://github.com/Aguafrommars/TheIdServer/compare/11.0.0...11.0.1) (2026-09-11)
 
 
