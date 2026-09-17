@@ -24,7 +24,7 @@
 		<PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.10.1" />
 		<PackageReference Include="Azure.Identity" Version="1.21.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.Identity.Client" Version="4.89.0" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.90.0" />
         <PackageReference Include="MongoDB.Driver" Version="3.11.2" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.22.0" />
         <PackageReference Include="RavenDB.Client" Version="7.2.6" />
