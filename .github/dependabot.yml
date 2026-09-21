@@ -28,13 +28,14 @@ updates:
       actions-deps:
         patterns:
           - "*"
-    assignees:
-      - "olivier lefebvre"
     labels:
       - "dependencies"
       - "github-actions"
     commit-message:
       prefix: "chore(ci)"
+    ignore:
+      - dependency-name: "akhileshns/heroku-deploy"
+        update-types: ["version-update:semver-major"]
 
   # NPM packages (for JS/TS security checks)
   - package-ecosystem: "npm"
