@@ -1,3 +1,10 @@
+## [11.0.3](https://github.com/Aguafrommars/TheIdServer/compare/11.0.2...11.0.3) (2026-10-26)
+
+
+### Bug Fixes
+
+* dependabot ignore heroku-deploy ([bf1c71a](https://github.com/Aguafrommars/TheIdServer/commit/bf1c71acddd0098f9c6577dce4123c9f465a9748))
+
 ## [11.0.2](https://github.com/Aguafrommars/TheIdServer/compare/11.0.1...11.0.2) (2026-09-13)
 
 
