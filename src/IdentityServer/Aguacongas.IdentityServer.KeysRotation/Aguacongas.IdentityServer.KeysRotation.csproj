@@ -16,19 +16,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.4" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.5" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.12" />
-		<PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.10.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.14" />
+		<PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.10.2" />
 		<PackageReference Include="Azure.Identity" Version="1.21.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.Identity.Client" Version="4.89.0" />
-        <PackageReference Include="MongoDB.Driver" Version="3.11.2" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.22.0" />
-        <PackageReference Include="RavenDB.Client" Version="7.2.6" />
-        <PackageReference Include="StackExchange.Redis" Version="3.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.14" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.91.1" />
+        <PackageReference Include="MongoDB.Driver" Version="3.13.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.23.0" />
+        <PackageReference Include="RavenDB.Client" Version="7.2.7" />
+        <PackageReference Include="StackExchange.Redis" Version="3.4.20" />
     </ItemGroup>
 	<ItemGroup>
         <None Include="package-icon.png" Pack="true" PackagePath="" />

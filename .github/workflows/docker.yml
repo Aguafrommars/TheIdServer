@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: "WyriHaximus/github-action-get-previous-tag@v2"
         with:
           fallback: 1.0.0
       - name: Build and push TheIdServer Duende
@@ -65,7 +65,7 @@ jobs:
           fetch-depth: 0
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: "WyriHaximus/github-action-get-previous-tag@v2"
         with:
           fallback: 1.0.0
       - name: Build and push TheIdServerApp
