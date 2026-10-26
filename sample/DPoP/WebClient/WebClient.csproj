@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="4.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.12" />
+        <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="4.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.14" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     </ItemGroup>
 

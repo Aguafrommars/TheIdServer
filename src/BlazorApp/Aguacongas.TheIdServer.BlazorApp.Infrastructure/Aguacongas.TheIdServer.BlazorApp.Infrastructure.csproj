@@ -19,10 +19,12 @@
 		<PackageReference Include="Aguacongas.DynamicConfiguration.Razor" Version="3.1.0" />
 
 		<PackageReference Include="IdentityModel" Version="7.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.12" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.12" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.14" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
