@@ -13,6 +13,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.5" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
