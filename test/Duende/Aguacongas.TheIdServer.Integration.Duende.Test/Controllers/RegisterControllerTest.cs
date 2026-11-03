@@ -627,7 +627,7 @@ namespace Aguacongas.TheIdServer.Integration.Duende.Test.Controllers
                 },
                 RedirectUris = new List<string>
                 {
-                    "http://www.certification.openid.net"
+                    "https://www.certification.openid.net"
                 },
                 Contacts = new[]
                 {

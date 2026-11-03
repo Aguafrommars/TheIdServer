@@ -211,9 +211,9 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }).ToList(),
                 RefreshTokenExpiration = (int)_defaultValues.RefreshTokenExpiration,
                 RefreshTokenUsage = (int)_defaultValues.RefreshTokenUsage,
-                RequireClientSecret = false,
+                RequireClientSecret = RequiresClientSecret(registration),
                 RequireConsent = _defaultValues.RequireConsent,
-                RequirePkce = false,
+                RequirePkce = RequiresPkce(registration),
                 Resources = registration.ClientNames.Where(n => n.Culture != null)
                     .Select(n => new ClientLocalizedResource
                     {
@@ -579,6 +579,8 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 registration.TosUris?.FirstOrDefault()?.Value;
             client.TosUri = registration.TosUris?.FirstOrDefault(u => u.Culture == null)?.Value ??
                 registration.TosUris?.FirstOrDefault()?.Value;
+            client.RequireClientSecret = RequiresClientSecret(registration);
+            client.RequirePkce = RequiresPkce(registration);
 
             await _clientStore.UpdateAsync(client).ConfigureAwait(false);
         }
@@ -638,6 +640,14 @@ namespace Aguacongas.IdentityServer.Admin.Services
 
         private static void ValidateRedirectUri(ClientRegisteration registration, string uri, Uri redirectUri)
         {
+            if (registration.ApplicationType == "web" && UsesCodeFlow(registration) && !registration.GrantTypes.Contains("implicit"))
+            {
+                var isLoopbackHttp = redirectUri.Scheme == Uri.UriSchemeHttp && redirectUri.IsLoopback;
+                if (redirectUri.Scheme != Uri.UriSchemeHttps && !isLoopbackHttp)
+                {
+                    throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'. Web client using the authorization code flow must use 'https' scheme (or 'http' on a loopback host).");
+                }
+            }
             if (registration.ApplicationType == "web" &&
                                 registration.GrantTypes.Contains("implicit"))
             {
@@ -730,6 +740,18 @@ namespace Aguacongas.IdentityServer.Admin.Services
                 }
             }
         }
+
+        private static bool UsesCodeFlow(ClientRegisteration registration)
+            => registration.GrantTypes.Any(g => g == "authorization_code" || g == "hybrid");
+
+        // PKCE is required for every client using the authorization code flow (RFC 9700 / OAuth 2.1).
+        private static bool RequiresPkce(ClientRegisteration registration)
+            => UsesCodeFlow(registration);
+
+        // Only a native app restricted to code flow can be a public client (RFC 8252). Any other client must authenticate at the token endpoint.
+        private static bool RequiresClientSecret(ClientRegisteration registration)
+            => !(registration.ApplicationType == "native" &&
+                 registration.GrantTypes.All(g => g == "authorization_code" || g == "refresh_token"));
 
         private static bool IsWebClient(ClientRegisteration client)
         {
