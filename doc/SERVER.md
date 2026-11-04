@@ -962,14 +962,19 @@ To disable the task, use **DisableTokenCleanup**.
 
 > The task is not enabled on proxy server.
 
-## Configure Dynamic client registration allowed contacts a host
+## Configure Dynamic client registration
 
 The server supports [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html).  
 
-New client registration is allowed to users with the **Is4-Writer** role by sending the user access token or to contacts defined in *DynamicClientRegistrationOptions* section.
+All settings are in the *DynamicClientRegistrationOptions* section.
+
+### Restrict who can register
+
+When **Protected** is `true`, new client registration is allowed to users with the **Is4-Writer** role by sending the user access token, or to contacts defined in the **AllowedContacts** list. When it is not `true`, the registration endpoint doesn't check the caller.
 
 ```json
 "DynamicClientRegistrationOptions": {
+  "Protected": true,
   "AllowedContacts": [
     {
       "Contact": "certification@oidf.org",
@@ -981,7 +986,7 @@ New client registration is allowed to users with the **Is4-Writer** role by send
 }
 ```
 
-It this case, the client registration request must contain the *contacts* array.
+In this case, the client registration request must contain the *contacts* array, and at least one *redirect_uris* host must be in **AllowedHosts**.
 
 **request sample**
 
@@ -1002,6 +1007,41 @@ It this case, the client registration request must contain the *contacts* array.
     ]
 }
 ```
+
+### Client security settings
+
+By default, clients created by dynamic registration are protected as follows:
+
+* A **native** application using only the `authorization_code` and `refresh_token` grant types is a *public client*: it has no client secret requirement, and PKCE is required.
+* Any other client (**web** applications, or clients using other grant types such as `client_credentials`) must authenticate at the token endpoint.
+* PKCE is required for every client using the `authorization_code` grant type.
+* A **web** client using the authorization code flow must register `https` redirect URIs. `http` is accepted only for loopback hosts (`localhost`, `127.0.0.1`, `[::1]`).
+
+Web clients using the implicit grant type must still use `https` redirect URIs and cannot use `localhost`, and native clients keep their own redirect URI rules.
+
+You can adjust these protections with the following options.
+
+| Option | Default | Description |
+| --- | --- | --- |
+| **RequirePkce** | `Always` | `Always`: PKCE is required for all clients using the authorization code flow. `PublicClientsOnly`: PKCE is required only for public clients. `Never`: PKCE is never required. |
+| **RequireClientAuthentication** | `true` | When `false`, no client created by dynamic registration is required to authenticate at the token endpoint (all clients are public). |
+| **RequireHttpsRedirectUris** | `true` | When `false`, web clients using the authorization code flow can register `http` redirect URIs. |
+| **AllowLoopbackHttpRedirectUris** | `true` | When **RequireHttpsRedirectUris** is `true`, accepts `http` redirect URIs on loopback hosts. |
+
+```json
+"DynamicClientRegistrationOptions": {
+  "RequirePkce": "PublicClientsOnly",
+  "RequireClientAuthentication": true,
+  "RequireHttpsRedirectUris": true,
+  "AllowLoopbackHttpRedirectUris": true
+}
+```
+
+> The server logs a warning at startup when one of these options is relaxed.
+
+> Without PKCE and client authentication, an authorization code intercepted by an attacker can be exchanged with only the client identifier. Keep the default values unless you need to accept clients that can't support them, for example to run a conformance test suite that doesn't send a PKCE code challenge.
+
+> These options apply when a client is registered or updated. Clients created before the upgrade keep their settings, check clients created by dynamic registration that have *RequirePkce* or *RequireClientSecret* set to `false` and use the `authorization_code` grant type.
 
 ## Configure Jwt request validator
 

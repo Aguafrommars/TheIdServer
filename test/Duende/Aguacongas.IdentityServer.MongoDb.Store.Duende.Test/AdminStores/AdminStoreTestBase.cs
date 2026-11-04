@@ -30,11 +30,16 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
         private readonly MongoClient _client;
         private readonly IMongoDatabase _database;
 
-        protected AdminStoreTestBase()
+        private readonly MongoClient _client;
+        private readonly IMongoDatabase _database;
+
+        protected AdminStoreTestBase(IOptions<ISConfiguration.IdentityServerOptions> options)
         {
-            var settings = MongoClientSettings.FromConnectionString("mongodb://localhost");
+            var connectionString = options.Value.MongoDbConnectionString ?? "mongodb://localhost";
+            var settings = MongoClientSettings.FromConnectionString(connectionString);
             _client = new MongoClient(settings);
-            _database = _client.GetDatabase(Guid.NewGuid().ToString());
+            // Utiliser un nom de base de données unique pour les tests afin d'éviter les conflits
+            _database = _client.GetDatabase($"TestDb_{Guid.NewGuid()}");
         }
 
         [Fact]
