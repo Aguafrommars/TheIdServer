@@ -71,6 +71,16 @@ namespace Aguacongas.IdentityServer.Admin.Services
             _clientGrantTypeStore = stores.ClientGrantTypeStore;
             _discoveryResponseGenerator = discoveryResponseGenerator ?? throw new ArgumentNullException(nameof(discoveryResponseGenerator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            if (_dymamicClientRegistrationOptions.RequirePkce != PkceRequirement.Always ||
+                !_dymamicClientRegistrationOptions.RequireClientAuthentication ||
+                !_dymamicClientRegistrationOptions.RequireHttpsRedirectUris)
+            {
+                _logger.LogWarning("Dynamic client registration security protections are relaxed (RequirePkce={RequirePkce}, RequireClientAuthentication={RequireClientAuthentication}, RequireHttpsRedirectUris={RequireHttpsRedirectUris}).",
+                    _dymamicClientRegistrationOptions.RequirePkce,
+                    _dymamicClientRegistrationOptions.RequireClientAuthentication,
+                    _dymamicClientRegistrationOptions.RequireHttpsRedirectUris);
+            }
         }
 
         /// <summary>
@@ -638,11 +648,13 @@ namespace Aguacongas.IdentityServer.Admin.Services
             ValidateResponseType(registration.GrantTypes, registration.ResponseTypes, discovery["response_types_supported"] as IEnumerable<string>);
         }
 
-        private static void ValidateRedirectUri(ClientRegisteration registration, string uri, Uri redirectUri)
+        private void ValidateRedirectUri(ClientRegisteration registration, string uri, Uri redirectUri)
         {
-            if (registration.ApplicationType == "web" && UsesCodeFlow(registration) && !registration.GrantTypes.Contains("implicit"))
+            if (_dymamicClientRegistrationOptions.RequireHttpsRedirectUris &&
+                registration.ApplicationType == "web" && UsesCodeFlow(registration) && !registration.GrantTypes.Contains("implicit"))
             {
-                var isLoopbackHttp = redirectUri.Scheme == Uri.UriSchemeHttp && redirectUri.IsLoopback;
+                var isLoopbackHttp = _dymamicClientRegistrationOptions.AllowLoopbackHttpRedirectUris &&
+                    redirectUri.Scheme == Uri.UriSchemeHttp && redirectUri.IsLoopback;
                 if (redirectUri.Scheme != Uri.UriSchemeHttps && !isLoopbackHttp)
                 {
                     throw new RegistrationException("invalid_redirect_uri", $"Invalid RedirectUri '{uri}'. Web client using the authorization code flow must use 'https' scheme (or 'http' on a loopback host).");
@@ -741,16 +753,31 @@ namespace Aguacongas.IdentityServer.Admin.Services
             }
         }
 
+        // Hybrid flows are registered with the authorization_code and implicit grant types.
         private static bool UsesCodeFlow(ClientRegisteration registration)
-            => registration.GrantTypes.Any(g => g == "authorization_code" || g == "hybrid");
+            => registration.GrantTypes.Any(g => g == "authorization_code");
 
-        // PKCE is required for every client using the authorization code flow (RFC 9700 / OAuth 2.1).
-        private static bool RequiresPkce(ClientRegisteration registration)
-            => UsesCodeFlow(registration);
+        // Behavior depends on DynamicClientRegistrationOptions.RequirePkce (default: Always).
+        private bool RequiresPkce(ClientRegisteration registration)
+        {
+            if (!UsesCodeFlow(registration))
+            {
+                return false;
+            }
 
-        // Only a native app restricted to code flow can be a public client (RFC 8252). Any other client must authenticate at the token endpoint.
-        private static bool RequiresClientSecret(ClientRegisteration registration)
-            => !(registration.ApplicationType == "native" &&
+            return _dymamicClientRegistrationOptions.RequirePkce switch
+            {
+                PkceRequirement.Always => true,
+                PkceRequirement.PublicClientsOnly => !RequiresClientSecret(registration),
+                _ => false
+            };
+        }
+
+        // Only a native app restricted to code flow can be a public client (RFC 8252).
+        // Any other client must authenticate at the token endpoint, unless the administrator disabled client authentication.
+        private bool RequiresClientSecret(ClientRegisteration registration)
+            => _dymamicClientRegistrationOptions.RequireClientAuthentication &&
+               !(registration.ApplicationType == "native" &&
                  registration.GrantTypes.All(g => g == "authorization_code" || g == "refresh_token"));
 
         private static bool IsWebClient(ClientRegisteration client)

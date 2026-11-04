@@ -1,10 +1,10 @@
 ﻿// Project: Aguafrommars/TheIdServer
 // Copyright (c) 2026 @Olivier Lefebvre
 using Aguacongas.IdentityServer.Abstractions;
+using Aguacongas.IdentityServer.Extensions;
 using Aguacongas.IdentityServer.Store;
 using Aguacongas.IdentityServer.Store.Entity;
 using Aguacongas.TheIdServer.Models;
-using Aguacongas.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +24,7 @@ using ISConfiguration = Duende.IdentityServer.Configuration;
 namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 {
     public abstract class AdminStoreTestBase<TEntity> : IDisposable
-        where TEntity: class, IEntityId, new()
+        where TEntity : class, IEntityId, new()
     {
         private bool disposedValue;
         private readonly MongoClient _client;
@@ -73,7 +73,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             });
 
             Assert.NotEmpty(entities.Items);
-            foreach(var property in navigationProperties)
+            foreach (var property in navigationProperties)
             {
                 Assert.Contains(entities.Items, i => property.GetValue(i) != null);
             }
@@ -145,7 +145,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
             if (updated is IAuditable auditable)
             {
                 Assert.NotNull(auditable.ModifiedAt);
-            }            
+            }
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
             var sut = provider.GetRequiredService<IAdminStore<TEntity>>();
             Assert.NotNull(sut);
-            
+
             var entity = await CreateEntityGraphAsync(navigationProperties, provider, sut);
 
             await sut.DeleteAsync(entity.Id);
@@ -296,14 +296,14 @@ namespace Aguacongas.IdentityServer.MongoDb.Store.Test.AdminStores
 
         private static Type GetParentType(string parentPropetyName)
         => parentPropetyName switch
-            {
-                nameof(IClientSubEntity.ClientId) => typeof(Client),
-                nameof(IApiSubEntity.ApiId) => typeof(ProtectResource),
-                nameof(IIdentitySubEntity.IdentityId) => typeof(IdentityResource),
-                nameof(IUserSubEntity.UserId) => typeof(User),
-                nameof(IRoleSubEntity.RoleId) => typeof(Role),
-                _ => throw new InvalidOperationException(),
-            };        
+        {
+            nameof(IClientSubEntity.ClientId) => typeof(Client),
+            nameof(IApiSubEntity.ApiId) => typeof(ProtectResource),
+            nameof(IIdentitySubEntity.IdentityId) => typeof(IdentityResource),
+            nameof(IUserSubEntity.UserId) => typeof(User),
+            nameof(IRoleSubEntity.RoleId) => typeof(Role),
+            _ => throw new InvalidOperationException(),
+        };
 
         private static string GetExpand()
         {
