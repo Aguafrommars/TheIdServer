@@ -1,3 +1,10 @@
+## [11.0.4](https://github.com/Aguafrommars/TheIdServer/compare/11.0.3...11.0.4) (2026-11-05)
+
+
+### Bug Fixes
+
+* GHSA-mw4v-v5j2-7f3g ([a7e7798](https://github.com/Aguafrommars/TheIdServer/commit/a7e779834b4578cc1caf540ba49d42a0caf43333))
+
 ## [11.0.3](https://github.com/Aguafrommars/TheIdServer/compare/11.0.2...11.0.3) (2026-10-26)
 
 
